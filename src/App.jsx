@@ -226,11 +226,13 @@ export default function Rackle(){
   };
 
   return(
-    <div style={S.app}>
+    <div className="rackle-outer" style={S.app}>
+      <div className="rackle-inner">
       <style>{CSS}</style>
       <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800;9..144,900&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
       {screen==="home"&&<Home go={m=>{setMode(m);setScreen("play");}} rounds={rounds} bestG={bestG} streak={streak} dailyDone={dailyDone} dailyGrade={dailyGrade} dailyShare={dailyShare}/>}
       {screen==="play"&&<Play mode={mode} home={()=>setScreen("home")} onFinish={onFinish}/>}
+      </div>
     </div>
   );
 }
@@ -246,7 +248,7 @@ function Home({go,rounds,bestG,streak,dailyDone,dailyGrade,dailyShare}){
     <div style={S.pg}>
       <div style={{textAlign:"center",paddingTop:20,marginBottom:18}}>
         <div className="tile-float" style={{fontSize:38,marginBottom:6}}>🀄</div>
-        <h1 style={{fontFamily:F.d,fontSize:36,color:C.ink,margin:0,fontWeight:900,letterSpacing:-1}}>Rackle</h1>
+        <h1 className="rk-title" style={{fontFamily:F.d,fontSize:36,color:C.ink,margin:0,fontWeight:900,letterSpacing:-1}}>Rackle</h1>
         <div style={{display:"inline-block",padding:"3px 12px",borderRadius:20,background:C.jade+"12",border:`1px solid ${C.jade}30`,marginTop:6}}>
           <span style={{fontSize:10,color:C.jade,fontWeight:700,letterSpacing:3}}>2026 NMJL EDITION</span>
         </div>
@@ -699,10 +701,28 @@ const CSS=`*{box-sizing:border-box}
 @keyframes confP{0%{transform:scale(0.5);opacity:0}50%{transform:scale(1.3)}100%{transform:scale(1);opacity:1}}
 .confetti{animation:confP 0.5s cubic-bezier(0.34,1.56,0.64,1)}
 @keyframes ttIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-.tt-in{animation:ttIn .25s ease}`;
+.tt-in{animation:ttIn .25s ease}
+
+/* Desktop: mahjong table background with centered card */
+@media(min-width:600px){
+  .rackle-outer{background:#1A2E28 !important;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:32px 20px;
+    background-image:radial-gradient(ellipse at center,#1E352E 0%,#152520 70%) !important;}
+  .rackle-inner{width:100%;max-width:480px;background:#FAF7F2;border-radius:24px;box-shadow:0 20px 80px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.05);overflow:hidden;min-height:auto;}
+  .rackle-inner .rk-pg{padding:16px 24px 40px;}
+  .rackle-inner .rk-card{padding:18px;border-radius:14px;}
+  .rackle-inner .rk-tile{width:44px !important;height:58px !important;}
+  .rackle-inner .rk-tile span:first-child{font-size:19px !important;}
+  .rackle-inner .rk-title{font-size:42px !important;}
+  .rackle-inner .rk-subtitle{font-size:14px !important;}
+}
+@media(max-width:599px){
+  .rackle-outer{background:#FAF7F2;min-height:100vh;}
+  .rackle-inner{max-width:100%;}
+}
+`;
 
 const S={
-  app:{fontFamily:F.b,background:C.bg,minHeight:"100vh",color:C.ink,maxWidth:440,margin:"0 auto"},
+  app:{fontFamily:F.b,color:C.ink},
   pg:{padding:"10px 14px",paddingBottom:36},
   pill:{background:C.bg2,borderRadius:12,padding:"8px 6px",textAlign:"center",border:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"center",gap:6},
   card:{background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:12,padding:14,marginBottom:8},
