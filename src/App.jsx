@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 /*
  * RACKLE v3 — Master Your Charleston
@@ -233,6 +234,7 @@ export default function Rackle(){
       {screen==="home"&&<Home go={m=>{setMode(m);setScreen("play");}} rounds={rounds} bestG={bestG} streak={streak} dailyDone={dailyDone} dailyGrade={dailyGrade} dailyShare={dailyShare}/>}
       {screen==="play"&&<Play mode={mode} home={()=>setScreen("home")} onFinish={onFinish}/>}
       </div>
+      <Analytics />
     </div>
   );
 }
