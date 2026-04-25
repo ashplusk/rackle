@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 /*
  * RACKLE v4 — Correct ROLLOR Charleston
@@ -158,6 +159,7 @@ export default function Rackle(){
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800;9..144,900&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
     {screen==="home"&&<HomeScreen go={m=>{setMode(m);setScreen("play");}} {...{streak,rounds,dailyDone,dailyResult,showHelp,setShowHelp}}/>}
     {screen==="play"&&<PlayScreen mode={mode} home={()=>setScreen("home")} onDone={onDone}/>}
+    <Analytics />
   </div>);
 }
 
