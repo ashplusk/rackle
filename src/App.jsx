@@ -1,4 +1,4 @@
-import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from '@vercel/analytics/react';
 import { useState, useEffect } from "react";
 
 /*
@@ -132,6 +132,7 @@ export default function Rackle(){
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800;9..144,900&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
     {screen==="home"&&<HomeScreen {...{streak,rounds,dailyDone,dailyResult,showHelp,setShowHelp}} go={go}/>}
     {screen==="play"&&<GameScreen mode={mode} home={()=>setScreen("home")} onDone={onDone}/>}
+      <Analytics />
   </div></div>);
 }
 
