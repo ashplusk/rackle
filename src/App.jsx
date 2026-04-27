@@ -140,36 +140,38 @@ export default function Rackle(){
 function HomeScreen({streak,rounds,dailyDone,dailyResult,showHelp,setShowHelp,go}){
   const [copied,setCopied]=useState(false);
   const dn=getDayNum();
-  const shareTxt=dailyResult?`🀄 Rackle #${dn}\nGrade: ${dailyResult.grade} ${dailyResult.emoji}\nSection: ${dailyResult.section}\nplayrackle.com`:"";
+  const shareTxt=dailyResult?`🀄 Rackle #${dn}\n${dailyResult.rating} ${dailyResult.emoji}\nSection: ${dailyResult.section}\nplayrackle.com`:"";
   const copy=()=>{navigator.clipboard?.writeText(shareTxt).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),2000);});};
 
   return(<div style={S.pg}>
     {/* Hero */}
-    <div style={{textAlign:"center",paddingTop:30,marginBottom:14}}>
-      <div className="rk-float" style={{fontSize:44,marginBottom:8}}>🀄</div>
-      <h1 style={{fontFamily:F.d,fontSize:44,color:C.ink,margin:0,fontWeight:900,letterSpacing:-1.5}}>Rackle</h1>
-      <p style={{fontFamily:F.d,fontSize:22,color:C.jade,margin:"6px 0 0",fontWeight:600,fontStyle:"italic"}}>Rack & Roll.</p>
+    <div style={{textAlign:"center",paddingTop:32,marginBottom:10}}>
+      <div className="rk-float" style={{fontSize:44,marginBottom:10}}>🀄</div>
+      <h1 style={{fontFamily:F.d,fontSize:46,color:C.ink,margin:0,fontWeight:900,letterSpacing:-2}}>Rackle</h1>
+      <p style={{fontFamily:F.d,fontSize:22,color:C.jade,margin:"6px 0 0",fontWeight:600,fontStyle:"italic",letterSpacing:0.5}}>Rack & Roll.</p>
     </div>
 
-    {/* Value prop */}
-    <div style={{textAlign:"center",marginBottom:18,padding:"0 8px"}}>
-      <p style={{fontSize:15,color:C.ink,fontWeight:600,margin:"0 0 6px",lineHeight:1.4}}>The daily Charleston challenge for<br/>American Mahjong players.</p>
-      <p style={{fontSize:13,color:C.mut,margin:0,lineHeight:1.5}}>Practice your passes. Sharpen your strategy.<br/>Share your grade with your mahj group.</p>
+    {/* Subtitle */}
+    <div style={{textAlign:"center",marginBottom:18}}>
+      <p style={{fontSize:14,color:C.ink,fontWeight:600,margin:"0 0 4px",lineHeight:1.5}}>The daily Charleston challenge.</p>
+      <p style={{fontSize:13,color:C.mut,margin:0}}>For American Mahjong players who want to get better.</p>
     </div>
 
-    {/* 3 value props */}
-    <div style={{display:"flex",gap:6,marginBottom:16}}>
-      {[
-        {icon:"🀄",label:"New daily challenge",sub:"every day"},
-        {icon:"📋",label:"Copy your grade",sub:"& share it"},
-        {icon:"🔥",label:"Build your",sub:"streak"},
-      ].map((v,i)=>(
-        <div key={i} style={{flex:1,textAlign:"center",padding:"12px 4px",background:"#fff",borderRadius:12,border:`1px solid ${C.bdr}`}}>
-          <div style={{fontSize:20,marginBottom:4}}>{v.icon}</div>
-          <div style={{fontSize:11,fontWeight:700,color:C.ink,lineHeight:1.3}}>{v.label}</div>
-          <div style={{fontSize:10,color:C.mut,marginTop:1}}>{v.sub}</div>
-        </div>
-      ))}
+    {/* Value props — visually distinct from buttons */}
+    <div style={{background:"linear-gradient(145deg, #F5F2EB, #EDE8DF)",borderRadius:16,padding:"16px 14px",marginBottom:16,border:`1px solid ${C.bdr}`}}>
+      <div style={{display:"flex",gap:10}}>
+        {[
+          {icon:"🀄",label:"Daily challenge",sub:"New puzzle every day"},
+          {icon:"📋",label:"Share your result",sub:"Screenshot & post"},
+          {icon:"🔥",label:"Build streaks",sub:"Come back daily"},
+        ].map((v,i)=>(
+          <div key={i} style={{flex:1,textAlign:"center"}}>
+            <div style={{fontSize:22,marginBottom:6}}>{v.icon}</div>
+            <div style={{fontSize:11,fontFamily:F.d,fontWeight:700,color:C.ink,lineHeight:1.2}}>{v.label}</div>
+            <div style={{fontSize:9,color:C.mut,marginTop:3,lineHeight:1.3}}>{v.sub}</div>
+          </div>
+        ))}
+      </div>
     </div>
 
     {/* Stats */}
@@ -181,15 +183,16 @@ function HomeScreen({streak,rounds,dailyDone,dailyResult,showHelp,setShowHelp,go
     {/* ── Daily Rackle ── */}
     {!dailyDone?(
       <button onClick={()=>go("daily")} style={{
-        width:"100%",padding:"22px 18px",borderRadius:18,border:"none",cursor:"pointer",marginBottom:10,
-        background:"linear-gradient(135deg,#1B7D4E,#156B42)",color:"#fff",
-        display:"flex",alignItems:"center",gap:14,textAlign:"left",
-        boxShadow:"0 8px 28px rgba(27,125,78,0.3)",
+        width:"100%",padding:"22px 20px",borderRadius:18,border:"none",cursor:"pointer",marginBottom:10,
+        background:"linear-gradient(135deg,#1B7D4E 0%,#156B42 50%,#0F5535 100%)",color:"#fff",
+        display:"flex",alignItems:"center",gap:16,textAlign:"left",
+        boxShadow:"0 8px 32px rgba(27,125,78,0.3), 0 2px 8px rgba(0,0,0,0.1)",
       }}>
-        <div style={{width:52,height:52,borderRadius:14,background:"rgba(255,255,255,0.15)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,flexShrink:0}}>📅</div>
+        <div style={{width:52,height:52,borderRadius:15,background:"rgba(255,255,255,0.12)",backdropFilter:"blur(4px)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,flexShrink:0,border:"1px solid rgba(255,255,255,0.15)"}}>📅</div>
         <div>
-          <div style={{fontFamily:F.d,fontSize:20,fontWeight:800}}>Daily Rackle #{dn}</div>
-          <div style={{fontSize:12,opacity:0.9,marginTop:3}}>Same deal for every player. One shot today.</div>
+          <div style={{fontSize:11,opacity:0.75,letterSpacing:2,fontWeight:700,marginBottom:3}}>TODAY'S CHALLENGE</div>
+          <div style={{fontFamily:F.d,fontSize:22,fontWeight:800}}>Daily Rackle #{dn}</div>
+          <div style={{fontSize:12,opacity:0.85,marginTop:3}}>Same deal for every player. One shot.</div>
         </div>
       </button>
     ):(
@@ -197,11 +200,11 @@ function HomeScreen({streak,rounds,dailyDone,dailyResult,showHelp,setShowHelp,go
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
           <div>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:800,color:C.ink}}>Daily Rackle #{dn}</div>
-            <div style={{fontSize:13,color:C.jade,fontWeight:600,marginTop:3}}>{dailyResult?.grade} {dailyResult?.emoji}</div>
+            <div style={{fontSize:13,color:C.jade,fontWeight:600,marginTop:3}}>{dailyResult?.rating} {dailyResult?.emoji}</div>
             <div style={{fontSize:11,color:C.mut,marginTop:2}}>{dailyResult?.section}</div>
           </div>
-          <div style={{width:48,height:48,borderRadius:14,background:C.jade+"12",border:`2px solid ${C.jade}30`,display:"flex",alignItems:"center",justifyContent:"center"}}>
-            <span style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.jade}}>{dailyResult?.grade}</span>
+          <div style={{padding:"6px 12px",borderRadius:10,background:C.jade+"12",border:`2px solid ${C.jade}30`,display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <span style={{fontFamily:F.d,fontSize:12,fontWeight:800,color:C.jade}}>{dailyResult?.rating}</span>
           </div>
         </div>
 
@@ -221,29 +224,30 @@ function HomeScreen({streak,rounds,dailyDone,dailyResult,showHelp,setShowHelp,go
 
     {/* Free Play */}
     <button onClick={()=>go("free")} style={{
-      ...S.card,width:"100%",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",
-      marginTop:6,borderRadius:14,padding:"14px 16px",
+      width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,
+      marginTop:8,borderRadius:16,padding:"18px 18px",textAlign:"left",
+      background:"linear-gradient(145deg, #FFF8F6, #FDF5F2)",
+      border:`1.5px solid ${C.cinn}18`,
+      boxShadow:"0 3px 12px rgba(184,50,50,0.06)",
     }}>
-      <div style={{display:"flex",alignItems:"center",gap:10}}>
-        <div style={{width:36,height:36,borderRadius:10,background:C.bg2,border:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>🎲</div>
-        <div style={{textAlign:"left"}}>
-          <div style={{fontSize:14,fontWeight:700,color:C.ink}}>Free Play</div>
-          <div style={{fontSize:11,color:C.mut}}>Unlimited Charleston practice</div>
-        </div>
+      <div style={{width:44,height:44,borderRadius:12,background:`linear-gradient(135deg, ${C.cinn}12, ${C.cinn}06)`,border:`1.5px solid ${C.cinn}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🀄</div>
+      <div style={{flex:1}}>
+        <div style={{fontSize:15,fontWeight:700,color:C.ink}}>Practice Mode</div>
+        <div style={{fontSize:11,color:C.mut,lineHeight:1.5,marginTop:2}}>Unlimited rounds. Random deals. No pressure — just sharpen your Charleston strategy at your own pace.</div>
       </div>
-      <span style={{fontSize:14,color:C.mut}}>→</span>
+      <span style={{fontSize:16,color:C.cinn,flexShrink:0}}>→</span>
     </button>
 
     {/* How to Play */}
-    <button onClick={()=>setShowHelp(!showHelp)} style={{...S.card,width:"100%",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:4,borderRadius:14}}>
-      <span style={{fontSize:13,fontWeight:600,color:C.ink}}>📖 How to Play</span>
-      <span style={{color:C.mut}}>{showHelp?"▾":"▸"}</span>
+    <button onClick={()=>setShowHelp(!showHelp)} style={{width:"100%",cursor:"pointer",display:"flex",justifyContent:"center",alignItems:"center",gap:6,marginTop:8,padding:"8px 0",background:"none",border:"none",borderRadius:0}}>
+      <span style={{fontSize:13,fontWeight:600,color:C.mut}}>📖 How to Play</span>
+      <span style={{color:C.mut,fontSize:12}}>{showHelp?"▾":"▸"}</span>
     </button>
     {showHelp&&<div style={{...S.card,background:"#FFFFF8",borderColor:C.gold+"30",borderRadius:14}} className="rk-in">
       {["You're dealt 13 tiles from a full 152-tile mahjong set.",
         "Pass tiles in the ROLLOR sequence: Right (3), Over (3), Left (0-3 blind). Jokers can't be passed.",
         "Optionally do a second Charleston (LOR) and a Courtesy Pass.",
-        "Choose which 2026 card section you'd play — Rackle grades your strategy.",
+        "Choose which 2026 card section you'd play — Rackle rates your strategy.",
       ].map((s,i)=>(<div key={i} style={{display:"flex",gap:8,marginBottom:8}}><div style={S.dot}>{i+1}</div><span style={{fontSize:12,color:C.mut,lineHeight:1.6}}>{s}</span></div>))}
     </div>}
 
@@ -255,17 +259,19 @@ function HomeScreen({streak,rounds,dailyDone,dailyResult,showHelp,setShowHelp,go
 
     {/* Social nudge for new users */}
     {rounds===0&&(
-      <div style={{textAlign:"center",padding:"16px 12px",marginTop:8,background:"#fff",borderRadius:14,border:`1px solid ${C.bdr}`}}>
-        <div style={{fontSize:14,fontWeight:700,color:C.ink,marginBottom:6}}>Join mahjong players across the country</div>
-        <div style={{fontSize:12,color:C.mut,lineHeight:1.6}}>Play the daily challenge, screenshot your grade, and share it with your group chat. See who in your club gets the best score.</div>
+      <div style={{textAlign:"center",padding:"18px 16px",marginTop:10,background:"linear-gradient(145deg, #FFFFF8, #F8F4EB)",borderRadius:16,border:`1px solid ${C.gold}20`}}>
+        <div style={{fontSize:22,marginBottom:8}}>🀄</div>
+        <div style={{fontSize:14,fontFamily:F.d,fontWeight:700,color:C.ink,marginBottom:6}}>Join mahjong players<br/>across the country</div>
+        <div style={{fontSize:12,color:C.mut,lineHeight:1.7}}>Play the daily challenge. Share your result.<br/>See who in your club gets the best rating.</div>
       </div>
     )}
 
     {/* Footer */}
-    <div style={{textAlign:"center",padding:"20px 0 6px",borderTop:`1px solid ${C.bdr}`,marginTop:16}}>
-      <div style={{fontFamily:F.d,fontSize:16,color:C.ink,fontWeight:800}}>playrackle.com</div>
-      <div style={{fontSize:11,color:C.mut,marginTop:3}}>Rack & Roll 🀄</div>
-      <div style={{fontSize:10,color:C.mut,marginTop:8,lineHeight:1.6}}>2026 NMJL Edition</div>
+    <div style={{textAlign:"center",padding:"22px 0 8px",marginTop:16}}>
+      <div style={{width:40,height:1,background:C.bdr,margin:"0 auto 16px"}}/>
+      <div style={{fontFamily:F.d,fontSize:18,color:C.ink,fontWeight:800,letterSpacing:-0.5}}>playrackle.com</div>
+      <div style={{fontSize:12,color:C.jade,marginTop:4,fontFamily:F.d,fontStyle:"italic"}}>Rack & Roll 🀄</div>
+      <div style={{fontSize:9,color:C.mut,marginTop:8,letterSpacing:2}}>2026 NMJL EDITION</div>
     </div>
   </div>);
 }
@@ -345,9 +351,10 @@ function GameScreen({mode,home,onDone}){
     if(!chosenSec)return;
     const adv=getAdvice(hand,chosenSec);const ev=evaluate(hand);const top=ev[0];
     const gi=top.score>=0.4?0:top.score>=0.3?1:top.score>=0.2?2:top.score>=0.12?3:top.score>=0.05?4:5;
-    const grades=["A+","A","B+","B","C","D"];const emojis=["🌟","🏆","💪","👏","👍","🎲"];
-    const g=grades[gi];
-    onDone({grade:g,emoji:emojis[gi],section:`${top.icon} ${top.name} (${(top.score*100).toFixed(0)}%)`,advice:adv,gi});
+    const ratings=["Mahjong Master","Sharp Player","Solid Hands","Getting There","Keep Practicing","Tough Deal"];
+    const emojis=["🌟","🏆","💪","👏","👍","🎲"];
+    const r=ratings[gi];
+    onDone({rating:r,emoji:emojis[gi],section:`${top.icon} ${top.name} (${(top.score*100).toFixed(0)}%)`,advice:adv,gi});
     setPhase("result");
   };
 
@@ -366,11 +373,12 @@ function GameScreen({mode,home,onDone}){
   if(phase==="result"){
     const adv=getAdvice(hand,chosenSec);const ev=evaluate(hand);const top=ev[0];
     const gi=top.score>=0.4?0:top.score>=0.3?1:top.score>=0.2?2:top.score>=0.12?3:top.score>=0.05?4:5;
-    const grades=["A+","A","B+","B","C","D"];const emojis=["🌟","🏆","💪","👏","👍","🎲"];
+    const ratings=["Mahjong Master","Sharp Player","Solid Hands","Getting There","Keep Practicing","Tough Deal"];
+    const emojis=["🌟","🏆","💪","👏","👍","🎲"];
     const gColors=[C.jade,C.jade,"#2460A8","#2460A8",C.gold,C.cinn];
-    const g=grades[gi];const gc=gColors[gi];const cd=SECS.find(s=>s.id===chosenSec);
+    const r=ratings[gi];const gc=gColors[gi];const cd=SECS.find(s=>s.id===chosenSec);
     const isDaily=mode==="daily";const dn=getDayNum();
-    const shareTxt=`🀄 Rackle ${isDaily?"#"+dn:""}\nGrade: ${g} ${emojis[gi]}\nSection: ${top.icon} ${top.name}\nplayrackle.com`;
+    const shareTxt=`🀄 Rackle ${isDaily?"#"+dn:""}\n${r} ${emojis[gi]}\nSection: ${top.icon} ${top.name}\nplayrackle.com`;
     const [cp2,setCp2]=useState(false);
     const copy2=()=>{navigator.clipboard?.writeText(shareTxt).then(()=>{setCp2(true);setTimeout(()=>setCp2(false),2000);});};
 
@@ -380,8 +388,8 @@ function GameScreen({mode,home,onDone}){
         <h2 style={{fontFamily:F.d,fontSize:22,color:C.ink,margin:0,fontWeight:800}}>{isDaily?`Daily Rackle #${dn}`:"Charleston Complete!"}</h2>
       </div>
       <div style={{textAlign:"center",marginBottom:14}}>
-        <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:64,height:64,borderRadius:18,background:gc+"12",border:`3px solid ${gc}35`}}>
-          <span style={{fontFamily:F.d,fontSize:30,fontWeight:900,color:gc}}>{g}</span>
+        <div style={{display:"inline-block",padding:"8px 20px",borderRadius:14,background:gc+"12",border:`2px solid ${gc}30`}}>
+          <span style={{fontFamily:F.d,fontSize:18,fontWeight:800,color:gc}}>{r}</span>
         </div>
         <div style={{marginTop:8}}>
           <div style={{fontSize:14,color:C.ink,fontWeight:600}}>Best fit: {top.icon} {top.name}</div>
@@ -409,7 +417,7 @@ function GameScreen({mode,home,onDone}){
       {/* Share */}
       <div style={S.shareCard}>
         <div style={{fontSize:8,color:C.jade,letterSpacing:4,fontWeight:700}}>RACKLE</div>
-        <div style={{fontFamily:F.d,fontSize:24,color:C.ink,margin:"4px 0",fontWeight:900}}>{isDaily?"#"+dn+" ":""}{g}</div>
+        <div style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"6px 0",fontWeight:800}}>{isDaily?"#"+dn+" · ":""}{r} {emojis[gi]}</div>
         <div style={{fontSize:13,color:C.mut}}>Section: {top.icon} {top.name}</div>
         <div style={{fontSize:12,color:C.jade,marginTop:8,fontWeight:600}}>How's your Charleston?</div>
         <div style={{fontSize:9,color:C.mut,marginTop:4,letterSpacing:2}}>PLAYRACKLE.COM</div>
@@ -422,8 +430,8 @@ function GameScreen({mode,home,onDone}){
     </div>);
   }
 
-  if(phase==="askSecond") return <AskScreen icon="🔄" title="Continue Charleston?" desc="Another round: Left → Over → Right?" hand={hand} onNo={()=>setPhase("askCourtesy")} onYes={()=>{setCn(2);setPi(0);setSel([]);setNewIdx([]);setPhase("pass");}}/>;
-  if(phase==="askCourtesy") return <AskScreen icon="🤝" title="Courtesy Pass?" desc="Pass 1-3 tiles across and receive the same back." hand={hand} onNo={()=>{setSel([]);setNewIdx([]);setPhase("chooseHand");}} onYes={()=>{setSel([]);setNewIdx([]);setPhase("courtesy");}}/>;
+  if(phase==="askSecond") return <AskScreen icon="🔄" title="Continue Charleston?" desc="Another round: Left → Over → Right?" hand={hand} onSort={()=>setHand(sortHand(hand))} onNo={()=>setPhase("askCourtesy")} onYes={()=>{setCn(2);setPi(0);setSel([]);setNewIdx([]);setPhase("pass");}}/>;
+  if(phase==="askCourtesy") return <AskScreen icon="🤝" title="Courtesy Pass?" desc="Pass 1-3 tiles across and receive the same back." hand={hand} onSort={()=>setHand(sortHand(hand))} onNo={()=>{setSel([]);setNewIdx([]);setPhase("chooseHand");}} onYes={()=>{setSel([]);setNewIdx([]);setPhase("courtesy");}}/>;
 
   if(phase==="courtesy"){
     return(<div style={S.pg}>
@@ -508,7 +516,7 @@ function GameScreen({mode,home,onDone}){
 
 // ── SHARED COMPONENTS ──────────────────────────
 
-function AskScreen({icon,title,desc,hand,onNo,onYes}){return(<div style={S.pg}><div style={{textAlign:"center",marginBottom:12,paddingTop:8}}><div style={{fontSize:24,marginBottom:6}}>{icon}</div><h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 4px"}}>{title}</h2><p style={{fontSize:12,color:C.mut}}>{desc}</p></div><RackDisplay hand={hand} label="YOUR RACK"/><div style={{display:"flex",gap:8,marginTop:12}}><button onClick={onNo} style={{...S.oBtn,flex:1}}>No</button><button onClick={onYes} style={{...S.greenBtn,flex:1}}>Yes</button></div></div>);}
+function AskScreen({icon,title,desc,hand,onNo,onYes,onSort}){return(<div style={S.pg}><div style={{textAlign:"center",marginBottom:12,paddingTop:8}}><div style={{fontSize:24,marginBottom:6}}>{icon}</div><h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 4px"}}>{title}</h2><p style={{fontSize:12,color:C.mut}}>{desc}</p></div><RackDisplay hand={hand} label="YOUR RACK" showSort={!!onSort} onSort={onSort}/><div style={{display:"flex",gap:8,marginTop:12}}><button onClick={onNo} style={{...S.oBtn,flex:1}}>No</button><button onClick={onYes} style={{...S.greenBtn,flex:1}}>Yes</button></div></div>);}
 function JW(){return(<div className="rk-in" style={{padding:"6px 10px",background:C.cinn+"08",borderRadius:8,border:`1px solid ${C.cinn}15`,textAlign:"center",marginBottom:6}}><span style={{fontSize:11,color:C.cinn,fontWeight:600}}>🃏 Jokers cannot be passed!</span></div>);}
 function RH({hand,onSort,showRef,onRef}){return(<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK ({hand.length})</span><div style={{display:"flex",gap:4}}><button onClick={onSort} style={S.sortBtn}>Sort</button>{onRef&&<button onClick={onRef} style={{...S.sortBtn,background:showRef?C.jade+"10":"none",color:showRef?C.jade:C.mut,borderColor:showRef?C.jade+"30":C.bdr}}>📖 2026 Card</button>}</div></div>);}
 function RackDisplay({hand,label,showSort,onSort}){return(<div style={S.card}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>{label}</span>{showSort&&<button onClick={onSort} style={S.sortBtn}>Sort</button>}</div><div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>{hand.map((t,i)=><MTile key={i} t={t}/>)}</div></div>);}
