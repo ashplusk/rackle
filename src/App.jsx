@@ -132,7 +132,7 @@ export default function Rackle(){
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800;9..144,900&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
     {screen==="home"&&<HomeScreen {...{streak,rounds,dailyDone,dailyResult,showHelp,setShowHelp}} go={go}/>}
     {screen==="play"&&<GameScreen mode={mode} home={()=>setScreen("home")} onDone={onDone}/>}
- <Analytics />
+  <Analytics />
   </div></div>);
 }
 
@@ -294,6 +294,7 @@ function GameScreen({mode,home,onDone}){
   const [chosenSec,setChosenSec]=useState(null);const [showRef,setShowRef]=useState(false);
   const [showHint,setShowHint]=useState(false);const [hintExp,setHintExp]=useState(null);
   const [cn,setCn]=useState(1);const [pi,setPi]=useState(0);
+  const [copied,setCopied]=useState(false);
 
   const cs=cn===1?FC:SC;const cp=cs[pi];
 
@@ -380,8 +381,6 @@ function GameScreen({mode,home,onDone}){
     const r=ratings[gi];const gc=gColors[gi];const cd=SECS.find(s=>s.id===chosenSec);
     const isDaily=mode==="daily";const dn=getDayNum();
     const shareTxt=`🀄 Rackle ${isDaily?"#"+dn:""}\n${r} ${emojis[gi]}\nSection: ${top.icon} ${top.name}\nplayrackle.com`;
-    const [cp2,setCp2]=useState(false);
-    const copy2=()=>{navigator.clipboard?.writeText(shareTxt).then(()=>{setCp2(true);setTimeout(()=>setCp2(false),2000);});};
 
     return(<div style={S.pg} className="rk-pg">
       <div style={{textAlign:"center",paddingTop:6,marginBottom:10}}>
@@ -423,7 +422,7 @@ function GameScreen({mode,home,onDone}){
         <div style={{fontSize:12,color:C.jade,marginTop:8,fontWeight:600}}>How's your Charleston?</div>
         <div style={{fontSize:9,color:C.mut,marginTop:4,letterSpacing:2}}>PLAYRACKLE.COM</div>
       </div>
-      <button onClick={copy2} style={{...S.oBtn,width:"100%",marginTop:6,fontSize:11}}>{cp2?"✓ Copied!":"📋 Copy & share"}</button>
+      <button onClick={()=>{navigator.clipboard?.writeText(shareTxt).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),2000);});}} style={{...S.oBtn,width:"100%",marginTop:6,fontSize:11}}>{copied?"✓ Copied!":"📋 Copy & share"}</button>
       <div style={{display:"flex",gap:8,marginTop:8}}>
         <button onClick={home} style={{...S.oBtn,flex:1}}>Home</button>
         {!isDaily&&<button onClick={restart} style={{...S.greenBtn,flex:1}}>Deal Again</button>}
