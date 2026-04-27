@@ -128,11 +128,11 @@ export default function Rackle(){
 
   const go=(m)=>{setMode(m);setScreen("play");};
 
-  return(<div style={S.outer}><div style={S.app}><style>{CSS}</style>
+  return(<div style={S.outer} className="rk-outer"><div style={S.app} className="rk-app"><style>{CSS}</style>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800;9..144,900&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
     {screen==="home"&&<HomeScreen {...{streak,rounds,dailyDone,dailyResult,showHelp,setShowHelp}} go={go}/>}
     {screen==="play"&&<GameScreen mode={mode} home={()=>setScreen("home")} onDone={onDone}/>}
-      <Analytics />
+ <Analytics />
   </div></div>);
 }
 
@@ -144,7 +144,7 @@ function HomeScreen({streak,rounds,dailyDone,dailyResult,showHelp,setShowHelp,go
   const shareTxt=dailyResult?`🀄 Rackle #${dn}\n${dailyResult.rating} ${dailyResult.emoji}\nSection: ${dailyResult.section}\nplayrackle.com`:"";
   const copy=()=>{navigator.clipboard?.writeText(shareTxt).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),2000);});};
 
-  return(<div style={S.pg}>
+  return(<div style={S.pg} className="rk-pg">
     {/* Hero */}
     <div style={{textAlign:"center",paddingTop:32,marginBottom:10}}>
       <div className="rk-float" style={{fontSize:44,marginBottom:10}}>🀄</div>
@@ -369,7 +369,7 @@ function GameScreen({mode,home,onDone}){
 
   // ── RENDERS ──────────────────────────────────
 
-  if(phase==="deal")return<div style={S.pg}><div style={{textAlign:"center",paddingTop:60}}><div style={{fontSize:28}}>🎲</div><h2 style={{fontFamily:F.d,fontSize:18,color:C.ink}}>Dealing...</h2></div></div>;
+  if(phase==="deal")return<div style={S.pg} className="rk-pg"><div style={{textAlign:"center",paddingTop:60}}><div style={{fontSize:28}}>🎲</div><h2 style={{fontFamily:F.d,fontSize:18,color:C.ink}}>Dealing...</h2></div></div>;
 
   if(phase==="result"){
     const adv=getAdvice(hand,chosenSec);const ev=evaluate(hand);const top=ev[0];
@@ -383,7 +383,7 @@ function GameScreen({mode,home,onDone}){
     const [cp2,setCp2]=useState(false);
     const copy2=()=>{navigator.clipboard?.writeText(shareTxt).then(()=>{setCp2(true);setTimeout(()=>setCp2(false),2000);});};
 
-    return(<div style={S.pg}>
+    return(<div style={S.pg} className="rk-pg">
       <div style={{textAlign:"center",paddingTop:6,marginBottom:10}}>
         <div className={gi<=1?"rk-pop":""} style={{fontSize:38,marginBottom:3}}>{emojis[gi]}</div>
         <h2 style={{fontFamily:F.d,fontSize:22,color:C.ink,margin:0,fontWeight:800}}>{isDaily?`Daily Rackle #${dn}`:"Charleston Complete!"}</h2>
@@ -435,7 +435,7 @@ function GameScreen({mode,home,onDone}){
   if(phase==="askCourtesy") return <AskScreen icon="🤝" title="Courtesy Pass?" desc="Pass 1-3 tiles across and receive the same back." hand={hand} onSort={()=>setHand(sortHand(hand))} onNo={()=>{setSel([]);setNewIdx([]);setPhase("chooseHand");}} onYes={()=>{setSel([]);setNewIdx([]);setPhase("courtesy");}}/>;
 
   if(phase==="courtesy"){
-    return(<div style={S.pg}>
+    return(<div style={S.pg} className="rk-pg">
       <div style={{textAlign:"center",marginBottom:10}}><span style={{fontSize:22}}>🤝</span><h2 style={{fontFamily:F.d,fontSize:17,color:C.ink,margin:"2px 0"}}>Courtesy Pass</h2><p style={{fontSize:12,color:C.mut}}>Select 1-3 tiles</p></div>
       {jw&&<JW/>}
       <div style={S.card}><RH hand={hand} onSort={()=>setHand(sortHand(hand))}/>
@@ -452,7 +452,7 @@ function GameScreen({mode,home,onDone}){
   }
 
   if(phase==="chooseHand"){
-    return(<div style={S.pg}>
+    return(<div style={S.pg} className="rk-pg">
       <h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 3px"}}>What hand are you playing?</h2>
       <p style={{fontSize:12,color:C.mut,marginBottom:8}}>Pick your target section.</p>
       <RackDisplay hand={hand} label="YOUR RACK" showSort onSort={()=>setHand(sortHand(hand))}/>
@@ -472,7 +472,7 @@ function GameScreen({mode,home,onDone}){
   // ── PASS PHASE ──
   const isBlind=cp.blind;const canPass=isBlind?sel.length<=(cp.max||3):sel.length===cp.req;const hasNew=newIdx.length>0;
 
-  return(<div style={S.pg}>
+  return(<div style={S.pg} className="rk-pg">
     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
       <button onClick={home} style={S.back}>← Back</button>
       <div style={{display:"flex",alignItems:"center",gap:6}}>
@@ -517,7 +517,7 @@ function GameScreen({mode,home,onDone}){
 
 // ── SHARED COMPONENTS ──────────────────────────
 
-function AskScreen({icon,title,desc,hand,onNo,onYes,onSort}){return(<div style={S.pg}><div style={{textAlign:"center",marginBottom:12,paddingTop:8}}><div style={{fontSize:24,marginBottom:6}}>{icon}</div><h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 4px"}}>{title}</h2><p style={{fontSize:12,color:C.mut}}>{desc}</p></div><RackDisplay hand={hand} label="YOUR RACK" showSort={!!onSort} onSort={onSort}/><div style={{display:"flex",gap:8,marginTop:12}}><button onClick={onNo} style={{...S.oBtn,flex:1}}>No</button><button onClick={onYes} style={{...S.greenBtn,flex:1}}>Yes</button></div></div>);}
+function AskScreen({icon,title,desc,hand,onNo,onYes,onSort}){return(<div style={S.pg} className="rk-pg"><div style={{textAlign:"center",marginBottom:12,paddingTop:8}}><div style={{fontSize:24,marginBottom:6}}>{icon}</div><h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 4px"}}>{title}</h2><p style={{fontSize:12,color:C.mut}}>{desc}</p></div><RackDisplay hand={hand} label="YOUR RACK" showSort={!!onSort} onSort={onSort}/><div style={{display:"flex",gap:8,marginTop:12}}><button onClick={onNo} style={{...S.oBtn,flex:1}}>No</button><button onClick={onYes} style={{...S.greenBtn,flex:1}}>Yes</button></div></div>);}
 function JW(){return(<div className="rk-in" style={{padding:"6px 10px",background:C.cinn+"08",borderRadius:8,border:`1px solid ${C.cinn}15`,textAlign:"center",marginBottom:6}}><span style={{fontSize:11,color:C.cinn,fontWeight:600}}>🃏 Jokers cannot be passed!</span></div>);}
 function RH({hand,onSort,showRef,onRef}){return(<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK ({hand.length})</span><div style={{display:"flex",gap:4}}><button onClick={onSort} style={S.sortBtn}>Sort</button>{onRef&&<button onClick={onRef} style={{...S.sortBtn,background:showRef?C.jade+"10":"none",color:showRef?C.jade:C.mut,borderColor:showRef?C.jade+"30":C.bdr}}>📖 2026 Card</button>}</div></div>);}
 function RackDisplay({hand,label,showSort,onSort}){return(<div style={S.card}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>{label}</span>{showSort&&<button onClick={onSort} style={S.sortBtn}>Sort</button>}</div><div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>{hand.map((t,i)=><MTile key={i} t={t}/>)}</div></div>);}
@@ -533,10 +533,15 @@ html,body{margin:0;padding:0;background:#D5CFC5}
 @keyframes rkIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}.rk-in{animation:rkIn .25s ease}
 @keyframes rkFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}.rk-float{animation:rkFloat 3s ease-in-out infinite}
 @keyframes rkPop{0%{transform:scale(0.5);opacity:0}50%{transform:scale(1.2)}100%{transform:scale(1);opacity:1}}.rk-pop{animation:rkPop 0.5s cubic-bezier(0.34,1.56,0.64,1)}
+@media(min-width:600px){
+  .rk-outer{padding:24px 0 !important}
+  .rk-app{border-radius:20px !important;min-height:auto !important;box-shadow:0 8px 60px rgba(0,0,0,0.12),0 0 0 1px rgba(0,0,0,0.04) !important;border:none !important;margin-top:16px}
+  .rk-pg{padding:20px 32px 44px !important}
+}
 `;
 const S={
-  outer:{background:"#D5CFC5",minHeight:"100vh",display:"flex",justifyContent:"center"},
-  app:{fontFamily:F.b,background:C.bg,minHeight:"100vh",color:C.ink,width:"100%",maxWidth:480,boxShadow:"0 0 60px rgba(0,0,0,0.1)",borderLeft:`1px solid ${C.bdr}`,borderRight:`1px solid ${C.bdr}`},
+  outer:{background:"#D5CFC5",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start",padding:0},
+  app:{fontFamily:F.b,background:C.bg,minHeight:"100vh",color:C.ink,width:"100%",maxWidth:560,borderLeft:`1px solid ${C.bdr}`,borderRight:`1px solid ${C.bdr}`},
   pg:{padding:"10px 16px",paddingBottom:36},
   pill:{background:C.bg2,borderRadius:12,padding:"8px 6px",textAlign:"center",border:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"center",gap:6},
   card:{background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:12,padding:14,marginBottom:8},
