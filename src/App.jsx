@@ -643,7 +643,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
       {dDone&&<MidnightCountdown dn={dn}/>}
 
-      <button onClick={()=>go("free")} aria-label="Play Practice Mode" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:8,borderRadius:16,padding:"14px 16px",textAlign:"left",background:`linear-gradient(135deg,${C.cinn}05,#fff)`,border:`1px solid ${C.cinn}20`}}>
+      <button onClick={()=>go("free")} aria-label="Play Practice Mode" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:20,borderRadius:16,padding:"14px 16px",textAlign:"left",background:`linear-gradient(135deg,${C.cinn}05,#fff)`,border:`1px solid ${C.cinn}20`}}>
         <div aria-hidden="true" style={{width:44,height:44,borderRadius:13,background:`linear-gradient(135deg,${C.cinn}20,${C.cinn}10)`,border:`1px solid ${C.cinn}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🀄</div>
         <div style={{flex:1}}>
           <div style={{fontSize:10,color:C.cinn,letterSpacing:2,fontWeight:700,marginBottom:3}}>UNLIMITED PLAY</div>
@@ -653,13 +653,19 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <span aria-hidden="true" style={{fontSize:14,color:C.mut,fontWeight:600}}>›</span>
       </button>
 
+      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16}}>
+        <div style={{flex:1,height:1,background:C.bdr}}/>
+        <span style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>LEARN & EXPLORE</span>
+        <div style={{flex:1,height:1,background:C.bdr}}/>
+      </div>
+
       <button onClick={()=>setShowHelp(!showHelp)} aria-expanded={showHelp} aria-controls="help-panel"
         style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:8,borderRadius:16,padding:"14px 16px",textAlign:"left",background:showHelp?C.gold+"08":"#fff",border:`1px solid ${showHelp?C.gold+"30":C.bdr}`}}>
         <div style={{width:44,height:44,borderRadius:13,background:C.gold+"10",border:`1px solid ${C.gold}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>📖</div>
         <div style={{flex:1}}>
           <div style={{fontSize:10,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:3}}>LEARN</div>
           <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,marginBottom:2}}>How to Play</div>
-          <div style={{fontSize:12,color:C.mut}}>New to Rackle? Learn the Charleston, passing strategy, and all 9 hand sections.</div>
+          <div style={{fontSize:12,color:C.mut}}>Charleston rules & all 9 sections explained.</div>
         </div>
         <span aria-hidden="true" style={{fontSize:14,color:C.mut,fontWeight:600}}>{showHelp?"▾":"›"}</span>
       </button>
