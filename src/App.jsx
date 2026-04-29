@@ -74,23 +74,23 @@ function Ti({t,sel,isNew,onClick,dim,large}){
 // SECTIONS
 function cg(h,fn){const v=h.filter(fn),jk=h.filter(t=>t.t==="j").length,c={};v.forEach(t=>{const k=`${t.t}-${t.s||""}-${t.n||""}-${t.v||""}`;c[k]=(c[k]||0)+1;});const ct=Object.values(c);let kg=0,pg=0,pr=0;ct.forEach(n=>{if(n>=4)kg++;else if(n>=3)pg++;else if(n>=2)pr++;});return{v:v.length,jk,kg,pg,pr};}
 const SECS=[
-{id:"2026",name:"2026",color:"#B54E7A",icon:"📅",desc:"Year tiles — 2s, Soap, 6s",hold:"2s, 6s, Soap, Flowers",pass:"1s, 9s, odds, Winds",combos:"2+0+2+6 across suits.",hands:6,diff:3,
+{id:"2026",name:"2026",color:"#B54E7A",icon:"📅",desc:"Year tiles — 2s, Soap, 6s",hold:"2s, 6s, Soap, Flowers",pass:"1s, 9s, odds, Winds",combos:"The 2 and 6 appear together in most hands — prioritise pairing them across suits.",example:"FF 22 2026 66 Soap",joker:"Jokers help but aren't essential — focus on tile pairs first.",level:"Intermediate",hands:6,diff:3,
   ck:h=>{const g=cg(h,t=>(t.t==="s"&&[2,6].includes(t.n))||(t.t==="d"&&t.v==="Soap"));const off=h.filter(t=>t.t==="s"&&![2,6].includes(t.n)).length+h.filter(t=>t.t==="w").length;const s=(g.kg*0.12+g.pg*0.09+g.pr*0.05)+g.jk*0.04;const fr=g.v/Math.max(g.v+off,1);return Math.max(0,Math.min(s*fr*2.5,1));}},
-{id:"2468",name:"2468",color:"#B83232",icon:"🔴",desc:"Even numbers (2, 4, 6, 8)",hold:"2s, 4s, 6s, 8s, Flowers, Jokers",pass:"All odds, Winds",combos:"2+6 strongest pair — 110 hands.",hands:10,diff:2,
+{id:"2468",name:"2468",color:"#B83232",icon:"🔴",desc:"Even numbers (2, 4, 6, 8)",hold:"2s, 4s, 6s, 8s, Flowers, Jokers",pass:"All odds, Winds",combos:"The largest section on the card — 2 and 6 appear in the most hands, prioritise those.",example:"FF 2222 44 666 88",joker:"Jokers are very useful here — hold all of them.",level:"Beginner friendly",hands:10,diff:2,
   ck:h=>{const g=cg(h,t=>t.t==="s"&&t.n%2===0);const off=h.filter(t=>t.t==="s"&&t.n%2===1).length+h.filter(t=>t.t==="w").length;const b=h.some(t=>t.t==="s"&&t.n===2)&&h.some(t=>t.t==="s"&&t.n===6);const s=(g.kg*0.12+g.pg*0.09+g.pr*0.05)+g.jk*0.04+(b?0.06:0);const fr=g.v/Math.max(g.v+off,1);return Math.max(0,Math.min(s*fr*2.2,1));}},
-{id:"369",name:"369",color:"#B84A72",icon:"💗",desc:"Multiples of 3 (3, 6, 9)",hold:"3s, 6s, 9s, Flowers",pass:"Non-multiples of 3, Winds",combos:"6 is the linchpin.",hands:8,diff:3,
+{id:"369",name:"369",color:"#B84A72",icon:"💗",desc:"Multiples of 3 (3, 6, 9)",hold:"3s, 6s, 9s, Flowers",pass:"Non-multiples of 3, Winds",combos:"6 appears in almost every hand — it's your anchor tile. Never pass a 6.",example:"FF 333 66 999 33",joker:"Jokers are helpful for completing pungs and kongs.",level:"Intermediate",hands:8,diff:3,
   ck:h=>{const g=cg(h,t=>t.t==="s"&&t.n%3===0);const off=h.filter(t=>t.t==="s"&&t.n%3!==0).length+h.filter(t=>t.t==="w").length;const b=h.some(t=>t.t==="s"&&t.n===6);const s=(g.kg*0.12+g.pg*0.09+g.pr*0.05)+g.jk*0.04+(b?0.06:0);const fr=g.v/Math.max(g.v+off,1);return Math.max(0,Math.min(s*fr*2.5,1));}},
-{id:"13579",name:"13579",color:"#D48A2A",icon:"🟠",desc:"Odd numbers (1, 3, 5, 7, 9)",hold:"Odds, Winds can pair",pass:"All evens",combos:"5 is most versatile.",hands:9,diff:2,
+{id:"13579",name:"13579",color:"#D48A2A",icon:"🟠",desc:"Odd numbers (1, 3, 5, 7, 9)",hold:"Odds, Winds can pair",pass:"All evens",combos:"5 is the most versatile odd — it appears in the most hands. Winds pair well here.",example:"FF 111 33 5555 99",joker:"Jokers substitute well for any odd tile — keep them.",level:"Beginner friendly",hands:9,diff:2,
   ck:h=>{const g=cg(h,t=>t.t==="s"&&t.n%2===1);const off=h.filter(t=>t.t==="s"&&t.n%2===0).length;const s=(g.kg*0.12+g.pg*0.09+g.pr*0.05)+g.jk*0.04+h.filter(t=>t.t==="w").length*0.02;const fr=g.v/Math.max(g.v+off,1);return Math.max(0,Math.min(s*fr*2.2,1));}},
-{id:"cr",name:"Consec. Run",color:"#1B7D4E",icon:"🟢",desc:"Sequential tiles across suits",hold:"Consecutive numbers, Flowers",pass:"Isolated numbers, honors",combos:"Runs in 2+ suits = most flexible.",hands:11,diff:3,
+{id:"cr",name:"Consec. Run",color:"#1B7D4E",icon:"🟢",desc:"Sequential tiles across suits",hold:"Consecutive numbers, Flowers",pass:"Isolated numbers, honors",combos:"Runs across 2+ suits give you the most hand options. Don't split a run to chase a pung.",example:"FF 123 456 789 Bam",joker:"Jokers fill gaps in runs — extremely valuable here.",level:"Intermediate",hands:11,diff:3,
   ck:h=>{const bs={};h.filter(t=>t.t==="s").forEach(t=>{if(!bs[t.s])bs[t.s]=new Set();bs[t.s].add(t.n);});let mr=0;Object.values(bs).forEach(s=>{const a=[...s].sort((a,b)=>a-b);let r=1;for(let i=1;i<a.length;i++){if(a[i]===a[i-1]+1)r++;else{mr=Math.max(mr,r);r=1;}}mr=Math.max(mr,r);});const su=Object.keys(bs).length;const jk=h.filter(t=>t.t==="j").length;const hon=h.filter(t=>t.t==="w"||t.t==="d").length;return Math.max(0,Math.min((mr>=5?0.4:mr>=4?0.3:mr>=3?0.2:mr*0.04)+su*0.04+jk*0.03-hon*0.04,1));}},
-{id:"wd",name:"Winds & Dragons",color:"#5C5247",icon:"🌀",desc:"Honor tiles",hold:"Winds, Dragons",pass:"Number tiles",combos:"Need 5+ honors.",hands:7,diff:4,
+{id:"wd",name:"Winds & Dragons",color:"#5C5247",icon:"🌀",desc:"Honor tiles",hold:"Winds, Dragons",pass:"Number tiles",combos:"You need 5+ honor tiles to make this work. Pass all number tiles aggressively.",example:"NN EE WW SS 中中 發發",joker:"Jokers can stand in for any Wind or Dragon — keep them.",level:"Advanced",hands:7,diff:4,
   ck:h=>{const g=cg(h,t=>t.t==="w"||t.t==="d");const off=h.filter(t=>t.t==="s").length;const s=(g.kg*0.14+g.pg*0.1+g.pr*0.06)+g.jk*0.04;const fr=g.v/Math.max(g.v+off,1);return Math.max(0,Math.min(s*fr*2.5,1));}},
-{id:"aln",name:"Like Numbers",color:"#2460A8",icon:"🔵",desc:"Same number, all suits",hold:"4+ of one number, Flowers, Jokers",pass:"Scattered numbers",combos:"Good fallback.",hands:6,diff:3,
+{id:"aln",name:"Like Numbers",color:"#2460A8",icon:"🔵",desc:"Same number, all suits",hold:"4+ of one number, Flowers, Jokers",pass:"Scattered numbers",combos:"Pick one or two numbers early and commit. Spreading across too many numbers kills this hand.",example:"FF 6666 6666 66 Bam Crak",joker:"Jokers are essential — they let you reach kongs on your key number.",level:"Intermediate",hands:6,diff:3,
   ck:h=>{const c={};h.filter(t=>t.t==="s").forEach(t=>{c[t.n]=(c[t.n]||0)+1;});const v=Object.values(c);const mx=v.length?Math.max(...v):0;const jk=h.filter(t=>t.t==="j").length;const fl=h.filter(t=>t.t==="f").length;return Math.max(0,Math.min((mx>=4?mx*0.08:mx*0.04)+jk*0.04+fl*0.02-Math.max(0,Object.keys(c).length-2)*0.06,1));}},
-{id:"q",name:"Quints",color:"#7B5CB0",icon:"🟣",desc:"Five of a kind",hold:"Jokers, 3-4 of a tile",pass:"Scattered tiles",combos:"Requires 2+ Jokers.",hands:4,diff:5,
+{id:"q",name:"Quints",color:"#7B5CB0",icon:"🟣",desc:"Five of a kind",hold:"Jokers, 3-4 of a tile",pass:"Scattered tiles",combos:"You need at least 2 Jokers to complete a quint. Without them, abandon this section early.",example:"JJJJ 11111 Bam",joker:"Jokers are mandatory — this hand cannot be made without them.",level:"Advanced",hands:4,diff:5,
   ck:h=>{const jk=h.filter(t=>t.t==="j").length;const c={};h.filter(t=>t.t==="s").forEach(t=>{const k=`${t.s}${t.n}`;c[k]=(c[k]||0)+1;});const v=Object.values(c);const mx=v.length?Math.max(...v):0;if(mx+jk>=5)return Math.min(0.5+jk*0.05,0.85);if(jk>=2&&mx>=3)return 0.35;return Math.max(0,(mx+jk)*0.03-0.1);}},
-{id:"sp",name:"Singles & Pairs",color:"#2E9485",icon:"🩵",desc:"Only singles and pairs",hold:"Pairs, Flowers",pass:"Triples+",combos:"All concealed.",hands:5,diff:2,
+{id:"sp",name:"Singles & Pairs",color:"#2E9485",icon:"🩵",desc:"Only singles and pairs",hold:"Pairs, Flowers",pass:"Triples+",combos:"This hand is fully concealed — no Jokers allowed. Focus on building clean pairs.",example:"FF AA BB CC DD EE GG",joker:"Jokers cannot be used in Singles & Pairs — pass them all.",level:"Beginner friendly",hands:5,diff:2,
   ck:h=>{const c={};h.forEach(t=>{const k=JSON.stringify(t);c[k]=(c[k]||0)+1;});const pr=Object.values(c).filter(v=>v===2).length;const tr=Object.values(c).filter(v=>v>=3).length;return Math.max(0,Math.min(pr*0.07+h.filter(t=>t.t==="j").length*0.02-tr*0.2,1));}},
 ];
 
@@ -499,14 +499,65 @@ function AppShell({children,settings}){
 
 // CARD GUIDE SCREEN
 function CardGuideScreen({home}){
+  const [exp,setExp]=useState(null);
+  const levelColor=(l)=>l==="Beginner friendly"?C.jade:l==="Intermediate"?C.gold:C.cinn;
   return(
     <div style={S.pg} className="rk-pg">
       <RackleHeader onBack={home}/>
-      <div style={{marginBottom:12}}>
+      <div style={{marginBottom:16}}>
         <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>2026 Card Guide</div>
-        <p style={{fontSize:12,color:C.mut,margin:0,lineHeight:1.6}}>Hold and pass tips for all 9 hand sections on the 2026 NMJL card. Study before you play.</p>
+        <p style={{fontSize:12,color:C.mut,margin:"0 0 10px",lineHeight:1.6}}>Hold and pass tips for all 9 hand sections on the 2026 NMJL card. Tap any section to study it.</p>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+          {["Beginner friendly","Intermediate","Advanced"].map(l=>{const c=levelColor(l);return(
+            <span key={l} style={{fontSize:10,color:c,fontWeight:700,background:c+"10",border:`1px solid ${c}25`,borderRadius:20,padding:"2px 10px"}}>{l}</span>
+          );})}
+        </div>
       </div>
-      <CG onClose={home}/>
+      {SECS.map(s=>{const o=exp===s.id;const lc=levelColor(s.level);return(
+        <div key={s.id} style={{...S.card,padding:0,overflow:"hidden",marginBottom:8}}>
+          <button onClick={()=>setExp(o?null:s.id)} aria-expanded={o} style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",padding:"14px 16px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
+            <div style={{display:"flex",alignItems:"center",gap:10}}>
+              <div style={{width:36,height:36,borderRadius:10,background:s.color+"12",border:`1px solid ${s.color}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{s.icon}</div>
+              <div>
+                <div style={{fontSize:13,fontWeight:800,color:C.ink,marginBottom:2}}>{s.name}</div>
+                <div style={{fontSize:11,color:C.mut}}>{s.desc}</div>
+              </div>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
+              <span style={{fontSize:10,color:lc,fontWeight:700,background:lc+"10",borderRadius:20,padding:"2px 8px"}}>{s.level}</span>
+              <span style={{fontSize:13,color:C.mut}}>{o?"▾":"▸"}</span>
+            </div>
+          </button>
+          {o&&<div style={{padding:"0 16px 14px",borderTop:`1px solid ${C.bdr}`}} className="rk-in">
+            <div style={{display:"flex",gap:6,margin:"12px 0 10px"}}>
+              <div style={{flex:1,background:C.jade+"08",borderRadius:8,padding:"8px 10px"}}>
+                <div style={{fontSize:8,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>✓ HOLD</div>
+                <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{s.hold}</div>
+              </div>
+              <div style={{flex:1,background:C.cinn+"06",borderRadius:8,padding:"8px 10px"}}>
+                <div style={{fontSize:8,color:C.cinn,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>✗ PASS</div>
+                <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{s.pass}</div>
+              </div>
+            </div>
+            <div style={{background:C.gold+"06",borderRadius:8,padding:"8px 10px",marginBottom:8}}>
+              <div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>💡 STRATEGY</div>
+              <div style={{fontSize:12,color:C.ink,lineHeight:1.6}}>{s.combos}</div>
+            </div>
+            <div style={{background:"#FFF9E6",borderRadius:8,padding:"8px 10px",marginBottom:8,border:`1px solid ${C.gold}20`}}>
+              <div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>🃏 JOKERS</div>
+              <div style={{fontSize:12,color:C.ink,lineHeight:1.6}}>{s.joker}</div>
+            </div>
+            <div style={{background:C.bg2,borderRadius:8,padding:"8px 10px"}}>
+              <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>EXAMPLE HAND STRUCTURE</div>
+              <div style={{fontFamily:"monospace",fontSize:12,color:C.ink,letterSpacing:1}}>{s.example}</div>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:6,marginTop:10}}>
+              <span style={{fontSize:11,color:C.mut}}>{"★".repeat(s.diff)}{"☆".repeat(5-s.diff)}</span>
+              <span style={{fontSize:11,color:C.mut}}>·</span>
+              <span style={{fontSize:11,color:C.mut}}>{s.hands} possible hands</span>
+            </div>
+          </div>}
+        </div>);})}
     </div>
   );
 }
@@ -582,12 +633,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       </div>}
 
       {!dDone?(
-        <button onClick={()=>go("daily")} aria-label={`Play Daily Rackle challenge number ${getDayNum()}`} style={{width:"100%",padding:"22px 20px",borderRadius:18,border:"none",cursor:"pointer",marginBottom:8,background:"linear-gradient(135deg,#1B7D4E,#0F5535)",color:"#fff",display:"flex",alignItems:"center",gap:16,textAlign:"left",boxShadow:"0 8px 32px rgba(27,125,78,0.3)"}}>
+        <button onClick={()=>go("daily")} aria-label={`Play Daily Rackle challenge number ${getDayNum()}`} style={{width:"100%",padding:"24px 20px",borderRadius:18,border:"none",cursor:"pointer",marginBottom:12,background:"linear-gradient(135deg,#1B7D4E,#0F5535)",color:"#fff",display:"flex",alignItems:"center",gap:16,textAlign:"left",boxShadow:"0 8px 32px rgba(27,125,78,0.3)"}}>
           <div aria-hidden="true" style={{width:52,height:52,borderRadius:15,background:"rgba(255,255,255,0.12)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,flexShrink:0}}>📅</div>
           <div>
-            <div style={{fontSize:11,opacity:0.75,letterSpacing:2,fontWeight:700,marginBottom:3}}>TODAY'S CHALLENGE</div>
-            <div style={{fontFamily:F.d,fontSize:22,fontWeight:800}}>Daily Rackle #{dn}</div>
-            <div style={{fontSize:12,opacity:0.85,marginTop:3}}>Same deal for every player. One shot.</div>
+            <div style={{fontSize:11,opacity:0.75,letterSpacing:2,fontWeight:700,marginBottom:5}}>TODAY'S CHALLENGE</div>
+            <div style={{fontFamily:F.d,fontSize:22,fontWeight:800,marginBottom:6}}>Daily Rackle #{dn}</div>
+            <div style={{fontSize:12,opacity:0.85}}>Same deal for every player. One shot.</div>
             <div style={{fontSize:11,opacity:0.65,marginTop:4}}>Compare your Charleston with your whole club.</div>
           </div>
         </button>
@@ -643,11 +694,11 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
       {dDone&&<MidnightCountdown dn={dn}/>}
 
-      <button onClick={()=>go("free")} aria-label="Play Practice Mode" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:20,borderRadius:16,padding:"14px 16px",textAlign:"left",background:`linear-gradient(135deg,${C.cinn}05,#fff)`,border:`1px solid ${C.cinn}20`}}>
+      <button onClick={()=>go("free")} aria-label="Play Practice Mode" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:20,borderRadius:16,padding:"18px 16px",textAlign:"left",background:`linear-gradient(135deg,${C.cinn}05,#fff)`,border:`1px solid ${C.cinn}20`}}>
         <div aria-hidden="true" style={{width:44,height:44,borderRadius:13,background:`linear-gradient(135deg,${C.cinn}20,${C.cinn}10)`,border:`1px solid ${C.cinn}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🀄</div>
         <div style={{flex:1}}>
-          <div style={{fontSize:10,color:C.cinn,letterSpacing:2,fontWeight:700,marginBottom:3}}>UNLIMITED PLAY</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,marginBottom:2}}>Practice Mode</div>
+          <div style={{fontSize:10,color:C.cinn,letterSpacing:2,fontWeight:700,marginBottom:5}}>UNLIMITED PLAY</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,marginBottom:5}}>Practice Mode</div>
           <div style={{fontSize:12,color:C.mut}}>Unlimited hands. No timer pressure. Build instincts for every section.</div>
         </div>
         <span aria-hidden="true" style={{fontSize:14,color:C.mut,fontWeight:600}}>›</span>
@@ -660,11 +711,11 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       </div>
 
       <button onClick={()=>setShowHelp(!showHelp)} aria-expanded={showHelp} aria-controls="help-panel"
-        style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:8,borderRadius:16,padding:"14px 16px",textAlign:"left",background:showHelp?C.gold+"08":"#fff",border:`1px solid ${showHelp?C.gold+"30":C.bdr}`}}>
+        style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:8,borderRadius:16,padding:"18px 16px",textAlign:"left",background:showHelp?C.gold+"08":"#fff",border:`1px solid ${showHelp?C.gold+"30":C.bdr}`}}>
         <div style={{width:44,height:44,borderRadius:13,background:C.gold+"10",border:`1px solid ${C.gold}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>📖</div>
         <div style={{flex:1}}>
-          <div style={{fontSize:10,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:3}}>LEARN</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,marginBottom:2}}>How to Play</div>
+          <div style={{fontSize:10,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:5}}>LEARN</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,marginBottom:5}}>How to Play</div>
           <div style={{fontSize:12,color:C.mut}}>Charleston rules & all 9 sections explained.</div>
         </div>
         <span aria-hidden="true" style={{fontSize:14,color:C.mut,fontWeight:600}}>{showHelp?"▾":"›"}</span>
@@ -675,11 +726,11 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <button onClick={showTutorial} style={{marginTop:4,background:"none",border:`1px solid ${C.gold}30`,borderRadius:8,padding:"6px 12px",fontSize:11,color:C.gold,cursor:"pointer",fontWeight:600}}>📖 Full interactive tutorial →</button>
       </div>}
 
-      {rounds>=3&&<button onClick={showStats} aria-label="View my stats and section mastery" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:8,borderRadius:16,padding:"14px 16px",textAlign:"left",background:"#fff",border:`1px solid ${C.bdr}`}}>
+      {rounds>=3&&<button onClick={showStats} aria-label="View my stats and section mastery" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:8,borderRadius:16,padding:"18px 16px",textAlign:"left",background:"#fff",border:`1px solid ${C.bdr}`}}>
         <div style={{width:44,height:44,borderRadius:13,background:C.bg2,border:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>📊</div>
         <div style={{flex:1}}>
-          <div style={{fontSize:10,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:3}}>YOUR HISTORY</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,marginBottom:2}}>My Stats</div>
+          <div style={{fontSize:10,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:5}}>YOUR HISTORY</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,marginBottom:5}}>My Stats</div>
           <div style={{fontSize:12,color:C.mut}}>Section Mastery · Ratings · Streak History</div>
         </div>
         <span style={{fontSize:14,color:C.mut,fontWeight:600}}>›</span>
@@ -941,7 +992,7 @@ function Game({mode,home,onDone,settings}){
 
           {/* CEREMONIAL HERO */}
           <div role="status" aria-live="polite" style={{borderRadius:20,overflow:"hidden",marginBottom:10,background:`linear-gradient(160deg,#0F2016,#1B3A28,#0D1F13)`,padding:"28px 20px 24px",textAlign:"center",boxShadow:"0 12px 40px rgba(0,0,0,0.2)"}}>
-            <div style={{fontSize:11,color:"rgba(255,255,255,0.45)",letterSpacing:3,fontWeight:700,marginBottom:14}}>{rd.isD?`DAILY RACKLE · #${rd.dn}`:"RACKLE SCORECARD"}</div>
+            <div style={{fontSize:11,color:"rgba(255,255,255,0.45)",letterSpacing:3,fontWeight:700,marginBottom:14}}>{rd.isD?`DAILY RACKLE · #${rd.dn}`:"PRACTICE MODE · SCORECARD"}</div>
             <div style={{fontSize:44,marginBottom:10,lineHeight:1}}>{REMO[rd.gi]}</div>
             <div style={{fontFamily:F.d,fontSize:32,fontWeight:900,color:"#fff",letterSpacing:-1,lineHeight:1,marginBottom:6}}>{rd.r}</div>
             <div style={{width:40,height:2,background:`linear-gradient(90deg,transparent,${C.gold},transparent)`,margin:"14px auto 14px"}}/>
@@ -1153,28 +1204,57 @@ function Rack({hand,label,showSort,onSort,large}){
 }
 function CG({onClose}){
   const [exp,setExp]=useState(null);
+  const levelColor=(l)=>l==="Beginner friendly"?C.jade:l==="Intermediate"?C.gold:C.cinn;
   return(
     <div style={{...S.card,background:"#FFFFF8",borderColor:C.gold+"30",maxHeight:380,overflowY:"auto"}} className="rk-in" role="region" aria-label="2026 Card Guide">
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6,position:"sticky",top:0,background:"#FFFFF8",paddingBottom:3,zIndex:1}}>
         <span style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:700}}>📖 2026 CARD GUIDE</span>
         <button onClick={onClose} style={{background:"none",border:"none",color:C.mut,fontSize:14,cursor:"pointer"}} aria-label="Close card guide">✕</button>
       </div>
-      {SECS.map(s=>{const o=exp===s.id;return(
+      {SECS.map(s=>{const o=exp===s.id;const lc=levelColor(s.level);return(
         <div key={s.id} style={{borderBottom:`1px solid ${C.bdr}`}}>
-          <button onClick={()=>setExp(o?null:s.id)} aria-expanded={o} style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",padding:"6px 0",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
-            <div style={{display:"flex",alignItems:"center",gap:5}}>
-              <span aria-hidden="true" style={{fontSize:11}}>{s.icon}</span>
-              <span style={{fontSize:11,fontWeight:600,color:C.ink}}>{s.name}</span>
-              <span style={{fontSize:10,color:C.mut}}>— {s.desc}</span>
+          <button onClick={()=>setExp(o?null:s.id)} aria-expanded={o} style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",padding:"8px 0",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
+            <div style={{display:"flex",alignItems:"center",gap:6}}>
+              <span aria-hidden="true" style={{fontSize:13}}>{s.icon}</span>
+              <div>
+                <span style={{fontSize:12,fontWeight:700,color:C.ink}}>{s.name}</span>
+                <span style={{fontSize:10,color:C.mut,marginLeft:6}}>— {s.desc}</span>
+              </div>
             </div>
-            <span aria-hidden="true" style={{fontSize:11,color:C.mut}}>{o?"▾":"▸"}</span>
+            <span aria-hidden="true" style={{fontSize:11,color:C.mut,flexShrink:0,marginLeft:8}}>{o?"▾":"▸"}</span>
           </button>
-          {o&&<div style={{paddingLeft:20,paddingBottom:6}} className="rk-in">
-            <div style={{fontSize:9,color:C.mut,marginBottom:2}} aria-label={`Difficulty: ${s.diff} out of 5 stars, ${s.hands} possible hands`}>{"★".repeat(s.diff)}{"☆".repeat(5-s.diff)} · {s.hands} hands</div>
-            <div style={{fontSize:11,lineHeight:1.7,color:C.ink}}>
-              <div><span style={{color:C.jade,fontWeight:700}}>✓ Hold:</span> {s.hold}</div>
-              <div><span style={{color:C.cinn,fontWeight:700}}>✗ Pass:</span> {s.pass}</div>
-              <div><span style={{color:C.gold,fontWeight:700}}>💡 Key:</span> {s.combos}</div>
+          {o&&<div style={{paddingLeft:4,paddingBottom:10}} className="rk-in">
+            {/* LEVEL + STATS ROW */}
+            <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
+              <span style={{fontSize:10,color:lc,fontWeight:700,background:lc+"12",border:`1px solid ${lc}25`,borderRadius:20,padding:"2px 8px"}}>{s.level}</span>
+              <span style={{fontSize:10,color:C.mut}}>{"★".repeat(s.diff)}{"☆".repeat(5-s.diff)}</span>
+              <span style={{fontSize:10,color:C.mut}}>{s.hands} hands</span>
+            </div>
+            {/* HOLD / PASS */}
+            <div style={{display:"flex",gap:6,marginBottom:8}}>
+              <div style={{flex:1,background:C.jade+"08",borderRadius:8,padding:"7px 9px"}}>
+                <div style={{fontSize:8,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>✓ HOLD</div>
+                <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{s.hold}</div>
+              </div>
+              <div style={{flex:1,background:C.cinn+"06",borderRadius:8,padding:"7px 9px"}}>
+                <div style={{fontSize:8,color:C.cinn,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>✗ PASS</div>
+                <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{s.pass}</div>
+              </div>
+            </div>
+            {/* STRATEGY */}
+            <div style={{background:C.gold+"06",borderRadius:8,padding:"7px 9px",marginBottom:8}}>
+              <div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>💡 STRATEGY</div>
+              <div style={{fontSize:11,color:C.ink,lineHeight:1.6}}>{s.combos}</div>
+            </div>
+            {/* JOKER NOTE */}
+            <div style={{background:"#FFF9E6",borderRadius:8,padding:"7px 9px",marginBottom:8,border:`1px solid ${C.gold}20`}}>
+              <div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>🃏 JOKERS</div>
+              <div style={{fontSize:11,color:C.ink,lineHeight:1.6}}>{s.joker}</div>
+            </div>
+            {/* EXAMPLE */}
+            <div style={{background:C.bg2,borderRadius:8,padding:"7px 9px"}}>
+              <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>EXAMPLE HAND STRUCTURE</div>
+              <div style={{fontFamily:"monospace",fontSize:12,color:C.ink,letterSpacing:1}}>{s.example}</div>
             </div>
           </div>}
         </div>);})}
