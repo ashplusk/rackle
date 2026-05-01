@@ -618,22 +618,45 @@ function setClubCode(c){ST.set("clubCode",c);}
 function getClubName(){return ST.get("clubName",null);}
 function setClubName(n){ST.set("clubName",n);}
 
-// Leaderboard stored per club + day seed
-function getLBKey(code){return`lb-${code}-${getDailySeed()}`;}
-function getLBEntries(code){return ST.get(getLBKey(code),[]);}
-function submitLBEntry(code,name,iqScore,time,streak){
-  const entries=getLBEntries(code);
-  // Remove any existing entry with same name (update it)
-  const filtered=entries.filter(e=>e.name.toLowerCase()!==name.toLowerCase());
-  filtered.push({name,iqScore,time,streak,ts:Date.now()});
-  // Sort by IQ desc
-  filtered.sort((a,b)=>b.iqScore-a.iqScore);
-  ST.set(getLBKey(code),filtered.slice(0,50));
-  return filtered;
+// ─── SUPABASE LEADERBOARD ─────────────────────────────────────────────────────
+const SB_URL="https://kkyhrwryhebpnbbffmfq.supabase.co";
+const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtreWhyd3J5aGVicG5iYmZmbWZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1OTM0MjAsImV4cCI6MjA5MzE2OTQyMH0.h_aEOEGfhh8h9iPGwkwzOzh6H7BCAefM6g20gW6IhWE";
+const SB_HEADERS={"Content-Type":"application/json","apikey":SB_KEY,"Authorization":`Bearer ${SB_KEY}`};
+
+async function fetchLBEntries(code){
+  try{
+    const res=await fetch(
+      `${SB_URL}/rest/v1/leaderboard?club_code=eq.${code}&day_seed=eq.${getDailySeed()}&order=iq_score.desc&limit=50`,
+      {headers:SB_HEADERS}
+    );
+    if(!res.ok)return[];
+    const rows=await res.json();
+    return rows.map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,ts:new Date(r.updated_at).getTime()}));
+  }catch{return[];}
 }
-function hasSubmittedToday(code){
-  const name=getClubName();if(!name)return false;
-  return getLBEntries(code).some(e=>e.name.toLowerCase()===name.toLowerCase());
+
+async function upsertLBEntry(code,name,iqScore,time,streak){
+  try{
+    const res=await fetch(`${SB_URL}/rest/v1/leaderboard`,{
+      method:"POST",
+      headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates"},
+      body:JSON.stringify({
+        club_code:code,day_seed:getDailySeed(),
+        name,iq_score:iqScore,time_secs:time||0,streak:streak||0,
+        updated_at:new Date().toISOString(),
+      }),
+    });
+    return res.ok||res.status===201;
+  }catch{return false;}
+}
+
+async function deleteLBEntry(code,name){
+  try{
+    await fetch(
+      `${SB_URL}/rest/v1/leaderboard?club_code=eq.${code}&day_seed=eq.${getDailySeed()}&name=eq.${encodeURIComponent(name)}`,
+      {method:"DELETE",headers:SB_HEADERS}
+    );
+  }catch{}
 }
 
 // Personal best IQ — scans history for highest iqScore
@@ -1092,9 +1115,8 @@ function Settings({home,settings,setSettings,showTutorial}){
   const [confirmClear,setConfirmClear]=useState(false);
   const clearHistory=()=>{
     ST.set("hist",[]);ST.set("str",0);ST.set("rnd",0);ST.set("ld",null);ST.set("dd",null);ST.set("dres",null);
-    // Clear leaderboard entry for today and saved name
-    const code=getClubCode();
-    if(code){const name=getClubName();if(name){const entries=getLBEntries(code).filter(e=>e.name.toLowerCase()!==name.toLowerCase());ST.set(getLBKey(code),entries);}}
+    const code=getClubCode();const name=getClubName();
+    if(code&&name)deleteLBEntry(code,name);
     ST.set("clubName",null);
     setConfirmClear(false);window.location.reload();
   };
@@ -1336,21 +1358,42 @@ function LeaderboardScreen({home,dRes,streak}){
   const code=getClubCode();
   const club=code?CLUBS[code]:null;
   const dn=getDayNum();
-  const [entries,setEntries]=useState(getLBEntries(code||""));
+  const [entries,setEntries]=useState([]);
+  const [loading,setLoading]=useState(true);
+  const [submitting,setSubmitting]=useState(false);
   const [nameInput,setNameInput]=useState(getClubName()||"");
-  const [submitted,setSubmitted]=useState(hasSubmittedToday(code||""));
+  const [submitted,setSubmitted]=useState(false);
   const [nameErr,setNameErr]=useState("");
   const [showNameForm,setShowNameForm]=useState(false);
 
   const iq=dRes?.iq;
   const myName=getClubName();
 
-  const submit=()=>{
+  // Load entries on mount and check if already submitted
+  useEffect(()=>{
+    if(!code)return;
+    setLoading(true);
+    fetchLBEntries(code).then(rows=>{
+      setEntries(rows);
+      if(myName&&rows.some(e=>e.name.toLowerCase()===myName.toLowerCase()))setSubmitted(true);
+      setLoading(false);
+    });
+  },[code]);
+
+  const submit=async()=>{
     if(!nameInput.trim()){setNameErr("Enter your name.");return;}
     if(!iq){setNameErr("Complete today's Daily Rackle first.");return;}
-    setClubName(nameInput.trim());
-    const updated=submitLBEntry(code,nameInput.trim(),iq.totalScore,dRes.time||0,streak);
-    setEntries(updated);setSubmitted(true);setShowNameForm(false);setNameErr("");
+    setSubmitting(true);setNameErr("");
+    const name=nameInput.trim();
+    setClubName(name);
+    const ok=await upsertLBEntry(code,name,iq.totalScore,dRes?.time||0,streak);
+    if(ok){
+      const updated=await fetchLBEntries(code);
+      setEntries(updated);setSubmitted(true);setShowNameForm(false);
+    } else {
+      setNameErr("Couldn't post score — check your connection and try again.");
+    }
+    setSubmitting(false);
   };
 
   if(!club)return(
@@ -1374,22 +1417,26 @@ function LeaderboardScreen({home,dRes,streak}){
         <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:"#fff",letterSpacing:-0.5,marginBottom:4}}>{club.name}</div>
         <div style={{fontSize:11,color:"rgba(255,255,255,0.4)",marginBottom:16}}>{club.location}</div>
         <div style={{width:"100%",height:0.5,background:"rgba(255,255,255,0.08)",marginBottom:14}}/>
-        <div style={{display:"flex",justifyContent:"center",gap:24}}>
-          <div style={{textAlign:"center"}}>
-            <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.gilt}}>{entries.length}</div>
-            <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:2,fontWeight:700,marginTop:2}}>PLAYERS TODAY</div>
+        {loading?(
+          <div style={{fontSize:12,color:"rgba(255,255,255,0.4)"}}>Loading today's scores…</div>
+        ):(
+          <div style={{display:"flex",justifyContent:"center",gap:24}}>
+            <div style={{textAlign:"center"}}>
+              <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.gilt}}>{entries.length}</div>
+              <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:2,fontWeight:700,marginTop:2}}>PLAYERS TODAY</div>
+            </div>
+            {entries.length>0&&<><div style={{width:1,background:"rgba(255,255,255,0.08)"}}/>
+            <div style={{textAlign:"center"}}>
+              <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.gilt}}>{entries[0].iqScore}</div>
+              <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:2,fontWeight:700,marginTop:2}}>TOP IQ TODAY</div>
+            </div></>}
+            {myRank&&<><div style={{width:1,background:"rgba(255,255,255,0.08)"}}/>
+            <div style={{textAlign:"center"}}>
+              <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.gilt}}>#{myRank}</div>
+              <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:2,fontWeight:700,marginTop:2}}>YOUR RANK</div>
+            </div></>}
           </div>
-          {entries.length>0&&<><div style={{width:1,background:"rgba(255,255,255,0.08)"}}/>
-          <div style={{textAlign:"center"}}>
-            <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.gilt}}>{entries[0].iqScore}</div>
-            <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:2,fontWeight:700,marginTop:2}}>TOP IQ TODAY</div>
-          </div></>}
-          {myRank&&<><div style={{width:1,background:"rgba(255,255,255,0.08)"}}/>
-          <div style={{textAlign:"center"}}>
-            <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.gilt}}>#{myRank}</div>
-            <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:2,fontWeight:700,marginTop:2}}>YOUR RANK</div>
-          </div></>}
-        </div>
+        )}
       </div>
 
       {/* SUBMIT YOUR SCORE */}
@@ -1412,7 +1459,9 @@ function LeaderboardScreen({home,dRes,streak}){
         {nameErr&&<div style={{fontSize:11,color:C.cinn,marginBottom:6}}>{nameErr}</div>}
         <div style={{display:"flex",gap:6}}>
           <button onClick={()=>setShowNameForm(false)} style={{...S.oBtn,flex:1,fontSize:12}}>Cancel</button>
-          <button onClick={submit} style={{...S.greenBtn,flex:2,fontSize:13,letterSpacing:0.2,fontFamily:F.b,fontWeight:700}}>Submit score</button>
+          <button onClick={submit} disabled={submitting} style={{...S.greenBtn,flex:2,fontSize:13,letterSpacing:0.2,fontFamily:F.b,fontWeight:700,opacity:submitting?0.7:1}}>
+            {submitting?"Posting…":"Submit score"}
+          </button>
         </div>
       </div>}
 
@@ -1431,15 +1480,18 @@ function LeaderboardScreen({home,dRes,streak}){
       </div>}
 
       {/* LEADERBOARD TABLE */}
-      {entries.length>0?(
+      {loading?(
+        <div style={{...S.card,textAlign:"center",padding:"28px 14px",marginBottom:8}}>
+          <div style={{fontSize:24,marginBottom:8,opacity:0.4}}>⏳</div>
+          <div style={{fontSize:12,color:C.mut}}>Loading scores…</div>
+        </div>
+      ):entries.length>0?(
         <div style={{...S.card,padding:0,overflow:"hidden",marginBottom:8}}>
-          {/* Header */}
           <div style={{display:"grid",gridTemplateColumns:"28px 1fr 44px 44px 36px",gap:0,padding:"8px 14px",background:C.bg2,borderBottom:`1px solid ${C.bdr}`}}>
             {["#","Name","IQ","Time","🔥"].map((h,i)=>(
               <div key={i} style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,textAlign:i>1?"center":"left"}}>{h}</div>
             ))}
           </div>
-          {/* Rows */}
           {entries.map((e,i)=>{
             const isMe=myName&&e.name.toLowerCase()===myName.toLowerCase();
             const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":null;
