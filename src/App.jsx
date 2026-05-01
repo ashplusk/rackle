@@ -156,9 +156,13 @@ function iqDirection(finalRack,sectionId){
     const total=finalRack.length;
     const strongRatio=strongTiles/Math.max(total,1);
     const weakRatio=weakTiles/Math.max(total,1);
-    directionScore=strongRatio>=0.55&&weakRatio<=0.1?40:strongRatio>=0.45&&weakRatio<=0.2?32:strongRatio>=0.35?22:strongRatio>=0.2?14:strongRatio>=0.1?8:4;
+    // Tighter curve — 40 requires 10+ strong tiles, not just 8
+    const base=strongTiles>=10?40:strongTiles>=9?36:strongTiles>=8?31:strongTiles>=7?26:strongTiles>=6?21:strongTiles>=5?15:strongTiles>=4?10:strongTiles>=3?6:strongTiles>=2?3:1;
+    // Weak tiles penalise meaningfully
+    const weakPenalty=weakRatio>=0.35?8:weakRatio>=0.25?5:weakRatio>=0.15?2:0;
+    directionScore=Math.max(2,base-weakPenalty);
     const secName=SECS.find(s=>s.id===sectionId)?.name||sectionId;
-    directionExplanation=strongRatio>=0.55?`${strongTiles} strong tiles for ${secName} — your rack pointed clearly in the right direction.`:strongRatio>=0.35?`${strongTiles} strong tiles for ${secName}. Getting there, but ${weakTiles} off-direction tiles are costing you.`:`Only ${strongTiles} tiles align with ${secName}. Your rack needed stronger commitment earlier.`;
+    directionExplanation=strongTiles>=8?`${strongTiles} strong tiles for ${secName} — a committed and well-directed rack.`:strongTiles>=5?`${strongTiles} strong tiles for ${secName}. Getting there, but ${weakTiles} off-direction tiles are diluting it.`:`Only ${strongTiles} tiles align with ${secName}. Your rack needed stronger commitment earlier.`;
   }
   return{directionScore:Math.max(0,Math.min(40,Math.round(directionScore))),directionExplanation};
 }
@@ -171,53 +175,79 @@ function iqTileStrength(finalRack,sectionId){
   const vals=Object.values(grps);
   const pairs=vals.filter(v=>v===2).length;
   const triples=vals.filter(v=>v>=3).length;
-  let raw=0;
+  let raw=0; // target: 0–25 directly, no division
 
   if(meta.pairsOnly){
-    // Singles & Pairs
-    raw+=pairs>=5?12:pairs>=4?10:pairs>=3?7:pairs>=2?4:pairs*2;
-    raw-=triples*5;
-    if(jk>0)raw-=3; // jokers worthless here
+    // Singles & Pairs — pairs are everything, triples and jokers are poison
+    raw+=pairs>=6?22:pairs>=5?18:pairs>=4?13:pairs>=3?9:pairs>=2?5:pairs*2;
+    raw-=triples*6;
+    raw-=jk>0?4:0; // jokers worthless here
+    raw+=fl>=2?2:fl>=1?1:0;
   } else if(meta.runBased){
     const run=iqLongestRun(finalRack);
-    raw+=run>=5?12:run>=4?9:run>=3?6:run*2;
+    const suits=new Set(finalRack.filter(t=>t.t==="s").map(t=>t.s)).size;
+    raw+=run>=6?18:run>=5?14:run>=4?10:run>=3?6:run*2;
+    raw+=suits>=2?3:0; // cross-suit bonus
     raw+=jk>=2?4:jk>=1?2:0;
     raw+=fl>=2?2:fl>=1?1:0;
+    raw-=finalRack.filter(t=>t.t==="w"||t.t==="d").length*2; // honors hurt run hands
   } else if(meta.likeNumbers){
     const c={};finalRack.filter(t=>t.t==="s").forEach(t=>{c[t.n]=(c[t.n]||0)+1;});
-    const mx=Object.values(c).length?Math.max(...Object.values(c)):0;
-    raw+=mx>=6?12:mx>=5?9:mx>=4?6:mx>=3?3:mx;
+    const vals2=Object.values(c);
+    const mx=vals2.length?Math.max(...vals2):0;
+    const spread=Object.keys(c).length;
+    raw+=mx>=8?20:mx>=6?15:mx>=5?11:mx>=4?7:mx>=3?4:mx*1;
+    raw-=Math.max(0,spread-2)*3; // penalise spreading across numbers
     raw+=jk>=2?4:jk>=1?2:0;
     raw+=fl>=1?2:0;
   } else if(meta.quintsNeeded){
     const c={};finalRack.filter(t=>t.t==="s").forEach(t=>{const k=`${t.s}${t.n}`;c[k]=(c[k]||0)+1;});
     const mx=Object.values(c).length?Math.max(...Object.values(c)):0;
-    raw+=jk>=2?8:jk>=1?4:0;
-    raw+=mx>=4?6:mx>=3?4:mx>=2?2:0;
+    raw+=jk>=2?12:jk>=1?6:0;
+    raw+=mx>=4?10:mx>=3?6:mx>=2?3:0;
   } else if(meta.strongTypes&&meta.strongTypes.length){
     // Winds & Dragons
     const honors=finalRack.filter(t=>meta.strongTypes.includes(t.t)).length;
-    raw+=honors>=8?12:honors>=6?9:honors>=4?6:honors>=2?3:0;
-    raw+=pairs>=3?6:pairs>=2?4:pairs>=1?2:0;
-    raw+=jk>=2?4:jk>=1?2:0;
+    raw+=honors>=9?18:honors>=7?14:honors>=5?10:honors>=3?6:honors*1;
+    raw+=pairs>=4?6:pairs>=3?4:pairs>=2?2:pairs>=1?1:0;
+    raw+=jk>=2?3:jk>=1?1:0;
+    raw-=finalRack.filter(t=>t.t==="s").length*1.5; // number tiles hurt
   } else {
-    // numbered sections
+    // Numbered sections (2026, 2468, 369, 13579)
     const strongNums=meta.strongNums||[];
     const weakNums=meta.weakNums||[];
     const strong=finalRack.filter(t=>t.t==="s"&&strongNums.includes(t.n)).length;
     const weak=finalRack.filter(t=>t.t==="s"&&weakNums.includes(t.n)).length;
-    raw+=strong>=8?10:strong>=6?8:strong>=4?5:strong>=2?3:0;
-    if(meta.pairBonus){raw+=pairs>=4?5:pairs>=3?4:pairs>=2?3:pairs>=1?1:0;}
-    raw+=jk>=2?4:jk>=1?2:0;
+    raw+=strong>=10?18:strong>=8?15:strong>=6?11:strong>=4?7:strong>=2?3:strong*1;
+    // Pairs/pungs of strong tiles bonus
+    const strongPairs=Object.entries(iqCountGroups(finalRack))
+      .filter(([k,v])=>{const parts=k.split("-");return parts[0]==="s"&&v>=2&&strongNums.includes(Number(parts[2]));}).length;
+    raw+=strongPairs>=3?5:strongPairs>=2?3:strongPairs>=1?1:0;
+    raw+=jk>=2?3:jk>=1?1:0;
     raw+=fl>=2&&meta.wantsFlowers?2:fl>=1&&meta.wantsFlowers?1:0;
-    if(weak>=4)raw-=4;else if(weak>=2)raw-=2;
+    raw-=weak>=6?4:weak>=4?2:weak>=2?1:0;
+
+    // FIX 3: TILE VERSATILITY BONUS
+    // Some tiles appear in multiple sections (6 is in 2468+369+2026, 5 is in 13579).
+    // Keeping crossover tiles that serve 2+ sections is good mahjong instinct.
+    const TILE_SECTIONS={
+      2:["2026","2468"],4:["2468"],6:["2026","2468","369"],8:["2468"],
+      3:["369","13579"],9:["369","13579"],5:["13579"],7:["13579"],1:["13579"],
+    };
+    let versatileCount=0;
+    finalRack.filter(t=>t.t==="s").forEach(t=>{
+      const sects=TILE_SECTIONS[t.n]||[];
+      if(sects.length>=2&&sects.includes(sectionId))versatileCount++;
+    });
+    raw+=versatileCount>=4?3:versatileCount>=2?1:0;
   }
 
-  const score=raw/1.8;
+  raw=Math.max(0,Math.min(25,Math.round(raw)));
+  // Tighter buckets — 25 requires near-perfect structure
   let bucketed=10;
-  if(score>=12)bucketed=25;
-  else if(score>=9)bucketed=20;
-  else if(score>=6)bucketed=15;
+  if(raw>=23)bucketed=25;
+  else if(raw>=17)bucketed=20;
+  else if(raw>=10)bucketed=15;
   return{tileStrengthScore:bucketed};
 }
 
@@ -228,7 +258,6 @@ function iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId){
   const weakNums=meta.weakNums||[];
   const strongTypes=meta.strongTypes||[];
   const weakTypes=meta.weakTypes||[];
-  const riskyPass=meta.riskyPass||[];
 
   const isStrongTile=(t)=>{
     if(t.t==="j")return true;
@@ -250,48 +279,83 @@ function iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId){
   const brokenPairKeys=[];
   Object.keys(startGroups).forEach(k=>{
     if(startGroups[k]>=2&&(!finalGroups[k]||finalGroups[k]<2)){
-      brokenPairsTotal++;
-      brokenPairKeys.push(k);
+      brokenPairsTotal++;brokenPairKeys.push(k);
     }
   });
 
-  let adj=0;
+  // FIX 1: AVAILABILITY-AWARE — measure weak clearance rate
+  const totalWeakInStart=startingRack.filter(t=>isWeakTile(t)).length;
+  const allPassed=passedTilesByRound.flatMap(p=>p.out||[]);
+  const totalWeakPassed=allPassed.filter(t=>isWeakTile(t)).length;
+  const weakClearRate=totalWeakInStart>0?totalWeakPassed/totalWeakInStart:1;
+
+  // FIX 2: BLIND PASS LENIENCY — halve the strong-tile penalty on blind passes
+  let totalRoundScore=0;
   const passInsights=passedTilesByRound.map(p=>{
     const tiles=p.out||[];
     if(tiles.length===0)return{roundName:p.label||p.roundName||"Pass",passedTiles:[],quality:"neutral",insight:"No tiles passed this round."};
-    let weakPassed=0,strongPassed=0;
+    const isBlind=p.blind||false;
+    let weakPassed=0,strongPassed=0,neutralPassed=0;
     tiles.forEach(t=>{
-      if(isStrongTile(t)){strongPassed++;adj=Math.max(adj-2,-8);}
-      else if(isWeakTile(t)){weakPassed++;adj=Math.min(adj+1.5,8);}
+      if(isStrongTile(t))strongPassed++;
+      else if(isWeakTile(t))weakPassed++;
+      else neutralPassed++;
     });
+    // Blind pass: strong-tile penalty halved — less information available
+    const strongPenalty=isBlind?2:4;
+    let roundScore=10+(weakPassed*3)-(strongPassed*strongPenalty)+(neutralPassed*0.5);
+    roundScore=Math.max(0,Math.min(15,roundScore));
+    totalRoundScore+=roundScore;
+
     let quality="neutral",insight="";
-    if(strongPassed>0&&weakPassed===0){quality="weak";insight=`Passed ${strongPassed} tile${strongPassed>1?"s":""} your section wanted to keep.`;}
-    else if(weakPassed>0&&strongPassed===0){quality="strong";insight=`Passed ${weakPassed} off-direction tile${weakPassed>1?"s":""} — clean round.`;}
-    else if(strongPassed>0&&weakPassed>0){quality="mixed";insight=`Mixed round — passed some useful tiles alongside the weaker ones.`;}
-    else{quality="neutral";insight="Neutral pass — tiles were neither clearly strong nor weak for your section.";}
+    if(strongPassed>0&&weakPassed===0){
+      quality="weak";
+      insight=isBlind
+        ?`Passed ${strongPassed} useful tile${strongPassed>1?"s":""} — a tough spot on a blind pass.`
+        :`Passed ${strongPassed} tile${strongPassed>1?"s":""} your section wanted to keep.`;
+    } else if(weakPassed>0&&strongPassed===0){
+      quality="strong";
+      insight=`Passed ${weakPassed} off-direction tile${weakPassed>1?"s":""} — clean${isBlind?" blind":""} round.`;
+    } else if(strongPassed>0&&weakPassed>0){
+      quality="mixed";
+      insight=isBlind?"Mixed blind pass — gave away a useful tile but cleared some weak ones too.":"Mixed round — passed some useful tiles alongside the weaker ones.";
+    } else{
+      quality="neutral";
+      insight=`Neutral${isBlind?" blind":""} pass — tiles were neither clearly strong nor weak for your section.`;
+    }
     return{roundName:p.label||p.roundName||"Pass",passedTiles:tiles,quality,insight};
   });
 
-  adj=Math.max(-8,Math.min(8,adj));
-  adj-=Math.min(brokenPairsTotal*2,6);
-  const raw=10+adj;
+  const roundCount=Math.max(passedTilesByRound.length,1);
+  const avgRound=totalRoundScore/roundCount;
+  let raw=(avgRound/15)*25;
+  // Availability bonus: clearing most of your weak tiles is disciplined play
+  if(totalWeakInStart>=4){
+    raw+=weakClearRate>=0.75?3:weakClearRate>=0.5?1:weakClearRate<=0.2?-2:0;
+  }
+  raw-=brokenPairsTotal*3;
+  raw=Math.max(0,Math.min(25,raw));
+
   let bucketed=10;
   if(raw>=22)bucketed=25;
   else if(raw>=16)bucketed=20;
-  else if(raw>=11)bucketed=15;
+  else if(raw>=9)bucketed=15;
   return{passQualityScore:bucketed,passInsights,brokenPairsCount:brokenPairsTotal,brokenPairKeys};
 }
 
 function iqTiming(totalTime,roundCount){
   const rc=Math.max(roundCount,1);
   const avg=totalTime/rc;
-  let timingScore=10,timingInsight="";
-  if(avg>=8&&avg<=20){timingScore=10;timingInsight="Good pace. You took enough time without overthinking.";}
-  else if(avg>=4&&avg<8){timingScore=6;timingInsight="Slightly fast — give yourself a few more seconds per round.";}
-  else if(avg<4){timingScore=4;timingInsight="You moved very quickly — the rack may have needed another look.";}
-  else if(avg>20&&avg<=30){timingScore=8;timingInsight="Slightly deliberate, but still within a reasonable window.";}
-  else if(avg>30&&avg<=45){timingScore=6;timingInsight="You took your time. Try to recognise your strongest group faster.";}
-  else{timingScore=4;timingInsight="Very slow pace — trust your instincts more.";}
+  let timingScore,timingInsight;
+  // Sweet spot is 8–20 seconds. Under 8 is fast (risky). Over 30 is slow.
+  if(avg>=8&&avg<=14){timingScore=10;timingInsight="Great pace — decisive without rushing. This is the sweet spot.";}
+  else if(avg>14&&avg<=20){timingScore=9;timingInsight="Good pace. You took enough time without overthinking.";}
+  else if(avg>20&&avg<=28){timingScore=7;timingInsight="Slightly deliberate — try to identify your strongest group a little faster.";}
+  else if(avg>28&&avg<=40){timingScore=5;timingInsight="You took your time. Trust your instincts — the best pass is usually obvious within 15 seconds.";}
+  else if(avg>40){timingScore=3;timingInsight="Very slow pace. Try to commit to a section before your first pass and move from there.";}
+  else if(avg>=5&&avg<8){timingScore=7;timingInsight="Slightly fast — a few more seconds per pass would sharpen your decisions.";}
+  else if(avg>=3&&avg<5){timingScore=5;timingInsight="Moving quickly — give yourself at least 8 seconds per pass to properly read the rack.";}
+  else{timingScore=3;timingInsight="Very fast passing. Slow down — each decision shapes your whole hand.";}
   return{timingScore,timingInsight};
 }
 
@@ -520,10 +584,54 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   if(!startingRack||!finalRack||!sectionId)return null;
 
   const roundCount=Math.max((passedTilesByRound||[]).length,1);
-  const{directionScore,directionExplanation}=iqDirection(finalRack,sectionId);
-  const{tileStrengthScore}=iqTileStrength(finalRack,sectionId);
+  let{directionScore,directionExplanation}=iqDirection(finalRack,sectionId);
+  let{tileStrengthScore}=iqTileStrength(finalRack,sectionId);
   const{passQualityScore,passInsights,brokenPairsCount}=iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId);
   const{timingScore,timingInsight}=iqTiming(totalTime||0,roundCount);
+
+  // ── DEAL QUALITY FLOOR ──────────────────────────────────────────────────────
+  const meta=SECTION_META[sectionId]||{};
+  const strongNums=meta.strongNums||[];
+  const strongTypes=meta.strongTypes||[];
+  const dealStrong=startingRack.filter(t=>{
+    if(strongTypes.includes(t.t))return true;
+    if(t.t==="s"&&strongNums.includes(t.n))return true;
+    if(t.t==="j")return true;
+    return false;
+  }).length;
+  const finalStrong=finalRack.filter(t=>{
+    if(strongTypes.includes(t.t))return true;
+    if(t.t==="s"&&strongNums.includes(t.n))return true;
+    if(t.t==="j")return true;
+    return false;
+  }).length;
+  const retentionRate=dealStrong>0?finalStrong/dealStrong:0;
+  // Retention bonus capped at +2 (was +4) — prevents stacking inflation
+  if(retentionRate>=0.85&&dealStrong>=5){
+    directionScore=Math.min(40,directionScore+2);
+    tileStrengthScore=Math.min(25,tileStrengthScore+(tileStrengthScore<20?3:0));
+  } else if(retentionRate>=0.7&&dealStrong>=5){
+    directionScore=Math.min(40,directionScore+1);
+  }
+  // Poor deal floor — only if truly starved (≤2 strong tiles dealt)
+  if(dealStrong<=2){
+    directionScore=Math.max(directionScore,16);
+    tileStrengthScore=Math.max(tileStrengthScore,10);
+  }
+
+  // ── SECTION DOMINANCE BONUS ─────────────────────────────────────────────────
+  // Capped at +2 total (was +4) — direction should be earned, not awarded
+  const allSectionScores=SECS.map(s=>s.ck(finalRack));
+  const chosenIdx=SECS.findIndex(s=>s.id===sectionId);
+  const chosenScore=chosenIdx>=0?allSectionScores[chosenIdx]:0;
+  const otherScores=allSectionScores.filter((_,i)=>i!==chosenIdx);
+  const bestOther=otherScores.length?Math.max(...otherScores):0;
+  if(chosenScore>=0.2&&chosenScore>=bestOther*2.5){
+    directionScore=Math.min(40,directionScore+2);
+    directionExplanation+=" Your rack had nowhere else to go — that's a decisive deal.";
+  } else if(chosenScore>=0.2&&chosenScore>=bestOther*1.8){
+    directionScore=Math.min(40,directionScore+1);
+  }
 
   const totalScore=Math.max(0,Math.min(100,directionScore+tileStrengthScore+passQualityScore+timingScore));
   const{level,levelExplanation}=iqScoreLevel(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
@@ -632,6 +740,20 @@ async function fetchLBEntries(code){
     if(!res.ok)return[];
     const rows=await res.json();
     return rows.map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,ts:new Date(r.updated_at).getTime()}));
+  }catch{return[];}
+}
+
+async function fetchPeriodEntries(code,period){
+  // period: "weekly" | "monthly" | "alltime"
+  const view=`leaderboard_${period}`;
+  try{
+    const res=await fetch(
+      `${SB_URL}/rest/v1/${view}?club_code=eq.${code}&order=iq_score.desc&limit=50`,
+      {headers:SB_HEADERS}
+    );
+    if(!res.ok)return[];
+    const rows=await res.json();
+    return rows.map(r=>({name:r.name,iqScore:r.iq_score,streak:r.streak,ts:new Date(r.updated_at).getTime()}));
   }catch{return[];}
 }
 
@@ -1302,8 +1424,15 @@ function ClubCodeEntry({setScreen}){
 
       {open&&<div className="rk-in" style={{background:"#fff",border:`1px solid ${C.jade+"25"}`,borderTop:"none",borderRadius:"0 0 12px 12px",padding:"14px 16px"}}>
         {savedClub?(
-          <button onClick={()=>setScreen("leaderboard")} style={{width:"100%",padding:"11px 0",borderRadius:10,border:"none",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",fontSize:13,fontFamily:F.d,fontWeight:700,cursor:"pointer",marginBottom:10}}>
-            View {savedClub.name} Leaderboard →
+          <button onClick={()=>setScreen("leaderboard")} style={{width:"100%",borderRadius:12,background:"#fff",border:`1px solid ${C.bdr}`,cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"12px 14px",marginBottom:10,textAlign:"left",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
+            <div style={{width:40,height:40,borderRadius:11,background:`linear-gradient(135deg,${C.hero1},${C.hero2})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{savedClub.emoji}</div>
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2,marginBottom:2}}>{savedClub.name}</div>
+              <div style={{fontSize:11,color:C.mut}}>View today's leaderboard</div>
+            </div>
+            <div style={{background:`linear-gradient(135deg,${C.jade},#156B42)`,borderRadius:20,padding:"5px 12px",flexShrink:0}}>
+              <span style={{fontSize:12,fontWeight:700,color:"#fff",fontFamily:F.d}}>Open →</span>
+            </div>
           </button>
         ):(
           <>
@@ -1353,6 +1482,59 @@ function LeaveClubButton({onLeave}){
   );
 }
 
+// ─── PERIOD LEADERBOARD TABLE ─────────────────────────────────────────────────
+function PeriodTable({code,period,myName,showTime}){
+  const [entries,setEntries]=useState([]);
+  const [loading,setLoading]=useState(true);
+
+  useEffect(()=>{
+    setLoading(true);
+    fetchPeriodEntries(code,period).then(rows=>{setEntries(rows);setLoading(false);});
+  },[code,period]);
+
+  if(loading)return(
+    <div style={{textAlign:"center",padding:"24px 14px"}}>
+      <div style={{fontSize:20,opacity:0.3,marginBottom:6}}>⏳</div>
+      <div style={{fontSize:11,color:C.mut}}>Loading…</div>
+    </div>
+  );
+
+  if(!entries.length)return(
+    <div style={{textAlign:"center",padding:"28px 14px"}}>
+      <div style={{fontSize:26,marginBottom:8}}>🀄</div>
+      <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,marginBottom:4}}>No scores yet</div>
+      <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>Be the first to post a score for this period.</div>
+    </div>
+  );
+
+  const cols=showTime
+    ?{template:"28px 1fr 44px 44px 36px",headers:["#","Name","IQ","Time","🔥"]}
+    :{template:"28px 1fr 52px 36px",headers:["#","Name","IQ","🔥"]};
+
+  return(
+    <>
+      <div style={{display:"grid",gridTemplateColumns:cols.template,gap:0,padding:"8px 14px",background:C.bg2,borderBottom:`1px solid ${C.bdr}`}}>
+        {cols.headers.map((h,i)=>(
+          <div key={i} style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,textAlign:i>1?"center":"left"}}>{h}</div>
+        ))}
+      </div>
+      {entries.map((e,i)=>{
+        const isMe=myName&&e.name.toLowerCase()===myName.toLowerCase();
+        const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":null;
+        return(
+          <div key={i} style={{display:"grid",gridTemplateColumns:cols.template,gap:0,padding:"11px 14px",background:isMe?C.jade+"06":"#fff",borderBottom:i<entries.length-1?`1px solid ${C.bdr}`:"none",alignItems:"center"}}>
+            <div style={{fontSize:13}}>{medal||<span style={{fontFamily:F.d,fontSize:12,fontWeight:700,color:C.mut}}>{i+1}</span>}</div>
+            <div style={{fontFamily:F.d,fontSize:13,fontWeight:isMe?800:600,color:isMe?C.jade:C.ink,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{e.name}{isMe?" (you)":""}</div>
+            <div style={{textAlign:"center"}}><span style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:e.iqScore>=80?C.jade:e.iqScore>=60?C.gold:C.cinn}}>{e.iqScore}</span></div>
+            {showTime&&<div style={{textAlign:"center",fontSize:11,color:C.mut,fontFamily:F.d,fontWeight:600}}>{e.time?fT(e.time):"—"}</div>}
+            <div style={{textAlign:"center",fontSize:11,color:C.cinn}}>{e.streak>1?e.streak:""}</div>
+          </div>
+        );
+      })}
+    </>
+  );
+}
+
 // ─── LEADERBOARD SCREEN ────────────────────────────────────────────────────────
 function LeaderboardScreen({home,dRes,streak}){
   const code=getClubCode();
@@ -1364,12 +1546,11 @@ function LeaderboardScreen({home,dRes,streak}){
   const [nameInput,setNameInput]=useState(getClubName()||"");
   const [submitted,setSubmitted]=useState(false);
   const [nameErr,setNameErr]=useState("");
-  const [showNameForm,setShowNameForm]=useState(false);
+  const [period,setPeriod]=useState("today");
 
   const iq=dRes?.iq;
   const myName=getClubName();
 
-  // Load entries on mount and check if already submitted
   useEffect(()=>{
     if(!code)return;
     setLoading(true);
@@ -1406,13 +1587,20 @@ function LeaderboardScreen({home,dRes,streak}){
   const myEntry=entries.find(e=>myName&&e.name.toLowerCase()===myName.toLowerCase());
   const myRank=myEntry?entries.indexOf(myEntry)+1:null;
 
+  const PERIODS=[
+    {id:"today",label:"Today"},
+    {id:"weekly",label:"This Week"},
+    {id:"monthly",label:"Month"},
+    {id:"alltime",label:"All Time"},
+  ];
+
   return(
     <div style={S.pg} className="rk-pg">
       <RackleHeader onBack={home}/>
 
       {/* CLUB HERO */}
       <div style={{borderRadius:20,overflow:"hidden",marginBottom:12,background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"24px 20px 20px",textAlign:"center",boxShadow:"0 8px 32px rgba(0,0,0,0.18)"}}>
-        <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:10}}>DAILY LEADERBOARD · #{dn}</div>
+        <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:10}}>CLUB LEADERBOARD · #{dn}</div>
         <div style={{fontSize:32,marginBottom:6}}>{club.emoji}</div>
         <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:"#fff",letterSpacing:-0.5,marginBottom:4}}>{club.name}</div>
         <div style={{fontSize:11,color:"rgba(255,255,255,0.4)",marginBottom:16}}>{club.location}</div>
@@ -1423,7 +1611,7 @@ function LeaderboardScreen({home,dRes,streak}){
           <div style={{display:"flex",justifyContent:"center",gap:24}}>
             <div style={{textAlign:"center"}}>
               <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.gilt}}>{entries.length}</div>
-              <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:2,fontWeight:700,marginTop:2}}>PLAYERS TODAY</div>
+              <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:2,fontWeight:700,marginTop:2}}>TODAY</div>
             </div>
             {entries.length>0&&<><div style={{width:1,background:"rgba(255,255,255,0.08)"}}/>
             <div style={{textAlign:"center"}}>
@@ -1439,38 +1627,51 @@ function LeaderboardScreen({home,dRes,streak}){
         )}
       </div>
 
-      {/* SUBMIT YOUR SCORE */}
-      {iq&&!submitted&&!showNameForm&&<button onClick={()=>setShowNameForm(true)} style={{width:"100%",padding:"13px 16px",borderRadius:12,border:"none",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",cursor:"pointer",marginBottom:10,display:"flex",alignItems:"center",gap:10,textAlign:"left",boxShadow:`0 4px 16px rgba(27,125,78,0.3)`}}>
-        <span style={{fontSize:20,flexShrink:0}}>📊</span>
-        <div style={{flex:1}}>
-          <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,lineHeight:1,marginBottom:2}}>Add your score to the board</div>
-          <div style={{fontSize:11,opacity:0.8}}>IQ {iq.totalScore} · {iq.level}</div>
+      {/* SUBMIT YOUR SCORE — always visible inline card when daily done */}
+      {iq&&!submitted&&(
+        <div style={{borderRadius:16,overflow:"hidden",marginBottom:10,border:`1px solid ${C.bdr}`,background:"#fff",boxShadow:"0 2px 8px rgba(0,0,0,0.04)"}}>
+          {/* Score preview banner */}
+          <div style={{background:`linear-gradient(135deg,#2C2420,#1A1612)`,padding:"14px 16px",display:"flex",alignItems:"center",gap:12}}>
+            <div style={{width:44,height:44,borderRadius:12,background:"rgba(255,255,255,0.15)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+              <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:"#fff",lineHeight:1}}>{iq.totalScore}</div>
+              <div style={{fontSize:8,color:"rgba(255,255,255,0.7)",fontWeight:700,letterSpacing:0.5}}>IQ</div>
+            </div>
+            <div style={{flex:1}}>
+              <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:"#fff",lineHeight:1,marginBottom:3}}>Post your score</div>
+              <div style={{fontSize:11,color:"rgba(255,255,255,0.75)",lineHeight:1.4}}>{iq.level} · ⏱ {fT(dRes?.time||0)}{streak>1?` · 🔥 ${streak}d streak`:""}</div>
+            </div>
+          </div>
+          {/* Name + submit inline */}
+          <div style={{padding:"12px 14px"}}>
+            <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>YOUR NAME ON THE BOARD</div>
+            <div style={{display:"flex",gap:6}}>
+              <input
+                value={nameInput}
+                onChange={e=>setNameInput(e.target.value)}
+                onKeyDown={e=>e.key==="Enter"&&submit()}
+                placeholder={getClubName()||"Your name or nickname"}
+                maxLength={20}
+                style={{flex:1,padding:"10px 12px",borderRadius:10,border:`1.5px solid ${nameErr?C.cinn:C.bdr}`,fontSize:13,fontFamily:F.b,color:C.ink,outline:"none",minWidth:0}}
+              />
+              <button
+                onClick={submit}
+                disabled={submitting||!nameInput.trim()}
+                style={{padding:"10px 18px",borderRadius:10,border:"none",background:nameInput.trim()?`linear-gradient(135deg,${C.jade},#156B42)`:"#D5CFC5",color:"#fff",fontSize:13,fontFamily:F.d,fontWeight:800,cursor:nameInput.trim()?"pointer":"default",whiteSpace:"nowrap",transition:"background 0.2s",flexShrink:0}}
+              >
+                {submitting?"…":"Post"}
+              </button>
+            </div>
+            {nameErr&&<div style={{fontSize:11,color:C.cinn,marginTop:5}}>{nameErr}</div>}
+          </div>
         </div>
-        <span style={{fontSize:14,fontWeight:700}}>›</span>
-      </button>}
+      )}
 
-      {iq&&!submitted&&showNameForm&&<div style={{...S.card,marginBottom:10}}>
-        <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>YOUR NAME ON THE BOARD</div>
-        <div style={{background:C.sage,borderRadius:10,padding:"10px 12px",marginBottom:10}}>
-          <div style={{fontSize:12,fontWeight:700,color:C.sageB}}>Your score today</div>
-          <div style={{fontSize:11,color:C.mut,marginTop:2}}>IQ {iq.totalScore} · {iq.level} · ⏱ {fT(dRes?.time||0)}{streak>1?` · 🔥 ${streak}-day streak`:""}</div>
-        </div>
-        <input value={nameInput} onChange={e=>setNameInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} placeholder="Your name or nickname" maxLength={20} style={{width:"100%",padding:"10px 12px",borderRadius:10,border:`1.5px solid ${nameErr?C.cinn:C.bdr}`,fontSize:13,fontFamily:F.b,color:C.ink,outline:"none",marginBottom:6,boxSizing:"border-box"}}/>
-        {nameErr&&<div style={{fontSize:11,color:C.cinn,marginBottom:6}}>{nameErr}</div>}
-        <div style={{display:"flex",gap:6}}>
-          <button onClick={()=>setShowNameForm(false)} style={{...S.oBtn,flex:1,fontSize:12}}>Cancel</button>
-          <button onClick={submit} disabled={submitting} style={{...S.greenBtn,flex:2,fontSize:13,letterSpacing:0.2,fontFamily:F.b,fontWeight:700,opacity:submitting?0.7:1}}>
-            {submitting?"Posting…":"Submit score"}
-          </button>
-        </div>
-      </div>}
-
-      {submitted&&myEntry&&<div style={{...S.card,marginBottom:10,background:C.sage,borderColor:C.sageB+"20"}}>
-        <div style={{display:"flex",alignItems:"center",gap:10}}>
-          <span style={{fontSize:24}}>✓</span>
+      {submitted&&myEntry&&<div style={{borderRadius:14,overflow:"hidden",marginBottom:10,border:`1.5px solid ${C.sageB}25`,background:C.sage}}>
+        <div style={{background:`linear-gradient(135deg,${C.sageB},#3A6B52)`,padding:"12px 16px",display:"flex",alignItems:"center",gap:10}}>
+          <div style={{width:32,height:32,borderRadius:10,background:"rgba(255,255,255,0.2)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>✓</div>
           <div>
-            <div style={{fontSize:13,fontWeight:800,color:C.sageB,fontFamily:F.d}}>Score posted!</div>
-            <div style={{fontSize:11,color:C.mut,marginTop:1}}>You're #{myRank} on the board today · IQ {myEntry.iqScore}</div>
+            <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#fff",lineHeight:1,marginBottom:2}}>Score posted!</div>
+            <div style={{fontSize:11,color:"rgba(255,255,255,0.8)"}}>You're #{myRank} today · IQ {myEntry.iqScore}</div>
           </div>
         </div>
       </div>}
@@ -1479,44 +1680,64 @@ function LeaderboardScreen({home,dRes,streak}){
         <div style={{fontSize:12,color:C.ink,lineHeight:1.6}}>🎯 <strong>Complete today's Daily Rackle</strong> to add your score to the leaderboard.</div>
       </div>}
 
-      {/* LEADERBOARD TABLE */}
-      {loading?(
-        <div style={{...S.card,textAlign:"center",padding:"28px 14px",marginBottom:8}}>
-          <div style={{fontSize:24,marginBottom:8,opacity:0.4}}>⏳</div>
-          <div style={{fontSize:12,color:C.mut}}>Loading scores…</div>
-        </div>
-      ):entries.length>0?(
-        <div style={{...S.card,padding:0,overflow:"hidden",marginBottom:8}}>
-          <div style={{display:"grid",gridTemplateColumns:"28px 1fr 44px 44px 36px",gap:0,padding:"8px 14px",background:C.bg2,borderBottom:`1px solid ${C.bdr}`}}>
-            {["#","Name","IQ","Time","🔥"].map((h,i)=>(
-              <div key={i} style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,textAlign:i>1?"center":"left"}}>{h}</div>
-            ))}
-          </div>
-          {entries.map((e,i)=>{
-            const isMe=myName&&e.name.toLowerCase()===myName.toLowerCase();
-            const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":null;
-            return(
-              <div key={i} style={{display:"grid",gridTemplateColumns:"28px 1fr 44px 44px 36px",gap:0,padding:"11px 14px",background:isMe?C.jade+"06":"#fff",borderBottom:i<entries.length-1?`1px solid ${C.bdr}`:"none",alignItems:"center"}}>
-                <div style={{fontSize:13,textAlign:"left"}}>{medal||<span style={{fontFamily:F.d,fontSize:12,fontWeight:700,color:C.mut}}>{i+1}</span>}</div>
-                <div style={{fontFamily:F.d,fontSize:13,fontWeight:isMe?800:600,color:isMe?C.jade:C.ink,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{e.name}{isMe?" (you)":""}</div>
-                <div style={{textAlign:"center"}}>
-                  <span style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:e.iqScore>=80?C.jade:e.iqScore>=60?C.gold:C.cinn}}>{e.iqScore}</span>
-                </div>
-                <div style={{textAlign:"center",fontSize:11,color:C.mut,fontFamily:F.d,fontWeight:600}}>{e.time?fT(e.time):"—"}</div>
-                <div style={{textAlign:"center",fontSize:11,color:C.cinn}}>{e.streak>1?e.streak:""}</div>
-              </div>
-            );
-          })}
-        </div>
-      ):(
-        <div style={{...S.card,textAlign:"center",padding:"32px 14px",marginBottom:8}}>
-          <div style={{fontSize:28,marginBottom:8}}>🀄</div>
-          <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:C.ink,marginBottom:4}}>No scores yet today</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.6}}>Be the first to post your score. Complete today's Daily Rackle and add your name above.</div>
-        </div>
-      )}
+      {/* PERIOD TABS */}
+      <div style={{display:"flex",gap:4,marginBottom:8,background:C.bg2,borderRadius:10,padding:3}}>
+        {PERIODS.map(p=>(
+          <button key={p.id} onClick={()=>setPeriod(p.id)} style={{flex:1,padding:"7px 0",borderRadius:8,border:"none",
+            background:period===p.id?"#fff":"transparent",
+            color:period===p.id?C.ink:C.mut,
+            fontSize:11,fontWeight:700,cursor:"pointer",
+            transition:"all 0.2s",
+            boxShadow:period===p.id?"0 1px 4px rgba(0,0,0,0.08)":"none"}}>
+            {p.label}
+          </button>
+        ))}
+      </div>
 
-      <div style={{fontSize:10,color:C.mut,textAlign:"center",lineHeight:1.5,opacity:0.7,marginBottom:12}}>Leaderboard resets daily at midnight · Code: {code}</div>
+      {/* LEADERBOARD TABLE */}
+      <div style={{...S.card,padding:0,overflow:"hidden",marginBottom:8}}>
+        {period==="today"?(
+          loading?(
+            <div style={{textAlign:"center",padding:"24px 14px"}}>
+              <div style={{fontSize:20,opacity:0.3,marginBottom:6}}>⏳</div>
+              <div style={{fontSize:11,color:C.mut}}>Loading scores…</div>
+            </div>
+          ):entries.length>0?(
+            <>
+              <div style={{display:"grid",gridTemplateColumns:"28px 1fr 44px 44px 36px",gap:0,padding:"8px 14px",background:C.bg2,borderBottom:`1px solid ${C.bdr}`}}>
+                {["#","Name","IQ","Time","🔥"].map((h,i)=>(
+                  <div key={i} style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,textAlign:i>1?"center":"left"}}>{h}</div>
+                ))}
+              </div>
+              {entries.map((e,i)=>{
+                const isMe=myName&&e.name.toLowerCase()===myName.toLowerCase();
+                const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":null;
+                return(
+                  <div key={i} style={{display:"grid",gridTemplateColumns:"28px 1fr 44px 44px 36px",gap:0,padding:"11px 14px",background:isMe?C.jade+"06":"#fff",borderBottom:i<entries.length-1?`1px solid ${C.bdr}`:"none",alignItems:"center"}}>
+                    <div style={{fontSize:13}}>{medal||<span style={{fontFamily:F.d,fontSize:12,fontWeight:700,color:C.mut}}>{i+1}</span>}</div>
+                    <div style={{fontFamily:F.d,fontSize:13,fontWeight:isMe?800:600,color:isMe?C.jade:C.ink,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{e.name}{isMe?" (you)":""}</div>
+                    <div style={{textAlign:"center"}}><span style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:e.iqScore>=80?C.jade:e.iqScore>=60?C.gold:C.cinn}}>{e.iqScore}</span></div>
+                    <div style={{textAlign:"center",fontSize:11,color:C.mut,fontFamily:F.d,fontWeight:600}}>{e.time?fT(e.time):"—"}</div>
+                    <div style={{textAlign:"center",fontSize:11,color:C.cinn}}>{e.streak>1?e.streak:""}</div>
+                  </div>
+                );
+              })}
+            </>
+          ):(
+            <div style={{textAlign:"center",padding:"28px 14px"}}>
+              <div style={{fontSize:26,marginBottom:8}}>🀄</div>
+              <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,marginBottom:4}}>No scores yet today</div>
+              <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>Complete today's Daily Rackle and add your name above.</div>
+            </div>
+          )
+        ):(
+          <PeriodTable code={code} period={period} myName={myName} showTime={false}/>
+        )}
+      </div>
+
+      <div style={{fontSize:10,color:C.mut,textAlign:"center",lineHeight:1.5,opacity:0.7,marginBottom:12}}>
+        {period==="today"?"Resets daily at midnight":period==="weekly"?"Best score per player · Mon–Sun":period==="monthly"?"Best score per player · this month":"Best score per player · all time"} · Code: {code}
+      </div>
       <div style={{display:"flex",gap:8,marginBottom:8}}>
         <button onClick={home} style={{...S.oBtn,flex:1}}>← Home</button>
         <LeaveClubButton onLeave={home}/>
