@@ -3194,9 +3194,9 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       </div>}
 
       {/* TOP BAR */}
-      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:0,marginTop:8}}>
-        <Statspill streak={streak} rounds={rounds} bestIQ={bestIQ} streakBadge={streakBadge}/>
-        <div style={{display:"flex",alignItems:"center",background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:12,overflow:"hidden"}}>
+      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"flex-end",marginBottom:0,marginTop:8}}>
+        <div style={{flex:1}}><Statspill streak={streak} rounds={rounds} bestIQ={bestIQ} streakBadge={streakBadge}/></div>
+        <div style={{display:"flex",alignItems:"center",background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:12,overflow:"hidden",flexShrink:0}}>
           <ProfilePill rounds={rounds} streak={streak} setScreen={setScreen}/>
           <div style={{width:1,alignSelf:"stretch",background:C.bdr}}/>
           <button onClick={showSettings} aria-label="Open settings" style={{background:"none",border:"none",padding:"4px 12px",cursor:"pointer",fontSize:13,color:C.mut,display:"flex",alignItems:"center"}}>⚙</button>
@@ -3225,8 +3225,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             </div>
             <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:4,flexShrink:0}}>
               <button onClick={()=>{dismiss();showTutorial();}} style={{background:C.jade,border:"none",borderRadius:8,padding:"5px 10px",fontSize:11,fontWeight:700,color:"#fff",cursor:"pointer",whiteSpace:"nowrap"}}>Quick intro →</button>
-              <button onClick={dismiss} style={{background:"none",border:"none",fontSize:10,color:C.mut,cursor:"pointer",padding:0}}>Dismiss</button>
             </div>
+            <button onClick={dismiss} aria-label="Dismiss" style={{background:"none",border:"none",color:C.mut,fontSize:14,cursor:"pointer",padding:"0 0 0 4px",lineHeight:1,flexShrink:0}}>✕</button>
           </div>
         );
       })()}
