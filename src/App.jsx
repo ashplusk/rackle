@@ -2519,8 +2519,8 @@ function ClubCodeEntry({setScreen}){
       <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px",borderRadius:open?"12px 12px 0 0":12,background:C.jade+"06",border:`1px solid ${C.jade+"25"}`,cursor:"pointer",textAlign:"left"}}>
         <div style={{display:"flex",flexDirection:"column",alignItems:"flex-start",gap:6,flex:1}}>
           <div style={{fontSize:10,color:C.jade,letterSpacing:1.5,fontWeight:700}}>COMMUNITY</div>
-          <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.2}}>Club Leaderboards</div>
-          <div style={{fontSize:11,color:C.mut,lineHeight:1.4}}>{savedClub?"Climb your club rankings. Win your next game.":"Play with your Mahj club · Post your score. Own the board."}</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,lineHeight:1.2}}>Club Leaderboards</div>
+          <div style={{fontSize:12,color:C.mut,lineHeight:1.4}}>{savedClub?"Climb your club rankings. Win your next game.":"Play with your Mahj club · Post your score. Own the board."}</div>
         </div>
         <span style={{fontSize:11,color:C.jade,opacity:0.7,marginLeft:8}}>{open?"▴":"▾"}</span>
       </button>
@@ -3196,7 +3196,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       {/* TOP BAR */}
       <div style={{display:"flex",alignItems:"flex-start",justifyContent:"flex-end",marginBottom:0,marginTop:8}}>
         <div style={{flex:1}}><Statspill streak={streak} rounds={rounds} bestIQ={bestIQ} streakBadge={streakBadge}/></div>
-        <div style={{display:"flex",alignItems:"center",background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:8,overflow:"hidden",flexShrink:0}}>
+        <div style={{display:"flex",alignItems:"center",background:streak>0?C.cinn+"08":bestIQ?C.gold+"08":C.bg2,border:streak>0?`1px solid ${C.cinn}20`:bestIQ?`1px solid ${C.gold}20`:`1px solid ${C.bdr}`,borderRadius:8,overflow:"hidden",flexShrink:0}}>
           <ProfilePill rounds={rounds} streak={streak} setScreen={setScreen}/>
           <div style={{width:1,alignSelf:"stretch",background:C.bdr}}/>
           <button onClick={showSettings} aria-label="Open settings" style={{background:"none",border:"none",padding:"4px 12px",cursor:"pointer",fontSize:13,color:C.mut,display:"flex",alignItems:"center"}}>⚙</button>
@@ -3218,7 +3218,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       {rounds===0&&!ST.get("tutorialDismissed",false)&&(()=>{
         const dismiss=()=>{ST.set("tutorialDismissed",true);};
         return(
-          <div className="rk-in" style={{display:"flex",alignItems:"center",gap:10,background:`linear-gradient(135deg,${C.jade}10,${C.jade}05)`,border:`1px solid ${C.jade}25`,borderRadius:14,padding:"10px 14px",marginBottom:8,marginTop:16}}>
+          <div className="rk-in" style={{display:"flex",alignItems:"center",gap:10,background:`linear-gradient(135deg,${C.jade}10,${C.jade}05)`,border:`1px solid ${C.jade}25`,borderRadius:14,padding:"10px 14px",marginBottom:8,marginTop:12}}>
             <span style={{fontSize:18,flexShrink:0}}>👋</span>
             <div style={{flex:1,minWidth:0}}>
               <div style={{fontSize:12,fontWeight:700,color:C.jade,fontFamily:F.d}}>New to Rackle?</div>
@@ -3316,7 +3316,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <span aria-hidden="true" style={{fontSize:14,color:C.mut,fontWeight:600}}>›</span>
       </button>
 
-      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16}}>
+      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12,marginTop:4}}>
+        <div style={{flex:1,height:1,background:C.bdr}}/><span style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>RACKLE COMMUNITY</span><div style={{flex:1,height:1,background:C.bdr}}/>
+      </div>
+
+      <ClubCodeEntry onJoin={()=>setScreen("leaderboard")} setScreen={setScreen}/>
+
+      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16,marginTop:20}}>
         <div style={{flex:1,height:1,background:C.bdr}}/><span style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>LEARN & EXPLORE</span><div style={{flex:1,height:1,background:C.bdr}}/>
       </div>
 
@@ -3407,12 +3413,6 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </div>
 
       </div>}
-
-      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12,marginTop:20}}>
-        <div style={{flex:1,height:1,background:C.bdr}}/><span style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>RACKLE COMMUNITY</span><div style={{flex:1,height:1,background:C.bdr}}/>
-      </div>
-
-      <ClubCodeEntry onJoin={()=>setScreen("leaderboard")} setScreen={setScreen}/>
 
       <EmailSignup/>
 
