@@ -2975,12 +2975,7 @@ function Statspill({streak,rounds,bestIQ,streakBadge}){
   const bg=streak>0?C.cinn+"08":bestIQ?C.gold+"08":C.bg2;
   const border=streak>0?`1px solid ${C.cinn}20`:bestIQ?`1px solid ${C.gold}20`:`1px solid ${C.bdr}`;
 
-  if(!hasAny)return(
-    <div style={{display:"flex",alignItems:"center",gap:5,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:12,padding:"4px 12px"}}>
-      <span style={{fontSize:12}}>🔥</span>
-      <span style={{fontSize:11,color:C.mut,fontWeight:600}}>Play daily to build your streak</span>
-    </div>
-  );
+  if(!hasAny)return null;
 
   return(
     <div>
@@ -3226,8 +3221,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <div className="rk-in" style={{display:"flex",alignItems:"center",gap:10,background:`linear-gradient(135deg,${C.jade}10,${C.jade}05)`,border:`1px solid ${C.jade}25`,borderRadius:14,padding:"10px 14px",marginBottom:8}}>
             <span style={{fontSize:18,flexShrink:0}}>👋</span>
             <div style={{flex:1,minWidth:0}}>
-              <div style={{fontSize:12,fontWeight:700,color:C.jade,fontFamily:F.d,marginBottom:1}}>New to Rackle?</div>
-              <div style={{fontSize:11,color:C.mut,lineHeight:1.5}}>Learn how the Charleston works and what your IQ score means.</div>
+              <div style={{fontSize:12,fontWeight:700,color:C.jade,fontFamily:F.d}}>New to Rackle?</div>
             </div>
             <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:4,flexShrink:0}}>
               <button onClick={()=>{dismiss();showTutorial();}} style={{background:C.jade,border:"none",borderRadius:8,padding:"5px 10px",fontSize:11,fontWeight:700,color:"#fff",cursor:"pointer",whiteSpace:"nowrap"}}>Quick intro →</button>
