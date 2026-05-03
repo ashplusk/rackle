@@ -2980,7 +2980,7 @@ function Statspill({streak,rounds,bestIQ,streakBadge}){
   return(
     <div>
       {/* Collapsed pill */}
-      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:5,background:bg,border,borderRadius:12,padding:"4px 12px",cursor:"pointer"}}>
+      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:5,background:bg,border,borderRadius:8,padding:"4px 12px",cursor:"pointer"}}>
         <span style={{fontSize:11}}>{icon}</span>
         <span style={{fontFamily:F.d,fontSize:12,fontWeight:800,color}}>{value}</span>
         <span style={{fontSize:11,color,fontWeight:600,opacity:0.8}}>{label}</span>
@@ -3196,7 +3196,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       {/* TOP BAR */}
       <div style={{display:"flex",alignItems:"flex-start",justifyContent:"flex-end",marginBottom:0,marginTop:8}}>
         <div style={{flex:1}}><Statspill streak={streak} rounds={rounds} bestIQ={bestIQ} streakBadge={streakBadge}/></div>
-        <div style={{display:"flex",alignItems:"center",background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:12,overflow:"hidden",flexShrink:0}}>
+        <div style={{display:"flex",alignItems:"center",background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:8,overflow:"hidden",flexShrink:0}}>
           <ProfilePill rounds={rounds} streak={streak} setScreen={setScreen}/>
           <div style={{width:1,alignSelf:"stretch",background:C.bdr}}/>
           <button onClick={showSettings} aria-label="Open settings" style={{background:"none",border:"none",padding:"4px 12px",cursor:"pointer",fontSize:13,color:C.mut,display:"flex",alignItems:"center"}}>⚙</button>
@@ -3209,7 +3209,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <h1 style={{fontFamily:F.d,fontSize:48,color:C.ink,margin:"0 0 6px",fontWeight:900,letterSpacing:-2.5,lineHeight:1}}>Rackle</h1>
         <p style={{fontFamily:F.d,fontSize:16,color:C.jade,margin:"0 0 10px",fontWeight:600,fontStyle:"italic",letterSpacing:0.3}}>The Daily Mahjong Workout.</p>
         <p style={{fontSize:11,color:C.mut,margin:"0 0 2px",lineHeight:1.6}}>Rate your Charleston. Track your improvement.</p>
-        <p style={{fontSize:11,color:C.mut,margin:0,lineHeight:1.6,fontWeight:600}}>Share with your Mahj club. 🀄</p>
+        <p style={{fontSize:11,color:C.mut,margin:0,lineHeight:1.6,fontWeight:600}}>Share with your Mahj club.</p>
       </div>
 
       {streak>0&&!settings?.hideStreak&&<StreakCard streak={streak} streakBadge={streakBadge} bestIQ={bestIQ} clubName={club?.name||null} onStats={showStats} firstName={profile?.nickname?profile.nickname.split(" ")[0]:null}/>}
@@ -3218,7 +3218,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       {rounds===0&&!ST.get("tutorialDismissed",false)&&(()=>{
         const dismiss=()=>{ST.set("tutorialDismissed",true);};
         return(
-          <div className="rk-in" style={{display:"flex",alignItems:"center",gap:10,background:`linear-gradient(135deg,${C.jade}10,${C.jade}05)`,border:`1px solid ${C.jade}25`,borderRadius:14,padding:"10px 14px",marginBottom:8}}>
+          <div className="rk-in" style={{display:"flex",alignItems:"center",gap:10,background:`linear-gradient(135deg,${C.jade}10,${C.jade}05)`,border:`1px solid ${C.jade}25`,borderRadius:14,padding:"10px 14px",marginBottom:8,marginTop:16}}>
             <span style={{fontSize:18,flexShrink:0}}>👋</span>
             <div style={{flex:1,minWidth:0}}>
               <div style={{fontSize:12,fontWeight:700,color:C.jade,fontFamily:F.d}}>New to Rackle?</div>
