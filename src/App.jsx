@@ -3204,7 +3204,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       </div>
 
       {/* HERO */}
-      <div style={{textAlign:"center",padding:"18px 0 10px"}}>
+      <div style={{textAlign:"center",padding:"30px 0 10px"}}>
         <div className="rk-float" style={{fontSize:40,marginBottom:10,lineHeight:1}}>🀄</div>
         <h1 style={{fontFamily:F.d,fontSize:48,color:C.ink,margin:"0 0 6px",fontWeight:900,letterSpacing:-2.5,lineHeight:1}}>Rackle</h1>
         <p style={{fontFamily:F.d,fontSize:16,color:C.jade,margin:"0 0 10px",fontWeight:600,fontStyle:"italic",letterSpacing:0.3}}>The Daily Mahjong Workout.</p>
