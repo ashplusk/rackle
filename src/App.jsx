@@ -328,7 +328,7 @@ const SECS=[
 // Hands: 222 000 2222 6666 | 2026 DDD 2222 DDD | FFF 2026 222 6666 | 22 00 222 666 NEWS
 // Key: 2 and 6 always together. Soap (0/White Dragon) acts as wild. 1 NEWS hand needs all 4 winds.
 // Flowers appear in hand 3. Dragons appear in hands 1,2,3. 6 is required in all 4 hands.
-{id:"2026",name:"2026",color:"#B54E7A",icon:"📅",desc:"Year tiles — 2s, 0 (Soap), 6s",hold:"2s, 6s, Soap (White Dragon), Flowers, any Dragon",pass:"All odd numbers (1,3,5,7,9), 4s, 8s — Winds only if building the NEWS hand",combos:"6 appears in all 4 hands — it is your most critical tile. Soap (White Dragon) is wild to any suit. You need pungs and kongs of 2s and 6s — not just pairs.",joker:null,hands:4,
+{id:"2026",name:"2026",color:"#B54E7A",icon:"📅",desc:"Year tiles — 2s, 0 (Soap), 6s",hold:"2s, 6s, Soap (White Dragon) — highest priority. Red & Green Dragons. Flowers only if you have 2+",pass:"All odd numbers (1,3,5,7,9), 4s, 8s — Winds only if building the NEWS hand",combos:"6 appears in all 4 hands — it is your most critical tile. Soap (White Dragon) is uniquely valuable here: it is suit-wild, meaning it counts as any suit's 0. Red and Green Dragons also appear. Flowers only appear in 1 of 4 hands — don't hold a lone Flower for this section.",joker:null,hands:4,
   ck:h=>{
     // Core tiles: 2, 6 (number), Soap/White Dragon (0)
     const twos=h.filter(t=>t.t==="s"&&t.n===2).length;
@@ -387,7 +387,7 @@ const SECS=[
 //        33 66 666 999 NEWS | FF 3369 3333 3333 | FF 333 666 999 369
 // Key: 6 in 6/6 hands (100%). 3 and 9 in 5/6. Flowers in 3/6. Dragons in 2/6. 1 NEWS hand.
 // Last hand (FF 333 666 999 369) is CONCEALED.
-{id:"369",name:"369",color:"#B84A72",icon:"💗",desc:"Multiples of 3 — 3, 6, 9",hold:"3s, 6s, 9s, Flowers, any Dragon",pass:"1s, 2s, 4s, 5s, 7s, 8s, Winds (unless building NEWS)",combos:"6 is in every single 369 hand — it is the most locked-in anchor on the entire card. Never pass a 6 if you're considering this section.",joker:null,hands:6,
+{id:"369",name:"369",color:"#B84A72",icon:"💗",desc:"Multiples of 3 — 3, 6, 9",hold:"3s, 6s, 9s, any Dragon — Flowers only if you have 2+ (appear in 3/6 hands)",pass:"1s, 2s, 4s, 5s, 7s, 8s, lone Flowers, Winds (unless building NEWS hand)",combos:"6 is in every single 369 hand — the most locked-in anchor on the entire card. Never pass a 6 if you're considering this section. Dragons appear in 2 hands. The final hand (FF 333 666 999 369) is fully concealed — no exposures allowed.",joker:null,hands:6,
   ck:h=>{
     const threes=h.filter(t=>t.t==="s"&&t.n===3).length;
     const sixes=h.filter(t=>t.t==="s"&&t.n===6).length;
@@ -416,7 +416,7 @@ const SECS=[
 //        1111 33 55 77 9999 | FF 11 33 55 111 111 | FF 135 777 999 DDD
 // Key: 5 in 9/10 hands. 3 in 9/10. 1 in 8/10. Flowers in 4/10. Winds (N,S) in 2/10.
 // Dragons in 4/10. 9 in 4/10. 7 in 4/10. 1 is the least flexible odd.
-{id:"13579",name:"13579",color:"#D48A2A",icon:"🟠",desc:"Odd numbers — 1, 3, 5, 7, 9",hold:"3s, 5s, 1s, N/S Winds, Flowers",pass:"All evens, E/W Winds",combos:"5 and 3 are the most-used odds — appear in 9 of 9 hands. North and South Winds appear in one hand. Two hands use Dragon kongs: one needs a MATCHING Dragon, one needs an OPPOSITE Dragon.",joker:null,hands:9,
+{id:"13579",name:"13579",color:"#D48A2A",icon:"🟠",desc:"Odd numbers — 1, 3, 5, 7, 9",hold:"5s and 3s (top priority), 1s, 7s, 9s, N/S Winds, Flowers, Dragons",pass:"All evens, E/W Winds",combos:"5 and 3 are the most-used odds — appear in 9 of 10 hands. North and South Winds appear in 2 hands (pass East/West freely). Dragons appear in 4 hands — worth holding a pair. Two hands use Dragon kongs: one needs a MATCHING Dragon, one needs an OPPOSITE Dragon. Flowers appear in 4 of 10 hands.",joker:null,hands:10,
   ck:h=>{
     const odds=h.filter(t=>t.t==="s"&&t.n%2===1);
     const c={};odds.forEach(t=>{c[t.n]=(c[t.n]||0)+1;});
@@ -474,7 +474,7 @@ const SECS=[
 // Key: Winds in 7/8 hands. Dragons in 5/8. Numbers appear in 5/8 (!) but usually as kongs.
 // Hand 2: 1234 with 3 dragon groups (very specific consecutive). Hand 3/4: like-number kongs.
 // Hand 6: specific 1N 2EE 3WWW 4SSSS (1 suit, specific numbers). Flowers in 2/8.
-{id:"wd",name:"Winds & Dragons",color:"#5C5247",icon:"🌀",desc:"Winds, Dragons — and specific number kongs",hold:"All Winds, all Dragons, Jokers",pass:"Most number tiles (except 1–4 kongs if strong)",combos:"Winds appear in 7 of 8 hands — they are your most important tiles here. Two hands use kongs of like numbers (2s or 1s), so 4-of-a-kind number tiles can also fit. Flowers appear in 2 hands.",joker:null,hands:8,
+{id:"wd",name:"Winds & Dragons",color:"#5C5247",icon:"🌀",desc:"Winds, Dragons — and specific number kongs",hold:"All Winds, all Dragons, Jokers — number kongs of 1–4 if you have 4+ of one value",pass:"Most number tiles, Flowers (appear in only 2 of 8 hands — don't hold a lone Flower)",combos:"Winds appear in 7 of 8 hands — they are your most important tiles here. Dragons appear in 5 of 8. Two hands use kongs of like numbers (1s or 2s), so 4-of-a-kind number tiles can fit. Flowers appear in only 2 hands — only hold them if you're stacking multiple.",joker:null,hands:8,
   ck:h=>{
     const winds=h.filter(t=>t.t==="w");
     const dragons=h.filter(t=>t.t==="d");
@@ -507,7 +507,7 @@ const SECS=[
 // Key: "1" here = any one number. All 3 hands use the SAME number throughout.
 // Flowers appear in hands 1 and 3 (as pairs or sextette of 6). Dragons in hands 2 and 3.
 // Critical: you must pick ONE number and mass all its copies.
-{id:"aln",name:"Like Numbers",color:"#2460A8",icon:"🔵",desc:"All one number — kongs & pairs of the same number",hold:"4+ of one number, Flowers, Jokers, Dragons",pass:"All other numbers (especially spread-out singles)",combos:"Pick your number by round 1 and commit hard. The FFFFFF sextette appears here — protect all Flowers. You need 8–12 tiles of a single number, so jokers are critical.",joker:null,hands:3,
+{id:"aln",name:"Like Numbers",color:"#2460A8",icon:"🔵",desc:"All one number — kongs & pairs of the same number",hold:"4+ of one number, Flowers, Jokers, Dragons",pass:"All other numbers — spread is your enemy. Pass any number that isn't your target immediately",combos:"Pick your number by round 1 and commit hard — spreading across two numbers kills your score. Flowers are critical: one hand uses a sextette of 6 Flowers (1111 FFFFFF 1111). Dragons appear in 2 of 3 hands. You need 8–12 tiles of a single number, so Jokers are essential.",joker:null,hands:3,
   ck:h=>{
     const nc={};h.filter(t=>t.t==="s").forEach(t=>{nc[t.n]=(nc[t.n]||0)+1;});
     const vals=Object.values(nc);
@@ -534,7 +534,7 @@ const SECS=[
 //        11111 44444 DDDD (2 nos. in 1 suit w opp. dragon)
 // Key: Only 3 hands. Quints require 5 of a single tile — impossible without 2+ Jokers.
 // Two Jokers are the MINIMUM entry requirement. Without them, abandon immediately.
-{id:"q",name:"Quints",color:"#7B5CB0",icon:"🟣",desc:"Five of a kind — requires 2+ Jokers",hold:"Jokers (mandatory), 3–4 of any tile",pass:"Everything else if you don't have 2 Jokers",combos:"Without 2 Jokers, this section is unreachable — abandon it in round 1. With 2+ Jokers and 3–4 of a tile, this becomes viable. Note: the third hand requires the OPPOSITE dragon (not matching).",joker:null,hands:3,
+{id:"q",name:"Quints",color:"#7B5CB0",icon:"🟣",desc:"Five of a kind — requires 2+ Jokers",hold:"Jokers (mandatory — need 2+), 3–4 of any tile, Flowers",pass:"Everything else if you don't have 2 Jokers — pivot immediately",combos:"Without 2 Jokers, this section is unreachable — abandon it in round 1. With 2+ Jokers and 3–4 of a specific tile, commit to stacking that tile. Flowers appear in hand 2 (FF 11111 22 33333). The third hand requires the OPPOSITE Dragon (not matching) — hold both dragon types if you have them.",joker:null,hands:3,
   ck:h=>{
     const jk=h.filter(t=>t.t==="j").length;
     // Without 2 jokers, quints are nearly impossible — hard floor
@@ -559,7 +559,7 @@ const SECS=[
 // CONCEALED_ONLY: no exposures. JOKERS_PROHIBITED: jokers cannot be used in singles or pairs.
 // Key: All pairs and singles. Flowers appear in 3/6 hands. Specific number pairs.
 // The 7-consecutive hand (11 22 33 44 55 66 77) is very specific.
-{id:"sp",name:"Singles & Pairs",color:"#2E9485",icon:"🩵",desc:"Only singles and pairs — fully concealed, no Jokers",hold:"Pairs (especially 2026 tiles, 369 tiles), Flowers",pass:"Triples and quads — any group of 3+ is wrong here; Jokers (worthless)",combos:"Fully concealed — no exposures. Jokers are completely useless here (cannot be a single or in a pair). Build pairs of matching tiles. Flowers can fill tile slots (FF = 2 flowers used together).",joker:"Jokers CANNOT be used in Singles & Pairs — not as a single, not in a pair. They have zero value here. Note: Jokers can never be passed in the Charleston either, so you're stuck with them.",hands:6,
+{id:"sp",name:"Singles & Pairs",color:"#2E9485",icon:"🩵",desc:"Only singles and pairs — fully concealed, no Jokers",hold:"Pairs (especially 2026 tiles, 369 tiles, consecutive same-suit pairs), Flowers",pass:"Triples and quads — any group of 3+ is structurally wrong here",combos:"Fully concealed — no exposures allowed. Jokers are completely useless (cannot be a single or in a pair) and cannot be passed in the Charleston, so you're stuck with any you're dealt. Build pairs of matching tiles across all three suits. Flowers count as natural pairs (FF together). One hand uses 7 consecutive same-suit pairs — if you see a run of paired numbers in one suit, protect them.",joker:"Jokers CANNOT be used in Singles & Pairs — not as a single, not in a pair. They have zero value here and cannot be passed away during the Charleston. If you're dealt Jokers and commit to S&P, you're playing shorthanded — factor this in before choosing this section.",hands:6,
   ck:h=>{
     // For S&P: group by exact tile identity
     const c={};
@@ -3130,10 +3130,10 @@ function ClubCodeEntry({setScreen}){
     <div style={{marginBottom:0}}>
       {/* Collapsed trigger — flat bottom so global pill attaches flush */}
       <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px",borderRadius:open?"12px 12px 0 0":"12px 12px 0 0",background:C.jade+"06",border:`1px solid ${C.jade+"25"}`,cursor:"pointer",textAlign:"left"}}>
-        <div style={{display:"flex",flexDirection:"column",alignItems:"flex-start",gap:6,flex:1}}>
-          <div style={{fontSize:10,color:C.jade,letterSpacing:1.5,fontWeight:700}}>COMMUNITY</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,lineHeight:1.2}}>Club Leaderboards</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.4}}>{savedClub?"Climb your club rankings. Win your next game.":"Play with your Mahj club · Post your score. Own the board."}</div>
+        <div style={{display:"flex",flexDirection:"column",alignItems:"flex-start",gap:0,flex:1}}>
+          <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:5}}>COMMUNITY</div>
+          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2,marginBottom:5}}>Club Leaderboards</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.5}}>{savedClub?"Climb your club rankings. Win your next game.":"Play with your Mahj club · Post your score. Own the board."}</div>
         </div>
         <span style={{fontSize:11,color:C.jade,opacity:0.7,marginLeft:8}}>{open?"▴":"▾"}</span>
       </button>
@@ -3205,10 +3205,10 @@ function GlobalLeaderboardPill(){
     <div style={{marginBottom:8}}>
       {/* Pill trigger — attached below club leaderboard, borderRadius top is square to attach visually */}
       <button onClick={toggle} style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px",borderRadius:open?"0 0 0 0":"0 0 12px 12px",background:"#2460A806",border:`1px solid #2460A825`,borderTop:"none",cursor:"pointer",textAlign:"left"}}>
-        <div style={{display:"flex",flexDirection:"column",alignItems:"flex-start",gap:6,flex:1}}>
-          <div style={{fontSize:10,color:"#2460A8",letterSpacing:1.5,fontWeight:700}}>🌍 GLOBAL · DAY #{dn}</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,lineHeight:1.2}}>Global Leaderboard</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.4}}>{entries.length>0?`${entries.length} players worldwide today`:"All Clubs, All Players"}</div>
+        <div style={{display:"flex",flexDirection:"column",alignItems:"flex-start",gap:0,flex:1}}>
+          <div style={{fontSize:9,color:"#2460A8",letterSpacing:1.5,fontWeight:700,marginBottom:5}}>🌍 GLOBAL · DAY #{dn}</div>
+          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2,marginBottom:5}}>Global Leaderboard</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.5}}>{entries.length>0?`${entries.length} players worldwide today`:"All Clubs, All Players"}</div>
         </div>
         <span style={{fontSize:11,color:"#2460A8",opacity:0.7,marginLeft:8}}>{open?"▴":"▾"}</span>
       </button>
@@ -3947,59 +3947,104 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <button onClick={showStats} style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:8,borderRadius:16,padding:"14px 16px",textAlign:"left",background:"#2460A806",border:`1px solid #2460A825`}}>
         <div style={{width:44,height:44,borderRadius:13,background:"#2460A810",border:`1px solid #2460A820`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>📊</div>
         <div style={{flex:1}}>
-          <div style={{fontSize:10,color:"#2460A8",letterSpacing:2,fontWeight:700,marginBottom:2}}>YOUR STATS</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,marginBottom:2}}>Progress & Trends</div>
-          <div style={{fontSize:12,color:C.mut}}>Last 5 scores · Tendencies & section mastery</div>
+          <div style={{fontSize:9,color:"#2460A8",letterSpacing:2,fontWeight:700,marginBottom:5}}>YOUR STATS</div>
+          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,marginBottom:5}}>Progress & Trends</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.5}}>Last 5 scores · Tendencies & section mastery</div>
         </div>
         <span aria-hidden="true" style={{fontSize:14,color:C.mut,fontWeight:600}}>›</span>
+      </button>
+
+      <button onClick={showTutorial} style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"12px 16px",borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",textAlign:"left",marginBottom:8}}>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:5}}>WALKTHROUGH</div>
+          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2,marginBottom:5}}>Interactive Tutorial</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.5,marginTop:0}}>Learn Rackle step by step</div>
+        </div>
+        <span style={{fontSize:14,color:C.jade,fontWeight:700,flexShrink:0}}>›</span>
       </button>
 
       <div style={{display:"flex",gap:8,marginBottom:8}}>
         <button onClick={showCardGuide} style={{flex:1,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${C.gold}25`,background:C.gold+"06",textAlign:"center"}}>
           <span style={{fontSize:22}}>📋</span>
           <div style={{fontSize:9,color:C.gold,letterSpacing:1.5,fontWeight:700}}>2026 NMJL</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,lineHeight:1.2}}>Card Guide</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.35,marginTop:1}}>Hold & pass tips</div>
+          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2}}>Card Guide</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:1}}>Hold & pass tips</div>
         </button>
         <button onClick={()=>setShowHelp(!showHelp)} aria-expanded={showHelp} style={{flex:1,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${showHelp?C.gold+"40":C.gold+"25"}`,background:C.gold+"06",textAlign:"center"}}>
           <span style={{fontSize:22}}>📖</span>
           <div style={{fontSize:9,color:C.gold,letterSpacing:1.5,fontWeight:700}}>LEARN</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,lineHeight:1.2}}>How to Play</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.35,marginTop:1}}>Rules & scoring</div>
+          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2}}>How to Play</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:1}}>Rules & scoring</div>
         </button>
       </div>
-
-      <button onClick={showTutorial} style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"12px 16px",borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",textAlign:"left",marginBottom:8}}>
-        <span style={{fontSize:22,flexShrink:0}}>🀄</span>
-        <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:2}}>WALKTHROUGH</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,lineHeight:1.2}}>Interactive Tutorial</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.35,marginTop:1}}>Learn Rackle step by step</div>
-        </div>
-        <span style={{fontSize:14,color:C.jade,fontWeight:700,flexShrink:0}}>›</span>
-      </button>
 
       {showHelp&&<div style={{background:"#FFFFF8",border:`1px solid ${C.gold}25`,borderRadius:16,marginBottom:8,overflow:"hidden"}} className="rk-in">
 
         {/* HOW TO PLAY steps */}
-        <div style={{padding:"16px 16px 12px"}}>
-          <div style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:12}}>HOW TO PLAY</div>
-          {["You're dealt 13 tiles. A timer starts.","Pass Right (3), Over (3), Left (0–3, blind). Jokers can't be passed.","Option to continue with a second Charleston and a Courtesy Pass.","Choose your target section — Rackle rates how well your tiles fit."].map((s,i)=>(
-            <div key={i} style={{display:"flex",gap:10,marginBottom:i<3?12:0,alignItems:"flex-start"}}>
+        <div style={{padding:"16px 16px 4px"}}>
+          <div style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:12}}>THE CHARLESTON</div>
+          {[
+            {title:"You're dealt 13 tiles",body:"At the start of each round you receive 13 tiles — a mix of numbers (Bam, Crak, Dot), Winds, Dragons, Flowers, and possibly Jokers. A timer starts the moment your hand appears."},
+            {title:"Pass Right — 3 tiles",body:"You must pass exactly 3 tiles to the player on your right. Pick your 3 weakest tiles for your target section. You cannot pass Jokers at any point in the Charleston."},
+            {title:"Pass Across — 3 tiles",body:"Pass 3 tiles to the player directly opposite you. By now you've received 6 new tiles — reassess your section before deciding what to give away."},
+            {title:"Pass Left — 1 to 3 tiles (blind optional)",body:"Pass 1–3 tiles to the player on your left. You can do a blind pass: place your tiles face-down before seeing what you receive. A strong blind pass protects tiles you've already committed to."},
+            {title:"Second Charleston (optional)",body:"If all four players agree, a second Charleston can be played — another Right, Across, Left sequence. This is optional and any player can refuse it."},
+            {title:"Courtesy Pass (optional)",body:"After the Charleston(s), each player may offer a single courtesy pass — offering 1–3 tiles face-down. The other player can take all, some, or none."},
+            {title:"Pick your section & get scored",body:"After passing is complete, choose which hand section you were building toward (2468, 369, Consecutive Run, etc.). Rackle scores how well your final 13-tile rack fits that section."},
+          ].map((s,i)=>(
+            <div key={i} style={{display:"flex",gap:10,marginBottom:i<6?14:0,alignItems:"flex-start"}}>
               <div style={{width:22,height:22,borderRadius:11,background:C.jade+"15",border:`1.5px solid ${C.jade}30`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:800,color:C.jade,flexShrink:0,marginTop:1}}>{i+1}</div>
-              <span style={{fontSize:12,color:C.ink,lineHeight:1.65}}>{s}</span>
+              <div>
+                <div style={{fontSize:12,fontWeight:700,color:C.ink,marginBottom:3}}>{s.title}</div>
+                <div style={{fontSize:11,color:C.mut,lineHeight:1.65}}>{s.body}</div>
+              </div>
             </div>
           ))}
+        </div>
+
+        {/* KEY RULES */}
+        <div style={{background:C.cinn+"05",borderTop:`1px solid ${C.cinn}15`,borderBottom:`1px solid ${C.cinn}15`,padding:"14px 16px"}}>
+          <div style={{fontSize:9,color:C.cinn,letterSpacing:2,fontWeight:700,marginBottom:12}}>KEY RULES TO KNOW</div>
+          {[
+            {icon:"🃏",title:"Jokers cannot be passed",body:"Jokers are stuck in your hand for the entire Charleston. You can never pass them to another player. If you're dealt Jokers and targeting Singles & Pairs, they're dead weight — factor that in."},
+            {icon:"🔒",title:"Concealed hands",body:"Some hands on the NMJL card are marked concealed — you cannot expose any tiles during the actual game. In Rackle, these hands score differently: your rack is judged on whether it fits a fully-concealed structure."},
+            {icon:"🌸",title:"Flowers are not suit tiles",body:"Flowers are their own tile type — they're not Bam, Crak, or Dot. They can fill Flower slots in hands that call for them (FFF, FFFFFF, FF). They count as pairs in Singles & Pairs."},
+            {icon:"🧼",title:"Soap (White Dragon) is suit-wild in 2026",body:"In the 2026 section, Soap acts as a wild tile across all three suits — it fills the '0' (zero) position in any suit. It is not interchangeable this way in other sections."},
+          ].map((r,i)=>(
+            <div key={i} style={{display:"flex",gap:10,marginBottom:i<3?12:0,alignItems:"flex-start"}}>
+              <div style={{width:28,height:28,borderRadius:8,background:"#fff",border:`1px solid ${C.cinn}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,flexShrink:0}}>{r.icon}</div>
+              <div>
+                <div style={{fontSize:12,fontWeight:700,color:C.ink,marginBottom:3}}>{r.title}</div>
+                <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>{r.body}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* DAILY VS PRACTICE */}
+        <div style={{padding:"14px 16px",borderBottom:`1px solid ${C.bdr}`}}>
+          <div style={{fontSize:9,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:12}}>DAILY vs PRACTICE</div>
+          <div style={{display:"flex",gap:8}}>
+            <div style={{flex:1,background:C.jade+"08",borderRadius:10,padding:"10px 12px",border:`1px solid ${C.jade}15`}}>
+              <div style={{fontSize:10,fontWeight:800,color:C.jade,marginBottom:5}}>Daily Rackle</div>
+              <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>One hand per day. Every player receives the exact same 13 tiles — your score goes to the club leaderboard and global rankings. One shot only.</div>
+            </div>
+            <div style={{flex:1,background:C.cinn+"06",borderRadius:10,padding:"10px 12px",border:`1px solid ${C.cinn}15`}}>
+              <div style={{fontSize:10,fontWeight:800,color:C.cinn,marginBottom:5}}>Practice Mode</div>
+              <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>Unlimited hands, any section, no pressure. Pick a specific section to drill, or go random. Great for building instincts before the daily.</div>
+            </div>
+          </div>
         </div>
 
         {/* CHARLESTON IQ section */}
         <div style={{background:C.gold+"06",borderTop:`1px solid ${C.gold}20`,borderBottom:`1px solid ${C.gold}20`,padding:"14px 16px"}}>
           <div style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:14}}>CHARLESTON IQ · HOW IT'S SCORED</div>
+          <p style={{fontSize:11,color:C.mut,lineHeight:1.55,margin:"0 0 14px"}}>Your Charleston IQ is scored out of 100 across four dimensions. Each game gives you a personalised coach note based on your strongest and weakest subscores.</p>
           {[
-            {label:"Direction",max:40,icon:"🧭",desc:"Did your tiles commit to one section? The biggest slice — good reads early pay off most."},
-            {label:"Tile Strength",max:25,icon:"💪",desc:"How structurally strong was your final rack? Pairs, pungs, jokers, and flowers all count."},
-            {label:"Pass Quality",max:25,icon:"🔄",desc:"Did you pass the right tiles? Passing strong tiles or breaking pairs costs you here."},
-            {label:"Timing",max:10,icon:"⏱",desc:"8–20 seconds per pass is the sweet spot. Too fast or too slow both drop your score."},
+            {label:"Direction",max:40,icon:"🧭",desc:"The biggest slice — did your final rack commit to one section? Holding tiles scattered across multiple sections is the most common mistake. Picking your section early and passing against it pays off most here."},
+            {label:"Tile Strength",max:25,icon:"💪",desc:"How structurally strong was your final rack? Pairs, pungs, kongs, Jokers, and Flowers in the right section all add strength. Isolated singles with no grouping potential drag this score down."},
+            {label:"Pass Quality",max:25,icon:"🔄",desc:"Did you pass the right tiles? Passing a tile your section needs, or breaking a pair you should have protected, costs you here. Passing Jokers (which you can't do) or Flowers when your section wants them also count against you."},
+            {label:"Timing",max:10,icon:"⏱",desc:"8–20 seconds per pass is the sweet spot — enough time to read your rack without overthinking. Passing in under 3 seconds suggests you're not fully evaluating options. Over 30 seconds per pass is too slow."},
           ].map((item,i)=>(
             <div key={i} style={{display:"flex",gap:12,marginBottom:i<3?14:0,alignItems:"flex-start"}}>
               <div style={{width:34,height:34,borderRadius:9,background:"#fff",border:`1px solid ${C.gold}25`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>{item.icon}</div>
@@ -4018,17 +4063,20 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         {/* IQ LEVELS section */}
         <div style={{padding:"14px 16px 16px"}}>
           <div style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:6}}>IQ LEVELS</div>
-          <p style={{fontSize:11,color:C.mut,lineHeight:1.55,margin:"0 0 12px"}}>Each level includes a personalised note based on your strongest and weakest subscores.</p>
+          <p style={{fontSize:11,color:C.mut,lineHeight:1.55,margin:"0 0 12px"}}>Each result includes a personalised coach note based on your strongest and weakest subscores.</p>
           {[
-            {range:"90–100",level:"Mahjong Master",color:C.jade,bg:C.jade+"10"},
-            {range:"80–89",level:"Skilled Player",color:C.jade,bg:C.jade+"08"},
-            {range:"70–79",level:"Game Ready",color:"#2460A8",bg:"#2460A810"},
-            {range:"60–69",level:"Getting There",color:C.gold,bg:C.gold+"10"},
-            {range:"<60",level:"Keep Going, Rookie",color:C.cinn,bg:C.cinn+"08"},
+            {range:"90–100",level:"Mahjong Master",color:C.jade,bg:C.jade+"10",note:"Elite read, clean passes, strong rack."},
+            {range:"80–89",level:"Skilled Player",color:C.jade,bg:C.jade+"08",note:"Solid all-round with one area to sharpen."},
+            {range:"70–79",level:"Game Ready",color:"#2460A8",bg:"#2460A810",note:"On the right track — execution needs tightening."},
+            {range:"60–69",level:"Getting There",color:C.gold,bg:C.gold+"10",note:"Right instincts but one dimension is dragging the score."},
+            {range:"<60",level:"Keep Going, Rookie",color:C.cinn,bg:C.cinn+"08",note:"Focus on picking a section before your first pass."},
           ].map((l,i)=>(
-            <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"7px 10px",borderRadius:8,background:l.bg,marginBottom:i<4?4:0}}>
-              <span style={{fontSize:12,fontWeight:700,color:l.color,fontFamily:F.d}}>{l.level}</span>
-              <span style={{fontSize:10,color:l.color,fontWeight:700,opacity:0.8}}>{l.range}</span>
+            <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 10px",borderRadius:8,background:l.bg,marginBottom:i<4?4:0}}>
+              <div>
+                <div style={{fontSize:12,fontWeight:700,color:l.color,fontFamily:F.d}}>{l.level}</div>
+                <div style={{fontSize:10,color:l.color,opacity:0.75,marginTop:2}}>{l.note}</div>
+              </div>
+              <span style={{fontSize:10,color:l.color,fontWeight:700,opacity:0.8,flexShrink:0,marginLeft:8}}>{l.range}</span>
             </div>
           ))}
           <button onClick={showTutorial} style={{marginTop:14,width:"100%",background:"none",border:`1px solid ${C.gold}30`,borderRadius:10,padding:"9px 12px",fontSize:12,color:C.gold,cursor:"pointer",fontWeight:600,fontFamily:F.d}}>📖 Full interactive tutorial →</button>
