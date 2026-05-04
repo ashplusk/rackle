@@ -88,7 +88,7 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
         try{
           await navigator.share({
             files:[new File([blob],`rackle-day${dayNum}.png`,{type:"image/png"})],
-            title:`Rackle #${dayNum} · IQ ${iq.totalScore}`,
+            title:`Daily Rackle #${dayNum} · IQ ${iq.totalScore}`,
             text:`${iq.level} · playrackle.com`,
           });
           setDone(true);setTimeout(()=>setDone(false),3000);
@@ -265,38 +265,369 @@ function tAria(t){if(t.t==="j")return"Joker tile";if(t.t==="f")return"Flower til
 function tLabel(t){if(t.t==="j")return"Joker";if(t.t==="f")return"Flower";if(t.t==="w")return`${t.v} Wind`;if(t.t==="d")return`${tS(t)} Dragon`;return`${t.n} ${SN[t.s]}`;}
 
 // ─── SECTION DEFINITIONS ─────────────────────────────────────────────────────
+// 2026 NMJL Card — validated against all 3 card images.
+// Scoring philosophy derived from hand-count analysis per section:
+//   2026: 4 hands | 2468: 8 hands | ALN: 3 hands | QUINTS: 3 hands
+//   CR: 8 hands   | 13579: 9 hands  | W/D: 8 hands | 369: 6 hands | S&P: 6 hands
+// Key 2026-card tile weights (frequency across all hands):
+//   6 → highest (appears in 2026, 2468, 369, W/D concealed) — NEVER pass a 6
+//   Flowers → appear in majority of hands across all numeric sections
+//   1 → lowest utility (fewest hands), 9 → low utility (only 13579, CR)
+//   Soap/0 → only 2026 section; very specific but free to any suit
+//   Winds → appear only in 13579 (NN/SS) and W/D; pass from all other sections
 function cg(h,fn){const v=h.filter(fn),jk=h.filter(t=>t.t==="j").length,c={};v.forEach(t=>{const k=`${t.t}-${t.s||""}-${t.n||""}-${t.v||""}`;c[k]=(c[k]||0)+1;});const ct=Object.values(c);let kg=0,pg=0,pr=0;ct.forEach(n=>{if(n>=4)kg++;else if(n>=3)pg++;else if(n>=2)pr++;});return{v:v.length,jk,kg,pg,pr};}
+
+// Consecutive Run scoring — window-based group depth.
+// The 2026 CR hands are NOT about long runs of singles. They are about
+// having pungs/kongs/pairs of numbers that fall within a tight 3–5 number window.
+// e.g. 111 222 3333 4444 → window [1,2,3,4], groups: 3+3+4+4 = 14 tiles, very deep.
+// e.g. 11 222 33 444 5555 → window [1,2,3,4,5], groups: 2+3+2+3+4 = 14 tiles, 5-wide.
+// Scorer: find the best N-wide window where total grouped tiles is maximised.
+// Longer windows (5-wide) score slightly less than tighter windows (3–4 wide)
+// because tighter windows have more hand options on the 2026 card.
+function crWindowScore(h){
+  // Build per-number group counts (collapse suits — CR hands mix suits freely)
+  const gc={};
+  h.filter(t=>t.t==="s").forEach(t=>{gc[t.n]=(gc[t.n]||0)+1;});
+  const nums=Object.keys(gc).map(Number).sort((a,b)=>a-b);
+  if(!nums.length)return{score:0,window:0,depth:0,windowNums:[]};
+
+  let best={score:0,window:0,depth:0,windowNums:[]};
+
+  // Try every consecutive window of width 3, 4, and 5
+  for(let w=3;w<=5;w++){
+    for(let start=1;start<=9-(w-1);start++){
+      const wNums=[];
+      for(let i=0;i<w;i++)wNums.push(start+i);
+      // Total tiles within window (capped at 4 per number — max kong)
+      const tilesInWindow=wNums.reduce((sum,n)=>sum+Math.min(gc[n]||0,4),0);
+      // Number of distinct values present in window
+      const distinctPresent=wNums.filter(n=>(gc[n]||0)>=1).length;
+      // Groups: a number contributes a "group" if it has 2+ copies
+      const groupsInWindow=wNums.filter(n=>(gc[n]||0)>=2).length;
+      // Bonus for having groups (pungs/kongs) vs singles
+      const groupDepth=wNums.reduce((sum,n)=>{
+        const cnt=Math.min(gc[n]||0,4);
+        return sum+(cnt>=4?4:cnt>=3?3:cnt>=2?2:cnt>=1?0.5:0);
+      },0);
+      // Penalise wide windows slightly — 3-wide has more hand options than 5-wide
+      const widthPenalty=w===5?1.5:w===4?0.5:0;
+      // Require at least 2 distinct numbers to be present
+      if(distinctPresent<2)continue;
+      const score=groupDepth*2+tilesInWindow*0.5+groupsInWindow-widthPenalty;
+      if(score>best.score){
+        best={score,window:w,depth:tilesInWindow,windowNums:wNums,groupDepth,distinctPresent};
+      }
+    }
+  }
+  return best;
+}
+
 const SECS=[
-{id:"2026",name:"2026",color:"#B54E7A",icon:"📅",desc:"Year tiles — 2s, Soap, 6s",hold:"2s, 6s, Soap, Flowers",pass:"1s, 9s, odds, Winds",combos:"The 2 and 6 appear together in most hands — prioritise pairing them across suits.",joker:null,hands:6,
-  ck:h=>{const g=cg(h,t=>(t.t==="s"&&[2,6].includes(t.n))||(t.t==="d"&&t.v==="Soap"));const off=h.filter(t=>t.t==="s"&&![2,6].includes(t.n)).length+h.filter(t=>t.t==="w").length;const s=(g.kg*0.12+g.pg*0.09+g.pr*0.05)+g.jk*0.04;const fr=g.v/Math.max(g.v+off,1);return Math.max(0,Math.min(s*fr*2.5,1));}},
-{id:"2468",name:"2468",color:"#B83232",icon:"🔴",desc:"Even numbers (2, 4, 6, 8)",hold:"2s, 4s, 6s, 8s, Flowers, Jokers",pass:"All odds, Winds",combos:"The largest section on the card — 2 and 6 appear in the most hands, prioritise those.",joker:null,hands:10,
-  ck:h=>{const g=cg(h,t=>t.t==="s"&&t.n%2===0);const off=h.filter(t=>t.t==="s"&&t.n%2===1).length+h.filter(t=>t.t==="w").length;const b=h.some(t=>t.t==="s"&&t.n===2)&&h.some(t=>t.t==="s"&&t.n===6);const s=(g.kg*0.12+g.pg*0.09+g.pr*0.05)+g.jk*0.04+(b?0.06:0);const fr=g.v/Math.max(g.v+off,1);return Math.max(0,Math.min(s*fr*2.2,1));}},
-{id:"369",name:"369",color:"#B84A72",icon:"💗",desc:"Multiples of 3 (3, 6, 9)",hold:"3s, 6s, 9s, Flowers",pass:"Non-multiples of 3, Winds",combos:"6 appears in almost every hand — it's your anchor tile. Never pass a 6.",joker:null,hands:8,
-  ck:h=>{const g=cg(h,t=>t.t==="s"&&t.n%3===0);const off=h.filter(t=>t.t==="s"&&t.n%3!==0).length+h.filter(t=>t.t==="w").length;const b=h.some(t=>t.t==="s"&&t.n===6);const s=(g.kg*0.12+g.pg*0.09+g.pr*0.05)+g.jk*0.04+(b?0.06:0);const fr=g.v/Math.max(g.v+off,1);return Math.max(0,Math.min(s*fr*2.5,1));}},
-{id:"13579",name:"13579",color:"#D48A2A",icon:"🟠",desc:"Odd numbers (1, 3, 5, 7, 9)",hold:"Odds, Winds can pair",pass:"All evens",combos:"5 is the most versatile odd — it appears in the most hands. Winds pair well here.",joker:null,hands:9,
-  ck:h=>{const g=cg(h,t=>t.t==="s"&&t.n%2===1);const off=h.filter(t=>t.t==="s"&&t.n%2===0).length;const s=(g.kg*0.12+g.pg*0.09+g.pr*0.05)+g.jk*0.04+h.filter(t=>t.t==="w").length*0.02;const fr=g.v/Math.max(g.v+off,1);return Math.max(0,Math.min(s*fr*2.2,1));}},
-{id:"cr",name:"Consec. Run",color:"#1B7D4E",icon:"🟢",desc:"Sequential tiles across suits",hold:"Consecutive numbers, Flowers",pass:"Isolated numbers, honors",combos:"Runs across 2+ suits give you the most hand options. Don't split a run to chase a pung.",joker:null,hands:11,
-  ck:h=>{const bs={};h.filter(t=>t.t==="s").forEach(t=>{if(!bs[t.s])bs[t.s]=new Set();bs[t.s].add(t.n);});let mr=0;Object.values(bs).forEach(s=>{const a=[...s].sort((a,b)=>a-b);let r=1;for(let i=1;i<a.length;i++){if(a[i]===a[i-1]+1)r++;else{mr=Math.max(mr,r);r=1;}}mr=Math.max(mr,r);});const su=Object.keys(bs).length;const jk=h.filter(t=>t.t==="j").length;const hon=h.filter(t=>t.t==="w"||t.t==="d").length;return Math.max(0,Math.min((mr>=5?0.4:mr>=4?0.3:mr>=3?0.2:mr*0.04)+su*0.04+jk*0.03-hon*0.04,1));}},
-{id:"wd",name:"Winds & Dragons",color:"#5C5247",icon:"🌀",desc:"Honor tiles",hold:"Winds, Dragons",pass:"Number tiles",combos:"You need 5+ honor tiles to make this work. Pass all number tiles aggressively.",joker:null,hands:7,
-  ck:h=>{const g=cg(h,t=>t.t==="w"||t.t==="d");const off=h.filter(t=>t.t==="s").length;const s=(g.kg*0.14+g.pg*0.1+g.pr*0.06)+g.jk*0.04;const fr=g.v/Math.max(g.v+off,1);return Math.max(0,Math.min(s*fr*2.5,1));}},
-{id:"aln",name:"Like Numbers",color:"#2460A8",icon:"🔵",desc:"Same number, all suits",hold:"4+ of one number, Flowers, Jokers",pass:"Scattered numbers",combos:"Pick one or two numbers early and commit. Spreading across too many numbers kills this hand.",joker:null,hands:6,
-  ck:h=>{const c={};h.filter(t=>t.t==="s").forEach(t=>{c[t.n]=(c[t.n]||0)+1;});const v=Object.values(c);const mx=v.length?Math.max(...v):0;const jk=h.filter(t=>t.t==="j").length;const fl=h.filter(t=>t.t==="f").length;return Math.max(0,Math.min((mx>=4?mx*0.08:mx*0.04)+jk*0.04+fl*0.02-Math.max(0,Object.keys(c).length-2)*0.06,1));}},
-{id:"q",name:"Quints",color:"#7B5CB0",icon:"🟣",desc:"Five of a kind",hold:"Jokers, 3-4 of a tile",pass:"Scattered tiles",combos:"You need at least 2 Jokers to complete a quint. Without them, abandon this section early.",joker:null,hands:4,
-  ck:h=>{const jk=h.filter(t=>t.t==="j").length;const c={};h.filter(t=>t.t==="s").forEach(t=>{const k=`${t.s}${t.n}`;c[k]=(c[k]||0)+1;});const v=Object.values(c);const mx=v.length?Math.max(...v):0;if(mx+jk>=5)return Math.min(0.5+jk*0.05,0.85);if(jk>=2&&mx>=3)return 0.35;return Math.max(0,(mx+jk)*0.03-0.1);}},
-{id:"sp",name:"Singles & Pairs",color:"#2E9485",icon:"🩵",desc:"Only singles and pairs",hold:"Pairs, Flowers",pass:"Triples+",combos:"This hand is fully concealed — no Jokers allowed. Focus on building clean pairs.",joker:"Jokers can never be used as a single or in a pair, so they have no value when playing this section. You'll have to toss them eventually.",hands:5,
-  ck:h=>{const c={};h.forEach(t=>{const k=JSON.stringify(t);c[k]=(c[k]||0)+1;});const pr=Object.values(c).filter(v=>v===2).length;const tr=Object.values(c).filter(v=>v>=3).length;return Math.max(0,Math.min(pr*0.07+h.filter(t=>t.t==="j").length*0.02-tr*0.2,1));}},
+// ── 2026 (4 hands) ───────────────────────────────────────────────────────────
+// Hands: 222 000 2222 6666 | 2026 DDD 2222 DDD | FFF 2026 222 6666 | 22 00 222 666 NEWS
+// Key: 2 and 6 always together. Soap (0/White Dragon) acts as wild. 1 NEWS hand needs all 4 winds.
+// Flowers appear in hand 3. Dragons appear in hands 1,2,3. 6 is required in all 4 hands.
+{id:"2026",name:"2026",color:"#B54E7A",icon:"📅",desc:"Year tiles — 2s, 0 (Soap), 6s",hold:"2s, 6s, Soap (White Dragon), Flowers, any Dragon",pass:"All odd numbers (1,3,5,7,9), 4s, 8s — Winds only if building the NEWS hand",combos:"6 appears in all 4 hands — it is your most critical tile. Soap (White Dragon) is wild to any suit. You need pungs and kongs of 2s and 6s — not just pairs.",joker:null,hands:4,
+  ck:h=>{
+    // Core tiles: 2, 6 (number), Soap/White Dragon (0)
+    const twos=h.filter(t=>t.t==="s"&&t.n===2).length;
+    const sixes=h.filter(t=>t.t==="s"&&t.n===6).length;
+    const soap=h.filter(t=>t.t==="d"&&t.v==="Soap").length;
+    const anyDragon=h.filter(t=>t.t==="d").length;
+    const flowers=h.filter(t=>t.t==="f").length;
+    const winds=h.filter(t=>t.t==="w").length;
+    const jk=h.filter(t=>t.t==="j").length;
+    // Off-direction: odd numbers other than via 2/6
+    const offNums=h.filter(t=>t.t==="s"&&![2,6].includes(t.n)).length;
+    // Nucleus: having both 2s and 6s is the core signal
+    const nucleus=(twos>=2?0.12:twos>=1?0.06:0)+(sixes>=2?0.14:sixes>=1?0.07:0);
+    // Supporting tiles
+    const support=soap*0.07+anyDragon*0.03+flowers*0.03+jk*0.05;
+    // Wind bonus (NEWS hand — 22 00 222 666 NEWS needs all 4 wind tiles)
+    const windBonus=winds>=3?0.04:winds>=2?0.02:0;
+    // Penalty for off-direction number tiles
+    const penalty=Math.min(offNums*0.05,0.25);
+    return Math.max(0,Math.min(nucleus+support+windBonus-penalty,1));
+  }},
+
+// ── 2468 (8 hands) ───────────────────────────────────────────────────────────
+// Hands: 222 444 6666 8888 | FF 2222 44 66 8888 | EE 22 444 666 88 WW |
+//        2222 DDD 8888 DDD | FFF 22 44 666 8888 | 2468 2222 D 2222 D |
+//        FFF 2468 FFF 2222 | FF 246 888 246 888
+// Key: 6 is in 7/8 hands. 2 in 7/8. 8 in 7/8. 4 in 6/8. Flowers in 5/8. Dragons in 4/8.
+// East+West winds in 1 hand only (EE/WW). 8 hands = largest section after CR.
+{id:"2468",name:"2468",color:"#B83232",icon:"🔴",desc:"Even numbers — 2, 4, 6, 8",hold:"2s, 4s, 6s, 8s, Flowers, Jokers, any Dragon",pass:"All odds (1,3,5,7,9), North/South Winds",combos:"6 is in 7 of 8 hands — never pass it. 2 is next most common (7/8), then 8 (6/8), then 4 (6/8). The last hand (FF 246 888 246 888) is concealed — no jokers allowed.",joker:null,hands:8,
+  ck:h=>{
+    const evens=h.filter(t=>t.t==="s"&&t.n%2===0);
+    const c={};evens.forEach(t=>{c[t.n]=(c[t.n]||0)+1;});
+    // Count distinct even values held (2,4,6,8)
+    const distinctEvens=Object.keys(c).length;
+    const totalEvens=evens.length;
+    const flowers=h.filter(t=>t.t==="f").length;
+    const dragons=h.filter(t=>t.t==="d").length;
+    const ew=h.filter(t=>t.t==="w"&&(t.v==="East"||t.v==="West")).length;
+    const jk=h.filter(t=>t.t==="j").length;
+    const odds=h.filter(t=>t.t==="s"&&t.n%2===1).length;
+    const nsWinds=h.filter(t=>t.t==="w"&&(t.v==="North"||t.v==="South")).length;
+    // 6 is the anchor — heavy bonus for holding 6s
+    const sixBonus=(c[6]||0)>=2?0.10:(c[6]||0)>=1?0.05:0;
+    // Even tile density score
+    const dens=totalEvens>=8?0.35:totalEvens>=6?0.25:totalEvens>=4?0.16:totalEvens>=2?0.08:totalEvens*0.03;
+    // Diversity bonus: more distinct even values = more hand options
+    const divBonus=distinctEvens>=3?0.06:distinctEvens>=2?0.03:0;
+    // Flower/dragon/joker support
+    const support=flowers*0.03+dragons*0.02+ew*0.02+jk*0.05;
+    const penalty=(odds*0.04)+(nsWinds*0.03);
+    return Math.max(0,Math.min(dens+sixBonus+divBonus+support-penalty,1));
+  }},
+
+// ── 369 (6 hands) ─────────────────────────────────────────────────────────────
+// Hands: 333 666 6666 9999 | 33 66 333 666 9999 | FFF 33 666 99 DDDD |
+//        33 66 666 999 NEWS | FF 3369 3333 3333 | FF 333 666 999 369
+// Key: 6 in 6/6 hands (100%). 3 and 9 in 5/6. Flowers in 3/6. Dragons in 2/6. 1 NEWS hand.
+// Last hand (FF 333 666 999 369) is CONCEALED.
+{id:"369",name:"369",color:"#B84A72",icon:"💗",desc:"Multiples of 3 — 3, 6, 9",hold:"3s, 6s, 9s, Flowers, any Dragon",pass:"1s, 2s, 4s, 5s, 7s, 8s, Winds (unless building NEWS)",combos:"6 is in every single 369 hand — it is the most locked-in anchor on the entire card. Never pass a 6 if you're considering this section.",joker:null,hands:6,
+  ck:h=>{
+    const threes=h.filter(t=>t.t==="s"&&t.n===3).length;
+    const sixes=h.filter(t=>t.t==="s"&&t.n===6).length;
+    const nines=h.filter(t=>t.t==="s"&&t.n===9).length;
+    const total369=threes+sixes+nines;
+    const flowers=h.filter(t=>t.t==="f").length;
+    const dragons=h.filter(t=>t.t==="d").length;
+    const winds=h.filter(t=>t.t==="w").length;
+    const jk=h.filter(t=>t.t==="j").length;
+    const offNums=h.filter(t=>t.t==="s"&&![3,6,9].includes(t.n)).length;
+    // 6 is in every hand — critical anchor
+    const sixBonus=sixes>=2?0.14:sixes>=1?0.07:0;
+    // Tile density
+    const dens=total369>=8?0.32:total369>=6?0.22:total369>=4?0.14:total369>=2?0.07:total369*0.03;
+    // Having 3 and 9 alongside 6 opens more hands
+    const spreadBonus=(threes>=1&&nines>=1)?0.05:(threes>=1||nines>=1)?0.02:0;
+    const support=flowers*0.03+dragons*0.03+jk*0.05;
+    const windBonus=winds>=3?0.03:0; // NEWS hand needs all 4 winds
+    const penalty=offNums*0.05;
+    return Math.max(0,Math.min(dens+sixBonus+spreadBonus+support+windBonus-penalty,1));
+  }},
+
+// ── 13579 (10 hands) ─────────────────────────────────────────────────────────
+// Hands: 11 333 55 777 9999 | 111 333 3333 5555 | NN 1111 33 5555 SS |
+//        113579 1111 1111 | FFF 11 33 555 DDDD | 11 33 111 333 5555 |
+//        1111 33 55 77 9999 | FF 11 33 55 111 111 | FF 135 777 999 DDD
+// Key: 5 in 9/10 hands. 3 in 9/10. 1 in 8/10. Flowers in 4/10. Winds (N,S) in 2/10.
+// Dragons in 4/10. 9 in 4/10. 7 in 4/10. 1 is the least flexible odd.
+{id:"13579",name:"13579",color:"#D48A2A",icon:"🟠",desc:"Odd numbers — 1, 3, 5, 7, 9",hold:"3s, 5s, 1s, N/S Winds, Flowers",pass:"All evens, E/W Winds",combos:"5 and 3 are the most-used odds — appear in 9 of 9 hands. North and South Winds appear in one hand. Two hands use Dragon kongs: one needs a MATCHING Dragon, one needs an OPPOSITE Dragon.",joker:null,hands:9,
+  ck:h=>{
+    const odds=h.filter(t=>t.t==="s"&&t.n%2===1);
+    const c={};odds.forEach(t=>{c[t.n]=(c[t.n]||0)+1;});
+    const totalOdds=odds.length;
+    const distinctOdds=Object.keys(c).length;
+    const flowers=h.filter(t=>t.t==="f").length;
+    const dragons=h.filter(t=>t.t==="d").length;
+    const ns=h.filter(t=>t.t==="w"&&(t.v==="North"||t.v==="South")).length;
+    const ew=h.filter(t=>t.t==="w"&&(t.v==="East"||t.v==="West")).length;
+    const jk=h.filter(t=>t.t==="j").length;
+    const evens=h.filter(t=>t.t==="s"&&t.n%2===0).length;
+    // 5 and 3 are the heaviest anchors — bonus for holding them
+    const anchorBonus=(c[5]||0)>=2?0.10:(c[5]||0)>=1?0.05:0;
+    const threeBonus=(c[3]||0)>=2?0.08:(c[3]||0)>=1?0.04:0;
+    const dens=totalOdds>=8?0.30:totalOdds>=6?0.22:totalOdds>=4?0.14:totalOdds>=2?0.07:totalOdds*0.03;
+    const divBonus=distinctOdds>=3?0.05:distinctOdds>=2?0.02:0;
+    const support=flowers*0.025+dragons*0.02+ns*0.03+jk*0.05;
+    const penalty=evens*0.04+ew*0.02;
+    return Math.max(0,Math.min(dens+anchorBonus+threeBonus+divBonus+support-penalty,1));
+  }},
+
+// ── Consecutive Run (9 hands) ─────────────────────────────────────────────────
+// Hands: 11 222 33 444 5555 | FFF 1111 234 5555 | 11 22 111 222 3333 |
+//        111 222 3333 4444 | FFF 11 22 333 DDDD | 1111 FFFFFF 2222 |
+//        FF 1111 2222 3333 | 1 22 333 1 22 333 44 (C) | 55 666 77 888 9999
+// Key insight: CR is about GROUP DEPTH within a 3–5 number window, NOT run length.
+// 111 222 3333 4444 (4-wide window, kongs+pungs) beats 1 2 3 4 5 6 7 (7 singles).
+// The FFFFFF sextette appears in hand 6 — flowers are critical here.
+// One hand (FFF 11 22 333 DDDD) uses a Dragon kong — any dragon.
+// Concealed hand: 1 22 333 1 22 333 44.
+{id:"cr",name:"Consec. Run",color:"#1B7D4E",icon:"🟢",desc:"Sequential numbers — pungs & kongs in a 3–5 number window",hold:"Groups (pungs/kongs) of consecutive numbers, all Flowers, Jokers",pass:"Isolated singles outside your run window, all Winds, scattered numbers",combos:"You need pungs or kongs of 3–4 consecutive numbers — not a long string of singles. One hand uses 6 Flowers as a group. One hand uses a Dragon kong — the Dragon must match the MIDDLE number of your run.",joker:null,hands:8,
+  ck:h=>{
+    const ws=crWindowScore(h);
+    const flowers=h.filter(t=>t.t==="f").length;
+    const dragons=h.filter(t=>t.t==="d").length;
+    const jk=h.filter(t=>t.t==="j").length;
+    const hon=h.filter(t=>t.t==="w").length; // winds only — dragons can appear in 1 hand
+    // Normalise window score to 0–1 range (max theoretical ~28 for perfect 4-wide kong rack)
+    const windowVal=Math.min(ws.score/28,1);
+    // Distinct values present — need at least 3 for most hands
+    const presentBonus=ws.distinctPresent>=4?0.08:ws.distinctPresent>=3?0.04:0;
+    // Flowers are critical — FFFFFF sextette hand + FFF hands
+    const flBonus=flowers>=4?0.10:flowers>=2?0.05:flowers>=1?0.02:0;
+    // Dragon bonus (FFF 11 22 333 DDDD hand)
+    const drBonus=dragons>=2?0.03:dragons>=1?0.01:0;
+    const jkBonus=jk*0.04;
+    const windPenalty=hon*0.04;
+    return Math.max(0,Math.min(windowVal+presentBonus+flBonus+drBonus+jkBonus-windPenalty,1));
+  }},
+
+// ── Winds & Dragons (8 hands) ─────────────────────────────────────────────────
+// Hands: NNNN EEE WWW SSSS | 1234 DDD DDD DDDD | NNN 1111 1111 SSS |
+//        EEE 2222 2222 WWW | FFF NNNN FFF DDDD | 1 N 2 EE 3 WWW 4 SSSS |
+//        FF NNNN SSSS DD DD | NN EEE 2026 WWW SS (C)
+// Key: Winds in 7/8 hands. Dragons in 5/8. Numbers appear in 5/8 (!) but usually as kongs.
+// Hand 2: 1234 with 3 dragon groups (very specific consecutive). Hand 3/4: like-number kongs.
+// Hand 6: specific 1N 2EE 3WWW 4SSSS (1 suit, specific numbers). Flowers in 2/8.
+{id:"wd",name:"Winds & Dragons",color:"#5C5247",icon:"🌀",desc:"Winds, Dragons — and specific number kongs",hold:"All Winds, all Dragons, Jokers",pass:"Most number tiles (except 1–4 kongs if strong)",combos:"Winds appear in 7 of 8 hands — they are your most important tiles here. Two hands use kongs of like numbers (2s or 1s), so 4-of-a-kind number tiles can also fit. Flowers appear in 2 hands.",joker:null,hands:8,
+  ck:h=>{
+    const winds=h.filter(t=>t.t==="w");
+    const dragons=h.filter(t=>t.t==="d");
+    const wc={};winds.forEach(t=>{wc[t.v]=(wc[t.v]||0)+1;});
+    const dc={};dragons.forEach(t=>{dc[t.v]=(dc[t.v]||0)+1;});
+    const honorTotal=winds.length+dragons.length;
+    const flowers=h.filter(t=>t.t==="f").length;
+    const jk=h.filter(t=>t.t==="j").length;
+    // Number kongs — only 1,2,3,4 appear in W/D hands (as kongs of like nos.)
+    const numKongs=h.filter(t=>t.t==="s"&&[1,2,3,4].includes(t.n));
+    const nkc={};numKongs.forEach(t=>{nkc[t.n]=(nkc[t.n]||0)+1;});
+    const hasKong=Object.values(nkc).some(v=>v>=4);
+    const nums=h.filter(t=>t.t==="s").length;
+    // Wind groups (kongs/pungs of same wind are the backbone)
+    const windGroups=Object.values(wc);
+    const wgScore=windGroups.reduce((a,n)=>a+(n>=4?0.14:n>=3?0.10:n>=2?0.06:0.02),0);
+    // Dragon groups
+    const dgScore=Object.values(dc).reduce((a,n)=>a+(n>=4?0.10:n>=3?0.08:n>=2?0.05:0.02),0);
+    // Honor density
+    const densBonus=honorTotal>=9?0.10:honorTotal>=7?0.07:honorTotal>=5?0.04:honorTotal>=3?0.02:0;
+    const support=flowers*0.02+jk*0.05+(hasKong?0.06:0);
+    // Penalty: non-1234 number tiles are off-direction
+    const offNums=h.filter(t=>t.t==="s"&&![1,2,3,4].includes(t.n)).length;
+    const penalty=offNums*0.05+(nums-numKongs.length)*0.02;
+    return Math.max(0,Math.min(wgScore+dgScore+densBonus+support-penalty,1));
+  }},
+
+// ── Any Like Numbers (3 hands) ────────────────────────────────────────────────
+// Hands: 1111 FFFFFF 1111 | 1111 D 111 D 1111 D | FF 1111 11 1111 DD
+// Key: "1" here = any one number. All 3 hands use the SAME number throughout.
+// Flowers appear in hands 1 and 3 (as pairs or sextette of 6). Dragons in hands 2 and 3.
+// Critical: you must pick ONE number and mass all its copies.
+{id:"aln",name:"Like Numbers",color:"#2460A8",icon:"🔵",desc:"All one number — kongs & pairs of the same number",hold:"4+ of one number, Flowers, Jokers, Dragons",pass:"All other numbers (especially spread-out singles)",combos:"Pick your number by round 1 and commit hard. The FFFFFF sextette appears here — protect all Flowers. You need 8–12 tiles of a single number, so jokers are critical.",joker:null,hands:3,
+  ck:h=>{
+    const nc={};h.filter(t=>t.t==="s").forEach(t=>{nc[t.n]=(nc[t.n]||0)+1;});
+    const vals=Object.values(nc);
+    const best=vals.length?Math.max(...vals):0;
+    const spread=vals.length; // distinct numbers held
+    const flowers=h.filter(t=>t.t==="f").length;
+    const dragons=h.filter(t=>t.t==="d").length;
+    const jk=h.filter(t=>t.t==="j").length;
+    const winds=h.filter(t=>t.t==="w").length;
+    // Primary: how many of the best number do you have?
+    const dens=best>=6?0.36:best>=5?0.28:best>=4?0.20:best>=3?0.12:best>=2?0.06:best*0.02;
+    // Flowers are critical — sextette hand exists (1111 FFFFFF 1111)
+    const flBonus=flowers>=4?0.12:flowers>=2?0.06:flowers>=1?0.03:0;
+    const support=dragons*0.03+jk*0.06;
+    // Spreading across numbers is lethal for this section
+    const spreadPenalty=Math.max(0,spread-1)*0.08;
+    const windPenalty=winds*0.03;
+    return Math.max(0,Math.min(dens+flBonus+support-spreadPenalty-windPenalty,1));
+  }},
+
+// ── Quints (3 hands) ──────────────────────────────────────────────────────────
+// Hands: 11111 1111 11111 (3 suits, any like nos.) |
+//        FF 11111 22 33333 (1 suit, any 3 consec. nos.) |
+//        11111 44444 DDDD (2 nos. in 1 suit w opp. dragon)
+// Key: Only 3 hands. Quints require 5 of a single tile — impossible without 2+ Jokers.
+// Two Jokers are the MINIMUM entry requirement. Without them, abandon immediately.
+{id:"q",name:"Quints",color:"#7B5CB0",icon:"🟣",desc:"Five of a kind — requires 2+ Jokers",hold:"Jokers (mandatory), 3–4 of any tile",pass:"Everything else if you don't have 2 Jokers",combos:"Without 2 Jokers, this section is unreachable — abandon it in round 1. With 2+ Jokers and 3–4 of a tile, this becomes viable. Note: the third hand requires the OPPOSITE dragon (not matching).",joker:null,hands:3,
+  ck:h=>{
+    const jk=h.filter(t=>t.t==="j").length;
+    // Without 2 jokers, quints are nearly impossible — hard floor
+    if(jk<2)return Math.max(0,(jk*0.04));
+    const c={};
+    h.filter(t=>t.t==="s").forEach(t=>{const k=`${t.s}|${t.n}`;c[k]=(c[k]||0)+1;});
+    const vals=Object.values(c);
+    const best=vals.length?Math.max(...vals):0;
+    const flowers=h.filter(t=>t.t==="f").length;
+    const dragons=h.filter(t=>t.t==="d").length;
+    // With 2 jokers, scoring is joker-first then tile depth
+    const base=jk>=3?0.20:0.12;
+    const tileBonus=best>=4?0.22:best>=3?0.14:best>=2?0.06:0;
+    const support=flowers*0.02+dragons*0.02;
+    return Math.max(0,Math.min(base+tileBonus+support,1));
+  }},
+
+// ── Singles & Pairs (6 hands) — CONCEALED ONLY, NO JOKERS ───────────────────
+// Hands: NN EE WW SS 1D 1D 1D | 2 4 66 88 2 4 66 88 88 |
+//        FF 3369 3669 3699 | 11 22 33 44 55 66 77 (1 suit, any 7 consec.) |
+//        11 357 99 11 357 99 | FF 2026 2026 2026
+// CONCEALED_ONLY: no exposures. JOKERS_PROHIBITED: jokers cannot be used in singles or pairs.
+// Key: All pairs and singles. Flowers appear in 3/6 hands. Specific number pairs.
+// The 7-consecutive hand (11 22 33 44 55 66 77) is very specific.
+{id:"sp",name:"Singles & Pairs",color:"#2E9485",icon:"🩵",desc:"Only singles and pairs — fully concealed, no Jokers",hold:"Pairs (especially 2026 tiles, 369 tiles), Flowers",pass:"Triples and quads — any group of 3+ is wrong here; Jokers (worthless)",combos:"Fully concealed — no exposures. Jokers are completely useless here (cannot be a single or in a pair). Build pairs of matching tiles. Flowers can fill tile slots (FF = 2 flowers used together).",joker:"Jokers CANNOT be used in Singles & Pairs — not as a single, not in a pair. They have zero value here. Note: Jokers can never be passed in the Charleston either, so you're stuck with them.",hands:6,
+  ck:h=>{
+    // For S&P: group by exact tile identity
+    const c={};
+    h.forEach(t=>{
+      const k=t.t==="s"?`s-${t.s}-${t.n}`:t.t==="w"?`w-${t.v}`:t.t==="d"?`d-${t.v}`:t.t==="f"?"f":"j";
+      c[k]=(c[k]||0)+1;
+    });
+    const pairs=Object.values(c).filter(v=>v===2).length;
+    const singles=Object.values(c).filter(v=>v===1).length;
+    const triples=Object.values(c).filter(v=>v>=3).length;
+    const jk=h.filter(t=>t.t==="j").length;
+    const flowers=h.filter(t=>t.t==="f").length;
+    // Jokers are anti-tiles for this section
+    const jkPenalty=jk*0.10;
+    // Triples are structurally wrong — hard penalty
+    const triplePenalty=triples*0.15;
+    // Pairs are the primary signal
+    const pairScore=pairs>=6?0.40:pairs>=5?0.32:pairs>=4?0.24:pairs>=3?0.16:pairs>=2?0.09:pairs*0.04;
+    // Flowers act as pairs in S&P (they count as natural pairs)
+    const flBonus=flowers>=2?0.06:flowers>=1?0.03:0;
+    // ── 7-consecutive same-suit pair bonus (11 22 33 44 55 66 77 hand) ──────────
+    // Find the longest run of consecutive paired numbers within a single suit
+    let consecPairBonus=0;
+    for(const suit of ["b","c","d"]){
+      // Which numbers in this suit have exactly a pair?
+      const pairedNums=[];
+      for(let n=1;n<=9;n++){
+        if((c[`s-${suit}-${n}`]||0)===2)pairedNums.push(n);
+      }
+      // Find longest consecutive run within paired numbers
+      let maxRun=0,run=0,prev=null;
+      for(const n of pairedNums){
+        if(prev!==null&&n===prev+1){run++;} else {run=1;}
+        if(run>maxRun)maxRun=run;
+        prev=n;
+      }
+      // Score the best consecutive run found in any suit
+      // 7 consecutive pairs = perfect hand bonus; partial runs build toward it
+      const runBonus=maxRun>=7?0.22:maxRun>=6?0.16:maxRun>=5?0.11:maxRun>=4?0.07:maxRun>=3?0.03:0;
+      if(runBonus>consecPairBonus)consecPairBonus=runBonus;
+    }
+    return Math.max(0,Math.min(pairScore+flBonus+consecPairBonus-jkPenalty-triplePenalty,1));
+  }},
 ];
 
-// Section metadata for IQ scoring
+// Section metadata for IQ scoring — calibrated to 2026 NMJL card hand analysis
+// strongNums: numbers appearing in majority of section's hands (hold priority)
+// weakNums: numbers that never or rarely appear in this section (pass immediately)
+// riskyPass: numbers so valuable they cost points if accidentally passed
+// wantsFlowers: true if flowers appear in 50%+ of section's hands
 const SECTION_META={
-  "2026":{strongNums:[2,6],weakNums:[1,3,5,7,9],riskyPass:[2,6],strongTypes:[],weakTypes:["w"],wantsFlowers:true,wantsJokers:true,pairBonus:true,runBased:false,likeNumbers:false,quintsNeeded:false,pairsOnly:false},
-  "2468":{strongNums:[2,4,6,8],weakNums:[1,3,5,7,9],riskyPass:[2,6],strongTypes:[],weakTypes:["w"],wantsFlowers:true,wantsJokers:true,pairBonus:true,runBased:false,likeNumbers:false,quintsNeeded:false,pairsOnly:false},
-  "369":{strongNums:[3,6,9],weakNums:[1,2,4,5,7,8],riskyPass:[6],strongTypes:[],weakTypes:["w"],wantsFlowers:true,wantsJokers:true,pairBonus:true,runBased:false,likeNumbers:false,quintsNeeded:false,pairsOnly:false},
-  "13579":{strongNums:[1,3,5,7,9],weakNums:[2,4,6,8],riskyPass:[5],strongTypes:["w"],weakTypes:[],wantsFlowers:true,wantsJokers:true,pairBonus:true,runBased:false,likeNumbers:false,quintsNeeded:false,pairsOnly:false},
+  // 2026: 2 and 6 in all 4 hands. Soap in 3/4. Flowers in 1/4 (FFF hand only). Winds only for NEWS hand.
+  "2026":{strongNums:[2,6],weakNums:[1,3,5,7,9],riskyPass:[2,6],strongTypes:["d"],weakTypes:["w"],wantsFlowers:false,wantsJokers:true,pairBonus:true,runBased:false,likeNumbers:false,quintsNeeded:false,pairsOnly:false,soapCritical:true},
+  // 2468: 6 in 7/8, 2+8 in 7/8, 4 in 6/8. Flowers in 5/8. E/W winds in 1 hand.
+  "2468":{strongNums:[2,6,8,4],weakNums:[1,3,5,7,9],riskyPass:[6,2,8],strongTypes:[],weakTypes:["w"],wantsFlowers:true,wantsJokers:true,pairBonus:true,runBased:false,likeNumbers:false,quintsNeeded:false,pairsOnly:false},
+  // 369: 6 in 6/6 (100%). 3+9 in 5/6. Flowers in 2/6 (FFF hand and FF hand).
+  "369":{strongNums:[6,3,9],weakNums:[1,2,4,5,7,8],riskyPass:[6,3,9],strongTypes:[],weakTypes:["w"],wantsFlowers:false,wantsJokers:true,pairBonus:true,runBased:false,likeNumbers:false,quintsNeeded:false,pairsOnly:false},
+  // 13579: 5+3 in 9/9 hands. N/S winds in 1/9 hand. Flowers in 4/9. E/W winds NEVER used.
+  "13579":{strongNums:[5,3,1,7,9],weakNums:[2,4,6,8],riskyPass:[5,3],strongTypes:["w"],weakTypes:[],wantsFlowers:true,wantsJokers:true,pairBonus:true,runBased:false,likeNumbers:false,quintsNeeded:false,pairsOnly:false},
+  // CR: no specific number anchors; run continuity is everything. Flowers critical (sextette).
   "cr":{strongNums:[],weakNums:[],riskyPass:[],strongTypes:[],weakTypes:["w","d"],wantsFlowers:true,wantsJokers:true,pairBonus:false,runBased:true,likeNumbers:false,quintsNeeded:false,pairsOnly:false},
-  "wd":{strongNums:[],weakNums:[],riskyPass:[],strongTypes:["w","d"],weakTypes:["s"],wantsFlowers:false,wantsJokers:true,pairBonus:true,runBased:false,likeNumbers:false,quintsNeeded:false,pairsOnly:false},
-  "aln":{strongNums:[],weakNums:[],riskyPass:[],strongTypes:[],weakTypes:[],wantsFlowers:true,wantsJokers:true,pairBonus:false,runBased:false,likeNumbers:true,quintsNeeded:false,pairsOnly:false},
-  "q":{strongNums:[],weakNums:[],riskyPass:[],strongTypes:[],weakTypes:[],wantsFlowers:false,wantsJokers:true,pairBonus:false,runBased:false,likeNumbers:false,quintsNeeded:true,pairsOnly:false},
+  // W/D: winds in 7/8 hands. Dragons in 5/8. Numbers 1-4 appear in 5/8 hands (kongs of 1s, kongs of 2s, 1234 run, 1N2EE3WWW4SSSS, 2026 concealed).
+  "wd":{strongNums:[1,2,3,4],weakNums:[5,6,7,8,9],riskyPass:[],strongTypes:["w","d"],weakTypes:["s"],wantsFlowers:false,wantsJokers:true,pairBonus:true,runBased:false,likeNumbers:false,quintsNeeded:false,pairsOnly:false},
+  // ALN: all hands use same number throughout. Flowers sextette exists. No winds.
+  "aln":{strongNums:[],weakNums:[],riskyPass:[],strongTypes:[],weakTypes:["w"],wantsFlowers:true,wantsJokers:true,pairBonus:false,runBased:false,likeNumbers:true,quintsNeeded:false,pairsOnly:false},
+  // Quints: jokers mandatory (need 2+). Without 2 jokers, abandon immediately.
+  "q":{strongNums:[],weakNums:[],riskyPass:[],strongTypes:[],weakTypes:["w"],wantsFlowers:true,wantsJokers:true,pairBonus:false,runBased:false,likeNumbers:false,quintsNeeded:true,pairsOnly:false},
+  // S&P: jokers banned. Concealed only. Pairs + singles only. Flowers count.
   "sp":{strongNums:[],weakNums:[],riskyPass:[],strongTypes:[],weakTypes:[],wantsFlowers:true,wantsJokers:false,pairBonus:true,runBased:false,likeNumbers:false,quintsNeeded:false,pairsOnly:true},
 };
 
@@ -326,67 +657,140 @@ function iqDirection(finalRack,sectionId){
   let directionScore=0,directionExplanation="";
 
   if(sectionId==="cr"){
-    const runLen=iqLongestRun(finalRack);
-    const honors=finalRack.filter(t=>t.t==="w"||t.t==="d").length;
-    directionScore=runLen>=5?40:runLen>=4?30:runLen>=3?20:runLen*4;
-    if(honors>1)directionScore=Math.max(0,directionScore-honors*3);
-    directionExplanation=runLen>=5?`Your longest run was ${runLen} tiles — strong sequential structure.`:runLen>=4?`You built a ${runLen}-tile run. One more tile would have sharpened this significantly.`:runLen>=3?`A ${runLen}-tile run is a start, but Consecutive Run needs 5+ to be viable.`:"No significant run formed. This section needs sequential tiles across suits.";
+    const ws=crWindowScore(finalRack);
+    const gd=ws.groupDepth||0;
+    directionScore=gd>=12?40:gd>=9?34:gd>=7?28:gd>=5?20:gd>=3?13:gd>=1?7:2;
+    if(fl>=4)directionScore=Math.min(40,directionScore+5);
+    else if(fl>=2)directionScore=Math.min(40,directionScore+2);
+    directionScore=Math.max(2,directionScore-finalRack.filter(t=>t.t==="w").length*2);
+    const wStr=ws.windowNums&&ws.windowNums.length?` within [${ws.windowNums[0]}–${ws.windowNums[ws.windowNums.length-1]}]`:"";
+    directionExplanation=gd>=12?`Strong group depth${wStr} — pungs and kongs locked in a tight window.`:gd>=7?`Decent group depth${wStr}. Keep consolidating within your number window.`:gd>=4?`Some grouped tiles${wStr}, but you need pungs/kongs — singles don't win CR hands.`:`Shallow structure. CR rewards pungs & kongs of 3–4 consecutive numbers, not long single runs.`;
+
   } else if(sectionId==="wd"){
-    const honors=finalRack.filter(t=>t.t==="w"||t.t==="d").length;
-    const nums=finalRack.filter(t=>t.t==="s").length;
-    const ratio=honors/Math.max(finalRack.length,1);
-    directionScore=ratio>=0.55&&nums<=2?40:ratio>=0.45?30:ratio>=0.35?20:ratio>=0.2?12:6;
-    directionExplanation=ratio>=0.55?`${honors} honor tiles — a committed Winds & Dragons rack.`:ratio>=0.4?`${honors} honors is decent but ${nums} number tiles are still diluting the rack.`:`Only ${honors} honor tiles. Winds & Dragons needs 7+ honors to be viable.`;
+    // Winds in 7/8 hands, Dragons in 5/8. Numbers 1-4 are valid as kongs (3 hands). 5-9 never valid.
+    const winds=finalRack.filter(t=>t.t==="w").length;
+    const dragons=finalRack.filter(t=>t.t==="d").length;
+    const honors=winds+dragons;
+    const validNums=finalRack.filter(t=>t.t==="s"&&[1,2,3,4].includes(t.n)).length;
+    const badNums=finalRack.filter(t=>t.t==="s"&&![1,2,3,4].includes(t.n)).length;
+    const windScore=winds>=6?16:winds>=4?12:winds>=3?8:winds>=2?5:winds*2;
+    const dragonScore=dragons>=4?10:dragons>=3?7:dragons>=2?4:dragons*1;
+    const numKongBonus=validNums>=4?5:validNums>=2?2:0;
+    directionScore=Math.min(40,Math.max(2,windScore+dragonScore+numKongBonus-(badNums*4)));
+    directionExplanation=honors>=9?`${winds} Winds + ${dragons} Dragons — a deep honor rack.`:honors>=6?`${honors} honor tiles is a solid W&D foundation. Keep passing number tiles.`:honors>=4?`${honors} honors is a start, but W&D needs 7+ to be viable.`:`Only ${honors} honor tiles. Pass all number tiles aggressively.`;
+
   } else if(sectionId==="aln"){
-    const c={};finalRack.filter(t=>t.t==="s").forEach(t=>{c[t.n]=(c[t.n]||0)+1;});
-    const vals=Object.values(c),mx=vals.length?Math.max(...vals):0,spread=Object.keys(c).length;
-    directionScore=mx>=6&&spread<=2?40:mx>=5&&spread<=3?32:mx>=4&&spread<=3?24:mx>=3?16:mx*4;
-    directionExplanation=mx>=6?`${mx} tiles of the same number — excellent consolidation.`:mx>=4?`${mx} of a number is a solid nucleus. Keep tightening.`:`Only ${mx} of any single number. Like Numbers needs 6+ of one tile to be strong.`;
+    // ALN: all 3 hands are kongs of one number + flowers/dragons. Concentration is everything.
+    const nc={};finalRack.filter(t=>t.t==="s").forEach(t=>{nc[t.n]=(nc[t.n]||0)+1;});
+    const vals=Object.values(nc),mx=vals.length?Math.max(...vals):0,spread=Object.keys(nc).length;
+    // Flowers act as tile-fillers in hand 1 (1111 FFFFFF 1111) — count them as supporting
+    const flBonus=fl>=4?6:fl>=2?3:fl>=1?1:0;
+    const baseScore=mx>=7?36:mx>=6?30:mx>=5?24:mx>=4?18:mx>=3?10:mx*3;
+    const spreadPenalty=Math.max(0,spread-1)*5; // spreading across numbers is fatal
+    directionScore=Math.min(40,Math.max(2,baseScore+flBonus-spreadPenalty));
+    directionExplanation=mx>=6?`${mx} of one number — excellent consolidation. That's ALN territory.`:mx>=4?`${mx} of a number is a solid nucleus. Pass everything else ruthlessly.`:`Only ${mx} of any single number. Pick one number immediately and consolidate hard.`;
+
   } else if(sectionId==="sp"){
-    const grps=iqCountGroups(finalRack);const pairs=Object.values(grps).filter(v=>v===2).length;const triples=Object.values(grps).filter(v=>v>=3).length;
-    directionScore=pairs>=5&&triples===0?40:pairs>=4&&triples===0?32:pairs>=3&&triples<=1?22:pairs>=2?14:pairs*5;
-    directionExplanation=pairs>=5?`${pairs} pairs with no triples — textbook Singles & Pairs structure.`:pairs>=3?`${pairs} pairs is reasonable. Avoid any triples.`:`Only ${pairs} pairs. Singles & Pairs needs 5+ clean pairs to work.`;
+    // S&P: all 6 hands are singles and pairs. Count flowers correctly (each flower = 1 tile, pairs if 2+).
+    // iqCountGroups maps all flowers to key "f" — so 2 flowers = count 2 = 1 pair. That's correct.
+    const grps=iqCountGroups(finalRack);
+    const allVals=Object.values(grps);
+    const pairs=allVals.filter(v=>v===2).length;
+    const triples=allVals.filter(v=>v>=3).length;
+    const jkCount=finalRack.filter(t=>t.t==="j").length;
+    // Jokers count as triples structurally — they can't be singles or pairs, so they break the pattern
+    directionScore=pairs>=6&&triples===0&&jkCount===0?40:pairs>=5&&triples===0?34:pairs>=4&&triples===0?26:pairs>=3&&triples<=1?18:pairs>=2?10:pairs*4;
+    directionExplanation=pairs>=6&&jkCount===0?`${pairs} pairs, no triples, no jokers — textbook S&P structure.`:pairs>=4?`${pairs} pairs is strong. Avoid any triples and get rid of those jokers.`:pairs>=2?`${pairs} pairs is a start. You need 6+ pairs to win — build more.`:`Only ${pairs} pairs. Singles & Pairs needs 6 clean pairs to complete.`;
+
   } else if(sectionId==="q"){
-    const c={};finalRack.filter(t=>t.t==="s").forEach(t=>{const k=`${t.s}${t.n}`;c[k]=(c[k]||0)+1;});
+    // Quints: 5 of one tile. Max natural is 4 (one of each suit) — always needs 1+ joker per quint.
+    // Hand 1: 11111 1111 11111 = 3 different quints = needs 2 jokers minimum for 2 of the 3 quints.
+    // Hand 2: FF 11111 22 33333 = 1 suit, 2 quints over 3 consec numbers + FF.
+    // Hand 3: 11111 44444 DDDD = 2 quints + dragon kong, 1 suit.
+    // Key metric: do you have 2 jokers + deep tile stacks?
+    const c={};finalRack.filter(t=>t.t==="s").forEach(t=>{const k=`${t.s}|${t.n}`;c[k]=(c[k]||0)+1;});
     const mx=Object.values(c).length?Math.max(...Object.values(c)):0;
-    directionScore=jk>=2&&mx>=3?40:jk>=2&&mx>=2?28:jk>=1&&mx>=3?22:jk>=1?14:(mx>=3?12:mx*3);
-    directionExplanation=jk>=2&&mx>=3?`${jk} jokers and ${mx} of a tile — well positioned for a quint.`:jk>=1?`${jk} joker with ${mx} of one tile. You need at least 2 jokers for a viable quint.`:"No jokers. Quints is nearly impossible without at least 2 jokers.";
-  } else {
-    // numbered sections: 2026, 2468, 369, 13579
-    // Score is RELATIVE to section difficulty — how rare is this many strong tiles?
-    // Based on hypergeometric distribution of strong tiles in 144-tile deck, 13 drawn.
-    // 369 (36 strong): mean=3.3 → 6 strong = top 5% → score ~38
-    // 2026 (24 strong): mean=2.2 → 6 strong = top 2% → score ~39
-    // 2468 (48 strong): mean=4.3 → 6 strong = top 36% → score ~26
-    // 13579 (60 strong): mean=5.4 → 6 strong = top 50% → score ~20
-    const strongNums=meta.strongNums||[];
-    const weakNums=meta.weakNums||[];
-    const strongTiles=finalRack.filter(t=>t.t==="s"&&strongNums.includes(t.n)).length;
-    const weakTiles=finalRack.filter(t=>t.t==="s"&&weakNums.includes(t.n)).length;
-    const weakRatio=weakTiles/Math.max(finalRack.length,1);
+    // Check for consecutive pairs (hand 2 needs 3 consec numbers in same suit)
+    const suitNums={};finalRack.filter(t=>t.t==="s").forEach(t=>{if(!suitNums[t.s])suitNums[t.s]=new Set();suitNums[t.s].add(t.n);});
+    let hasConsecSuit=false;Object.values(suitNums).forEach(ns=>{const a=[...ns].sort((a,b)=>a-b);for(let i=0;i<a.length-1;i++){if(a[i+1]===a[i]+1)hasConsecSuit=true;}});
+    directionScore=jk>=2&&mx>=3?40:jk>=2&&mx>=2?30:jk>=2?20:jk>=1&&mx>=3?22:jk>=1?12:(mx>=3?8:mx*2);
+    if(jk>=2&&hasConsecSuit)directionScore=Math.min(40,directionScore+4);
+    directionExplanation=jk>=2&&mx>=3?`${jk} jokers and ${mx} of a tile — well positioned for a quint.`:jk>=2?`${jk} jokers is the entry requirement — now build tile depth (need 3-4 of one tile).`:jk>=1?`Only ${jk} joker. Quints needs at least 2 — this section is risky without more.`:"No jokers. Quints is unreachable without at least 2 jokers.";
 
-    // Difficulty factor: fewer strong tiles in deck = harder section = higher reward per tile
-    // 369/2026 hardest (3 nums = 36/24 tiles), 2468 medium (4 nums = 48), 13579 easiest (5 nums = 60)
-    const deckStrong={
-      "369":36,"2026":24,"2468":48,"13579":60
-    }[sectionId]||48;
-    // Expected strong tiles dealt = 13 * deckStrong/144
-    const expectedDealt=Math.round(13*deckStrong/144*10)/10;
-    // Score relative to section difficulty — how many strong tiles vs expected?
-    // Base starts at 20 (not 15) so average play lands in Getting There, not Rookie
-    // Each tile above expected = +5 pts, below = -4 pts (asymmetric — punish less)
-    const aboveExpected=strongTiles-expectedDealt;
-    const base=Math.max(4,Math.min(40,Math.round(20+(aboveExpected>=0?aboveExpected*5:aboveExpected*4))));
-    // Weak tile penalty — scaled so it's meaningful but not crushing
-    const weakPenalty=weakRatio>=0.4?8:weakRatio>=0.3?5:weakRatio>=0.2?3:weakRatio>=0.1?1:0;
-    directionScore=Math.max(2,base-weakPenalty);
+  } else if(sectionId==="2026"){
+    // 2026: count 2s, 6s, Soap, and dragons — this section's "strong tiles" span tile types.
+    // Treat Soap + any Dragon as supporting since they appear in 3/4 hands.
+    const twos=finalRack.filter(t=>t.t==="s"&&t.n===2).length;
+    const sixes=finalRack.filter(t=>t.t==="s"&&t.n===6).length;
+    const soap=finalRack.filter(t=>t.t==="d"&&t.v==="Soap").length;
+    const otherDragons=finalRack.filter(t=>t.t==="d"&&t.v!=="Soap").length;
+    const winds=finalRack.filter(t=>t.t==="w").length;
+    const offNums=finalRack.filter(t=>t.t==="s"&&![2,6].includes(t.n)).length;
+    // 6 is in all 4 hands, 2 is in all 4 hands — both required
+    const sixScore=sixes>=3?16:sixes>=2?12:sixes>=1?6:0;
+    const twoScore=twos>=3?12:twos>=2?8:twos>=1?4:0;
+    const soapBonus=soap>=1?5:0;
+    const dragonBonus=otherDragons>=2?3:otherDragons>=1?1:0;
+    const windBonus=winds>=3?3:winds>=2?1:0; // NEWS hand needs all 4 winds
+    const flBonus=fl>=1?2:0;
+    const offPenalty=Math.min(offNums*4,20);
+    directionScore=Math.min(40,Math.max(2,sixScore+twoScore+soapBonus+dragonBonus+windBonus+flBonus-offPenalty));
+    const coreStr=sixes>0&&twos>0?`${twos} Twos + ${sixes} Sixes — the 2026 core is there.`:sixes>0?`${sixes} Sixes but missing 2s — you need both for every 2026 hand.`:`${twos} Twos but missing 6s — 6 appears in all 4 hands, it's critical.`;
+    directionExplanation=offNums>=4?coreStr+` But ${offNums} off-direction tiles are diluting the rack.`:coreStr;
 
-    const secName=SECS.find(s=>s.id===sectionId)?.name||sectionId;
-    const aboveStr=aboveExpected>0?`${strongTiles} strong tiles — ${(aboveExpected).toFixed(1)} above average for ${secName}.`:
-      aboveExpected<-1?`Only ${strongTiles} strong tiles for ${secName} — a tough deal.`:
-      `${strongTiles} strong tiles for ${secName} — about average for this section.`;
-    directionExplanation=weakTiles>=4?aboveStr+` ${weakTiles} off-direction tiles are diluting the rack.`:aboveStr;
+  } else if(sectionId==="2468"){
+    // 2468: count all even tiles. 6 is most critical (7/8 hands), then 2 and 8 (7/8), then 4 (6/8).
+    const ec={};finalRack.filter(t=>t.t==="s"&&t.n%2===0).forEach(t=>{ec[t.n]=(ec[t.n]||0)+1;});
+    const totalEvens=Object.values(ec).reduce((a,b)=>a+b,0);
+    const distinctEvens=Object.keys(ec).length;
+    const odds=finalRack.filter(t=>t.t==="s"&&t.n%2===1).length;
+    const nsWinds=finalRack.filter(t=>t.t==="w"&&(t.v==="North"||t.v==="South")).length;
+    // 6 anchor bonus
+    const sixBonus=(ec[6]||0)>=2?8:(ec[6]||0)>=1?4:0;
+    const densScore=totalEvens>=9?24:totalEvens>=7?18:totalEvens>=5?13:totalEvens>=3?8:totalEvens*2;
+    const divBonus=distinctEvens>=4?4:distinctEvens>=3?2:0;
+    const flBonus=fl>=2?3:fl>=1?1:0;
+    const offPenalty=(odds*3)+(nsWinds*2);
+    directionScore=Math.min(40,Math.max(2,densScore+sixBonus+divBonus+flBonus-offPenalty));
+    directionExplanation=totalEvens>=8?`${totalEvens} even tiles across ${distinctEvens} values — strong 2468 rack.`:totalEvens>=5?`${totalEvens} even tiles. Focus on deepening groups, not spreading across more values.`:totalEvens>=3?`${totalEvens} even tiles — viable but needs more depth. Pass odds aggressively.`:`Only ${totalEvens} even tiles. Pass all odd tiles immediately.`;
+
+  } else if(sectionId==="369"){
+    // 369: 3, 6, 9 only. 6 in 100% of hands — most critical tile on the entire card for this section.
+    const threes=finalRack.filter(t=>t.t==="s"&&t.n===3).length;
+    const sixes=finalRack.filter(t=>t.t==="s"&&t.n===6).length;
+    const nines=finalRack.filter(t=>t.t==="s"&&t.n===9).length;
+    const total=threes+sixes+nines;
+    const offNums=finalRack.filter(t=>t.t==="s"&&![3,6,9].includes(t.n)).length;
+    const winds=finalRack.filter(t=>t.t==="w").length;
+    // 6 is the absolute anchor
+    const sixScore=sixes>=3?18:sixes>=2?13:sixes>=1?7:0;
+    const spreadBonus=(threes>=1&&nines>=1)?4:(threes>=1||nines>=1)?2:0;
+    const densScore=total>=8?20:total>=6?14:total>=4?9:total>=2?4:total*1;
+    const flBonus=fl>=2?2:fl>=1?1:0;
+    const offPenalty=(offNums*4)+(winds>=3?0:winds*2); // winds only ok if NEWS hand possible
+    directionScore=Math.min(40,Math.max(2,densScore+sixScore+spreadBonus+flBonus-offPenalty));
+    directionExplanation=sixes===0?`No 6s — 6 appears in every 369 hand. This section needs 6s urgently.`:total>=8?`${total} tiles across 3/6/9 — strong structure.`:total>=5?`${total} tiles of 3/6/9. Keep building and pass non-multiples of 3 first.`:`Only ${total} tiles of 3/6/9 — pass all other numbers immediately.`;
+
+  } else if(sectionId==="13579"){
+    // 13579: 10 hands — 5 and 3 in 9/10, N+S winds in 2 hands, flowers in 4/10, dragons in 4/10.
+    const oc={};finalRack.filter(t=>t.t==="s"&&t.n%2===1).forEach(t=>{oc[t.n]=(oc[t.n]||0)+1;});
+    const totalOdds=Object.values(oc).reduce((a,b)=>a+b,0);
+    const distinctOdds=Object.keys(oc).length;
+    const evens=finalRack.filter(t=>t.t==="s"&&t.n%2===0).length;
+    const ns=finalRack.filter(t=>t.t==="w"&&(t.v==="North"||t.v==="South")).length;
+    const ew=finalRack.filter(t=>t.t==="w"&&(t.v==="East"||t.v==="West")).length;
+    // 5 and 3 are the primary anchors
+    const fiveBonus=(oc[5]||0)>=2?8:(oc[5]||0)>=1?4:0;
+    const threeBonus=(oc[3]||0)>=2?6:(oc[3]||0)>=1?3:0;
+    const densScore=totalOdds>=9?22:totalOdds>=7?16:totalOdds>=5?11:totalOdds>=3?6:totalOdds*1;
+    const divBonus=distinctOdds>=4?3:distinctOdds>=3?1:0;
+    const nsBonus=ns>=2?3:ns>=1?1:0; // N+S winds valid in 2 hands
+    const flBonus=fl>=2?2:fl>=1?1:0;
+    const offPenalty=(evens*3)+(ew*2);
+    directionScore=Math.min(40,Math.max(2,densScore+fiveBonus+threeBonus+divBonus+nsBonus+flBonus-offPenalty));
+    directionExplanation=totalOdds>=8?`${totalOdds} odd tiles — a committed 13579 rack.`:totalOdds>=5?`${totalOdds} odd tiles. Focus on 5s and 3s — they appear in every hand.`:totalOdds>=3?`${totalOdds} odds — pass all even tiles immediately.`:`Only ${totalOdds} odd tiles. 13579 needs 8+ odds to be competitive.`;
   }
+
   return{directionScore:Math.max(0,Math.min(40,Math.round(directionScore))),directionExplanation};
 }
 
@@ -395,69 +799,162 @@ function iqTileStrength(finalRack,sectionId){
   const jk=finalRack.filter(t=>t.t==="j").length;
   const fl=finalRack.filter(t=>t.t==="f").length;
   const grps=iqCountGroups(finalRack);
-  const vals=Object.values(grps);
-  const pairs=vals.filter(v=>v===2).length;
-  const triples=vals.filter(v=>v>=3).length;
-  let raw=0; // target: 0–25 directly, no division
+  const allVals=Object.values(grps);
+  const pairs=allVals.filter(v=>v===2).length;
+  const pungs=allVals.filter(v=>v===3).length;
+  const kongs=allVals.filter(v=>v>=4).length;
+  let raw=0;
 
-  if(meta.pairsOnly){
-    // Singles & Pairs — pairs are everything, triples and jokers are poison
-    raw+=pairs>=6?22:pairs>=5?18:pairs>=4?13:pairs>=3?9:pairs>=2?5:pairs*2;
-    raw-=triples*6;
-    raw-=jk>0?4:0; // jokers worthless here
-    raw+=fl>=2?2:fl>=1?1:0;
-  } else if(meta.runBased){
-    const run=iqLongestRun(finalRack);
-    const suits=new Set(finalRack.filter(t=>t.t==="s").map(t=>t.s)).size;
-    raw+=run>=6?18:run>=5?14:run>=4?10:run>=3?6:run*2;
-    raw+=suits>=2?3:0; // cross-suit bonus
+  if(sectionId==="sp"){
+    // S&P — CONCEALED, NO JOKERS. Pairs only (no pungs/kongs). Flowers count as pairs.
+    // 6 hands: need 6 pairs + 1 single OR 7 pairs (depending on hand).
+    // Flowers: iqCountGroups maps all flowers to "f", so 2 flowers = pair. Correct.
+    const jkCount=finalRack.filter(t=>t.t==="j").length;
+    raw+=pairs>=7?25:pairs>=6?22:pairs>=5?17:pairs>=4?12:pairs>=3?7:pairs>=2?4:pairs*1;
+    raw-=(pungs+kongs)*8; // pungs/kongs structurally break S&P
+    raw-=jkCount*8;       // jokers cannot be singles or pairs — poison
+    raw=Math.max(0,raw);
+
+  } else if(sectionId==="cr"){
+    // CR — window depth is the primary signal
+    const ws=crWindowScore(finalRack);
+    const gd=ws.groupDepth||0;
+    const dp=ws.distinctPresent||0;
+    raw+=gd>=12?22:gd>=9?17:gd>=7?13:gd>=5?9:gd>=3?5:gd*1;
+    raw+=dp>=4?3:dp>=3?1:0;
     raw+=jk>=2?4:jk>=1?2:0;
-    raw+=fl>=2?2:fl>=1?1:0;
-    raw-=finalRack.filter(t=>t.t==="w"||t.t==="d").length*2; // honors hurt run hands
-  } else if(meta.likeNumbers){
-    const c={};finalRack.filter(t=>t.t==="s").forEach(t=>{c[t.n]=(c[t.n]||0)+1;});
-    const vals2=Object.values(c);
+    raw+=fl>=4?5:fl>=2?3:fl>=1?1:0; // sextette hand
+    raw-=finalRack.filter(t=>t.t==="w").length*2;
+
+  } else if(sectionId==="wd"){
+    // W/D — winds and dragons. Number kongs of 1-4 are valid (3 hands). 5-9 never valid.
+    // Pairs of winds/dragons matter a lot (multiple hands use pairs of honor tiles).
+    const winds=finalRack.filter(t=>t.t==="w").length;
+    const dragons=finalRack.filter(t=>t.t==="d").length;
+    const honors=winds+dragons;
+    const validNums=finalRack.filter(t=>t.t==="s"&&[1,2,3,4].includes(t.n)).length;
+    const badNums=finalRack.filter(t=>t.t==="s"&&![1,2,3,4].includes(t.n)).length;
+    // Honor groups — kongs and pungs are the backbone
+    const wc={};finalRack.filter(t=>t.t==="w").forEach(t=>{wc[t.v]=(wc[t.v]||0)+1;});
+    const dc={};finalRack.filter(t=>t.t==="d").forEach(t=>{dc[t.v]=(dc[t.v]||0)+1;});
+    const windGroupScore=Object.values(wc).reduce((a,n)=>a+(n>=4?8:n>=3?6:n>=2?3:1),0);
+    const dragonGroupScore=Object.values(dc).reduce((a,n)=>a+(n>=4?6:n>=3?4:n>=2?2:0),0);
+    raw+=windGroupScore+dragonGroupScore;
+    raw+=jk>=2?3:jk>=1?1:0;
+    raw+=fl>=2?2:fl>=1?1:0;  // flowers in 2 hands
+    raw+=validNums>=4?3:0;    // valid number kong bonus
+    raw-=badNums*3;           // 5-9 tiles are poison
+
+  } else if(sectionId==="aln"){
+    // ALN — all 3 hands use kongs of ONE number. Flowers fill one hand (sextette).
+    // Need 8-12 tiles of the same number (with joker help). Spreading = fatal.
+    const nc={};finalRack.filter(t=>t.t==="s").forEach(t=>{nc[t.n]=(nc[t.n]||0)+1;});
+    const vals2=Object.values(nc);
     const mx=vals2.length?Math.max(...vals2):0;
-    const spread=Object.keys(c).length;
-    raw+=mx>=8?20:mx>=6?15:mx>=5?11:mx>=4?7:mx>=3?4:mx*1;
-    raw-=Math.max(0,spread-2)*3; // penalise spreading across numbers
+    const spread=Object.keys(nc).length;
+    raw+=mx>=8?22:mx>=6?17:mx>=5?13:mx>=4?9:mx>=3?5:mx*1;
+    raw+=fl>=4?6:fl>=2?3:fl>=1?1:0; // flowers fill the sextette hand
     raw+=jk>=2?4:jk>=1?2:0;
-    raw+=fl>=1?2:0;
-  } else if(meta.quintsNeeded){
-    const c={};finalRack.filter(t=>t.t==="s").forEach(t=>{const k=`${t.s}${t.n}`;c[k]=(c[k]||0)+1;});
+    raw+=finalRack.filter(t=>t.t==="d").length>=1?1:0; // dragons appear in 2/3 hands
+    raw-=Math.max(0,spread-1)*5; // every extra distinct number is dilution
+
+  } else if(sectionId==="q"){
+    // Quints — 3 hands. 2 jokers minimum. Stack one tile type deep.
+    // Hand 3 (11111 44444 DDDD) uses a dragon kong — dragons have minor value.
+    const c={};finalRack.filter(t=>t.t==="s").forEach(t=>{const k=`${t.s}|${t.n}`;c[k]=(c[k]||0)+1;});
     const mx=Object.values(c).length?Math.max(...Object.values(c)):0;
-    raw+=jk>=2?12:jk>=1?6:0;
-    raw+=mx>=4?10:mx>=3?6:mx>=2?3:0;
-  } else if(meta.strongTypes&&meta.strongTypes.length){
-    // Winds & Dragons
-    const honors=finalRack.filter(t=>meta.strongTypes.includes(t.t)).length;
-    raw+=honors>=9?18:honors>=7?14:honors>=5?10:honors>=3?6:honors*1;
-    raw+=pairs>=4?6:pairs>=3?4:pairs>=2?2:pairs>=1?1:0;
+    const dragons=finalRack.filter(t=>t.t==="d").length;
+    if(jk<2){raw=jk*3;}  // hard floor — quints without 2 jokers is nearly impossible
+    else{
+      raw+=jk>=3?14:12;  // 2 jokers = entry, 3 = great
+      raw+=mx>=4?10:mx>=3?7:mx>=2?4:0;
+      raw+=dragons>=3?2:0; // dragon kong in hand 3
+      raw+=fl>=2?2:0;      // FF in hand 2
+    }
+
+  } else if(sectionId==="2026"){
+    // 2026 — 4 hands. Count 2s, 6s, Soap, other dragons, winds (NEWS hand), flowers.
+    const twos=finalRack.filter(t=>t.t==="s"&&t.n===2).length;
+    const sixes=finalRack.filter(t=>t.t==="s"&&t.n===6).length;
+    const soap=finalRack.filter(t=>t.t==="d"&&t.v==="Soap").length;
+    const otherD=finalRack.filter(t=>t.t==="d"&&t.v!=="Soap").length;
+    const winds=finalRack.filter(t=>t.t==="w").length;
+    const offNums=finalRack.filter(t=>t.t==="s"&&![2,6].includes(t.n)).length;
+    // Group quality for 2s and 6s — kongs and pungs are used in all hands
+    const twoGrp=twos>=4?10:twos>=3?7:twos>=2?4:twos*1;
+    const sixGrp=sixes>=4?12:sixes>=3?8:sixes>=2?5:sixes*1;
+    raw+=twoGrp+sixGrp;
+    raw+=soap>=1?4:0;       // Soap = wild suit zero = critical
+    raw+=otherD>=2?2:otherD>=1?1:0;
+    raw+=winds>=3?2:0;      // NEWS hand needs all 4 winds
+    raw+=fl>=1?2:0;         // flowers in 1 hand (FFF)
     raw+=jk>=2?3:jk>=1?1:0;
-    raw-=finalRack.filter(t=>t.t==="s").length*1.5; // number tiles hurt
-  } else {
-    // Numbered sections — difficulty-aware (harder sections reward more per strong tile)
-    const strongNums=meta.strongNums||[];
-    const weakNums=meta.weakNums||[];
-    const strong=finalRack.filter(t=>t.t==="s"&&strongNums.includes(t.n)).length;
-    const weak=finalRack.filter(t=>t.t==="s"&&weakNums.includes(t.n)).length;
-    // Sections with fewer strong tiles in deck are harder → more credit per tile
-    const deckStrong={"369":36,"2026":24,"2468":48,"13579":60}[sectionId]||48;
-    const diffMult=deckStrong<=24?1.4:deckStrong<=36?1.2:deckStrong<=48?1.0:0.85;
-    const strongBase=strong>=10?18:strong>=8?14:strong>=6?10:strong>=4?6:strong>=2?3:strong;
-    raw+=Math.round(strongBase*diffMult);
-    // Strong pairs bonus
-    const strongPairs=Object.entries(iqCountGroups(finalRack))
-      .filter(([k,v])=>{const parts=k.split("-");return parts[0]==="s"&&v>=2&&strongNums.includes(Number(parts[2]));}).length;
-    raw+=strongPairs>=3?4:strongPairs>=2?2:strongPairs>=1?1:0;
+    raw-=offNums*3;
+
+  } else if(sectionId==="2468"){
+    // 2468 — 8 hands. 6 in 7/8, 2+8 in 7/8, 4 in 6/8. Flowers in 5/8. Dragons in 4/8.
+    // E+W winds in 1 hand only. Last hand (FF 246 888 246 888) is concealed — pairs.
+    const ec={};finalRack.filter(t=>t.t==="s"&&t.n%2===0).forEach(t=>{ec[t.n]=(ec[t.n]||0)+1;});
+    const totalEvens=Object.values(ec).reduce((a,b)=>a+b,0);
+    const distinctEvens=Object.keys(ec).length;
+    const odds=finalRack.filter(t=>t.t==="s"&&t.n%2===1).length;
+    const dragons=finalRack.filter(t=>t.t==="d").length;
+    const ew=finalRack.filter(t=>t.t==="w"&&(t.v==="East"||t.v==="West")).length;
+    const nsW=finalRack.filter(t=>t.t==="w"&&(t.v==="North"||t.v==="South")).length;
+    // Group depth within even tiles
+    const evenGroupScore=Object.values(ec).reduce((a,n)=>a+(n>=4?8:n>=3?5:n>=2?3:n>=1?1:0),0);
+    // 6 anchor bonus
+    const sixBonus=(ec[6]||0)>=2?4:(ec[6]||0)>=1?2:0;
+    raw+=evenGroupScore+sixBonus;
+    raw+=distinctEvens>=4?3:distinctEvens>=3?1:0; // more distinct values = more hand options
+    raw+=fl>=2?3:fl>=1?1:0;    // flowers in 5/8 hands
+    raw+=dragons>=2?2:dragons>=1?1:0;
+    raw+=ew>=2?2:ew>=1?1:0;    // E+W valid in 1 hand
     raw+=jk>=2?3:jk>=1?1:0;
-    raw+=fl>=2&&meta.wantsFlowers?2:fl>=1&&meta.wantsFlowers?1:0;
-    raw-=weak>=6?5:weak>=4?3:weak>=2?1:0;
-    // Tile versatility bonus — crossover tiles that serve multiple sections
-    const TILE_SECTIONS={2:["2026","2468"],4:["2468"],6:["2026","2468","369"],8:["2468"],3:["369","13579"],9:["369","13579"],5:["13579"],7:["13579"],1:["13579"]};
-    let versatileCount=0;
-    finalRack.filter(t=>t.t==="s").forEach(t=>{const sects=TILE_SECTIONS[t.n]||[];if(sects.length>=2&&sects.includes(sectionId))versatileCount++;});
-    raw+=versatileCount>=4?2:versatileCount>=2?1:0;
+    raw-=odds*3+nsW*2;
+
+  } else if(sectionId==="369"){
+    // 369 — 6 hands. 6 in all 6. 3+9 in 5/6. Flowers in 3/6. Dragons in 2/6.
+    // Last hand concealed. NEWS hand needs all 4 winds.
+    const threes=finalRack.filter(t=>t.t==="s"&&t.n===3).length;
+    const sixes=finalRack.filter(t=>t.t==="s"&&t.n===6).length;
+    const nines=finalRack.filter(t=>t.t==="s"&&t.n===9).length;
+    const offNums=finalRack.filter(t=>t.t==="s"&&![3,6,9].includes(t.n)).length;
+    const dragons=finalRack.filter(t=>t.t==="d").length;
+    const winds=finalRack.filter(t=>t.t==="w").length;
+    // Group quality — kongs and pungs of 3/6/9
+    const threeGrp=threes>=4?8:threes>=3?5:threes>=2?3:threes*1;
+    const sixGrp=sixes>=4?10:sixes>=3?7:sixes>=2?4:sixes*1; // 6 = highest value
+    const nineGrp=nines>=4?8:nines>=3?5:nines>=2?3:nines*1;
+    raw+=threeGrp+sixGrp+nineGrp;
+    raw+=fl>=2?3:fl>=1?1:0;
+    raw+=dragons>=3?3:dragons>=1?1:0;
+    raw+=winds>=3?2:0; // NEWS hand
+    raw+=jk>=2?3:jk>=1?1:0;
+    raw-=offNums*3;
+
+  } else if(sectionId==="13579"){
+    // 13579 — 9 hands. 5+3 in 9/9. N+S winds in 2/10. Flowers in 4/10. Dragons in 4/10.
+    // 1, 7, 9 each appear in ~4/10 hands. E+W winds never used.
+    const oc={};finalRack.filter(t=>t.t==="s"&&t.n%2===1).forEach(t=>{oc[t.n]=(oc[t.n]||0)+1;});
+    const totalOdds=Object.values(oc).reduce((a,b)=>a+b,0);
+    const distinctOdds=Object.keys(oc).length;
+    const evens=finalRack.filter(t=>t.t==="s"&&t.n%2===0).length;
+    const ns=finalRack.filter(t=>t.t==="w"&&(t.v==="North"||t.v==="South")).length;
+    const ew=finalRack.filter(t=>t.t==="w"&&(t.v==="East"||t.v==="West")).length;
+    const dragons=finalRack.filter(t=>t.t==="d").length;
+    // Group depth in odd tiles — weight 5 and 3 higher (appear in 9/10 hands)
+    const fiveGrp=(oc[5]||0)>=4?10:(oc[5]||0)>=3?7:(oc[5]||0)>=2?4:(oc[5]||0)*1;
+    const threeGrp=(oc[3]||0)>=4?8:(oc[3]||0)>=3?6:(oc[3]||0)>=2?3:(oc[3]||0)*1;
+    const otherOddGrp=Object.entries(oc).filter(([n])=>![3,5].includes(Number(n)))
+      .reduce((a,[,n])=>a+(n>=4?6:n>=3?4:n>=2?2:n>=1?0.5:0),0);
+    raw+=fiveGrp+threeGrp+Math.round(otherOddGrp);
+    raw+=distinctOdds>=4?3:distinctOdds>=3?1:0;
+    raw+=ns>=2?3:ns>=1?1:0;   // N+S winds valid in 2 hands
+    raw+=fl>=2?2:fl>=1?1:0;   // flowers in 4/10 hands
+    raw+=dragons>=3?2:dragons>=1?1:0;
+    raw+=jk>=2?3:jk>=1?1:0;
+    raw-=evens*3+ew*2;
   }
 
   raw=Math.max(0,Math.min(25,Math.round(raw)));
@@ -473,15 +970,21 @@ function iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId){
   const weakTypes=meta.weakTypes||[];
 
   const isStrongTile=(t)=>{
-    if(t.t==="j")return true;
+    if(t.t==="j"&&sectionId!=="sp")return true; // jokers worthless in S&P
     if(t.t==="f"&&meta.wantsFlowers)return true;
     if(strongTypes.includes(t.t))return true;
     if(t.t==="s"&&strongNums.includes(t.n))return true;
+    // 2026 special: Soap (White Dragon) is a strong tile
+    if(sectionId==="2026"&&t.t==="d"&&t.v==="Soap")return true;
     return false;
   };
   const isWeakTile=(t)=>{
-    if(weakTypes.includes(t.t))return true;
+    // In S&P, jokers are structurally useless — treat as weak so passing them scores well
+    if(sectionId==="sp"&&t.t==="j")return true;
+    if(weakTypes.includes(t.t)&&t.t!=="j")return true;
     if(t.t==="s"&&weakNums.includes(t.n))return true;
+    // In W/D, number tiles 5-9 are weak (1-4 may be valid kongs so not flagged weak)
+    if(sectionId==="wd"&&t.t==="s"&&![1,2,3,4].includes(t.n))return true;
     return false;
   };
 
@@ -553,19 +1056,59 @@ function iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId){
   return{passQualityScore:raw,passInsights,brokenPairsCount:brokenPairsTotal,brokenPairKeys};
 }
 
-function iqTiming(totalTime,roundCount){
+function iqTiming(totalTime,roundCount,passLog){
+  // Use per-pass times if available, otherwise fall back to total/count average
+  const passTimes=(passLog||[]).map(p=>p.secs).filter(s=>typeof s==="number"&&s>0);
   const rc=Math.max(roundCount,1);
-  const avg=totalTime/rc;
+  const avg=passTimes.length>0
+    ?passTimes.reduce((a,b)=>a+b,0)/passTimes.length
+    :totalTime/rc;
+
+  // Per-pass analysis when we have the data
+  const slowPasses=passTimes.filter(s=>s>25).length;
+  const fastPasses=passTimes.filter(s=>s<5).length;
+  const goodPasses=passTimes.filter(s=>s>=7&&s<=20).length;
+  const hasMixedBag=slowPasses>0&&fastPasses>0;
+
   let timingScore,timingInsight;
-  // Tight sweet spot: 8–12s per pass. Falls off sharply outside it.
-  if(avg>=8&&avg<=12){timingScore=10;timingInsight="Elite pace — you read the rack and committed. That's the sweet spot.";}
-  else if(avg>12&&avg<=16){timingScore=8;timingInsight="Solid pace. A touch deliberate — sharper players aim for 8–12s per pass.";}
-  else if(avg>16&&avg<=22){timingScore=6;timingInsight="Slower than ideal. You have the time, but experienced players commit faster.";}
-  else if(avg>22&&avg<=35){timingScore=4;timingInsight="Quite deliberate — try naming your section before your first tile move.";}
-  else if(avg>35){timingScore=Math.max(2,Math.round(3-((avg-35)/30)));timingInsight="Very slow. Commit to a section first, then pass — don't deliberate mid-rack.";}
-  else if(avg>=5&&avg<8){timingScore=7;timingInsight="Slightly quick — 8+ seconds per pass gives you time to catch a better move.";}
-  else if(avg>=3&&avg<5){timingScore=4;timingInsight="Moving fast. Slow down — give each pass at least 8 seconds of thought.";}
-  else{timingScore=2;timingInsight="Very fast passing. Each decision shapes your whole hand — take more time.";}
+
+  // Sweet spot: 7–20s per pass. Generous enough to not penalise thoughtful play.
+  // Below 5s = reflexive (misses analysis). Above 25s = second-guessing.
+  if(avg>=7&&avg<=20){
+    timingScore=10;
+    if(hasMixedBag){
+      timingInsight=`Good overall pace. ${slowPasses} pass${slowPasses>1?"es were":"was"} slow — trust your first read on those.`;
+    } else {
+      timingInsight="Excellent pace — deliberate without second-guessing. Right in the zone.";
+    }
+  } else if(avg>20&&avg<=28){
+    timingScore=8;
+    if(slowPasses>=2){
+      timingInsight=`${slowPasses} passes took over 25s — once you see a clear discard, commit to it.`;
+    } else {
+      timingInsight="A bit deliberate overall, but not by much. Try committing to your section read by pass 1.";
+    }
+  } else if(avg>28&&avg<=40){
+    timingScore=6;
+    timingInsight=slowPasses>=2
+      ?`${slowPasses} passes took a long time. Name your target section before touching any tiles — it speeds up every decision after that.`
+      :"Taking longer than ideal. Lock in your section before the first pass and the rest follows faster.";
+  } else if(avg>40){
+    timingScore=Math.max(2,Math.round(4-((avg-40)/20)));
+    timingInsight="Very long pauses between passes. Commit to a section before you start — once you know what you're building, the right tiles become obvious.";
+  } else if(avg>=5&&avg<7){
+    timingScore=8;
+    timingInsight="Slightly quick — a couple more seconds per pass lets you catch a better option before committing.";
+  } else if(avg>=3&&avg<5){
+    timingScore=5;
+    timingInsight=fastPasses>=2
+      ?`${fastPasses} passes went very fast. Each one shapes your whole hand — give yourself at least 5–7 seconds.`
+      :"Moving a bit fast. Give yourself a breath before each pass — your instincts are good, but a moment to confirm helps.";
+  } else {
+    timingScore=2;
+    timingInsight="Passing reflexively — slow down and read the rack before each discard. Speed doesn't score points here.";
+  }
+
   return{timingScore:Math.max(2,Math.min(10,timingScore)),timingInsight};
 }
 
@@ -617,41 +1160,51 @@ function iqDistanceToOptimal(finalRack,startingRack,passedTilesByRound,sectionId
   const strongNums=meta.strongNums||[];
   const strongTypes=meta.strongTypes||[];
 
-  // Missing strong tile types
+  // Section-aware strong tile check (mirrors isStrongTile in passQuality)
+  const isStrong=(t)=>{
+    if(t.t==="j"&&sectionId!=="sp")return true;
+    if(t.t==="f"&&meta.wantsFlowers)return true;
+    if(strongTypes.includes(t.t))return true;
+    if(t.t==="s"&&strongNums.includes(t.n))return true;
+    if(sectionId==="2026"&&t.t==="d"&&t.v==="Soap")return true;
+    return false;
+  };
+  const isWeak=(t)=>{
+    if(sectionId==="sp"&&t.t==="j")return true;
+    if((meta.weakTypes||[]).includes(t.t)&&t.t!=="j")return true;
+    if(t.t==="s"&&(meta.weakNums||[]).includes(t.n))return true;
+    if(sectionId==="wd"&&t.t==="s"&&![1,2,3,4].includes(t.n))return true;
+    return false;
+  };
+
+  // Missing strong tile types in final rack
   const missingStrongTiles=[];
   if(strongNums.length){
-    strongNums.forEach(n=>{
-      const has=finalRack.some(t=>t.t==="s"&&t.n===n);
-      if(!has)missingStrongTiles.push(`${n} (any suit)`);
+    strongNums.slice(0,3).forEach(n=>{
+      if(!finalRack.some(t=>t.t==="s"&&t.n===n))missingStrongTiles.push(`${n} (any suit)`);
     });
   }
   if(strongTypes.length){
     strongTypes.forEach(ty=>{
-      const has=finalRack.some(t=>t.t===ty);
-      if(!has)missingStrongTiles.push(ty==="w"?"Wind tile":"Dragon tile");
+      if(!finalRack.some(t=>t.t===ty))missingStrongTiles.push(ty==="w"?"Wind tile":"Dragon tile");
     });
+  }
+  // Section-specific missing tile checks
+  if(sectionId==="2026"){
+    if(!finalRack.some(t=>t.t==="s"&&t.n===6))missingStrongTiles.push("6 (any suit)");
+    if(!finalRack.some(t=>t.t==="s"&&t.n===2))missingStrongTiles.push("2 (any suit)");
   }
 
   // Off-direction tiles in final rack
   const offDir=[];
-  if(meta.weakTypes&&meta.weakTypes.length){
-    finalRack.forEach(t=>{if(meta.weakTypes.includes(t.t)&&t.t!=="j")offDir.push(tLabel(t));});
-  }
-  if(meta.weakNums&&meta.weakNums.length){
-    finalRack.filter(t=>t.t==="s"&&meta.weakNums.includes(t.n)).forEach(t=>offDir.push(tLabel(t)));
-  }
+  finalRack.forEach(t=>{if(isWeak(t))offDir.push(tLabel(t));});
   const offDirectionTiles=offDir.slice(0,5);
 
-  // Key mistake round
+  // Key mistake round — which pass gave away the most useful tiles
   let keyMistakeRound=null;let worstAdj=-99;
   (passedTilesByRound||[]).forEach(p=>{
     const tiles=p.out||[];
-    const strongPassed=tiles.filter(t=>{
-      if(t.t==="j")return true;
-      if(strongTypes.includes(t.t))return true;
-      if(t.t==="s"&&strongNums.includes(t.n))return true;
-      return false;
-    }).length;
+    const strongPassed=tiles.filter(t=>isStrong(t)).length;
     if(strongPassed>worstAdj){worstAdj=strongPassed;keyMistakeRound=p.label||p.roundName||null;}
   });
   if(worstAdj<=0)keyMistakeRound=null;
@@ -672,14 +1225,15 @@ function iqDistanceToOptimal(finalRack,startingRack,passedTilesByRound,sectionId
     }
   });
 
-  // Run gap for consecutive run
+  // Depth gap for CR — window depth based
   let runGap=0;
-  if(sectionId==="cr"){const run=iqLongestRun(finalRack);runGap=Math.max(0,5-run);}
+  if(sectionId==="cr"){const ws=crWindowScore(finalRack);runGap=Math.max(0,Math.round(7-(ws.groupDepth||0)));}
 
   const distanceCount=Math.min(missingStrongTiles.length,3)+Math.min(offDirectionTiles.length,2)+runGap+brokenPairs.length;
 
   let explanation="Your final rack was well-optimised for your target direction.";
-  if(runGap>0)explanation=`Your longest run was ${5-runGap} tiles — you needed ${runGap} more to fully unlock Consecutive Run.`;
+  if(runGap>4)explanation="Your number tiles didn't consolidate into groups — CR needs pungs and kongs within a 3–4 number window, not singles.";
+  else if(runGap>0)explanation="You had the right number window but needed deeper groups — aim for pungs/kongs rather than singles.";
   else if(brokenPairs.length>0)explanation=`You broke ${brokenPairs.length} pair${brokenPairs.length>1?"s":""} (${brokenPairs.join(", ")}) during the Charleston.`;
   else if(missingStrongTiles.length>0)explanation=`Your rack was missing ${missingStrongTiles.slice(0,2).join(" and ")} — key tiles for this section.`;
   else if(offDirectionTiles.length>0)explanation=`${offDirectionTiles.length} off-direction tile${offDirectionTiles.length>1?"s":""} stayed in your rack.`;
@@ -691,36 +1245,32 @@ function iqTileInsights(finalRack,startingRack,passedTilesByRound,sectionId){
   const meta=SECTION_META[sectionId]||{};
   const strongNums=meta.strongNums||[];
   const strongTypes=meta.strongTypes||[];
-  const allPassed=(passedTilesByRound||[]).flatMap(p=>p.out||[]);
-
-  const protectedTiles=[];
-  finalRack.forEach(t=>{
-    if(t.t==="j")protectedTiles.push(tLabel(t));
-    else if(t.t==="f"&&meta.wantsFlowers)protectedTiles.push(tLabel(t));
-    else if(strongTypes.includes(t.t))protectedTiles.push(tLabel(t));
-    else if(t.t==="s"&&strongNums.includes(t.n))protectedTiles.push(tLabel(t));
-  });
-
-  const missedTiles=allPassed.filter(t=>{
-    if(t.t==="j")return true;
-    if(strongTypes.includes(t.t))return true;
-    if(t.t==="s"&&strongNums.includes(t.n))return true;
-    return false;
-  }).map(t=>tLabel(t));
-
   const weakNums=meta.weakNums||[];
   const weakTypes=meta.weakTypes||[];
-  const weakKept=finalRack.filter(t=>{
+  const allPassed=(passedTilesByRound||[]).flatMap(p=>p.out||[]);
+
+  // Section-aware strong/weak (mirrors iqPassQuality logic)
+  const isStrong=(t)=>{
+    if(t.t==="j"&&sectionId!=="sp")return true;
+    if(t.t==="f"&&meta.wantsFlowers)return true;
+    if(strongTypes.includes(t.t))return true;
+    if(t.t==="s"&&strongNums.includes(t.n))return true;
+    if(sectionId==="2026"&&t.t==="d"&&t.v==="Soap")return true;
+    return false;
+  };
+  const isWeak=(t)=>{
+    if(sectionId==="sp"&&t.t==="j")return true;
     if(weakTypes.includes(t.t)&&t.t!=="j")return true;
     if(t.t==="s"&&weakNums.includes(t.n))return true;
+    if(sectionId==="wd"&&t.t==="s"&&![1,2,3,4].includes(t.n))return true;
     return false;
-  }).map(t=>tLabel(t));
+  };
 
-  const riskyPassed=allPassed.filter(t=>{
-    if(t.t==="j")return true;
-    if(t.t==="f"&&meta.wantsFlowers)return true;
-    return false;
-  }).map(t=>tLabel(t));
+  const protectedTiles=finalRack.filter(t=>isStrong(t)).map(t=>tLabel(t));
+  const missedTiles=allPassed.filter(t=>isStrong(t)).map(t=>tLabel(t));
+  const weakKept=finalRack.filter(t=>isWeak(t)).map(t=>tLabel(t));
+  // Risky passed = jokers or flowers (when wanted) that left the rack
+  const riskyPassed=allPassed.filter(t=>(t.t==="j"&&sectionId!=="sp")||(t.t==="f"&&meta.wantsFlowers)).map(t=>tLabel(t));
 
   const missedOpportunities=[];
   const startGroups=iqCountGroups(startingRack);
@@ -734,7 +1284,7 @@ function iqTileInsights(finalRack,startingRack,passedTilesByRound,sectionId){
       missedOpportunities.push(label);
     }
   });
-  if(sectionId==="cr"){const run=iqLongestRun(finalRack);if(run<4&&missedTiles.length>0)missedOpportunities.push("Passed tiles that could have extended a consecutive run");}
+  if(sectionId==="cr"){const ws=crWindowScore(finalRack);if((ws.groupDepth||0)<5&&missedTiles.length>0)missedOpportunities.push("Passed tiles that could have deepened your number window groups");}
   if(weakKept.length>=3)missedOpportunities.push(`Held ${weakKept.length} off-direction tiles that could have been passed`);
 
   return{
@@ -756,8 +1306,11 @@ function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScor
   if(directionScore<20)weaknesses.push("Your rack stayed scattered without committing to one section.");
   if(tileStrengthScore<=10)weaknesses.push("Weak structure in the final rack — tiles didn't support each other well.");
   if(passQualityScore<=12)weaknesses.push("Some risky passing decisions gave away tiles your section needed.");
-  if(brokenPairsCount>0)weaknesses.push(`Broke ${brokenPairsCount} pair${brokenPairsCount>1?"s":""} during the Charleston — protect your pairs.`);
-  if(timingScore<=5)weaknesses.push("Pace was off — try to spend 8–20 seconds per pass.");
+  // Section-specific pair feedback — in S&P, breaking triples into pairs is good
+  if(brokenPairsCount>0&&sectionId!=="sp"){
+    weaknesses.push(`Broke ${brokenPairsCount} pair${brokenPairsCount>1?"s":""} during the Charleston — protect your pairs.`);
+  }
+  if(timingScore<=5)weaknesses.push("Pace was off — aim for 7–20 seconds per pass. Either too fast (not enough analysis) or too slow (second-guessing a good first read).");
 
   const uniqueStr=[...new Set(strengths)].slice(0,2);
   const uniqueWk=[...new Set(weaknesses)].slice(0,2);
@@ -765,7 +1318,26 @@ function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScor
   let coachNote="";
   let tryNextTime="";
 
-  if(directionScore<20&&passQualityScore<=12){
+  // Section-specific coach notes
+  if(sectionId==="sp"){
+    if(directionScore<20&&passQualityScore<=12)coachNote="S&P is fully concealed — you can't expose tiles. Focus on building pairs and getting rid of jokers and triples early.";
+    else if(passQualityScore<=12)coachNote="You were playing S&P, but passed tiles that would have been good pairs. For S&P: hold pairs, pass jokers, pass triples.";
+    else if(directionScore<20)coachNote="Your rack had too many singles. S&P needs 6+ clean pairs to win — consolidate toward fewer, deeper pairs.";
+    else coachNote="S&P is a discipline game. Keep holding pairs, keep releasing jokers, and you'll complete it.";
+  } else if(sectionId==="q"){
+    if(directionScore<20)coachNote="Quints without 2 jokers is nearly impossible. Identify joker count in deal — if you have fewer than 2, pivot immediately.";
+    else coachNote="With 2 jokers, focus entirely on stacking 3-4 of one specific tile. Spread is your enemy in Quints.";
+  } else if(sectionId==="cr"){
+    if(directionScore<20)coachNote="Consecutive Run isn't about long strings of singles — it's pungs and kongs within a 3-4 number window. Identify your window by pass 1.";
+    else if(tileStrengthScore<=10)coachNote="You had the right window, but not enough group depth. Pass tiles outside the window ruthlessly to deepen groups within it.";
+    else coachNote="Good CR instincts. Next level: pick the tightest window possible (3-wide > 5-wide) for more hand options.";
+  } else if(sectionId==="wd"){
+    if(directionScore<20)coachNote="W&D needs 7+ honor tiles. Pass all number tiles in round 1 unless you have a complete kong of 1-4.";
+    else coachNote="Winds are your backbone — 7 of 8 hands use them. Stack same-wind groups before dragons.";
+  } else if(sectionId==="2026"){
+    if(directionScore<20)coachNote="2026 needs both 2s and 6s — they appear in all 4 hands. Soap (White Dragon) is wild-suit zero. These three tiles are your filter.";
+    else coachNote="Strong 2026 read. Soap (White Dragon) makes it easier — it plays as any suit, so hold it whenever you're building this section.";
+  } else if(directionScore<20&&passQualityScore<=12){
     coachNote="Your passing and direction both need attention. The key habit: identify your strongest group before your very first pass, then protect it ruthlessly.";
   } else if(passQualityScore<=12){
     coachNote="You were pointing in the right direction, but your passing decisions cost you. Focus on what leaves your hand, not just what stays.";
@@ -777,11 +1349,23 @@ function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScor
     coachNote="Push higher by paying attention to your middle tiles — the ones that could serve two sections. Committing early to one path unlocks a sharper Charleston.";
   }
 
+  // Section-specific tryNextTime tips
+  const secTips={
+    "2026":"Hold every 2, 6, and Soap you see. In round 1, pass all odd numbers except via a Soap or Dragon connection.",
+    "2468":"Pass odds immediately in round 1. Your 6s are the anchor — never pass a 6 in any round.",
+    "369":"6 is in every 369 hand — never pass it. Round 1: pass everything except 3s, 6s, 9s, jokers, and flowers.",
+    "13579":"5 and 3 appear in every 13579 hand — prioritize them above all other odds. Pass all even tiles in round 1 without hesitation.",
+    "cr":"Identify your 3-4 number window by your first pass. Then pass every tile outside that window, even if it hurts.",
+    "wd":"Pass every number tile round 1 unless you have 4 of one number (1-4 only). Winds first, then dragons.",
+    "aln":"Pick your number immediately. Pass everything else — every round — until you have 8+ of that one number.",
+    "q":"Count jokers first. If you have 2+, pick your target tile and stack it. If fewer than 2, pivot to another section.",
+    "sp":"Pass jokers immediately — they're worthless here. Hold every pair. Break no pairs to chase anything.",
+  };
   const scores=[
-    {name:"direction",ratio:directionScore/40,tip:"Before your first pass, identify the section your rack most favors. Everything else follows from that read."},
-    {name:"tiles",ratio:tileStrengthScore/25,tip:"Before passing any tile, ask: does it support my main group, a pair, or a sequential path? If no to all three, it goes."},
+    {name:"direction",ratio:directionScore/40,tip:secTips[sectionId]||"Before your first pass, identify the section your rack most favors. Everything else follows from that read."},
+    {name:"tiles",ratio:tileStrengthScore/25,tip:"Before passing any tile, ask: does it support my main group, a pair, or a window? If no to all three, it goes."},
     {name:"passes",ratio:passQualityScore/25,tip:"Before each pass, check: does this tile connect to anything I'm keeping? Tiles that connect to nothing are the ones to pass."},
-    {name:"timing",ratio:timingScore/10,tip:"Aim for 8–20 seconds per pass. That's enough time to read the rack without second-guessing."},
+    {name:"timing",ratio:timingScore/10,tip:"Aim for 7–20 seconds per pass — enough to read the rack without second-guessing your first instinct."},
   ];
   const worst=scores.sort((a,b)=>a.ratio-b.ratio)[0];
   tryNextTime=worst.tip;
@@ -797,24 +1381,23 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   let{directionScore,directionExplanation}=iqDirection(finalRack,sectionId);
   let{tileStrengthScore}=iqTileStrength(finalRack,sectionId);
   const{passQualityScore,passInsights,brokenPairsCount}=iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId);
-  const{timingScore,timingInsight}=iqTiming(totalTime||0,roundCount);
+  const{timingScore,timingInsight}=iqTiming(totalTime||0,roundCount,passedTilesByRound);
 
   // ── DEAL QUALITY FLOOR ──────────────────────────────────────────────────────
   const meta=SECTION_META[sectionId]||{};
   const strongNums=meta.strongNums||[];
   const strongTypes=meta.strongTypes||[];
-  const dealStrong=startingRack.filter(t=>{
+  // Section-aware strong tile definition — mirrors isStrongTile in iqPassQuality
+  const isStrongForSection=(t)=>{
+    if(t.t==="j"&&sectionId!=="sp")return true;
+    if(t.t==="f"&&meta.wantsFlowers)return true;
     if(strongTypes.includes(t.t))return true;
     if(t.t==="s"&&strongNums.includes(t.n))return true;
-    if(t.t==="j")return true;
+    if(sectionId==="2026"&&t.t==="d"&&t.v==="Soap")return true;
     return false;
-  }).length;
-  const finalStrong=finalRack.filter(t=>{
-    if(strongTypes.includes(t.t))return true;
-    if(t.t==="s"&&strongNums.includes(t.n))return true;
-    if(t.t==="j")return true;
-    return false;
-  }).length;
+  };
+  const dealStrong=startingRack.filter(t=>isStrongForSection(t)).length;
+  const finalStrong=finalRack.filter(t=>isStrongForSection(t)).length;
   const retentionRate=dealStrong>0?finalStrong/dealStrong:0;
   // Retention bonus capped at +2 (was +4) — prevents stacking inflation
   if(retentionRate>=0.85&&dealStrong>=5){
@@ -856,7 +1439,7 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   const _prof=getProfile();
   const _club=_prof?.clubCode?CLUBS[_prof.clubCode]:null;
   const clubLine=_club?`${_club.name}\n`:"";
-  const shareText=`🀄 RACKLE${isDaily?` #${dn}`:""}\nCharleston IQ: ${totalScore} · ${level}\nSection: ${sectionId?SECS.find(s=>s.id===sectionId)?.name||"":""}\nPasses: ${passEmoji}\nTime: ${fT(totalTime||0)}\n${clubLine}playrackle.com`;
+  const shareText=`🀄 ${isDaily?`Daily Rackle #${dn}`:"Rackle Practice"}\nCharleston IQ: ${totalScore} · ${level}\nSection: ${sectionId?SECS.find(s=>s.id===sectionId)?.name||"":""}\nPasses: ${passEmoji}\nTime: ${fT(totalTime||0)}\n${clubLine}playrackle.com`;
 
   return{
     puzzleId,totalScore,level,levelExplanation,
@@ -1369,7 +1952,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
           <button onClick={tryLogin} disabled={!pwInput} style={{...S.greenBtn,width:"100%",opacity:pwInput?1:0.35}}>Unlock →</button>
         </div>
         <div style={{textAlign:"center",marginTop:8}}>
-          <button onClick={()=>{setStoredHash(null);setProfile(null);setProfileState({nickname:"",clubCode:"",avatarUrl:"",email:""});setMode("setup");setPwInput("");}} style={{fontSize:11,color:C.mut,background:"none",border:"none",cursor:"pointer",textDecoration:"underline"}}>Forgot password? Reset profile</button>
+          <button onClick={()=>{setStoredHash(null);setProfile(null);setProfileState({nickname:"",clubCode:"",avatarUrl:"",email:""});ST.set("clubName",null);ST.set("clubCode",null);setMode("setup");setPwInput("");}} style={{fontSize:11,color:C.mut,background:"none",border:"none",cursor:"pointer",textDecoration:"underline"}}>Forgot password? Reset profile</button>
         </div>
         <Footer/>
       </div>
@@ -1500,7 +2083,7 @@ function ProfilePill({rounds,streak,setScreen}){
     <button onClick={()=>setScreen("profile")} style={{display:"flex",alignItems:"center",gap:5,background:"none",border:"none",padding:"4px 12px",cursor:"pointer"}}>
       {profile.avatarUrl
         ?<img src={profile.avatarUrl} alt="" style={{width:22,height:22,borderRadius:11,objectFit:"cover",border:`1.5px solid ${C.bdr}`}}/>
-        :<span style={{fontSize:11}}>{streakBadge?streakBadge.badge:"👤"}</span>
+        :<span style={{fontSize:11}}>{"👤"}</span>
       }
       <span style={{fontSize:11,color:C.ink,fontWeight:700}}>{profile.nickname.split(" ")[0]}</span>
     </button>
@@ -1590,6 +2173,19 @@ async function fetchDailyStats(){
     const avg=Math.round(rows.reduce((s,r)=>s+r.iq_score,0)/total);
     return{total,avg};
   }catch{return null;}
+}
+
+// Fetch global leaderboard — all players today, no club filter
+async function fetchGlobalEntries(){
+  try{
+    const res=await fetch(
+      `${SB_URL}/rest/v1/leaderboard?day_seed=eq.${getDailySeed()}&order=iq_score.desc&limit=100`,
+      {headers:SB_HEADERS}
+    );
+    if(!res.ok)return[];
+    const rows=await res.json();
+    return rows.map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,clubCode:r.club_code}));
+  }catch{return[];}
 }
 
 // Personal best IQ — scans history for highest iqScore
@@ -1783,7 +2379,7 @@ function DailyIQScorecard({iq,hand,passLog,dayNum,section,chosenSec,allSections,
   const [passOpen,setPassOpen]=useState(false);
   const [dailyStats,setDailyStats]=useState(null);
   if(!iq)return null;
-  const shareText=iq.shareText||`🀄 RACKLE #${dayNum}\nCharleston IQ: ${iq.totalScore} · ${iq.level}\nplayrackle.com`;
+  const shareText=iq.shareText||`🀄 Daily Rackle #${dayNum}\nCharleston IQ: ${iq.totalScore} · ${iq.level}\nplayrackle.com`;
   useEffect(()=>{fetchDailyStats().then(s=>{if(s&&s.total>1)setDailyStats(s);});},[]);
 
   // Build section comparison: what they chose vs what they should have
@@ -1833,7 +2429,7 @@ function DailyIQScorecard({iq,hand,passLog,dayNum,section,chosenSec,allSections,
     }
     // 5. Timing tip
     if(iq.timingScore<=4){
-      tips.push(`⏱ You passed very quickly (avg ${Math.round((iq.totalTime||0)/Math.max((passLog||[]).length,1))}s per pass). Give yourself 8–12s to read the rack before each pass.`);
+      tips.push(`⏱ You passed very quickly (avg ${Math.round((iq.totalTime||0)/Math.max((passLog||[]).length,1))}s per pass). Give yourself at least 7s to read the rack before each pass.`);
     } else if(iq.timingScore>=9){
       tips.push(`⏱ Excellent pace — ${Math.round((iq.totalTime||0)/Math.max((passLog||[]).length,1))}s per pass average. That's the sweet spot.`);
     }
@@ -1867,12 +2463,6 @@ function DailyIQScorecard({iq,hand,passLog,dayNum,section,chosenSec,allSections,
         <div style={{fontFamily:"monospace",fontSize:10,color:C.mut,lineHeight:1.9,whiteSpace:"pre",background:C.bg2,borderRadius:8,padding:"10px 12px",marginBottom:10,textAlign:"center",borderBottom:`1px solid ${C.bdr}`}}>{shareText}</div>
         <div style={{display:"flex",flexDirection:"column",gap:6}}>
           <ShareButton text={shareText}/>
-          <ShareButton
-            text={`🎯 Can you beat my Rackle IQ?\n\nI scored ${iq.totalScore} on Daily #${dayNum} — ${iq.level}.\n\nChallenge link:\nplayrackle.com?challenge=${iq.totalScore}&day=${dayNum}`}
-            label="Challenge a Friend"
-            sublabel={`Dare them to beat your ${iq.totalScore} IQ`}
-            variant="goldpill"
-          />
         </div>
       </div>
 
@@ -2108,7 +2698,8 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
           const qualCounts={strong:0,mixed:0,weak:0,neutral:0};
           iq.passInsights.forEach(p=>{qualCounts[p.quality]=(qualCounts[p.quality]||0)+1;});
           const cleanRounds=qualCounts.strong;
-          const riskyCount=allPassed.filter(t=>t.t==="j"||t.t==="f").length;
+          // Use pre-computed riskyPassed from tileInsights — already section-aware
+          const riskyCount=(iq.tileInsights&&iq.tileInsights.riskyPassed)?iq.tileInsights.riskyPassed.length:allPassed.filter(t=>t.t==="j"||t.t==="f").length;
           return(
           <div style={{...S.card,background:"linear-gradient(135deg,#F8F4EB,#FBF9F4)",marginBottom:10,borderColor:C.gold+"25"}}>
             <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>PASS SUMMARY</div>
@@ -2135,7 +2726,15 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
           const qBg={strong:C.sage,weak:"#FDF0E8",mixed:C.amber,neutral:"#fff"};
           const qColor={strong:C.sageB,weak:"#8A3010",mixed:C.amberB,neutral:C.mut};
           const qIcon={strong:"✓",weak:"✗",mixed:"≈",neutral:"·"};
-          const passedStrong=(p.passedTiles||[]).filter(t=>t.t==="j"||t.t==="f").length;
+          // Section-aware: jokers are NOT risky in S&P; Soap IS risky in 2026
+          const sid=section&&section.id?section.id:(chosenSec||"2026");
+          const passedStrong=(p.passedTiles||[]).filter(t=>{
+            if(t.t==="j"&&sid==="sp")return false; // jokers are weak/worthless in S&P
+            if(t.t==="j")return true;
+            if(t.t==="f")return true;
+            if(sid==="2026"&&t.t==="d"&&t.v==="Soap")return true;
+            return false;
+          }).length;
           const passedCount=(p.passedTiles||[]).length;
           return(
             <div key={i} style={{...S.card,background:qBg[p.quality]||"#fff",marginBottom:8,padding:0,overflow:"hidden"}}>
@@ -2295,6 +2894,20 @@ function StreakBadgeToast({badge,onDismiss}){
         <div style={{fontSize:13,fontWeight:800,color:C.ink,fontFamily:F.d}}>{badge.title}!</div>
         <div style={{fontSize:11,color:C.mut}}>{badge.desc} streak unlocked</div>
       </div>
+    </div>
+  );
+}
+
+function ClubPostToast({toast,onDismiss}){
+  useEffect(()=>{const t=setTimeout(onDismiss,4500);return()=>clearTimeout(t);},[]);
+  return(
+    <div role="status" aria-live="polite" className="rk-in" style={{position:"fixed",top:16,left:"50%",transform:"translateX(-50%)",background:"#fff",borderRadius:16,padding:"12px 18px",boxShadow:"0 8px 32px rgba(0,0,0,0.14)",border:`2px solid ${C.jade}25`,zIndex:200,display:"flex",alignItems:"center",gap:12,maxWidth:300,width:"calc(100% - 32px)"}}>
+      <div style={{width:36,height:36,borderRadius:10,background:C.jade+"12",border:`1.5px solid ${C.jade}25`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🀄</div>
+      <div style={{flex:1,minWidth:0}}>
+        <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.jade,lineHeight:1,marginBottom:3}}>Posted to {toast.clubName}</div>
+        <div style={{fontSize:11,color:C.mut}}>IQ {toast.iqScore} is on the board</div>
+      </div>
+      <button onClick={onDismiss} style={{background:"none",border:"none",color:C.mut,fontSize:14,cursor:"pointer",padding:0,lineHeight:1,flexShrink:0}}>✕</button>
     </div>
   );
 }
@@ -2514,9 +3127,9 @@ function ClubCodeEntry({setScreen}){
   const addClubEmail="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20";
 
   return(
-    <div style={{marginBottom:8}}>
-      {/* Collapsed trigger */}
-      <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px",borderRadius:open?"12px 12px 0 0":12,background:C.jade+"06",border:`1px solid ${C.jade+"25"}`,cursor:"pointer",textAlign:"left"}}>
+    <div style={{marginBottom:0}}>
+      {/* Collapsed trigger — flat bottom so global pill attaches flush */}
+      <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px",borderRadius:open?"12px 12px 0 0":"12px 12px 0 0",background:C.jade+"06",border:`1px solid ${C.jade+"25"}`,cursor:"pointer",textAlign:"left"}}>
         <div style={{display:"flex",flexDirection:"column",alignItems:"flex-start",gap:6,flex:1}}>
           <div style={{fontSize:10,color:C.jade,letterSpacing:1.5,fontWeight:700}}>COMMUNITY</div>
           <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,lineHeight:1.2}}>Club Leaderboards</div>
@@ -2525,7 +3138,7 @@ function ClubCodeEntry({setScreen}){
         <span style={{fontSize:11,color:C.jade,opacity:0.7,marginLeft:8}}>{open?"▴":"▾"}</span>
       </button>
 
-      {open&&<div className="rk-in" style={{background:"#fff",border:`1px solid ${C.jade+"25"}`,borderTop:"none",borderRadius:"0 0 12px 12px",padding:"14px 16px"}}>
+      {open&&<div className="rk-in" style={{background:"#fff",border:`1px solid ${C.jade+"25"}`,borderTop:"none",borderRadius:"0 0 0 0",padding:"14px 16px"}}>
         {savedClub?(
           <button onClick={()=>setScreen("leaderboard")} style={{width:"100%",borderRadius:12,background:"#fff",border:`1px solid ${C.bdr}`,cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"12px 14px",marginBottom:10,textAlign:"left",boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
             <div style={{flex:1,minWidth:0}}>
@@ -2554,6 +3167,107 @@ function ClubCodeEntry({setScreen}){
           <a href={addClubEmail} style={{fontSize:11,color:C.mut,textDecoration:"none",opacity:0.7}}>
             + Start your Rackle club leaderboard
           </a>
+        </div>
+      </div>}
+    </div>
+  );
+}
+
+// ─── GLOBAL LEADERBOARD PILL ──────────────────────────────────────────────────
+function GlobalLeaderboardPill(){
+  const [open,setOpen]=useState(false);
+  const [entries,setEntries]=useState([]);
+  const [loading,setLoading]=useState(false);
+  const [fetched,setFetched]=useState(false);
+  const myName=getClubName()||(getProfile()?.nickname||null);
+  const dn=getDayNum();
+
+  const load=()=>{
+    if(fetched)return;
+    setLoading(true);
+    fetchGlobalEntries().then(rows=>{
+      setEntries(rows);
+      setLoading(false);
+      setFetched(true);
+    });
+  };
+
+  const toggle=()=>{
+    if(!open)load();
+    setOpen(o=>!o);
+  };
+
+  const top10=entries.slice(0,10);
+  const myRank=myName?entries.findIndex(e=>e.name.toLowerCase()===myName.toLowerCase())+1:0;
+  const myEntry=myRank>0?entries[myRank-1]:null;
+
+  return(
+    <div style={{marginBottom:8}}>
+      {/* Pill trigger — attached below club leaderboard, borderRadius top is square to attach visually */}
+      <button onClick={toggle} style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px",borderRadius:open?"0 0 0 0":"0 0 12px 12px",background:"#2460A806",border:`1px solid #2460A825`,borderTop:"none",cursor:"pointer",textAlign:"left"}}>
+        <div style={{display:"flex",flexDirection:"column",alignItems:"flex-start",gap:6,flex:1}}>
+          <div style={{fontSize:10,color:"#2460A8",letterSpacing:1.5,fontWeight:700}}>🌍 GLOBAL · DAY #{dn}</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,lineHeight:1.2}}>Global Leaderboard</div>
+          <div style={{fontSize:12,color:C.mut,lineHeight:1.4}}>{entries.length>0?`${entries.length} players worldwide today`:"All Clubs, All Players"}</div>
+        </div>
+        <span style={{fontSize:11,color:"#2460A8",opacity:0.7,marginLeft:8}}>{open?"▴":"▾"}</span>
+      </button>
+
+      {open&&<div className="rk-in" style={{border:`1px solid #2460A825`,borderTop:"none",borderRadius:"0 0 12px 12px",overflow:"hidden",background:"#fff"}}>
+        {/* My rank banner if I'm on the board */}
+        {myEntry&&(
+          <div style={{background:`linear-gradient(135deg,#2460A810,#2460A806)`,borderBottom:`1px solid #2460A815`,padding:"10px 14px",display:"flex",alignItems:"center",gap:10}}>
+            <div style={{width:28,height:28,borderRadius:8,background:"#2460A815",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:900,color:"#2460A8",fontFamily:F.d,flexShrink:0}}>#{myRank}</div>
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{fontFamily:F.d,fontSize:12,fontWeight:800,color:"#2460A8",lineHeight:1}}>You're #{myRank} globally today</div>
+              <div style={{fontSize:10,color:C.mut,marginTop:2}}>IQ {myEntry.iqScore}{myEntry.streak>1?` · ${myEntry.streak}d streak`:""}</div>
+            </div>
+          </div>
+        )}
+
+        {loading?(
+          <div style={{textAlign:"center",padding:"20px 14px"}}>
+            <div style={{fontSize:18,opacity:0.25,marginBottom:6}}>⏳</div>
+            <div style={{fontSize:11,color:C.mut}}>Loading global scores…</div>
+          </div>
+        ):top10.length===0?(
+          <div style={{textAlign:"center",padding:"24px 14px"}}>
+            <div style={{fontSize:26,marginBottom:8}}>🀄</div>
+            <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.ink,marginBottom:4}}>No scores yet today</div>
+            <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>Play the Daily to be first on the global board.</div>
+          </div>
+        ):(
+          <>
+            {/* Header row */}
+            <div style={{display:"grid",gridTemplateColumns:"28px 1fr 44px 36px",gap:0,padding:"7px 14px",background:C.bg2,borderBottom:`1px solid ${C.bdr}`}}>
+              {["#","Player","IQ","🔥"].map((h,i)=>(
+                <div key={i} style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,textAlign:i>1?"center":"left"}}>{h}</div>
+              ))}
+            </div>
+            {/* Rows */}
+            {top10.map((e,i)=>{
+              const isMe=myName&&e.name.toLowerCase()===myName.toLowerCase();
+              const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":null;
+              const clubLabel=e.clubCode&&CLUBS[e.clubCode]?CLUBS[e.clubCode].name:null;
+              return(
+                <div key={i} style={{display:"grid",gridTemplateColumns:"28px 1fr 44px 36px",gap:0,padding:"10px 14px",background:isMe?"#2460A806":"#fff",borderBottom:i<top10.length-1?`1px solid ${C.bdr}`:"none",alignItems:"center"}}>
+                  <div style={{fontSize:i<3?14:12}}>{medal||<span style={{fontFamily:F.d,fontSize:12,fontWeight:700,color:C.mut}}>{i+1}</span>}</div>
+                  <div style={{minWidth:0}}>
+                    <div style={{fontFamily:F.d,fontSize:12,fontWeight:isMe?800:600,color:isMe?"#2460A8":C.ink,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{e.name}{isMe?" (you)":""}</div>
+                    {clubLabel&&<div style={{fontSize:9,color:C.mut,marginTop:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{clubLabel}</div>}
+                  </div>
+                  <div style={{textAlign:"center"}}><span style={{fontFamily:F.d,fontSize:13,fontWeight:900,color:e.iqScore>=80?C.jade:e.iqScore>=60?C.gold:C.cinn}}>{e.iqScore}</span></div>
+                  <div style={{textAlign:"center",fontSize:11,color:C.cinn}}>{e.streak>1?e.streak:""}</div>
+                </div>
+              );
+            })}
+          </>
+        )}
+
+        {/* Footer */}
+        <div style={{padding:"10px 14px",borderTop:`1px solid ${C.bdr}`,background:C.bg2,textAlign:"center"}}>
+          {entries.length>10&&<div style={{fontSize:10,color:C.mut,marginBottom:4}}>+ {entries.length-10} more players worldwide</div>}
+          <div style={{fontSize:10,color:C.mut,lineHeight:1.5,opacity:0.7}}>Play the Daily to appear · Resets midnight</div>
         </div>
       </div>}
     </div>
@@ -2635,100 +3349,6 @@ function PeriodTable({code,period,myName,showTime,fetchFn}){
 }
 
 // ─── LEADERBOARD SHARE CARD ───────────────────────────────────────────────────
-function LeaderboardShareCard({code,club,entries,dn}){
-  const [saving,setSaving]=useState(false);
-  const [done,setDone]=useState(false);
-  const cardRef=useRef(null);
-  const SANS="-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif";
-  const top=entries.slice(0,5);
-  const playerCount=entries.length;
-  const avgIQ=playerCount>0?Math.round(entries.reduce((s,e)=>s+e.iqScore,0)/playerCount):0;
-  const topIQ=entries[0]?.iqScore||0;
-  const today=new Date();
-  const dateStr=today.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
-  const medal=["🥇","🥈","🥉"];
-
-  const save=async()=>{
-    if(!cardRef.current||saving)return;
-    setSaving(true);
-    await loadHtml2Canvas();
-    try{
-      const canvas=await window.html2canvas(cardRef.current,{
-        scale:3,useCORS:false,allowTaint:true,
-        backgroundColor:"#FAF7F1",logging:false,removeContainer:true,
-      });
-      const blob=await new Promise(r=>canvas.toBlob(r,"image/png"));
-      const filename=`rackle-${code}-day${dn}.png`;
-      if(navigator.share&&navigator.canShare&&blob){
-        try{
-          await navigator.share({
-            files:[new File([blob],filename,{type:"image/png"})],
-            title:`${club.name} · Rackle Day #${dn}`,
-            text:`Today's leaderboard for ${club.name} · playrackle.com`,
-          });
-          setDone(true);setTimeout(()=>setDone(false),3000);
-          setSaving(false);return;
-        }catch(e){}
-      }
-      const url=URL.createObjectURL(blob);
-      const a=document.createElement("a");
-      a.href=url;a.download=filename;a.click();
-      URL.revokeObjectURL(url);
-      setDone(true);setTimeout(()=>setDone(false),3000);
-    }catch(e){console.error(e);}
-    setSaving(false);
-  };
-
-  if(!entries.length)return null;
-
-  return(
-    <div style={{marginBottom:10}}>
-      <div ref={cardRef} style={{background:"#FAF7F1",border:"1.5px solid #E3DDD3",borderRadius:16,overflow:"hidden",fontFamily:SANS}}>
-        {/* Jade header */}
-        <div style={{background:"linear-gradient(135deg,#083D22,#1B7D4E)",padding:"16px 18px 14px"}}>
-          <div style={{fontSize:8,color:"rgba(255,255,255,0.4)",letterSpacing:3,fontWeight:700,marginBottom:6}}>
-            {club.name.toUpperCase()} · DAY #{dn}
-          </div>
-          <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",marginBottom:10}}>
-            <div style={{fontSize:17,fontWeight:700,color:"#fff"}}>Today's Board</div>
-            <div style={{fontSize:10,color:"rgba(255,255,255,0.45)"}}>{dateStr}</div>
-          </div>
-          <div style={{display:"flex",gap:20,paddingTop:10,borderTop:"1px solid rgba(255,255,255,0.1)"}}>
-            {[{val:playerCount,label:"PLAYERS"},{val:avgIQ,label:"AVG IQ"},{val:topIQ,label:"TOP IQ"}].map(s=>(
-              <div key={s.label}>
-                <div style={{fontSize:16,fontWeight:700,color:"#C9A84C",lineHeight:1}}>{s.val}</div>
-                <div style={{fontSize:8,color:"rgba(255,255,255,0.35)",letterSpacing:1.5,fontWeight:700,marginTop:3}}>{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-        {/* Rows */}
-        <div style={{padding:"4px 0"}}>
-          {top.map((e,i)=>(
-            <div key={i} style={{display:"grid",gridTemplateColumns:"28px 1fr 44px",padding:"9px 16px",alignItems:"center",background:i%2===0?"#FAF7F1":"#F4F0E8",borderBottom:i<top.length-1?"1px solid #E3DDD3":"none"}}>
-              <div style={{fontSize:i<3?15:12,fontWeight:700,color:"#6B6560"}}>{i<3?medal[i]:i+1}</div>
-              <div style={{fontSize:13,fontWeight:i===0?700:600,color:"#221E1A",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{e.name}</div>
-              <div style={{textAlign:"right",fontSize:i===0?17:15,fontWeight:700,color:i===0?"#1B7D4E":"#6B6560"}}>{e.iqScore}</div>
-            </div>
-          ))}
-          {entries.length>5&&(
-            <div style={{padding:"8px 16px",fontSize:11,color:"#6B6560",textAlign:"center"}}>+ {entries.length-5} more players</div>
-          )}
-        </div>
-        {/* Footer */}
-        <div style={{padding:"10px 16px",borderTop:"1px solid #E3DDD3",display:"flex",alignItems:"center",justifyContent:"space-between",background:"#F4F0E8"}}>
-          <div style={{fontSize:10,color:"#6B6560"}}>playrackle.com</div>
-          <div style={{fontSize:10,fontWeight:700,color:"#1B7D4E",letterSpacing:0.5}}>Code: {code}</div>
-        </div>
-      </div>
-      {/* Share button — outside card, not captured */}
-      <button onClick={save} disabled={saving} style={{width:"100%",marginTop:8,padding:"12px 0",borderRadius:12,border:"none",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",fontSize:13,fontWeight:700,cursor:saving?"default":"pointer",opacity:saving?0.7:1,letterSpacing:0.3}}>
-        {done?"✓ Saved! Drop it in your group chat":saving?"Saving…":"📸 Share Leaderboard"}
-      </button>
-    </div>
-  );
-}
-
 // ─── LEADERBOARD SCREEN ────────────────────────────────────────────────────────
 function LeaderboardScreen({home,dRes,streak}){
   const code=getClubCode();
@@ -2764,7 +3384,7 @@ function LeaderboardScreen({home,dRes,streak}){
     const ok=await upsertLBEntry(code,name,iq.totalScore,dRes?.time||0,streak);
     if(ok){
       const updated=await fetchLBEntries(code);
-      setEntries(updated);setSubmitted(true);setShowNameForm(false);
+      setEntries(updated);setSubmitted(true);
     } else {
       setNameErr("Couldn't post score — check your connection and try again.");
     }
@@ -2833,7 +3453,7 @@ function LeaderboardScreen({home,dRes,streak}){
             </div>
             <div style={{flex:1}}>
               <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:"#fff",lineHeight:1,marginBottom:3}}>Post your score</div>
-              <div style={{fontSize:11,color:"rgba(255,255,255,0.75)",lineHeight:1.4}}>{iq.level} · ⏱ {fT(dRes?.time||0)}{streak>1?` · 🔥 ${streak}d streak`:""}</div>
+              <div style={{fontSize:11,color:"rgba(255,255,255,0.75)",lineHeight:1.4}}>{iq.level} · ⏱ {fT(dRes?.time||0)}{streak>1?` · ${streak}d streak`:""}</div>
             </div>
           </div>
           {/* Name + submit inline */}
@@ -2879,7 +3499,7 @@ function LeaderboardScreen({home,dRes,streak}){
                 href={`sms:?&body=${smsText}`}
                 style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,width:"100%",padding:"11px 0",borderRadius:12,background:`linear-gradient(135deg,${C.sageB},#3A6B52)`,color:"#fff",fontSize:13,fontWeight:700,textDecoration:"none",boxSizing:"border-box"}}
               >
-                💬 Challenge your club via text
+                💬 Challenge your club
               </a>
             );
           })()}
@@ -2890,8 +3510,7 @@ function LeaderboardScreen({home,dRes,streak}){
         <div style={{fontSize:12,color:C.ink,lineHeight:1.6}}>🎯 <strong>Complete today's Daily Rackle</strong> to add your score to the leaderboard.</div>
       </div>}
 
-      {/* SHARE LEADERBOARD CARD */}
-      {entries.length>0&&<LeaderboardShareCard code={code} club={club} entries={entries} dn={dn}/>}
+
 
       {/* PERIOD TABS */}
       <div style={{display:"flex",gap:4,marginBottom:8,background:C.bg2,borderRadius:10,padding:3}}>
@@ -2968,7 +3587,7 @@ function Statspill({streak,rounds,bestIQ,streakBadge}){
   const hasAny=streak>0||rounds>0||bestIQ;
 
   // Collapsed pill — shows most prominent stat
-  const icon=streak>0?(streakBadge?streakBadge.badge:"🔥"):bestIQ?"⭐":"🎲";
+  const icon=streak>0?(streakBadge?streakBadge.badge:"📅"):bestIQ?"⭐":"🎲";
   const value=streak>0?`${streak}-day`:bestIQ?bestIQ.score:rounds;
   const label=streak>0?"streak":bestIQ?"best IQ":"rounds";
   const color=streak>0?C.cinn:bestIQ?C.gold:C.mut;
@@ -2981,7 +3600,6 @@ function Statspill({streak,rounds,bestIQ,streakBadge}){
     <div>
       {/* Collapsed pill */}
       <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:5,background:bg,border,borderRadius:8,padding:"4px 12px",cursor:"pointer"}}>
-        <span style={{fontSize:11}}>{icon}</span>
         <span style={{fontFamily:F.d,fontSize:12,fontWeight:800,color}}>{value}</span>
         <span style={{fontSize:11,color,fontWeight:600,opacity:0.8}}>{label}</span>
         <span style={{fontSize:9,color,opacity:0.5,marginLeft:1}}>{open?"▴":"▾"}</span>
@@ -2990,7 +3608,7 @@ function Statspill({streak,rounds,bestIQ,streakBadge}){
       {/* Expanded panel */}
       {open&&<div className="rk-in" style={{marginTop:6,background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:14,padding:"10px 14px",boxShadow:"0 4px 16px rgba(0,0,0,0.06)",minWidth:180}}>
         {streak>0&&<div style={{display:"flex",alignItems:"center",gap:8,paddingBottom:8,borderBottom:rounds>0||bestIQ?`1px solid ${C.bdr}`:"none",marginBottom:rounds>0||bestIQ?8:0}}>
-          <span style={{fontSize:16}}>{streakBadge?streakBadge.badge:"🔥"}</span>
+          <span style={{fontSize:16}}>{streakBadge?streakBadge.badge:"📅"}</span>
           <div>
             <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.cinn,lineHeight:1}}>{streak}-day streak{streakBadge?` · ${streakBadge.title}`:""}</div>
             <div style={{fontSize:10,color:C.mut,marginTop:2}}>{streakBadge?streakBadge.desc:"Keep playing daily!"}</div>
@@ -3054,7 +3672,7 @@ function getStreakNudge(streak,pct,daysLeft,nextBadge,bestIQ,clubName){
 }
 
 function StreakCard({streak,streakBadge,bestIQ,clubName,onStats,firstName}){
-  const [collapsed,setCollapsed]=useState(false);
+  const [collapsed,setCollapsed]=useState(true);
   const nextBadge=STREAK_BADGES.find(b=>b.days>streak);
   const pct=nextBadge?Math.round((streak/nextBadge.days)*100):100;
   const daysLeft=nextBadge?nextBadge.days-streak:0;
@@ -3087,7 +3705,7 @@ function StreakCard({streak,streakBadge,bestIQ,clubName,onStats,firstName}){
         aria-label={collapsed?"Expand streak card":"Collapse streak card"}
         style={{width:"100%",display:"flex",alignItems:"center",gap:12,padding:"11px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}
       >
-        <span style={{fontSize:22,flexShrink:0}}>{streakBadge?streakBadge.badge:"🔥"}</span>
+        <span style={{fontSize:22,flexShrink:0}}>{streakBadge?streakBadge.badge:"📅"}</span>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:13,fontWeight:800,color:C.ink,fontFamily:F.d,lineHeight:1.2}}>
             {streak}-day streak{streakBadge?(firstName?` · You're on fire, ${firstName}!`:` · ${streakBadge.title}`):""}
@@ -3106,11 +3724,8 @@ function StreakCard({streak,streakBadge,bestIQ,clubName,onStats,firstName}){
               <div style={{fontSize:11,color:C.mut,marginBottom:6}}>
                 {daysLeft} more day{daysLeft!==1?"s":""} to unlock {nextBadge.badge} <strong style={{color:C.ink}}>{nextBadge.title}</strong>
               </div>
-              <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden"}}>
+              <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden",marginBottom:12}}>
                 <div style={{height:"100%",borderRadius:3,background:`linear-gradient(90deg,${C.gold},#C99F3A)`,width:`${pct}%`,transition:"width 0.6s ease"}}/>
-              </div>
-              <div style={{fontSize:10,color:C.mut,marginTop:4,opacity:0.7,lineHeight:1.5}}>
-                {pct}% of the way there{nudge&&<> · <span style={{fontStyle:"italic"}}>{nudge}</span></>}
               </div>
             </>
           ):(
@@ -3178,7 +3793,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   // Build share text fresh every render
   const passEmoji=(iq?.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
   const shareText=iq
-    ?`🀄 RACKLE #${dn}\nCharleston IQ: ${iq.totalScore} · ${iq.level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Time: ${fT(iq.totalTime||0)}\nplayrackle.com`
+    ?`🀄 Daily Rackle #${dn}\nCharleston IQ: ${iq.totalScore} · ${iq.level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Time: ${fT(iq.totalTime||0)}\nplayrackle.com`
     :dRes?`🀄 Rackle #${dn} · ${dRes.rating} ${dRes.emoji}\n${dRes.section||""}\nplayrackle.com`:"";
 
   return(
@@ -3240,7 +3855,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <div aria-hidden="true" style={{width:52,height:52,borderRadius:15,background:"rgba(255,255,255,0.12)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,flexShrink:0}}>📅</div>
           <div>
             <div style={{fontSize:11,opacity:0.75,letterSpacing:2,fontWeight:700,marginBottom:5}}>TODAY'S CHALLENGE</div>
-            <div style={{fontFamily:F.d,fontSize:22,fontWeight:800,marginBottom:6}}>Daily Rackle #{dn}</div>
+            <div style={{fontFamily:F.d,fontSize:18,fontWeight:800,marginBottom:6}}>Daily Rackle #{dn}</div>
             <div style={{fontSize:12,opacity:0.85}}>Same deal for every player. One shot.</div>
             <div style={{fontSize:11,opacity:0.65,marginTop:4}}>Compare your Charleston with your whole club.</div>
           </div>
@@ -3282,7 +3897,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
                   <span style={{fontSize:11,color:"rgba(255,255,255,0.7)",fontWeight:600}}>{ydComp.label}</span>
                 </div>}
                 {streak>1&&<div style={{display:"flex",alignItems:"center",gap:5,background:"rgba(255,255,255,0.07)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:20,padding:"4px 12px"}}>
-                  <span style={{fontSize:11}}>{streakBadge?streakBadge.badge:"🔥"}</span>
+                  <span style={{fontSize:11}}>{streakBadge?streakBadge.badge:"📅"}</span>
                   <span style={{fontSize:11,color:"rgba(255,255,255,0.7)",fontWeight:600}}>{streak}-day streak{streakBadge?` · ${streakBadge.title}`:""}</span>
                 </div>}
               </div>}
@@ -3310,7 +3925,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div aria-hidden="true" style={{width:44,height:44,borderRadius:13,background:`linear-gradient(135deg,${C.cinn}20,${C.cinn}10)`,border:`1px solid ${C.cinn}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🀄</div>
         <div style={{flex:1}}>
           <div style={{fontSize:10,color:C.cinn,letterSpacing:2,fontWeight:700,marginBottom:2}}>UNLIMITED PLAY</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,marginBottom:2}}>Practice Mode</div>
+          <div style={{fontFamily:F.d,fontSize:18,fontWeight:800,color:C.ink,marginBottom:2}}>Practice Mode</div>
           <div style={{fontSize:12,color:C.mut}}>Unlimited hands. No timer pressure. Build instincts for every section.</div>
         </div>
         <span aria-hidden="true" style={{fontSize:14,color:C.mut,fontWeight:600}}>›</span>
@@ -3320,7 +3935,10 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div style={{flex:1,height:1,background:C.bdr}}/><span style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>RACKLE COMMUNITY</span><div style={{flex:1,height:1,background:C.bdr}}/>
       </div>
 
-      <ClubCodeEntry onJoin={()=>setScreen("leaderboard")} setScreen={setScreen}/>
+      <div style={{marginBottom:8}}>
+        <ClubCodeEntry onJoin={()=>setScreen("leaderboard")} setScreen={setScreen}/>
+        <GlobalLeaderboardPill/>
+      </div>
 
       <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16,marginTop:20}}>
         <div style={{flex:1,height:1,background:C.bdr}}/><span style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>LEARN & EXPLORE</span><div style={{flex:1,height:1,background:C.bdr}}/>
@@ -3337,25 +3955,29 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       </button>
 
       <div style={{display:"flex",gap:8,marginBottom:8}}>
-        <button onClick={showTutorial} style={{flex:1,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",textAlign:"center"}}>
-          <span style={{fontSize:22}}>🀄</span>
-          <div style={{fontSize:10,color:C.jade,letterSpacing:1.5,fontWeight:700}}>WALKTHROUGH</div>
-          <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.2}}>Interactive Tutorial</div>
-          <div style={{fontSize:10,color:C.mut,lineHeight:1.35,marginTop:1}}>Learn Rackle step by step</div>
-        </button>
         <button onClick={showCardGuide} style={{flex:1,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${C.gold}25`,background:C.gold+"06",textAlign:"center"}}>
           <span style={{fontSize:22}}>📋</span>
-          <div style={{fontSize:10,color:C.gold,letterSpacing:1.5,fontWeight:700}}>2026 NMJL</div>
-          <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.2}}>Card Guide</div>
-          <div style={{fontSize:10,color:C.mut,lineHeight:1.35,marginTop:1}}>Hold & pass tips</div>
+          <div style={{fontSize:9,color:C.gold,letterSpacing:1.5,fontWeight:700}}>2026 NMJL</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,lineHeight:1.2}}>Card Guide</div>
+          <div style={{fontSize:12,color:C.mut,lineHeight:1.35,marginTop:1}}>Hold & pass tips</div>
         </button>
         <button onClick={()=>setShowHelp(!showHelp)} aria-expanded={showHelp} style={{flex:1,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${showHelp?C.gold+"40":C.gold+"25"}`,background:C.gold+"06",textAlign:"center"}}>
           <span style={{fontSize:22}}>📖</span>
-          <div style={{fontSize:10,color:C.gold,letterSpacing:1.5,fontWeight:700}}>LEARN</div>
-          <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.2}}>How to Play</div>
-          <div style={{fontSize:10,color:C.mut,lineHeight:1.35,marginTop:1}}>Rules & scoring</div>
+          <div style={{fontSize:9,color:C.gold,letterSpacing:1.5,fontWeight:700}}>LEARN</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,lineHeight:1.2}}>How to Play</div>
+          <div style={{fontSize:12,color:C.mut,lineHeight:1.35,marginTop:1}}>Rules & scoring</div>
         </button>
       </div>
+
+      <button onClick={showTutorial} style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"12px 16px",borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",textAlign:"left",marginBottom:8}}>
+        <span style={{fontSize:22,flexShrink:0}}>🀄</span>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:2}}>WALKTHROUGH</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,lineHeight:1.2}}>Interactive Tutorial</div>
+          <div style={{fontSize:12,color:C.mut,lineHeight:1.35,marginTop:1}}>Learn Rackle step by step</div>
+        </div>
+        <span style={{fontSize:14,color:C.jade,fontWeight:700,flexShrink:0}}>›</span>
+      </button>
 
       {showHelp&&<div style={{background:"#FFFFF8",border:`1px solid ${C.gold}25`,borderRadius:16,marginBottom:8,overflow:"hidden"}} className="rk-in">
 
@@ -3475,72 +4097,39 @@ function Stats({home,onShowScorecard,onRecap,dRes}){
             const trendCol=last>prev?C.jade:last<prev?C.cinn:C.gold;
             return(
               <div style={{...S.card,marginBottom:12,padding:"14px 14px 10px"}}>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:10}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:6}}>
                   <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>IQ HISTORY · LAST {scores.length} GAMES</div>
                   <div style={{display:"flex",alignItems:"baseline",gap:4}}>
-                    <span style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.jade}}>{last}</span>
+                    <span style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:h[h.length-1].mode==="daily"?C.jade:C.cinn}}>{last}</span>
                     <span style={{fontSize:12,fontWeight:700,color:trendCol}}>{trend}</span>
                   </div>
+                </div>
+                <div style={{display:"flex",gap:10,marginBottom:8}}>
+                  <div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:8,height:8,borderRadius:"50%",background:C.jade}}/><span style={{fontSize:9,color:C.mut}}>Daily</span></div>
+                  <div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:8,height:8,borderRadius:"50%",background:C.cinn}}/><span style={{fontSize:9,color:C.mut}}>Practice</span></div>
                 </div>
                 <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{display:"block",overflow:"visible"}}>
                   <defs>
                     <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor={C.jade} stopOpacity="0.15"/>
+                      <stop offset="0%" stopColor={C.jade} stopOpacity="0.1"/>
                       <stop offset="100%" stopColor={C.jade} stopOpacity="0"/>
                     </linearGradient>
                   </defs>
                   <path d={fillD} fill="url(#sparkGrad)"/>
-                  <path d={pathD} fill="none" stroke={C.jade} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round"/>
-                  {pts.map((p,i)=>(
-                    <circle key={i} cx={p.x} cy={p.y} r={i===pts.length-1?4:2.5}
-                      fill={i===pts.length-1?C.jade:"#fff"}
-                      stroke={C.jade} strokeWidth="1.5"/>
-                  ))}
+                  <path d={pathD} fill="none" stroke={C.mut} strokeWidth="1.5" strokeDasharray="3 2" strokeLinejoin="round" strokeLinecap="round"/>
+                  {pts.map((p,i)=>{
+                    const dotCol=h[i].mode==="daily"?C.jade:C.cinn;
+                    const isLast=i===pts.length-1;
+                    return(
+                      <circle key={i} cx={p.x} cy={p.y} r={isLast?4:2.5}
+                        fill={dotCol}
+                        stroke="#fff" strokeWidth="1.5"/>
+                    );
+                  })}
                 </svg>
                 <div style={{display:"flex",justifyContent:"space-between",marginTop:4}}>
                   <span style={{fontSize:9,color:C.mut}}>{scores.length} games ago</span>
                   <span style={{fontSize:9,color:C.mut}}>latest</span>
-                </div>
-              </div>
-            );
-          })()}
-
-          {/* LAST 5 SCORES */}
-          {(()=>{
-            const h=getHist().filter(e=>e.iqScore!=null).slice(-5);
-            if(h.length<2)return null;
-            const avgIQ=Math.round(h.reduce((a,e)=>a+e.iqScore,0)/h.length);
-            const best=Math.max(...h.map(e=>e.iqScore));
-            const worst=Math.min(...h.map(e=>e.iqScore));
-            return(
-              <div style={{...S.card,marginBottom:10,padding:"14px"}}>
-                <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>LAST 5 SCORES</div>
-                <div style={{display:"flex",gap:4,marginBottom:10,justifyContent:"center"}}>
-                  {h.map((e,i)=>{
-                    const col=e.iqScore>=80?C.jade:e.iqScore>=60?C.gold:C.cinn;
-                    const emoji=e.iqScore>=80?"🟢":e.iqScore>=60?"🟡":"🔴";
-                    return(
-                      <div key={i} style={{flex:1,textAlign:"center",background:col+"08",borderRadius:8,padding:"8px 4px",border:`1px solid ${col}20`}}>
-                        <div style={{fontSize:11}}>{emoji}</div>
-                        <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:col,lineHeight:1,marginTop:2}}>{e.iqScore}</div>
-                        <div style={{fontSize:8,color:C.mut,marginTop:2,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{(e.section||"").replace(/^[^\s]+\s/,"").slice(0,6)}</div>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div style={{display:"flex",gap:6,justifyContent:"center"}}>
-                  <div style={{flex:1,background:C.bg2,borderRadius:8,padding:"6px 8px",textAlign:"center"}}>
-                    <div style={{fontSize:8,color:C.mut,letterSpacing:1,fontWeight:700}}>AVG</div>
-                    <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink}}>{avgIQ}</div>
-                  </div>
-                  <div style={{flex:1,background:C.jade+"08",borderRadius:8,padding:"6px 8px",textAlign:"center"}}>
-                    <div style={{fontSize:8,color:C.jade,letterSpacing:1,fontWeight:700}}>BEST</div>
-                    <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.jade}}>{best}</div>
-                  </div>
-                  <div style={{flex:1,background:C.cinn+"08",borderRadius:8,padding:"6px 8px",textAlign:"center"}}>
-                    <div style={{fontSize:8,color:C.cinn,letterSpacing:1,fontWeight:700}}>WORST</div>
-                    <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.cinn}}>{worst}</div>
-                  </div>
                 </div>
               </div>
             );
@@ -3610,18 +4199,17 @@ function Stats({home,onShowScorecard,onRecap,dRes}){
             const maxScore=Math.max(...last10.map(e=>e.iqScore),100);
             return(
               <div style={{...S.card,marginBottom:10}}>
-                <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:12}}>OVERALL PROGRESS · LAST {last10.length} HANDS</div>
+                <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:12}}>LAST {last10.length} HANDS</div>
                 {/* Bar chart for last 10 hands */}
                 <div style={{display:"flex",gap:3,alignItems:"flex-end",height:64,marginBottom:8}}>
                   {last10.map((e,i)=>{
                     const pct=Math.round((e.iqScore/maxScore)*100);
-                    const col=e.iqScore>=80?C.jade:e.iqScore>=60?C.gold:C.cinn;
                     const isDaily=e.mode==="daily";
+                    const col=isDaily?C.jade:C.cinn;
                     return(
                       <div key={i} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
                         <div style={{fontSize:8,color:col,fontWeight:700,fontFamily:F.d,lineHeight:1}}>{e.iqScore}</div>
-                        <div style={{width:"100%",borderRadius:"3px 3px 0 0",background:col+(isDaily?"":"60"),height:`${Math.max(pct*0.52,6)}px`,border:isDaily?`1px solid ${col}40`:"none"}}/>
-                        <div style={{width:4,height:4,borderRadius:2,background:isDaily?C.jade:C.cinn,opacity:0.5}}/>
+                        <div style={{width:"100%",borderRadius:"3px 3px 0 0",background:col,height:`${Math.max(pct*0.52,6)}px`,opacity:isDaily?1:0.55}}/>
                       </div>
                     );
                   })}
@@ -3713,29 +4301,43 @@ function Stats({home,onShowScorecard,onRecap,dRes}){
             );
           })()}
 
-          <div style={S.card}>
-            <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>SECTION MASTERY</div>
-            {stats.mastery.map(s=>{
-              const isW=wk&&s.id===wk.id;
-              let lv,lc,lb;
-              if(s.cnt===0){lv="Try it!";lc=C.mut;lb=C.bg2;}
-              else if(s.avg<=1){lv="Strong";lc=C.jade;lb=C.jade+"12";}
-              else if(s.avg<=2.5){lv="Solid";lc="#2460A8";lb="#2460A812";}
-              else if(s.avg<=3.5){lv="Learning";lc=C.gold;lb=C.gold+"12";}
-              else{lv="Needs work";lc=C.cinn;lb=C.cinn+"10";}
-              return(
-                <div key={s.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${C.bdr}`}}>
-                  <div style={{display:"flex",alignItems:"center",gap:8}}>
-                    <span aria-hidden="true" style={{fontSize:16}}>{s.icon}</span>
-                    <div><div style={{fontSize:12,fontWeight:600,color:C.ink}}>{s.name}{isW?" ⭐":""}</div><div style={{fontSize:10,color:C.mut,marginTop:1}}>{s.cnt} round{s.cnt!==1?"s":""}</div></div>
-                  </div>
-                  <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:4}}>
-                    <span style={{fontSize:10,fontWeight:700,color:lc,background:lb,border:`1px solid ${lc}25`,borderRadius:20,padding:"2px 10px"}}>{lv}</span>
-                    {s.cnt>0&&<div aria-hidden="true" style={{width:48,height:3,borderRadius:2,background:C.bdr}}><div style={{height:"100%",borderRadius:2,background:lc,width:`${Math.max(8,100-s.avg*20)}%`}}/></div>}
-                  </div>
-                </div>);
-            })}
-          </div>
+          {(()=>{
+            const [smOpen,setSmOpen]=useState(false);
+            return(
+              <div style={{...S.card,padding:0,overflow:"hidden"}}>
+                <button
+                  onClick={()=>setSmOpen(o=>!o)}
+                  style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"12px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}
+                >
+                  <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>SECTION MASTERY</div>
+                  <span style={{fontSize:12,color:C.mut,opacity:0.5,transition:"transform 0.2s",transform:smOpen?"rotate(180deg)":"rotate(0deg)"}}>▾</span>
+                </button>
+                {smOpen&&<div className="rk-in" style={{borderTop:`1px solid ${C.bdr}`,padding:"0 14px 6px"}}>
+                  {stats.mastery.map(s=>{
+                    const isW=wk&&s.id===wk.id;
+                    let lv,lc,lb;
+                    if(s.cnt===0){lv="Try it!";lc=C.mut;lb=C.bg2;}
+                    else if(s.avg<=1){lv="Strong";lc=C.jade;lb=C.jade+"12";}
+                    else if(s.avg<=2.5){lv="Solid";lc="#2460A8";lb="#2460A812";}
+                    else if(s.avg<=3.5){lv="Learning";lc=C.gold;lb=C.gold+"12";}
+                    else{lv="Needs work";lc=C.cinn;lb=C.cinn+"10";}
+                    return(
+                      <div key={s.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${C.bdr}`}}>
+                        <div style={{display:"flex",alignItems:"center",gap:8}}>
+                          <span aria-hidden="true" style={{fontSize:16}}>{s.icon}</span>
+                          <div><div style={{fontSize:12,fontWeight:600,color:C.ink}}>{s.name}{isW?" ⭐":""}</div><div style={{fontSize:10,color:C.mut,marginTop:1}}>{s.cnt} round{s.cnt!==1?"s":""}</div></div>
+                        </div>
+                        <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:4}}>
+                          <span style={{fontSize:10,fontWeight:700,color:lc,background:lb,border:`1px solid ${lc}25`,borderRadius:20,padding:"2px 10px"}}>{lv}</span>
+                          {s.cnt>0&&<div aria-hidden="true" style={{width:48,height:3,borderRadius:2,background:C.bdr}}><div style={{height:"100%",borderRadius:2,background:lc,width:`${Math.max(8,100-s.avg*20)}%`}}/></div>}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>}
+              </div>
+            );
+          })()}
         </>
       )}
       {onRecap&&getWeeklyRecapData()&&(
@@ -3792,7 +4394,7 @@ function Game({mode,home,onDone,settings}){
   const [st,setSt]=useState(null);const [el,setEl]=useState(0);const [td,setTd]=useState(false);
   const [showLeave,setShowLeave]=useState(false);
   const [iqResult,setIqResult]=useState(null);
-  const elRef=useRef(0);const stRef=useRef(null);
+  const elRef=useRef(0);const stRef=useRef(null);const lastPassElRef=useRef(0);
   const cs=cn===1?F1C:S2C;const cp=cs[pi];
   const large=settings?.tileSize==="large";
 
@@ -3849,7 +4451,9 @@ function Game({mode,home,onDone,settings}){
     const roundName=cn===1
       ?(pi===0?"Pass Right":pi===1?"Pass Over":"Pass Left (Blind)")
       :(pi===0?"2nd Charleston · Pass Left":pi===1?"2nd Charleston · Pass Over":"2nd Charleston · Pass Right (Blind)");
-    setPassLog(pl=>[...pl,{label:roundName,roundName,out:pt,in:inc,blind:cp.blind}]);
+    const nowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);
+    const passEl=nowEl-lastPassElRef.current;lastPassElRef.current=nowEl;
+    setPassLog(pl=>[...pl,{label:roundName,roundName,out:pt,in:inc,blind:cp.blind,secs:passEl}]);
     setNewIdx(ni);setHand(comb);setSel([]);
     setTimeout(()=>{setNewIdx([]);setShowHint(false);setHintExp(null);if(pi<2){setPi(p=>p+1);}else{setPhase(cn===1?"askSecond":"askCourtesy");}},600);
   };
@@ -3958,7 +4562,7 @@ function Game({mode,home,onDone,settings}){
           <div style={S.card}><RH hand={hand} onSort={()=>setHand(sortHand(hand))}/>
             <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} dim={t.t==="j"} onClick={()=>cTog(i)} large={large}/>)}</div></div>
           <div aria-live="polite" style={{textAlign:"center",fontSize:13,color:sel.length>0?C.jade:C.mut,fontWeight:700,margin:"4px 0"}}>{sel.length}/3 selected</div>
-          <button onClick={()=>{if(sel.length<1)return;haptic(40);const pt=sel.map(i=>hand[i]);setPassed(p=>[...p,...pt]);const rem=hand.filter((_,i)=>!sel.includes(i));const safe=pool.filter(t=>t.t!=="j");const inc=safe.slice(0,sel.length);setPool(safe.slice(sel.length));setHand([...rem,...inc]);setPassLog(pl=>[...pl,{label:"Courtesy Pass",roundName:"Courtesy Pass",out:pt,in:inc,blind:false}]);setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");}} disabled={sel.length<1} style={{...S.passBtn,opacity:sel.length>=1?1:0.3}}>🔄 {sel.length<1?"Skip (pass 0)":`Pass ${sel.length}`}</button>
+          <button onClick={()=>{if(sel.length<1)return;haptic(40);const pt=sel.map(i=>hand[i]);setPassed(p=>[...p,...pt]);const rem=hand.filter((_,i)=>!sel.includes(i));const safe=pool.filter(t=>t.t!=="j");const inc=safe.slice(0,sel.length);setPool(safe.slice(sel.length));setHand([...rem,...inc]);const cpNowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);const cpPassEl=cpNowEl-lastPassElRef.current;lastPassElRef.current=cpNowEl;setPassLog(pl=>[...pl,{label:"Courtesy Pass",roundName:"Courtesy Pass",out:pt,in:inc,blind:false,secs:cpPassEl}]);setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");}} disabled={sel.length<1} style={{...S.passBtn,opacity:sel.length>=1?1:0.3}}>🔄 {sel.length<1?"Skip (pass 0)":`Pass ${sel.length}`}</button>
         </>
       )}
 
@@ -4114,17 +4718,20 @@ function dismissWeeklyRecap(){
 function WeeklyRecapScreen({home,go}){
   const data=getWeeklyRecapData();
   const profile=getProfile();
+  const isSunday=new Date().getDay()===0;
   if(!data)return(
     <div style={S.pg} className="rk-pg">
       <RackleHeader onBack={home}/>
-      <div style={{textAlign:"center",padding:"48px 0"}}>
+      <div style={{textAlign:"center",padding:"48px 20px"}}>
         <div style={{fontSize:32,marginBottom:12}}>🀄</div>
         <div style={{fontFamily:F.d,fontSize:18,fontWeight:800,color:C.ink,marginBottom:8}}>No games this week yet</div>
-        <div style={{fontSize:13,color:C.mut,lineHeight:1.6,marginBottom:24}}>Play today's Daily to start your week on the leaderboard.</div>
+        <div style={{fontSize:13,color:C.mut,lineHeight:1.6,marginBottom:24}}>Play today's Daily to start building your week.</div>
         <button onClick={()=>go("daily")} style={{...S.greenBtn,padding:"13px 32px"}}>Play Today's Daily →</button>
       </div>
     </div>
   );
+  // Week-in-progress banner — shown any day except Sunday
+  const weekInProgress=!isSunday;
 
   const {avgIQ,bestEntry,daysPlayed,topSec,delta,weekRounds,dailyH}=data;
   const IQ_LEVELS=[
@@ -4172,6 +4779,15 @@ function WeeklyRecapScreen({home,go}){
           </div></>}
         </div>
       </div>
+
+      {/* Week-in-progress banner */}
+      {weekInProgress&&<div style={{display:"flex",alignItems:"center",gap:10,background:C.gold+"08",border:`1px solid ${C.gold}25`,borderRadius:14,padding:"11px 14px",marginBottom:12}}>
+        <span style={{fontSize:18,flexShrink:0}}>📅</span>
+        <div>
+          <div style={{fontSize:12,fontWeight:700,color:C.gold,fontFamily:F.d}}>Week in progress</div>
+          <div style={{fontSize:11,color:C.mut,marginTop:2,lineHeight:1.5}}>Your recap updates as you play. Come back Sunday for the full picture.</div>
+        </div>
+      </div>}
 
       {/* Insights */}
       <div style={{...S.card,marginBottom:8}}>
@@ -4234,6 +4850,7 @@ export default function Rackle(){
   const [showHelp,setShowHelp]=useState(false);
   const [settings,setSettings]=useState({...DEFAULT_SETTINGS,...ST.get("settings",{})});
   const [badgeToast,setBadgeToast]=useState(null);
+  const [clubPostToast,setClubPostToast]=useState(null);
   const [showWeeklyNudge,setShowWeeklyNudge]=useState(shouldShowWeeklyRecap);
   const isFirstDaily=!ST.get("hadFirstDaily",false);
 
@@ -4255,6 +4872,14 @@ export default function Rackle(){
     if(mode==="daily"){
       setDDone(true);ST.set("dd",today);setDRes(result);ST.set("dres",result);
       if(isFirstDaily){ST.set("hadFirstDaily",true);}
+      // Auto-post to club leaderboard if player has a club + name
+      const autoCode=getClubCode();
+      const autoName=getClubName()||(getProfile()?.nickname||null);
+      if(autoCode&&autoName&&result?.iq?.totalScore){
+        upsertLBEntry(autoCode,autoName,result.iq.totalScore,result.time||0,newStreak).then(ok=>{
+          if(ok)setClubPostToast({clubName:CLUBS[autoCode]?.name||"your club",iqScore:result.iq.totalScore});
+        });
+      }
     }
     addHist(result);
     // Auto-sync profile if it exists
@@ -4271,6 +4896,7 @@ export default function Rackle(){
   return(
     <AppShell>
       {badgeToast&&<StreakBadgeToast badge={badgeToast} onDismiss={()=>setBadgeToast(null)}/>}
+      {clubPostToast&&<ClubPostToast toast={clubPostToast} onDismiss={()=>setClubPostToast(null)}/>}
       {/* Sunday weekly recap nudge */}
       {screen==="home"&&showWeeklyNudge&&getWeeklyRecapData()&&(
         <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.55)",zIndex:100,display:"flex",alignItems:"flex-end"}} onClick={()=>{dismissWeeklyRecap();setShowWeeklyNudge(false);}}>
