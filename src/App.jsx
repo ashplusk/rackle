@@ -2784,14 +2784,23 @@ async function upsertGlobalEntry(name,iqScore,time,streak,clubCode){
 // Fetch global leaderboard — all players today, no club filter
 async function fetchGlobalEntries(){
   try{
-    const res=await fetch(
-      `${SB_URL}/rest/v1/global_leaderboard?day_seed=eq.${getDailySeed()}&order=iq_score.desc&limit=100`,
-      {headers:SB_HEADERS}
-    );
-    if(!res.ok)return[];
+    const seed=getDailySeed();
+    const url=`${SB_URL}/rest/v1/global_leaderboard?day_seed=eq.${seed}&order=iq_score.desc&limit=100`;
+    console.log("[GlobalLB] fetching:", url, "seed:", seed);
+    const res=await fetch(url,{headers:SB_HEADERS});
+    console.log("[GlobalLB] response status:", res.status);
+    if(!res.ok){
+      const errText=await res.text();
+      console.warn("[GlobalLB] fetch failed:", res.status, errText);
+      return[];
+    }
     const rows=await res.json();
+    console.log("[GlobalLB] rows returned:", rows.length, rows.slice(0,2));
     return rows.map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,clubCode:r.club_code}));
-  }catch{return[];}
+  }catch(err){
+    console.warn("[GlobalLB] fetch error:", err);
+    return[];
+  }
 }
 
 // Personal best IQ — scans history for highest iqScore
@@ -4041,8 +4050,9 @@ function GlobalLeaderboardPill({setScreen}){
   const myName=getClubName()||(getProfile()?.nickname||null);
   const dn=getDayNum();
 
-  const load=()=>{
-    if(fetched)return;
+  const load=(force=false)=>{
+    // Re-fetch if: never fetched, forced, or last fetch returned empty
+    if(fetched&&!force&&entries.length>0)return;
     setLoading(true);
     fetchGlobalEntries().then(rows=>{
       setEntries(rows);
@@ -4052,9 +4062,13 @@ function GlobalLeaderboardPill({setScreen}){
   };
 
   const toggle=()=>{
-    if(!open)load();
+    // Always re-fetch when opening if we have no entries (handles cached-empty case)
+    if(!open)load(entries.length===0);
     setOpen(o=>!o);
   };
+
+  // Add a manual refresh button when open and empty
+  const refresh=()=>load(true);
 
   const top5=entries.slice(0,5);
   const myRank=myName?entries.findIndex(e=>e.name.toLowerCase()===myName.toLowerCase())+1:0;
@@ -4093,7 +4107,8 @@ function GlobalLeaderboardPill({setScreen}){
           <div style={{textAlign:"center",padding:"24px 14px"}}>
             <div style={{fontSize:26,marginBottom:8}}>🀄</div>
             <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.ink,marginBottom:4}}>No scores yet today</div>
-            <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>Play the Daily to be first on the global board.</div>
+            <div style={{fontSize:11,color:C.mut,lineHeight:1.6,marginBottom:12}}>Play the Daily to be first on the global board.</div>
+            <button onClick={refresh} style={{fontSize:11,color:"#2460A8",fontWeight:700,background:"#2460A808",border:`1px solid #2460A825`,borderRadius:8,padding:"6px 14px",cursor:"pointer"}}>↻ Refresh</button>
           </div>
         ):(
           <>
