@@ -2755,19 +2755,30 @@ function getOrCreateAnonymousName(){
 // Post to global leaderboard table (no club filter)
 async function upsertGlobalEntry(name,iqScore,time,streak,clubCode){
   try{
-    const res=await fetch(`${SB_URL}/rest/v1/global_leaderboard`,{
+    const pid=getOrCreatePlayerId();
+    const daySeed=getDailySeed();
+    // Use explicit on_conflict to ensure true upsert on (player_id, day_seed)
+    const res=await fetch(`${SB_URL}/rest/v1/global_leaderboard?on_conflict=player_id,day_seed`,{
       method:"POST",
-      headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates"},
+      headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates,return=minimal"},
       body:JSON.stringify({
-        player_id:getOrCreatePlayerId(),
-        day_seed:getDailySeed(),
+        player_id:pid,
+        day_seed:daySeed,
         name,iq_score:iqScore,time_secs:time||0,streak:streak||0,
         club_code:clubCode||null,
         updated_at:new Date().toISOString(),
       }),
     });
-    return res.ok||res.status===201;
-  }catch{return false;}
+    if(!res.ok&&res.status!==201&&res.status!==204){
+      // Log error for debugging without crashing
+      res.text().then(t=>console.warn("Global LB upsert failed:",res.status,t));
+      return false;
+    }
+    return true;
+  }catch(err){
+    console.warn("Global LB upsert error:",err);
+    return false;
+  }
 }
 
 // Fetch global leaderboard — all players today, no club filter
@@ -5588,7 +5599,7 @@ function Game({mode,home,onDone,settings}){
             return(<>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
                 <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>CHOOSE YOUR SECTION</div>
-                <div style={{fontSize:9,color:C.mut}}>ranked by rack fit</div>
+
               </div>
               <div style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
                 {ranked.map((s,idx)=>{
@@ -5598,7 +5609,7 @@ function Game({mode,home,onDone,settings}){
                   const isTop=idx===0;
                   const barW=topPct>0?Math.round((s.score/topPct)*100):pct;
                   return(
-                    <button key={s.id} onClick={()=>{haptic(20);setChosenSec(s.id);}} role="radio" aria-checked={isSel} aria-label={`${s.name}: ${s.desc} — ${pct}% fit`}
+                    <button key={s.id} onClick={()=>{haptic(20);setChosenSec(s.id);}} role="radio" aria-checked={isSel} aria-label={`${s.name}: ${s.desc}`}
                       style={{cursor:"pointer",display:"flex",alignItems:"center",gap:0,borderRadius:12,overflow:"hidden",
                         border:`1.5px solid ${isSel?s.color:viable?C.bdr:"#ECEAE5"}`,
                         background:isSel?s.color+"0C":viable?"#fff":"#F9F8F5",
@@ -5617,13 +5628,7 @@ function Game({mode,home,onDone,settings}){
                           {isSel&&<span style={{fontSize:8,fontWeight:700,background:s.color+"20",color:s.color,borderRadius:8,padding:"1px 6px",letterSpacing:0.5}}>SELECTED</span>}
                         </div>
                         <div style={{fontSize:10,color:C.mut,lineHeight:1.3,marginBottom:5}}>{s.desc}</div>
-                        {/* Fit bar */}
-                        <div style={{display:"flex",alignItems:"center",gap:6}}>
-                          <div style={{flex:1,height:3,borderRadius:2,background:isSel?s.color+"20":C.bdr,overflow:"hidden"}}>
-                            <div style={{height:"100%",width:`${barW}%`,background:isSel?s.color:viable?s.color+"80":"#C5C0B8",borderRadius:2,transition:"width 0.3s ease"}}/>
-                          </div>
-                          <span style={{fontSize:10,fontWeight:800,color:isSel?s.color:viable?C.mut:"#C5C0B8",fontFamily:F.d,flexShrink:0,minWidth:28,textAlign:"right"}}>{pct}%</span>
-                        </div>
+
                       </div>
                       {/* Check indicator */}
                       <div style={{width:36,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
