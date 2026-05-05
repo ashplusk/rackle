@@ -2754,23 +2754,28 @@ function getOrCreateAnonymousName(){
 
 // Post to global leaderboard table (no club filter)
 async function upsertGlobalEntry(name,iqScore,time,streak,clubCode){
+  // Uses the existing `leaderboard` table — same table as club leaderboards.
+  // club_code stores the player's actual club (or null). Queried globally by omitting club_code filter.
+  // Deduplication key: name + day_seed (same as club LB).
   try{
-    const pid=getOrCreatePlayerId();
     const daySeed=getDailySeed();
-    // Use explicit on_conflict to ensure true upsert on (player_id, day_seed)
-    const res=await fetch(`${SB_URL}/rest/v1/global_leaderboard?on_conflict=player_id,day_seed`,{
+    // If player has a club, their score is already submitted via upsertLBEntry.
+    // For players without a club, write a global-only entry with club_code=null.
+    if(clubCode){
+      // Already submitted to club table — no duplicate needed.
+      return true;
+    }
+    const res=await fetch(`${SB_URL}/rest/v1/leaderboard`,{
       method:"POST",
-      headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates,return=minimal"},
+      headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates"},
       body:JSON.stringify({
-        player_id:pid,
+        club_code:"__global__",
         day_seed:daySeed,
         name,iq_score:iqScore,time_secs:time||0,streak:streak||0,
-        club_code:clubCode||null,
         updated_at:new Date().toISOString(),
       }),
     });
     if(!res.ok&&res.status!==201&&res.status!==204){
-      // Log error for debugging without crashing
       res.text().then(t=>console.warn("Global LB upsert failed:",res.status,t));
       return false;
     }
@@ -2781,24 +2786,39 @@ async function upsertGlobalEntry(name,iqScore,time,streak,clubCode){
   }
 }
 
-// Fetch global leaderboard — all players today, no club filter
+// Fetch global leaderboard — all scores today from the leaderboard table, no club filter
 async function fetchGlobalEntries(){
   try{
     const seed=getDailySeed();
-    const url=`${SB_URL}/rest/v1/global_leaderboard?day_seed=eq.${seed}&order=iq_score.desc&limit=100`;
-    console.log("[GlobalLB] fetching:", url, "seed:", seed);
+    // Query the main leaderboard table without club_code filter to get everyone.
+    // Deduplicate by name (take highest score per name) since players may appear
+    // in both their club row and a __global__ row.
+    const url=`${SB_URL}/rest/v1/leaderboard?day_seed=eq.${seed}&order=iq_score.desc&limit=200`;
     const res=await fetch(url,{headers:SB_HEADERS});
-    console.log("[GlobalLB] response status:", res.status);
     if(!res.ok){
       const errText=await res.text();
-      console.warn("[GlobalLB] fetch failed:", res.status, errText);
+      console.warn("[GlobalLB] fetch failed:",res.status,errText);
       return[];
     }
     const rows=await res.json();
-    console.log("[GlobalLB] rows returned:", rows.length, rows.slice(0,2));
-    return rows.map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,clubCode:r.club_code}));
+    // Deduplicate by name — keep highest score
+    const seen={};
+    const deduped=[];
+    rows.forEach(r=>{
+      const key=r.name.toLowerCase();
+      if(!seen[key]||r.iq_score>seen[key]){
+        seen[key]=r.iq_score;
+        // Remove previous entry for this name and add new one
+        const idx=deduped.findIndex(e=>e.name.toLowerCase()===key);
+        if(idx>=0)deduped.splice(idx,1);
+        deduped.push(r);
+      }
+    });
+    // Re-sort after dedup
+    deduped.sort((a,b)=>b.iq_score-a.iq_score);
+    return deduped.map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,clubCode:r.club_code==="__global__"?null:r.club_code}));
   }catch(err){
-    console.warn("[GlobalLB] fetch error:", err);
+    console.warn("[GlobalLB] fetch error:",err);
     return[];
   }
 }
