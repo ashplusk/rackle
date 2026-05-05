@@ -3034,20 +3034,28 @@ function SpecificHandCard({finalRack,sectionId}){
   const hands=recommendSpecificHands(finalRack,sectionId);
   if(!hands||hands.length===0)return null;
   const sec=SECS.find(s=>s.id===sectionId);
-  const secColor=sec?.color||C.jade;
+  // Use family colours — same visual language as HandFamilyCard
+  const fam=getHandFamily(sectionId);
+  const hColor=fam?fam.color:(sec?.color||C.jade);
+  const hBg=fam?fam.bg:(sec?.color+"08"||C.jade+"08");
+  const hBorder=fam?fam.border:(sec?.color+"40"||C.jade+"40");
+  const hEmoji=fam?fam.emoji:(sec?.icon||"🀄");
+  const hLabel=fam?fam.label:(sec?.name||"Hand Targets");
+  const hDesc=fam?fam.desc:"";
 
   return(
-    <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden",borderColor:secColor+"40"}}>
-      {/* Header — matches HandFamilyCard typography */}
-      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"12px 14px",background:secColor+"08",border:"none",cursor:"pointer",textAlign:"left",borderBottom:open?`1px solid ${secColor}20`:"none"}}>
+    <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden",borderColor:hBorder}}>
+      {/* Header — family colour palette */}
+      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"12px 14px",background:hBg,border:"none",cursor:"pointer",textAlign:"left",borderBottom:open?`1px solid ${hBorder}`:"none"}}>
         <div style={{display:"flex",alignItems:"center",gap:10}}>
-          <span style={{fontSize:22}}>{sec?.icon||"🀄"}</span>
+          <span style={{fontSize:22}}>{hEmoji}</span>
           <div>
-            <div style={{fontSize:8,color:secColor,letterSpacing:2,fontWeight:700,marginBottom:2}}>HAND TARGETS</div>
-            <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:secColor,lineHeight:1.2}}>Best specific hands for your rack</div>
+            <div style={{fontSize:8,color:hColor,letterSpacing:2,fontWeight:700,marginBottom:2}}>HAND TARGETS</div>
+            <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:hColor,lineHeight:1.2}}>{hLabel}</div>
+            {hDesc&&<div style={{fontSize:11,color:hColor,opacity:0.7,lineHeight:1.3,marginTop:1}}>{hDesc}</div>}
           </div>
         </div>
-        <span style={{fontSize:12,color:C.mut,flexShrink:0}}>{open?"▾":"▸"}</span>
+        <span style={{fontSize:12,color:hColor,flexShrink:0,opacity:0.7}}>{open?"▾":"▸"}</span>
       </button>
 
       {open&&<div className="rk-in">
@@ -3399,8 +3407,7 @@ function DailyIQScorecard({iq,hand,passLog,dayNum,section,chosenSec,allSections,
         {sectionMatch&&<div style={{marginTop:8,fontSize:11,color:C.jade,lineHeight:1.5,background:C.jade+"08",borderRadius:8,padding:"7px 10px"}}>✓ Great read — your section pick matched your best hand fit.</div>}
       </div>}
 
-      {/* HAND FAMILY + CONCRETE PATHS */}
-      {hand&&hand.length>0&&allSections&&<HandFamilyCard finalRack={hand} allSections={allSections} chosenSecId={chosenSec}/>}
+      {/* HAND TARGETS */}
       {hand&&hand.length>0&&chosenSec&&<SpecificHandCard finalRack={hand} sectionId={chosenSec}/>}
 
       {/* CONCRETE COACHING FEEDBACK */}
@@ -3504,8 +3511,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
         {/* Final Rack — shown first */}
         {hand&&hand.length>0&&<SortableRack hand={hand}/>}
 
-        {/* Hand Family + Concrete Paths */}
-        {hand&&hand.length>0&&allSections&&<HandFamilyCard finalRack={hand} allSections={allSections} chosenSecId={chosenSec}/>}
+        {/* Hand Targets */}
         {hand&&hand.length>0&&chosenSec&&<SpecificHandCard finalRack={hand} sectionId={chosenSec}/>}
 
         {/* Score bars */}
