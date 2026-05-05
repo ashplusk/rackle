@@ -282,41 +282,38 @@ function cg(h,fn){const v=h.filter(fn),jk=h.filter(t=>t.t==="j").length,c={};v.f
 // having pungs/kongs/pairs of numbers that fall within a tight 3–5 number window.
 // e.g. 111 222 3333 4444 → window [1,2,3,4], groups: 3+3+4+4 = 14 tiles, very deep.
 // e.g. 11 222 33 444 5555 → window [1,2,3,4,5], groups: 2+3+2+3+4 = 14 tiles, 5-wide.
-// Scorer: find the best N-wide window where total grouped tiles is maximised.
-// Longer windows (5-wide) score slightly less than tighter windows (3–4 wide)
-// because tighter windows have more hand options on the 2026 card.
+// Scorer: find the best N-wide window where GROUPED tiles is maximised.
+// Singles (lone tiles) give 0 group credit — CR needs pungs/kongs, not lone stragglers.
+// Steeper width penalties (5-wide=2, 4-wide=1) vs old (1.5/0.5) to tighten requirement.
 function crWindowScore(h){
-  // Build per-number group counts (collapse suits — CR hands mix suits freely)
-  const gc={};
-  h.filter(t=>t.t==="s").forEach(t=>{gc[t.n]=(gc[t.n]||0)+1;});
-  const nums=Object.keys(gc).map(Number).sort((a,b)=>a-b);
-  if(!nums.length)return{score:0,window:0,depth:0,windowNums:[]};
+  // CR hands are SAME-SUIT sequences. Score per suit, take the best.
+  // Pooling across suits is wrong — 3Bam + 3Crk + 3Dot is NOT a CR group.
+  const suits=["bam","crak","dot"];
+  let best={score:0,window:0,depth:0,windowNums:[],groupDepth:0,distinctPresent:0,groupCount:0,suit:null};
 
-  let best={score:0,window:0,depth:0,windowNums:[]};
+  for(const suit of suits){
+    const gc={};
+    h.filter(t=>t.t==="s"&&t.s===suit).forEach(t=>{gc[t.n]=(gc[t.n]||0)+1;});
+    if(Object.keys(gc).length<2)continue;
 
-  // Try every consecutive window of width 3, 4, and 5
-  for(let w=3;w<=5;w++){
-    for(let start=1;start<=9-(w-1);start++){
-      const wNums=[];
-      for(let i=0;i<w;i++)wNums.push(start+i);
-      // Total tiles within window (capped at 4 per number — max kong)
-      const tilesInWindow=wNums.reduce((sum,n)=>sum+Math.min(gc[n]||0,4),0);
-      // Number of distinct values present in window
-      const distinctPresent=wNums.filter(n=>(gc[n]||0)>=1).length;
-      // Groups: a number contributes a "group" if it has 2+ copies
-      const groupsInWindow=wNums.filter(n=>(gc[n]||0)>=2).length;
-      // Bonus for having groups (pungs/kongs) vs singles
-      const groupDepth=wNums.reduce((sum,n)=>{
-        const cnt=Math.min(gc[n]||0,4);
-        return sum+(cnt>=4?4:cnt>=3?3:cnt>=2?2:cnt>=1?0.5:0);
-      },0);
-      // Penalise wide windows slightly — 3-wide has more hand options than 5-wide
-      const widthPenalty=w===5?1.5:w===4?0.5:0;
-      // Require at least 2 distinct numbers to be present
-      if(distinctPresent<2)continue;
-      const score=groupDepth*2+tilesInWindow*0.5+groupsInWindow-widthPenalty;
-      if(score>best.score){
-        best={score,window:w,depth:tilesInWindow,windowNums:wNums,groupDepth,distinctPresent};
+    for(let w=3;w<=5;w++){
+      for(let start=1;start<=9-(w-1);start++){
+        const wNums=[];
+        for(let i=0;i<w;i++)wNums.push(start+i);
+        const distinctPresent=wNums.filter(n=>(gc[n]||0)>=1).length;
+        if(distinctPresent<2)continue;
+        // Singles (cnt===1) give 0 — CR needs actual groups (pairs/pungs/kongs)
+        const groupDepth=wNums.reduce((sum,n)=>{
+          const cnt=Math.min(gc[n]||0,4);
+          return sum+(cnt>=4?4:cnt>=3?3:cnt>=2?2:0);
+        },0);
+        const groupCount=wNums.filter(n=>(gc[n]||0)>=2).length;
+        // Steeper width penalties — 3-wide has the most hand options
+        const widthPenalty=w===5?2:w===4?1:0;
+        const score=groupDepth*2+groupCount-widthPenalty;
+        if(score>best.score){
+          best={score,window:w,depth:groupDepth,windowNums:wNums,groupDepth,distinctPresent,groupCount,suit};
+        }
       }
     }
   }
@@ -330,25 +327,23 @@ const SECS=[
 // Flowers appear in hand 3. Dragons appear in hands 1,2,3. 6 is required in all 4 hands.
 {id:"2026",name:"2026",color:"#B54E7A",icon:"📅",desc:"Year tiles — 2s, 0 (Soap), 6s",hold:"2s, 6s, Soap (White Dragon) — highest priority. Red & Green Dragons. Flowers only if you have 2+",pass:"All odd numbers (1,3,5,7,9), 4s, 8s — Winds only if building the NEWS hand",combos:"6 appears in all 4 hands — it is your most critical tile. Soap (White Dragon) is uniquely valuable here: it is suit-wild, meaning it counts as any suit's 0. Red and Green Dragons also appear. Flowers only appear in 1 of 4 hands — don't hold a lone Flower for this section.",joker:null,hands:4,
   ck:h=>{
-    // Core tiles: 2, 6 (number), Soap/White Dragon (0)
     const twos=h.filter(t=>t.t==="s"&&t.n===2).length;
     const sixes=h.filter(t=>t.t==="s"&&t.n===6).length;
+    // Both anchors required — missing either is a strong signal against 2026
+    if(!twos||!sixes)return 0.01;
     const soap=h.filter(t=>t.t==="d"&&t.v==="Soap").length;
     const anyDragon=h.filter(t=>t.t==="d").length;
     const flowers=h.filter(t=>t.t==="f").length;
     const winds=h.filter(t=>t.t==="w").length;
     const jk=h.filter(t=>t.t==="j").length;
-    // Off-direction: odd numbers other than via 2/6
     const offNums=h.filter(t=>t.t==="s"&&![2,6].includes(t.n)).length;
-    // Nucleus: having both 2s and 6s is the core signal
-    const nucleus=(twos>=2?0.12:twos>=1?0.06:0)+(sixes>=2?0.14:sixes>=1?0.07:0);
-    // Supporting tiles
-    const support=soap*0.07+anyDragon*0.03+flowers*0.03+jk*0.05;
-    // Wind bonus (NEWS hand — 22 00 222 666 NEWS needs all 4 wind tiles)
+    // Group quality for 2s and 6s — scale with count
+    const twoScore=twos>=4?0.24:twos>=3?0.18:twos>=2?0.12:0.06;
+    const sixScore=sixes>=4?0.28:sixes>=3?0.20:sixes>=2?0.13:0.07;
+    const support=soap*0.08+anyDragon*0.025+flowers*0.02+jk*0.05;
     const windBonus=winds>=3?0.04:winds>=2?0.02:0;
-    // Penalty for off-direction number tiles
-    const penalty=Math.min(offNums*0.05,0.25);
-    return Math.max(0,Math.min(nucleus+support+windBonus-penalty,1));
+    const penalty=Math.min(offNums*0.035,0.18);
+    return Math.max(0,Math.min(twoScore+sixScore+support+windBonus-penalty,1));
   }},
 
 // ── 2468 (8 hands) ───────────────────────────────────────────────────────────
@@ -361,25 +356,21 @@ const SECS=[
   ck:h=>{
     const evens=h.filter(t=>t.t==="s"&&t.n%2===0);
     const c={};evens.forEach(t=>{c[t.n]=(c[t.n]||0)+1;});
-    // Count distinct even values held (2,4,6,8)
     const distinctEvens=Object.keys(c).length;
-    const totalEvens=evens.length;
     const flowers=h.filter(t=>t.t==="f").length;
     const dragons=h.filter(t=>t.t==="d").length;
     const ew=h.filter(t=>t.t==="w"&&(t.v==="East"||t.v==="West")).length;
     const jk=h.filter(t=>t.t==="j").length;
     const odds=h.filter(t=>t.t==="s"&&t.n%2===1).length;
     const nsWinds=h.filter(t=>t.t==="w"&&(t.v==="North"||t.v==="South")).length;
-    // 6 is the anchor — heavy bonus for holding 6s
-    const sixBonus=(c[6]||0)>=2?0.10:(c[6]||0)>=1?0.05:0;
-    // Even tile density score
-    const dens=totalEvens>=8?0.35:totalEvens>=6?0.25:totalEvens>=4?0.16:totalEvens>=2?0.08:totalEvens*0.03;
-    // Diversity bonus: more distinct even values = more hand options
-    const divBonus=distinctEvens>=3?0.06:distinctEvens>=2?0.03:0;
-    // Flower/dragon/joker support
-    const support=flowers*0.03+dragons*0.02+ew*0.02+jk*0.05;
-    const penalty=(odds*0.04)+(nsWinds*0.03);
-    return Math.max(0,Math.min(dens+sixBonus+divBonus+support-penalty,1));
+    // Group depth in even tiles — singles give 0 credit
+    const evenGroupDepth=Object.values(c).reduce((a,n)=>a+(n>=4?4:n>=3?3:n>=2?2:0),0);
+    const groupScore=evenGroupDepth>=10?0.40:evenGroupDepth>=8?0.32:evenGroupDepth>=6?0.24:evenGroupDepth>=4?0.16:evenGroupDepth>=2?0.08:evens.length*0.012;
+    const sixBonus=(c[6]||0)>=3?0.12:(c[6]||0)>=2?0.08:(c[6]||0)>=1?0.04:0;
+    const divBonus=distinctEvens>=4?0.07:distinctEvens>=3?0.04:distinctEvens>=2?0.02:0;
+    const support=flowers*0.025+dragons*0.015+ew*0.015+jk*0.05;
+    const penalty=(odds*0.03)+(nsWinds*0.02);
+    return Math.max(0,Math.min(groupScore+sixBonus+divBonus+support-penalty,1));
   }},
 
 // ── 369 (6 hands) ─────────────────────────────────────────────────────────────
@@ -392,22 +383,20 @@ const SECS=[
     const threes=h.filter(t=>t.t==="s"&&t.n===3).length;
     const sixes=h.filter(t=>t.t==="s"&&t.n===6).length;
     const nines=h.filter(t=>t.t==="s"&&t.n===9).length;
-    const total369=threes+sixes+nines;
     const flowers=h.filter(t=>t.t==="f").length;
     const dragons=h.filter(t=>t.t==="d").length;
     const winds=h.filter(t=>t.t==="w").length;
     const jk=h.filter(t=>t.t==="j").length;
     const offNums=h.filter(t=>t.t==="s"&&![3,6,9].includes(t.n)).length;
-    // 6 is in every hand — critical anchor
-    const sixBonus=sixes>=2?0.14:sixes>=1?0.07:0;
-    // Tile density
-    const dens=total369>=8?0.32:total369>=6?0.22:total369>=4?0.14:total369>=2?0.07:total369*0.03;
-    // Having 3 and 9 alongside 6 opens more hands
-    const spreadBonus=(threes>=1&&nines>=1)?0.05:(threes>=1||nines>=1)?0.02:0;
-    const support=flowers*0.03+dragons*0.03+jk*0.05;
-    const windBonus=winds>=3?0.03:0; // NEWS hand needs all 4 winds
-    const penalty=offNums*0.05;
-    return Math.max(0,Math.min(dens+sixBonus+spreadBonus+support+windBonus-penalty,1));
+    // Group depth for 369 tiles — singles give 0 credit
+    const dep369=[threes,sixes,nines].reduce((a,n)=>a+(n>=4?4:n>=3?3:n>=2?2:0),0);
+    const groupScore=dep369>=9?0.44:dep369>=7?0.34:dep369>=5?0.25:dep369>=3?0.16:dep369>=1?0.08:(threes+sixes+nines)*0.015;
+    const sixBonus=sixes>=3?0.10:sixes>=2?0.07:sixes>=1?0.04:0;
+    const spreadBonus=(threes>=1&&nines>=1)?0.05:0;
+    const support=flowers*0.02+dragons*0.02+jk*0.05;
+    const windBonus=winds>=3?0.03:0;
+    const penalty=offNums*0.035;
+    return Math.max(0,Math.min(groupScore+sixBonus+spreadBonus+support+windBonus-penalty,1));
   }},
 
 // ── 13579 (10 hands) ─────────────────────────────────────────────────────────
@@ -420,7 +409,6 @@ const SECS=[
   ck:h=>{
     const odds=h.filter(t=>t.t==="s"&&t.n%2===1);
     const c={};odds.forEach(t=>{c[t.n]=(c[t.n]||0)+1;});
-    const totalOdds=odds.length;
     const distinctOdds=Object.keys(c).length;
     const flowers=h.filter(t=>t.t==="f").length;
     const dragons=h.filter(t=>t.t==="d").length;
@@ -428,14 +416,16 @@ const SECS=[
     const ew=h.filter(t=>t.t==="w"&&(t.v==="East"||t.v==="West")).length;
     const jk=h.filter(t=>t.t==="j").length;
     const evens=h.filter(t=>t.t==="s"&&t.n%2===0).length;
-    // 5 and 3 are the heaviest anchors — bonus for holding them
-    const anchorBonus=(c[5]||0)>=2?0.10:(c[5]||0)>=1?0.05:0;
-    const threeBonus=(c[3]||0)>=2?0.08:(c[3]||0)>=1?0.04:0;
-    const dens=totalOdds>=8?0.30:totalOdds>=6?0.22:totalOdds>=4?0.14:totalOdds>=2?0.07:totalOdds*0.03;
-    const divBonus=distinctOdds>=3?0.05:distinctOdds>=2?0.02:0;
-    const support=flowers*0.025+dragons*0.02+ns*0.03+jk*0.05;
-    const penalty=evens*0.04+ew*0.02;
-    return Math.max(0,Math.min(dens+anchorBonus+threeBonus+divBonus+support-penalty,1));
+    // Group depth in odd tiles — singles give 0 credit
+    const oddGroupDepth=Object.values(c).reduce((a,n)=>a+(n>=4?4:n>=3?3:n>=2?2:0),0);
+    const groupScore=oddGroupDepth>=10?0.38:oddGroupDepth>=8?0.30:oddGroupDepth>=6?0.22:oddGroupDepth>=4?0.15:oddGroupDepth>=2?0.08:odds.length*0.01;
+    // 5 and 3 are the heaviest anchors
+    const fiveBonus=(c[5]||0)>=3?0.10:(c[5]||0)>=2?0.07:(c[5]||0)>=1?0.04:0;
+    const threeBonus=(c[3]||0)>=3?0.08:(c[3]||0)>=2?0.05:(c[3]||0)>=1?0.02:0;
+    const divBonus=distinctOdds>=4?0.05:distinctOdds>=3?0.02:0;
+    const support=flowers*0.015+dragons*0.01+ns*0.02+jk*0.05;
+    const penalty=evens*0.03+ew*0.015;
+    return Math.max(0,Math.min(groupScore+fiveBonus+threeBonus+divBonus+support-penalty,1));
   }},
 
 // ── Consecutive Run (9 hands) ─────────────────────────────────────────────────
@@ -453,14 +443,17 @@ const SECS=[
     const flowers=h.filter(t=>t.t==="f").length;
     const dragons=h.filter(t=>t.t==="d").length;
     const jk=h.filter(t=>t.t==="j").length;
-    const hon=h.filter(t=>t.t==="w").length; // winds only — dragons can appear in 1 hand
-    // Normalise window score to 0–1 range (max theoretical ~28 for perfect 4-wide kong rack)
-    const windowVal=Math.min(ws.score/28,1);
-    // Distinct values present — need at least 3 for most hands
-    const presentBonus=ws.distinctPresent>=4?0.08:ws.distinctPresent>=3?0.04:0;
-    // Flowers are critical — FFFFFF sextette hand + FFF hands
+    const hon=h.filter(t=>t.t==="w").length;
+    // Gate: need at least 2 groups (pairs/pungs/kongs) AND groupDepth>=4
+    // Without real group structure, CR is not a viable path
+    if(ws.groupCount<2||ws.groupDepth<4){
+      return Math.min(ws.groupDepth*0.015+flowers*0.01+jk*0.01,0.08);
+    }
+    // Normalise window score — max realistic score ~32 with 13 tiles
+    const windowVal=Math.min(ws.score/32,1);
+    // presentBonus only awarded when group structure is already meaningful
+    const presentBonus=ws.groupDepth>=6?(ws.distinctPresent>=4?0.05:ws.distinctPresent>=3?0.02:0):0;
     const flBonus=flowers>=4?0.10:flowers>=2?0.05:flowers>=1?0.02:0;
-    // Dragon bonus (FFF 11 22 333 DDDD hand)
     const drBonus=dragons>=2?0.03:dragons>=1?0.01:0;
     const jkBonus=jk*0.04;
     const windPenalty=hon*0.04;
@@ -483,23 +476,21 @@ const SECS=[
     const honorTotal=winds.length+dragons.length;
     const flowers=h.filter(t=>t.t==="f").length;
     const jk=h.filter(t=>t.t==="j").length;
-    // Number kongs — only 1,2,3,4 appear in W/D hands (as kongs of like nos.)
     const numKongs=h.filter(t=>t.t==="s"&&[1,2,3,4].includes(t.n));
     const nkc={};numKongs.forEach(t=>{nkc[t.n]=(nkc[t.n]||0)+1;});
     const hasKong=Object.values(nkc).some(v=>v>=4);
     const nums=h.filter(t=>t.t==="s").length;
-    // Wind groups (kongs/pungs of same wind are the backbone)
-    const windGroups=Object.values(wc);
-    const wgScore=windGroups.reduce((a,n)=>a+(n>=4?0.14:n>=3?0.10:n>=2?0.06:0.02),0);
-    // Dragon groups
-    const dgScore=Object.values(dc).reduce((a,n)=>a+(n>=4?0.10:n>=3?0.08:n>=2?0.05:0.02),0);
-    // Honor density
-    const densBonus=honorTotal>=9?0.10:honorTotal>=7?0.07:honorTotal>=5?0.04:honorTotal>=3?0.02:0;
-    const support=flowers*0.02+jk*0.05+(hasKong?0.06:0);
-    // Penalty: non-1234 number tiles are off-direction
+    // Honor group depth — singles give 0 credit
+    const windGroupDepth=Object.values(wc).reduce((a,n)=>a+(n>=4?4:n>=3?3:n>=2?2:0),0);
+    const dragonGroupDepth=Object.values(dc).reduce((a,n)=>a+(n>=4?4:n>=3?3:n>=2?2:0),0);
+    const honorDepth=windGroupDepth+dragonGroupDepth;
+    // Honor density bonus (raw tile count still matters for building toward groups)
+    const honorDens=honorTotal>=10?0.15:honorTotal>=8?0.10:honorTotal>=6?0.06:honorTotal>=4?0.03:0;
+    const groupScore=honorDepth>=10?0.42:honorDepth>=8?0.32:honorDepth>=6?0.23:honorDepth>=4?0.15:honorDepth>=2?0.08:0;
+    const support=flowers*0.02+jk*0.05+(hasKong?0.07:0);
     const offNums=h.filter(t=>t.t==="s"&&![1,2,3,4].includes(t.n)).length;
-    const penalty=offNums*0.05+(nums-numKongs.length)*0.02;
-    return Math.max(0,Math.min(wgScore+dgScore+densBonus+support-penalty,1));
+    const penalty=offNums*0.045+(nums-numKongs.length)*0.02;
+    return Math.max(0,Math.min(groupScore+honorDens+support-penalty,1));
   }},
 
 // ── Any Like Numbers (3 hands) ────────────────────────────────────────────────
@@ -512,18 +503,17 @@ const SECS=[
     const nc={};h.filter(t=>t.t==="s").forEach(t=>{nc[t.n]=(nc[t.n]||0)+1;});
     const vals=Object.values(nc);
     const best=vals.length?Math.max(...vals):0;
-    const spread=vals.length; // distinct numbers held
+    const spread=vals.length;
     const flowers=h.filter(t=>t.t==="f").length;
     const dragons=h.filter(t=>t.t==="d").length;
     const jk=h.filter(t=>t.t==="j").length;
     const winds=h.filter(t=>t.t==="w").length;
-    // Primary: how many of the best number do you have?
-    const dens=best>=6?0.36:best>=5?0.28:best>=4?0.20:best>=3?0.12:best>=2?0.06:best*0.02;
-    // Flowers are critical — sextette hand exists (1111 FFFFFF 1111)
+    // Concentration scoring — must have deep stacks of ONE number
+    const dens=best>=7?0.52:best>=6?0.42:best>=5?0.32:best>=4?0.22:best>=3?0.13:best>=2?0.06:0;
     const flBonus=flowers>=4?0.12:flowers>=2?0.06:flowers>=1?0.03:0;
-    const support=dragons*0.03+jk*0.06;
-    // Spreading across numbers is lethal for this section
-    const spreadPenalty=Math.max(0,spread-1)*0.08;
+    const support=dragons*0.03+jk*0.07;
+    // Spreading across numbers is lethal
+    const spreadPenalty=Math.max(0,spread-1)*0.06;
     const windPenalty=winds*0.03;
     return Math.max(0,Math.min(dens+flBonus+support-spreadPenalty-windPenalty,1));
   }},
@@ -546,8 +536,8 @@ const SECS=[
     const flowers=h.filter(t=>t.t==="f").length;
     const dragons=h.filter(t=>t.t==="d").length;
     // With 2 jokers, scoring is joker-first then tile depth
-    const base=jk>=3?0.20:0.12;
-    const tileBonus=best>=4?0.22:best>=3?0.14:best>=2?0.06:0;
+    const base=jk>=3?0.22:0.14;
+    const tileBonus=best>=4?0.26:best>=3?0.18:best>=2?0.08:0;
     const support=flowers*0.02+dragons*0.02;
     return Math.max(0,Math.min(base+tileBonus+support,1));
   }},
@@ -568,36 +558,30 @@ const SECS=[
       c[k]=(c[k]||0)+1;
     });
     const pairs=Object.values(c).filter(v=>v===2).length;
-    const singles=Object.values(c).filter(v=>v===1).length;
     const triples=Object.values(c).filter(v=>v>=3).length;
     const jk=h.filter(t=>t.t==="j").length;
     const flowers=h.filter(t=>t.t==="f").length;
     // Jokers are anti-tiles for this section
-    const jkPenalty=jk*0.10;
+    const jkPenalty=jk*0.08;
     // Triples are structurally wrong — hard penalty
-    const triplePenalty=triples*0.15;
-    // Pairs are the primary signal
-    const pairScore=pairs>=6?0.40:pairs>=5?0.32:pairs>=4?0.24:pairs>=3?0.16:pairs>=2?0.09:pairs*0.04;
+    const triplePenalty=triples*0.10;
+    // Pairs are the primary signal — boosted scale
+    const pairScore=pairs>=7?0.58:pairs>=6?0.48:pairs>=5?0.37:pairs>=4?0.26:pairs>=3?0.16:pairs>=2?0.08:pairs*0.03;
     // Flowers act as pairs in S&P (they count as natural pairs)
-    const flBonus=flowers>=2?0.06:flowers>=1?0.03:0;
+    const flBonus=flowers>=2?0.05:flowers>=1?0.025:0;
     // ── 7-consecutive same-suit pair bonus (11 22 33 44 55 66 77 hand) ──────────
-    // Find the longest run of consecutive paired numbers within a single suit
     let consecPairBonus=0;
     for(const suit of ["b","c","d"]){
-      // Which numbers in this suit have exactly a pair?
       const pairedNums=[];
       for(let n=1;n<=9;n++){
         if((c[`s-${suit}-${n}`]||0)===2)pairedNums.push(n);
       }
-      // Find longest consecutive run within paired numbers
       let maxRun=0,run=0,prev=null;
       for(const n of pairedNums){
         if(prev!==null&&n===prev+1){run++;} else {run=1;}
         if(run>maxRun)maxRun=run;
         prev=n;
       }
-      // Score the best consecutive run found in any suit
-      // 7 consecutive pairs = perfect hand bonus; partial runs build toward it
       const runBonus=maxRun>=7?0.22:maxRun>=6?0.16:maxRun>=5?0.11:maxRun>=4?0.07:maxRun>=3?0.03:0;
       if(runBonus>consecPairBonus)consecPairBonus=runBonus;
     }
@@ -631,6 +615,586 @@ const SECTION_META={
   "sp":{strongNums:[],weakNums:[],riskyPass:[],strongTypes:[],weakTypes:[],wantsFlowers:true,wantsJokers:false,pairBonus:true,runBased:false,likeNumbers:false,quintsNeeded:false,pairsOnly:true},
 };
 
+// ─── 2026 NMJL HAND CATALOG ─────────────────────────────────────────────────
+// Every hand on the 2026 card, structured for rack-fit scoring.
+// Each hand has: label, section, tiles (what you need to complete it),
+// concealed flag, value, and a fit() function that scores the rack 0-1.
+// fit() counts tiles already in rack vs tiles needed.
+// Jokers are wild for pungs/kongs (not singles/pairs/flowers).
+
+function mkHand(label,sec,value,concealed,fit){return{label,sec,value,concealed,fit};}
+
+function countTile(rack,fn){return rack.filter(fn).length;}
+function countNum(rack,n){return countTile(rack,t=>t.t==="s"&&t.n===n);}
+function countNumSuit(rack,n,s){return countTile(rack,t=>t.t==="s"&&t.n===n&&t.s===s);}
+function jokers(rack){return countTile(rack,t=>t.t==="j");}
+function flowers(rack){return countTile(rack,t=>t.t==="f");}
+function winds(rack,v){return v?countTile(rack,t=>t.t==="w"&&t.v===v):countTile(rack,t=>t.t==="w");}
+function dragons(rack,v){return v?countTile(rack,t=>t.t==="d"&&t.v===v):countTile(rack,t=>t.t==="d");}
+
+// Score how many "slots" of a group a rack can fill (with joker assist for pungs/kongs)
+function groupFit(have,jokerPool,need){
+  // Returns [tilesUsed, jokersUsed]
+  const natural=Math.min(have,need);
+  const rem=need-natural;
+  const jk=Math.min(rem,jokerPool);
+  return{natural,jk,total:natural+jk,complete:natural+jk>=need};
+}
+
+// Score a hand's fit: returns 0–1 (fraction of hand slots filled by rack)
+// groups = array of {have, need, label} where have = tiles in rack, need = tiles required
+// jokerPool = jokers available (jokers can sub for pungs/kongs but not singles/pairs/flowers)
+function handFitScore(groups,jokerPool,totalSlots){
+  let filled=0,jkLeft=jokerPool;
+  for(const g of groups){
+    if(g.noJoker){
+      // singles, pairs, flowers — jokers can't sub
+      filled+=Math.min(g.have,g.need);
+    } else {
+      const natural=Math.min(g.have,g.need);
+      const rem=g.need-natural;
+      const jkUsed=Math.min(rem,jkLeft);
+      filled+=natural+jkUsed;
+      jkLeft-=jkUsed;
+    }
+  }
+  return Math.min(filled/totalSlots,1);
+}
+
+const HAND_CATALOG=[
+  // ── 2026 ──────────────────────────────────────────────────────────────────────
+  mkHand("222 000 2222 6666","2026",25,false,r=>{
+    const jk=jokers(r);
+    const g=[
+      {have:countTile(r,t=>t.t==="s"&&t.n===2),need:3},
+      {have:dragons(r,"Soap"),need:3},
+      {have:countTile(r,t=>t.t==="s"&&t.n===2),need:4},
+      {have:countTile(r,t=>t.t==="s"&&t.n===6),need:4},
+    ];
+    // 2s shared between pung+kong — need 7 total 2s or jokers
+    const twos=countTile(r,t=>t.t==="s"&&t.n===2);
+    const soap=dragons(r,"Soap");
+    const sixes=countTile(r,t=>t.t==="s"&&t.n===6);
+    return handFitScore([
+      {have:twos,need:7},{have:soap,need:3},{have:sixes,need:4}
+    ],jk,14);
+  }),
+  mkHand("2026 DDD 2222 DDD","2026",25,false,r=>{
+    const twos=countTile(r,t=>t.t==="s"&&t.n===2);
+    const sixes=countTile(r,t=>t.t==="s"&&t.n===6);
+    const soap=dragons(r,"Soap");
+    const dr=dragons(r);
+    const jk=jokers(r);
+    // 2026 = 2+soap+2+6 as singles; then DDD 2222 DDD = pung d + kong 2 + pung d
+    return handFitScore([
+      {have:twos,need:3,noJoker:false},{have:soap,need:1,noJoker:true},
+      {have:sixes,need:1,noJoker:true},{have:dr,need:6},{have:twos,need:4}
+    ],jk,15);
+  }),
+  mkHand("FFF 2026 222 6666","2026",25,false,r=>{
+    const fl=flowers(r);const twos=countTile(r,t=>t.t==="s"&&t.n===2);
+    const sixes=countTile(r,t=>t.t==="s"&&t.n===6);const soap=dragons(r,"Soap");
+    const jk=jokers(r);
+    return handFitScore([
+      {have:fl,need:3,noJoker:true},{have:twos,need:3},{have:soap,need:1,noJoker:true},
+      {have:sixes,need:1,noJoker:true},{have:twos,need:3},{have:sixes,need:4}
+    ],jk,15);
+  }),
+  mkHand("22 00 222 666 NEWS","2026",30,false,r=>{
+    const twos=countTile(r,t=>t.t==="s"&&t.n===2);
+    const sixes=countTile(r,t=>t.t==="s"&&t.n===6);
+    const soap=dragons(r,"Soap");const w=winds(r);const jk=jokers(r);
+    return handFitScore([
+      {have:twos,need:2,noJoker:true},{have:soap,need:2,noJoker:true},
+      {have:twos,need:3},{have:sixes,need:3},{have:w,need:4,noJoker:true}
+    ],jk,14);
+  }),
+
+  // ── 2468 ──────────────────────────────────────────────────────────────────────
+  mkHand("222 444 6666 8888","2468",25,false,r=>{
+    const t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
+    return handFitScore([{have:t2,need:3},{have:t4,need:3},{have:t6,need:4},{have:t8,need:4}],jokers(r),14);
+  }),
+  mkHand("FF 2222 44 66 8888","2468",30,false,r=>{
+    const fl=flowers(r),t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
+    return handFitScore([{have:fl,need:2,noJoker:true},{have:t2,need:4},{have:t4,need:2,noJoker:true},{have:t6,need:2,noJoker:true},{have:t8,need:4}],jokers(r),14);
+  }),
+  mkHand("EE 22 444 666 88 WW","2468",30,false,r=>{
+    const ew=countTile(r,t=>t.t==="w"&&(t.v==="East"||t.v==="West"));
+    const t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
+    return handFitScore([{have:ew,need:2,noJoker:true},{have:t2,need:2,noJoker:true},{have:t4,need:3},{have:t6,need:3},{have:t8,need:2,noJoker:true},{have:ew,need:2,noJoker:true}],jokers(r),14);
+  }),
+  mkHand("2222 DDD 8888 DDD","2468",25,false,r=>{
+    const t2=countNum(r,2),t8=countNum(r,8),dr=dragons(r);
+    return handFitScore([{have:t2,need:4},{have:dr,need:3},{have:t8,need:4},{have:dr,need:3}],jokers(r),14);
+  }),
+  mkHand("FFF 22 44 666 8888","2468",25,false,r=>{
+    const fl=flowers(r),t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
+    return handFitScore([{have:fl,need:3,noJoker:true},{have:t2,need:2,noJoker:true},{have:t4,need:2,noJoker:true},{have:t6,need:3},{have:t8,need:4}],jokers(r),14);
+  }),
+  mkHand("2468 2222 D 2222 D","2468",25,false,r=>{
+    const t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8),dr=dragons(r);
+    return handFitScore([{have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t8,need:1,noJoker:true},{have:t2,need:4},{have:dr,need:1,noJoker:true},{have:t2,need:4},{have:dr,need:1,noJoker:true}],jokers(r),14);
+  }),
+  mkHand("FFF 2468 FFF 2222","2468",30,false,r=>{
+    const fl=flowers(r),t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
+    return handFitScore([{have:fl,need:3,noJoker:true},{have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t8,need:1,noJoker:true},{have:fl,need:3,noJoker:true},{have:t2,need:4}],jokers(r),14);
+  }),
+  mkHand("FF 246 888 246 888","2468",30,true,r=>{
+    const fl=flowers(r),t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
+    // Concealed — no jokers
+    return handFitScore([{have:fl,need:2,noJoker:true},{have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t8,need:3,noJoker:true},{have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t8,need:3,noJoker:true}],0,14);
+  }),
+
+  // ── 369 ───────────────────────────────────────────────────────────────────────
+  mkHand("333 666 6666 9999","369",25,false,r=>{
+    const t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9);
+    return handFitScore([{have:t3,need:3},{have:t6,need:3},{have:t6,need:4},{have:t9,need:4}],jokers(r),14);
+  }),
+  mkHand("33 66 333 666 9999","369",25,false,r=>{
+    const t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9);
+    return handFitScore([{have:t3,need:2,noJoker:true},{have:t6,need:2,noJoker:true},{have:t3,need:3},{have:t6,need:3},{have:t9,need:4}],jokers(r),14);
+  }),
+  mkHand("FFF 33 666 99 DDDD","369",25,false,r=>{
+    const fl=flowers(r),t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9),dr=dragons(r);
+    return handFitScore([{have:fl,need:3,noJoker:true},{have:t3,need:2,noJoker:true},{have:t6,need:3},{have:t9,need:2,noJoker:true},{have:dr,need:4}],jokers(r),14);
+  }),
+  mkHand("33 66 666 999 NEWS","369",30,false,r=>{
+    const t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9),w=winds(r);
+    return handFitScore([{have:t3,need:2,noJoker:true},{have:t6,need:2,noJoker:true},{have:t6,need:3},{have:t9,need:3},{have:w,need:4,noJoker:true}],jokers(r),14);
+  }),
+  mkHand("FF 3369 3333 3333","369",25,false,r=>{
+    const fl=flowers(r),t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9);
+    return handFitScore([{have:fl,need:2,noJoker:true},{have:t3,need:2,noJoker:true},{have:t6,need:1,noJoker:true},{have:t9,need:1,noJoker:true},{have:t3,need:4},{have:t3,need:4}],jokers(r),14);
+  }),
+  mkHand("FF 333 666 999 369","369",30,true,r=>{
+    const fl=flowers(r),t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9);
+    return handFitScore([{have:fl,need:2,noJoker:true},{have:t3,need:3,noJoker:true},{have:t6,need:3,noJoker:true},{have:t9,need:3,noJoker:true},{have:t3,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t9,need:1,noJoker:true}],0,14);
+  }),
+
+  // ── 13579 ─────────────────────────────────────────────────────────────────────
+  mkHand("11 333 55 777 9999","13579",25,false,r=>{
+    const t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5),t7=countNum(r,7),t9=countNum(r,9);
+    return handFitScore([{have:t1,need:2,noJoker:true},{have:t3,need:3},{have:t5,need:2,noJoker:true},{have:t7,need:3},{have:t9,need:4}],jokers(r),14);
+  }),
+  mkHand("111 333 3333 5555","13579",25,false,r=>{
+    const t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5);
+    return handFitScore([{have:t1,need:3},{have:t3,need:3},{have:t3,need:4},{have:t5,need:4}],jokers(r),14);
+  }),
+  mkHand("NN 1111 33 5555 SS","13579",30,false,r=>{
+    const n=winds(r,"North"),s=winds(r,"South"),t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5);
+    return handFitScore([{have:n,need:2,noJoker:true},{have:t1,need:4},{have:t3,need:2,noJoker:true},{have:t5,need:4},{have:s,need:2,noJoker:true}],jokers(r),14);
+  }),
+  mkHand("113579 1111 1111","13579",25,false,r=>{
+    const t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5),t7=countNum(r,7),t9=countNum(r,9);
+    return handFitScore([{have:t1,need:2,noJoker:true},{have:t1,need:1,noJoker:true},{have:t3,need:1,noJoker:true},{have:t5,need:1,noJoker:true},{have:t7,need:1,noJoker:true},{have:t9,need:1,noJoker:true},{have:t1,need:4},{have:t1,need:4}],jokers(r),15);
+  }),
+  mkHand("FFF 11 33 555 DDDD","13579",25,false,r=>{
+    const fl=flowers(r),t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5),dr=dragons(r);
+    return handFitScore([{have:fl,need:3,noJoker:true},{have:t1,need:2,noJoker:true},{have:t3,need:2,noJoker:true},{have:t5,need:3},{have:dr,need:4}],jokers(r),14);
+  }),
+  mkHand("11 33 111 333 5555","13579",25,false,r=>{
+    const t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5);
+    return handFitScore([{have:t1,need:2,noJoker:true},{have:t3,need:2,noJoker:true},{have:t1,need:3},{have:t3,need:3},{have:t5,need:4}],jokers(r),14);
+  }),
+  mkHand("1111 33 55 77 9999","13579",30,false,r=>{
+    const t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5),t7=countNum(r,7),t9=countNum(r,9);
+    return handFitScore([{have:t1,need:4},{have:t3,need:2,noJoker:true},{have:t5,need:2,noJoker:true},{have:t7,need:2,noJoker:true},{have:t9,need:4}],jokers(r),14);
+  }),
+  mkHand("FF 11 33 55 111 111","13579",35,true,r=>{
+    const fl=flowers(r),t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5);
+    return handFitScore([{have:fl,need:2,noJoker:true},{have:t1,need:2,noJoker:true},{have:t3,need:2,noJoker:true},{have:t5,need:2,noJoker:true},{have:t1,need:3,noJoker:true},{have:t1,need:3,noJoker:true}],0,14);
+  }),
+  mkHand("FF 135 777 999 DDD","13579",30,true,r=>{
+    const fl=flowers(r),t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5),t7=countNum(r,7),t9=countNum(r,9),dr=dragons(r);
+    return handFitScore([{have:fl,need:2,noJoker:true},{have:t1,need:1,noJoker:true},{have:t3,need:1,noJoker:true},{have:t5,need:1,noJoker:true},{have:t7,need:3,noJoker:true},{have:t9,need:3,noJoker:true},{have:dr,need:3,noJoker:true}],0,14);
+  }),
+
+  // ── Consecutive Run ───────────────────────────────────────────────────────────
+  mkHand("11 222 33 444 5555","cr",25,false,r=>{
+    // Any 1 suit — score each suit, take best
+    return Math.max(...["bam","crak","dot"].map(s=>handFitScore([
+      {have:countNumSuit(r,1,s),need:2,noJoker:true},{have:countNumSuit(r,2,s),need:3},{have:countNumSuit(r,3,s),need:2,noJoker:true},{have:countNumSuit(r,4,s),need:3},{have:countNumSuit(r,5,s),need:4}
+    ],jokers(r),14)));
+  }),
+  mkHand("55 666 77 888 9999","cr",25,false,r=>{
+    return Math.max(...["bam","crak","dot"].map(s=>handFitScore([
+      {have:countNumSuit(r,5,s),need:2,noJoker:true},{have:countNumSuit(r,6,s),need:3},{have:countNumSuit(r,7,s),need:2,noJoker:true},{have:countNumSuit(r,8,s),need:3},{have:countNumSuit(r,9,s),need:4}
+    ],jokers(r),14)));
+  }),
+  mkHand("FFF 1111 234 5555","cr",25,false,r=>{
+    const fl=flowers(r);
+    return Math.max(...["bam","crak","dot"].map(s=>handFitScore([
+      {have:fl,need:3,noJoker:true},{have:countNumSuit(r,1,s),need:4},{have:countNumSuit(r,2,s),need:1,noJoker:true},{have:countNumSuit(r,3,s),need:1,noJoker:true},{have:countNumSuit(r,4,s),need:1,noJoker:true},{have:countNumSuit(r,5,s),need:4}
+    ],jokers(r),14)));
+  }),
+  mkHand("11 22 111 222 3333","cr",25,false,r=>{
+    return Math.max(...["bam","crak","dot"].map(s=>handFitScore([
+      {have:countNumSuit(r,1,s),need:2,noJoker:true},{have:countNumSuit(r,2,s),need:2,noJoker:true},{have:countNumSuit(r,1,s),need:3},{have:countNumSuit(r,2,s),need:3},{have:countNumSuit(r,3,s),need:4}
+    ],jokers(r),14)));
+  }),
+  mkHand("111 222 3333 4444","cr",25,false,r=>{
+    return Math.max(...["bam","crak","dot"].map(s=>handFitScore([
+      {have:countNumSuit(r,1,s),need:3},{have:countNumSuit(r,2,s),need:3},{have:countNumSuit(r,3,s),need:4},{have:countNumSuit(r,4,s),need:4}
+    ],jokers(r),14)));
+  }),
+  mkHand("FFF 11 22 333 DDDD","cr",25,false,r=>{
+    const fl=flowers(r),dr=dragons(r);
+    return Math.max(...["bam","crak","dot"].map(s=>handFitScore([
+      {have:fl,need:3,noJoker:true},{have:countNumSuit(r,1,s),need:2,noJoker:true},{have:countNumSuit(r,2,s),need:2,noJoker:true},{have:countNumSuit(r,3,s),need:3},{have:dr,need:4}
+    ],jokers(r),14)));
+  }),
+  mkHand("1111 FFFFFF 2222","cr",30,false,r=>{
+    const fl=flowers(r);
+    return Math.max(...["bam","crak","dot"].map(s=>handFitScore([
+      {have:countNumSuit(r,1,s),need:4},{have:fl,need:6,noJoker:true},{have:countNumSuit(r,2,s),need:4}
+    ],jokers(r),14)));
+  }),
+  mkHand("FF 1111 2222 3333","cr",25,false,r=>{
+    const fl=flowers(r);
+    return Math.max(...["bam","crak","dot"].map(s=>handFitScore([
+      {have:fl,need:2,noJoker:true},{have:countNumSuit(r,1,s),need:4},{have:countNumSuit(r,2,s),need:4},{have:countNumSuit(r,3,s),need:4}
+    ],jokers(r),14)));
+  }),
+  mkHand("1 22 333 1 22 333 44","cr",35,true,r=>{
+    // Concealed — no jokers. Any 3 suits, any 4 consec nos.
+    const nums=[1,2,3,4,5,6,7,8,9];
+    let best=0;
+    for(let start=1;start<=6;start++){
+      const [a,b,c,d]=[start,start+1,start+2,start+3];
+      for(const s of ["bam","crak","dot"]){
+        const score=handFitScore([
+          {have:countNumSuit(r,a,s),need:1,noJoker:true},{have:countNumSuit(r,b,s),need:2,noJoker:true},{have:countNumSuit(r,c,s),need:3,noJoker:true},
+          {have:countNumSuit(r,a,s),need:1,noJoker:true},{have:countNumSuit(r,b,s),need:2,noJoker:true},{have:countNumSuit(r,c,s),need:3,noJoker:true},
+          {have:countNumSuit(r,d,s),need:2,noJoker:true}
+        ],0,14);
+        if(score>best)best=score;
+      }
+    }
+    return best;
+  }),
+
+  // ── Winds & Dragons ──────────────────────────────────────────────────────────
+  mkHand("NNNN EEE WWW SSSS","wd",25,false,r=>{
+    const n=winds(r,"North"),e=winds(r,"East"),w=winds(r,"West"),s=winds(r,"South");
+    return handFitScore([{have:n,need:4},{have:e,need:3},{have:w,need:3},{have:s,need:4}],jokers(r),14);
+  }),
+  mkHand("NNN EEEE WWWW SSS","wd",25,false,r=>{
+    const n=winds(r,"North"),e=winds(r,"East"),w=winds(r,"West"),s=winds(r,"South");
+    return handFitScore([{have:n,need:3},{have:e,need:4},{have:w,need:4},{have:s,need:3}],jokers(r),14);
+  }),
+  mkHand("1234 DDD DDD DDDD","wd",25,false,r=>{
+    // 4 consec nos in 1 suit + 3 dragon groups
+    const dr=dragons(r);
+    return Math.max(...["bam","crak","dot"].map(s=>Math.max(...[1,2,3,4,5,6].map(start=>
+      handFitScore([
+        {have:countNumSuit(r,start,s),need:1,noJoker:true},{have:countNumSuit(r,start+1,s),need:1,noJoker:true},{have:countNumSuit(r,start+2,s),need:1,noJoker:true},{have:countNumSuit(r,start+3,s),need:1,noJoker:true},{have:dr,need:10}
+      ],jokers(r),14)))));
+  }),
+  mkHand("NNN 1111 1111 SSS","wd",25,false,r=>{
+    const n=winds(r,"North"),s=winds(r,"South");
+    const nums=[1,3,5,7,9];let best=0;
+    for(const n1 of nums)for(const n2 of nums){if(n1===n2)continue;
+      const t1=countNum(r,n1),t2=countNum(r,n2);
+      const sc=handFitScore([{have:n,need:3},{have:t1,need:4},{have:t2,need:4},{have:s,need:3}],jokers(r),14);
+      if(sc>best)best=sc;}
+    return best;
+  }),
+  mkHand("EEE 2222 2222 WWW","wd",25,false,r=>{
+    const e=winds(r,"East"),w=winds(r,"West");
+    const evens=[2,4,6,8];let best=0;
+    for(const n1 of evens)for(const n2 of evens){if(n1===n2)continue;
+      const t1=countNum(r,n1),t2=countNum(r,n2);
+      const sc=handFitScore([{have:e,need:3},{have:t1,need:4},{have:t2,need:4},{have:w,need:3}],jokers(r),14);
+      if(sc>best)best=sc;}
+    return best;
+  }),
+  mkHand("FFF NNNN FFF DDDD","wd",25,false,r=>{
+    const fl=flowers(r),n=winds(r,"North"),dr=dragons(r);
+    return handFitScore([{have:fl,need:3,noJoker:true},{have:n,need:4},{have:fl,need:3,noJoker:true},{have:dr,need:4}],jokers(r),14);
+  }),
+  mkHand("1 N 2 EE 3 WWW 4 SSSS","wd",25,false,r=>{
+    const n=winds(r,"North"),e=winds(r,"East"),w=winds(r,"West"),s=winds(r,"South");
+    return Math.max(...["bam","crak","dot"].map(su=>handFitScore([
+      {have:countNumSuit(r,1,su),need:1,noJoker:true},{have:n,need:1,noJoker:true},{have:countNumSuit(r,2,su),need:1,noJoker:true},{have:e,need:2,noJoker:true},{have:countNumSuit(r,3,su),need:1,noJoker:true},{have:w,need:3,noJoker:true},{have:countNumSuit(r,4,su),need:1,noJoker:true},{have:s,need:4,noJoker:true}
+    ],jokers(r),14)));
+  }),
+  mkHand("FF NNNN SSSS DD DD","wd",25,false,r=>{
+    const fl=flowers(r),n=winds(r,"North"),s=winds(r,"South"),dr=dragons(r);
+    return handFitScore([{have:fl,need:2,noJoker:true},{have:n,need:4},{have:s,need:4},{have:dr,need:2,noJoker:true},{have:dr,need:2,noJoker:true}],jokers(r),14);
+  }),
+  mkHand("NN EEE 2026 WWW SS","wd",30,true,r=>{
+    // Concealed. 2026 = 2+soap+2+6 singles from any 1 suit
+    const n=winds(r,"North"),e=winds(r,"East"),w=winds(r,"West"),s=winds(r,"South");
+    const soap=dragons(r,"Soap");const t2=countNum(r,2),t6=countNum(r,6);
+    return handFitScore([{have:n,need:2,noJoker:true},{have:e,need:3,noJoker:true},{have:t2,need:1,noJoker:true},{have:soap,need:1,noJoker:true},{have:t2,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:w,need:3,noJoker:true},{have:s,need:2,noJoker:true}],0,14);
+  }),
+
+  // ── Any Like Numbers ──────────────────────────────────────────────────────────
+  mkHand("1111 FFFFFF 1111","aln",30,false,r=>{
+    const fl=flowers(r);
+    let best=0;
+    for(let n=1;n<=9;n++){const t=countNum(r,n);const sc=handFitScore([{have:t,need:4},{have:fl,need:6,noJoker:true},{have:t,need:4}],jokers(r),14);if(sc>best)best=sc;}
+    return best;
+  }),
+  mkHand("1111 D 111 D 1111 D","aln",25,false,r=>{
+    const dr=dragons(r);
+    let best=0;
+    for(let n=1;n<=9;n++){const t=countNum(r,n);const sc=handFitScore([{have:t,need:4},{have:dr,need:1,noJoker:true},{have:t,need:3},{have:dr,need:1,noJoker:true},{have:t,need:4},{have:dr,need:1,noJoker:true}],jokers(r),14);if(sc>best)best=sc;}
+    return best;
+  }),
+  mkHand("FF 1111 11 1111 DD","aln",25,false,r=>{
+    const fl=flowers(r),dr=dragons(r);
+    let best=0;
+    for(let n=1;n<=9;n++){const t=countNum(r,n);const sc=handFitScore([{have:fl,need:2,noJoker:true},{have:t,need:4},{have:t,need:2,noJoker:true},{have:t,need:4},{have:dr,need:2}],jokers(r),14);if(sc>best)best=sc;}
+    return best;
+  }),
+
+  // ── Quints ───────────────────────────────────────────────────────────────────
+  mkHand("11111 1111 11111","q",40,false,r=>{
+    // 3 suits, any like nos — quints of 1 number in suit A, kong in suit B, quint in suit C
+    let best=0;
+    for(let n=1;n<=9;n++){
+      const counts=["bam","crak","dot"].map(s=>countNumSuit(r,n,s)).sort((a,b)=>b-a);
+      const sc=handFitScore([{have:counts[0],need:5},{have:counts[1],need:4},{have:counts[2],need:5}],jokers(r),14);
+      if(sc>best)best=sc;
+    }
+    return best;
+  }),
+  mkHand("FF 11111 22 33333","q",45,false,r=>{
+    const fl=flowers(r);
+    return Math.max(...["bam","crak","dot"].map(s=>Math.max(...[1,2,3,4,5,6,7].map(start=>
+      handFitScore([{have:fl,need:2,noJoker:true},{have:countNumSuit(r,start,s),need:5},{have:countNumSuit(r,start+1,s),need:2,noJoker:true},{have:countNumSuit(r,start+2,s),need:5}],jokers(r),14)))));
+  }),
+  mkHand("11111 44444 DDDD","q",40,false,r=>{
+    // 2 nos in 1 suit w opp dragon — score all number pairs
+    let best=0;
+    for(let n1=1;n1<=9;n1++)for(let n2=n1+1;n2<=9;n2++){
+      for(const s of ["bam","crak","dot"]){
+        const dr=dragons(r);// opp dragon — any dragon works for scoring
+        const sc=handFitScore([{have:countNumSuit(r,n1,s),need:5},{have:countNumSuit(r,n2,s),need:5},{have:dr,need:4}],jokers(r),14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // ── Singles & Pairs ───────────────────────────────────────────────────────────
+  mkHand("NN EE WW SS 1D 1D 1D","sp",50,true,r=>{
+    const n=winds(r,"North"),e=winds(r,"East"),w=winds(r,"West"),s=winds(r,"South");
+    let best=0;
+    for(let num=1;num<=9;num++){
+      const dr=dragons(r);const t=countNum(r,num);
+      const sc=handFitScore([{have:n,need:2,noJoker:true},{have:e,need:2,noJoker:true},{have:w,need:2,noJoker:true},{have:s,need:2,noJoker:true},{have:t,need:1,noJoker:true},{have:dr,need:1,noJoker:true},{have:t,need:1,noJoker:true},{have:dr,need:1,noJoker:true},{have:t,need:1,noJoker:true},{have:dr,need:1,noJoker:true}],0,14);
+      if(sc>best)best=sc;
+    }
+    return best;
+  }),
+  mkHand("2 4 66 88 2 4 66 88 88","sp",50,true,r=>{
+    const t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
+    return handFitScore([{have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},{have:t6,need:2,noJoker:true},{have:t8,need:2,noJoker:true},{have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},{have:t6,need:2,noJoker:true},{have:t8,need:2,noJoker:true},{have:t8,need:2,noJoker:true}],0,14);
+  }),
+  mkHand("FF 3369 3669 3699","sp",50,true,r=>{
+    const fl=flowers(r),t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9);
+    return handFitScore([{have:fl,need:2,noJoker:true},{have:t3,need:2,noJoker:true},{have:t6,need:1,noJoker:true},{have:t9,need:1,noJoker:true},{have:t3,need:1,noJoker:true},{have:t6,need:2,noJoker:true},{have:t9,need:1,noJoker:true},{have:t3,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t9,need:2,noJoker:true}],0,14);
+  }),
+  mkHand("11 22 33 44 55 66 77","sp",50,true,r=>{
+    // Any 1 suit, any 7 consec nos — score each suit+start
+    let best=0;
+    for(const s of ["bam","crak","dot"])for(let start=1;start<=3;start++){
+      const tiles=[start,start+1,start+2,start+3,start+4,start+5,start+6].map(n=>countNumSuit(r,n,s));
+      const sc=handFitScore(tiles.map(have=>({have,need:2,noJoker:true})),0,14);
+      if(sc>best)best=sc;
+    }
+    return best;
+  }),
+  mkHand("11 357 99 11 357 99","sp",50,true,r=>{
+    const t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5),t7=countNum(r,7),t9=countNum(r,9);
+    return handFitScore([{have:t1,need:2,noJoker:true},{have:t3,need:1,noJoker:true},{have:t5,need:1,noJoker:true},{have:t7,need:1,noJoker:true},{have:t9,need:2,noJoker:true},{have:t1,need:2,noJoker:true},{have:t3,need:1,noJoker:true},{have:t5,need:1,noJoker:true},{have:t7,need:1,noJoker:true},{have:t9,need:2,noJoker:true}],0,14);
+  }),
+  mkHand("FF 2026 2026 2026","sp",75,true,r=>{
+    const fl=flowers(r),t2=countNum(r,2),t6=countNum(r,6),soap=dragons(r,"Soap");
+    return handFitScore([{have:fl,need:2,noJoker:true},{have:t2,need:1,noJoker:true},{have:soap,need:1,noJoker:true},{have:t2,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t2,need:1,noJoker:true},{have:soap,need:1,noJoker:true},{have:t2,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t2,need:1,noJoker:true},{have:soap,need:1,noJoker:true},{have:t2,need:1,noJoker:true},{have:t6,need:1,noJoker:true}],0,14);
+  }),
+];
+
+// Return top 1-2 specific hands for a section, scored against the rack
+function recommendSpecificHands(rack,sectionId){
+  if(!rack||!sectionId)return[];
+  const hands=HAND_CATALOG.filter(h=>h.sec===sectionId);
+  const scored=hands.map(h=>({...h,fit:h.fit(rack)})).sort((a,b)=>b.fit-a.fit);
+  return scored.slice(0,2).filter(h=>h.fit>0.05);
+}
+
+// ─── HAND FAMILIES ───────────────────────────────────────────────────────────
+// Groups sections into strategic families for the scorecard "Best Hand Family" block.
+// Each section belongs to exactly one family. Family determines coaching language.
+const HAND_FAMILIES={
+  "Power":  {label:"Power Hand",emoji:"💪",color:"#7B5CB0",bg:"#F4EFFC",border:"#C4A8E8",
+    desc:"Built on jokers and set stacking. Your strength is raw tile depth — pungs and kongs.",
+    sections:["q","aln"]},
+  "Run":    {label:"Consecutive Run",emoji:"🟢",color:"#1B7D4E",bg:"#EDF7F1",border:"#8FC9A8",
+    desc:"Built on connected number sequences. Pungs and kongs within a tight 3–4 number window.",
+    sections:["cr"]},
+  "Number Pattern":{label:"Number Pattern",emoji:"🔢",color:"#B83232",bg:"#FEF0F0",border:"#E8A8A8",
+    desc:"Built on a specific number family — odds, evens, or multiples of 3.",
+    sections:["13579","2468","369"]},
+  "Year":   {label:"Year Hand (2026)",emoji:"📅",color:"#B54E7A",bg:"#FDF0F6",border:"#E8A8CC",
+    desc:"Built on 2s, 6s, and Soap. Highly specific — needs both anchors from the start.",
+    sections:["2026"]},
+  "Honor":  {label:"Winds & Dragons",emoji:"🌀",color:"#5C5247",bg:"#F3F1EF",border:"#C0B8B0",
+    desc:"Built on honor tiles. Pass all number tiles early and stack winds and dragons.",
+    sections:["wd"]},
+  "Pairs":  {label:"Singles & Pairs",emoji:"🩵",color:"#2E9485",bg:"#EDF8F6",border:"#8ECCC5",
+    desc:"Fully concealed. No jokers. Seven natural pairs win this section.",
+    sections:["sp"]},
+};
+
+function getHandFamily(sectionId){
+  return Object.entries(HAND_FAMILIES).find(([,f])=>f.sections.includes(sectionId))?.[1]||null;
+}
+
+// ─── CONCRETE PATH GENERATOR ──────────────────────────────────────────────────
+// Produces 1–2 specific, tile-grounded paths for the scorecard.
+// Uses the actual finalRack tile counts — never generic advice.
+function generateHandPaths(finalRack,sortedSections,chosenSecId){
+  if(!finalRack||!sortedSections||sortedSections.length===0)return{primary:null,secondary:null};
+
+  const grps={}; // key → count
+  finalRack.forEach(t=>{
+    const k=t.t==="s"?`${t.n}${t.s[0].toUpperCase()}`:t.t==="w"?`${t.v}W`:t.t==="d"?`${t.v}D`:t.t==="f"?"FL":"JK";
+    grps[k]=(grps[k]||0)+1;
+  });
+  const jokers=finalRack.filter(t=>t.t==="j").length;
+  const flowers=finalRack.filter(t=>t.t==="f").length;
+  const winds=finalRack.filter(t=>t.t==="w");
+  const dragons=finalRack.filter(t=>t.t==="d");
+
+  // Count helpers
+  const countOf=(fn)=>finalRack.filter(fn).length;
+  const pairsOf=(fn)=>{
+    const c={};finalRack.filter(fn).forEach(t=>{
+      const k=t.t==="s"?`${t.n}${t.s}`:t.t==="w"?t.v:t.t==="d"?t.v:"f";
+      c[k]=(c[k]||0)+1;
+    });
+    return Object.entries(c).filter(([,v])=>v>=2).map(([k,v])=>({key:k,count:v}));
+  };
+
+  // Number count map
+  const numCounts={};
+  finalRack.filter(t=>t.t==="s").forEach(t=>{numCounts[t.n]=(numCounts[t.n]||0)+1;});
+
+  // Best number for ALN
+  const bestNum=Object.entries(numCounts).sort((a,b)=>b[1]-a[1])[0];
+
+  // Even/odd/369 counts
+  const evens=Object.entries(numCounts).filter(([n])=>[2,4,6,8].includes(+n)).map(([n,c])=>({n:+n,c}));
+  const odds=Object.entries(numCounts).filter(([n])=>[1,3,5,7,9].includes(+n)).map(([n,c])=>({n:+n,c}));
+  const t369=Object.entries(numCounts).filter(([n])=>[3,6,9].includes(+n)).map(([n,c])=>({n:+n,c}));
+  const twos=numCounts[2]||0,sixes=numCounts[6]||0;
+  const soap=countOf(t=>t.t==="d"&&t.v==="Soap");
+
+  // CR window analysis — find the best 4-wide window
+  const crWindow=(()=>{
+    const suitsPresent=["bam","crak","dot"];
+    let bestW=null,bestDepth=0;
+    suitsPresent.forEach(s=>{
+      const nums=finalRack.filter(t=>t.t==="s"&&t.s===s);
+      const byN={};nums.forEach(t=>{byN[t.n]=(byN[t.n]||0)+1;});
+      for(let w=1;w<=6;w++){
+        const window=[w,w+1,w+2,w+3];
+        const depth=window.reduce((sum,n)=>sum+(byN[n]>=2?byN[n]:0),0);
+        if(depth>bestDepth){bestDepth=depth;bestW={suit:s,nums:window,depth,byN};}
+      }
+    });
+    return bestW;
+  })();
+
+  const top2=sortedSections.filter(s=>s.score>0.05).slice(0,3);
+  const primary=top2[0];
+  const secondary=top2.find(s=>s.id!==primary?.id&&s.score>0.05);
+
+  function pathForSection(sec){
+    if(!sec)return null;
+    const id=sec.id;
+    const pct=Math.round(sec.score*100);
+    let anchor="",why=[],keep=[],pivot="";
+
+    if(id==="q"){
+      anchor=jokers>=2?`${jokers} Jokers + ${bestNum?`${bestNum[1]}× ${bestNum[0]}`:"your best tile group"}`:"Jokers (need 2+)";
+      why=[jokers>=2?`${jokers} jokers let you build a quint around any tile you stack.`:"You're short on jokers — quints require 2+.",bestNum&&bestNum[1]>=3?`${bestNum[1]}× ${bestNum[0]} is already near-quint depth — stack it.`:"Identify your deepest tile group and commit to it now."];
+      keep=jokers>=2?["All Jokers",bestNum?`${bestNum[0]}s (your deepest group)`:"Your best tile group","Flowers"]:[`Need ${2-jokers} more joker(s) to make Quints viable`];
+      pivot="If you don't draw another joker in the first 2 turns, pivot to Any Like Numbers.";
+    } else if(id==="aln"){
+      anchor=bestNum?`${bestNum[1]}× ${bestNum[0]}`:"Your deepest number";
+      why=[bestNum?`${bestNum[1]} of ${bestNum[0]} is your current best stack — ALN needs 8–12 of one number.`:"Identify one number to commit to immediately.",jokers>=1?`${jokers} joker${jokers>1?"s":""} help fill out kongs quickly.`:"No jokers — you'll need to draw your number consistently.",flowers>=2?`${flowers} flowers cover the sextette hand (1111 FFFFFF 1111).`:""];
+      why=why.filter(Boolean);
+      keep=[bestNum?`All ${bestNum[0]}s`:"Your target number","All Jokers","All Flowers"];
+      pivot="If another player keeps drawing your number, shift to Any Like Numbers with the next best stack.";
+    } else if(id==="cr"){
+      const w=crWindow;
+      anchor=w?`${w.suit[0].toUpperCase()}${w.suit.slice(1)} ${w.nums[0]}–${w.nums[3]} window`:"Best consecutive window";
+      const depthStr=w?`group depth ${w.depth}`:"shallow depth";
+      why=[w?`Your ${w.suit} suit has the strongest consecutive grouping (${depthStr}) — that's your CR window.`:"No deep window yet — look for 3-4 numbers with multiple tiles in one suit.",flowers>=2?`${flowers} flowers help — one CR hand uses a flower sextette.`:"",jokers>=1?`${jokers} joker${jokers>1?"s":""} can plug gaps in your window.`:""];
+      why=why.filter(Boolean);
+      keep=w?[`All ${w.suit} tiles in the ${w.nums[0]}–${w.nums[3]} range`,"All Flowers","All Jokers"]:["Identify your 4-number window before next discard","All Jokers","All Flowers"];
+      pivot="If your window stays shallow after 2 draws, pivot to 2468 or 13579 depending on your number parity.";
+    } else if(id==="2468"){
+      const sixStr=sixes>0?`${sixes}× 6`:"missing 6s";
+      const total=evens.reduce((s,e)=>s+e.c,0);
+      anchor=`${total} even tiles — ${sixStr} (your anchor)`;
+      const deepest=evens.sort((a,b)=>b.c-a.c)[0];
+      why=[sixes>=2?`${sixes} sixes are a strong anchor — 6 appears in 7 of 8 hands.`:"You need 6s — they appear in 7 of 8 hands. Draw priority.",deepest&&deepest.c>=2?`${deepest.c}× ${deepest.n} is your next deepest group — build on it.`:"Start pairing your even numbers.",flowers>=2?`${flowers} flowers support this section well.`:""];
+      why=why.filter(Boolean);
+      keep=[sixes>0?"All 6s (never pass)":null,evens.filter(e=>e.c>=2).map(e=>`${e.n}s (${e.c} tiles)`),"All Flowers","All Jokers"].flat().filter(Boolean);
+      pivot="If evens stay thin after 3 draws, check if 369 fits better — 6s serve both sections.";
+    } else if(id==="369"){
+      const total=t369.reduce((s,e)=>s+e.c,0);
+      anchor=`${total} tiles of 3/6/9${sixes>0?` — ${sixes}× 6 (anchor)`:""} `;
+      why=[sixes>=1?`${sixes} six${sixes>1?"es":""} — 6 is in 100% of 369 hands. It's your core.`:"Missing 6s — they appear in every 369 hand. Draw priority.",t369.filter(e=>e.c>=2).length>0?`You have pairs in ${t369.filter(e=>e.c>=2).map(e=>e.n).join("/")} — protect them.`:"Stack 3s and 9s to pair with your 6s.",flowers>=2?`${flowers} flowers support this section.`:""];
+      why=why.filter(Boolean);
+      keep=["All 6s (never pass)","All 3s and 9s","All Flowers","All Jokers"].filter(Boolean);
+      pivot="If you hold both 6s and 2s, 2468 is your backup — they share the same anchor.";
+    } else if(id==="13579"){
+      const total=odds.reduce((s,e)=>s+e.c,0);
+      const threes=numCounts[3]||0,fives=numCounts[5]||0;
+      anchor=`${total} odd tiles — ${threes>0?`${threes}× 3`:""}${fives>0?`, ${fives}× 5`:""}`;
+      why=[threes>=2||fives>=2?`${threes}× 3 and ${fives}× 5 — these appear in 9 of 10 hands. Core anchors.`:"Prioritize drawing 3s and 5s — they appear in 9 of 10 hands.",odds.filter(e=>e.c>=2).length>0?`Pairs in ${odds.filter(e=>e.c>=2).map(e=>e.n).join("/")} — protect these.`:"Build pairs in your odd numbers before the game starts.",winds.length>=2?`${winds.length} winds are possible — some 13579 hands use N/S winds.`:""];
+      why=why.filter(Boolean);
+      keep=["All 3s and 5s (top priority)","All other odds","All Flowers","All Jokers"];
+      pivot="If odds stay thin, check if 369 works — 3s and 9s cross both sections.";
+    } else if(id==="2026"){
+      anchor=`${twos}× 2, ${sixes}× 6${soap>0?`, ${soap}× Soap`:""}`;
+      why=[twos>=1&&sixes>=1?`${twos}× 2 and ${sixes}× 6 — both appear in all 4 hands. Core anchors established.`:twos>=1?`You have ${twos}× 2 but need 6s — both are required in every hand.`:`You have ${sixes}× 6 but need 2s — both are required in every hand.`,soap>=1?`${soap} Soap — suit-wild, covers any 0 position. Very strong for this section.`:"Draw Soap (White Dragon) — it's suit-flexible and appears in 3 of 4 hands.",dragons.length>1?`${dragons.length} dragons support the hand options further.`:""];
+      why=why.filter(Boolean);
+      keep=["All 2s","All 6s","Soap (White Dragon)","All Dragons","All Jokers"];
+      pivot="If you can't find 6s in the first 3 draws, pivot to 2468 — your 2s still contribute.";
+    } else if(id==="wd"){
+      const honorCount=winds.length+dragons.length;
+      anchor=`${winds.length} Winds + ${dragons.length} Dragons (${honorCount} honors)`;
+      const windGroups=pairsOf(t=>t.t==="w");
+      why=[honorCount>=6?`${honorCount} honor tiles is a deep W&D rack — keep passing number tiles.`:`${honorCount} honors — W&D needs 7+. Pass all number tiles without hesitation.`,windGroups.length>0?`Pairs in ${windGroups.map(g=>g.key).join("/")} Wind — protect these.`:"Stack your most common wind for the best grouping.",dragons.length>=2?`${dragons.length} dragons add flexibility across the 5 hands that use them.`:""];
+      why=why.filter(Boolean);
+      keep=["All Winds","All Dragons","All Jokers"];
+      pivot="If honor tiles stop coming, pivot to Any Like Numbers using any number groups you've kept.";
+    } else if(id==="sp"){
+      const prs=pairsOf(t=>t.t!=="j");
+      anchor=`${prs.length} natural pair${prs.length!==1?"s":""} + ${flowers>=2?`${Math.floor(flowers/2)} flower pair${Math.floor(flowers/2)>1?"s":""}`:""}`;
+      why=[prs.length>=4?`${prs.length} natural pairs — that's strong S&P territory. Protect every pair.`:prs.length>=2?`${prs.length} pairs so far — keep building. S&P needs 6–7 pairs to win.`:"Very few pairs — S&P needs 6-7. Consider whether another section fits better.",jokers>0?`${jokers} joker${jokers>1?"s":""} are dead weight in S&P — you can't pass them and they can't be pairs. Factor this in.`:"No jokers — that's perfect for S&P.",flowers>=2?`${flowers} flowers count as natural pairs here.`:""];
+      why=why.filter(Boolean);
+      keep=["All natural pairs (never break)","Flowers (count as pairs)"];
+      pivot=jokers>0?`With ${jokers} joker${jokers>1?"s":""} stuck in your hand, consider switching — jokers cannot form pairs and cannot be passed.`:"If you can't get to 6 pairs by mid-game, pivot to any section where jokers help.";
+    }
+
+    return{id,name:sec.name,icon:sec.icon,pct,anchor,why,keep,pivot,family:getHandFamily(id)};
+  }
+
+  return{
+    primary:pathForSection(primary),
+    secondary:secondary?pathForSection(secondary):null,
+  };
+}
+
 // ─── CHARLESTON IQ SCORING ENGINE ────────────────────────────────────────────
 
 function iqCountGroups(rack){
@@ -663,7 +1227,7 @@ function iqDirection(finalRack,sectionId){
     if(fl>=4)directionScore=Math.min(40,directionScore+5);
     else if(fl>=2)directionScore=Math.min(40,directionScore+2);
     directionScore=Math.max(2,directionScore-finalRack.filter(t=>t.t==="w").length*2);
-    const wStr=ws.windowNums&&ws.windowNums.length?` within [${ws.windowNums[0]}–${ws.windowNums[ws.windowNums.length-1]}]`:"";
+    const suitNames={bam:"Bam",crak:"Crk",dot:"Dot"};const suitStr=ws.suit?` (${suitNames[ws.suit]||ws.suit})`:"";const wStr=ws.windowNums&&ws.windowNums.length?` within [${ws.windowNums[0]}–${ws.windowNums[ws.windowNums.length-1]}]${suitStr}`:"";
     directionExplanation=gd>=12?`Strong group depth${wStr} — pungs and kongs locked in a tight window.`:gd>=7?`Decent group depth${wStr}. Keep consolidating within your number window.`:gd>=4?`Some grouped tiles${wStr}, but you need pungs/kongs — singles don't win CR hands.`:`Shallow structure. CR rewards pungs & kongs of 3–4 consecutive numbers, not long single runs.`;
 
   } else if(sectionId==="wd"){
@@ -1065,44 +1629,46 @@ function iqTiming(totalTime,roundCount,passLog){
     :totalTime/rc;
 
   // Per-pass analysis when we have the data
-  const slowPasses=passTimes.filter(s=>s>25).length;
-  const fastPasses=passTimes.filter(s=>s<5).length;
-  const goodPasses=passTimes.filter(s=>s>=7&&s<=20).length;
+  const slowPasses=passTimes.filter(s=>s>35).length;
+  const fastPasses=passTimes.filter(s=>s<6).length;
+  const goodPasses=passTimes.filter(s=>s>=10&&s<=25).length;
   const hasMixedBag=slowPasses>0&&fastPasses>0;
 
   let timingScore,timingInsight;
 
-  // Sweet spot: 7–20s per pass. Generous enough to not penalise thoughtful play.
-  // Below 5s = reflexive (misses analysis). Above 25s = second-guessing.
-  if(avg>=7&&avg<=20){
+  // Real-world average decision time in a Charleston: 16.7s per pass.
+  // Sweet spot: 10–25s per pass. Below 6s = reflexive. Above 35s = second-guessing.
+  const slowPasses_=passTimes.filter(s=>s>35).length;
+  const fastPasses_=passTimes.filter(s=>s<6).length;
+  if(avg>=10&&avg<=25){
     timingScore=10;
     if(hasMixedBag){
-      timingInsight=`Good overall pace. ${slowPasses} pass${slowPasses>1?"es were":"was"} slow — trust your first read on those.`;
+      timingInsight=`Good overall pace (avg ${Math.round(avg)}s). ${slowPasses_} pass${slowPasses_>1?"es were":"was"} slow — trust your first read on those.`;
     } else {
-      timingInsight="Excellent pace — deliberate without second-guessing. Right in the zone.";
+      timingInsight=`Excellent pace — avg ${Math.round(avg)}s per pass. Deliberate without second-guessing. Right in the zone.`;
     }
-  } else if(avg>20&&avg<=28){
+  } else if(avg>25&&avg<=35){
     timingScore=8;
-    if(slowPasses>=2){
-      timingInsight=`${slowPasses} passes took over 25s — once you see a clear discard, commit to it.`;
+    if(slowPasses_>=2){
+      timingInsight=`${slowPasses_} passes took over 35s — once you see a clear discard, commit to it.`;
     } else {
-      timingInsight="A bit deliberate overall, but not by much. Try committing to your section read by pass 1.";
+      timingInsight=`A touch deliberate (avg ${Math.round(avg)}s), but not by much. Try committing to your section read by pass 1.`;
     }
-  } else if(avg>28&&avg<=40){
+  } else if(avg>35&&avg<=50){
     timingScore=6;
-    timingInsight=slowPasses>=2
-      ?`${slowPasses} passes took a long time. Name your target section before touching any tiles — it speeds up every decision after that.`
+    timingInsight=slowPasses_>=2
+      ?`${slowPasses_} passes took a long time. Name your target section before touching any tiles — it speeds up every decision after that.`
       :"Taking longer than ideal. Lock in your section before the first pass and the rest follows faster.";
-  } else if(avg>40){
-    timingScore=Math.max(2,Math.round(4-((avg-40)/20)));
+  } else if(avg>50){
+    timingScore=Math.max(2,Math.round(4-((avg-50)/25)));
     timingInsight="Very long pauses between passes. Commit to a section before you start — once you know what you're building, the right tiles become obvious.";
-  } else if(avg>=5&&avg<7){
+  } else if(avg>=6&&avg<10){
     timingScore=8;
-    timingInsight="Slightly quick — a couple more seconds per pass lets you catch a better option before committing.";
-  } else if(avg>=3&&avg<5){
+    timingInsight=`Slightly quick (avg ${Math.round(avg)}s) — a few more seconds per pass lets you catch a better option before committing.`;
+  } else if(avg>=3&&avg<6){
     timingScore=5;
-    timingInsight=fastPasses>=2
-      ?`${fastPasses} passes went very fast. Each one shapes your whole hand — give yourself at least 5–7 seconds.`
+    timingInsight=fastPasses_>=2
+      ?`${fastPasses_} passes went very fast. Each one shapes your whole hand — give yourself at least 10 seconds.`
       :"Moving a bit fast. Give yourself a breath before each pass — your instincts are good, but a moment to confirm helps.";
   } else {
     timingScore=2;
@@ -1137,19 +1703,19 @@ function iqScoreLevel(score,directionScore,tileStrengthScore,passQualityScore,ti
     if(worst==="passes")levelExplanation="Your direction was on point, but passing decisions gave away tiles that would have strengthened your rack.";
     else if(worst==="direction")levelExplanation="Your passing was disciplined, but the rack didn't fully commit — pick your section before the first pass next time.";
     else if(worst==="tiles")levelExplanation="Right idea, right section — but the tiles you kept didn't pull together into a strong structure.";
-    else levelExplanation="Solid instincts overall, but rushing through passes meant you missed a couple of better options.";
+    else levelExplanation="Good instincts overall, but rushing through passes meant you missed a couple of better options. Aim for around 15–20s per pass.";
   } else if(score>=60){
     level="Getting There";
     if(worst==="direction")levelExplanation="Your rack pulled in too many directions. Try naming your target section before you touch a single tile.";
     else if(worst==="passes")levelExplanation="You had the right tiles but passed too many of them away. Slow down and ask: does this tile connect to what I'm keeping?";
     else if(worst==="tiles")levelExplanation="The section was right but the tiles you held didn't support each other. Look for pairs and runs, not just individual tiles.";
-    else levelExplanation="Moving too quickly through passes — give yourself 8–20 seconds each round to properly read your rack.";
+    else levelExplanation="Moving too quickly through passes — real players take around 17s each round to properly read their rack.";
   } else {
     level="Keep Going, Rookie";
     if(worst==="direction")levelExplanation="No clear section emerged. Before your next game, pick one group of tiles and build everything around it.";
     else if(worst==="passes")levelExplanation="Several strong tiles left your hand that shouldn't have. Before passing, ask: is this tile useful to me or not?";
     else if(worst==="tiles")levelExplanation="Your final rack lacked structure. Aim to hold pairs or runs rather than isolated individual tiles.";
-    else levelExplanation="Very fast passing left little time to read the rack. Slow down — each pass decision shapes your whole hand.";
+    else levelExplanation="Very fast passing left little time to read the rack. Slow down — each pass takes real players about 17 seconds on average.";
   }
 
   return{level,levelExplanation};
@@ -1310,7 +1876,7 @@ function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScor
   if(brokenPairsCount>0&&sectionId!=="sp"){
     weaknesses.push(`Broke ${brokenPairsCount} pair${brokenPairsCount>1?"s":""} during the Charleston — protect your pairs.`);
   }
-  if(timingScore<=5)weaknesses.push("Pace was off — aim for 7–20 seconds per pass. Either too fast (not enough analysis) or too slow (second-guessing a good first read).");
+  if(timingScore<=5)weaknesses.push("Pace was off — aim for 10–25 seconds per pass. Either too fast (not enough analysis) or too slow (second-guessing a good first read).");
 
   const uniqueStr=[...new Set(strengths)].slice(0,2);
   const uniqueWk=[...new Set(weaknesses)].slice(0,2);
@@ -1365,7 +1931,7 @@ function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScor
     {name:"direction",ratio:directionScore/40,tip:secTips[sectionId]||"Before your first pass, identify the section your rack most favors. Everything else follows from that read."},
     {name:"tiles",ratio:tileStrengthScore/25,tip:"Before passing any tile, ask: does it support my main group, a pair, or a window? If no to all three, it goes."},
     {name:"passes",ratio:passQualityScore/25,tip:"Before each pass, check: does this tile connect to anything I'm keeping? Tiles that connect to nothing are the ones to pass."},
-    {name:"timing",ratio:timingScore/10,tip:"Aim for 7–20 seconds per pass — enough to read the rack without second-guessing your first instinct."},
+    {name:"timing",ratio:timingScore/10,tip:"Aim for 10–25 seconds per pass — the real-world average is about 17s. Enough to read the rack without second-guessing your first instinct."},
   ];
   const worst=scores.sort((a,b)=>a.ratio-b.ratio)[0];
   tryNextTime=worst.tip;
@@ -2083,7 +2649,7 @@ function ProfilePill({rounds,streak,setScreen}){
     <button onClick={()=>setScreen("profile")} style={{display:"flex",alignItems:"center",gap:5,background:"none",border:"none",padding:"4px 12px",cursor:"pointer"}}>
       {profile.avatarUrl
         ?<img src={profile.avatarUrl} alt="" style={{width:22,height:22,borderRadius:11,objectFit:"cover",border:`1.5px solid ${C.bdr}`}}/>
-        :<span style={{fontSize:11}}>{"👤"}</span>
+        :<div style={{width:22,height:22,borderRadius:11,background:C.jade+"18",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:C.jade,flexShrink:0}}>{(profile.nickname||"?").charAt(0).toUpperCase()}</div>
       }
       <span style={{fontSize:11,color:C.ink,fontWeight:700}}>{profile.nickname.split(" ")[0]}</span>
     </button>
@@ -2175,11 +2741,40 @@ async function fetchDailyStats(){
   }catch{return null;}
 }
 
+// Generate a stable anonymous player name for users without accounts
+function getOrCreateAnonymousName(){
+  let n=ST.get("anonName",null);
+  if(!n){
+    const num=100+Math.floor(Math.random()*900);
+    n=`Player ${num}`;
+    ST.set("anonName",n);
+  }
+  return n;
+}
+
+// Post to global leaderboard table (no club filter)
+async function upsertGlobalEntry(name,iqScore,time,streak,clubCode){
+  try{
+    const res=await fetch(`${SB_URL}/rest/v1/global_leaderboard`,{
+      method:"POST",
+      headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates"},
+      body:JSON.stringify({
+        player_id:getOrCreatePlayerId(),
+        day_seed:getDailySeed(),
+        name,iq_score:iqScore,time_secs:time||0,streak:streak||0,
+        club_code:clubCode||null,
+        updated_at:new Date().toISOString(),
+      }),
+    });
+    return res.ok||res.status===201;
+  }catch{return false;}
+}
+
 // Fetch global leaderboard — all players today, no club filter
 async function fetchGlobalEntries(){
   try{
     const res=await fetch(
-      `${SB_URL}/rest/v1/leaderboard?day_seed=eq.${getDailySeed()}&order=iq_score.desc&limit=100`,
+      `${SB_URL}/rest/v1/global_leaderboard?day_seed=eq.${getDailySeed()}&order=iq_score.desc&limit=100`,
       {headers:SB_HEADERS}
     );
     if(!res.ok)return[];
@@ -2230,7 +2825,7 @@ function Ti({t,sel,isNew,onClick,dim,large}){
   </div>);}
 
 // IQ HERO — shared dark jade gradient hero card used in scorecard + home
-function IQHero({iq,isDaily,dayNum,section,totalTime}){
+function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections}){
   if(!iq)return null;
   const [displayScore,setDisplayScore]=useState(0);
   const [isPB,setIsPB]=useState(false);
@@ -2273,7 +2868,18 @@ function IQHero({iq,isDaily,dayNum,section,totalTime}){
       <div style={{display:"flex",justifyContent:"center",gap:24,flexWrap:"wrap"}}>
         {section&&<div style={{textAlign:"center"}}>
           <div style={{fontSize:8,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginBottom:3}}>SECTION</div>
-          <div style={{fontSize:12,color:"rgba(255,255,255,0.9)",fontWeight:700}}>{section}</div>
+          {(()=>{
+            // Determine if the player's chosen section was the best fit
+            const bestFitId=allSections?[...allSections].sort((a,b)=>b.score-a.score)[0]?.id:null;
+            const matched=chosenSec&&bestFitId&&chosenSec===bestFitId;
+            const hasChoice=!!chosenSec&&!!bestFitId;
+            return(
+              <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:5}}>
+                <div style={{fontSize:12,color:"rgba(255,255,255,0.9)",fontWeight:700}}>{section}</div>
+                {hasChoice&&<span style={{fontSize:11,fontWeight:800,color:matched?"#6EE7A0":"#F87171",lineHeight:1}}>{matched?"✓":"✗"}</span>}
+              </div>
+            );
+          })()}
         </div>}
         {totalTime>0&&<><div style={{width:1,background:"rgba(255,255,255,0.1)"}}/>
         <div style={{textAlign:"center"}}>
@@ -2374,6 +2980,250 @@ function Chip({label,type}){
   return <span style={{fontSize:10,fontWeight:600,background:m.bg,color:m.color,border:m.border,borderRadius:20,padding:"3px 10px",display:"inline-block",margin:"2px 3px"}}>{label}</span>;
 }
 
+// ─── SPECIFIC HAND RECOMMENDER CARD ─────────────────────────────────────────
+function SpecificHandCard({finalRack,sectionId}){
+  const [open,setOpen]=useState(false);
+  if(!finalRack||!sectionId)return null;
+  const hands=recommendSpecificHands(finalRack,sectionId);
+  if(!hands||hands.length===0)return null;
+  const sec=SECS.find(s=>s.id===sectionId);
+  const secColor=sec?.color||C.jade;
+
+  return(
+    <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden",borderColor:secColor+"40"}}>
+      {/* Header — matches HandFamilyCard typography */}
+      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"12px 14px",background:secColor+"08",border:"none",cursor:"pointer",textAlign:"left",borderBottom:open?`1px solid ${secColor}20`:"none"}}>
+        <div style={{display:"flex",alignItems:"center",gap:10}}>
+          <span style={{fontSize:22}}>{sec?.icon||"🀄"}</span>
+          <div>
+            <div style={{fontSize:8,color:secColor,letterSpacing:2,fontWeight:700,marginBottom:2}}>HAND TARGETS</div>
+            <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:secColor,lineHeight:1.2}}>Best specific hands for your rack</div>
+          </div>
+        </div>
+        <span style={{fontSize:12,color:C.mut,flexShrink:0}}>{open?"▾":"▸"}</span>
+      </button>
+
+      {open&&<div className="rk-in">
+        {hands.map((hand,i)=>{
+          const pct=Math.round(hand.fit*100);
+          const barColor=pct>=70?C.jade:pct>=45?C.gold:C.cinn;
+          return(
+            <div key={i} style={{padding:"12px 14px",borderBottom:i<hands.length-1?`1px solid ${C.bdr}`:"none"}}>
+              {/* Hand label row */}
+              <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+                <div style={{flex:1}}>
+                  <div style={{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap",gap:4}}>
+                    <span style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,letterSpacing:0.3}}>{hand.label}</span>
+                    {hand.concealed&&<span style={{fontSize:9,fontWeight:700,background:"#2460A820",color:"#2460A8",borderRadius:10,padding:"2px 7px",letterSpacing:0.5}}>CONCEALED</span>}
+                    <span style={{fontSize:9,fontWeight:700,background:"#00000009",color:C.mut,borderRadius:10,padding:"2px 7px"}}>×{hand.value}</span>
+                  </div>
+                </div>
+                <div style={{textAlign:"right",flexShrink:0}}>
+                  <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:barColor,lineHeight:1}}>{pct}<span style={{fontSize:10,fontWeight:400,color:C.mut}}>%</span></div>
+                  <div style={{fontSize:9,color:C.mut}}>rack fit</div>
+                </div>
+              </div>
+
+              {/* Fit bar */}
+              <div style={{height:4,borderRadius:2,background:C.bdr,overflow:"hidden",marginBottom:10}}>
+                <div className="rk-bar" style={{height:"100%",borderRadius:2,background:`linear-gradient(90deg,${barColor},${barColor}CC)`,width:`${pct}%`,"--w":`${pct}%`}}/>
+              </div>
+
+              {/* What you have vs what you need */}
+              {(()=>{
+                const jk=jokers(finalRack);
+                const fl=flowers(finalRack);
+                const numCounts={};
+                finalRack.filter(t=>t.t==="s").forEach(t=>{numCounts[t.n]=(numCounts[t.n]||0)+1;});
+                const wCounts={};
+                finalRack.filter(t=>t.t==="w").forEach(t=>{wCounts[t.v]=(wCounts[t.v]||0)+1;});
+                const dCounts={};
+                finalRack.filter(t=>t.t==="d").forEach(t=>{dCounts[t.v]=(dCounts[t.v]||0)+1;});
+
+                // Build strength summary
+                const strengths=[];
+                const gaps=[];
+
+                if(jk>=2&&!hand.concealed)strengths.push(`${jk} jokers fill gaps`);
+                else if(jk>=1&&!hand.concealed)strengths.push(`${jk} joker helps`);
+                if(hand.concealed&&jk>0)gaps.push(`Concealed — ${jk} joker${jk>1?"s":""} can't be used`);
+
+                // Tile-specific feedback based on hand label
+                const label=hand.label;
+                // Extract numbers from label
+                const numRefs=[...new Set((label.match(/\d+/g)||[]).map(Number).filter(n=>n>=1&&n<=9))];
+                numRefs.forEach(n=>{
+                  const have=numCounts[n]||0;
+                  // Rough need estimate from how many times n appears in label
+                  const appearances=(label.match(new RegExp(n,'g'))||[]).length;
+                  const approxNeed=Math.min(appearances,4);
+                  if(have>=approxNeed&&have>=2)strengths.push(`${have}× ${n} ✓`);
+                  else if(have>0&&have<approxNeed)gaps.push(`Need more ${n}s (have ${have})`);
+                  else if(have===0&&approxNeed>=2)gaps.push(`Missing ${n}s`);
+                });
+
+                // Wind/dragon feedback
+                if(label.includes("NEWS")||label.match(/[NEWS]{2,}/)){
+                  const w=Object.values(wCounts).reduce((a,b)=>a+b,0);
+                  if(w>=4)strengths.push(`${w} winds ✓`);
+                  else gaps.push(`Need winds (have ${w})`);
+                }
+                if(label.includes("DDD")||label.includes("DDDD")){
+                  const d=Object.values(dCounts).reduce((a,b)=>a+b,0);
+                  if(d>=3)strengths.push(`${d} dragons ✓`);
+                  else gaps.push(`Need dragons (have ${d})`);
+                }
+                if(label.includes("FFF")||label.includes("FFFFFF")){
+                  if(fl>=3)strengths.push(`${fl} flowers ✓`);
+                  else gaps.push(`Need ${label.includes("FFFFFF")?6:3} flowers (have ${fl})`);
+                }
+                if(label.includes("FF")&&!label.includes("FFF")){
+                  if(fl>=2)strengths.push(`${fl} flowers ✓`);
+                  else gaps.push(`Need flowers (have ${fl})`);
+                }
+
+                return(
+                  <div style={{display:"flex",gap:8}}>
+                    {strengths.length>0&&<div style={{flex:1,background:C.sage,borderRadius:8,padding:"8px 10px"}}>
+                      <div style={{fontSize:8,color:C.sageB,fontWeight:700,letterSpacing:1,marginBottom:4}}>YOU HAVE</div>
+                      {strengths.slice(0,3).map((s,i)=><div key={i} style={{fontSize:10,color:C.ink,lineHeight:1.5}}>✓ {s}</div>)}
+                    </div>}
+                    {gaps.length>0&&<div style={{flex:1,background:"#FEF0E8",borderRadius:8,padding:"8px 10px"}}>
+                      <div style={{fontSize:8,color:"#8A4010",fontWeight:700,letterSpacing:1,marginBottom:4}}>STILL NEED</div>
+                      {gaps.slice(0,3).map((g,i)=><div key={i} style={{fontSize:10,color:"#5C2808",lineHeight:1.5}}>→ {g}</div>)}
+                    </div>}
+                  </div>
+                );
+              })()}
+            </div>
+          );
+        })}
+      </div>}
+    </div>
+  );
+}
+
+// ─── HAND FAMILY CARD — Best Hand Family + 1–2 Concrete Paths ────────────────
+function HandFamilyCard({finalRack,allSections,chosenSecId}){
+  const [expanded,setExpanded]=useState(false);
+  if(!finalRack||!allSections||allSections.length===0)return null;
+  const sorted=[...allSections].sort((a,b)=>b.score-a.score);
+  const{primary,secondary}=generateHandPaths(finalRack,sorted,chosenSecId);
+  if(!primary)return null;
+  const fam=primary.family;
+  if(!fam)return null;
+
+  const [hfOpen,setHfOpen]=useState(false);
+  return(
+    <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden",borderColor:fam.border}}>
+      {/* Family header — clickable toggle */}
+      <button onClick={()=>setHfOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"12px 14px",background:fam.bg,border:"none",cursor:"pointer",textAlign:"left",borderBottom:hfOpen?`1px solid ${fam.border}`:"none"}}>
+        <div style={{display:"flex",alignItems:"center",gap:10}}>
+          <span style={{fontSize:22}}>{fam.emoji}</span>
+          <div>
+            <div style={{fontSize:8,color:fam.color,letterSpacing:2,fontWeight:700,marginBottom:2}}>BEST HAND FAMILY</div>
+            <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:fam.color,lineHeight:1.2}}>{fam.label}</div>
+            <div style={{fontSize:11,color:fam.color,opacity:0.7,lineHeight:1.3,marginTop:1}}>{fam.desc}</div>
+          </div>
+        </div>
+        <span style={{fontSize:12,color:fam.color,flexShrink:0,opacity:0.7}}>{hfOpen?"▾":"▸"}</span>
+      </button>
+      {hfOpen&&<div className="rk-in">
+
+      {/* Primary path */}
+      <div style={{padding:"12px 14px",borderBottom:secondary?`1px solid ${C.bdr}`:"none"}}>
+        <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:8}}>
+          <span style={{fontSize:14}}>{primary.icon}</span>
+          <div style={{flex:1}}>
+            <span style={{fontSize:11,fontWeight:800,color:C.ink}}>{primary.name}</span>
+            <span style={{fontSize:10,color:C.mut,marginLeft:6}}>{primary.pct}% fit</span>
+          </div>
+          <div style={{fontSize:9,background:fam.color,color:"#fff",borderRadius:12,padding:"2px 8px",fontWeight:700,letterSpacing:0.5}}>PRIMARY</div>
+        </div>
+        {/* Anchor */}
+        <div style={{background:fam.bg,borderRadius:8,padding:"7px 10px",marginBottom:8,border:`1px solid ${fam.border}`}}>
+          <div style={{fontSize:9,color:fam.color,fontWeight:700,letterSpacing:1,marginBottom:2}}>YOUR ANCHOR</div>
+          <div style={{fontSize:11,color:C.ink,fontWeight:600}}>{primary.anchor||"—"}</div>
+        </div>
+        {/* Why it fits */}
+        {primary.why&&primary.why.length>0&&(
+          <div style={{marginBottom:8}}>
+            {primary.why.map((w,i)=>(
+              <div key={i} style={{display:"flex",gap:6,alignItems:"flex-start",marginBottom:i<primary.why.length-1?5:0}}>
+                <span style={{color:fam.color,fontSize:10,marginTop:1,flexShrink:0}}>▸</span>
+                <span style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{w}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        {/* Keep chips */}
+        {primary.keep&&primary.keep.length>0&&(
+          <div>
+            <div style={{fontSize:9,color:C.mut,fontWeight:700,letterSpacing:1,marginBottom:4}}>PROTECT</div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
+              {primary.keep.slice(0,4).map((k,i)=>(
+                <span key={i} style={{fontSize:10,fontWeight:600,background:C.sage,color:C.sageB,border:`1px solid ${C.sageB}30`,borderRadius:16,padding:"3px 9px"}}>{k}</span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Secondary path — collapsible */}
+      {secondary&&(
+        <div>
+          <button onClick={()=>setExpanded(e=>!e)} style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",padding:"10px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
+            <div style={{display:"flex",alignItems:"center",gap:6}}>
+              <span style={{fontSize:13}}>{secondary.icon}</span>
+              <span style={{fontSize:11,fontWeight:700,color:C.mut}}>{secondary.name} — Backup ({secondary.pct}%)</span>
+            </div>
+            <span style={{fontSize:12,color:C.mut}}>{expanded?"▾":"▸"}</span>
+          </button>
+          {expanded&&(
+            <div style={{padding:"0 14px 12px",background:"#fff"}} className="rk-in">
+              {secondary.anchor&&<div style={{fontSize:11,color:C.ink,fontWeight:600,marginBottom:6}}>Anchor: {secondary.anchor}</div>}
+              {secondary.why&&secondary.why.slice(0,2).map((w,i)=>(
+                <div key={i} style={{display:"flex",gap:6,alignItems:"flex-start",marginBottom:i<Math.min(secondary.why.length,2)-1?5:0}}>
+                  <span style={{color:C.mut,fontSize:10,marginTop:1,flexShrink:0}}>▸</span>
+                  <span style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{w}</span>
+                </div>
+              ))}
+              {secondary.pivot&&<div style={{marginTop:8,fontSize:10,color:C.mut,lineHeight:1.5,background:"#fff",borderRadius:6,padding:"6px 9px",border:`1px solid ${C.bdr}`}}>↩ Pivot condition: {secondary.pivot}</div>}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Primary pivot note */}
+      {primary.pivot&&!secondary&&(
+        <div style={{padding:"0 14px 12px"}}>
+          <div style={{fontSize:10,color:C.mut,lineHeight:1.5,background:C.bg2,borderRadius:6,padding:"6px 9px",border:`1px solid ${C.bdr}`}}>↩ Pivot condition: {primary.pivot}</div>
+        </div>
+      )}
+      </div>}
+    </div>
+  );
+}
+
+// ─── SORTABLE RACK — final rack display with sort button ──────────────────────
+function SortableRack({hand:initialHand}){
+  const [rack,setRack]=useState(initialHand);
+  const [sorted,setSorted]=useState(false);
+  const toggle=()=>{
+    if(sorted){setRack(initialHand);setSorted(false);}
+    else{setRack(sortHand(initialHand));setSorted(true);}
+  };
+  return(
+    <div style={{...S.card,marginBottom:8}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+        <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>FINAL RACK</div>
+        <button onClick={toggle} style={{...S.sortBtn,color:sorted?C.jade:C.mut,borderColor:sorted?C.jade+"40":C.bdr,background:sorted?C.jade+"08":"none"}}>{sorted?"Sorted":"Sort"}</button>
+      </div>
+      <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>{rack.map((t,i)=><Ti key={i} t={t}/>)}</div>
+    </div>
+  );
+}
+
 // ─── DAILY SCORECARD — simplified, no tabs, no coach note ─────────────────────
 function DailyIQScorecard({iq,hand,passLog,dayNum,section,chosenSec,allSections,onHome,onPractice}){
   const [passOpen,setPassOpen]=useState(false);
@@ -2437,7 +3287,7 @@ function DailyIQScorecard({iq,hand,passLog,dayNum,section,chosenSec,allSections,
   })();
   return(
     <div>
-      <div style={{marginBottom:10}}><IQHero iq={iq} isDaily dayNum={dayNum} section={section} totalTime={iq.totalTime||0}/></div>
+      <div style={{marginBottom:10}}><IQHero iq={iq} isDaily dayNum={dayNum} section={section} totalTime={iq.totalTime||0} chosenSec={chosenSec} allSections={allSections}/></div>
       {dailyStats&&(()=>{
         const isFirst=!ST.get("hadFirstDaily",false)||ST.get("rnd",0)<=1;
         const profile=getProfile();
@@ -2466,10 +3316,7 @@ function DailyIQScorecard({iq,hand,passLog,dayNum,section,chosenSec,allSections,
         </div>
       </div>
 
-      {hand&&hand.length>0&&<div style={{...S.card,marginBottom:8}}>
-        <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>FINAL RACK</div>
-        <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>{hand.map((t,i)=><Ti key={i} t={t}/>)}</div>
-      </div>}
+      {hand&&hand.length>0&&<SortableRack hand={hand}/>}
 
       {/* SECTION CHOSEN VS OPTIMAL */}
       {chosenSecObj&&<div style={{...S.card,marginBottom:8,padding:"12px 14px"}}>
@@ -2499,6 +3346,10 @@ function DailyIQScorecard({iq,hand,passLog,dayNum,section,chosenSec,allSections,
         {!sectionMatch&&<div style={{marginTop:8,fontSize:11,color:"#8A3010",lineHeight:1.5,background:"#FFF5F0",borderRadius:8,padding:"7px 10px"}}>💡 Your tiles leaned more toward {bestFitSec?.icon} {bestFitSec?.name}. An earlier pivot could have scored higher.</div>}
         {sectionMatch&&<div style={{marginTop:8,fontSize:11,color:C.jade,lineHeight:1.5,background:C.jade+"08",borderRadius:8,padding:"7px 10px"}}>✓ Great read — your section pick matched your best hand fit.</div>}
       </div>}
+
+      {/* HAND FAMILY + CONCRETE PATHS */}
+      {hand&&hand.length>0&&allSections&&<HandFamilyCard finalRack={hand} allSections={allSections} chosenSecId={chosenSec}/>}
+      {hand&&hand.length>0&&chosenSec&&<SpecificHandCard finalRack={hand} sectionId={chosenSec}/>}
 
       {/* CONCRETE COACHING FEEDBACK */}
       {concreteFeedback.length>0&&<div style={{...S.card,marginBottom:8,background:"linear-gradient(145deg,#FFFFF8,#F8F4EB)",borderColor:C.gold+"30"}}>
@@ -2591,7 +3442,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
   const tabs=["Overview","Passes","Tiles"];
   return(
     <div>
-      <div style={{marginBottom:10}}><IQHero iq={iq} isDaily={false} section={section} totalTime={iq.totalTime||0}/></div>
+      <div style={{marginBottom:10}}><IQHero iq={iq} isDaily={false} section={section} totalTime={iq.totalTime||0} chosenSec={chosenSec} allSections={allSections}/></div>
       <div style={{display:"flex",gap:4,marginBottom:12,background:C.bg2,borderRadius:10,padding:3}}>
         {tabs.map((t,i)=>(<button key={i} onClick={()=>setTab(i)} style={{flex:1,padding:"8px 0",borderRadius:8,border:"none",background:tab===i?"#fff":"transparent",color:tab===i?C.ink:C.mut,fontSize:12,fontWeight:700,cursor:"pointer",transition:"all 0.2s",boxShadow:tab===i?"0 1px 4px rgba(0,0,0,0.08)":"none"}}>{t}</button>))}
       </div>
@@ -2599,10 +3450,11 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
       {/* TAB 0 — OVERVIEW */}
       {tab===0&&<div className="rk-in">
         {/* Final Rack — shown first */}
-        {hand&&hand.length>0&&<div style={{...S.card,marginBottom:8}}>
-          <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>FINAL RACK</div>
-          <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>{hand.map((t,i)=><Ti key={i} t={t}/>)}</div>
-        </div>}
+        {hand&&hand.length>0&&<SortableRack hand={hand}/>}
+
+        {/* Hand Family + Concrete Paths */}
+        {hand&&hand.length>0&&allSections&&<HandFamilyCard finalRack={hand} allSections={allSections} chosenSecId={chosenSec}/>}
+        {hand&&hand.length>0&&chosenSec&&<SpecificHandCard finalRack={hand} sectionId={chosenSec}/>}
 
         {/* Score bars */}
         <div style={{...S.card,marginBottom:8}}>
@@ -2613,75 +3465,45 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
           <ScoreBar label="Timing" score={iq.timingScore} max={10} note={iq.timingInsight}/>
         </div>
 
-        {/* Distance to Optimal */}
-        {dist.distanceCount>0&&<div style={{background:C.amber,border:`1px solid ${C.amberB}25`,borderRadius:12,padding:"12px 14px",marginBottom:8}}>
-          <div style={{fontSize:9,color:C.amberB,letterSpacing:2,fontWeight:700,marginBottom:6}}>DISTANCE TO OPTIMAL</div>
-          <p style={{fontSize:12,color:C.ink,margin:0,lineHeight:1.6}}>{dist.explanation}</p>
-          {dist.keyMistakeRound&&<div style={{fontSize:11,color:C.amberB,marginTop:5,fontWeight:600}}>Key round: {dist.keyMistakeRound}</div>}
-        </div>}
-
-        {/* Section comparison */}
-        {allSections&&allSections.length>0&&<div style={{...S.card,marginBottom:8}}>
-          <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>SECTION FIT</div>
-          {allSections.slice(0,5).map((s,i)=>{
-            const isChosen=s.id===chosenSec;const isTop=i===0;
-            const pct=Math.round(s.score*100);
-            return(
-              <div key={s.id} style={{display:"flex",alignItems:"center",gap:8,marginBottom:i<4?8:0}}>
-                <span style={{fontSize:13,flexShrink:0}}>{s.icon}</span>
-                <div style={{flex:1,minWidth:0}}>
-                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
-                    <span style={{fontSize:11,fontWeight:isChosen?700:500,color:isChosen?C.ink:C.mut}}>{s.name}{isChosen?" · your pick":""}{isTop&&!isChosen?" · best fit":""}</span>
-                    <span style={{fontSize:11,fontWeight:700,color:isChosen?C.jade:C.mut,fontFamily:F.d}}>{pct}%</span>
-                  </div>
-                  <div style={{height:4,borderRadius:2,background:C.bdr,overflow:"hidden"}}>
-                    <div style={{height:"100%",borderRadius:2,width:`${pct}%`,background:isChosen?C.jade:isTop&&!isChosen?C.gold:C.bdr2||"#D5CFC5"}}/>
+        {/* Section comparison — collapsible */}
+        {allSections&&allSections.length>0&&(()=>{
+          const [sfOpen,setSfOpen]=useState(false);
+          const topSec=[...allSections].sort((a,b)=>b.score-a.score)[0];
+          return(
+            <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden"}}>
+              <button onClick={()=>setSfOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"12px 14px",background:"#fff",border:"none",cursor:"pointer",textAlign:"left",borderBottom:sfOpen?`1px solid ${C.bdr}`:"none"}}>
+                <div style={{display:"flex",alignItems:"center",gap:10}}>
+                  <span style={{fontSize:22}}>{topSec?.icon||"📊"}</span>
+                  <div>
+                    <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:2}}>SECTION FIT</div>
+                    <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:C.ink,lineHeight:1.2}}>All sections ranked</div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>}
-
-        {/* What Went Well */}
-        {iq.strengths&&iq.strengths.length>0&&<div style={{background:C.sage,border:`1px solid ${C.sageB}20`,borderRadius:12,padding:"12px 14px",marginBottom:8}}>
-          <div style={{fontSize:9,color:C.sageB,letterSpacing:2,fontWeight:700,marginBottom:8}}>WHAT WENT WELL</div>
-          {iq.strengths.map((s,i)=>(
-            <div key={i} style={{display:"flex",alignItems:"flex-start",gap:8,marginBottom:i<iq.strengths.length-1?6:0}}>
-              <span style={{width:16,height:16,borderRadius:8,background:C.sageB,display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,color:"#fff",fontWeight:900,flexShrink:0,marginTop:1}}>✓</span>
-              <span style={{fontSize:12,color:C.ink,lineHeight:1.5}}>{s}</span>
+                <span style={{fontSize:12,color:C.mut,flexShrink:0}}>{sfOpen?"▾":"▸"}</span>
+              </button>
+              {sfOpen&&<div style={{padding:"12px 14px"}} className="rk-in">
+                {allSections.slice(0,5).map((s,i)=>{
+                  const isChosen=s.id===chosenSec;const isTop=i===0;
+                  const pct=Math.round(s.score*100);
+                  return(
+                    <div key={s.id} style={{display:"flex",alignItems:"center",gap:8,marginBottom:i<4?8:0}}>
+                      <span style={{fontSize:13,flexShrink:0}}>{s.icon}</span>
+                      <div style={{flex:1,minWidth:0}}>
+                        <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
+                          <span style={{fontSize:11,fontWeight:isChosen?700:500,color:isChosen?C.ink:C.mut}}>{s.name}{isChosen?" · your pick":""}{isTop&&!isChosen?" · best fit":""}</span>
+                          <span style={{fontSize:11,fontWeight:700,color:isChosen?C.jade:C.mut,fontFamily:F.d}}>{pct}%</span>
+                        </div>
+                        <div style={{height:4,borderRadius:2,background:C.bdr,overflow:"hidden"}}>
+                          <div style={{height:"100%",borderRadius:2,width:`${pct}%`,background:isChosen?C.jade:isTop&&!isChosen?C.gold:"#D5CFC5"}}/>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>}
             </div>
-          ))}
-        </div>}
-
-        {/* Timing */}
-        {(()=>{const totalSec=iq.totalTime||0;const rc=3;const avg=Math.round(totalSec/rc);const pace=iq.timingScore>=9?"Elite":iq.timingScore>=7?"Solid":iq.timingScore>=5?"Slow":iq.timingScore>=3?"Deliberate":"Too fast";const paceColor=iq.timingScore>=9?C.jade:iq.timingScore>=7?"#2460A8":iq.timingScore>=5?C.gold:C.cinn;return(
-        <div style={{background:C.parch,border:`1px solid ${C.bdr}`,borderRadius:12,padding:"14px",marginBottom:8}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
-            <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>TIMING</div>
-            <div style={{display:"flex",alignItems:"baseline",gap:3}}>
-              <span style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:paceColor,lineHeight:1}}>{iq.timingScore}</span>
-              <span style={{fontSize:10,color:C.mut,fontWeight:400}}>/10</span>
-            </div>
-          </div>
-          <div style={{display:"flex",gap:10,marginBottom:10}}>
-            <div style={{flex:1,background:"#fff",borderRadius:8,padding:"8px 10px",textAlign:"center",border:`1px solid ${C.bdr}`}}>
-              <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>TOTAL TIME</div>
-              <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink}}>{fT(totalSec)}</div>
-            </div>
-            <div style={{flex:1,background:"#fff",borderRadius:8,padding:"8px 10px",textAlign:"center",border:`1px solid ${C.bdr}`}}>
-              <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>AVG PER PASS</div>
-              <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink}}>{avg}s</div>
-            </div>
-            <div style={{flex:1,background:paceColor+"12",borderRadius:8,padding:"8px 10px",textAlign:"center",border:`1.5px solid ${paceColor}30`}}>
-              <div style={{fontSize:8,color:paceColor,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>PACE</div>
-              <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:paceColor}}>{pace}</div>
-            </div>
-          </div>
-          <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{iq.timingInsight}</div>
-          <div style={{marginTop:6,fontSize:10,color:C.mut,lineHeight:1.4}}>Target: <strong style={{color:C.jade}}>8–12s per pass</strong> — decisive, not rushed.</div>
-        </div>
-        );})()}
+          );
+        })()}
 
         {/* Share */}
         <div style={{...S.card,marginBottom:8}}>
@@ -2779,6 +3601,35 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
             {passLog.flatMap(p=>p.out||[]).map((t,i)=><Ti key={i} t={t}/>)}
           </div>
         </div>}
+
+        {/* Timing — moved here from Overview */}
+        {(()=>{const totalSec=iq.totalTime||0;const rc=3;const avg=Math.round(totalSec/rc);const pace=iq.timingScore>=9?"Elite":iq.timingScore>=7?"Solid":iq.timingScore>=5?"Slow":iq.timingScore>=3?"Deliberate":"Too fast";const paceColor=iq.timingScore>=9?C.jade:iq.timingScore>=7?"#2460A8":iq.timingScore>=5?C.gold:C.cinn;return(
+        <div style={{background:C.parch,border:`1px solid ${C.bdr}`,borderRadius:12,padding:"14px",marginBottom:8}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
+            <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>TIMING</div>
+            <div style={{display:"flex",alignItems:"baseline",gap:3}}>
+              <span style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:paceColor,lineHeight:1}}>{iq.timingScore}</span>
+              <span style={{fontSize:10,color:C.mut,fontWeight:400}}>/10</span>
+            </div>
+          </div>
+          <div style={{display:"flex",gap:10,marginBottom:10}}>
+            <div style={{flex:1,background:"#fff",borderRadius:8,padding:"8px 10px",textAlign:"center",border:`1px solid ${C.bdr}`}}>
+              <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>TOTAL TIME</div>
+              <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink}}>{fT(totalSec)}</div>
+            </div>
+            <div style={{flex:1,background:"#fff",borderRadius:8,padding:"8px 10px",textAlign:"center",border:`1px solid ${C.bdr}`}}>
+              <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>AVG PER PASS</div>
+              <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink}}>{avg}s</div>
+            </div>
+            <div style={{flex:1,background:paceColor+"12",borderRadius:8,padding:"8px 10px",textAlign:"center",border:`1.5px solid ${paceColor}30`}}>
+              <div style={{fontSize:8,color:paceColor,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>PACE</div>
+              <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:paceColor}}>{pace}</div>
+            </div>
+          </div>
+          <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{iq.timingInsight}</div>
+          <div style={{marginTop:6,fontSize:10,color:C.mut,lineHeight:1.4}}>Target: <strong style={{color:C.jade}}>8–12s per pass</strong> — decisive, not rushed.</div>
+        </div>
+        );})()}
       </div>}
 
       {/* TAB 2 — TILES */}
@@ -2794,10 +3645,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
           <span style={{fontSize:13,opacity:0.7,fontFamily:F.b,fontWeight:600,letterSpacing:0}}>→</span>
         </button>
         {/* Final rack */}
-        {hand&&<div style={S.card}>
-          <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>FINAL RACK</div>
-          <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>{hand.map((t,i)=><Ti key={i} t={t}/>)}</div>
-        </div>}
+        {hand&&<SortableRack hand={hand}/>}
 
         {tins.protectedTiles&&tins.protectedTiles.length>0&&<div style={{background:C.sage,border:`1px solid ${C.sageB}20`,borderRadius:12,padding:"12px 14px",marginBottom:8}}>
           <div style={{fontSize:9,color:C.sageB,letterSpacing:2,fontWeight:700,marginBottom:6}}>PROTECTED TILES</div>
@@ -3174,7 +4022,7 @@ function ClubCodeEntry({setScreen}){
 }
 
 // ─── GLOBAL LEADERBOARD PILL ──────────────────────────────────────────────────
-function GlobalLeaderboardPill(){
+function GlobalLeaderboardPill({setScreen}){
   const [open,setOpen]=useState(false);
   const [entries,setEntries]=useState([]);
   const [loading,setLoading]=useState(false);
@@ -3197,7 +4045,7 @@ function GlobalLeaderboardPill(){
     setOpen(o=>!o);
   };
 
-  const top10=entries.slice(0,10);
+  const top5=entries.slice(0,5);
   const myRank=myName?entries.findIndex(e=>e.name.toLowerCase()===myName.toLowerCase())+1:0;
   const myEntry=myRank>0?entries[myRank-1]:null;
 
@@ -3230,7 +4078,7 @@ function GlobalLeaderboardPill(){
             <div style={{fontSize:18,opacity:0.25,marginBottom:6}}>⏳</div>
             <div style={{fontSize:11,color:C.mut}}>Loading global scores…</div>
           </div>
-        ):top10.length===0?(
+        ):top5.length===0?(
           <div style={{textAlign:"center",padding:"24px 14px"}}>
             <div style={{fontSize:26,marginBottom:8}}>🀄</div>
             <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.ink,marginBottom:4}}>No scores yet today</div>
@@ -3245,12 +4093,12 @@ function GlobalLeaderboardPill(){
               ))}
             </div>
             {/* Rows */}
-            {top10.map((e,i)=>{
+            {top5.map((e,i)=>{
               const isMe=myName&&e.name.toLowerCase()===myName.toLowerCase();
               const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":null;
               const clubLabel=e.clubCode&&CLUBS[e.clubCode]?CLUBS[e.clubCode].name:null;
               return(
-                <div key={i} style={{display:"grid",gridTemplateColumns:"28px 1fr 44px 36px",gap:0,padding:"10px 14px",background:isMe?"#2460A806":"#fff",borderBottom:i<top10.length-1?`1px solid ${C.bdr}`:"none",alignItems:"center"}}>
+                <div key={i} style={{display:"grid",gridTemplateColumns:"28px 1fr 44px 36px",gap:0,padding:"10px 14px",background:isMe?"#2460A806":"#fff",borderBottom:i<top5.length-1?`1px solid ${C.bdr}`:"none",alignItems:"center"}}>
                   <div style={{fontSize:i<3?14:12}}>{medal||<span style={{fontFamily:F.d,fontSize:12,fontWeight:700,color:C.mut}}>{i+1}</span>}</div>
                   <div style={{minWidth:0}}>
                     <div style={{fontFamily:F.d,fontSize:12,fontWeight:isMe?800:600,color:isMe?"#2460A8":C.ink,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{e.name}{isMe?" (you)":""}</div>
@@ -3265,9 +4113,17 @@ function GlobalLeaderboardPill(){
         )}
 
         {/* Footer */}
-        <div style={{padding:"10px 14px",borderTop:`1px solid ${C.bdr}`,background:C.bg2,textAlign:"center"}}>
-          {entries.length>10&&<div style={{fontSize:10,color:C.mut,marginBottom:4}}>+ {entries.length-10} more players worldwide</div>}
-          <div style={{fontSize:10,color:C.mut,lineHeight:1.5,opacity:0.7}}>Play the Daily to appear · Resets midnight</div>
+        <div style={{padding:"10px 14px",borderTop:`1px solid ${C.bdr}`,background:C.bg2}}>
+          {entries.length>5&&setScreen&&(
+            <button onClick={()=>setScreen("leaderboard")} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",background:"none",border:"none",cursor:"pointer",padding:"2px 0 8px",textAlign:"left"}}>
+              <span style={{fontSize:11,fontWeight:700,color:"#2460A8"}}>See all {entries.length} scores</span>
+              <span style={{display:"flex",alignItems:"center",gap:4}}>
+                <span style={{fontSize:10,color:C.mut}}>+{entries.length-5} more</span>
+                <span style={{fontSize:12,color:"#2460A8",fontWeight:700}}>→</span>
+              </span>
+            </button>
+          )}
+          <div style={{fontSize:10,color:C.mut,lineHeight:1.5,opacity:0.7,textAlign:"center"}}>Play the Daily to appear · Resets midnight</div>
         </div>
       </div>}
     </div>
@@ -3811,7 +4667,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       {/* TOP BAR */}
       <div style={{display:"flex",alignItems:"flex-start",justifyContent:"flex-end",marginBottom:0,marginTop:8}}>
         <div style={{flex:1}}><Statspill streak={streak} rounds={rounds} bestIQ={bestIQ} streakBadge={streakBadge}/></div>
-        <div style={{display:"flex",alignItems:"center",background:streak>0?C.cinn+"08":bestIQ?C.gold+"08":C.bg2,border:streak>0?`1px solid ${C.cinn}20`:bestIQ?`1px solid ${C.gold}20`:`1px solid ${C.bdr}`,borderRadius:8,overflow:"hidden",flexShrink:0}}>
+        <div style={{display:"flex",alignItems:"center",background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:8,overflow:"hidden",flexShrink:0}}>
           <ProfilePill rounds={rounds} streak={streak} setScreen={setScreen}/>
           <div style={{width:1,alignSelf:"stretch",background:C.bdr}}/>
           <button onClick={showSettings} aria-label="Open settings" style={{background:"none",border:"none",padding:"4px 12px",cursor:"pointer",fontSize:13,color:C.mut,display:"flex",alignItems:"center"}}>⚙</button>
@@ -3937,7 +4793,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
       <div style={{marginBottom:8}}>
         <ClubCodeEntry onJoin={()=>setScreen("leaderboard")} setScreen={setScreen}/>
-        <GlobalLeaderboardPill/>
+        <GlobalLeaderboardPill setScreen={setScreen}/>
       </div>
 
       <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16,marginTop:20}}>
@@ -3977,6 +4833,43 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:1}}>Rules & scoring</div>
         </button>
       </div>
+
+      {/* WHY PLAY RACKLE — collapsible */}
+      {(()=>{
+        const [whyOpen,setWhyOpen]=useState(false);
+        return(
+          <div style={{borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",marginBottom:8,overflow:"hidden"}}>
+            <button onClick={()=>setWhyOpen(o=>!o)} aria-expanded={whyOpen}
+              style={{width:"100%",display:"flex",alignItems:"center",gap:14,padding:"14px 16px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
+              <div style={{width:44,height:44,borderRadius:13,background:C.jade+"12",border:`1px solid ${C.jade}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🀄</div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:9,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:4}}>THE CASE FOR RACKLE</div>
+                <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2,marginBottom:4}}>Why play Rackle?</div>
+                <div style={{fontSize:11,color:C.mut,lineHeight:1.4}}>The fastest way to get better at American Mahjong</div>
+              </div>
+              <span style={{fontSize:14,color:C.jade,fontWeight:700,flexShrink:0}}>{whyOpen?"▾":"›"}</span>
+            </button>
+            {whyOpen&&<div style={{background:"#FFFFF8",borderTop:`1px solid ${C.jade}15`,padding:"16px 16px 4px"}} className="rk-in">
+              {[
+                {icon:"🧠",title:"Build real instincts, not just rules",body:"Knowing the card and actually feeling what to pass are two different things. Rackle puts you through the Charleston over and over — the same decision-making muscle you use in live games — until the right move becomes automatic."},
+                {icon:"📅",title:"Trained to the 2026 NMJL card",body:"Every hand, every section, every hold/pass recommendation is built directly from the 2026 card. When the card updates each year, Rackle updates with it. You're always practising the real thing."},
+                {icon:"⏱️",title:"Two minutes between games",body:"You don't need a full four-player table. A Daily takes under two minutes — deal, pass, score, done. It's the rep you put in on the train, on your lunch break, or the night before game night."},
+                {icon:"📈",title:"See yourself improve",body:"Your Charleston IQ score tracks across every Daily. You'll notice your Direction score climbing as you get faster at reading your rack, and your Pass Quality rising as you stop giving away tiles you needed."},
+                {icon:"🏆",title:"Play with your club, not just against it",body:"The global and club leaderboards mean every Daily is a shared experience. Your friends are playing the exact same hand — compare scores, talk about what you passed, and learn from each other between real games."},
+                {icon:"🌸",title:"Flowers, Jokers, Soap — no guessing",body:"Rackle's section coaching explains exactly why Flowers matter for 2468 but not 2026, why Jokers are worthless in Singles & Pairs, and why Soap is your most flexible tile in the year hand. Understanding the why sticks far longer than memorising the what."},
+              ].map((b,i,arr)=>(
+                <div key={i} style={{display:"flex",gap:14,marginBottom:i<arr.length-1?20:16,paddingBottom:i<arr.length-1?20:0,borderBottom:i<arr.length-1?`1px solid ${C.jade}12`:"none",alignItems:"flex-start"}}>
+                  <div style={{width:38,height:38,borderRadius:11,background:C.jade+"12",border:`1px solid ${C.jade}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,marginTop:1}}>{b.icon}</div>
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:13,fontWeight:700,color:C.ink,marginBottom:5,lineHeight:1.3}}>{b.title}</div>
+                    <div style={{fontSize:11,color:C.mut,lineHeight:1.7}}>{b.body}</div>
+                  </div>
+                </div>
+              ))}
+            </div>}
+          </div>
+        );
+      })()}
 
       {showHelp&&<div style={{background:"#FFFFF8",border:`1px solid ${C.gold}25`,borderRadius:16,marginBottom:8,overflow:"hidden"}} className="rk-in">
 
@@ -4095,297 +4988,359 @@ function Pill({i,v,l,hl}){return(<div style={{...S.pill,flex:1,background:hl?"#F
 
 // ─── STATS ────────────────────────────────────────────────────────────────────
 function Stats({home,onShowScorecard,onRecap,dRes}){
-  const stats=getStats(),wk=getWeekly();
   const dn=getDayNum();
-  const tt=stats?(stats.trend>0.5?"Improving 📈":stats.trend<-0.5?"Slipping 📉":"Steady ➡️"):null;
   const iq=dRes?.iq;
+  const allHist=getHist().filter(e=>e.iqScore!=null);
+  const hasData=allHist.length>0;
+
+  // ── Derived data ──────────────────────────────────────────────────────────
+  const dailyHist=allHist.filter(e=>e.mode==="daily");
+  const practiceHist=allHist.filter(e=>e.mode!=="daily");
+  const last10=allHist.slice(-10);
+  const streak=ST.get("str",0);
+  const bestIQ=allHist.length?Math.max(...allHist.map(e=>e.iqScore)):0;
+  const dailyAvg=dailyHist.length?Math.round(dailyHist.reduce((a,e)=>a+e.iqScore,0)/dailyHist.length):null;
+  const practiceAvg=practiceHist.length?Math.round(practiceHist.reduce((a,e)=>a+e.iqScore,0)/practiceHist.length):null;
+
+  // Per-section stats
+  const secData={};
+  SECS.forEach(s=>{secData[s.id]={id:s.id,name:s.name,icon:s.icon,color:s.color,count:0,totalIQ:0,bestIQ:0,avgIQ:0,lastPlayed:null};});
+  allHist.forEach(e=>{
+    const sid=e.chosenSec||e.sid;
+    if(sid&&secData[sid]){
+      secData[sid].count++;
+      secData[sid].totalIQ+=e.iqScore;
+      if(e.iqScore>secData[sid].bestIQ)secData[sid].bestIQ=e.iqScore;
+      if(!secData[sid].lastPlayed||e.ts>secData[sid].lastPlayed)secData[sid].lastPlayed=e.ts;
+    }
+  });
+  Object.values(secData).forEach(s=>{if(s.count>0)s.avgIQ=Math.round(s.totalIQ/s.count);});
+  const triedSections=Object.values(secData).filter(s=>s.count>0).sort((a,b)=>b.avgIQ-a.avgIQ);
+  const untriedSections=Object.values(secData).filter(s=>s.count===0);
+
+  // Sub-score trends (last 10 with iq data)
+  const iqHist=allHist.filter(e=>e.iq).slice(-10);
+  const avgDir=iqHist.length?Math.round(iqHist.reduce((a,e)=>a+(e.iq.directionScore||0),0)/iqHist.length):null;
+  const avgPass=iqHist.length?Math.round(iqHist.reduce((a,e)=>a+(e.iq.passQualityScore||0),0)/iqHist.length):null;
+  const avgTile=iqHist.length?Math.round(iqHist.reduce((a,e)=>a+(e.iq.tileStrengthScore||0),0)/iqHist.length):null;
+
+  // Trajectory: last 3 vs prior
+  const recent3=allHist.slice(-3);
+  const prior=allHist.slice(0,Math.max(allHist.length-3,1));
+  const recentAvg=recent3.length?recent3.reduce((a,e)=>a+e.iqScore,0)/recent3.length:null;
+  const priorAvg=prior.length?prior.reduce((a,e)=>a+e.iqScore,0)/prior.length:null;
+  const trajectory=recentAvg!=null&&priorAvg!=null?Math.round(recentAvg-priorAvg):null;
+
+  // Focus area — data-driven weakest sub-score
+  const focusTips={
+    "Direction":"You're often not committing to a section early enough. Pick your strongest 3 tiles before your first pass and build from there.",
+    "Pass Quality":"You tend to pass tiles your section needs. Before passing, ask: is this tile useful for my target section?",
+    "Tile Strength":"Your final rack is lacking structure. Hold pairs and pungs over isolated singles.",
+  };
+  let focusLabel=null;
+  if(avgDir!=null&&avgPass!=null&&avgTile!=null){
+    const pcts={Direction:avgDir/40,["Pass Quality"]:avgPass/25,["Tile Strength"]:avgTile/25};
+    focusLabel=Object.entries(pcts).sort((a,b)=>a[1]-b[1])[0][0];
+  }
+
+  // Best hand fit ever — scan history for highest allSections score per section
+  const bestHandFits={};
+  allHist.filter(e=>e.allSections&&e.allSections.length).forEach(e=>{
+    e.allSections.forEach(s=>{
+      if(!bestHandFits[s.id]||s.score>bestHandFits[s.id].score){
+        bestHandFits[s.id]={score:s.score,ts:e.ts,iqScore:e.iqScore};
+      }
+    });
+  });
+
   return(
     <div style={S.pg} className="rk-pg">
       <RackleHeader onBack={home}/>
-      {/* If today's daily is done, show IQ hero at top */}
+
+      {/* Today's daily hero — if played */}
       {iq&&<div style={{marginBottom:12}}>
-        <IQHero iq={iq} isDaily dayNum={dn} section={dRes.section} totalTime={iq.totalTime||0}/>
-        <div style={{marginTop:8}}>
-          <button onClick={onShowScorecard} style={{width:"100%",padding:"12px 16px",borderRadius:12,background:C.sage,border:`1px solid ${C.sageB}25`,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"flex-start"}}>
-            <div style={{textAlign:"left"}}><div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:"#1A3D28",lineHeight:1,marginBottom:2}}>View Full Scorecard</div><div style={{fontSize:11,color:C.sageB}}>Coach notes · Pass breakdown · Tile analysis</div></div>
-            <span style={{background:"#2E6B48",color:"#fff",borderRadius:20,padding:"4px 10px",fontSize:11,fontWeight:700,marginLeft:"auto"}}>›</span>
-          </button>
-        </div>
+        <IQHero iq={iq} isDaily dayNum={dn} section={dRes.section} totalTime={iq.totalTime||0} chosenSec={dRes.chosenSec} allSections={dRes.allSections}/>
+        <button onClick={onShowScorecard} style={{width:"100%",marginTop:8,padding:"12px 16px",borderRadius:12,background:C.sage,border:`1px solid ${C.sageB}25`,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"flex-start",gap:12}}>
+          <div style={{width:36,height:36,borderRadius:10,background:C.sageB+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>📋</div>
+          <div style={{textAlign:"left",flex:1}}>
+            <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#1A3D28",lineHeight:1,marginBottom:2}}>View Full Scorecard</div>
+            <div style={{fontSize:11,color:C.sageB}}>Coach notes · Pass breakdown · Tile analysis</div>
+          </div>
+          <span style={{background:"#2E6B48",color:"#fff",borderRadius:20,padding:"4px 10px",fontSize:11,fontWeight:700,flexShrink:0}}>›</span>
+        </button>
       </div>}
-      {!stats?(
+
+      {!hasData?(
         <div style={{textAlign:"center",padding:"40px 0"}}>
-          <div aria-hidden="true" style={{fontSize:32,marginBottom:8}}>🀄</div>
+          <div style={{fontSize:32,marginBottom:8}}>🀄</div>
           <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink,marginBottom:6}}>No games yet</div>
           <div style={{fontSize:12,color:C.mut,lineHeight:1.6}}>Play a Daily or Practice round to start tracking your improvement.</div>
         </div>
       ):(
         <>
-          <div style={{display:"flex",gap:6,marginBottom:12}}>
-            <Pill i="🎲" v={stats.total} l="ROUNDS"/>
-            {stats.fastest&&<Pill i="⏱" v={fT(stats.fastest)} l="FASTEST"/>}
+          {/* ── ZONE 1: AT A GLANCE ──────────────────────────────────────────── */}
+          <div style={{display:"flex",gap:6,marginBottom:10}}>
+            <div style={{flex:1,background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:12,padding:"12px 10px",textAlign:"center"}}>
+              <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>GAMES</div>
+              <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.ink}}>{allHist.length}</div>
+            </div>
+            <div style={{flex:1,background:C.jade+"08",border:`1px solid ${C.jade}20`,borderRadius:12,padding:"12px 10px",textAlign:"center"}}>
+              <div style={{fontSize:8,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>BEST IQ</div>
+              <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.jade}}>{bestIQ}</div>
+            </div>
+            {streak>0&&<div style={{flex:1,background:C.gold+"08",border:`1px solid ${C.gold}20`,borderRadius:12,padding:"12px 10px",textAlign:"center"}}>
+              <div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>STREAK</div>
+              <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.gold}}>{streak}d 🔥</div>
+            </div>}
+            {trajectory!=null&&<div style={{flex:1,background:trajectory>=0?C.jade+"08":C.cinn+"08",border:`1px solid ${trajectory>=0?C.jade:C.cinn}20`,borderRadius:12,padding:"12px 10px",textAlign:"center"}}>
+              <div style={{fontSize:8,color:trajectory>=0?C.jade:C.cinn,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>TREND</div>
+              <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:trajectory>=0?C.jade:C.cinn}}>{trajectory>=0?"+":""}{trajectory}</div>
+            </div>}
           </div>
 
-          {/* IQ Sparkline */}
-          {(()=>{
-            const h=getHist().filter(e=>e.iqScore!=null).slice(-10);
-            if(h.length<2)return null;
-            const scores=h.map(e=>e.iqScore);
-            const min=Math.min(...scores,0);const max=Math.max(...scores,100);
-            const range=Math.max(max-min,20);
-            const W=260,H=52,pad=4;
+          {/* ── IQ CHART — single combined chart, Daily vs Practice ───────── */}
+          {last10.length>=2&&(()=>{
+            const scores=last10.map(e=>e.iqScore);
+            const minS=Math.min(...scores,40);const maxS=Math.max(...scores,100);
+            const range=Math.max(maxS-minS,20);
+            const W=300,H=72,padX=8,padY=6;
             const pts=scores.map((s,i)=>({
-              x:pad+(i/(scores.length-1))*(W-pad*2),
-              y:H-pad-((s-min)/range)*(H-pad*2)
+              x:padX+(i/(scores.length-1))*(W-padX*2),
+              y:H-padY-((s-minS)/range)*(H-padY*2),
+              mode:last10[i].mode,score:s
             }));
-            const pathD=pts.map((p,i)=>i===0?`M${p.x},${p.y}`:`L${p.x},${p.y}`).join(" ");
-            const fillD=`${pathD} L${pts[pts.length-1].x},${H} L${pts[0].x},${H} Z`;
-            const last=scores[scores.length-1];
-            const prev=scores[scores.length-2];
-            const trend=last>prev?"↑":last<prev?"↓":"→";
+            // Separate lines for Daily and Practice
+            const dailyPts=pts.filter((_,i)=>last10[i].mode==="daily");
+            const practPts=pts.filter((_,i)=>last10[i].mode!=="daily");
+            const allPath=pts.map((p,i)=>i===0?`M${p.x},${p.y}`:`L${p.x},${p.y}`).join(" ");
+            const fillPath=`${allPath} L${pts[pts.length-1].x},${H} L${pts[0].x},${H} Z`;
+            const last=scores[scores.length-1];const prev=scores[scores.length-2];
             const trendCol=last>prev?C.jade:last<prev?C.cinn:C.gold;
             return(
-              <div style={{...S.card,marginBottom:12,padding:"14px 14px 10px"}}>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:6}}>
-                  <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>IQ HISTORY · LAST {scores.length} GAMES</div>
-                  <div style={{display:"flex",alignItems:"baseline",gap:4}}>
-                    <span style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:h[h.length-1].mode==="daily"?C.jade:C.cinn}}>{last}</span>
-                    <span style={{fontSize:12,fontWeight:700,color:trendCol}}>{trend}</span>
+              <div style={{...S.card,marginBottom:10,padding:"14px 14px 10px"}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+                  <div>
+                    <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:2}}>IQ HISTORY · LAST {scores.length}</div>
+                    <div style={{display:"flex",gap:10,marginTop:4}}>
+                      {dailyAvg!=null&&<div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:8,height:8,borderRadius:"50%",background:C.jade}}/><span style={{fontSize:10,color:C.ink,fontWeight:600}}>Daily {dailyAvg}</span></div>}
+                      {practiceAvg!=null&&<div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:8,height:8,borderRadius:"50%",background:C.cinn}}/><span style={{fontSize:10,color:C.ink,fontWeight:600}}>Practice {practiceAvg}</span></div>}
+                    </div>
                   </div>
-                </div>
-                <div style={{display:"flex",gap:10,marginBottom:8}}>
-                  <div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:8,height:8,borderRadius:"50%",background:C.jade}}/><span style={{fontSize:9,color:C.mut}}>Daily</span></div>
-                  <div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:8,height:8,borderRadius:"50%",background:C.cinn}}/><span style={{fontSize:9,color:C.mut}}>Practice</span></div>
+                  <div style={{textAlign:"right"}}>
+                    <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:trendCol,lineHeight:1}}>{last}</div>
+                    <div style={{fontSize:10,color:C.mut}}>latest</div>
+                  </div>
                 </div>
                 <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{display:"block",overflow:"visible"}}>
                   <defs>
-                    <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor={C.jade} stopOpacity="0.1"/>
+                    <linearGradient id="sg2" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor={C.jade} stopOpacity="0.08"/>
                       <stop offset="100%" stopColor={C.jade} stopOpacity="0"/>
                     </linearGradient>
                   </defs>
-                  <path d={fillD} fill="url(#sparkGrad)"/>
-                  <path d={pathD} fill="none" stroke={C.mut} strokeWidth="1.5" strokeDasharray="3 2" strokeLinejoin="round" strokeLinecap="round"/>
+                  <path d={fillPath} fill="url(#sg2)"/>
+                  <path d={allPath} fill="none" stroke={C.bdr} strokeWidth="1" strokeDasharray="2 2"/>
                   {pts.map((p,i)=>{
-                    const dotCol=h[i].mode==="daily"?C.jade:C.cinn;
+                    const isD=last10[i].mode==="daily";
                     const isLast=i===pts.length-1;
                     return(
-                      <circle key={i} cx={p.x} cy={p.y} r={isLast?4:2.5}
-                        fill={dotCol}
-                        stroke="#fff" strokeWidth="1.5"/>
+                      <g key={i}>
+                        <circle cx={p.x} cy={p.y} r={isLast?5:isD?3.5:2.5} fill={isD?C.jade:C.cinn} stroke="#fff" strokeWidth={isLast?2:1.5}/>
+                        {isLast&&<text x={p.x} y={p.y-9} textAnchor="middle" fontSize="8" fontWeight="700" fill={trendCol}>{p.score}</text>}
+                      </g>
                     );
                   })}
+                  {/* Y-axis labels */}
+                  <text x={1} y={padY+4} fontSize="7" fill={C.mut} opacity="0.6">{maxS}</text>
+                  <text x={1} y={H-2} fontSize="7" fill={C.mut} opacity="0.6">{minS}</text>
                 </svg>
-                <div style={{display:"flex",justifyContent:"space-between",marginTop:4}}>
-                  <span style={{fontSize:9,color:C.mut}}>{scores.length} games ago</span>
+                <div style={{display:"flex",justifyContent:"space-between",marginTop:2}}>
+                  <span style={{fontSize:9,color:C.mut}}>oldest</span>
                   <span style={{fontSize:9,color:C.mut}}>latest</span>
                 </div>
               </div>
             );
           })()}
 
-          {/* COMMON PATTERNS / TENDENCIES */}
-          {(()=>{
-            const h=getHist().filter(e=>e.iq).slice(-10);
-            if(h.length<3)return null;
-            const avgDir=Math.round(h.reduce((a,e)=>a+(e.iq.directionScore||0),0)/h.length);
-            const avgPass=Math.round(h.reduce((a,e)=>a+(e.iq.passQualityScore||0),0)/h.length);
-            const avgTile=Math.round(h.reduce((a,e)=>a+(e.iq.tileStrengthScore||0),0)/h.length);
-            const avgTime=Math.round(h.reduce((a,e)=>a+(e.iq.timingScore||0),0)/h.length);
-            const subs=[
-              {label:"Direction",score:avgDir,max:40,pct:Math.round(avgDir/40*100)},
-              {label:"Pass Quality",score:avgPass,max:25,pct:Math.round(avgPass/25*100)},
-              {label:"Tile Strength",score:avgTile,max:25,pct:Math.round(avgTile/25*100)},
-              {label:"Timing",score:avgTime,max:10,pct:Math.round(avgTime/10*100)},
-            ];
-            const weakest=subs.sort((a,b)=>a.pct-b.pct)[0];
-            const tips={
-              "Direction":"You're often not committing to a section early enough. Pick your strongest 3 tiles before your first pass and build from there.",
-              "Pass Quality":"You tend to pass tiles your section needs. Before passing, ask: 'Is this tile useful for my target section?' If yes — keep it.",
-              "Tile Strength":"Your final rack is lacking structure. Prioritise keeping pairs and pungs over isolated individual tiles.",
-              "Timing":"Your pace is off the sweet spot. Aim for 8–12 seconds per pass — enough to read the rack without second-guessing.",
-            };
-            return(
-              <div style={{...S.card,marginBottom:10}}>
-                <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:12}}>YOUR TENDENCIES · LAST {h.length} GAMES</div>
-                {subs.sort((a,b)=>b.pct-a.pct).map((sub,i)=>{
-                  const col=sub.pct>=75?C.jade:sub.pct>=55?"#2460A8":sub.pct>=40?C.gold:C.cinn;
-                  return(
-                    <div key={sub.label} style={{marginBottom:i<3?10:0}}>
-                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
-                        <span style={{fontSize:11,fontWeight:700,color:C.ink}}>{sub.label}</span>
-                        <span style={{fontSize:11,fontWeight:800,color:col,fontFamily:F.d}}>{sub.pct}%</span>
-                      </div>
-                      <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden"}}>
-                        <div style={{height:"100%",borderRadius:3,background:col,width:`${sub.pct}%`}}/>
-                      </div>
+          {/* ── ZONE 2: YOUR GAME ────────────────────────────────────────────── */}
+          {avgDir!=null&&<div style={{...S.card,marginBottom:10}}>
+            <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:12}}>YOUR GAME · LAST {iqHist.length} ROUNDS</div>
+            {[
+              {label:"Direction",score:avgDir,max:40,desc:"Committing to a section"},
+              {label:"Pass Quality",score:avgPass,max:25,desc:"Passing the right tiles"},
+              {label:"Tile Strength",score:avgTile,max:25,desc:"Structural rack quality"},
+            ].map((sub,i,arr)=>{
+              const pct=Math.round(sub.score/sub.max*100);
+              const col=pct>=75?C.jade:pct>=55?"#2460A8":pct>=40?C.gold:C.cinn;
+              const isFocus=focusLabel===sub.label;
+              return(
+                <div key={sub.label} style={{marginBottom:i<arr.length-1?12:0}}>
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:4}}>
+                    <div>
+                      <span style={{fontSize:12,fontWeight:700,color:C.ink}}>{sub.label}</span>
+                      {isFocus&&<span style={{fontSize:9,fontWeight:700,background:C.gold+"20",color:C.gold,borderRadius:8,padding:"1px 6px",marginLeft:6,letterSpacing:0.5}}>FOCUS</span>}
+                      <div style={{fontSize:10,color:C.mut,marginTop:1}}>{sub.desc}</div>
                     </div>
-                  );
-                })}
-                <div style={{marginTop:12,background:C.amber,borderRadius:10,padding:"10px 12px",border:`1px solid ${C.amberB}20`}}>
-                  <div style={{fontSize:8,color:C.amberB,letterSpacing:1.5,fontWeight:700,marginBottom:5}}>FOCUS AREA</div>
-                  <div style={{fontSize:12,color:C.ink,lineHeight:1.6,fontWeight:600}}>{weakest.label}</div>
-                  <div style={{fontSize:11,color:C.ink,lineHeight:1.6,marginTop:3}}>{tips[weakest.label]}</div>
-                </div>
-              </div>
-            );
-          })()}
-
-          {stats.trend!==null&&<div style={{...S.card,textAlign:"center",padding:12}}>
-            <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:4}}>RECENT TREND</div>
-            <div style={{fontSize:16,fontWeight:700,color:stats.trend>0.5?C.jade:stats.trend<-0.5?C.cinn:C.gold}}>{tt}</div>
-            <div style={{fontSize:11,color:C.mut,marginTop:4}}>Last 5 avg: {RATS[Math.round(stats.ra)]}</div>
-          </div>}
-
-          {/* PROGRESS OVERVIEW — Daily vs Practice IQ comparison */}
-          {(()=>{
-            const allHist=getHist().filter(e=>e.iqScore!=null);
-            if(allHist.length<2)return null;
-            const dailyHist=allHist.filter(e=>e.mode==="daily");
-            const practiceHist=allHist.filter(e=>e.mode!=="daily");
-            // Last 5-10 hands bar chart
-            const last10=allHist.slice(-10);
-            const maxScore=Math.max(...last10.map(e=>e.iqScore),100);
-            return(
-              <div style={{...S.card,marginBottom:10}}>
-                <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:12}}>LAST {last10.length} HANDS</div>
-                {/* Bar chart for last 10 hands */}
-                <div style={{display:"flex",gap:3,alignItems:"flex-end",height:64,marginBottom:8}}>
-                  {last10.map((e,i)=>{
-                    const pct=Math.round((e.iqScore/maxScore)*100);
-                    const isDaily=e.mode==="daily";
-                    const col=isDaily?C.jade:C.cinn;
-                    return(
-                      <div key={i} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
-                        <div style={{fontSize:8,color:col,fontWeight:700,fontFamily:F.d,lineHeight:1}}>{e.iqScore}</div>
-                        <div style={{width:"100%",borderRadius:"3px 3px 0 0",background:col,height:`${Math.max(pct*0.52,6)}px`,opacity:isDaily?1:0.55}}/>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div style={{display:"flex",gap:12,marginBottom:10}}>
-                  <div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:10,height:10,borderRadius:2,background:C.jade}}/><span style={{fontSize:10,color:C.mut}}>Daily</span></div>
-                  <div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:10,height:10,borderRadius:2,background:C.cinn+"60"}}/><span style={{fontSize:10,color:C.mut}}>Practice</span></div>
-                </div>
-                {/* Summary row */}
-                <div style={{display:"flex",gap:6}}>
-                  {dailyHist.length>0&&<div style={{flex:1,background:C.jade+"08",borderRadius:8,padding:"8px 10px",textAlign:"center",border:`1px solid ${C.jade}15`}}>
-                    <div style={{fontSize:8,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>DAILY AVG</div>
-                    <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.jade}}>{Math.round(dailyHist.reduce((a,e)=>a+e.iqScore,0)/dailyHist.length)}</div>
-                  </div>}
-                  {practiceHist.length>0&&<div style={{flex:1,background:C.cinn+"06",borderRadius:8,padding:"8px 10px",textAlign:"center",border:`1px solid ${C.cinn}15`}}>
-                    <div style={{fontSize:8,color:C.cinn,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>PRACTICE AVG</div>
-                    <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.cinn}}>{Math.round(practiceHist.reduce((a,e)=>a+e.iqScore,0)/practiceHist.length)}</div>
-                  </div>}
-                  {allHist.length>=3&&(()=>{
-                    const recent=allHist.slice(-3).reduce((a,e)=>a+e.iqScore,0)/3;
-                    const older=allHist.slice(0,Math.max(3,allHist.length-3)).reduce((a,e)=>a+e.iqScore,0)/Math.max(3,allHist.length-3);
-                    const delta=Math.round(recent-older);
-                    return<div style={{flex:1,background:delta>=0?C.jade+"06":C.cinn+"06",borderRadius:8,padding:"8px 10px",textAlign:"center",border:`1px solid ${delta>=0?C.jade:C.cinn}15`}}>
-                      <div style={{fontSize:8,color:delta>=0?C.jade:C.cinn,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>TRAJECTORY</div>
-                      <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:delta>=0?C.jade:C.cinn}}>{delta>=0?"+":""}{delta}</div>
-                    </div>;
-                  })()}
-                </div>
-              </div>
-            );
-          })()}
-
-          {/* SCIENTIFIC SECTION FOCUS — smarter recommendation */}
-          {(()=>{
-            const allH=getHist().filter(e=>e.iq&&e.sid).slice(-15);
-            if(allH.length<3)return null;
-            // Count section frequency
-            const secFreq={};allH.forEach(e=>{secFreq[e.sid]=(secFreq[e.sid]||0)+1;});
-            // Average IQ per section
-            const secIQ={};const secCnt={};
-            allH.forEach(e=>{secIQ[e.sid]=(secIQ[e.sid]||0)+e.iqScore;secCnt[e.sid]=(secCnt[e.sid]||0)+1;});
-            const secAvgIQ=Object.fromEntries(Object.keys(secIQ).map(k=>[k,Math.round(secIQ[k]/secCnt[k])]));
-            // Find least-tried sections with room to grow
-            const allSectionIds=SECS.map(s=>s.id);
-            const untried=allSectionIds.filter(id=>!secFreq[id]);
-            const tried=allSectionIds.filter(id=>secFreq[id]);
-            // Find overplayed section (highest frequency)
-            const mostPlayed=tried.sort((a,b)=>(secFreq[b]||0)-(secFreq[a]||0))[0];
-            const mostPlayedSec=SECS.find(s=>s.id===mostPlayed);
-            // Find section with worst IQ among tried ones
-            const worstSection=tried.sort((a,b)=>(secAvgIQ[a]||100)-(secAvgIQ[b]||100))[0];
-            const worstSec=SECS.find(s=>s.id===worstSection);
-            const worstAvg=secAvgIQ[worstSection]||0;
-            // Pick a recommendation
-            let rec=null,recReason="";
-            if(untried.length>0){
-              const suggest=untried[Math.floor(Math.random()*Math.min(untried.length,3))];
-              const suggestSec=SECS.find(s=>s.id===suggest);
-              if(suggestSec){rec=suggestSec;recReason=`You haven't tried ${suggestSec.name} yet — unexplored sections often reveal hidden strengths.`;}
-            } else if(worstSec&&worstAvg<70){
-              rec=worstSec;recReason=`Your avg IQ in ${worstSec.name} is ${worstAvg} — your weakest section. Focused practice here will lift your overall score the fastest.`;
-            } else if(mostPlayedSec){
-              const alternative=tried.filter(id=>id!==mostPlayed).sort((a,b)=>(secAvgIQ[b]||0)-(secAvgIQ[a]||0))[0];
-              const altSec=alternative?SECS.find(s=>s.id===alternative):null;
-              if(altSec){rec=altSec;recReason=`You've been leaning heavily on ${mostPlayedSec.name}. Try ${altSec.name} — you score well there and variety builds adaptability.`;}
-            }
-            if(!rec)return null;
-            // Also suggest a tile focus
-            const tileHints={"Flowers":"Practice protecting your Flowers — pass them last in any section that wants them.","Jokers":"Work on Joker discipline — they're only worth holding in Quints, Runs, and pungs.","Dragons":"Dragons pair well with Winds in honors-heavy hands (Winds & Dragons section).","Evens":"Even tiles (2,4,6,8) appear in the most hands — if you see a 6, hold it.","Odds":"Odd tiles (1,3,5,7,9) anchor the 13579 section — 5 is the most versatile."};
-            const tileHintKeys=Object.keys(tileHints);
-            const tileHint=tileHints[tileHintKeys[dn%tileHintKeys.length]];
-            return(
-              <div style={{...S.card,marginBottom:10,background:"linear-gradient(145deg,#FFFFF8,#F8F4EB)",borderColor:C.gold+"25"}}>
-                <div style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:10}}>🎯 YOUR FOCUS AREAS</div>
-                {/* Section recommendation */}
-                <div style={{display:"flex",alignItems:"flex-start",gap:10,marginBottom:10,paddingBottom:10,borderBottom:`1px solid ${C.bdr}`}}>
-                  <div style={{width:36,height:36,borderRadius:10,background:rec.color+"12",border:`1px solid ${rec.color}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{rec.icon}</div>
-                  <div style={{flex:1}}>
-                    <div style={{fontSize:11,fontWeight:800,color:C.ink,marginBottom:3}}>Try next: {rec.name}</div>
-                    <div style={{fontSize:11,color:C.mut,lineHeight:1.5}}>{recReason}</div>
+                    <span style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:col}}>{sub.score}<span style={{fontSize:9,color:C.mut,fontWeight:400}}>/{sub.max}</span></span>
+                  </div>
+                  <div style={{height:6,borderRadius:3,background:C.bdr,overflow:"hidden"}}>
+                    <div style={{height:"100%",borderRadius:3,background:col,width:`${pct}%`,transition:"width 0.6s ease"}}/>
                   </div>
                 </div>
-                {/* Tile tip of the day */}
-                <div style={{background:C.jade+"06",borderRadius:8,padding:"8px 10px"}}>
-                  <div style={{fontSize:8,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>💡 TILE TIP</div>
-                  <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{tileHint}</div>
-                </div>
-              </div>
-            );
-          })()}
+              );
+            })}
+            {focusLabel&&<div style={{marginTop:12,background:C.amber,borderRadius:10,padding:"10px 12px",border:`1px solid ${C.amberB}15`}}>
+              <div style={{fontSize:8,color:C.amberB,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>FOCUS AREA</div>
+              <div style={{fontSize:12,color:C.ink,lineHeight:1.6,fontWeight:600}}>{focusLabel}</div>
+              <div style={{fontSize:11,color:C.ink,lineHeight:1.55,marginTop:2}}>{focusTips[focusLabel]}</div>
+            </div>}
+          </div>}
 
+          {/* ── ZONE 3: SECTION PERFORMANCE ─────────────────────────────────── */}
           {(()=>{
-            const [smOpen,setSmOpen]=useState(false);
+            const [spOpen,setSpOpen]=useState(false);
+            if(triedSections.length===0)return null;
+            const maxAvg=Math.max(...triedSections.map(s=>s.avgIQ),1);
             return(
-              <div style={{...S.card,padding:0,overflow:"hidden"}}>
-                <button
-                  onClick={()=>setSmOpen(o=>!o)}
-                  style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"12px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}
-                >
-                  <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>SECTION MASTERY</div>
-                  <span style={{fontSize:12,color:C.mut,opacity:0.5,transition:"transform 0.2s",transform:smOpen?"rotate(180deg)":"rotate(0deg)"}}>▾</span>
+              <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden"}}>
+                <button onClick={()=>setSpOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"14px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
+                  <div>
+                    <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:2}}>SECTION PERFORMANCE</div>
+                    <div style={{fontSize:12,fontWeight:700,color:C.ink}}>Avg IQ by section · {triedSections.length} played</div>
+                  </div>
+                  <span style={{fontSize:12,color:C.mut}}>{spOpen?"▾":"▸"}</span>
                 </button>
-                {smOpen&&<div className="rk-in" style={{borderTop:`1px solid ${C.bdr}`,padding:"0 14px 6px"}}>
-                  {stats.mastery.map(s=>{
-                    const isW=wk&&s.id===wk.id;
-                    let lv,lc,lb;
-                    if(s.cnt===0){lv="Try it!";lc=C.mut;lb=C.bg2;}
-                    else if(s.avg<=1){lv="Strong";lc=C.jade;lb=C.jade+"12";}
-                    else if(s.avg<=2.5){lv="Solid";lc="#2460A8";lb="#2460A812";}
-                    else if(s.avg<=3.5){lv="Learning";lc=C.gold;lb=C.gold+"12";}
-                    else{lv="Needs work";lc=C.cinn;lb=C.cinn+"10";}
+                {spOpen&&<div style={{borderTop:`1px solid ${C.bdr}`,padding:"8px 14px 12px"}} className="rk-in">
+                  {triedSections.map((s,i)=>{
+                    const barW=Math.round((s.avgIQ/maxAvg)*100);
+                    const col=s.avgIQ>=80?C.jade:s.avgIQ>=65?"#2460A8":s.avgIQ>=50?C.gold:C.cinn;
                     return(
-                      <div key={s.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${C.bdr}`}}>
-                        <div style={{display:"flex",alignItems:"center",gap:8}}>
-                          <span aria-hidden="true" style={{fontSize:16}}>{s.icon}</span>
-                          <div><div style={{fontSize:12,fontWeight:600,color:C.ink}}>{s.name}{isW?" ⭐":""}</div><div style={{fontSize:10,color:C.mut,marginTop:1}}>{s.cnt} round{s.cnt!==1?"s":""}</div></div>
+                      <div key={s.id} style={{marginBottom:i<triedSections.length-1?10:0}}>
+                        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
+                          <div style={{display:"flex",alignItems:"center",gap:6}}>
+                            <span style={{fontSize:14}}>{s.icon}</span>
+                            <span style={{fontSize:12,fontWeight:700,color:C.ink}}>{s.name}</span>
+                            <span style={{fontSize:10,color:C.mut}}>{s.count} round{s.count!==1?"s":""}</span>
+                          </div>
+                          <div style={{display:"flex",alignItems:"baseline",gap:3}}>
+                            <span style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:col}}>{s.avgIQ}</span>
+                            {s.bestIQ>s.avgIQ&&<span style={{fontSize:9,color:C.mut}}>↑{s.bestIQ}</span>}
+                          </div>
                         </div>
-                        <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:4}}>
-                          <span style={{fontSize:10,fontWeight:700,color:lc,background:lb,border:`1px solid ${lc}25`,borderRadius:20,padding:"2px 10px"}}>{lv}</span>
-                          {s.cnt>0&&<div aria-hidden="true" style={{width:48,height:3,borderRadius:2,background:C.bdr}}><div style={{height:"100%",borderRadius:2,background:lc,width:`${Math.max(8,100-s.avg*20)}%`}}/></div>}
+                        <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden"}}>
+                          <div style={{height:"100%",borderRadius:3,background:col,width:`${barW}%`}}/>
                         </div>
                       </div>
                     );
                   })}
+                  {untriedSections.length>0&&<div style={{marginTop:14,paddingTop:14,borderTop:`1px solid ${C.bdr}`}}>
+                    <div style={{fontSize:9,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:8}}>NOT YET TRIED ({untriedSections.length})</div>
+                    <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+                      {untriedSections.map(s=>(
+                        <div key={s.id} style={{display:"flex",alignItems:"center",gap:5,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:20,padding:"4px 10px"}}>
+                          <span style={{fontSize:12}}>{s.icon}</span>
+                          <span style={{fontSize:10,fontWeight:600,color:C.mut}}>{s.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{fontSize:10,color:C.mut,marginTop:8,lineHeight:1.5}}>Practice these sections to find hidden strengths and improve your overall read speed.</div>
+                  </div>}
                 </div>}
               </div>
             );
           })()}
+
+          {/* ── ZONE 4: 2026 CARD KNOWLEDGE ─────────────────────────────────── */}
+          {(()=>{
+            const [ckOpen,setCkOpen]=useState(false);
+            if(Object.keys(bestHandFits).length===0)return null;
+            // For each section the player has played, show their best rack fit % against each hand
+            const coveredSecs=triedSections.slice(0,5);
+            return(
+              <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden"}}>
+                <button onClick={()=>setCkOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"14px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
+                  <div>
+                    <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:2}}>2026 CARD KNOWLEDGE</div>
+                    <div style={{fontSize:12,fontWeight:700,color:C.ink}}>Best rack fits per section</div>
+                    <div style={{fontSize:10,color:C.mut,marginTop:1}}>How close your racks have come to real hands</div>
+                  </div>
+                  <span style={{fontSize:12,color:C.mut}}>{ckOpen?"▾":"▸"}</span>
+                </button>
+                {ckOpen&&<div style={{borderTop:`1px solid ${C.bdr}`,padding:"12px 14px"}} className="rk-in">
+                  {coveredSecs.map((sec,si)=>{
+                    const hands=HAND_CATALOG.filter(h=>h.sec===sec.id);
+                    // Score each hand against the player's best-ever rack for that section
+                    // We use the bestHandFits score as proxy — show top 2 hands by catalog position
+                    // and the overall best fit % for this section
+                    const bestFit=bestHandFits[sec.id];
+                    const fitPct=bestFit?Math.round(bestFit.score*100):0;
+                    const famColor=fitPct>=70?C.jade:fitPct>=45?C.gold:C.cinn;
+                    const famLabel=fitPct>=70?"Strong fit":fitPct>=45?"Building":fitPct>=20?"Early stage":"Low exposure";
+                    return(
+                      <div key={sec.id} style={{marginBottom:si<coveredSecs.length-1?16:0,paddingBottom:si<coveredSecs.length-1?16:0,borderBottom:si<coveredSecs.length-1?`1px solid ${C.bdr}`:"none"}}>
+                        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+                          <span style={{fontSize:16}}>{sec.icon}</span>
+                          <div style={{flex:1}}>
+                            <div style={{fontSize:12,fontWeight:800,color:C.ink}}>{sec.name}</div>
+                            <div style={{fontSize:10,color:C.mut}}>{hands.length} hands on the 2026 card · {sec.count} round{sec.count!==1?"s":""} played</div>
+                          </div>
+                          <div style={{textAlign:"right"}}>
+                            <div style={{fontSize:9,fontWeight:700,color:famColor,letterSpacing:0.5}}>{famLabel}</div>
+                            <div style={{fontFamily:F.d,fontSize:13,fontWeight:900,color:famColor}}>{fitPct}%</div>
+                          </div>
+                        </div>
+                        {/* Coverage bar — how close your best rack ever got */}
+                        <div style={{height:4,borderRadius:2,background:C.bdr,overflow:"hidden",marginBottom:6}}>
+                          <div style={{height:"100%",borderRadius:2,background:famColor,width:`${fitPct}%`}}/>
+                        </div>
+                        <div style={{fontSize:10,color:C.mut,lineHeight:1.5}}>
+                          {fitPct>=70?`Your racks have come close to completing real ${sec.name} hands.`:
+                           fitPct>=45?`Good foundation. Keep building depth in ${sec.name} — you're getting into realistic hand territory.`:
+                           `Your ${sec.name} racks are still early stage. Focus on the section's anchor tiles.`}
+                        </div>
+                      </div>
+                    );
+                  })}
+                  <div style={{marginTop:14,background:C.jade+"06",borderRadius:10,padding:"10px 12px",border:`1px solid ${C.jade}15`}}>
+                    <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>HOW THIS WORKS</div>
+                    <div style={{fontSize:10,color:C.ink,lineHeight:1.55}}>Each % shows how close your best-ever rack came to completing a real hand from the 2026 NMJL card. 70%+ means you've built racks that were genuinely close to winning.</div>
+                  </div>
+                </div>}
+              </div>
+            );
+          })()}
+
+          {/* ── NEXT PRACTICE RECOMMENDATION ─────────────────────────────────── */}
+          {(()=>{
+            // Data-driven: weakest avg IQ section, or untried
+            let rec=null,recReason="";
+            const weakest=triedSections.length?[...triedSections].sort((a,b)=>a.avgIQ-b.avgIQ)[0]:null;
+            if(untriedSections.length>0){
+              rec=untriedSections[0];
+              recReason=`You haven't practised ${rec.name} yet — blind spots are where the most improvement hides.`;
+            } else if(weakest&&weakest.avgIQ<70){
+              rec=SECS.find(s=>s.id===weakest.id);
+              recReason=`Your avg IQ in ${weakest.name} is ${weakest.avgIQ} — your weakest section. Focused reps here will lift your overall read speed fastest.`;
+            } else if(weakest){
+              const best=triedSections[0];
+              rec=SECS.find(s=>s.id===best.id);
+              recReason=`${best.name} is your strongest section at avg IQ ${best.avgIQ}. Keep sharpening it — consistency at your ceiling matters.`;
+            }
+            if(!rec)return null;
+            return(
+              <div style={{...S.card,marginBottom:10,background:"linear-gradient(145deg,#FFFFF8,#F8F4EB)",borderColor:C.gold+"25"}}>
+                <div style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:10}}>🎯 NEXT PRACTICE</div>
+                <div style={{display:"flex",alignItems:"flex-start",gap:10}}>
+                  <div style={{width:40,height:40,borderRadius:11,background:rec.color+"12",border:`1px solid ${rec.color}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{rec.icon}</div>
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:13,fontWeight:800,color:C.ink,marginBottom:4}}>{rec.name}</div>
+                    <div style={{fontSize:11,color:C.mut,lineHeight:1.55}}>{recReason}</div>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
         </>
       )}
       {onRecap&&getWeeklyRecapData()&&(
@@ -4397,6 +5352,8 @@ function Stats({home,onShowScorecard,onRecap,dRes}){
     </div>
   );
 }
+
+
 
 // ─── GAME ─────────────────────────────────────────────────────────────────────
 function ReadyOverlay({mode,dayNum,onReady,onHome}){
@@ -4625,24 +5582,61 @@ function Game({mode,home,onDone,settings}){
             <span style={{fontSize:12,fontWeight:600,color:showRef?C.gold:C.ink}}>📖 {showRef?"Hide":"Show"} 2026 Card Guide</span><span aria-hidden="true" style={{color:C.mut}}>{showRef?"▾":"▸"}</span>
           </button>
           {showRef&&<CG onClose={()=>setShowRef(false)}/>}
-          <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>CHOOSE YOUR SECTION</div>
-          <div style={{display:"flex",flexDirection:"column",gap:6,marginBottom:10}}>
-            {SECS.map(s=>{const isSel=chosenSec===s.id;return(
-              <button key={s.id} onClick={()=>{haptic(20);setChosenSec(s.id);}} role="radio" aria-checked={isSel} aria-label={`${s.name}: ${s.desc}`}
-                style={{cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"11px 14px",borderRadius:12,
-                  border:`1.5px solid ${isSel?s.color:C.bdr}`,
-                  background:isSel?s.color+"0A":"#fff",
-                  textAlign:"left",transition:"all 0.15s"}}>
-                <div style={{width:34,height:34,borderRadius:9,background:isSel?s.color+"18":C.bg2,border:`1.5px solid ${isSel?s.color+"40":C.bdr}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>{s.icon}</div>
-                <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontSize:13,fontWeight:700,color:isSel?s.color:C.ink,lineHeight:1.2,marginBottom:1}}>{s.name}</div>
-                  <div style={{fontSize:11,color:C.mut,lineHeight:1.3}}>{s.desc}</div>
-                </div>
-                {isSel
-                  ?<div style={{width:20,height:20,borderRadius:10,background:s.color,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><span style={{fontSize:10,color:"#fff",fontWeight:900}}>✓</span></div>
-                  :<div style={{width:20,height:20,borderRadius:10,border:`1.5px solid ${C.bdr}`,flexShrink:0}}/>}
-              </button>);})}
-          </div>
+          {(()=>{
+            const ranked=ev(hand).sort((a,b)=>b.score-a.score);
+            const topPct=ranked[0]?.score||0;
+            return(<>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
+                <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>CHOOSE YOUR SECTION</div>
+                <div style={{fontSize:9,color:C.mut}}>ranked by rack fit</div>
+              </div>
+              <div style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
+                {ranked.map((s,idx)=>{
+                  const isSel=chosenSec===s.id;
+                  const pct=Math.round(s.score*100);
+                  const viable=s.score>0.05;
+                  const isTop=idx===0;
+                  const barW=topPct>0?Math.round((s.score/topPct)*100):pct;
+                  return(
+                    <button key={s.id} onClick={()=>{haptic(20);setChosenSec(s.id);}} role="radio" aria-checked={isSel} aria-label={`${s.name}: ${s.desc} — ${pct}% fit`}
+                      style={{cursor:"pointer",display:"flex",alignItems:"center",gap:0,borderRadius:12,overflow:"hidden",
+                        border:`1.5px solid ${isSel?s.color:viable?C.bdr:"#ECEAE5"}`,
+                        background:isSel?s.color+"0C":viable?"#fff":"#F9F8F5",
+                        textAlign:"left",transition:"all 0.15s",
+                        boxShadow:isSel?`0 2px 12px ${s.color}20`:"none",
+                        opacity:viable?1:0.65}}>
+                      {/* Left accent bar */}
+                      <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:isSel?s.color:viable?s.color+"40":"#D5CFC5",transition:"background 0.15s"}}/>
+                      {/* Icon */}
+                      <div style={{width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,margin:"0 2px"}}>{s.icon}</div>
+                      {/* Content */}
+                      <div style={{flex:1,minWidth:0,padding:"10px 8px 10px 4px"}}>
+                        <div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:3}}>
+                          <span style={{fontSize:13,fontWeight:800,color:isSel?s.color:viable?C.ink:C.mut,lineHeight:1.2}}>{s.name}</span>
+                          {isTop&&!isSel&&<span style={{fontSize:8,fontWeight:700,background:C.gold+"20",color:C.gold,borderRadius:8,padding:"1px 6px",letterSpacing:0.5}}>BEST FIT</span>}
+                          {isSel&&<span style={{fontSize:8,fontWeight:700,background:s.color+"20",color:s.color,borderRadius:8,padding:"1px 6px",letterSpacing:0.5}}>SELECTED</span>}
+                        </div>
+                        <div style={{fontSize:10,color:C.mut,lineHeight:1.3,marginBottom:5}}>{s.desc}</div>
+                        {/* Fit bar */}
+                        <div style={{display:"flex",alignItems:"center",gap:6}}>
+                          <div style={{flex:1,height:3,borderRadius:2,background:isSel?s.color+"20":C.bdr,overflow:"hidden"}}>
+                            <div style={{height:"100%",width:`${barW}%`,background:isSel?s.color:viable?s.color+"80":"#C5C0B8",borderRadius:2,transition:"width 0.3s ease"}}/>
+                          </div>
+                          <span style={{fontSize:10,fontWeight:800,color:isSel?s.color:viable?C.mut:"#C5C0B8",fontFamily:F.d,flexShrink:0,minWidth:28,textAlign:"right"}}>{pct}%</span>
+                        </div>
+                      </div>
+                      {/* Check indicator */}
+                      <div style={{width:36,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                        {isSel
+                          ?<div style={{width:22,height:22,borderRadius:11,background:s.color,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:11,color:"#fff",fontWeight:900}}>✓</span></div>
+                          :<div style={{width:22,height:22,borderRadius:11,border:`2px solid ${viable?C.bdr:"#E0DDD8"}`}}/>}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </>);
+          })()}
           <button onClick={confirm} disabled={!chosenSec} style={{...S.greenBtn,width:"100%",marginTop:4,opacity:chosenSec?1:0.3}}>Rate My Hand →</button>
         </>
       )}
@@ -4678,18 +5672,105 @@ function Game({mode,home,onDone,settings}){
             </button>
           </>}
           {!hasNew&&mode==="free"&&<div style={{marginTop:8}}>
-            <button onClick={()=>setShowHint(!showHint)} aria-expanded={showHint} style={{background:"none",border:`1px solid ${C.bdr}`,borderRadius:8,padding:"6px 12px",fontSize:11,color:showHint?C.jade:C.mut,cursor:"pointer",fontWeight:600,width:"100%"}}>{showHint?"Hide Hint":"💡 Hint — Best sections for your rack"}</button>
-            {showHint&&<div style={{marginTop:6}} className="rk-in">
-              {ev(hand).slice(0,4).map(s=>(<div key={s.id}>
-                <button onClick={()=>setHintExp(hintExp===s.id?null:s.id)} aria-expanded={hintExp===s.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",padding:"5px 8px",marginBottom:2,borderRadius:8,background:s.score>0.05?s.color+"08":C.bg2,border:`1px solid ${s.score>0.05?s.color+"20":C.bdr}`,cursor:"pointer"}}>
-                  <span style={{fontSize:10,color:s.score>0.05?s.color:C.mut,fontWeight:600}}>{s.icon} {s.name} — {(s.score*100).toFixed(0)}% fit</span><span style={{fontSize:10,color:C.mut}}>{hintExp===s.id?"▾":"▸"}</span>
-                </button>
-                {hintExp===s.id&&<div style={{padding:"5px 8px",marginBottom:3,fontSize:10,color:C.ink,lineHeight:1.6,background:"#fff",borderRadius:6,border:`1px solid ${C.bdr}`}} className="rk-in">
-                  <div><span style={{color:C.jade,fontWeight:700}}>Hold:</span> {s.hold}</div>
-                  <div><span style={{color:C.cinn,fontWeight:700}}>Pass:</span> {s.pass}</div>
-                </div>}
-              </div>))}
-            </div>}
+            {/* ── HINT PANEL ── */}
+            <button onClick={()=>{setShowHint(!showHint);if(!showHint)setHintExp(null);}} aria-expanded={showHint}
+              style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",
+                padding:"10px 14px",borderRadius:12,cursor:"pointer",
+                background:showHint?C.jade+"0C":"#fff",
+                border:`1.5px solid ${showHint?C.jade+"40":C.bdr}`,
+                transition:"all 0.15s"}}>
+              <div style={{display:"flex",alignItems:"center",gap:8}}>
+                <span style={{fontSize:15}}>💡</span>
+                <div style={{textAlign:"left"}}>
+                  <div style={{fontSize:11,fontWeight:800,color:showHint?C.jade:C.ink,lineHeight:1.2}}>Section Hint</div>
+                  <div style={{fontSize:10,color:C.mut,lineHeight:1}}>Best fits for your current rack</div>
+                </div>
+              </div>
+              <span style={{fontSize:11,color:showHint?C.jade:C.mut,fontWeight:700}}>{showHint?"▾":"▸"}</span>
+            </button>
+
+            {showHint&&(()=>{
+              const ranked=ev(hand).slice(0,5);
+              const top=ranked[0];
+              return(
+                <div style={{marginTop:6,background:"#fff",borderRadius:12,border:`1px solid ${C.bdr}`,overflow:"hidden"}} className="rk-in">
+                  {/* Top match highlight */}
+                  <div style={{padding:"10px 14px",background:`linear-gradient(135deg,${top.color}10,${top.color}06)`,borderBottom:`1px solid ${top.color}20`}}>
+                    <div style={{fontSize:8,color:top.color,letterSpacing:2,fontWeight:700,marginBottom:4}}>BEST FIT RIGHT NOW</div>
+                    <div style={{display:"flex",alignItems:"center",gap:8}}>
+                      <span style={{fontSize:18}}>{top.icon}</span>
+                      <div style={{flex:1}}>
+                        <div style={{fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2}}>{top.name}</div>
+                        <div style={{fontSize:10,color:C.mut,lineHeight:1.3,marginTop:1}}>{top.desc}</div>
+                      </div>
+                      <div style={{textAlign:"right",flexShrink:0}}>
+                        <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:top.color,lineHeight:1}}>{Math.round(top.score*100)}<span style={{fontSize:10,color:C.mut,fontWeight:400}}>%</span></div>
+                      </div>
+                    </div>
+                    {/* Fit bar */}
+                    <div style={{height:3,borderRadius:2,background:top.color+"20",overflow:"hidden",marginTop:8}}>
+                      <div style={{height:"100%",width:`${Math.round(top.score*100)}%`,background:top.color,borderRadius:2}}/>
+                    </div>
+                  </div>
+
+                  {/* Hold / Pass chips for top section */}
+                  <div style={{padding:"10px 14px",borderBottom:`1px solid ${C.bdr}`,display:"flex",gap:8}}>
+                    <div style={{flex:1,background:C.jade+"08",borderRadius:8,padding:"7px 10px"}}>
+                      <div style={{fontSize:8,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>✓ HOLD</div>
+                      <div style={{fontSize:10,color:C.ink,lineHeight:1.5}}>{top.hold}</div>
+                    </div>
+                    <div style={{flex:1,background:C.cinn+"06",borderRadius:8,padding:"7px 10px"}}>
+                      <div style={{fontSize:8,color:C.cinn,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>✗ PASS</div>
+                      <div style={{fontSize:10,color:C.ink,lineHeight:1.5}}>{top.pass}</div>
+                    </div>
+                  </div>
+
+                  {/* Other sections ranked list */}
+                  <div style={{padding:"6px 8px"}}>
+                    <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700,padding:"4px 6px 6px"}}>OTHER OPTIONS</div>
+                    {ranked.slice(1).map((s,i)=>{
+                      const pct=Math.round(s.score*100);
+                      const viable=s.score>0.05;
+                      const isExp=hintExp===s.id;
+                      return(
+                        <div key={s.id} style={{marginBottom:2}}>
+                          <button onClick={()=>setHintExp(isExp?null:s.id)} aria-expanded={isExp}
+                            style={{width:"100%",display:"flex",alignItems:"center",gap:10,padding:"8px 8px",borderRadius:9,
+                              background:isExp?s.color+"0A":"transparent",
+                              border:`1px solid ${isExp?s.color+"30":"transparent"}`,cursor:"pointer",textAlign:"left",
+                              transition:"all 0.12s"}}>
+                            <span style={{fontSize:14,flexShrink:0}}>{s.icon}</span>
+                            <div style={{flex:1,minWidth:0}}>
+                              <div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:3}}>
+                                <span style={{fontSize:11,fontWeight:700,color:viable?C.ink:C.mut}}>{s.name}</span>
+                                <span style={{fontSize:10,fontWeight:700,color:viable?s.color:C.mut,fontFamily:F.d}}>{pct}%</span>
+                              </div>
+                              <div style={{height:3,borderRadius:2,background:C.bdr,overflow:"hidden"}}>
+                                <div style={{height:"100%",width:`${pct}%`,background:viable?s.color:"#D5CFC5",borderRadius:2}}/>
+                              </div>
+                            </div>
+                            <span style={{fontSize:10,color:C.mut,flexShrink:0}}>{isExp?"▾":"▸"}</span>
+                          </button>
+                          {isExp&&<div style={{margin:"2px 8px 6px",padding:"8px 10px",background:"#fff",borderRadius:8,border:`1px solid ${C.bdr}`}} className="rk-in">
+                            <div style={{display:"flex",gap:8,marginBottom:viable?6:0}}>
+                              <div style={{flex:1}}>
+                                <div style={{fontSize:8,color:C.jade,letterSpacing:1,fontWeight:700,marginBottom:2}}>HOLD</div>
+                                <div style={{fontSize:10,color:C.ink,lineHeight:1.5}}>{s.hold}</div>
+                              </div>
+                              <div style={{flex:1}}>
+                                <div style={{fontSize:8,color:C.cinn,letterSpacing:1,fontWeight:700,marginBottom:2}}>PASS</div>
+                                <div style={{fontSize:10,color:C.ink,lineHeight:1.5}}>{s.pass}</div>
+                              </div>
+                            </div>
+                            {!viable&&<div style={{fontSize:10,color:C.cinn,marginTop:4,fontStyle:"italic"}}>Low fit — your rack doesn't lean this way yet.</div>}
+                          </div>}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })()}
           </div>}
         </>
       )}
@@ -4763,7 +5844,7 @@ function dismissWeeklyRecap(){
   ST.set("weeklyRecapSeen",seed);
 }
 
-function WeeklyRecapScreen({home,go}){
+function WeeklyRecapScreen({home,go,dDone}){
   const data=getWeeklyRecapData();
   const profile=getProfile();
   const isSunday=new Date().getDay()===0;
@@ -4774,7 +5855,10 @@ function WeeklyRecapScreen({home,go}){
         <div style={{fontSize:32,marginBottom:12}}>🀄</div>
         <div style={{fontFamily:F.d,fontSize:18,fontWeight:800,color:C.ink,marginBottom:8}}>No games this week yet</div>
         <div style={{fontSize:13,color:C.mut,lineHeight:1.6,marginBottom:24}}>Play today's Daily to start building your week.</div>
-        <button onClick={()=>go("daily")} style={{...S.greenBtn,padding:"13px 32px"}}>Play Today's Daily →</button>
+        {dDone
+          ?<div style={{fontSize:12,color:C.jade,fontWeight:700}}>✓ Today's Daily is done. See you tomorrow!</div>
+          :<button onClick={()=>go("daily")} style={{...S.greenBtn,padding:"13px 32px"}}>Play Today's Daily →</button>
+        }
       </div>
     </div>
   );
@@ -4879,7 +5963,13 @@ function WeeklyRecapScreen({home,go}){
       </div>
 
       {/* CTA */}
-      <button onClick={()=>go("daily")} style={{...S.greenBtn,width:"100%",marginBottom:8}}>Play This Week's Daily →</button>
+      {dDone
+        ?<div style={{...S.card,marginBottom:8,background:C.jade+"06",borderColor:C.jade+"20",textAlign:"center",padding:"14px 16px"}}>
+          <div style={{fontSize:11,color:C.jade,fontWeight:700,marginBottom:2}}>✓ Today's Daily Complete</div>
+          <div style={{fontSize:11,color:C.mut}}>Come back tomorrow for the next challenge.</div>
+        </div>
+        :<button onClick={()=>go("daily")} style={{...S.greenBtn,width:"100%",marginBottom:8}}>Play This Week's Daily →</button>
+      }
       <button onClick={home} style={{...S.oBtn,width:"100%"}}>Back to Home</button>
       <Footer/>
     </div>
@@ -4928,6 +6018,11 @@ export default function Rackle(){
           if(ok)setClubPostToast({clubName:CLUBS[autoCode]?.name||"your club",iqScore:result.iq.totalScore});
         });
       }
+      // Auto-post to GLOBAL leaderboard — always, even without an account
+      if(result?.iq?.totalScore){
+        const globalName=autoName||getOrCreateAnonymousName();
+        upsertGlobalEntry(globalName,result.iq.totalScore,result.time||0,newStreak,autoCode||null);
+      }
     }
     addHist(result);
     // Auto-sync profile if it exists
@@ -4971,7 +6066,7 @@ export default function Rackle(){
         {screen==="scorecard"&&<ScorecardScreen res={dRes} home={()=>setScreen("home")} dayNum={getDayNum()} onPractice={()=>go("free")}/>}
         {screen==="leaderboard"&&<LeaderboardScreen home={()=>setScreen("home")} dRes={dRes} streak={streak}/>}
         {screen==="profile"&&<ProfileScreen home={()=>setScreen("home")} streak={streak} rounds={rounds} dRes={dRes} setScreen={setScreen}/>}
-        {screen==="recap"&&<WeeklyRecapScreen home={()=>setScreen("home")} go={go}/>}
+        {screen==="recap"&&<WeeklyRecapScreen home={()=>setScreen("home")} go={go} dDone={dDone}/>}
       </>
     </AppShell>
   );
