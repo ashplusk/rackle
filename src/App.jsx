@@ -2725,18 +2725,25 @@ async function deleteLBEntry(code,name){
   }catch{}
 }
 
-// Fetch global daily stats — total players + avg IQ across all clubs today
+// Fetch global daily stats — total unique players + avg IQ across all clubs today
 async function fetchDailyStats(){
   try{
     const res=await fetch(
-      `${SB_URL}/rest/v1/leaderboard?day_seed=eq.${getDailySeed()}&select=iq_score`,
+      `${SB_URL}/rest/v1/leaderboard?day_seed=eq.${getDailySeed()}&select=name,iq_score`,
       {headers:SB_HEADERS}
     );
     if(!res.ok)return null;
     const rows=await res.json();
     if(!rows.length)return null;
-    const total=rows.length;
-    const avg=Math.round(rows.reduce((s,r)=>s+r.iq_score,0)/total);
+    // Deduplicate by name — same player may appear under multiple club codes
+    const seen={};
+    rows.forEach(r=>{
+      const key=r.name.toLowerCase();
+      if(!seen[key]||r.iq_score>seen[key])seen[key]=r.iq_score;
+    });
+    const unique=Object.values(seen);
+    const total=unique.length;
+    const avg=Math.round(unique.reduce((s,v)=>s+v,0)/total);
     return{total,avg};
   }catch{return null;}
 }
@@ -3270,7 +3277,12 @@ function DailyIQScorecard({iq,hand,passLog,dayNum,section,chosenSec,allSections,
   const [dailyStats,setDailyStats]=useState(null);
   if(!iq)return null;
   const shareText=iq.shareText||`🀄 Daily Rackle #${dayNum}\nCharleston IQ: ${iq.totalScore} · ${iq.level}\nplayrackle.com`;
-  useEffect(()=>{fetchDailyStats().then(s=>{if(s&&s.total>1)setDailyStats(s);});},[]);
+  useEffect(()=>{fetchDailyStats().then(s=>{
+    if(s&&s.total>=1){
+      // Add 1 for the current player — their score may not yet be committed to DB
+      setDailyStats({...s,total:s.total+1});
+    }
+  });},[]);
 
   // Build section comparison: what they chose vs what they should have
   const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
@@ -5646,30 +5658,28 @@ function Game({mode,home,onDone,settings}){
                   return(
                     <button key={s.id} onClick={()=>{haptic(20);setChosenSec(s.id);}} role="radio" aria-checked={isSel} aria-label={`${s.name}: ${s.desc}`}
                       style={{cursor:"pointer",display:"flex",alignItems:"center",gap:0,borderRadius:12,overflow:"hidden",
-                        border:`1.5px solid ${isSel?s.color:viable?C.bdr:"#ECEAE5"}`,
-                        background:isSel?s.color+"0C":viable?"#fff":"#F9F8F5",
+                        border:`1.5px solid ${isSel?s.color:C.bdr}`,
+                        background:isSel?s.color+"0C":"#fff",
                         textAlign:"left",transition:"all 0.15s",
-                        boxShadow:isSel?`0 2px 12px ${s.color}20`:"none",
-                        opacity:viable?1:0.65}}>
+                        boxShadow:isSel?`0 2px 12px ${s.color}20`:"none"}}>
                       {/* Left accent bar */}
-                      <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:isSel?s.color:viable?s.color+"40":"#D5CFC5",transition:"background 0.15s"}}/>
+                      <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:isSel?s.color:s.color+"40",transition:"background 0.15s"}}/>
                       {/* Icon */}
                       <div style={{width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,margin:"0 2px"}}>{s.icon}</div>
                       {/* Content */}
                       <div style={{flex:1,minWidth:0,padding:"10px 8px 10px 4px"}}>
                         <div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:3}}>
-                          <span style={{fontSize:13,fontWeight:800,color:isSel?s.color:viable?C.ink:C.mut,lineHeight:1.2}}>{s.name}</span>
+                          <span style={{fontSize:13,fontWeight:800,color:isSel?s.color:C.ink,lineHeight:1.2}}>{s.name}</span>
                           {isTop&&!isSel&&<span style={{fontSize:8,fontWeight:700,background:C.gold+"20",color:C.gold,borderRadius:8,padding:"1px 6px",letterSpacing:0.5}}>BEST FIT</span>}
                           {isSel&&<span style={{fontSize:8,fontWeight:700,background:s.color+"20",color:s.color,borderRadius:8,padding:"1px 6px",letterSpacing:0.5}}>SELECTED</span>}
                         </div>
                         <div style={{fontSize:10,color:C.mut,lineHeight:1.3,marginBottom:5}}>{s.desc}</div>
-
                       </div>
                       {/* Check indicator */}
                       <div style={{width:36,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
                         {isSel
                           ?<div style={{width:22,height:22,borderRadius:11,background:s.color,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:11,color:"#fff",fontWeight:900}}>✓</span></div>
-                          :<div style={{width:22,height:22,borderRadius:11,border:`2px solid ${viable?C.bdr:"#E0DDD8"}`}}/>}
+                          :<div style={{width:22,height:22,borderRadius:11,border:`2px solid ${C.bdr}`}}/>}
                       </div>
                     </button>
                   );
