@@ -1,19 +1,19 @@
 import { Analytics } from '@vercel/analytics/react';
 import { useState, useEffect, useRef, useCallback } from "react";
-// RACKLE — Daily Charleston + Practice. The Daily Mahjong Workout. 2026 NMJL.
+// RACKLE — Daily Charleston + Practice. The Daily Mahjong Workout. 2026 NMJL. v93.1
 // v2.0 — Full Charleston IQ Scoring Engine, IQScorecard, ScorecardScreen
 
 // DESIGN
-const C={bg:"#FAF7F1",bg2:"#F1ECE3",ink:"#221E1A",mut:"#6B6560",jade:"#1B7D4E",gold:"#B08A35",cinn:"#B83232",bdr:"#E3DDD3",
+const C={bg:"#F8F4EE",bg2:"#EDE7DA",ink:"#1A1410",mut:"#6B6157",jade:"#176B42",gold:"#A07828",cinn:"#B02A2A",bdr:"#DDD6C8",
   // IQ hero palette
-  hero1:"#083D22",hero2:"#0F5535",hero3:"#072E19",gilt:"#C9A84C",
+  hero1:"#062B18",hero2:"#0D4A2E",hero3:"#051F11",gilt:"#C9A84C",
   // card accents
-  sage:"#F0F7F2",sageB:"#4A7A5E",amber:"#FDF6E3",amberB:"#7A5C1E",parch:"#FAF7F0",
+  sage:"#EDF5F0",sageB:"#3D6E52",amber:"#FBF3E2",amberB:"#7A5010",parch:"#F8F4EE",
 };
 const F={d:"'Fraunces',Georgia,serif",b:"'Nunito','Segoe UI',sans-serif"};
 const CSS=`
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:#D5CFC5}
+html,body{margin:0;padding:0;background:#F8F4EE}
 @keyframes rkIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 .rk-in{animation:rkIn .25s ease}
 @keyframes rkFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
@@ -32,15 +32,15 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .rk-bar{animation:rkBar 1s ease forwards}
 `;
 const S={
-  outer:{background:"#D5CFC5",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
+  outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
   app:{fontFamily:F.b,background:C.bg,minHeight:"100vh",color:C.ink,width:"100%",maxWidth:560,borderLeft:`1px solid ${C.bdr}`,borderRight:`1px solid ${C.bdr}`},
   pg:{padding:"10px 16px",paddingBottom:36},
   pill:{background:C.bg2,borderRadius:12,padding:"8px 6px",textAlign:"center",border:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"center",gap:6},
-  card:{background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:12,padding:14,marginBottom:8},
+  card:{background:"#FDFAF6",border:`1px solid ${C.bdr}`,borderRadius:12,padding:14,marginBottom:8},
   dot:{width:20,height:20,borderRadius:10,background:C.jade+"12",border:`1.5px solid ${C.jade}25`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:C.jade,flexShrink:0},
-  passBtn:{width:"100%",padding:"13px 0",borderRadius:12,border:"none",cursor:"pointer",background:`linear-gradient(135deg,${C.cinn},#9A2828)`,color:"#fff",fontSize:14,fontFamily:F.d,fontWeight:700,letterSpacing:1,minHeight:48},
-  greenBtn:{padding:"12px 0",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",border:"none",borderRadius:12,fontSize:14,fontFamily:F.d,fontWeight:700,letterSpacing:1,cursor:"pointer",minHeight:48},
-  oBtn:{padding:"10px 0",background:"#F5F1EB",color:C.ink,border:`1px solid ${C.bdr}`,borderRadius:12,fontSize:13,cursor:"pointer",minHeight:44,fontWeight:600},
+  passBtn:{width:"100%",padding:"13px 0",borderRadius:12,border:"none",cursor:"pointer",background:`linear-gradient(135deg,${C.cinn},#8A2020)`,color:"#fff",fontSize:14,fontFamily:F.d,fontWeight:700,letterSpacing:1,minHeight:48},
+  greenBtn:{padding:"12px 0",background:`linear-gradient(135deg,${C.jade},#115C38)`,color:"#fff",border:"none",borderRadius:12,fontSize:14,fontFamily:F.d,fontWeight:700,letterSpacing:1,cursor:"pointer",minHeight:48},
+  oBtn:{padding:"10px 0",background:"#F0EAE0",color:C.ink,border:`1px solid ${C.bdr}`,borderRadius:12,fontSize:13,cursor:"pointer",minHeight:44,fontWeight:600},
   back:{background:"none",border:"none",color:C.jade,fontSize:12,cursor:"pointer",fontWeight:700,padding:0,minHeight:44,display:"flex",alignItems:"center"},
   sortBtn:{background:"none",border:`1px solid ${C.bdr}`,borderRadius:6,padding:"4px 8px",fontSize:9,color:C.mut,cursor:"pointer",fontWeight:600,minHeight:32},
   shareCard:{background:"linear-gradient(145deg,#FFFFF5,#F4EFE3)",border:`1.5px solid ${C.jade}20`,borderRadius:18,padding:"16px 20px",textAlign:"center",marginTop:8,boxShadow:"0 4px 18px rgba(0,0,0,0.04)"},
@@ -2005,7 +2005,9 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   const _prof=getProfile();
   const _club=_prof?.clubCode?CLUBS[_prof.clubCode]:null;
   const clubLine=_club?`${_club.name}\n`:"";
-  const shareText=`🀄 Daily Rackle #${dn} · IQ ${totalScore} · ${level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}${clubLine}Think you can beat it? Same hand for everyone today.\nplayrackle.com`;
+  const shareText=isDaily
+    ?`🀄 Daily Rackle #${dn} · IQ ${totalScore} · ${level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}${clubLine}Think you can beat it?\nplayrackle.com`
+    :`🀄 Rackle Practice · IQ ${totalScore} · ${level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}${clubLine}Play the daily Charleston challenge!\nplayrackle.com`;
 
   return{
     puzzleId,totalScore,level,levelExplanation,
@@ -3208,11 +3210,6 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false}){
                 </div>}
               </div>
 
-              {/* Pass advice */}
-              <div style={{background:C.bg2,borderRadius:8,padding:"8px 10px",border:`1px solid ${C.bdr}`}}>
-                <div style={{fontSize:8,color:C.mut,fontWeight:700,letterSpacing:1,marginBottom:3}}>PASSING STRATEGY</div>
-                <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{passAdvice}</div>
-              </div>
             </div>
           );
         })}
@@ -3347,7 +3344,7 @@ function DailyIQScorecard({iq,hand,passLog,dayNum,section,chosenSec,allSections,
   const [passOpen,setPassOpen]=useState(false);
   const [dailyStats,setDailyStats]=useState(null);
   if(!iq)return null;
-  const shareText=iq.shareText||`🀄 Daily Rackle #${dayNum} · IQ ${iq.totalScore} · ${iq.level}\nThink you can beat it? Same hand for everyone today.\nplayrackle.com`;
+  const shareText=iq.shareText||`🀄 Daily Rackle #${dayNum} · IQ ${iq.totalScore} · ${iq.level}\nThink you can beat it?\nplayrackle.com`;
   useEffect(()=>{fetchDailyStats().then(s=>{
     if(s&&s.total>=1){
       // Add 1 for the current player — their score may not yet be committed to DB
@@ -3413,7 +3410,9 @@ function DailyIQScorecard({iq,hand,passLog,dayNum,section,chosenSec,allSections,
       <div style={{marginBottom:10}}><IQHero iq={iq} isDaily dayNum={dayNum} section={section} totalTime={iq.totalTime||0} chosenSec={chosenSec} allSections={allSections}/></div>
 
       <div style={{...S.card,marginBottom:8}}>
-        <div style={{fontFamily:"monospace",fontSize:10,color:C.mut,lineHeight:1.9,whiteSpace:"pre",background:C.bg2,borderRadius:8,padding:"10px 12px",marginBottom:10,textAlign:"center",borderBottom:`1px solid ${C.bdr}`}}>{shareText}</div>
+        <div style={{fontFamily:"monospace",fontSize:10,color:C.mut,background:C.bg2,borderRadius:8,padding:"10px 12px",marginBottom:10,textAlign:"center",borderBottom:`1px solid ${C.bdr}`}}>
+          {shareText.split("\n").map((line,i)=>line===""?<div key={i} style={{height:8}}/>:<div key={i} style={{lineHeight:1.9}}>{line}</div>)}
+        </div>
         <div style={{display:"flex",flexDirection:"column",gap:6}}>
           <ShareButton text={shareText}/>
         </div>
@@ -3497,6 +3496,7 @@ function DailyIQScorecard({iq,hand,passLog,dayNum,section,chosenSec,allSections,
 // ─── PRACTICE SCORECARD — full tabbed ─────────────────────────────────────────
 function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHome,onDealAgain}){
   const [tab,setTab]=useState(0);
+  const [sfOpen,setSfOpen]=useState(false);
   if(!iq)return null;
   const dist=iq.distanceToOptimal||{};
   const tins=iq.tileInsights||{};
@@ -3528,7 +3528,6 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
 
         {/* Section comparison — collapsible */}
         {allSections&&allSections.length>0&&(()=>{
-          const [sfOpen,setSfOpen]=useState(false);
           const topSec=[...allSections].sort((a,b)=>b.score-a.score)[0];
           return(
             <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden"}}>
@@ -3568,7 +3567,9 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
 
         {/* Share */}
         <div style={{...S.card,marginBottom:8}}>
-          <div style={{fontFamily:"monospace",fontSize:10,color:C.mut,lineHeight:1.9,whiteSpace:"pre",background:C.bg2,borderRadius:8,padding:"10px 12px",marginBottom:10,textAlign:"center",borderBottom:`1px solid ${C.bdr}`}}>{iq.shareText}</div>
+          <div style={{fontFamily:"monospace",fontSize:10,color:C.mut,background:C.bg2,borderRadius:8,padding:"10px 12px",marginBottom:10,textAlign:"center",borderBottom:`1px solid ${C.bdr}`}}>
+            {(iq.shareText||"").split("\n").map((line,i)=>line===""?<div key={i} style={{height:8}}/>:<div key={i} style={{lineHeight:1.9}}>{line}</div>)}
+          </div>
           <ShareButton text={iq.shareText}/>
         </div>
       </div>}
@@ -3748,6 +3749,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
 // ─── COACH MODE SCREEN — deep analysis page ──────────────────────────────────
 function CoachModeScreen({iq,hand,passLog,dayNum,section,chosenSec,allSections,onBack}){
   const [passOpen,setPassOpen]=useState(false);
+  const [sfOpen,setSfOpen]=useState(false);
   if(!iq)return null;
 
   const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
@@ -3758,32 +3760,50 @@ function CoachModeScreen({iq,hand,passLog,dayNum,section,chosenSec,allSections,o
   const bestPct=bestFitSec?Math.round(bestFitSec.score*100):null;
   const sectionMatch=chosenSec===bestFitSec?.id;
 
+  // Score bar colors
+  const scoreColor=(v,max)=>v/max>=0.8?C.jade:v/max>=0.55?C.gold:C.cinn;
+
   return(
     <div style={S.pg} className="rk-pg">
-      <div style={{display:"flex",alignItems:"center",justifyContent:"center",position:"relative",marginBottom:16,paddingTop:2}}>
-        <button onClick={onBack} style={{...S.back,position:"absolute",left:0}}>← Back</button>
-        <div style={{textAlign:"center"}}>
-          <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Coach Mode</div>
-          <div style={{fontSize:10,color:"#1E3A5F",fontWeight:600,fontStyle:"italic",letterSpacing:0.5,marginTop:1}}>Deep analysis · Day #{dayNum}</div>
+
+      {/* Header */}
+      <div style={{display:"flex",alignItems:"center",position:"relative",marginBottom:14,paddingTop:2}}>
+        <button onClick={onBack} style={S.back}>← Back</button>
+        <div style={{flex:1,textAlign:"center"}}>
+          <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:C.ink,letterSpacing:-0.5}}>Coach Mode</div>
+          <div style={{fontSize:10,color:C.mut,marginTop:1}}>Day #{dayNum}</div>
         </div>
       </div>
 
-      {/* Final Rack — top of coach view */}
+      {/* Final Rack */}
       {hand&&hand.length>0&&<SortableRack hand={hand}/>}
 
-      {/* SCORE BREAKDOWN — first after rack */}
-      <div style={{...S.card,marginBottom:8}}>
-        <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:14}}>SCORE BREAKDOWN</div>
-        <ScoreBar label="Direction" score={iq.directionScore} max={40} note={iq.directionExplanation}/>
-        <ScoreBar label="Tile Strength" score={iq.tileStrengthScore} max={25}/>
-        <ScoreBar label="Pass Quality" score={iq.passQualityScore} max={25}/>
-        <ScoreBar label="Timing" score={iq.timingScore} max={10} note={iq.timingInsight}/>
+      {/* IQ at a glance — compact row */}
+      <div style={{display:"flex",gap:6,marginBottom:10}}>
+        {[
+          {label:"Direction",v:iq.directionScore,max:40},
+          {label:"Tile Str.",v:iq.tileStrengthScore,max:25},
+          {label:"Pass Qual.",v:iq.passQualityScore,max:25},
+          {label:"Timing",v:iq.timingScore,max:10},
+        ].map(({label,v,max})=>{
+          const col=scoreColor(v,max);
+          return(
+            <div key={label} style={{flex:1,background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:10,padding:"8px 6px",textAlign:"center"}}>
+              <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:col,lineHeight:1}}>{v}</div>
+              <div style={{fontSize:7,color:C.mut,letterSpacing:1,fontWeight:700,marginTop:3,lineHeight:1.3}}>{label.toUpperCase()}</div>
+              <div style={{fontSize:8,color:C.mut,opacity:0.6}}>/{max}</div>
+            </div>
+          );
+        })}
       </div>
 
-      {/* SECTION READ */}
-      {chosenSecObj&&<div style={{...S.card,marginBottom:8,padding:"12px 14px"}}>
+      {/* Direction note */}
+      {iq.directionExplanation&&<div style={{fontSize:11,color:C.mut,lineHeight:1.55,background:C.bg2,borderRadius:10,padding:"9px 12px",marginBottom:10,borderLeft:`3px solid ${scoreColor(iq.directionScore,40)}`}}>{iq.directionExplanation}</div>}
+
+      {/* Section Read */}
+      {chosenSecObj&&<div style={{...S.card,marginBottom:10,padding:"12px 14px"}}>
         <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>SECTION READ</div>
-        <div style={{display:"flex",gap:8}}>
+        <div style={{display:"flex",gap:8,marginBottom:sectionMatch?0:8}}>
           <div style={{flex:1,borderRadius:10,padding:"10px",background:sectionMatch?C.jade+"08":"#FFF0E8",border:`1.5px solid ${sectionMatch?C.jade+"30":"#C0602025"}`}}>
             <div style={{fontSize:8,color:sectionMatch?C.jade:"#8A3010",letterSpacing:1.5,fontWeight:700,marginBottom:4}}>YOU CHOSE</div>
             <div style={{display:"flex",alignItems:"center",gap:5}}>
@@ -3795,7 +3815,7 @@ function CoachModeScreen({iq,hand,passLog,dayNum,section,chosenSec,allSections,o
             </div>
           </div>
           <div style={{flex:1,borderRadius:10,padding:"10px",background:sectionMatch?C.jade+"08":C.sage,border:`1.5px solid ${sectionMatch?C.jade+"30":C.sageB+"30"}`}}>
-            <div style={{fontSize:8,color:sectionMatch?C.jade:C.sageB,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>{sectionMatch?"✓ BEST FIT TOO":"BEST FIT WAS"}</div>
+            <div style={{fontSize:8,color:sectionMatch?C.jade:C.sageB,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>{sectionMatch?"✓ BEST FIT":"BEST FIT WAS"}</div>
             <div style={{display:"flex",alignItems:"center",gap:5}}>
               <span style={{fontSize:16}}>{bestFitSec?.icon}</span>
               <div>
@@ -3805,30 +3825,28 @@ function CoachModeScreen({iq,hand,passLog,dayNum,section,chosenSec,allSections,o
             </div>
           </div>
         </div>
-        {!sectionMatch&&<div style={{marginTop:8,fontSize:11,color:"#8A3010",lineHeight:1.5,background:"#FFF5F0",borderRadius:8,padding:"7px 10px"}}>💡 Your tiles leaned more toward {bestFitSec?.icon} {bestFitSec?.name}. An earlier pivot could have scored higher.</div>}
-        {sectionMatch&&<div style={{marginTop:8,fontSize:11,color:C.jade,lineHeight:1.5,background:C.jade+"08",borderRadius:8,padding:"7px 10px"}}>✓ Great read — your section pick matched your best hand fit.</div>}
+        {!sectionMatch&&<div style={{fontSize:11,color:"#8A3010",lineHeight:1.55,background:"#FFF5F0",borderRadius:8,padding:"7px 10px"}}>💡 {bestFitSec?.icon} {bestFitSec?.name} was the stronger fit. An earlier pivot could have scored higher.</div>}
       </div>}
 
-      {/* HAND TARGETS */}
+      {/* Hand Targets */}
       {hand&&hand.length>0&&chosenSec&&<SpecificHandCard finalRack={hand} sectionId={chosenSec} defaultOpen={true}/>}
 
-      {/* HAND BREAKDOWN (section fit ranking) */}
+      {/* All sections — collapsed by default */}
       {allSections&&allSections.length>0&&(()=>{
-        const [sfOpen,setSfOpen]=useState(false);
         const topSec=[...allSections].sort((a,b)=>b.score-a.score)[0];
         return(
-          <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden"}}>
-            <button onClick={()=>setSfOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"12px 14px",background:"#fff",border:"none",cursor:"pointer",textAlign:"left",borderBottom:sfOpen?`1px solid ${C.bdr}`:"none"}}>
-              <div style={{display:"flex",alignItems:"center",gap:10}}>
-                <span style={{fontSize:22}}>{topSec?.icon||"📊"}</span>
+          <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden"}}>
+            <button onClick={()=>setSfOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"11px 14px",background:"#fff",border:"none",cursor:"pointer",textAlign:"left",borderBottom:sfOpen?`1px solid ${C.bdr}`:"none"}}>
+              <div style={{display:"flex",alignItems:"center",gap:8}}>
+                <span style={{fontSize:18}}>{topSec?.icon||"📊"}</span>
                 <div>
-                  <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:2}}>HAND BREAKDOWN</div>
-                  <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:C.ink,lineHeight:1.2}}>All sections ranked</div>
+                  <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>ALL SECTIONS RANKED</div>
+                  <div style={{fontSize:12,fontWeight:700,color:C.ink,marginTop:1}}>Section fit breakdown</div>
                 </div>
               </div>
-              <span style={{fontSize:12,color:C.mut,flexShrink:0}}>{sfOpen?"▾":"▸"}</span>
+              <span style={{fontSize:12,color:C.mut}}>{sfOpen?"▾":"▸"}</span>
             </button>
-            {sfOpen&&<div style={{padding:"12px 14px"}} className="rk-in">
+            {sfOpen&&<div style={{padding:"10px 14px"}} className="rk-in">
               {allSections.slice(0,5).map((s,i)=>{
                 const isChosen=s.id===chosenSec;const isTop=i===0;
                 const pct=Math.round(s.score*100);
@@ -3852,23 +3870,33 @@ function CoachModeScreen({iq,hand,passLog,dayNum,section,chosenSec,allSections,o
         );
       })()}
 
-      {/* PASS BREAKDOWN */}
-      {iq.passInsights&&iq.passInsights.length>0&&<div style={{...S.card,padding:0,overflow:"hidden",marginBottom:8}}>
-        <button onClick={()=>setPassOpen(o=>!o)} style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",padding:"12px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
-          <span style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>PASS BREAKDOWN</span>
-          <span style={{fontSize:13,color:C.mut}}>{passOpen?"▾":"▸"}</span>
+      {/* Pass Breakdown — collapsed */}
+      {iq.passInsights&&iq.passInsights.length>0&&<div style={{...S.card,padding:0,overflow:"hidden",marginBottom:10}}>
+        <button onClick={()=>setPassOpen(o=>!o)} style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",padding:"11px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
+          <div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>PASS BREAKDOWN</div>
+            <div style={{fontSize:12,fontWeight:700,color:C.ink,marginTop:1}}>Per-pass analysis</div>
+          </div>
+          <span style={{fontSize:12,color:C.mut}}>{passOpen?"▾":"▸"}</span>
         </button>
         {passOpen&&<div style={{borderTop:`1px solid ${C.bdr}`}} className="rk-in">
           {iq.passInsights.map((p,i)=>{
             const qBg={strong:C.sage,weak:"#FDF0E8",mixed:C.amber,neutral:"#fff"};
+            const qColor={strong:C.sageB,weak:"#8A3010",mixed:C.amberB,neutral:C.mut};
             return(<div key={i} style={{background:qBg[p.quality]||"#fff",padding:"10px 14px",borderBottom:i<iq.passInsights.length-1?`1px solid ${C.bdr}`:undefined}}>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:9,color:C.mut,fontWeight:700,letterSpacing:1}}>{(p.roundName||"Pass").toUpperCase()}</span><QualityPip quality={p.quality}/></div>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+                <span style={{fontSize:10,color:qColor[p.quality]||C.mut,fontWeight:700}}>{p.roundName||"Pass"}</span>
+                <QualityPip quality={p.quality}/>
+              </div>
               {p.passedTiles&&p.passedTiles.length>0&&<div style={{display:"flex",flexWrap:"wrap",gap:2,marginBottom:6}}>{p.passedTiles.map((t,j)=><Ti key={j} t={t}/>)}</div>}
-              <p style={{fontSize:11,color:C.ink,margin:0,lineHeight:1.5}}>{p.insight}</p>
+              <p style={{fontSize:11,color:C.ink,margin:0,lineHeight:1.55}}>{p.insight}</p>
             </div>);
           })}
         </div>}
       </div>}
+
+      {/* Timing note */}
+      {iq.timingInsight&&<div style={{fontSize:11,color:C.mut,lineHeight:1.55,background:C.bg2,borderRadius:10,padding:"9px 12px",marginBottom:10,borderLeft:`3px solid ${scoreColor(iq.timingScore,10)}`}}>⏱ {iq.timingInsight}</div>}
 
       <button onClick={onBack} style={{...S.oBtn,width:"100%",marginTop:4}}>← Back to Scorecard</button>
       <Footer/>
@@ -3964,13 +3992,42 @@ function ClubPostToast({toast,onDismiss}){
   );
 }
 
-function RackleHeader({onBack}){
+function RackleHeader({onBack,setScreen}){
+  const [menuOpen,setMenuOpen]=useState(false);
+  const profile=getProfile();
+  const hasProfile=!!(profile&&profile.nickname);
   return(
-    <div style={{display:"flex",alignItems:"center",justifyContent:"center",position:"relative",marginBottom:16,paddingTop:2}}>
-      <button onClick={onBack} style={{...S.back,position:"absolute",left:0}} aria-label="Back to home">← Back</button>
-      <div style={{textAlign:"center"}}>
+    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",position:"relative",marginBottom:16,paddingTop:8}}>
+      <button onClick={onBack} style={S.back} aria-label="Back to home">← Back</button>
+      <div style={{textAlign:"center",position:"absolute",left:"50%",transform:"translateX(-50%)"}}>
         <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div>
         <div style={{fontFamily:F.d,fontSize:10,color:C.jade,fontWeight:600,fontStyle:"italic",letterSpacing:0.5,marginTop:1}}>The Daily Mahjong Workout.</div>
+      </div>
+      <div style={{position:"relative"}}>
+        <button onClick={()=>setMenuOpen(o=>!o)} aria-label="Menu"
+          style={{background:menuOpen?C.bg2:"none",border:`1px solid ${menuOpen?C.bdr:"transparent"}`,borderRadius:8,padding:"6px 10px",cursor:"pointer",display:"flex",flexDirection:"column",gap:4,alignItems:"center",justifyContent:"center",flexShrink:0}}>
+          <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
+          <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
+          <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
+        </button>
+        {menuOpen&&(
+          <div className="rk-in" style={{position:"absolute",top:"100%",right:0,zIndex:50,background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:12,boxShadow:"0 8px 32px rgba(0,0,0,0.12)",minWidth:140,maxWidth:160,marginTop:6,overflow:"hidden"}}>
+            {hasProfile?(
+              <button onClick={()=>{setMenuOpen(false);setScreen&&setScreen("profile");}} style={{width:"100%",display:"flex",alignItems:"center",gap:10,padding:"12px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left",borderBottom:`1px solid ${C.bdr}`}}>
+                <div style={{width:28,height:28,borderRadius:14,background:C.jade+"18",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:C.jade,flexShrink:0}}>
+                  {(profile.nickname||"?").charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <div style={{fontSize:13,fontWeight:700,color:C.ink,lineHeight:1.2}}>{profile.nickname.split(" ")[0]}</div>
+                  <div style={{fontSize:10,color:C.mut}}>View profile</div>
+                </div>
+              </button>
+            ):(
+              <button onClick={()=>{setMenuOpen(false);setScreen&&setScreen("profile");}} style={{width:"100%",padding:"12px 14px",background:C.jade+"08",border:"none",cursor:"pointer",textAlign:"left",fontSize:13,fontWeight:700,color:C.jade,borderBottom:`1px solid ${C.bdr}`}}>Join Rackle →</button>
+            )}
+            <button onClick={()=>{setMenuOpen(false);setScreen&&setScreen("settings");}} style={{width:"100%",padding:"12px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left",fontSize:13,fontWeight:600,color:C.ink}}>⚙ Settings</button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -4080,38 +4137,50 @@ function Tutorial({onDone,onBack}){
 }
 
 // ─── CARD GUIDE ──────────────────────────────────────────────────────────────
-function CardGuideScreen({home}){
+function CardGuideScreen({home,setScreen}){
   const [exp,setExp]=useState(null);
   return(
     <div style={S.pg} className="rk-pg">
-      <RackleHeader onBack={home}/>
-      <div style={{marginBottom:16}}>
+      <RackleHeader onBack={home} setScreen={setScreen}/>
+      <div style={{marginBottom:20,marginTop:4}}>
         <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>2026 Card Guide</div>
-        <p style={{fontSize:12,color:C.mut,margin:"0 0 10px",lineHeight:1.6}}>Hold and pass tips for all 9 hand sections. Tap any section to study it.</p>
+        <p style={{fontSize:12,color:C.mut,margin:0,lineHeight:1.6}}>Hold and pass tips for all 9 sections. Tap any to study it.</p>
       </div>
       {SECS.map(s=>{const o=exp===s.id;return(
-        <div key={s.id} style={{...S.card,padding:0,overflow:"hidden",marginBottom:8}}>
+        <div key={s.id} style={{background:"#FDFAF6",border:`1px solid ${o?s.color+"40":C.bdr}`,borderRadius:14,overflow:"hidden",marginBottom:8,transition:"border-color 0.15s"}}>
           <button onClick={()=>setExp(o?null:s.id)} aria-expanded={o} style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",padding:"14px 16px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
-            <div style={{display:"flex",alignItems:"center",gap:10}}>
-              <div style={{width:36,height:36,borderRadius:10,background:s.color+"12",border:`1px solid ${s.color}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{s.icon}</div>
-              <div><div style={{fontSize:13,fontWeight:800,color:C.ink,marginBottom:2}}>{s.name}</div><div style={{fontSize:11,color:C.mut}}>{s.desc}</div></div>
+            <div style={{display:"flex",alignItems:"center",gap:12}}>
+              <div style={{width:40,height:40,borderRadius:11,background:s.color+"14",border:`1px solid ${s.color}25`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{s.icon}</div>
+              <div>
+                <div style={{fontSize:14,fontWeight:800,color:o?s.color:C.ink,marginBottom:3,transition:"color 0.15s"}}>{s.name}</div>
+                <div style={{fontSize:11,color:C.mut,lineHeight:1.3}}>{s.desc}</div>
+              </div>
             </div>
-            <span style={{fontSize:13,color:C.mut}}>{o?"▾":"▸"}</span>
+            <div style={{display:"flex",alignItems:"center",gap:6,flexShrink:0}}>
+              <span style={{fontSize:9,color:C.mut,fontWeight:600}}>{s.hands} hands</span>
+              <span style={{fontSize:13,color:o?s.color:C.mut,transition:"color 0.15s"}}>{o?"▾":"▸"}</span>
+            </div>
           </button>
-          {o&&<div style={{padding:"0 16px 14px",borderTop:`1px solid ${C.bdr}`}} className="rk-in">
-            <div style={{display:"flex",gap:6,margin:"12px 0 10px"}}>
-              <div style={{flex:1,background:C.jade+"08",borderRadius:8,padding:"8px 10px"}}><div style={{fontSize:8,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>✓ HOLD</div><div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{s.hold}</div></div>
-              <div style={{flex:1,background:C.cinn+"06",borderRadius:8,padding:"8px 10px"}}><div style={{fontSize:8,color:C.cinn,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>✗ PASS</div><div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{s.pass}</div></div>
+          {o&&<div style={{borderTop:`1px solid ${s.color}20`,background:`${s.color}04`}} className="rk-in">
+            <div style={{display:"flex",gap:8,padding:"12px 16px 0"}}>
+              <div style={{flex:1,background:"#fff",border:`1px solid ${C.jade}20`,borderRadius:10,padding:"10px 12px"}}>
+                <div style={{fontSize:8,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>✓ HOLD</div>
+                <div style={{fontSize:11,color:C.ink,lineHeight:1.6}}>{s.hold}</div>
+              </div>
+              <div style={{flex:1,background:"#fff",border:`1px solid ${C.cinn}15`,borderRadius:10,padding:"10px 12px"}}>
+                <div style={{fontSize:8,color:C.cinn,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>✗ PASS</div>
+                <div style={{fontSize:11,color:C.ink,lineHeight:1.6}}>{s.pass}</div>
+              </div>
             </div>
-            <div style={{background:C.gold+"06",borderRadius:8,padding:"8px 10px",marginBottom:s.joker?8:0}}>
-              <div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>💡 STRATEGY</div>
-              <div style={{fontSize:12,color:C.ink,lineHeight:1.6}}>{s.combos}</div>
+            <div style={{padding:"10px 16px",margin:"10px 16px 0",background:"#fff",border:`1px solid ${C.gold}20`,borderRadius:10,marginBottom:s.joker?0:16}}>
+              <div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>💡 STRATEGY</div>
+              <div style={{fontSize:11,color:C.ink,lineHeight:1.65}}>{s.combos}</div>
             </div>
-            {s.joker&&<div style={{background:"#FFF9E6",borderRadius:8,padding:"8px 10px",border:`1px solid ${C.gold}20`}}>
-              <div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>🃏 JOKER TIP</div>
-              <div style={{fontSize:12,color:C.ink,lineHeight:1.6}}>{s.joker}</div>
+            {s.joker&&<div style={{padding:"10px 16px",margin:"10px 16px 16px",background:"#fff",border:`1px solid ${C.gold}20`,borderRadius:10}}>
+              <div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>🃏 JOKER TIP</div>
+              <div style={{fontSize:11,color:C.ink,lineHeight:1.65}}>{s.joker}</div>
             </div>}
-            <div style={{display:"flex",alignItems:"center",gap:6,marginTop:10}}><span style={{fontSize:11,color:C.mut}}>{s.hands} possible hands</span></div>
+            {!s.joker&&<div style={{height:4}}/>}
           </div>}
         </div>);})}
       <Footer/>
@@ -4138,16 +4207,22 @@ function MidnightCountdown({dn}){
     "Same time tomorrow. A new hand. A better score.",
     "Your club is coming back. Will you beat them?",
     "Tomorrow's deal is already shuffled. Be ready.",
-    "One daily. One shot. Don't miss it.",
-    "The streak doesn't keep itself.",
+    "One shot. One hand. Don't let your streak die here.",
+    "The table remembers who shows up.",
   ];
   const tagline=taglines[dn%taglines.length];
   const urgent=h<2;
   return(
-    <div style={{textAlign:"center",padding:"18px 16px",margin:"8px 0"}}>
-      <div style={{fontSize:9,color:urgent?C.cinn:C.mut,letterSpacing:2.5,fontWeight:700,marginBottom:8}}>NEXT DAILY · #{dn+1}</div>
-      <div style={{fontFamily:F.d,fontSize:28,fontWeight:900,color:urgent?C.cinn:C.ink,letterSpacing:-1,marginBottom:8,lineHeight:1}}>{timeLeft}</div>
-      <div style={{fontSize:12,color:urgent?C.cinn:C.mut,lineHeight:1.6,fontStyle:"italic"}}>{urgent?"Last chance to practice before tomorrow's daily 🔥":tagline}</div>
+    <div style={{textAlign:"center",padding:"22px 16px 18px",margin:"8px 0"}}>
+      {/* Pill */}
+      <div style={{display:"inline-flex",alignItems:"center",gap:6,background:urgent?C.cinn+"12":"#FDFAF6",border:`1.5px solid ${urgent?C.cinn+"40":C.bdr}`,borderRadius:20,padding:"4px 14px",marginBottom:14}}>
+        <span style={{fontSize:9,color:urgent?C.cinn:C.mut,letterSpacing:2,fontWeight:700}}>NEXT DAILY · #{dn+1}</span>
+        {!urgent&&<span style={{width:5,height:5,borderRadius:"50%",background:C.jade,display:"inline-block",opacity:0.7}}/>}
+      </div>
+      {/* Countdown */}
+      <div style={{fontFamily:F.d,fontSize:34,fontWeight:900,color:urgent?C.cinn:C.ink,letterSpacing:-1.5,marginBottom:10,lineHeight:1}}>{timeLeft}</div>
+      {/* Tagline */}
+      <div style={{fontSize:13,color:urgent?C.cinn:C.mut,lineHeight:1.6,fontStyle:"italic",maxWidth:260,margin:"0 auto"}}>{urgent?"Last chance to practice before the next daily 🔥":tagline}</div>
     </div>
   );
 }
@@ -4212,10 +4287,10 @@ function ClubCodeEntry({setScreen}){
 
   return(
     <div style={{marginBottom:0}}>
-      <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",display:"flex",alignItems:"flex-start",justifyContent:"space-between",padding:"14px 14px",borderRadius:open?"0 0 0 0":"0 0 12px 12px",background:C.jade+"06",border:`1px solid ${C.jade+"25"}`,borderTop:"none",cursor:"pointer",textAlign:"left"}}>
+      <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",display:"flex",alignItems:"flex-start",justifyContent:"space-between",padding:"16px 14px",borderRadius:open?"0":"0 0 12px 12px",background:C.jade+"06",border:"none",borderTop:`1px solid ${C.bdr}`,cursor:"pointer",textAlign:"left"}}>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>{savedClub?"YOUR CLUB · TODAY":"JOIN YOUR CLUB"}</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.2,marginBottom:8}}>{savedClub?savedClub.name:"Club Leaderboard"}</div>
+          <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:8}}>{savedClub?"YOUR CLUB · TODAY":"JOIN YOUR CLUB"}</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.2,marginBottom:10}}>{savedClub?savedClub.name:"Club Leaderboard"}</div>
           {/* Live stat pills for club members */}
           {savedClub&&clubStats?(
             <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
@@ -4306,10 +4381,10 @@ function GlobalLeaderboardPill({setScreen}){
 
   return(
     <div style={{marginBottom:0}}>
-      <button onClick={toggle} style={{width:"100%",display:"flex",alignItems:"flex-start",justifyContent:"space-between",padding:"14px 14px",borderRadius:open?"12px 12px 0 0":"12px 12px 0 0",background:"#2460A806",border:`1px solid #2460A825`,borderBottom:open?"none":"1px solid #2460A825",cursor:"pointer",textAlign:"left"}}>
+      <button onClick={toggle} style={{width:"100%",display:"flex",alignItems:"flex-start",justifyContent:"space-between",padding:"16px 14px",borderRadius:open?"12px 12px 0 0":"12px 12px 0 0",background:"#2460A806",border:"none",borderBottom:open?"none":`1px solid #2460A815`,cursor:"pointer",textAlign:"left"}}>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:9,color:"#2460A8",letterSpacing:1.5,fontWeight:700,marginBottom:6}}>🌍 GLOBAL · DAY #{dn}</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.2,marginBottom:8}}>Rackle Leaderboard</div>
+          <div style={{fontSize:9,color:"#2460A8",letterSpacing:1.5,fontWeight:700,marginBottom:8}}>🌍 GLOBAL · DAY #{dn}</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.2,marginBottom:10}}>Rackle Leaderboard</div>
           {/* Live stat pills */}
           {hasData?(
             <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
@@ -4903,12 +4978,23 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const club=profile?.clubCode?CLUBS[profile.clubCode]:null;
   const nudge=shouldShowNudge(dDone);
   const [nudgeDismissed,setNudgeDismissed]=useState(ST.get("nudgeDismissed",null)===getDailySeed());
+  const [leOpen,setLeOpen]=useState(false);
+  const [whyOpen,setWhyOpen]=useState(false);
+  const [menuOpen,setMenuOpen]=useState(false);
+  const [streakOpen,setStreakOpen]=useState(false);
+  const [ds,setDs]=useState(null);
+  const [clubPlayers,setClubPlayers]=useState(null);
   const dismissNudge=()=>{ST.set("nudgeDismissed",getDailySeed());setNudgeDismissed(true);};
+  useEffect(()=>{
+    fetchDailyStats().then(s=>{if(s&&s.total>=1)setDs(s);});
+    const code=getClubCode();
+    if(code){fetchLBEntries(code).then(rows=>{if(rows&&rows.length>0)setClubPlayers(rows.length);});}
+  },[]);
 
   // Build share text fresh every render
   const passEmoji=(iq?.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
   const shareText=iq
-    ?`🀄 Daily Rackle #${dn} · IQ ${iq.totalScore} · ${iq.level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}${club?`${club.name}\n`:""}Think you can beat it? Same hand for everyone today.\nplayrackle.com`
+    ?`🀄 Daily Rackle #${dn} · IQ ${iq.totalScore} · ${iq.level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}${club?`${club.name}\n`:""}Think you can beat it?\nplayrackle.com`
     :dRes?`🀄 Rackle #${dn} · ${dRes.rating} ${dRes.emoji}\n${dRes.section||""}\nplayrackle.com`:"";
 
   const ydIQ=yd?.iq?.totalScore||null;
@@ -4929,7 +5015,6 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
       {/* TOP BAR */}
       {(()=>{
-        const [menuOpen,setMenuOpen]=useState(false);
         const profile=getProfile();
         const hasProfile=!!(profile&&profile.nickname);
         return(
@@ -5003,14 +5088,14 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               {/* Three features */}
               <div style={{display:"flex",gap:8,marginBottom:24}}>
                 {[
-                  {icon:"📅",label:"Fresh deal",sub:"New hand every day. Same 13 tiles for every player."},
-                  {icon:"🧠",label:"IQ scored",sub:"Every pass rated. Direction, timing, tile strength."},
-                  {icon:"🏆",label:"Top your club",sub:"Auto-posts your score. See who's leading right now."},
+                  {icon:"📅",label:"Fresh Deal",sub:"Same 13 tiles for every player. One shot, daily."},
+                  {icon:"🧠",label:"IQ Scored",sub:"Every pass judged. Find out if you're actually good."},
+                  {icon:"🏆",label:"Beat Your Club",sub:"Auto-posts your score. The leaderboard is live."},
                 ].map((f,i)=>(
                   <div key={i} style={{flex:1,background:"rgba(255,255,255,0.12)",border:"1px solid rgba(255,255,255,0.18)",borderRadius:10,padding:"10px 8px",textAlign:"center"}}>
-                    <div style={{fontSize:18,marginBottom:5}}>{f.icon}</div>
-                    <div style={{fontSize:9,color:"rgba(255,255,255,0.95)",fontWeight:700,lineHeight:1.3,marginBottom:4}}>{f.label}</div>
-                    <div style={{fontSize:8,color:"rgba(255,255,255,0.55)",fontWeight:500,lineHeight:1.5}}>{f.sub}</div>
+                    <div style={{fontSize:20,marginBottom:6}}>{f.icon}</div>
+                    <div style={{fontSize:11,color:"rgba(255,255,255,0.97)",fontWeight:800,lineHeight:1.25,marginBottom:5,fontFamily:F.d}}>{f.label}</div>
+                    <div style={{fontSize:9,color:"rgba(255,255,255,0.6)",fontWeight:500,lineHeight:1.5}}>{f.sub}</div>
                   </div>
                 ))}
               </div>
@@ -5069,17 +5154,6 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </button>
         {/* Live daily stats strip */}
         {(()=>{
-          const [ds,setDs]=useState(null);
-          const [clubPlayers,setClubPlayers]=useState(null);
-          useEffect(()=>{
-            fetchDailyStats().then(s=>{if(s&&s.total>=1)setDs(s);});
-            const code=getClubCode();
-            if(code){
-              fetchLBEntries(code).then(rows=>{
-                if(rows&&rows.length>0)setClubPlayers(rows.length);
-              });
-            }
-          },[]);
           if(!ds&&!clubPlayers)return <div style={{marginBottom:12}}/>;
           const topIQ=ds?.max||null;
           const items=[
@@ -5110,7 +5184,6 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <div style={{borderRadius:20,overflow:"hidden",marginBottom:8,boxShadow:"0 8px 32px rgba(0,0,0,0.15)"}}>
             {/* STREAK HEADER — collapsible strip, light bg sits above dark hero */}
             {streak>0&&!settings?.hideStreak&&(()=>{
-              const [streakOpen,setStreakOpen]=useState(false);
               const firstName=profile?.nickname?profile.nickname.split(" ")[0]:null;
               const nextBadge=STREAK_BADGES.find(b=>b.days>streak);
               const pct=nextBadge?Math.round((streak/nextBadge.days)*100):100;
@@ -5130,13 +5203,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               const avg=hasSparkline?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):null;
               const improving=hasSparkline&&scores[scores.length-1]>scores[0];
               return(
-                <div style={{background:C.bg,borderBottom:`1px solid ${C.ink}15`}}>
+                <div style={{background:`#FDFAF6`,borderBottom:`1px solid ${C.bdr}`}}>
                   {/* Tappable header row */}
                   <button onClick={()=>setStreakOpen(o=>!o)} aria-expanded={streakOpen}
-                    style={{width:"100%",display:"flex",alignItems:"center",gap:10,padding:"10px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left",minHeight:44}}>
-                    <span style={{fontSize:18,flexShrink:0,lineHeight:1}}>🔥</span>
+                    style={{width:"100%",display:"flex",alignItems:"center",gap:10,padding:"11px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left",minHeight:44}}>
+                    <div style={{width:32,height:32,borderRadius:9,background:`linear-gradient(135deg,${C.gold}30,${C.gold}18)`,border:`1px solid ${C.gold}40`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>🔥</div>
                     <div style={{flex:1,minWidth:0}}>
-                      <div style={{fontSize:13,fontWeight:700,color:C.ink,fontFamily:F.b,lineHeight:1.3}}>
+                      <div style={{fontSize:13,fontWeight:700,color:"#5C3D00",fontFamily:F.b,lineHeight:1.3}}>
                         {(()=>{
                           const n=firstName?` ${firstName}`:"";
                           if(streak===1){
@@ -5174,11 +5247,11 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
                           return`${streak} days${n} · ${streakBadge?streakBadge.title:"All-time great"} 🐐`;
                         })()}
                       </div>
-                      {!streakOpen&&nextBadge&&<div style={{marginTop:4,height:3,borderRadius:2,background:C.bdr,overflow:"hidden",maxWidth:100}}>
+                      {!streakOpen&&nextBadge&&<div style={{marginTop:5,height:3,borderRadius:2,background:C.gold+"25",overflow:"hidden",maxWidth:120}}>
                         <div style={{height:"100%",borderRadius:2,background:`linear-gradient(90deg,${C.gold},#C99F3A)`,width:`${pct}%`}}/>
                       </div>}
                     </div>
-                    <span style={{fontSize:11,color:C.mut,flexShrink:0,display:"inline-block",transition:"transform 0.2s",transform:streakOpen?"rotate(180deg)":"rotate(0deg)"}}>▾</span>
+                    <span style={{fontSize:11,color:C.gold,opacity:0.8,flexShrink:0,display:"inline-block",transition:"transform 0.2s",transform:streakOpen?"rotate(180deg)":"rotate(0deg)"}}>▾</span>
                   </button>
 
                   {/* Expanded body */}
@@ -5281,17 +5354,14 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               </div>}
             </div>
             {/* ACTIONS */}
-            <div style={{background:C.bg,padding:"14px 16px 12px",borderTop:`1px solid ${C.bdr}`}}>
-              <div style={{marginBottom:8}}><ShareButton text={shareText}/></div>
-              <button onClick={showScorecard} style={{width:"100%",borderRadius:12,background:C.sage,border:`1px solid ${C.sageB}20`,cursor:"pointer",display:"flex",alignItems:"center",gap:10,padding:"11px 14px",marginBottom:6,textAlign:"left"}}>
-                <div style={{width:32,height:32,borderRadius:8,background:C.sageB+"25",display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,flexShrink:0}}>📊</div>
-                <div style={{flex:1,minWidth:0,display:"flex",flexDirection:"column",gap:2}}>
-                  <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#1A3D28",lineHeight:1.2}}>View Full Scorecard</div>
-                  <div style={{fontSize:11,color:C.sageB,lineHeight:1.4}}>IQ breakdown · 2026 NMJL card analysis · Coach Mode</div>
-                </div>
-                <span style={{fontSize:14,color:C.sageB,fontWeight:700,flexShrink:0}}>›</span>
+            <div style={{background:C.bg,padding:"14px 16px 16px",borderTop:`1px solid ${C.bdr}`}}>
+              <div style={{marginBottom:10}}>
+                <ShareButton text={shareText} variant="jadepill" label="Share My Score" sublabel="Tap to copy · drop it in your group chat"/>
+              </div>
+              <button onClick={showScorecard} style={{width:"100%",borderRadius:10,background:"none",border:`1px solid ${C.bdr}`,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"9px 14px",textAlign:"left"}}>
+                <span style={{fontSize:11,fontWeight:600,color:C.mut,letterSpacing:0.2}}>View Full Scorecard · IQ breakdown · Coach Mode</span>
+                <span style={{fontSize:13,color:C.mut,flexShrink:0}}>›</span>
               </button>
-              <p style={{fontSize:10,color:C.mut,textAlign:"center",margin:0,lineHeight:1.5,fontStyle:"italic",opacity:0.8}}>No spoilers — it's the same hand for everyone.</p>
             </div>
           </div>
         );
@@ -5309,11 +5379,16 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <span aria-hidden="true" style={{fontSize:14,color:C.mut,fontWeight:600}}>›</span>
       </button>
 
-      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12,marginTop:4}}>
-        <div style={{flex:1,height:1,background:C.bdr}}/><span style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>RACKLE COMMUNITY</span><div style={{flex:1,height:1,background:C.bdr}}/>
+      <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12,marginTop:8}}>
+        <div style={{flex:1,height:1,background:`linear-gradient(90deg,transparent,${C.bdr})`}}/>
+        <div style={{display:"flex",alignItems:"center",gap:6,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:20,padding:"4px 12px"}}>
+          <span style={{fontSize:10}}>🀄</span>
+          <span style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>COMMUNITY</span>
+        </div>
+        <div style={{flex:1,height:1,background:`linear-gradient(90deg,${C.bdr},transparent)`}}/>
       </div>
 
-      <div style={{marginBottom:8}}>
+      <div style={{marginBottom:8,borderRadius:12,overflow:"hidden",border:`1px solid ${C.bdr}`}}>
         <GlobalLeaderboardPill setScreen={setScreen}/>
         <ClubCodeEntry onJoin={()=>setScreen("leaderboard")} setScreen={setScreen}/>
       </div>
@@ -5322,50 +5397,48 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       {!getClubCode()&&(()=>{
         const addClubEmail="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20";
         return(
-          <div style={{margin:"12px -16px 8px",background:"linear-gradient(135deg,#F2FAF6,#EAF5EF)",padding:"20px 16px 18px",borderTop:`1px solid ${C.jade}20`,borderBottom:`1px solid ${C.jade}20`}}>
+          <div style={{margin:"24px -32px 8px",background:"linear-gradient(135deg,#F2FAF6,#EAF5EF)",padding:"20px 32px 18px",borderTop:`1px solid ${C.jade}20`,borderBottom:`1px solid ${C.jade}20`}}>
             <div style={{fontSize:9,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:6}}>FOR CLUB ORGANISERS</div>
-            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,lineHeight:1.2,marginBottom:8}}>Is your club on Rackle?</div>
+            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,lineHeight:1.2,marginBottom:8}}>Your club should be on Rackle</div>
             <div style={{fontSize:12,color:C.mut,lineHeight:1.65,marginBottom:14}}>Your group is probably already playing. Get your club its own leaderboard — free, takes 2 minutes. Every member's score posts automatically after each Daily.</div>
             <div style={{display:"flex",gap:8}}>
-              <a href={addClubEmail} style={{flex:2,display:"flex",alignItems:"center",justifyContent:"center",padding:"12px 0",borderRadius:11,background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",fontSize:13,fontWeight:700,fontFamily:F.d,textDecoration:"none",letterSpacing:0.3}}>Get your club set up →</a>
-              <button onClick={()=>setScreen("leaderboard")} style={{flex:1,padding:"12px 0",borderRadius:11,border:`1px solid ${C.jade}30`,background:"#fff",color:C.jade,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:F.b}}>Have a code?</button>
+              <a href={addClubEmail} style={{flex:2,display:"flex",alignItems:"center",justifyContent:"center",padding:"12px 0",borderRadius:11,background:`linear-gradient(135deg,${C.jade},#115C38)`,color:"#fff",fontSize:13,fontWeight:700,fontFamily:F.d,textDecoration:"none",letterSpacing:0.3}}>Add my club →</a>
+              <button onClick={()=>setScreen("leaderboard")} style={{flex:1,padding:"12px 0",borderRadius:11,border:`1px solid ${C.jade}30`,background:"#fff",color:C.jade,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:F.b}}>Join a club</button>
             </div>
           </div>
         );
       })()}
 
-      {(()=>{
-        const [leOpen,setLeOpen]=useState(false);
-        return(
-          <div style={{marginTop:20,marginBottom:8}}>
+      <div style={{marginTop:20,marginBottom:8}}>
             <button onClick={()=>setLeOpen(o=>!o)} aria-expanded={leOpen}
-              style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,background:leOpen?C.bg2:"#fff",border:`1px solid ${C.bdr}`,borderRadius:leOpen?"12px 12px 0 0":12,cursor:"pointer",padding:"11px 14px",textAlign:"left"}}>
-              <div style={{display:"flex",alignItems:"center",gap:8}}>
-                <span style={{fontSize:14}}>📚</span>
+              style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,background:leOpen?`linear-gradient(135deg,${C.jade}18,${C.jade}0C)`:`linear-gradient(135deg,${C.jade}10,${C.jade}06)`,border:`1.5px solid ${C.jade}30`,borderRadius:leOpen?"12px 12px 0 0":12,cursor:"pointer",padding:"12px 14px",textAlign:"left",transition:"background 0.2s"}}>
+              <div style={{display:"flex",alignItems:"center",gap:10}}>
+                <div style={{width:34,height:34,borderRadius:9,background:C.jade+"20",border:`1px solid ${C.jade}30`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>📚</div>
                 <div>
-                  <div style={{fontSize:12,fontWeight:700,color:C.ink,fontFamily:F.b}}>Learn & Explore</div>
-                  {!leOpen&&<div style={{fontSize:10,color:C.mut}}>Tutorial · Card guide · Stats · How to play</div>}
+                  <div style={{fontSize:12,fontWeight:800,color:C.jade,fontFamily:F.b,letterSpacing:0.2}}>Learn & Explore</div>
+                  {!leOpen&&<div style={{fontSize:10,color:C.jade,opacity:0.7,marginTop:1}}>Tutorial · Card guide · Stats · How to play</div>}
                 </div>
               </div>
-              <span style={{fontSize:12,color:C.mut,transition:"transform 0.2s",display:"inline-block",transform:leOpen?"rotate(180deg)":"rotate(0deg)",flexShrink:0}}>▾</span>
+              <span style={{fontSize:13,color:C.jade,opacity:0.7,transition:"transform 0.2s",display:"inline-block",transform:leOpen?"rotate(180deg)":"rotate(0deg)",flexShrink:0}}>▾</span>
             </button>
 
-            {leOpen&&<div className="rk-in" style={{border:`1px solid ${C.bdr}`,borderTop:"none",borderRadius:"0 0 12px 12px",overflow:"hidden",background:"#fff",padding:"12px 12px 4px"}}>
+            {leOpen&&<div className="rk-in" style={{border:`1.5px solid ${C.jade}30`,borderTop:"none",borderRadius:"0 0 12px 12px",overflow:"hidden",background:"#fff",padding:"12px 12px 4px"}}>
       <button onClick={showStats} style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:8,borderRadius:16,padding:"14px 16px",textAlign:"left",background:"#2460A806",border:`1px solid #2460A825`}}>
         <div style={{width:44,height:44,borderRadius:13,background:"#2460A810",border:`1px solid #2460A820`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>📊</div>
         <div style={{flex:1}}>
           <div style={{fontSize:9,color:"#2460A8",letterSpacing:2,fontWeight:700,marginBottom:5}}>YOUR STATS</div>
-          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,marginBottom:5}}>Progress & Trends</div>
+          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,marginBottom:5}}>How Am I Doing?</div>
           <div style={{fontSize:11,color:C.mut,lineHeight:1.5}}>Last 5 scores · Tendencies & section mastery</div>
         </div>
         <span aria-hidden="true" style={{fontSize:14,color:C.mut,fontWeight:600}}>›</span>
       </button>
 
-      <button onClick={showTutorial} style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"12px 16px",borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",textAlign:"left",marginBottom:8}}>
+      <button onClick={showTutorial} style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,padding:"14px 16px",borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",textAlign:"left",marginBottom:8}}>
+        <div style={{width:44,height:44,borderRadius:13,background:C.jade+"12",border:`1px solid ${C.jade}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🎓</div>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:5}}>WALKTHROUGH</div>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2,marginBottom:5}}>Interactive Tutorial</div>
-          <div style={{fontSize:11,color:C.mut,lineHeight:1.5,marginTop:0}}>Learn Rackle step by step</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.5}}>Learn Rackle step by step</div>
         </div>
         <span style={{fontSize:14,color:C.jade,fontWeight:700,flexShrink:0}}>›</span>
       </button>
@@ -5386,17 +5459,14 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       </div>
 
       {/* WHY PLAY RACKLE — collapsible */}
-      {(()=>{
-        const [whyOpen,setWhyOpen]=useState(false);
-        return(
-          <div style={{borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",marginBottom:8,overflow:"hidden"}}>
+      <div style={{borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",marginBottom:8,overflow:"hidden"}}>
             <button onClick={()=>setWhyOpen(o=>!o)} aria-expanded={whyOpen}
-              style={{width:"100%",display:"flex",alignItems:"center",gap:14,padding:"14px 16px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
+              style={{width:"100%",display:"flex",alignItems:"center",gap:14,padding:"16px 16px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
               <div style={{width:44,height:44,borderRadius:13,background:C.jade+"12",border:`1px solid ${C.jade}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🀄</div>
               <div style={{flex:1}}>
-                <div style={{fontSize:9,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:4}}>THE CASE FOR RACKLE</div>
-                <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2,marginBottom:4}}>Why play Rackle?</div>
-                <div style={{fontSize:11,color:C.mut,lineHeight:1.4}}>The fastest way to get better at American Mahjong</div>
+                <div style={{fontSize:9,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:7}}>THE CASE FOR RACKLE</div>
+                <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2,marginBottom:6}}>Why play Rackle?</div>
+                <div style={{fontSize:11,color:C.mut,lineHeight:1.5}}>The fastest way to get better at American Mahjong</div>
               </div>
               <span style={{fontSize:14,color:C.jade,fontWeight:700,flexShrink:0}}>{whyOpen?"▾":"›"}</span>
             </button>
@@ -5419,8 +5489,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               ))}
             </div>}
           </div>
-        );
-      })()}
+            </div>}
+      </div>
 
       {showHelp&&<div style={{background:"#FFFFF8",border:`1px solid ${C.gold}25`,borderRadius:16,marginBottom:8,overflow:"hidden"}} className="rk-in">
 
@@ -5528,11 +5598,6 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
       </div>}
 
-            </div>}
-          </div>
-        );
-      })()}
-
       <Footer/>
     </div>
   );
@@ -5541,7 +5606,9 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 function Pill({i,v,l,hl}){return(<div style={{...S.pill,flex:1,background:hl?"#FFF5F0":C.bg2}} aria-label={`${l}: ${v}`}><span aria-hidden="true" style={{fontSize:12}}>{i}</span><div><div style={{fontSize:15,fontFamily:F.d,fontWeight:800,color:hl?C.cinn:C.ink}}>{v}</div><div style={{fontSize:7,color:C.mut,letterSpacing:1.5,fontWeight:700}}>{l}</div></div></div>);}
 
 // ─── STATS ────────────────────────────────────────────────────────────────────
-function Stats({home,onShowScorecard,onRecap,dRes}){
+function Stats({home,onShowScorecard,onRecap,dRes,setScreen}){
+  const [spOpen,setSpOpen]=useState(false);
+  const [ckOpen,setCkOpen]=useState(false);
   const dn=getDayNum();
   const iq=dRes?.iq;
   const allHist=getHist().filter(e=>e.iqScore!=null);
@@ -5609,18 +5676,24 @@ function Stats({home,onShowScorecard,onRecap,dRes}){
 
   return(
     <div style={S.pg} className="rk-pg">
-      <RackleHeader onBack={home}/>
+      <RackleHeader onBack={home} setScreen={setScreen}/>
+
+      {/* Page title */}
+      <div style={{marginBottom:20,marginTop:20,textAlign:"center"}}>
+        <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1,marginBottom:6}}>How Am I Doing?</div>
+        <div style={{fontSize:12,color:C.mut,marginTop:0}}>Your Charleston IQ over time</div>
+      </div>
 
       {/* Today's daily hero — if played */}
-      {iq&&<div style={{marginBottom:12}}>
+      {iq&&<div style={{marginBottom:16}}>
         <IQHero iq={iq} isDaily dayNum={dn} section={dRes.section} totalTime={iq.totalTime||0} chosenSec={dRes.chosenSec} allSections={dRes.allSections}/>
-        <button onClick={onShowScorecard} style={{width:"100%",marginTop:8,padding:"12px 16px",borderRadius:12,background:C.sage,border:`1px solid ${C.sageB}25`,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"flex-start",gap:12}}>
-          <div style={{width:36,height:36,borderRadius:10,background:C.sageB+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>📋</div>
+        <button onClick={onShowScorecard} style={{width:"100%",marginTop:8,padding:"11px 16px",borderRadius:12,background:C.sage,border:`1px solid ${C.sageB}25`,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"flex-start",gap:12}}>
+          <div style={{width:34,height:34,borderRadius:9,background:C.sageB+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>📋</div>
           <div style={{textAlign:"left",flex:1}}>
-            <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#1A3D28",lineHeight:1,marginBottom:2}}>View Full Scorecard</div>
-            <div style={{fontSize:11,color:C.sageB}}>IQ breakdown · 2026 NMJL card analysis · Coach Mode</div>
+            <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:"#1A3D28",lineHeight:1,marginBottom:2}}>View Full Scorecard</div>
+            <div style={{fontSize:11,color:C.sageB}}>IQ breakdown · Coach Mode</div>
           </div>
-          <span style={{background:"#2E6B48",color:"#fff",borderRadius:20,padding:"4px 10px",fontSize:11,fontWeight:700,flexShrink:0}}>›</span>
+          <span style={{fontSize:14,color:C.sageB,fontWeight:700,flexShrink:0}}>›</span>
         </button>
       </div>}
 
@@ -5632,27 +5705,27 @@ function Stats({home,onShowScorecard,onRecap,dRes}){
         </div>
       ):(
         <>
-          {/* ── ZONE 1: AT A GLANCE ──────────────────────────────────────────── */}
-          <div style={{display:"flex",gap:6,marginBottom:10}}>
-            <div style={{flex:1,background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:12,padding:"12px 10px",textAlign:"center"}}>
-              <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>GAMES</div>
-              <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.ink}}>{allHist.length}</div>
+          {/* ── AT A GLANCE ── */}
+          <div style={{display:"flex",gap:8,marginBottom:16}}>
+            <div style={{flex:1,background:"#FDFAF6",border:`1px solid ${C.bdr}`,borderRadius:12,padding:"14px 10px",textAlign:"center"}}>
+              <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>GAMES</div>
+              <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,lineHeight:1}}>{allHist.length}</div>
             </div>
-            <div style={{flex:1,background:C.jade+"08",border:`1px solid ${C.jade}20`,borderRadius:12,padding:"12px 10px",textAlign:"center"}}>
-              <div style={{fontSize:8,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>BEST IQ</div>
-              <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.jade}}>{bestIQ}</div>
+            <div style={{flex:1,background:C.jade+"08",border:`1px solid ${C.jade}20`,borderRadius:12,padding:"14px 10px",textAlign:"center"}}>
+              <div style={{fontSize:8,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>BEST IQ</div>
+              <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.jade,lineHeight:1}}>{bestIQ}</div>
             </div>
-            {streak>0&&<div style={{flex:1,background:C.gold+"08",border:`1px solid ${C.gold}20`,borderRadius:12,padding:"12px 10px",textAlign:"center"}}>
-              <div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>STREAK</div>
-              <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.gold}}>{streak}d 🔥</div>
+            {streak>0&&<div style={{flex:1,background:C.gold+"08",border:`1px solid ${C.gold}20`,borderRadius:12,padding:"14px 10px",textAlign:"center"}}>
+              <div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>STREAK</div>
+              <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.gold,lineHeight:1}}>{streak}d 🔥</div>
             </div>}
-            {trajectory!=null&&<div style={{flex:1,background:trajectory>=0?C.jade+"08":C.cinn+"08",border:`1px solid ${trajectory>=0?C.jade:C.cinn}20`,borderRadius:12,padding:"12px 10px",textAlign:"center"}}>
-              <div style={{fontSize:8,color:trajectory>=0?C.jade:C.cinn,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>TREND</div>
-              <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:trajectory>=0?C.jade:C.cinn}}>{trajectory>=0?"+":""}{trajectory}</div>
+            {trajectory!=null&&<div style={{flex:1,background:trajectory>=0?C.jade+"08":C.cinn+"08",border:`1px solid ${trajectory>=0?C.jade:C.cinn}20`,borderRadius:12,padding:"14px 10px",textAlign:"center"}}>
+              <div style={{fontSize:8,color:trajectory>=0?C.jade:C.cinn,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>TREND</div>
+              <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:trajectory>=0?C.jade:C.cinn,lineHeight:1}}>{trajectory>=0?"+":""}{trajectory}</div>
             </div>}
           </div>
 
-          {/* ── IQ CHART — single combined chart, Daily vs Practice ───────── */}
+          {/* ── IQ CHART ── */}
           {last10.length>=2&&(()=>{
             const scores=last10.map(e=>e.iqScore);
             const minS=Math.min(...scores,40);const maxS=Math.max(...scores,100);
@@ -5663,7 +5736,6 @@ function Stats({home,onShowScorecard,onRecap,dRes}){
               y:H-padY-((s-minS)/range)*(H-padY*2),
               mode:last10[i].mode,score:s
             }));
-            // Separate lines for Daily and Practice
             const dailyPts=pts.filter((_,i)=>last10[i].mode==="daily");
             const practPts=pts.filter((_,i)=>last10[i].mode!=="daily");
             const allPath=pts.map((p,i)=>i===0?`M${p.x},${p.y}`:`L${p.x},${p.y}`).join(" ");
@@ -5671,18 +5743,18 @@ function Stats({home,onShowScorecard,onRecap,dRes}){
             const last=scores[scores.length-1];const prev=scores[scores.length-2];
             const trendCol=last>prev?C.jade:last<prev?C.cinn:C.gold;
             return(
-              <div style={{...S.card,marginBottom:10,padding:"14px 14px 10px"}}>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+              <div style={{...S.card,marginBottom:16,padding:"16px 14px 12px"}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:12}}>
                   <div>
-                    <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:2}}>IQ HISTORY · LAST {scores.length}</div>
-                    <div style={{display:"flex",gap:10,marginTop:4}}>
-                      {dailyAvg!=null&&<div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:8,height:8,borderRadius:"50%",background:C.jade}}/><span style={{fontSize:10,color:C.ink,fontWeight:600}}>Daily {dailyAvg}</span></div>}
-                      {practiceAvg!=null&&<div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:8,height:8,borderRadius:"50%",background:C.cinn}}/><span style={{fontSize:10,color:C.ink,fontWeight:600}}>Practice {practiceAvg}</span></div>}
+                    <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>IQ HISTORY · LAST {scores.length}</div>
+                    <div style={{display:"flex",gap:10,marginTop:2}}>
+                      {dailyAvg!=null&&<div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:7,height:7,borderRadius:"50%",background:C.jade}}/><span style={{fontSize:10,color:C.ink,fontWeight:600}}>Daily {dailyAvg}</span></div>}
+                      {practiceAvg!=null&&<div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:7,height:7,borderRadius:"50%",background:C.cinn}}/><span style={{fontSize:10,color:C.ink,fontWeight:600}}>Practice {practiceAvg}</span></div>}
                     </div>
                   </div>
                   <div style={{textAlign:"right"}}>
-                    <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:trendCol,lineHeight:1}}>{last}</div>
-                    <div style={{fontSize:10,color:C.mut}}>latest</div>
+                    <div style={{fontFamily:F.d,fontSize:26,fontWeight:900,color:trendCol,lineHeight:1}}>{last}</div>
+                    <div style={{fontSize:10,color:C.mut,marginTop:2}}>latest</div>
                   </div>
                 </div>
                 <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{display:"block",overflow:"visible"}}>
@@ -5704,11 +5776,10 @@ function Stats({home,onShowScorecard,onRecap,dRes}){
                       </g>
                     );
                   })}
-                  {/* Y-axis labels */}
                   <text x={1} y={padY+4} fontSize="7" fill={C.mut} opacity="0.6">{maxS}</text>
                   <text x={1} y={H-2} fontSize="7" fill={C.mut} opacity="0.6">{minS}</text>
                 </svg>
-                <div style={{display:"flex",justifyContent:"space-between",marginTop:2}}>
+                <div style={{display:"flex",justifyContent:"space-between",marginTop:4}}>
                   <span style={{fontSize:9,color:C.mut}}>oldest</span>
                   <span style={{fontSize:9,color:C.mut}}>latest</span>
                 </div>
@@ -5716,9 +5787,9 @@ function Stats({home,onShowScorecard,onRecap,dRes}){
             );
           })()}
 
-          {/* ── ZONE 2: YOUR GAME ────────────────────────────────────────────── */}
-          {avgDir!=null&&<div style={{...S.card,marginBottom:10}}>
-            <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:12}}>YOUR GAME · LAST {iqHist.length} ROUNDS</div>
+          {/* ── YOUR GAME ── */}
+          {avgDir!=null&&<div style={{...S.card,marginBottom:16}}>
+            <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:14}}>YOUR GAME · LAST {iqHist.length} ROUNDS</div>
             {[
               {label:"Direction",score:avgDir,max:40,desc:"Committing to a section"},
               {label:"Pass Quality",score:avgPass,max:25,desc:"Passing the right tiles"},
@@ -5728,14 +5799,14 @@ function Stats({home,onShowScorecard,onRecap,dRes}){
               const col=pct>=75?C.jade:pct>=55?"#2460A8":pct>=40?C.gold:C.cinn;
               const isFocus=focusLabel===sub.label;
               return(
-                <div key={sub.label} style={{marginBottom:i<arr.length-1?12:0}}>
-                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:4}}>
+                <div key={sub.label} style={{marginBottom:i<arr.length-1?16:0}}>
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:6}}>
                     <div>
                       <span style={{fontSize:12,fontWeight:700,color:C.ink}}>{sub.label}</span>
                       {isFocus&&<span style={{fontSize:9,fontWeight:700,background:C.gold+"20",color:C.gold,borderRadius:8,padding:"1px 6px",marginLeft:6,letterSpacing:0.5}}>FOCUS</span>}
-                      <div style={{fontSize:10,color:C.mut,marginTop:1}}>{sub.desc}</div>
+                      <div style={{fontSize:10,color:C.mut,marginTop:2}}>{sub.desc}</div>
                     </div>
-                    <span style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:col}}>{sub.score}<span style={{fontSize:9,color:C.mut,fontWeight:400}}>/{sub.max}</span></span>
+                    <span style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:col}}>{sub.score}<span style={{fontSize:9,color:C.mut,fontWeight:400}}>/{sub.max}</span></span>
                   </div>
                   <div style={{height:6,borderRadius:3,background:C.bdr,overflow:"hidden"}}>
                     <div style={{height:"100%",borderRadius:3,background:col,width:`${pct}%`,transition:"width 0.6s ease"}}/>
@@ -5743,51 +5814,50 @@ function Stats({home,onShowScorecard,onRecap,dRes}){
                 </div>
               );
             })}
-            {focusLabel&&<div style={{marginTop:12,background:C.amber,borderRadius:10,padding:"10px 12px",border:`1px solid ${C.amberB}15`}}>
-              <div style={{fontSize:8,color:C.amberB,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>FOCUS AREA</div>
-              <div style={{fontSize:12,color:C.ink,lineHeight:1.6,fontWeight:600}}>{focusLabel}</div>
-              <div style={{fontSize:11,color:C.ink,lineHeight:1.55,marginTop:2}}>{focusTips[focusLabel]}</div>
+            {focusLabel&&<div style={{marginTop:16,background:C.amber,borderRadius:10,padding:"12px 14px",border:`1px solid ${C.amberB}15`}}>
+              <div style={{fontSize:8,color:C.amberB,letterSpacing:1.5,fontWeight:700,marginBottom:5}}>FOCUS AREA</div>
+              <div style={{fontSize:12,color:C.ink,lineHeight:1.5,fontWeight:700,marginBottom:3}}>{focusLabel}</div>
+              <div style={{fontSize:11,color:C.ink,lineHeight:1.6}}>{focusTips[focusLabel]}</div>
             </div>}
           </div>}
 
-          {/* ── ZONE 3: SECTION PERFORMANCE ─────────────────────────────────── */}
+          {/* ── SECTION PERFORMANCE ── */}
           {(()=>{
-            const [spOpen,setSpOpen]=useState(false);
             if(triedSections.length===0)return null;
             const maxAvg=Math.max(...triedSections.map(s=>s.avgIQ),1);
             return(
-              <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden"}}>
-                <button onClick={()=>setSpOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"14px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
+              <div style={{...S.card,marginBottom:16,padding:0,overflow:"hidden"}}>
+                <button onClick={()=>setSpOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"16px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
                   <div>
-                    <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:2}}>SECTION PERFORMANCE</div>
-                    <div style={{fontSize:12,fontWeight:700,color:C.ink}}>Avg IQ by section · {triedSections.length} played</div>
+                    <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:5}}>SECTION PERFORMANCE</div>
+                    <div style={{fontSize:13,fontWeight:700,color:C.ink}}>Avg IQ by section · {triedSections.length} played</div>
                   </div>
                   <span style={{fontSize:12,color:C.mut}}>{spOpen?"▾":"▸"}</span>
                 </button>
-                {spOpen&&<div style={{borderTop:`1px solid ${C.bdr}`,padding:"8px 14px 12px"}} className="rk-in">
+                {spOpen&&<div style={{borderTop:`1px solid ${C.bdr}`,padding:"12px 14px 14px"}} className="rk-in">
                   {triedSections.map((s,i)=>{
                     const barW=Math.round((s.avgIQ/maxAvg)*100);
                     const col=s.avgIQ>=80?C.jade:s.avgIQ>=65?"#2460A8":s.avgIQ>=50?C.gold:C.cinn;
                     return(
-                      <div key={s.id} style={{marginBottom:i<triedSections.length-1?10:0}}>
-                        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
-                          <div style={{display:"flex",alignItems:"center",gap:6}}>
-                            <span style={{fontSize:14}}>{s.icon}</span>
+                      <div key={s.id} style={{marginBottom:i<triedSections.length-1?14:0}}>
+                        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:5}}>
+                          <div style={{display:"flex",alignItems:"center",gap:7}}>
+                            <span style={{fontSize:15}}>{s.icon}</span>
                             <span style={{fontSize:12,fontWeight:700,color:C.ink}}>{s.name}</span>
                             <span style={{fontSize:10,color:C.mut}}>{s.count} round{s.count!==1?"s":""}</span>
                           </div>
-                          <div style={{display:"flex",alignItems:"baseline",gap:3}}>
-                            <span style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:col}}>{s.avgIQ}</span>
+                          <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                            <span style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:col}}>{s.avgIQ}</span>
                             {s.bestIQ>s.avgIQ&&<span style={{fontSize:9,color:C.mut}}>↑{s.bestIQ}</span>}
                           </div>
                         </div>
-                        <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden"}}>
+                        <div style={{height:6,borderRadius:3,background:C.bdr,overflow:"hidden"}}>
                           <div style={{height:"100%",borderRadius:3,background:col,width:`${barW}%`}}/>
                         </div>
                       </div>
                     );
                   })}
-                  {untriedSections.length>0&&<div style={{marginTop:14,paddingTop:14,borderTop:`1px solid ${C.bdr}`}}>
+                  {untriedSections.length>0&&<div style={{marginTop:16,paddingTop:16,borderTop:`1px solid ${C.bdr}`}}>
                     <div style={{fontSize:9,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:8}}>NOT YET TRIED ({untriedSections.length})</div>
                     <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
                       {untriedSections.map(s=>(
@@ -5797,76 +5867,69 @@ function Stats({home,onShowScorecard,onRecap,dRes}){
                         </div>
                       ))}
                     </div>
-                    <div style={{fontSize:10,color:C.mut,marginTop:8,lineHeight:1.5}}>Practice these sections to find hidden strengths and improve your overall read speed.</div>
+                    <div style={{fontSize:10,color:C.mut,marginTop:10,lineHeight:1.6}}>Practice these sections to find hidden strengths and improve your overall read speed.</div>
                   </div>}
                 </div>}
               </div>
             );
           })()}
 
-          {/* ── ZONE 4: 2026 CARD KNOWLEDGE ─────────────────────────────────── */}
+          {/* ── 2026 CARD KNOWLEDGE ── */}
           {(()=>{
-            const [ckOpen,setCkOpen]=useState(false);
             if(Object.keys(bestHandFits).length===0)return null;
-            // For each section the player has played, show their best rack fit % against each hand
             const coveredSecs=triedSections.slice(0,5);
             return(
-              <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden"}}>
-                <button onClick={()=>setCkOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"14px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
+              <div style={{...S.card,marginBottom:16,padding:0,overflow:"hidden"}}>
+                <button onClick={()=>setCkOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"16px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
                   <div>
-                    <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:2}}>2026 CARD KNOWLEDGE</div>
-                    <div style={{fontSize:12,fontWeight:700,color:C.ink}}>Best rack fits per section</div>
-                    <div style={{fontSize:10,color:C.mut,marginTop:1}}>How close your racks have come to real hands</div>
+                    <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:5}}>2026 CARD KNOWLEDGE</div>
+                    <div style={{fontSize:13,fontWeight:700,color:C.ink}}>Best rack fits per section</div>
+                    <div style={{fontSize:10,color:C.mut,marginTop:3}}>How close your racks have come to real hands</div>
                   </div>
                   <span style={{fontSize:12,color:C.mut}}>{ckOpen?"▾":"▸"}</span>
                 </button>
-                {ckOpen&&<div style={{borderTop:`1px solid ${C.bdr}`,padding:"12px 14px"}} className="rk-in">
+                {ckOpen&&<div style={{borderTop:`1px solid ${C.bdr}`,padding:"14px 14px"}} className="rk-in">
                   {coveredSecs.map((sec,si)=>{
                     const hands=HAND_CATALOG.filter(h=>h.sec===sec.id);
-                    // Score each hand against the player's best-ever rack for that section
-                    // We use the bestHandFits score as proxy — show top 2 hands by catalog position
-                    // and the overall best fit % for this section
                     const bestFit=bestHandFits[sec.id];
                     const fitPct=bestFit?Math.round(bestFit.score*100):0;
                     const famColor=fitPct>=70?C.jade:fitPct>=45?C.gold:C.cinn;
                     const famLabel=fitPct>=70?"Strong fit":fitPct>=45?"Building":fitPct>=20?"Early stage":"Low exposure";
                     return(
-                      <div key={sec.id} style={{marginBottom:si<coveredSecs.length-1?16:0,paddingBottom:si<coveredSecs.length-1?16:0,borderBottom:si<coveredSecs.length-1?`1px solid ${C.bdr}`:"none"}}>
-                        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-                          <span style={{fontSize:16}}>{sec.icon}</span>
+                      <div key={sec.id} style={{marginBottom:si<coveredSecs.length-1?18:0,paddingBottom:si<coveredSecs.length-1?18:0,borderBottom:si<coveredSecs.length-1?`1px solid ${C.bdr}`:"none"}}>
+                        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
+                          <span style={{fontSize:17}}>{sec.icon}</span>
                           <div style={{flex:1}}>
-                            <div style={{fontSize:12,fontWeight:800,color:C.ink}}>{sec.name}</div>
-                            <div style={{fontSize:10,color:C.mut}}>{hands.length} hands on the 2026 card · {sec.count} round{sec.count!==1?"s":""} played</div>
+                            <div style={{fontSize:13,fontWeight:800,color:C.ink}}>{sec.name}</div>
+                            <div style={{fontSize:10,color:C.mut,marginTop:2}}>{hands.length} hands on the 2026 card · {sec.count} round{sec.count!==1?"s":""} played</div>
                           </div>
                           <div style={{textAlign:"right"}}>
                             <div style={{fontSize:9,fontWeight:700,color:famColor,letterSpacing:0.5}}>{famLabel}</div>
-                            <div style={{fontFamily:F.d,fontSize:13,fontWeight:900,color:famColor}}>{fitPct}%</div>
+                            <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:famColor}}>{fitPct}%</div>
                           </div>
                         </div>
-                        {/* Coverage bar — how close your best rack ever got */}
-                        <div style={{height:4,borderRadius:2,background:C.bdr,overflow:"hidden",marginBottom:6}}>
-                          <div style={{height:"100%",borderRadius:2,background:famColor,width:`${fitPct}%`}}/>
+                        <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden",marginBottom:8}}>
+                          <div style={{height:"100%",borderRadius:3,background:famColor,width:`${fitPct}%`}}/>
                         </div>
-                        <div style={{fontSize:10,color:C.mut,lineHeight:1.5}}>
+                        <div style={{fontSize:10,color:C.mut,lineHeight:1.6}}>
                           {fitPct>=70?`Your racks have come close to completing real ${sec.name} hands.`:
-                           fitPct>=45?`Good foundation. Keep building depth in ${sec.name} — you're getting into realistic hand territory.`:
+                           fitPct>=45?`Good foundation. Keep building depth in ${sec.name} — you're into realistic hand territory.`:
                            `Your ${sec.name} racks are still early stage. Focus on the section's anchor tiles.`}
                         </div>
                       </div>
                     );
                   })}
                   <div style={{marginTop:14,background:C.jade+"06",borderRadius:10,padding:"10px 12px",border:`1px solid ${C.jade}15`}}>
-                    <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>HOW THIS WORKS</div>
-                    <div style={{fontSize:10,color:C.ink,lineHeight:1.55}}>Each % shows how close your best-ever rack came to completing a real hand from the 2026 NMJL card. 70%+ means you've built racks that were genuinely close to winning.</div>
+                    <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:5}}>HOW THIS WORKS</div>
+                    <div style={{fontSize:10,color:C.ink,lineHeight:1.6}}>Each % shows how close your best-ever rack came to completing a real hand from the 2026 NMJL card. 70%+ means you've built racks that were genuinely close to winning.</div>
                   </div>
                 </div>}
               </div>
             );
           })()}
 
-          {/* ── NEXT PRACTICE RECOMMENDATION ─────────────────────────────────── */}
+          {/* ── NEXT PRACTICE ── */}
           {(()=>{
-            // Data-driven: weakest avg IQ section, or untried
             let rec=null,recReason="";
             const weakest=triedSections.length?[...triedSections].sort((a,b)=>a.avgIQ-b.avgIQ)[0]:null;
             if(untriedSections.length>0){
@@ -5882,19 +5945,18 @@ function Stats({home,onShowScorecard,onRecap,dRes}){
             }
             if(!rec)return null;
             return(
-              <div style={{...S.card,marginBottom:10,background:"linear-gradient(145deg,#FFFFF8,#F8F4EB)",borderColor:C.gold+"25"}}>
-                <div style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:10}}>🎯 NEXT PRACTICE</div>
-                <div style={{display:"flex",alignItems:"flex-start",gap:10}}>
-                  <div style={{width:40,height:40,borderRadius:11,background:rec.color+"12",border:`1px solid ${rec.color}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{rec.icon}</div>
+              <div style={{...S.card,marginBottom:16,background:"linear-gradient(145deg,#FFFFF8,#F8F4EB)",borderColor:C.gold+"25"}}>
+                <div style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:12}}>🎯 NEXT PRACTICE</div>
+                <div style={{display:"flex",alignItems:"flex-start",gap:12}}>
+                  <div style={{width:44,height:44,borderRadius:12,background:rec.color+"12",border:`1px solid ${rec.color}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>{rec.icon}</div>
                   <div style={{flex:1}}>
-                    <div style={{fontSize:13,fontWeight:800,color:C.ink,marginBottom:4}}>{rec.name}</div>
-                    <div style={{fontSize:11,color:C.mut,lineHeight:1.55}}>{recReason}</div>
+                    <div style={{fontSize:14,fontWeight:800,color:C.ink,marginBottom:6}}>{rec.name}</div>
+                    <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>{recReason}</div>
                   </div>
                 </div>
               </div>
             );
           })()}
-
         </>
       )}
       {onRecap&&getWeeklyRecapData()&&(
@@ -6137,8 +6199,9 @@ function Game({mode,home,onDone,settings}){
           </button>
           {showRef&&<CG onClose={()=>setShowRef(false)}/>}
           {(()=>{
-            const ranked=ev(hand).sort((a,b)=>b.score-a.score);
-            const topPct=ranked[0]?.score||0;
+            const scored=ev(hand);
+            const ranked=SECS.map(s=>scored.find(e=>e.id===s.id)).filter(Boolean);
+            const topPct=scored[0]?.score||0;
             return(<>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
                 <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>CHOOSE YOUR SECTION</div>
@@ -6504,7 +6567,9 @@ function WeeklyRecapScreen({home,go,dDone}){
 
       {/* Share */}
       <div style={{...S.card,marginBottom:12}}>
-        <div style={{fontFamily:"monospace",fontSize:10,color:C.mut,lineHeight:1.9,whiteSpace:"pre",background:C.bg2,borderRadius:8,padding:"10px 12px",marginBottom:10,textAlign:"center",borderBottom:`1px solid ${C.bdr}`}}>{shareText}</div>
+        <div style={{fontFamily:"monospace",fontSize:10,color:C.mut,background:C.bg2,borderRadius:8,padding:"10px 12px",marginBottom:10,textAlign:"center",borderBottom:`1px solid ${C.bdr}`}}>
+          {shareText.split("\n").map((line,i)=>line===""?<div key={i} style={{height:8}}/>:<div key={i} style={{lineHeight:1.9}}>{line}</div>)}
+        </div>
         <ShareButton text={shareText} label="Share your week" sublabel="Post it to your group chat"/>
       </div>
 
@@ -6605,9 +6670,9 @@ export default function Rackle(){
       <>
         {screen==="home"&&<Home {...{streak,rounds,dDone,dRes,showHelp,setShowHelp,go,settings,setScreen}} showStats={()=>setScreen("stats")} showSettings={()=>setScreen("settings")} showTutorial={()=>setScreen("tutorial")} showCardGuide={()=>setScreen("cardguide")} showScorecard={()=>setScreen("scorecard")}/>}
         {screen==="tutorial"&&<Tutorial onDone={()=>{ST.set("tutDone",true);setScreen("home");}} onBack={()=>setScreen("home")}/>}
-        {screen==="cardguide"&&<CardGuideScreen home={()=>setScreen("home")}/>}
+        {screen==="cardguide"&&<CardGuideScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
         {screen==="play"&&<Game mode={mode} home={()=>setScreen("home")} onDone={onDone} settings={settings}/>}
-        {screen==="stats"&&<Stats home={()=>setScreen("home")} onShowScorecard={()=>setScreen("scorecard")} onRecap={()=>setScreen("recap")} dRes={dRes}/>}
+        {screen==="stats"&&<Stats home={()=>setScreen("home")} onShowScorecard={()=>setScreen("scorecard")} onRecap={()=>setScreen("recap")} dRes={dRes} setScreen={setScreen}/>}
         {screen==="settings"&&<Settings home={()=>setScreen("home")} settings={settings} setSettings={setSettings} showTutorial={()=>setScreen("tutorial")}/>}
         {screen==="scorecard"&&<ScorecardScreen res={dRes} home={()=>setScreen("home")} dayNum={getDayNum()} onPractice={()=>go("free")}/>}
         {screen==="leaderboard"&&<LeaderboardScreen home={()=>setScreen("home")} dRes={dRes} streak={streak}/>}
@@ -6630,4 +6695,3 @@ function AppShell({children}){
     </div>
   );
 }
-
