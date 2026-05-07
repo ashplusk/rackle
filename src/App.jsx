@@ -2349,7 +2349,7 @@ function iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId,chose
     });
     // Blind pass: strong-tile penalty halved — less information available
     const strongPenalty=isBlind?2:4;
-    let roundScore=10+(weakPassed*3)-(strongPassed*strongPenalty)+(neutralPassed*0.5);
+    let roundScore=10+(weakPassed*3)-(strongPassed*strongPenalty)+(neutralPassed*1);
     roundScore=Math.max(0,Math.min(15,roundScore));
     totalRoundScore+=roundScore;
 
@@ -2379,7 +2379,7 @@ function iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId,chose
   if(totalWeakInStart>=4){
     raw+=weakClearRate>=0.75?3:weakClearRate>=0.5?1:weakClearRate<=0.2?-2:0;
   }
-  raw-=brokenPairsTotal*3;
+  raw-=brokenPairsTotal*2;
   raw=Math.max(0,Math.min(25,raw));
 
   raw=Math.max(0,Math.min(25,Math.round(raw)));
@@ -2755,14 +2755,19 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   const finalStrong=finalRack.filter(t=>isStrongForHand(t)).length;
   const retentionRate=dealStrong>0?finalStrong/dealStrong:0;
   if(retentionRate>=0.85&&dealStrong>=5){
-    directionScore=Math.min(40,directionScore+2);
-    tileStrengthScore=Math.min(25,tileStrengthScore+(tileStrengthScore<20?3:0));
+    directionScore=Math.min(40,directionScore+3);
+    tileStrengthScore=Math.min(25,tileStrengthScore+(tileStrengthScore<20?4:0));
   } else if(retentionRate>=0.7&&dealStrong>=5){
     directionScore=Math.min(40,directionScore+1);
+    tileStrengthScore=Math.min(25,tileStrengthScore+(tileStrengthScore<18?2:0));
   }
+  // Poor deal floors — a player shouldn't be punished for bad luck
   if(dealStrong<=2){
-    directionScore=Math.max(directionScore,16);
-    tileStrengthScore=Math.max(tileStrengthScore,10);
+    directionScore=Math.max(directionScore,22);
+    tileStrengthScore=Math.max(tileStrengthScore,13);
+  } else if(dealStrong<=4){
+    directionScore=Math.max(directionScore,18);
+    tileStrengthScore=Math.max(tileStrengthScore,11);
   }
 
   // ── SECTION DOMINANCE BONUS ─────────────────────────────────────────────────
@@ -3707,6 +3712,323 @@ function Ti({t,sel,isNew,onClick,dim,large}){
     {sel&&<div aria-hidden="true" style={{position:"absolute",top:0,left:0,right:0,height:2,background:c}}/>}
   </div>);}
 
+// ═══════════════════════════════════════════════════════════════════════════
+// COACHING ENGINE — rack narrative, flexibility, expert read, identity
+// Pure computation — no API, derived entirely from existing rack data.
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ── 1. WHAT YOUR RACK WAS BECOMING ─────────────────────────────────────────
+// Returns an array of structural narrative bullets describing the rack's shape.
+function computeRackBecoming(finalRack, startingRack, chosenSec, passLog){
+  const bullets=[];
+  if(!finalRack||!finalRack.length)return bullets;
+
+  const jk=finalRack.filter(t=>t.t==="j").length;
+  const fl=finalRack.filter(t=>t.t==="f").length;
+  const windCount=finalRack.filter(t=>t.t==="w").length;
+  const dragonCount=finalRack.filter(t=>t.t==="d").length;
+  const honorTotal=windCount+dragonCount;
+  const numTiles=finalRack.filter(t=>t.t==="s").length;
+
+  // Honor tile weight — check FIRST so W&D racks don't get a spurious suit label
+  if(honorTotal>=6)bullets.push("Honor-heavy rack — Winds & Dragons direction was becoming very clear");
+  else if(windCount>=4)bullets.push("Wind concentration — strong pull toward Winds & Dragons");
+  else if(windCount>=3&&dragonCount>=2)bullets.push("Honor tiles building — W&D section momentum was forming");
+  else if(honorTotal>=4)bullets.push("Meaningful honor presence — W&D worth considering");
+
+  // Suit concentration — only meaningful when number tiles dominate the rack
+  if(numTiles>=6){
+    const sc={bam:0,crak:0,dot:0};
+    finalRack.filter(t=>t.t==="s").forEach(t=>{sc[t.s]++;});
+    const dominant=Object.entries(sc).sort((a,b)=>b[1]-a[1])[0];
+    const dominantName={bam:"Bamboo",crak:"Character",dot:"Circle"}[dominant[0]];
+    if(dominant[1]/numTiles>=0.6)bullets.push(`${dominantName}-heavy structure — your tiles were pulling toward one suit`);
+    else if(dominant[1]/numTiles>=0.45)bullets.push(`Leaning ${dominantName} — some suit concentration forming, not yet locked in`);
+  }
+
+  // Number character — odd vs even
+  const odds=finalRack.filter(t=>t.t==="s"&&t.n%2===1).length;
+  const evens=finalRack.filter(t=>t.t==="s"&&t.n%2===0).length;
+  if(odds+evens>=5){
+    const ratio=odds/(odds+evens);
+    if(ratio>=0.75)bullets.push("Odd-heavy rack — strong instinct toward odd-number sections");
+    else if(ratio<=0.28)bullets.push("Even-heavy rack — pointing toward 2468 or multiples-of-3 territory");
+    else if(odds+evens>=7)bullets.push("Mixed number parity — rack still had flexibility across odd and even sections");
+  }
+
+  // Pair/pung/kong structure
+  const groups={};
+  finalRack.forEach(t=>{
+    const k=t.t==="s"?`s-${t.s}-${t.n}`:t.t==="w"?`w-${t.v}`:t.t==="d"?`d-${t.v}`:`f`;
+    groups[k]=(groups[k]||0)+1;
+  });
+  const pairs=Object.values(groups).filter(v=>v===2).length;
+  const pungs=Object.values(groups).filter(v=>v===3).length;
+  const kongs=Object.values(groups).filter(v=>v>=4).length;
+  if(kongs>=2)bullets.push("Deep group concentration — two or more kongs forming");
+  else if(pungs>=2)bullets.push("Pung-rich structure — multiple groups of three building");
+  else if(pairs>=4)bullets.push("Pair-based flexibility — rack was becoming pair-dense");
+  else if(pairs>=2&&numTiles>=6)bullets.push("Early pair structure — good foundation, still wide open");
+
+  // Joker situation
+  if(jk>=3)bullets.push("Three jokers — exceptional wild-tile support for any open hand");
+  else if(jk===2)bullets.push("Two jokers — strong support for pung or kong completion");
+  else if(jk===1)bullets.push("One joker in hand — useful but commit carefully on where to use it");
+  else if(chosenSec!=="sp"&&bullets.length<3)bullets.push("No jokers — rack needed natural group depth to compete");
+
+  // Flowers
+  if(fl>=3)bullets.push("Flower-rich deal — multiple sections could absorb them");
+  else if(fl>=2)bullets.push("Two flowers — solid support for flower-inclusive hands");
+
+  // CR window signal
+  if(chosenSec==="cr"||(numTiles>=8&&!chosenSec)){
+    const cw=crWindowScore(finalRack);
+    if((cw.groupDepth||0)>=8)bullets.push("Consecutive Run depth — tight number window forming with multiple groups");
+    else if((cw.groupDepth||0)>=4)bullets.push("Early run structure — a window was starting to form in your numbers");
+  }
+
+  // S&P signal
+  if((chosenSec==="sp"||pairs>=5)&&jk===0&&pairs>=5){
+    bullets.push("Pair-only potential — a Soap & Pairs path was visible");
+  }
+
+  return bullets.slice(0,5);
+}
+
+// ── 2. FLEXIBILITY SCORE ────────────────────────────────────────────────────
+// Measures optionality preservation. Returns {label, color, desc, livePaths, score 0-100}.
+function computeFlexibility(finalRack, allSections, passLog, startingRack){
+  if(!finalRack||!allSections)return{label:"Unknown",color:C.mut,desc:"",livePaths:0,score:50};
+
+  // Count sections with meaningful fit (>5% is a live path)
+  const livePaths=allSections.filter(s=>s.score>0.05).length;
+  const strongPaths=allSections.filter(s=>s.score>0.15).length;
+  const topScore=allSections[0]?.score||0;
+  const secondScore=allSections[1]?.score||0;
+  const concentration=topScore>0?topScore/(topScore+secondScore+0.001):0;
+
+  // Broken pairs reduce flexibility
+  const bp=(passLog||[]).reduce((acc,p)=>{
+    // count how many starting pairs were broken during passing
+    return acc;
+  },0);
+
+  // Compute raw flexibility score
+  let score=0;
+  score+=Math.min(livePaths*12,40);      // live paths (max 40)
+  score+=Math.min(strongPaths*10,30);    // strong paths (max 30)
+  score+=concentration<0.6?20:concentration<0.75?12:concentration<0.9?5:0; // openness bonus
+  // Pass quality modifies flexibility — passing strong tiles collapses options
+  const weakPasses=(passLog||[]).filter(p=>(p.out||[]).some(t=>t.t==="j")).length;
+  score-=weakPasses*8;
+  score=Math.max(0,Math.min(100,Math.round(score)));
+
+  let label,color,desc;
+  if(score>=80){
+    label="Elite";color=C.jade;
+    desc="You preserved multiple live paths through the Charleston. Your rack can still evolve in several directions.";
+  } else if(score>=60){
+    label="Strong";color="#2460A8";
+    desc="Your rack stayed adaptable while building structure. You have a clear direction but haven't closed off alternatives yet.";
+  } else if(score>=38){
+    label="Narrowing";color=C.gold;
+    desc="Your passes committed you earlier than most players would prefer. Still playable — but pivoting now costs tiles.";
+  } else {
+    label="Locked-In";color=C.cinn;
+    desc="Your rack became highly dependent on one outcome. Strong commitment has its place — but watch for the moments you overcommit.";
+  }
+
+  return{label,color,desc,livePaths,strongPaths,score};
+}
+
+// ── 3. EXPERT READ ──────────────────────────────────────────────────────────
+// Returns {bullets[], risk, flexibility, commitment} from a coach perspective.
+function computeExpertRead(finalRack, chosenSec, allSections, passLog, iq){
+  if(!finalRack||!chosenSec)return null;
+  const bullets=[];
+  const meta=SECTION_META[chosenSec]||{};
+  const topSec=allSections?[...allSections].sort((a,b)=>b.score-a.score)[0]:null;
+  const chosenFit=allSections?.find(s=>s.id===chosenSec);
+  const chosenPct=chosenFit?Math.round(chosenFit.score*100):0;
+  const topPct=topSec?Math.round(topSec.score*100):0;
+  const sectionMatch=chosenSec===topSec?.id;
+
+  // Section-specific coaching tendencies
+  const secReads={
+    "2026":["Keep 2s and 6s no matter what — they're in every hand","Soap (White Dragon) is wild-suit zero — never pass it","Commit early: this section has few hands and needs specific tiles","Pass all odd numbers in round one without hesitation"],
+    "2468":["6 is in 7 of 8 hands — the anchor you never give away","Focus on group depth over spread — three 6s beats six different evens","Flowers add value to 5 of 8 hands — hold them if you have 2+","E/W winds only matter for one hand — low priority unless stacking"],
+    "369":["6 is in every single 369 hand — protect it absolutely","3 and 9 are co-anchors, nearly as important as 6","Pass everything that isn't 3, 6, or 9 in round one","This section rewards early commitment and ruthless passing"],
+    "13579":["5 and 3 are in 9 of 10 hands — your primary anchors","Stay flexible between the many hand patterns in this section","N/S winds only matter for 2 hands — don't prioritize them early","This section rewards patience: many valid configurations exist"],
+    "cr":["Identify your 3–4 number window by the first pass","Pass everything outside the window — even tiles you like","Depth within the window matters more than width","Pungs and kongs beat singles — lone tiles don't score CR credit"],
+    "wd":["Pass all numbers above 4 in round one without exception","Stack winds of the same value — concentration beats variety","Dragons support 5 of 8 hands — hold them if you have pairs","This section rewards decisive, early commitment to honors"],
+    "aln":["Choose your number immediately and commit completely","Pass everything that isn't your chosen number","Jokers are your best friend — they fill any gap in your stacks","Width is your enemy — every extra number weakens the structure"],
+    "q":["Count jokers first — fewer than two means pivot immediately","Stack one specific tile as deep as possible","Pass anything that doesn't support the primary stack","This section is high-risk, high-reward — know when to abandon it"],
+    "sp":["Pass jokers immediately — they cannot help a concealed hand","Build pairs, not triples — pungs break S&P structure","Never break a pair to chase something else","This section rewards patience and tile discipline above all else"],
+  };
+
+  const reads=secReads[chosenSec]||[];
+  // Pick 3 contextually: prioritize based on what the rack shows
+  const jk=finalRack.filter(t=>t.t==="j").length;
+  const fl=finalRack.filter(t=>t.t==="f").length;
+  bullets.push(reads[0]); // always the anchor rule
+  if(jk===0&&chosenSec==="q")bullets.push(reads[0].replace("Count","You had no jokers — always count"));
+  else if(reads[1])bullets.push(reads[1]);
+  if(reads[2])bullets.push(reads[2]);
+
+  // Add cross-section insight if rack was close to another section
+  if(!sectionMatch&&topPct>chosenPct+15){
+    bullets.push(`Your rack had stronger natural fit in ${topSec.icon} ${topSec.name} (${topPct}%) — worth noting for next time`);
+  } else if(sectionMatch&&topPct<35){
+    bullets.push("Even the best-fitting section had low rack support — this was a tough deal to work with");
+  }
+
+  // Risk / flexibility / commitment labels
+  const totalPassed=(passLog||[]).reduce((a,p)=>(p.out||[]).length+a,0);
+  const passedStrong=(passLog||[]).flatMap(p=>p.out||[]).filter(t=>t.t==="j").length;
+
+  let risk,flex,commitment;
+  const dirRatio=(iq?.directionScore||0)/40;
+  const passRatio=(iq?.passQualityScore||0)/25;
+
+  risk=dirRatio>=0.75&&passRatio>=0.75?"Low":dirRatio>=0.5||passRatio>=0.5?"Medium":"High";
+  flex=livePaths(allSections)>=4?"High":livePaths(allSections)>=2?"Medium":"Low";
+  commitment=dirRatio>=0.85?"High":dirRatio>=0.6?"Medium":"Low";
+
+  return{bullets:bullets.filter(Boolean).slice(0,4),risk,flexibility:flex,commitment};
+
+  function livePaths(secs){return(secs||[]).filter(s=>s.score>0.08).length;}
+}
+
+// ── 4. MAHJONG IDENTITY ─────────────────────────────────────────────────────
+// Returns {archetype, tagline} based on play pattern.
+function computeMahjongIdentity(iq, chosenSec, passLog, finalRack){
+  if(!iq)return null;
+  const dr=iq.directionScore/40;
+  const pr=iq.passQualityScore/25;
+  const tr=iq.tileStrengthScore/25;
+  const tmr=iq.timingScore/10;
+  const jk=(finalRack||[]).filter(t=>t.t==="j").length;
+  const fl=(finalRack||[]).filter(t=>t.t==="f").length;
+  const allPassed=(passLog||[]).flatMap(p=>p.out||[]);
+  const passedJokers=allPassed.filter(t=>t.t==="j").length;
+
+  // Identity matrix
+  if(dr>=0.85&&pr>=0.8)return{archetype:"The Disciplined Builder",tagline:"You knew your direction and your passes protected it. That's expert instinct."};
+  if(dr>=0.8&&tmr>=0.85)return{archetype:"The Sharp Reader",tagline:"Quick decisions, clear direction. You read the rack and trusted your first instinct."};
+  if(dr>=0.75&&tr>=0.8)return{archetype:"The Structure Seeker",tagline:"You built depth and held the right tiles. Tile discipline at its best."};
+  if(pr>=0.85&&tr>=0.75)return{archetype:"The Clean Passer",tagline:"Your pass quality was exceptional. You gave away exactly what you should have."};
+  if(jk>=3&&pr>=0.7)return{archetype:"The Joker Keeper",tagline:"You held your wildcards and built around them. High-ceiling play."};
+  if(dr>=0.7&&pr<0.5)return{archetype:"The Committed Player",tagline:"Strong direction, but your passes didn't always protect the plan. Two sides of the same coin."};
+  if(dr<0.5&&pr>=0.75)return{archetype:"The Careful Passer",tagline:"Disciplined discards, but the section read was still forming. Trust your instincts earlier."};
+  if(tmr<=0.4&&dr>=0.7)return{archetype:"The Methodical Planner",tagline:"You took your time and committed to a direction. Slow and intentional — that's a style."};
+  if(passedJokers>0)return{archetype:"The Risk-Taker",tagline:"Passing a joker takes nerve. Sometimes it pays off — was this one of those times?"};
+  if(fl>=3&&tr>=0.6)return{archetype:"The Flower Collector",tagline:"Your flowers added real structural support. You recognized their value."};
+  if(chosenSec==="sp")return{archetype:"The Pair Builder",tagline:"S&P is the disciplined path. Pairs only, no jokers, all instinct."};
+  if(chosenSec==="q")return{archetype:"The High Roller",tagline:"Quints or nothing. You swung for the fence — no shame in that."};
+  if(dr<0.5&&pr<0.5)return{archetype:"The Exploratory Player",tagline:"This rack kept you guessing. Sometimes the best round is the one that teaches you something."};
+  return{archetype:"The Adaptive Player",tagline:"You adjusted as the rack evolved. Flexibility is an underrated skill in Mahjong."};
+}
+
+// ── COACHING UI COMPONENTS ──────────────────────────────────────────────────
+
+function RackBecomingCard({finalRack, startingRack, chosenSec, passLog}){
+  const bullets=computeRackBecoming(finalRack,startingRack,chosenSec,passLog);
+  if(!bullets.length)return null;
+  return(
+    <div style={{...S.card,marginBottom:8,background:"linear-gradient(145deg,#F9F6F0,#F5F0E8)",borderColor:C.gold+"30"}}>
+      <div style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:10}}>WHAT YOUR RACK WAS BECOMING</div>
+      <div style={{display:"flex",flexDirection:"column",gap:7}}>
+        {bullets.map((b,i)=>(
+          <div key={i} style={{display:"flex",alignItems:"flex-start",gap:8}}>
+            <div style={{width:5,height:5,borderRadius:3,background:C.gold,flexShrink:0,marginTop:5}}/>
+            <span style={{fontSize:12,color:C.ink,lineHeight:1.55,flex:1}}>{b}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function FlexibilityCard({finalRack, allSections, passLog, startingRack}){
+  const f=computeFlexibility(finalRack,allSections,passLog,startingRack);
+  if(!f)return null;
+  const barW=`${f.score}%`;
+  return(
+    <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden"}}>
+      <div style={{background:`linear-gradient(135deg,${f.color}14,${f.color}06)`,borderBottom:`1px solid ${f.color}20`,padding:"12px 14px"}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
+          <div style={{fontSize:9,color:f.color,letterSpacing:2,fontWeight:700}}>FLEXIBILITY SCORE</div>
+          <div style={{display:"flex",alignItems:"baseline",gap:3}}>
+            <span style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:f.color,lineHeight:1}}>{f.label}</span>
+          </div>
+        </div>
+        <div style={{height:5,borderRadius:3,background:f.color+"20",overflow:"hidden",marginBottom:8}}>
+          <div style={{height:"100%",borderRadius:3,background:f.color,width:barW,transition:"width 0.8s ease"}}/>
+        </div>
+        <div style={{display:"flex",gap:10}}>
+          <div style={{flex:1,textAlign:"center"}}>
+            <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:f.color}}>{f.livePaths}</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1,fontWeight:700,marginTop:1}}>LIVE PATHS</div>
+          </div>
+          <div style={{width:1,background:f.color+"20"}}/>
+          <div style={{flex:1,textAlign:"center"}}>
+            <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:f.color}}>{f.strongPaths}</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1,fontWeight:700,marginTop:1}}>STRONG PATHS</div>
+          </div>
+        </div>
+      </div>
+      <div style={{padding:"10px 14px"}}>
+        <p style={{fontSize:12,color:C.ink,lineHeight:1.55,margin:0}}>{f.desc}</p>
+      </div>
+    </div>
+  );
+}
+
+function ExpertReadCard({finalRack, chosenSec, allSections, passLog, iq}){
+  const read=computeExpertRead(finalRack,chosenSec,allSections,passLog,iq);
+  if(!read)return null;
+  const riskColor={Low:C.jade,Medium:C.gold,High:C.cinn}[read.risk]||C.mut;
+  const flexColor={High:C.jade,Medium:C.gold,Low:C.cinn}[read.flexibility]||C.mut;
+  const commitColor={High:C.cinn,Medium:C.gold,Low:C.jade}[read.commitment]||C.mut;
+  return(
+    <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden"}}>
+      <div style={{background:"linear-gradient(135deg,#0F2016,#1B3A28)",padding:"11px 14px"}}>
+        <div style={{fontSize:9,color:"rgba(255,255,255,0.45)",letterSpacing:2,fontWeight:700,marginBottom:2}}>EXPERT READ</div>
+        <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#fff",lineHeight:1.2}}>How strong players see this rack</div>
+      </div>
+      <div style={{padding:"12px 14px",borderBottom:`1px solid ${C.bdr}`}}>
+        {read.bullets.map((b,i)=>(
+          <div key={i} style={{display:"flex",alignItems:"flex-start",gap:8,marginBottom:i<read.bullets.length-1?7:0}}>
+            <span style={{fontSize:11,color:C.jade,fontWeight:900,flexShrink:0,marginTop:1}}>›</span>
+            <span style={{fontSize:12,color:C.ink,lineHeight:1.55,flex:1}}>{b}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{display:"flex",borderTop:`1px solid ${C.bdr}`}}>
+        {[{label:"Risk",value:read.risk,color:riskColor},{label:"Flexibility",value:read.flexibility,color:flexColor},{label:"Commitment",value:read.commitment,color:commitColor}].map((m,i)=>(
+          <div key={i} style={{flex:1,padding:"9px 10px",textAlign:"center",borderRight:i<2?`1px solid ${C.bdr}`:"none"}}>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>{m.label.toUpperCase()}</div>
+            <div style={{fontSize:12,fontWeight:800,color:m.color}}>{m.value}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MahjongIdentityCard({iq, chosenSec, passLog, finalRack}){
+  const id=computeMahjongIdentity(iq,chosenSec,passLog,finalRack);
+  if(!id)return null;
+  return(
+    <div style={{borderRadius:14,background:`linear-gradient(160deg,${C.hero1},${C.hero2})`,padding:"18px 20px",marginBottom:8,textAlign:"center"}}>
+      <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:10}}>YOUR STYLE THIS ROUND</div>
+      <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.gilt,lineHeight:1.2,marginBottom:8}}>{id.archetype}</div>
+      <div style={{width:40,height:1,background:`linear-gradient(90deg,transparent,${C.gilt}60,transparent)`,margin:"0 auto 10px"}}/>
+      <p style={{fontSize:12,color:"rgba(255,255,255,0.7)",lineHeight:1.6,margin:0,maxWidth:280,marginLeft:"auto",marginRight:"auto"}}>{id.tagline}</p>
+    </div>
+  );
+}
+
 // IQ HERO — shared dark jade gradient hero card used in scorecard + home
 function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections}){
   if(!iq)return null;
@@ -4147,6 +4469,13 @@ function DailyIQScorecard({iq,hand,passLog,dayNum,section,chosenSec,allSections,
 
       {hand&&hand.length>0&&<SortableRack hand={hand}/>}
 
+      {/* COACHING LAYER — What Your Rack Was Becoming + Expert Read + Flexibility */}
+      {chosenSec&&hand&&hand.length>0&&<>
+        <RackBecomingCard finalRack={hand} startingRack={hand} chosenSec={chosenSec} passLog={passLog}/>
+        <ExpertReadCard finalRack={hand} chosenSec={chosenSec} allSections={allSections} passLog={passLog} iq={iq}/>
+        <FlexibilityCard finalRack={hand} allSections={allSections} passLog={passLog} startingRack={hand}/>
+      </>}
+
       {/* COACH MODE BUTTON */}
       {onCoachMode&&<button onClick={onCoachMode} style={{width:"100%",borderRadius:14,background:`linear-gradient(135deg,#1E3A5F08,#152A4508)`,border:`1.5px solid #1E3A5F25`,cursor:"pointer",display:"flex",alignItems:"center",gap:14,padding:"14px 16px",marginBottom:8,textAlign:"left"}}>
         <div style={{width:40,height:40,borderRadius:11,background:"#1E3A5F15",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🎓</div>
@@ -4233,6 +4562,14 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
           <ScoreBar label="Pass Quality" score={iq.passQualityScore} max={25}/>
           <ScoreBar label="Timing" score={iq.timingScore} max={10} note={iq.timingInsight}/>
         </div>
+
+        {/* COACHING LAYER */}
+        {chosenSec&&hand&&hand.length>0&&<>
+          <RackBecomingCard finalRack={hand} startingRack={hand} chosenSec={chosenSec} passLog={passLog}/>
+          <ExpertReadCard finalRack={hand} chosenSec={chosenSec} allSections={allSections} passLog={passLog} iq={iq}/>
+          <FlexibilityCard finalRack={hand} allSections={allSections} passLog={passLog} startingRack={hand}/>
+          <MahjongIdentityCard iq={iq} chosenSec={chosenSec} passLog={passLog} finalRack={hand}/>
+        </>}
 
         {/* Section comparison — collapsible */}
         {allSections&&allSections.length>0&&(()=>{
@@ -4627,7 +4964,7 @@ function CoachModeScreen({iq,hand,passLog,dayNum,section,chosenSec,chosenHand,al
 }
 
 // IQScorecard router — daily gets simplified, practice gets tabbed
-function IQScorecard({iq,hand,passLog,isDaily,dayNum,section,chosenSec,allSections,onHome,onDealAgain,onPractice,setScreen}){
+function IQScorecard({iq,hand,passLog,isDaily,dayNum,section,chosenSec,chosenHand,allSections,onHome,onDealAgain,onPractice,setScreen}){
   const [coachMode,setCoachMode]=useState(false);
   if(isDaily&&coachMode)return(
     <CoachModeScreen iq={iq} hand={hand} passLog={passLog} dayNum={dayNum} section={section} chosenSec={chosenSec} chosenHand={chosenHand} allSections={allSections} onBack={()=>setCoachMode(false)} setScreen={setScreen}/>
@@ -6633,17 +6970,31 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       </button>
 
       <div style={{display:"flex",gap:8,marginBottom:8}}>
-        <button onClick={showCardGuide} style={{flex:1,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${C.gold}25`,background:C.gold+"06",textAlign:"center"}}>
+        <button onClick={()=>setScreen("handbrowser")} style={{flex:1,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${C.gold}25`,background:C.gold+"06",textAlign:"center"}}>
           <span style={{fontSize:22}}>📋</span>
           <div style={{fontSize:9,color:C.gold,letterSpacing:1.5,fontWeight:700}}>2026 NMJL</div>
-          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2}}>Card Guide</div>
-          <div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:1}}>Hold & pass tips</div>
+          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2}}>Hand Browser</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:1}}>Visual hand breakdowns</div>
         </button>
         <button onClick={()=>setShowHelp(!showHelp)} aria-expanded={showHelp} style={{flex:1,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${showHelp?C.gold+"40":C.gold+"25"}`,background:C.gold+"06",textAlign:"center"}}>
           <span style={{fontSize:22}}>📖</span>
           <div style={{fontSize:9,color:C.gold,letterSpacing:1.5,fontWeight:700}}>LEARN</div>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2}}>How to Play</div>
           <div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:1}}>Rules & scoring</div>
+        </button>
+      </div>
+      <div style={{display:"flex",gap:8,marginBottom:8}}>
+        <button onClick={()=>setScreen("glossary")} style={{flex:1,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",textAlign:"center"}}>
+          <span style={{fontSize:22}}>📖</span>
+          <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700}}>BEGINNER</div>
+          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2}}>Glossary</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:1}}>Pung, kong, concealed…</div>
+        </button>
+        <button onClick={()=>setScreen("quiz")} style={{flex:1,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",textAlign:"center"}}>
+          <span style={{fontSize:22}}>🧠</span>
+          <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700}}>TRAINING</div>
+          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2}}>Section Quiz</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:1}}>Read racks. Pick sections.</div>
         </button>
       </div>
 
@@ -7250,18 +7601,60 @@ function Game({mode,home,onDone,settings,setScreen}){
     setSel(p=>{const n=p.includes(i)?p.filter(x=>x!==i):p.length>=3?p:[...p,i];if(n.length!==p.length)haptic(20);return n;});
   };
 
+  // ── OPPONENT SIMULATION ──────────────────────────────────────────────────────
+  // Pool is the undealt deck (no jokers). We pick tiles from it as if an opponent
+  // is passing back — biased toward a random mix so received tiles feel authentic.
+  // The opponent's "section" rotates per Charleston so the mix feels natural.
+  const oppSectionRef=useRef(null);
+  if(!oppSectionRef.current){
+    // Pick a random opposing section at game start — determines their discard bias
+    const oppSecs=["2468","cr","13579","369","wd","sp","aln","2026"];
+    oppSectionRef.current=oppSecs[Math.floor(Math.random()*oppSecs.length)];
+  }
+
+  // Score a pool tile as "discard likelihood" for the opponent — higher = more likely to pass it
+  const oppDiscardScore=(t,oppSec)=>{
+    // Jokers never enter the pool (filtered out on deal)
+    if(t.t==="j")return 0;
+    // Common discards: tiles that don't fit opponent's section
+    const weakFor={
+      "2468":(t)=>t.t==="s"&&t.n%2===1,
+      "13579":(t)=>t.t==="s"&&t.n%2===0,
+      "369":(t)=>t.t==="s"&&![3,6,9].includes(t.n),
+      "cr":(t)=>t.t==="w",
+      "wd":(t)=>t.t==="s"&&t.n>4,
+      "aln":(t)=>t.t==="s",
+      "2026":(t)=>t.t==="s"&&![2,6].includes(t.n),
+      "sp":(t)=>t.t==="j",
+    };
+    const isWeak=weakFor[oppSec]?weakFor[oppSec](t):false;
+    // Flowers and high-value tiles are less likely to be passed
+    if(t.t==="f")return 2;
+    if(isWeak)return 10+Math.random()*5;
+    return 3+Math.random()*4;
+  };
+
   const doSwap=(count)=>{
     haptic(40);
     const pt=sel.map(i=>hand[i]);setPassed(p=>[...p,...pt]);
-    const rem=hand.filter((_,i)=>!sel.includes(i));const safe=pool.filter(t=>t.t!=="j");
-    const inc=safe.slice(0,count);setPool(safe.slice(count));
-    const comb=[...rem,...inc];const ni=[];for(let i=rem.length;i<comb.length;i++)ni.push(i);
+    const rem=hand.filter((_,i)=>!sel.includes(i));
+
+    // Pick incoming tiles from pool — weighted by opponent discard likelihood
+    const safe=pool.filter(t=>t.t!=="j");
+    const scored=safe.map((t,idx)=>({t,idx,score:oppDiscardScore(t,oppSectionRef.current)}));
+    scored.sort((a,b)=>b.score-a.score); // highest discard score = most likely to receive
+    const incoming=scored.slice(0,count).map(x=>x.t);
+    const incomingIdxSet=new Set(scored.slice(0,count).map(x=>x.idx));
+    const newPool=safe.filter((_,i)=>!incomingIdxSet.has(i));
+    setPool(newPool);
+
+    const comb=[...rem,...incoming];const ni=[];for(let i=rem.length;i<comb.length;i++)ni.push(i);
     const roundName=cn===1
       ?(pi===0?"Pass Right":pi===1?"Pass Over":"Pass Left (Blind)")
       :(pi===0?"2nd Charleston · Pass Left":pi===1?"2nd Charleston · Pass Over":"2nd Charleston · Pass Right (Blind)");
     const nowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);
     const passEl=nowEl-lastPassElRef.current;lastPassElRef.current=nowEl;
-    setPassLog(pl=>[...pl,{label:roundName,roundName,out:pt,in:inc,blind:cp.blind,secs:passEl}]);
+    setPassLog(pl=>[...pl,{label:roundName,roundName,out:pt,in:incoming,blind:cp.blind,secs:passEl}]);
     setNewIdx(ni);setHand(comb);setSel([]);
     setTimeout(()=>{setNewIdx([]);setShowHint(false);setHintExp(null);if(pi<2){setPi(p=>p+1);}else{setPhase(cn===1?"askSecond":"askCourtesy");}},600);
   };
@@ -7371,7 +7764,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           <div style={S.card}><RH hand={hand} onSort={()=>setHand(sortHand(hand))}/>
             <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} dim={t.t==="j"} onClick={()=>cTog(i)} large={large}/>)}</div></div>
           <div aria-live="polite" style={{textAlign:"center",fontSize:13,color:sel.length>0?C.jade:C.mut,fontWeight:700,margin:"4px 0"}}>{sel.length}/3 selected</div>
-          <button onClick={()=>{if(sel.length<1)return;haptic(40);const pt=sel.map(i=>hand[i]);setPassed(p=>[...p,...pt]);const rem=hand.filter((_,i)=>!sel.includes(i));const safe=pool.filter(t=>t.t!=="j");const inc=safe.slice(0,sel.length);setPool(safe.slice(sel.length));setHand([...rem,...inc]);const cpNowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);const cpPassEl=cpNowEl-lastPassElRef.current;lastPassElRef.current=cpNowEl;setPassLog(pl=>[...pl,{label:"Courtesy Pass",roundName:"Courtesy Pass",out:pt,in:inc,blind:false,secs:cpPassEl}]);setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");}} disabled={sel.length<1} style={{...S.passBtn,opacity:sel.length>=1?1:0.3}}>🔄 {sel.length<1?"Skip (pass 0)":`Pass ${sel.length}`}</button>
+          <button onClick={()=>{haptic(40);if(sel.length<1){setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");return;}const pt=sel.map(i=>hand[i]);setPassed(p=>[...p,...pt]);const rem=hand.filter((_,i)=>!sel.includes(i));const safe=pool.filter(t=>t.t!=="j");const scored2=safe.map((t,idx)=>({t,idx,score:oppDiscardScore(t,oppSectionRef.current)}));scored2.sort((a,b)=>b.score-a.score);const inc=scored2.slice(0,sel.length).map(x=>x.t);const inSet=new Set(scored2.slice(0,sel.length).map(x=>x.idx));setPool(safe.filter((_,i)=>!inSet.has(i)));setHand([...rem,...inc]);const cpNowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);const cpPassEl=cpNowEl-lastPassElRef.current;lastPassElRef.current=cpNowEl;setPassLog(pl=>[...pl,{label:"Courtesy Pass",roundName:"Courtesy Pass",out:pt,in:inc,blind:false,secs:cpPassEl}]);setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");}} style={{...S.passBtn}}>{sel.length<1?"Skip →":`Pass ${sel.length} across →`}</button>
         </>
       )}
 
@@ -7379,22 +7772,9 @@ function Game({mode,home,onDone,settings,setScreen}){
         <>
           <RackleHeader onBack={()=>setShowLeave(true)}/>
           {getDisplayTime()&&<div style={{textAlign:"center",marginBottom:4}}><span style={{fontSize:12,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {getDisplayTime()}</span></div>}
-          <h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 2px",textAlign:"center"}}>What hand are you playing?</h2>
-          <p style={{fontSize:12,color:C.mut,marginBottom:10,textAlign:"center"}}>Pick the exact hand from your card.</p>
-
-          {/* Fit hints toggle — practice mode only */}
-          {mode!=="daily"&&(
-            <button onClick={()=>setShowFitHints(v=>!v)} style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"8px 12px",marginBottom:8,borderRadius:10,border:`1px solid ${showFitHints?C.jade+"50":C.bdr}`,background:showFitHints?C.sage:"#fff",cursor:"pointer"}}>
-              <div style={{display:"flex",alignItems:"center",gap:8}}>
-                <span style={{fontSize:13}}>{showFitHints?"👁":"👁‍🗨"}</span>
-                <span style={{fontSize:11,fontWeight:600,color:showFitHints?C.sageB:C.mut}}>{showFitHints?"Fit hints on — tap to hide":"Show fit hints"}</span>
-              </div>
-              <div style={{width:32,height:18,borderRadius:9,background:showFitHints?C.jade:C.bdr,position:"relative",transition:"background 0.2s",flexShrink:0}}>
-                <div style={{width:14,height:14,borderRadius:7,background:"#fff",position:"absolute",top:2,left:showFitHints?16:2,transition:"left 0.2s",boxShadow:"0 1px 3px rgba(0,0,0,0.2)"}}/>
-              </div>
-            </button>
-          )}
-          <Rack hand={hand} label="YOUR RACK" showSort onSort={()=>setHand(sortHand(hand))} large={large}/>
+          <h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 2px",textAlign:"center"}}>Which section are you going for?</h2>
+          <p style={{fontSize:12,color:C.mut,marginBottom:10,textAlign:"center"}}>Pick the section you played toward.</p>
+          <Rack hand={hand} label="YOUR FINAL RACK" showSort onSort={()=>setHand(sortHand(hand))} large={large}/>
           <button onClick={()=>setShowRef(!showRef)} aria-expanded={showRef} style={{...S.card,width:"100%",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8,background:showRef?C.gold+"06":"#fff"}}>
             <span style={{fontSize:12,fontWeight:600,color:showRef?C.gold:C.ink}}>📖 {showRef?"Hide":"Show"} 2026 Card Guide</span><span aria-hidden="true" style={{color:C.mut}}>{showRef?"▾":"▸"}</span>
           </button>
@@ -7402,87 +7782,46 @@ function Game({mode,home,onDone,settings,setScreen}){
           {(()=>{
             const scored=ev(hand);
             const ranked=SECS.map(s=>scored.find(e=>e.id===s.id)).filter(Boolean);
-            const topPct=scored[0]?.score||0;
-
-            // Step 1: pick section
-            if(!chosenSec) return(
+            return(
               <>
-                <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>STEP 1 — PICK YOUR SECTION</div>
+                <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>TAP TO SCORE YOUR ROUND</div>
                 <div style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
                   {ranked.map((s,idx)=>{
                     const pct=Math.round(s.score*100);
                     const isTop=idx===0&&s.score>=0.1;
                     return(
-                      <button key={s.id} onClick={()=>{haptic(20);setChosenSec(s.id);setChosenHand(null);}} aria-label={`${s.name}: ${s.desc}`}
+                      <button key={s.id} onClick={()=>{haptic(20);setChosenSec(s.id);setChosenHand(null);/* fire confirm after state settles */setTimeout(()=>{
+                        if(!s.id)return;
+                        setTd(true);
+                        const e=ev(hand),top=e[0],gi=gri(top.score);
+                        const totalEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);
+                        const dn2=getDayNum();
+                        const isD=mode==="daily";
+                        const iq=calculateCharlestonIQ({startingRack,finalRack:hand,passedTilesByRound:passLog,totalTime:totalEl,sectionId:s.id,chosenHand:null},getDailySeed(),isD,dn2);
+                        setIqResult(iq);
+                        const result={rating:RATS[gi],emoji:REMO[gi],section:`${top.icon} ${top.name}`,sid:top.id,score:top.score,time:totalEl,gi,iqScore:iq?iq.totalScore:null,iq,finalRack:hand,passLog,chosenSec:s.id,chosenHand:null,allSections:ev(hand)};
+                        onDone(result);
+                        setPhase("result");
+                      },0);}} aria-label={`${s.name}: ${s.desc}`}
                         style={{cursor:"pointer",display:"flex",alignItems:"center",gap:0,borderRadius:12,overflow:"hidden",
-                          border:`1.5px solid ${isTop?s.color:C.bdr}`,
-                          background:isTop?s.color+"08":"#fff",
+                          border:`1.5px solid ${C.bdr}`,
+                          background:"#fff",
                           textAlign:"left",transition:"all 0.15s"}}>
-                        <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:isTop?s.color:s.color+"40"}}/>
+                        <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:s.color+"40"}}/>
                         <div style={{width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,margin:"0 2px"}}>{s.icon}</div>
                         <div style={{flex:1,minWidth:0,padding:"10px 8px 10px 4px"}}>
                           <div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:2}}>
-                            <span style={{fontSize:13,fontWeight:800,color:isTop?s.color:C.ink,lineHeight:1.2}}>{s.name}</span>
-                            {isTop&&(mode==="daily"||showFitHints)&&<span style={{fontSize:8,fontWeight:700,background:s.color+"20",color:s.color,borderRadius:8,padding:"1px 6px",letterSpacing:0.5}}>BEST FIT</span>}
+                            <span style={{fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.2}}>{s.name}</span>
+                            {isTop&&mode!=="daily"&&showFitHints&&<span style={{fontSize:8,fontWeight:700,background:s.color+"20",color:s.color,borderRadius:8,padding:"1px 6px",letterSpacing:0.5}}>BEST FIT</span>}
                           </div>
                           <div style={{fontSize:10,color:C.mut,lineHeight:1.3}}>{s.desc}</div>
                         </div>
                         <div style={{padding:"0 12px",textAlign:"right",flexShrink:0}}>
-                          {(mode==="daily"||showFitHints)&&<><div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:isTop?s.color:C.mut}}>{pct}%</div>
+                          {mode!=="daily"&&showFitHints&&<><div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:isTop?s.color:C.mut}}>{pct}%</div>
                           <div style={{fontSize:8,color:C.mut}}>fit</div></>}
                         </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </>
-            );
-
-            // Step 2: pick specific hand from the chosen section
-            const secHands=HAND_CATALOG.filter(h=>h.sec===chosenSec)
-              .map(h=>({...h,fit:h.fit(hand)}))
-              .sort((a,b)=>b.fit-a.fit);
-            const secObj=SECS.find(s=>s.id===chosenSec);
-            return(
-              <>
-                {/* Section header with back */}
-                <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-                  <button onClick={()=>{setChosenSec(null);setChosenHand(null);}} style={{...S.back,fontSize:11,padding:"4px 0"}}>← Sections</button>
-                  <div style={{flex:1,textAlign:"center"}}>
-                    <span style={{fontSize:11,fontWeight:700,color:secObj?.color||C.jade}}>{secObj?.icon} {secObj?.name}</span>
-                  </div>
-                </div>
-                <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>STEP 2 — PICK YOUR EXACT HAND</div>
-                <div style={{display:"flex",flexDirection:"column",gap:4,marginBottom:10}}>
-                  {secHands.map((h,i)=>{
-                    const isSel=chosenHand===h.label;
-                    const pct=Math.round(h.fit*100);
-                    const barColor=pct>=70?C.jade:pct>=45?C.gold:C.cinn;
-                    const showPct=mode==="daily"||showFitHints;
-                    return(
-                      <button key={i} onClick={()=>{haptic(20);setChosenHand(h.label);}} aria-checked={isSel}
-                        style={{cursor:"pointer",display:"flex",alignItems:"center",gap:10,borderRadius:12,padding:"10px 12px",
-                          border:`1.5px solid ${isSel?(secObj?.color||C.jade):C.bdr}`,
-                          background:isSel?(secObj?.color||C.jade)+"0C":"#fff",
-                          textAlign:"left",transition:"all 0.15s",
-                          boxShadow:isSel?`0 2px 12px ${secObj?.color||C.jade}20`:"none"}}>
-                        <div style={{flex:1,minWidth:0}}>
-                          <div style={{fontSize:12,fontWeight:700,color:isSel?(secObj?.color||C.jade):C.ink,lineHeight:1.3,marginBottom:2}}>{h.label}</div>
-                          <div style={{fontSize:10,color:C.mut}}>{h.concealed?"Concealed · no jokers":"Open"} · {h.value} pts</div>
-                        </div>
-                        {showPct&&(
-                          <div style={{textAlign:"right",flexShrink:0,minWidth:44}}>
-                            <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:barColor,lineHeight:1}}>{pct}%</div>
-                            <div style={{width:40,height:3,borderRadius:2,background:C.bdr,marginTop:3}}>
-                              <div style={{width:`${pct}%`,height:"100%",borderRadius:2,background:barColor}}/>
-                            </div>
-                          </div>
-                        )}
-                        <div style={{width:22,height:22,borderRadius:11,flexShrink:0,
-                          background:isSel?(secObj?.color||C.jade):"none",
-                          border:isSel?"none":`2px solid ${C.bdr}`,
-                          display:"flex",alignItems:"center",justifyContent:"center"}}>
-                          {isSel&&<span style={{fontSize:11,color:"#fff",fontWeight:900}}>✓</span>}
+                        <div style={{width:28,height:28,borderRadius:14,background:`linear-gradient(135deg,${s.color},${s.color}CC)`,display:"flex",alignItems:"center",justifyContent:"center",marginRight:10,flexShrink:0}}>
+                          <span style={{fontSize:12,color:"#fff",fontWeight:900}}>→</span>
                         </div>
                       </button>
                     );
@@ -7491,7 +7830,6 @@ function Game({mode,home,onDone,settings,setScreen}){
               </>
             );
           })()}
-          <button onClick={confirm} disabled={!chosenSec||!chosenHand} style={{...S.greenBtn,width:"100%",marginTop:4,opacity:(chosenSec&&chosenHand)?1:0.3}}>Rate My Hand →</button>
         </>
       )}
 
@@ -7511,7 +7849,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           <div style={{textAlign:"center",marginBottom:10}}>
             <span aria-hidden="true" style={{fontSize:22}}>{cp.icon}</span>
             <h2 style={{fontFamily:F.d,fontSize:17,color:C.ink,margin:"2px 0"}}>Pass {cp.dir}{isBlind?" (Blind)":""}</h2>
-            <p role="status" aria-live="polite" style={{fontSize:12,color:hasNew?C.jade:C.mut,fontWeight:hasNew?600:400}}>{hasNew?`✓ ${newIdx.length} new tile${newIdx.length!==1?"s":""} received`:isBlind?`Select 0–${cp.max||3} tiles to pass`:`Select exactly ${cp.req} tiles to pass`}</p>
+            <p role="status" aria-live="polite" style={{fontSize:12,color:hasNew?C.jade:C.mut,fontWeight:hasNew?600:400}}>{hasNew?`← ${newIdx.length} tile${newIdx.length!==1?"s":""} in from ${cp.dir==="Right"?"your left":cp.dir==="Left"?"your right":cp.dir==="Over"?"across the table":"your neighbor"}`:isBlind?`Select 0–${cp.max||3} tiles to pass`:`Select exactly ${cp.req} tiles to pass`}</p>
           </div>
           {jw&&<JW/>}
           <div style={S.card}>
@@ -7836,6 +8174,565 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
   );
 }
 
+
+// ════════════════════════════════════════════════════════════════════════════
+// HAND ANATOMY DATA — plain-English breakdown of every group type
+// ════════════════════════════════════════════════════════════════════════════
+const GROUP_TYPES={
+  "pair":  {name:"Pair",     count:2, jokerOk:false, desc:"2 identical tiles. Natural only — no jokers."},
+  "pung":  {name:"Pung",     count:3, jokerOk:true,  desc:"3 identical tiles. 1–2 jokers allowed."},
+  "kong":  {name:"Kong",     count:4, jokerOk:true,  desc:"4 identical tiles. Up to 3 jokers allowed."},
+  "quint": {name:"Quint",    count:5, jokerOk:true,  desc:"5 identical tiles. Needs at least 1 joker."},
+  "single":{name:"Single",   count:1, jokerOk:false, desc:"1 tile standing alone. Natural only."},
+  "sextet":{name:"Sextet",   count:6, jokerOk:true,  desc:"6 identical tiles (e.g. 6 Flowers)."},
+};
+
+// Decode a hand label string into structured groups for visual display
+// e.g. "FF 2222 44 66 8888" → [{type:"pair",tile:"F"},{type:"kong",tile:"2"},...]
+function decodeHandLabel(label, sectionId){
+  const groups=[];
+  // Tokenize by whitespace
+  const tokens=label.trim().split(/\s+/);
+  for(const tok of tokens){
+    if(!tok)continue;
+    // Special: NEWS = 4 wind singles
+    if(tok==="NEWS"){
+      groups.push({type:"single",tile:"N",count:1,isWind:true});
+      groups.push({type:"single",tile:"E",count:1,isWind:true});
+      groups.push({type:"single",tile:"W",count:1,isWind:true});
+      groups.push({type:"single",tile:"S",count:1,isWind:true});
+      continue;
+    }
+    // Winds: NN, EE, EEE, EEEE, SS, etc.
+    if(/^[NEWS]+$/.test(tok)){
+      const windChar=tok[0];
+      const cnt=tok.length;
+      const t=cnt===2?"pair":cnt===3?"pung":cnt===4?"kong":"single";
+      groups.push({type:t,tile:windChar,count:cnt,isWind:true});
+      continue;
+    }
+    // Dragons: DDD, DDDD, D (matching or opposite — mark as dragon)
+    if(/^D+$/.test(tok)){
+      const cnt=tok.length;
+      const t=cnt===1?"single":cnt===2?"pair":cnt===3?"pung":"kong";
+      groups.push({type:t,tile:"D",count:cnt,isDragon:true});
+      continue;
+    }
+    // Flowers: F, FF, FFF, FFFF, FFFFFF
+    if(/^F+$/.test(tok)){
+      const cnt=tok.length;
+      const t=cnt===1?"single":cnt===2?"pair":cnt===3?"pung":cnt===4?"kong":cnt===5?"quint":"sextet";
+      groups.push({type:t,tile:"F",count:cnt,isFlower:true});
+      continue;
+    }
+    // Soap/Zero: 0, 00, 000 (Soap = White Dragon)
+    if(/^0+$/.test(tok)){
+      const cnt=tok.length;
+      const t=cnt===1?"single":cnt===2?"pair":cnt===3?"pung":"kong";
+      groups.push({type:t,tile:"0",count:cnt,isSoap:true});
+      continue;
+    }
+    // Number tiles: sequences like "2026", "135", "246" = singles of each digit
+    // or repeated digits like "2222" = kong of 2
+    // Detect: if all chars are the same digit → grouped
+    if(/^\d+$/.test(tok)){
+      const digits=[...tok].map(Number);
+      const allSame=digits.every(d=>d===digits[0]);
+      if(allSame){
+        const cnt=digits.length;
+        const t=cnt===1?"single":cnt===2?"pair":cnt===3?"pung":cnt===4?"kong":cnt===5?"quint":"sextet";
+        groups.push({type:t,tile:String(digits[0]),count:cnt,isNum:true});
+      } else {
+        // Each digit is a single
+        for(const d of digits){
+          groups.push({type:"single",tile:String(d),count:1,isNum:true});
+        }
+      }
+      continue;
+    }
+  }
+  return groups;
+}
+
+// Render a single decoded group as tile chips
+function HandGroupChips({group, suitHint}){
+  const cols={bam:SC.bam,crak:SC.crak,dot:SC.dot};
+  const col=suitHint?cols[suitHint]||C.mut:
+    group.isFlower?C.jade+""+"B54E7A".slice(-6):
+    group.isWind?"#5C5247":
+    group.isDragon?"#B83232":
+    group.isSoap?"#6B6560":
+    C.mut;
+
+  const label=
+    group.isFlower?"🌸":
+    group.isWind?group.tile:
+    group.isSoap?"白":
+    group.isDragon?"D":
+    group.tile;
+
+  const sub=
+    group.isFlower?"Flower":
+    group.isWind?{N:"N Wind",E:"E Wind",W:"W Wind",S:"S Wind"}[group.tile]||"Wind":
+    group.isSoap?"Soap":
+    group.isDragon?"Dragon":
+    suitHint?{bam:"Bam",crak:"Crk",dot:"Dot"}[suitHint]:"?";
+
+  const tiles=Array.from({length:group.count});
+  const typeLabel=GROUP_TYPES[group.type]?.name||group.type;
+  const jokerNote=GROUP_TYPES[group.type]?.jokerOk&&group.count>=3?" (jokers ok)":"";
+
+  return(
+    <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
+      <div style={{display:"flex",gap:2}}>
+        {tiles.map((_,i)=>(
+          <div key={i} style={{width:28,height:38,borderRadius:5,background:"linear-gradient(145deg,#fff,#F7F4EE)",border:`1.5px solid ${col}40`,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+            <span style={{fontSize:12,fontWeight:800,color:col,lineHeight:1}}>{label}</span>
+            <span style={{fontSize:6,color:col,opacity:0.5,fontWeight:700,marginTop:1}}>{sub}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{fontSize:8,color:C.mut,fontWeight:600,textAlign:"center"}}>{typeLabel}{jokerNote}</div>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// VISUAL HAND RENDERER — shows a completed hand as tiles + plain-English breakdown
+// ════════════════════════════════════════════════════════════════════════════
+function HandRenderer({hand, defaultOpen=false}){
+  const [open,setOpen]=useState(defaultOpen);
+  const sec=SECS.find(s=>s.id===hand.sec);
+  const groups=decodeHandLabel(hand.label,hand.sec);
+  const totalTiles=groups.reduce((a,g)=>a+g.count,0);
+
+  // Pick a representative suit colour for number tiles in this section
+  const suitForSection={cr:"bam","2468":"crak","13579":"dot","369":"bam","2026":"crak","wd":null,"aln":"bam","q":"dot","sp":"crak"}[hand.sec]||null;
+
+  // Build plain-English breakdown
+  const breakdown=groups.map(g=>{
+    const cnt=g.count;
+    const typeInfo=GROUP_TYPES[g.type]||{name:g.type,jokerOk:false,desc:""};
+    let tileDesc="";
+    if(g.isFlower) tileDesc=`${cnt===6?"Sextet":cnt===3?"Pung":cnt===2?"Pair":"Kong"} of Flowers`;
+    else if(g.isSoap) tileDesc=`${typeInfo.name} of Soap (White Dragon / 0)`;
+    else if(g.isDragon) tileDesc=`${typeInfo.name} of Dragons (matching your suit)`;
+    else if(g.isWind) tileDesc=cnt===1?`${g.tile} Wind`:`${typeInfo.name} of ${g.tile} Winds`;
+    else if(g.isNum&&g.type==="single") tileDesc=`${g.tile} (single tile — exact, no joker)`;
+    else if(g.isNum) tileDesc=`${typeInfo.name} of ${g.tile}s${typeInfo.jokerOk?" — jokers ok":"— natural only"}`;
+    return{...g,tileDesc,typeInfo};
+  });
+
+  return(
+    <div style={{...S.card,marginBottom:6,padding:0,overflow:"hidden"}}>
+      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"10px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap",marginBottom:2}}>
+            <span style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.ink}}>{hand.label}</span>
+            {hand.concealed&&<span style={{fontSize:8,fontWeight:700,background:"#2460A815",color:"#2460A8",borderRadius:8,padding:"2px 6px"}}>CONCEALED</span>}
+            <span style={{fontSize:8,fontWeight:700,background:C.bg2,color:C.mut,borderRadius:8,padding:"2px 6px"}}>×{hand.value}</span>
+          </div>
+          <div style={{fontSize:10,color:C.mut}}>{totalTiles} tiles · {sec?.name}</div>
+        </div>
+        <span style={{fontSize:11,color:C.mut,flexShrink:0,marginLeft:8}}>{open?"▾":"▸"}</span>
+      </button>
+
+      {open&&<div className="rk-in" style={{borderTop:`1px solid ${C.bdr}`}}>
+        {/* Visual tile display */}
+        <div style={{padding:"12px 14px",background:C.bg2,overflowX:"auto"}}>
+          <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>COMPLETED HAND</div>
+          <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"flex-end"}}>
+            {groups.map((g,i)=>(
+              <div key={i}>
+                <HandGroupChips group={g} suitHint={g.isNum?suitForSection:null}/>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Plain-English breakdown */}
+        <div style={{padding:"10px 14px"}}>
+          <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>WHAT YOU NEED</div>
+          <div style={{display:"flex",flexDirection:"column",gap:5}}>
+            {breakdown.map((g,i)=>(
+              <div key={i} style={{display:"flex",alignItems:"flex-start",gap:8,padding:"6px 8px",background:C.bg2,borderRadius:8}}>
+                <div style={{width:20,height:20,borderRadius:10,background:C.jade+"15",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:800,color:C.jade,flexShrink:0,marginTop:1}}>{i+1}</div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:11,fontWeight:700,color:C.ink,lineHeight:1.3}}>{g.tileDesc}</div>
+                  <div style={{fontSize:10,color:C.mut,lineHeight:1.4,marginTop:1}}>{g.typeInfo.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Concealed warning */}
+          {hand.concealed&&<div style={{marginTop:8,background:"#2460A808",borderRadius:8,padding:"8px 10px",border:`1px solid #2460A820`}}>
+            <div style={{fontSize:9,color:"#2460A8",letterSpacing:1.5,fontWeight:700,marginBottom:3}}>🔒 CONCEALED HAND</div>
+            <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>You can never claim a discarded tile for this hand — every tile must be drawn from the wall. Plan for a longer game and never expose any group.</div>
+          </div>}
+
+          {/* Joker guidance */}
+          {!hand.concealed&&<div style={{marginTop:8,background:C.jade+"06",borderRadius:8,padding:"8px 10px"}}>
+            <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>🃏 JOKER RULES FOR THIS HAND</div>
+            <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>
+              {breakdown.filter(g=>g.typeInfo.jokerOk).length>0
+                ?`Jokers can substitute in: ${breakdown.filter(g=>g.typeInfo.jokerOk).map(g=>g.tileDesc.split(" — ")[0]).slice(0,3).join(", ")}. Jokers can NEVER go in pairs or singles.`
+                :"This hand has no joker-eligible groups — all tiles must be natural."}
+            </div>
+          </div>}
+        </div>
+      </div>}
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// GLOSSARY SCREEN — plain-English mahjong terms with tile examples
+// ════════════════════════════════════════════════════════════════════════════
+const GLOSSARY_TERMS=[
+  {term:"Pung",emoji:"🀄",short:"3 identical tiles",detail:"Three of the same tile. You can use 1–2 jokers to complete a pung. Example: three 6-Bam tiles, or two 6-Bam + one Joker.",tiles:[{t:"s",s:"bam",n:6},{t:"s",s:"bam",n:6},{t:"s",s:"bam",n:6}]},
+  {term:"Kong",emoji:"🀄",short:"4 identical tiles",detail:"Four of the same tile. You can use up to 3 jokers. Kong hands score higher than pungs. Example: four 8-Crak, or three 8-Crak + one Joker.",tiles:[{t:"s",s:"crak",n:8},{t:"s",s:"crak",n:8},{t:"s",s:"crak",n:8},{t:"s",s:"crak",n:8}]},
+  {term:"Pair",emoji:"🩵",short:"2 identical tiles — natural only",detail:"Two of the same tile. Pairs can NEVER include jokers — both tiles must be real, matching tiles. This is the most important joker rule to remember.",tiles:[{t:"s",s:"dot",n:4},{t:"s",s:"dot",n:4}]},
+  {term:"Quint",emoji:"🟣",short:"5 identical tiles — needs jokers",detail:"Five of the same tile. There are only 4 of any number tile in the deck, so you always need at least 1 joker. Quint hands are powerful but require 2+ jokers to build.",tiles:[{t:"s",s:"bam",n:3},{t:"s",s:"bam",n:3},{t:"s",s:"bam",n:3},{t:"s",s:"bam",n:3},{t:"j"}]},
+  {term:"Sextet",emoji:"🌸",short:"6 identical tiles",detail:"Six of the same tile — usually Flowers. The Flower sextette (six Flowers in a row) is one of the most satisfying hands in the game. Requires jokers to complete.",tiles:[{t:"f"},{t:"f"},{t:"f"},{t:"f"},{t:"f"},{t:"f"}]},
+  {term:"Single",emoji:"1️⃣",short:"1 tile standing alone",detail:"A single tile by itself, not grouped. Singles appear in specific hand patterns like '2026' where you need exactly one 2, one Soap, one 2, and one 6. No jokers allowed.",tiles:[{t:"s",s:"crak",n:2},{t:"d",v:"Soap"},{t:"s",s:"bam",n:2},{t:"s",s:"dot",n:6}]},
+  {term:"Joker",emoji:"🃏",short:"Wild tile — but not in pairs",detail:"A joker can substitute for any tile in a pung, kong, quint, or sextet — but NEVER in a pair or single. You cannot pass jokers during the Charleston. In Singles & Pairs, jokers are completely useless.",tiles:[{t:"j"},{t:"j"}]},
+  {term:"Flower",emoji:"🌸",short:"Special tile — interchangeable",detail:"All 8 Flower tiles are identical and interchangeable. They can form pairs, pungs, kongs, and sextettes. Flowers appear in the majority of NMJL sections — they're almost always worth holding.",tiles:[{t:"f"},{t:"f"},{t:"f"}]},
+  {term:"Soap",emoji:"白",short:"White Dragon = 0 in year hands",detail:"The White Dragon (called 'Soap') acts as zero in year hands (2026 section). It's suit-wild — it counts in any suit. Outside the year section it has no special value, but in 2026 hands it's critical.",tiles:[{t:"d",v:"Soap"},{t:"d",v:"Soap"},{t:"d",v:"Soap"}]},
+  {term:"Matching Dragon",emoji:"🐉",short:"Dragon color that matches your suit",detail:"Each suit has a matching dragon: Bam → Green Dragon, Crak → Red Dragon, Dot → Soap (White Dragon). When a hand says 'matching dragon,' you must use the dragon that corresponds to your number tile suit.",tiles:[{t:"s",s:"bam",n:5},{t:"d",v:"Grn"},{t:"d",v:"Grn"},{t:"d",v:"Grn"}]},
+  {term:"Concealed",emoji:"🔒",short:"Must draw all tiles — no calling",detail:"A concealed hand cannot claim any discarded tile. You must draw every tile yourself from the wall. Never expose any group. These hands often score more points but are harder to complete.",tiles:[]},
+  {term:"Open",emoji:"🔓",short:"Can claim discarded tiles",detail:"An open hand lets you call a tile someone else discards to complete a pung or kong. You then expose that group face-up. Most hands on the card are open.",tiles:[]},
+  {term:"Charleston",emoji:"🔄",short:"The pre-game tile exchange",detail:"Before play begins, players pass tiles to each other in three rounds: right, across, left. Then optionally a second Charleston, then an optional courtesy pass. Rackle trains this phase.",tiles:[]},
+  {term:"NEWS",emoji:"🌀",short:"All four winds in one hand",detail:"N-E-W-S means one each of North, East, West, and South wind tiles. Appears in several hands across sections. You need exactly one of each — jokers cannot substitute.",tiles:[{t:"w",v:"N"},{t:"w",v:"E"},{t:"w",v:"W"},{t:"w",v:"S"}]},
+];
+
+function GlossaryScreen({home,setScreen}){
+  const [search,setSearch]=useState("");
+  const [open,setOpen]=useState(null);
+  const filtered=search.trim()===""?GLOSSARY_TERMS:GLOSSARY_TERMS.filter(t=>t.term.toLowerCase().includes(search.toLowerCase())||t.short.toLowerCase().includes(search.toLowerCase()));
+  return(
+    <div style={S.pg} className="rk-pg">
+      <RackleHeader onBack={home} setScreen={setScreen}/>
+      <div style={{marginBottom:14,marginTop:4}}>
+        <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>Mahjong Glossary</div>
+        <p style={{fontSize:12,color:C.mut,margin:"0 0 12px",lineHeight:1.6}}>Plain-English definitions of every term you'll see on the card.</p>
+        <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search terms…" style={{width:"100%",padding:"10px 12px",borderRadius:10,border:`1.5px solid ${C.bdr}`,fontSize:13,fontFamily:F.b,color:C.ink,outline:"none",background:"#fff"}}/>
+      </div>
+
+      {filtered.map((term,i)=>{
+        const isOpen=open===term.term;
+        return(
+          <div key={term.term} style={{background:"#FDFAF6",border:`1px solid ${isOpen?C.jade+"40":C.bdr}`,borderRadius:14,overflow:"hidden",marginBottom:6,transition:"border-color 0.15s"}}>
+            <button onClick={()=>setOpen(isOpen?null:term.term)} aria-expanded={isOpen}
+              style={{display:"flex",alignItems:"center",gap:12,width:"100%",padding:"12px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
+              <div style={{width:38,height:38,borderRadius:10,background:C.jade+"10",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{term.emoji}</div>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontSize:14,fontWeight:800,color:isOpen?C.jade:C.ink,transition:"color 0.15s"}}>{term.term}</div>
+                <div style={{fontSize:11,color:C.mut,marginTop:1,lineHeight:1.3}}>{term.short}</div>
+              </div>
+              <span style={{fontSize:12,color:C.mut,flexShrink:0}}>{isOpen?"▾":"▸"}</span>
+            </button>
+            {isOpen&&<div className="rk-in" style={{borderTop:`1px solid ${C.jade}20`,background:`${C.jade}04`,padding:"10px 14px"}}>
+              <p style={{fontSize:12,color:C.ink,lineHeight:1.7,margin:"0 0 10px"}}>{term.detail}</p>
+              {term.tiles.length>0&&(
+                <div>
+                  <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:6}}>EXAMPLE</div>
+                  <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{term.tiles.map((t,j)=><Ti key={j} t={t} large={false}/>)}</div>
+                </div>
+              )}
+            </div>}
+          </div>
+        );
+      })}
+      <Footer/>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// SECTION QUIZ MODE — show 13 tiles, pick the best section
+// ════════════════════════════════════════════════════════════════════════════
+function SectionQuizScreen({home,setScreen}){
+  const ROUNDS=5;
+  const [phase,setPhase]=useState("intro"); // intro | question | revealed | done
+  const [qIdx,setQIdx]=useState(0);
+  const [rack,setRack]=useState([]);
+  const [scores,setScores]=useState([]); // [{correct,chosen,best,pct}]
+  const [chosen,setChosen]=useState(null);
+  const [revealed,setRevealed]=useState(false);
+  const [streak,setStreakQ]=useState(0);
+
+  const generateRack=()=>{
+    const d=shuffle(buildDeck());
+    return d.slice(0,13);
+  };
+
+  const startGame=()=>{
+    setQIdx(0);setScores([]);setChosen(null);setRevealed(false);setPhase("question");setRack(generateRack());
+  };
+
+  const nextQuestion=()=>{
+    if(qIdx+1>=ROUNDS){setPhase("done");return;}
+    setQIdx(q=>q+1);setChosen(null);setRevealed(false);setRack(generateRack());
+  };
+
+  const pick=(secId)=>{
+    if(chosen)return;
+    setChosen(secId);
+    // Score all sections
+    const secScores=SECS.map(s=>({...s,score:s.ck(rack)})).sort((a,b)=>b.score-a.score);
+    const best=secScores[0];
+    const chosenScore=secScores.find(s=>s.id===secId);
+    const isCorrect=secId===best.id||((chosenScore?.score||0)>=best.score*0.9);
+    setScores(prev=>[...prev,{correct:isCorrect,chosen:secId,best:best.id,chosenScore:chosenScore?.score||0,bestScore:best.score,allScores:secScores}]);
+    if(isCorrect)setStreakQ(s=>s+1); else setStreakQ(0);
+    setRevealed(true);
+  };
+
+  const secScoresForRack=rack.length?SECS.map(s=>({...s,score:s.ck(rack)})).sort((a,b)=>b.score-a.score):[];
+  const best=secScoresForRack[0];
+  const lastResult=scores[scores.length-1];
+  const correctCount=scores.filter(s=>s.correct).length;
+  const totalAnswered=scores.length;
+
+  if(phase==="intro") return(
+    <div style={S.pg} className="rk-pg">
+      <RackleHeader onBack={home} setScreen={setScreen}/>
+      <div style={{textAlign:"center",padding:"32px 0 24px"}}>
+        <div style={{fontSize:48,marginBottom:12}}>🧠</div>
+        <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:8}}>Section Quiz</div>
+        <div style={{fontSize:13,color:C.mut,lineHeight:1.7,maxWidth:280,margin:"0 auto 24px"}}>You'll see a random rack of 13 tiles. Pick the section your tiles fit best. {ROUNDS} rounds — see how sharp your read is.</div>
+        <div style={{display:"flex",gap:12,justifyContent:"center",marginBottom:24,flexWrap:"wrap"}}>
+          {[{icon:"👁",label:"Read the rack"},{icon:"🎯",label:"Pick your section"},{icon:"📊",label:"See the fit scores"}].map((s,i)=>(
+            <div key={i} style={{textAlign:"center",width:90}}>
+              <div style={{fontSize:24,marginBottom:4}}>{s.icon}</div>
+              <div style={{fontSize:10,color:C.mut,fontWeight:600,lineHeight:1.3}}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+        <button onClick={startGame} style={{...S.greenBtn,padding:"13px 40px",display:"inline-block"}}>Start Quiz →</button>
+      </div>
+      <Footer/>
+    </div>
+  );
+
+  if(phase==="done") return(
+    <div style={S.pg} className="rk-pg">
+      <RackleHeader onBack={home} setScreen={setScreen}/>
+      <div style={{textAlign:"center",padding:"28px 0 20px"}}>
+        <div style={{fontSize:48,marginBottom:10}}>{correctCount>=4?"🏆":correctCount>=3?"🎯":correctCount>=2?"👍":"📚"}</div>
+        <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>{correctCount}/{ROUNDS} correct</div>
+        <div style={{fontSize:13,color:C.mut,marginBottom:20}}>{correctCount>=4?"Sharp read — your section instincts are strong.":correctCount>=3?"Good eye. A little more practice and you'll be automatic.":correctCount>=2?"Getting there. Focus on what tiles each section needs.":"Keep studying — the pattern recognition comes with reps."}</div>
+      </div>
+      {/* Round-by-round review */}
+      <div style={{...S.card,marginBottom:12}}>
+        <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>ROUND REVIEW</div>
+        {scores.map((s,i)=>{
+          const bestSec=SECS.find(sec=>sec.id===s.best);
+          const chosenSec=SECS.find(sec=>sec.id===s.chosen);
+          return(
+            <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderBottom:i<scores.length-1?`1px solid ${C.bdr}`:"none"}}>
+              <span style={{fontSize:16,flexShrink:0}}>{s.correct?"✅":"❌"}</span>
+              <div style={{flex:1}}>
+                <div style={{fontSize:11,fontWeight:700,color:C.ink}}>Round {i+1}: You picked {chosenSec?.icon} {chosenSec?.name}</div>
+                {!s.correct&&<div style={{fontSize:10,color:C.cinn,marginTop:1}}>Best fit: {bestSec?.icon} {bestSec?.name} ({Math.round(s.bestScore*100)}%)</div>}
+                {s.correct&&<div style={{fontSize:10,color:C.jade,marginTop:1}}>Correct — {Math.round(s.chosenScore*100)}% fit</div>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{display:"flex",gap:8}}>
+        <button onClick={startGame} style={{...S.greenBtn,flex:2}}>Play Again →</button>
+        <button onClick={home} style={{...S.oBtn,flex:1}}>Home</button>
+      </div>
+      <Footer/>
+    </div>
+  );
+
+  // question / revealed phase
+  return(
+    <div style={S.pg} className="rk-pg">
+      <RackleHeader onBack={home} setScreen={setScreen}/>
+      {/* Progress */}
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+        <span style={{fontSize:10,color:C.mut,fontWeight:700}}>Round {qIdx+1} of {ROUNDS}</span>
+        <span style={{fontSize:10,fontWeight:700,color:C.jade}}>{correctCount} correct</span>
+      </div>
+      <div style={{display:"flex",gap:3,marginBottom:12}}>
+        {Array.from({length:ROUNDS}).map((_,i)=>(
+          <div key={i} style={{flex:1,height:4,borderRadius:2,background:i<totalAnswered?(scores[i]?.correct?C.jade:C.cinn):i===qIdx?C.gold:C.bdr}}/>
+        ))}
+      </div>
+
+      {/* The rack */}
+      <div style={S.card}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+          <span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK (13 TILES)</span>
+        </div>
+        <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>
+          {sortHand(rack).map((t,i)=><Ti key={i} t={t} large={false}/>)}
+        </div>
+      </div>
+
+      {/* Section picker */}
+      {!revealed&&(
+        <div style={{marginBottom:8}}>
+          <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>WHICH SECTION FITS BEST?</div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>
+            {SECS.map(s=>(
+              <button key={s.id} onClick={()=>pick(s.id)}
+                style={{display:"flex",alignItems:"center",gap:8,padding:"10px 12px",borderRadius:12,border:`1.5px solid ${C.bdr}`,background:"#fff",cursor:"pointer",textAlign:"left",transition:"all 0.15s"}}>
+                <span style={{fontSize:18,flexShrink:0}}>{s.icon}</span>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:12,fontWeight:700,color:C.ink,lineHeight:1.2}}>{s.name}</div>
+                  <div style={{fontSize:9,color:C.mut,lineHeight:1.2,marginTop:1}}>{s.desc}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Reveal */}
+      {revealed&&lastResult&&(()=>{
+        const isCorrect=lastResult.correct;
+        const bestSec=SECS.find(s=>s.id===lastResult.best);
+        const chosenSec=SECS.find(s=>s.id===lastResult.chosen);
+        return(
+          <div className="rk-in">
+            <div style={{...S.card,marginBottom:8,borderColor:isCorrect?C.jade+"40":C.cinn+"40",background:isCorrect?C.jade+"06":C.cinn+"06"}}>
+              <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
+                <span style={{fontSize:24}}>{isCorrect?"✅":"❌"}</span>
+                <div>
+                  <div style={{fontSize:14,fontWeight:800,color:isCorrect?C.jade:C.cinn}}>{isCorrect?"Correct!":"Not quite"}</div>
+                  <div style={{fontSize:11,color:C.mut}}>
+                    {isCorrect?`${chosenSec?.name} was the best fit.`:`Best fit: ${bestSec?.icon} ${bestSec?.name} (${Math.round(lastResult.bestScore*100)}%)`}
+                  </div>
+                </div>
+              </div>
+              {/* All section scores */}
+              <div style={{display:"flex",flexDirection:"column",gap:4}}>
+                {lastResult.allScores.slice(0,5).map((s,i)=>{
+                  const pct=Math.round(s.score*100);
+                  const isChosen=s.id===lastResult.chosen;
+                  const isBest=i===0;
+                  return(
+                    <div key={s.id} style={{display:"flex",alignItems:"center",gap:7}}>
+                      <span style={{fontSize:12,flexShrink:0}}>{s.icon}</span>
+                      <span style={{fontSize:10,fontWeight:isChosen||isBest?700:400,color:isChosen?C.jade:C.ink,minWidth:80,flexShrink:0}}>{s.name}</span>
+                      <div style={{flex:1,height:4,borderRadius:2,background:C.bg2,overflow:"hidden"}}>
+                        <div style={{height:"100%",width:`${pct}%`,borderRadius:2,background:isBest?C.jade:isChosen?C.cinn:C.bdr}}/>
+                      </div>
+                      <span style={{fontSize:10,fontWeight:isBest||isChosen?700:400,color:isBest?C.jade:isChosen?C.cinn:C.mut,minWidth:28,textAlign:"right",fontFamily:F.d}}>{pct}%</span>
+                      {isChosen&&!isBest&&<span style={{fontSize:8,color:C.cinn,fontWeight:700}}>←you</span>}
+                      {isBest&&<span style={{fontSize:8,color:C.jade,fontWeight:700}}>best</span>}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <button onClick={nextQuestion} style={{...S.greenBtn,width:"100%"}}>
+              {qIdx+1>=ROUNDS?"See Results →":"Next Rack →"}
+            </button>
+          </div>
+        );
+      })()}
+      <Footer/>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// HAND BROWSER — visual catalog of every hand on the 2026 card
+// (replaces/extends CardGuideScreen with per-hand visual rendering)
+// ════════════════════════════════════════════════════════════════════════════
+function HandBrowserScreen({home,setScreen}){
+  const [activeSec,setActiveSec]=useState(null);
+  const [search,setSearch]=useState("");
+
+  const allHands=search.trim()
+    ?HAND_CATALOG.filter(h=>h.label.toLowerCase().includes(search.toLowerCase())||SECS.find(s=>s.id===h.sec)?.name.toLowerCase().includes(search.toLowerCase()))
+    :activeSec?HAND_CATALOG.filter(h=>h.sec===activeSec):HAND_CATALOG;
+
+  const sec=activeSec?SECS.find(s=>s.id===activeSec):null;
+
+  return(
+    <div style={S.pg} className="rk-pg">
+      <RackleHeader onBack={activeSec?()=>setActiveSec(null):home} setScreen={setScreen}/>
+      <div style={{marginBottom:14,marginTop:4}}>
+        <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>
+          {sec?`${sec.icon} ${sec.name}`:search?"Search Results":"2026 Hand Browser"}
+        </div>
+        <p style={{fontSize:12,color:C.mut,margin:"0 0 10px",lineHeight:1.6}}>
+          {sec?`${allHands.length} hands · tap any to see tile breakdown`:search?`${allHands.length} matches`:"Every hand on the 2026 NMJL card. Tap to see how it's built."}
+        </p>
+        <input value={search} onChange={e=>{setSearch(e.target.value);setActiveSec(null);}} placeholder="Search hands…" style={{width:"100%",padding:"10px 12px",borderRadius:10,border:`1.5px solid ${C.bdr}`,fontSize:13,fontFamily:F.b,color:C.ink,outline:"none",background:"#fff",marginBottom:10}}/>
+        {/* Section filter pills */}
+        {!search&&<div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
+          <button onClick={()=>setActiveSec(null)} style={{padding:"5px 10px",borderRadius:20,border:`1px solid ${!activeSec?C.jade:C.bdr}`,background:!activeSec?C.jade+"10":"#fff",fontSize:10,fontWeight:!activeSec?700:400,color:!activeSec?C.jade:C.mut,cursor:"pointer"}}>All</button>
+          {SECS.map(s=>(
+            <button key={s.id} onClick={()=>setActiveSec(activeSec===s.id?null:s.id)}
+              style={{padding:"5px 10px",borderRadius:20,border:`1px solid ${activeSec===s.id?s.color:C.bdr}`,background:activeSec===s.id?s.color+"10":"#fff",fontSize:10,fontWeight:activeSec===s.id?700:400,color:activeSec===s.id?s.color:C.mut,cursor:"pointer"}}>
+              {s.icon} {s.name}
+            </button>
+          ))}
+        </div>}
+      </div>
+
+      {/* Hand cards */}
+      {allHands.length===0&&<div style={{textAlign:"center",padding:"32px 0",color:C.mut}}>No hands found.</div>}
+      {allHands.map((hand,i)=>(
+        <HandRenderer key={i} hand={hand}/>
+      ))}
+
+      {/* Dragon matching explainer */}
+      {!search&&!activeSec&&(
+        <div style={{...S.card,marginTop:8,background:"linear-gradient(145deg,#FFFFF8,#F4EFE3)",borderColor:C.gold+"30"}}>
+          <div style={{fontSize:8,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:8}}>🐉 DRAGON MATCHING GUIDE</div>
+          <div style={{display:"flex",flexDirection:"column",gap:8}}>
+            {[
+              {suit:"Bam",dragon:"Green Dragon",suitCol:SC.bam,dragonCol:"#1B7D4E",tiles:[{t:"s",s:"bam",n:5},{t:"d",v:"Grn"}]},
+              {suit:"Crak",dragon:"Red Dragon",suitCol:SC.crak,dragonCol:"#B83232",tiles:[{t:"s",s:"crak",n:5},{t:"d",v:"Red"}]},
+              {suit:"Dot",dragon:"Soap (White Dragon)",suitCol:SC.dot,dragonCol:"#6B6560",tiles:[{t:"s",s:"dot",n:5},{t:"d",v:"Soap"}]},
+            ].map(row=>(
+              <div key={row.suit} style={{display:"flex",alignItems:"center",gap:12,padding:"6px 8px",background:"#fff",borderRadius:8}}>
+                <div style={{display:"flex",gap:4}}>{row.tiles.map((t,i)=><Ti key={i} t={t} large={false}/>)}</div>
+                <div style={{flex:1}}>
+                  <span style={{fontSize:12,fontWeight:700,color:row.suitCol}}>{row.suit}</span>
+                  <span style={{fontSize:11,color:C.mut}}> → </span>
+                  <span style={{fontSize:12,fontWeight:700,color:row.dragonCol}}>{row.dragon}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.6,marginTop:8}}>When a hand says "Matching Dragon," use the dragon that matches your number tile suit. "Opposite Dragon" means use the non-matching one.</div>
+        </div>
+      )}
+      <Footer/>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// PERSISTENT QUICK-CARD BUTTON — floating tab always visible during live game
+// (rendered inside AppShell so it overlays every screen)
+// ════════════════════════════════════════════════════════════════════════════
+function QuickCardButton({setScreen,screen}){
+  // Only show when in screens where you might be playing or looking things up
+  const showOn=["home","play","stats","scorecard","lookup","handbrowser","glossary","quiz"];
+  if(!showOn.includes(screen))return null;
+  return(
+    <div style={{position:"fixed",bottom:20,right:16,zIndex:80}}>
+      <button onClick={()=>setScreen(screen==="handbrowser"?"home":"handbrowser")}
+        aria-label="Quick card reference"
+        style={{width:48,height:48,borderRadius:24,background:screen==="handbrowser"?C.jade:"linear-gradient(135deg,#0F2016,#1B3A28)",border:`2px solid ${C.jade}50`,boxShadow:"0 4px 16px rgba(0,0,0,0.25)",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",transition:"all 0.2s"}}>
+        <span style={{fontSize:22}}>{screen==="handbrowser"?"✕":"🀄"}</span>
+      </button>
+    </div>
+  );
+}
+
 // ─── APP ROOT ──────────────────────────────────────────────────────────────────
 export default function Rackle(){
   const [screen,setScreenRaw]=useState("home");
@@ -7928,6 +8825,7 @@ export default function Rackle(){
         </div>
       )}
       <>
+        <QuickCardButton setScreen={setScreen} screen={screen}/>
         {screen==="home"&&<Home {...{streak,rounds,dDone,dRes,showHelp,setShowHelp,go,settings,setScreen}} showStats={()=>setScreen("stats")} showSettings={()=>setScreen("settings")} showTutorial={()=>setScreen("tutorial")} showCardGuide={()=>setScreen("cardguide")} showScorecard={()=>setScreen("scorecard")}/>}
         {screen==="tutorial"&&<Tutorial onDone={()=>{ST.set("tutDone",true);setScreen("home");}} onBack={()=>setScreen("home")} setScreen={setScreen}/>}
         {screen==="cardguide"&&<CardGuideScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
@@ -7939,6 +8837,9 @@ export default function Rackle(){
         {screen==="clubs"&&<ClubDirectoryScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
         {screen==="profile"&&<ProfileScreen home={()=>setScreen("home")} streak={streak} rounds={rounds} dRes={dRes} setScreen={setScreen}/>}
         {screen==="recap"&&<WeeklyRecapScreen home={()=>setScreen("home")} go={go} dDone={dDone} setScreen={setScreen}/>}
+        {screen==="glossary"&&<GlossaryScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
+        {screen==="quiz"&&<SectionQuizScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
+        {screen==="handbrowser"&&<HandBrowserScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
       </>
     </AppShell>
   );
