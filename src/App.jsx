@@ -1811,8 +1811,13 @@ HAND_CATALOG.forEach(h=>{if(HAND_CONSTRAINTS[h.label])h.constraint=HAND_CONSTRAI
 function recommendSpecificHands(rack,sectionId){
   if(!rack||!sectionId)return[];
   const hands=HAND_CATALOG.filter(h=>h.sec===sectionId);
-  const scored=hands.map(h=>({...h,fitScore:h.fit(rack)})).sort((a,b)=>b.fitScore-a.fitScore);
-  return scored.slice(0,3).filter(h=>h.fitScore>0.05);
+  // Use honest coverage (same as display) — not fit() which picks best-case suit permutations.
+  // This ensures the inferred hand actually reflects what tiles the player is holding.
+  const scored=hands.map(h=>{
+    const{pct}=computeHonestCoverage(rack,h);
+    return{...h,fitScore:pct/100,coveragePct:pct};
+  }).sort((a,b)=>b.coveragePct-a.coveragePct);
+  return scored.slice(0,3).filter(h=>h.coveragePct>5);
 }
 
 // ─── HAND FAMILIES ───────────────────────────────────────────────────────────
@@ -2006,17 +2011,19 @@ function iqLongestRun(rack){
 }
 
 function iqDirection(finalRack,sectionId,chosenHandObj){
-  // If a specific hand was chosen, score direction as fit against that exact hand
+  // If a specific hand was chosen, score direction using honest suit-specific coverage —
+  // the same calculation shown in the HandTargetPreview display. This prevents fit()
+  // from inflating direction scores by picking best-case suit permutations.
   if(chosenHandObj){
-    const fit=chosenHandObj.fit(finalRack); // 0–1
-    const pct=Math.round(fit*100);
-    const directionScore=Math.round(fit*40); // scale to 0–40
+    const{held,total,pct}=computeHonestCoverage(finalRack,chosenHandObj);
+    const directionScore=Math.round((pct/100)*40);
+    const scored=`Scored against ${chosenHandObj.label}: ${held} of ${total} tiles covered (${pct}%).`;
     const directionExplanation=
-      pct>=85?`${pct}% fit for ${chosenHandObj.label} — your rack is almost complete for this hand.`:
-      pct>=65?`${pct}% fit for ${chosenHandObj.label} — solid foundation, a few key tiles still needed.`:
-      pct>=45?`${pct}% fit for ${chosenHandObj.label} — partial match. More tiles needed to commit to this hand.`:
-      pct>=25?`${pct}% fit for ${chosenHandObj.label} — low fit. This hand needed a different tile distribution.`:
-      `${pct}% fit for ${chosenHandObj.label} — very low fit. The tiles you held don't support this hand well.`;
+      pct>=85?`${scored} Your rack is almost complete for this hand.`:
+      pct>=65?`${scored} Solid foundation — a few key tiles still needed.`:
+      pct>=45?`${scored} Partial match. More tiles needed to commit to this hand.`:
+      pct>=25?`${scored} Low coverage. This hand needed a different tile distribution.`:
+      `${scored} Very low coverage. The tiles held don't support this hand well.`;
     return{directionScore:Math.max(2,Math.min(40,directionScore)),directionExplanation};
   }
   const meta=SECTION_META[sectionId]||{};
@@ -2182,12 +2189,10 @@ function iqDirection(finalRack,sectionId,chosenHandObj){
 }
 
 function iqTileStrength(finalRack,sectionId,chosenHandObj){
-  // If a specific hand was chosen, tile strength = how well the rack supports that hand's groups
+  // If a specific hand was chosen, use honest coverage (same as display) not fit().
   if(chosenHandObj){
-    const fit=chosenHandObj.fit(finalRack);
-    const pct=Math.round(fit*100);
-    // Scale fit to 0–25, with a slight curve to reward high fits
-    const raw=pct>=90?25:pct>=80?22:pct>=70?18:pct>=60?14:pct>=50?11:pct>=40?8:pct>=25?5:Math.round(fit*20);
+    const{pct}=computeHonestCoverage(finalRack,chosenHandObj);
+    const raw=pct>=90?25:pct>=80?22:pct>=70?18:pct>=60?14:pct>=50?11:pct>=40?8:pct>=25?5:Math.round((pct/100)*20);
     return{tileStrengthScore:Math.max(0,Math.min(25,raw))};
   }
   const meta=SECTION_META[sectionId]||{};
@@ -2839,13 +2844,14 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   const{timingScore,timingInsight}=iqTiming(totalTime||0,roundCount,passedTilesByRound);
 
   // ── OUTCOME VALIDATION FLOOR ─────────────────────────────────────────────────
-  // If direction and tile strength are both strong, the final rack proves the passes
-  // were correct. A player cannot end up with a 90%+ direction rack by making bad passes.
-  // Floor scales with how good the outcome is — great rack = passes were at least decent.
+  // Outcome validation floor: if direction AND tile strength are both high (now using honest
+  // coverage, not fit()), the final rack genuinely proves the passes were reasonable.
+  // A player who ends up with 80%+ real coverage did something right in the Charleston.
   const dirRatio=directionScore/40;
   const tileRatio=tileStrengthScore/25;
   const outcomeStrength=(dirRatio+tileRatio)/2;
-  const passFloor=outcomeStrength>=0.88?18:outcomeStrength>=0.80?15:outcomeStrength>=0.70?12:0;
+  // Floor only kicks in above 0.75 to avoid inflating scores on mediocre racks
+  const passFloor=outcomeStrength>=0.88?18:outcomeStrength>=0.80?15:outcomeStrength>=0.75?10:0;
   if(passQualityScore<passFloor)passQualityScore=passFloor;
 
   // ── DEAL QUALITY FLOOR ──────────────────────────────────────────────────────
@@ -2943,9 +2949,11 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
     ?`🀄 Daily Rackle #${dn} · IQ ${totalScore} · ${level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Think you can beat it?\nplayrackle.com`
     :`🀄 Rackle Practice · IQ ${totalScore} · ${level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Play the daily Charleston challenge!\nplayrackle.com`;
 
-  // Append inferred hand note to direction explanation so player knows what was scored against
+  // When the hand was inferred, prefix the explanation so the player understands the basis.
+  // The directionExplanation already includes "Scored against X: N of M tiles covered (P%)."
+  // so we just flag that this was inferred, not player-chosen.
   if(handWasInferred&&chosenHandObj){
-    directionExplanation=`Scored against best-fit hand: ${chosenHandObj.label}. `+directionExplanation;
+    directionExplanation=`Best-fit hand (inferred): ${chosenHandObj.label}. `+directionExplanation;
   }
 
   return{
@@ -4002,61 +4010,329 @@ function computeFlexibility(finalRack, allSections, passLog, startingRack){
 }
 
 // ── 3. EXPERT READ ──────────────────────────────────────────────────────────
-// Returns {bullets[], risk, flexibility, commitment} from a coach perspective.
+// Full strategic Charleston evaluator.
+// Returns rich structured read: primaryDirection, secondaryPaths, pivotPotential,
+// flexibility, commitment, structuralStrength, deadnessRisk, observations[], expertInsight.
 function computeExpertRead(finalRack, chosenSec, allSections, passLog, iq){
   if(!finalRack||!chosenSec)return null;
-  const bullets=[];
-  const meta=SECTION_META[chosenSec]||{};
-  const topSec=allSections?[...allSections].sort((a,b)=>b.score-a.score)[0]:null;
-  const chosenFit=allSections?.find(s=>s.id===chosenSec);
-  const chosenPct=chosenFit?Math.round(chosenFit.score*100):0;
-  const topPct=topSec?Math.round(topSec.score*100):0;
-  const sectionMatch=chosenSec===topSec?.id;
 
-  // Section-specific coaching tendencies
-  const secReads={
-    "2026":["Keep 2s and 6s no matter what — they're in every hand","Soap (White Dragon) is wild-suit zero — never pass it","Commit early: this section has few hands and needs specific tiles","Pass all odd numbers in round one without hesitation"],
-    "2468":["6 is in 7 of 8 hands — the anchor you never give away","Focus on group depth over spread — three 6s beats six different evens","Flowers add value to 5 of 8 hands — hold them if you have 2+","E/W winds only matter for one hand — low priority unless stacking"],
-    "369":["6 is in every single 369 hand — protect it absolutely","3 and 9 are co-anchors, nearly as important as 6","Pass everything that isn't 3, 6, or 9 in round one","This section rewards early commitment and ruthless passing"],
-    "13579":["5 and 3 are in 9 of 10 hands — your primary anchors","Stay flexible between the many hand patterns in this section","N/S winds only matter for 2 hands — don't prioritize them early","This section rewards patience: many valid configurations exist"],
-    "cr":["Identify your 3–4 number window by the first pass","Pass everything outside the window — even tiles you like","Depth within the window matters more than width","Pungs and kongs beat singles — lone tiles don't score CR credit"],
-    "wd":["Pass all numbers above 4 in round one without exception","Stack winds of the same value — concentration beats variety","Dragons support 5 of 8 hands — hold them if you have pairs","This section rewards decisive, early commitment to honors"],
-    "aln":["Choose your number immediately and commit completely","Pass everything that isn't your chosen number","Jokers are your best friend — they fill any gap in your stacks","Width is your enemy — every extra number weakens the structure"],
-    "q":["Count jokers first — fewer than two means pivot immediately","Stack one specific tile as deep as possible","Pass anything that doesn't support the primary stack","This section is high-risk, high-reward — know when to abandon it"],
-    "sp":["Pass jokers immediately — they cannot help a concealed hand","Build pairs, not triples — pungs break S&P structure","Never break a pair to chase something else","This section rewards patience and tile discipline above all else"],
-  };
-
-  const reads=secReads[chosenSec]||[];
-  // Pick 3 contextually: prioritize based on what the rack shows
+  // ── TILE INVENTORY ──────────────────────────────────────────────────────────
   const jk=finalRack.filter(t=>t.t==="j").length;
   const fl=finalRack.filter(t=>t.t==="f").length;
-  bullets.push(reads[0]); // always the anchor rule
-  if(jk===0&&chosenSec==="q")bullets.push(reads[0].replace("Count","You had no jokers — always count"));
-  else if(reads[1])bullets.push(reads[1]);
-  if(reads[2])bullets.push(reads[2]);
+  const numTiles=finalRack.filter(t=>t.t==="s");
+  const windTiles=finalRack.filter(t=>t.t==="w");
+  const dragTiles=finalRack.filter(t=>t.t==="d");
+  const allPassed=(passLog||[]).flatMap(p=>p.out||[]);
+  const passedJokers=allPassed.filter(t=>t.t==="j").length;
+  const passedFlowers=allPassed.filter(t=>t.t==="f").length;
 
-  // Add cross-section insight if rack was close to another section
-  if(!sectionMatch&&topPct>chosenPct+15){
-    bullets.push(`Your rack had stronger natural fit in ${topSec.icon} ${topSec.name} (${topPct}%) — worth noting for next time`);
-  } else if(sectionMatch&&topPct<35){
-    bullets.push("Even the best-fitting section had low rack support — this was a tough deal to work with");
-  }
+  // Number counts per value and per suit
+  const nc={};numTiles.forEach(t=>{nc[t.n]=(nc[t.n]||0)+1;});
+  const sc={bam:0,crak:0,dot:0};numTiles.forEach(t=>{sc[t.s]++;});
+  const suitCounts=Object.entries(sc).sort((a,b)=>b[1]-a[1]);
+  const dominantSuit=suitCounts[0]?.[0];
+  const dominantSuitCount=suitCounts[0]?.[1]||0;
+  const secondSuitCount=suitCounts[1]?.[1]||0;
+  const thirdSuitCount=suitCounts[2]?.[1]||0;
+  const totalNums=numTiles.length;
+  const suitName={bam:"Bamboo",crak:"Character",dot:"Circle"};
 
-  // Risk / flexibility / commitment labels
-  const totalPassed=(passLog||[]).reduce((a,p)=>(p.out||[]).length+a,0);
-  const passedStrong=(passLog||[]).flatMap(p=>p.out||[]).filter(t=>t.t==="j").length;
+  // Group analysis
+  const groups={};
+  finalRack.forEach(t=>{
+    const k=t.t==="s"?`s-${t.s}-${t.n}`:t.t==="w"?`w-${t.v}`:t.t==="d"?`d-${t.v}`:`f`;
+    groups[k]=(groups[k]||0)+1;
+  });
+  const pairKeys=Object.keys(groups).filter(k=>groups[k]===2);
+  const pungKeys=Object.keys(groups).filter(k=>groups[k]===3);
+  const kongKeys=Object.keys(groups).filter(k=>groups[k]>=4);
+  const pairs=pairKeys.length;
+  const pungs=pungKeys.length;
+  const kongs=kongKeys.length;
+  const isolatedTiles=Object.keys(groups).filter(k=>groups[k]===1&&!k.startsWith("f")).length;
 
-  let risk,flex,commitment;
+  // Odd / even balance
+  const odds=numTiles.filter(t=>t.n%2===1).length;
+  const evens=numTiles.filter(t=>t.n%2===0).length;
+
+  // Wind grouping
+  const wc={};windTiles.forEach(t=>{wc[t.v]=(wc[t.v]||0)+1;});
+  const windPairs=Object.values(wc).filter(v=>v>=2).length;
+  const windPungs=Object.values(wc).filter(v=>v>=3).length;
+  const honorTotal=windTiles.length+dragTiles.length;
+
+  // Section scores
+  const sortedSecs=(allSections||[]).slice().sort((a,b)=>b.score-a.score);
+  const topSec=sortedSecs[0];
+  const chosenFit=allSections?.find(s=>s.id===chosenSec);
+  const chosenPct=Math.round((chosenFit?.score||0)*100);
+  const topPct=Math.round((topSec?.score||0)*100);
+  const sectionMatch=chosenSec===topSec?.id;
+  const livePaths=(allSections||[]).filter(s=>s.score>0.08).length;
+  const strongPaths=(allSections||[]).filter(s=>s.score>0.16).length;
+  const secondSec=sortedSecs[1];
+  const thirdSec=sortedSecs[2];
+
+  // IQ ratios
   const dirRatio=(iq?.directionScore||0)/40;
   const passRatio=(iq?.passQualityScore||0)/25;
+  const tileRatio=(iq?.tileStrengthScore||0)/25;
 
-  risk=dirRatio>=0.75&&passRatio>=0.75?"Low":dirRatio>=0.5||passRatio>=0.5?"Medium":"High";
-  flex=livePaths(allSections)>=4?"High":livePaths(allSections)>=2?"Medium":"Low";
-  commitment=dirRatio>=0.85?"High":dirRatio>=0.6?"Medium":"Low";
+  // ── FLEXIBILITY ─────────────────────────────────────────────────────────────
+  // High = rack has real optionality; Low = trapped in one direction
+  let flexScore=0;
+  flexScore+=Math.min(strongPaths*15,40);
+  flexScore+=livePaths>=5?20:livePaths>=3?12:livePaths>=2?6:0;
+  // Concentration penalty — one section dominating collapses options
+  const topConcentration=topPct>0?(topPct/(topPct+(sortedSecs[1]?.score||0.001)*100)):0;
+  flexScore+=topConcentration<0.55?20:topConcentration<0.7?10:topConcentration<0.85?4:0;
+  // Jokers add flexibility to any open hand
+  flexScore+=jk>=2?8:jk===1?3:0;
+  // Too many isolates hurt flexibility
+  flexScore-=Math.min(isolatedTiles*4,16);
+  flexScore=Math.max(0,Math.min(100,flexScore));
 
-  return{bullets:bullets.filter(Boolean).slice(0,4),risk,flexibility:flex,commitment};
+  const flexibility=flexScore>=68?"High":flexScore>=38?"Medium":"Low";
 
-  function livePaths(secs){return(secs||[]).filter(s=>s.score>0.08).length;}
+  // ── COMMITMENT ──────────────────────────────────────────────────────────────
+  // High = rack is deeply locked to one section; Low = still wide open
+  let commitScore=0;
+  commitScore+=dirRatio*50;
+  // Single-suit dominance = commitment
+  if(totalNums>=5){
+    const suitRatio=dominantSuitCount/totalNums;
+    commitScore+=suitRatio>=0.8?20:suitRatio>=0.65?12:suitRatio>=0.5?6:0;
+  }
+  // Deep groups = commitment
+  commitScore+=kongs*12+pungs*8+pairs*3;
+  // Heavily odd or even = committed to a parity
+  if(odds+evens>=6){
+    const parityRatio=Math.max(odds,evens)/(odds+evens);
+    commitScore+=parityRatio>=0.85?12:parityRatio>=0.7?6:0;
+  }
+  commitScore=Math.max(0,Math.min(100,commitScore));
+  const commitment=commitScore>=68?"High":commitScore>=38?"Medium":"Low";
+
+  // ── PIVOT POTENTIAL ─────────────────────────────────────────────────────────
+  // Strong = still easy to switch directions; Weak = too locked
+  let pivotScore=0;
+  pivotScore+=strongPaths>=3?35:strongPaths>=2?22:strongPaths>=1?10:0;
+  pivotScore+=livePaths>=5?25:livePaths>=3?15:0;
+  pivotScore+=jk>=2?15:jk===1?7:0;
+  // If the second-best section is within 12pts of chosen, pivot is easy
+  const secPct=Math.round((secondSec?.score||0)*100);
+  pivotScore+=secondSec&&Math.abs(secPct-chosenPct)<=12?15:secondSec&&Math.abs(secPct-chosenPct)<=20?8:0;
+  // Pungs/kongs of tiles not in chosen section make pivoting harder
+  const deadGroupPenalty=kongs*10+pungs*5;
+  pivotScore-=Math.min(deadGroupPenalty,25);
+  pivotScore=Math.max(0,Math.min(100,pivotScore));
+  const pivotPotential=pivotScore>=62?"Strong":pivotScore>=35?"Moderate":"Weak";
+
+  // ── STRUCTURAL STRENGTH ──────────────────────────────────────────────────────
+  // Developing = early groups forming; Strong = committed depth
+  let structScore=0;
+  structScore+=kongs*20+pungs*12+pairs*6;
+  structScore+=jk>=3?15:jk>=2?10:jk>=1?4:0;
+  structScore+=fl>=2?8:fl>=1?3:0;
+  structScore-=isolatedTiles*4;
+  structScore=Math.max(0,Math.min(100,structScore));
+  const structuralStrength=structScore>=55?"Strong":structScore>=22?"Developing":"Weak";
+
+  // ── DEADNESS RISK ────────────────────────────────────────────────────────────
+  // High = rack depends on low-probability tiles arriving; Low = many paths still live
+  let deadScore=0;
+  // Heavily committed with low fit = depends on future tiles not yet drawn
+  if(chosenPct<40&&commitment==="High")deadScore+=35;
+  else if(chosenPct<50&&commitment==="High")deadScore+=20;
+  // Few pivots left
+  if(pivotPotential==="Weak")deadScore+=25;
+  else if(pivotPotential==="Moderate")deadScore+=10;
+  // Many isolated tiles = need specific draws
+  deadScore+=Math.min(isolatedTiles*5,20);
+  // Few jokers in high-commitment rack = every needed tile must come naturally
+  if(commitment==="High"&&jk===0)deadScore+=15;
+  // No live secondary paths
+  if(strongPaths<=1)deadScore+=15;
+  deadScore=Math.max(0,Math.min(100,deadScore));
+  const deadnessRisk=deadScore>=55?"High":deadScore>=28?"Medium":"Low";
+
+  // ── PRIMARY DIRECTION ────────────────────────────────────────────────────────
+  const secNames={"2026":"2026","2468":"Even Numbers (2468)","369":"369","13579":"Odd Numbers (13579)","cr":"Consecutive Runs","wd":"Winds & Dragons","aln":"Any Like Numbers","q":"Quints","sp":"Singles & Pairs"};
+  const chosenName=secNames[chosenSec]||chosenSec;
+  const chosenIcon=SECS?.find(s=>s.id===chosenSec)?.icon||"";
+
+  // Build a substantive primary direction description
+  let primaryDirection="";
+  if(chosenSec==="13579"){
+    const has3=nc[3]||0,has5=nc[5]||0,has7=nc[7]||0;
+    const anchor=has5>=2?"5s as anchor":(has3>=2?"3s as anchor":(has7>=2?"7s as anchor":"building odd structure"));
+    primaryDirection=`Odd number build centered on ${anchor}. ${strongPaths>=3?"Multiple viable 13579 hand patterns remain live — don't commit to a single hand yet.":"Narrow the field by deepening pungs rather than spreading across all five odd values."}`;
+  } else if(chosenSec==="2468"){
+    const has6=nc[6]||0,has2=nc[2]||0,has8=nc[8]||0;
+    primaryDirection=`Even structure${has6>=2?" with 6 as primary anchor — correctly prioritized":" still forming — 6 appears in 7 of 8 hands and must be the first pung you build"}. ${has2>=2||has8>=2?"Secondary pairs are developing on time.":"Deepen your even-number groups before the tiles you need become unavailable."}`;
+  } else if(chosenSec==="369"){
+    const has6=nc[6]||0,has3=nc[3]||0,has9=nc[9]||0;
+    primaryDirection=`369 build — ${has6>=2?"6 pung forming (correctly anchored)":"6 not yet paired — this is the most critical tile in the section"}. ${has3>=2||has9>=2?"Co-anchors forming.":"Pass everything outside 3-6-9 without hesitation."}`;
+  } else if(chosenSec==="2026"){
+    const has2=nc[2]||0,has6=nc[6]||0,soap=dragTiles.filter(t=>t.v==="Soap").length;
+    primaryDirection=`2026 structure${has2>=2&&has6>=2?" — both anchors present, strong position":(has2>=1||has6>=1)?" — partial anchors; need depth in both 2s and 6s":" — anchors missing; this section needs significant tile improvement"}. ${soap>=1?"Soap (White Dragon) in hand — the critical wildcard is protected.":"Hunt for Soap — it appears in 3 of 4 hands."}`;
+  } else if(chosenSec==="cr"){
+    const runLen=iqLongestRun(finalRack);
+    primaryDirection=`Consecutive Run build — ${runLen>=4?"a ${runLen}-wide window is forming":runLen>=2?"partial run continuity, window needs tightening":"no clear window yet"}. Depth within a 3-4 number window is more valuable than a wide spread of singles.`;
+  } else if(chosenSec==="wd"){
+    primaryDirection=`Winds & Dragons — ${honorTotal>=7?"strong honor concentration, committed to this section":honorTotal>=5?"credible foundation, pass all 5-9 tiles immediately":honorTotal>=3?"early honor presence — needs significant development":"very thin honor count; aggressive passing of number tiles required"}. ${windPungs>=1?"Wind pung already forming — excellent.":"Stack one wind value before chasing variety."}`;
+  } else if(chosenSec==="aln"){
+    const topNum=Object.entries(nc).sort((a,b)=>b[1]-a[1])[0];
+    primaryDirection=`Any Like Numbers — ${topNum&&topNum[1]>=3?`${topNum[0]}s are your number (${topNum[1]} in hand — good depth)`:topNum&&topNum[1]>=2?`${topNum[0]}s leading, but need more depth — pass everything else ruthlessly`:"number not yet identified — choose your deepest tile and commit completely"}. ALN rewards extreme focus; every off-number is a liability.`;
+  } else if(chosenSec==="q"){
+    primaryDirection=`Quints — ${jk>=3?"three jokers gives exceptional ceiling":jk>=2?"two jokers means the section is accessible":jk===1?"only one joker — you need a second before fully committing":"no jokers means Quints is unavailable; start planning your exit now"}. ${kongs>=1||pungs>=1?"Natural depth forming alongside jokers — stack it.":"Need 3-4 natural copies of a tile to pair with jokers."}`;
+  } else if(chosenSec==="sp"){
+    primaryDirection=`Singles & Pairs — ${jk===0?"correctly joker-free for a concealed hand":jk>0?`${jk} joker${jk>1?"s":""} remaining — pass them, they cannot be used here`:""}. ${pairs>=4?"Strong pair density — this rack is building well for S&P":pairs>=2?"pairs forming, need 6 total for completion":"pair count is low — focus every draw decision on matching tiles"}. No exposures allowed.`;
+  } else {
+    primaryDirection=`${chosenName} — ${chosenPct}% structural fit after the Charleston.`;
+  }
+
+  // ── SECONDARY PATHS ─────────────────────────────────────────────────────────
+  const secondaryPaths=[];
+  sortedSecs.slice(0,4).forEach(s=>{
+    if(s.id===chosenSec)return;
+    const pct=Math.round(s.score*100);
+    if(pct<8)return;
+    const why={
+      "13579":"odd-number tile concentration supports this direction",
+      "2468":"even-number depth gives this section real viability",
+      "369":"the 6s and paired 3s or 9s support 369 alignment",
+      "2026":"2s and 6s already in hand give this section structure",
+      "cr":"number continuity could support a run-based pivot",
+      "wd":"honor tile count keeps W&D as a viable alternative",
+      "aln":"tile depth in one number value points toward ALN",
+      "q":"joker count makes a Quints pivot theoretically available",
+      "sp":"pair density keeps S&P as a live escape route",
+    }[s.id]||`${pct}% fit keeps this alive`;
+    secondaryPaths.push(`${s.icon||""} ${secNames[s.id]||s.id} (${pct}% fit) — ${why}`);
+  });
+
+  // ── KEY OBSERVATIONS ─────────────────────────────────────────────────────────
+  const observations=[];
+
+  // Suit usage
+  if(totalNums>=5){
+    const suitRatio=dominantSuitCount/totalNums;
+    if(suitRatio>=0.75)observations.push(`Suit concentration: ${Math.round(suitRatio*100)}% of number tiles are ${suitName[dominantSuit]||dominantSuit} — natural pull toward single-suit hands. Strong efficiency for section hands that allow one suit.`);
+    else if(suitRatio>=0.5)observations.push(`Suit lean toward ${suitName[dominantSuit]||dominantSuit} (${dominantSuitCount} of ${totalNums} number tiles) with real secondary presence in the other suits — multi-suit hands remain very viable.`);
+    else observations.push(`Suit spread is balanced across all three suits — this rack has cross-suit flexibility but will need to consolidate for most final hands.`);
+  }
+
+  // Group concentration
+  if(kongs>=2)observations.push(`Two or more kong-depth groups — exceptional concentration. The rack is structurally locked but positioned to complete quickly.`);
+  else if(kongs>=1)observations.push(`Kong-depth group forming — that tile is effectively claimed. Build the rest of the rack around this anchor.`);
+  else if(pungs>=2)observations.push(`Multiple pungs building — strong group structure without over-commitment. Flexibility is higher than the depth suggests.`);
+  else if(pungs>=1)observations.push(`One pung established — a useful anchor. The remaining tiles still allow directional adjustment.`);
+  else if(pairs>=3)observations.push(`Pair-dense rack (${pairs} pairs) without pungs — useful for S&P or as a base for further development, but depth is needed to win most other sections.`);
+  else if(pairs>=1)observations.push(`Early pair structure forming. Pairs are the building blocks — protect them and look to deepen into pungs.`);
+
+  // Joker insight
+  if(jk>=3)observations.push(`Three jokers — rare and powerful. This rack can complete almost any open hand. Don't over-specify your target; let the draw refine the direction.`);
+  else if(jk===2)observations.push(`Two jokers support any open pung or kong. Keep the rack structure simple — jokers fill the gaps you leave.`);
+  else if(jk===1)observations.push(`One joker provides a single flexible wildcard. Assign it mentally to your hardest-to-complete group and protect that direction.`);
+  else if(chosenSec!=="sp")observations.push(`No jokers — every group must be completed naturally. The rack needs higher tile concentration to compensate.`);
+
+  // Isolated tile risk
+  if(isolatedTiles>=5)observations.push(`${isolatedTiles} isolated tiles (singletons without a matching pair) create vulnerability — too many specific draws are needed to salvage them. Consider narrowing focus.`);
+  else if(isolatedTiles>=3)observations.push(`${isolatedTiles} isolated tiles. These need to either find pairs through draws or leave via future passes — watch which direction the rack is moving.`);
+  else if(isolatedTiles<=1&&totalNums>=6)observations.push(`Low isolated tile count — almost every number tile in the rack has structural company. Efficient.`);
+
+  // Flower note
+  if(fl>=3)observations.push(`Three Flowers — above-average flower count supports the majority of hands that use them. High-value hold.`);
+  else if(fl>=2)observations.push(`Two Flowers provide solid support for flower-inclusive hands across most sections.`);
+  else if(fl===0&&chosenSec!=="wd"&&chosenSec!=="sp")observations.push(`No Flowers — many winning hands use at least one. This is not critical yet but worth noting.`);
+
+  // Pass quality note
+  if(passedJokers>0)observations.push(`Joker${passedJokers>1?"s":""} passed during the Charleston — almost always the wrong move. Jokers are the most flexible tile on the board.`);
+  if(passRatio>=0.8)observations.push(`Pass execution was strong — the right tiles left the rack on time.`);
+  else if(passRatio<=0.4)observations.push(`Pass decisions cost this rack structure — tiles the section needed were allowed to leave.`);
+
+  // ── EXPERT INSIGHT ───────────────────────────────────────────────────────────
+  let expertInsight="";
+  const sn=secNames[chosenSec]||chosenSec;
+
+  // Build contextual insight from the most important 2-4 signals
+  const signals=[];
+
+  // Signal 1: group depth signal
+  if(kongs>=1&&pungs>=1)signals.push(`a kong and a pung already anchoring the rack`);
+  else if(pungs>=2)signals.push(`two pungs giving the rack real structural depth`);
+  else if(pairs>=3&&pungs===0)signals.push(`${pairs} pairs without pungs — good base but needing deeper group development`);
+  else if(isolatedTiles>=4)signals.push(`too many singleton tiles requiring specific draws`);
+
+  // Signal 2: flexibility signal
+  if(flexibility==="High"&&commitment==="Low")signals.push(`strong optionality across ${strongPaths} live section paths`);
+  else if(flexibility==="Low"&&commitment==="High")signals.push(`a rack that's committed early — the upside is speed, the risk is deadness if key tiles don't arrive`);
+  else if(pivotPotential==="Strong")signals.push(`real pivot options still available if the primary direction stalls`);
+
+  // Signal 3: joker signal
+  if(jk>=2)signals.push(`${jk} jokers providing significant wildcard ceiling`);
+  else if(jk===0&&commitment==="High")signals.push(`no joker support in a committed rack — natural tile draws become critical`);
+
+  // Signal 4: suit signal
+  if(totalNums>=5&&dominantSuitCount/totalNums>=0.7)signals.push(`strong ${suitName[dominantSuit]||dominantSuit} concentration building natural suit efficiency`);
+  else if(totalNums>=6&&thirdSuitCount>=2)signals.push(`tiles spread across three suits, which reduces single-suit hand depth`);
+
+  // Compose the insight from signals
+  if(signals.length>=2){
+    expertInsight=`This rack comes out of the Charleston with ${signals.slice(0,2).join(" and ")}. `;
+    if(signals[2])expertInsight+=`${signals[2].charAt(0).toUpperCase()+signals[2].slice(1)}. `;
+    // Add section-specific closer
+    const closers={
+      "13579":"The section has enough hand variety that staying flexible a few more draws is the right play — don't lock onto one specific 13579 hand until a second pung forms.",
+      "2468":"Six is the non-negotiable anchor in this section — every decision from here should protect it first.",
+      "369":"369 is the most unforgiving section for tile discipline — if it isn't 3, 6, or 9, it should be leaving the rack.",
+      "2026":"This section has only four hands, so tile specificity matters more than in larger sections — know which hand you're building toward.",
+      "cr":"Consecutive Run rewards depth over width — a tight 3-4 number window with pungs is worth more than six different numbers with singles.",
+      "wd":"Honor tiles compound slowly — patience through the early draws is part of the W&D strategy.",
+      "aln":"ALN is won by extreme focus; the rack that commits earliest and passes most ruthlessly usually finishes first.",
+      "q":"Quints is the highest-ceiling, narrowest-path section on the card — know your exit point if the second joker doesn't arrive.",
+      "sp":"S&P is entirely concealed with no joker help, so every draw decision reduces to one question: does this tile match something I'm holding?",
+    };
+    expertInsight+=(closers[chosenSec]||`The Charleston ended at a reasonable position — the next few draws will clarify which specific hand within ${sn} is the right target.`);
+  } else {
+    // Fallback for sparse racks
+    expertInsight=`The rack exited the Charleston with ${flexibility.toLowerCase()} flexibility and ${commitment.toLowerCase()} commitment to ${sn}. `;
+    expertInsight+=deadnessRisk==="High"?"Deadness risk is elevated — pivot options should be identified now before tiles become unavailable.":
+      deadnessRisk==="Medium"?"A few more draws will clarify whether the primary direction is viable or a pivot is needed.":
+      "The structure is sound and multiple paths remain live — let the draws lead the final hand decision.";
+  }
+
+  // Section fit for display
+  const sectionFitLabel=chosenPct>=65?"Strong alignment"
+    :chosenPct>=45?"Moderate alignment"
+    :chosenPct>=28?"Partial alignment"
+    :"Weak alignment";
+  const sectionFitConfidence=chosenPct>=65?"High"
+    :chosenPct>=45?"Medium"
+    :chosenPct>=28?"Low"
+    :"Very low";
+
+  return{
+    primaryDirection,
+    secondaryPaths,
+    pivotPotential,
+    flexibility,
+    commitment,
+    structuralStrength,
+    deadnessRisk,
+    observations:observations.filter(Boolean).slice(0,5),
+    expertInsight,
+    sectionFitLabel,
+    sectionFitConfidence,
+    chosenPct,
+    topPct,
+    sectionMatch,
+    topSec,
+    // legacy compat
+    risk:deadnessRisk==="High"?"High":deadnessRisk==="Medium"?"Medium":"Low",
+    bullets:[],
+  };
 }
 
 // ── 4. MAHJONG IDENTITY ─────────────────────────────────────────────────────
@@ -4170,40 +4446,79 @@ function PassesCard({passNarrative}){
   );
 }
 
-function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs}){
-  const [open,setOpen]=useState(false);
+function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,primaryCoveragePct}){
+  // Auto-expand when primary coverage is low — player needs alternatives immediately visible
+  const [open,setOpen]=useState((primaryCoveragePct||0)<35);
+
+  // Score all hands in the chosen section by honest coverage
   const sectionHands=HAND_CATALOG.filter(h=>h.sec===chosenSec)
-    .map(h=>({...h,fitScore:h.fit(hand)}))
-    .sort((a,b)=>b.fitScore-a.fitScore);
-  const altHand=sectionHands.find(h=>h.label!==resolvedHandLabel&&h.fitScore>0.08);
-  const altSec=sortedSecs.find(s=>s.id!==chosenSec&&s.score>0.08);
-  const altSecHand=altSec?HAND_CATALOG.filter(h=>h.sec===altSec.id)
-    .map(h=>({...h,fitScore:h.fit(hand)}))
-    .sort((a,b)=>b.fitScore-a.fitScore)[0]:null;
-  if(!altHand&&!altSecHand)return null;
+    .map(h=>{const{pct}=computeHonestCoverage(hand,h);return{...h,coveragePct:pct};})
+    .sort((a,b)=>b.coveragePct-a.coveragePct);
+
+  // Top 2 alternates in the same section (excluding the primary scored hand)
+  const altSectionHands=sectionHands.filter(h=>h.label!==resolvedHandLabel&&h.coveragePct>3).slice(0,2);
+
+  // Best hand from up to 2 other sections by honest coverage
+  const altSecHands=[];
+  for(const sec of sortedSecs){
+    if(sec.id===chosenSec)continue;
+    if(altSecHands.length>=2)break;
+    const best=HAND_CATALOG.filter(h=>h.sec===sec.id)
+      .map(h=>{const{pct}=computeHonestCoverage(hand,h);return{...h,coveragePct:pct,secObj:sec};})
+      .sort((a,b)=>b.coveragePct-a.coveragePct)[0];
+    if(best&&best.coveragePct>8)altSecHands.push(best);
+  }
+
+  const hasAnything=altSectionHands.length>0||altSecHands.length>0;
+  if(!hasAnything)return null;
+
   return(
     <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden"}}>
       <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"11px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
         <div>
-          <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>WHAT ELSE YOUR RACK WAS CLOSE TO</div>
-          <div style={{fontSize:12,fontWeight:700,color:C.ink,marginTop:1}}>Alternative hand targets</div>
+          <div style={{fontSize:8,color:C.gold,letterSpacing:2,fontWeight:700}}>OTHER HANDS YOUR RACK COULD TARGET</div>
+          <div style={{fontSize:12,fontWeight:700,color:C.ink,marginTop:1}}>
+            {altSectionHands.length+altSecHands.length} alternative{altSectionHands.length+altSecHands.length!==1?"s":""} worth knowing
+          </div>
         </div>
         <span style={{fontSize:12,color:C.mut}}>{open?"▾":"▸"}</span>
       </button>
-      {open&&<div style={{borderTop:`1px solid ${C.bdr}`,padding:"10px 14px"}} className="rk-in">
-        {altHand&&(
-          <div style={{marginBottom:altSecHand?10:0}}>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:5}}>SAME SECTION · {Math.round(altHand.fitScore*100)}% COVERAGE</div>
-            <RackVsHandOverlay hand={hand} handObj={altHand} passLog={[]} sectionId={chosenSec} handWasInferred={false} secObj={chosenSecObj}/>
+      {open&&<div style={{borderTop:`1px solid ${C.bdr}`}} className="rk-in">
+        {/* Same-section alternates */}
+        {altSectionHands.map((h,i)=>(
+          <div key={h.label} style={{borderBottom:i<altSectionHands.length-1||altSecHands.length>0?`1px solid ${C.bdr}`:"none",padding:"10px 14px"}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}>
+              <div style={{fontSize:8,color:chosenSecObj?.color||C.mut,letterSpacing:1.5,fontWeight:700}}>
+                {chosenSecObj?.icon} {chosenSecObj?.name?.toUpperCase()} · SAME SECTION
+              </div>
+              <CoverageChip pct={h.coveragePct}/>
+            </div>
+            <RackVsHandOverlay hand={hand} handObj={h} passLog={[]} sectionId={chosenSec} handWasInferred={false} secObj={chosenSecObj}/>
           </div>
-        )}
-        {altSecHand&&altSec&&(
-          <div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:5}}>{altSec.icon} {altSec.name.toUpperCase()} · {Math.round(altSecHand.fitScore*100)}% COVERAGE</div>
-            <RackVsHandOverlay hand={hand} handObj={altSecHand} passLog={[]} sectionId={altSec.id} handWasInferred={false} secObj={altSec}/>
+        ))}
+        {/* Cross-section alternates */}
+        {altSecHands.map((h,i)=>(
+          <div key={h.label} style={{borderBottom:i<altSecHands.length-1?`1px solid ${C.bdr}`:"none",padding:"10px 14px"}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}>
+              <div style={{fontSize:8,color:h.secObj?.color||C.mut,letterSpacing:1.5,fontWeight:700}}>
+                {h.secObj?.icon} {h.secObj?.name?.toUpperCase()} · DIFFERENT SECTION
+              </div>
+              <CoverageChip pct={h.coveragePct}/>
+            </div>
+            <RackVsHandOverlay hand={hand} handObj={h} passLog={[]} sectionId={h.sec} handWasInferred={false} secObj={h.secObj}/>
           </div>
-        )}
+        ))}
       </div>}
+    </div>
+  );
+}
+
+function CoverageChip({pct}){
+  const col=pct>=50?C.jade:pct>=25?C.gold:C.cinn;
+  return(
+    <div style={{display:"flex",alignItems:"center",gap:4,background:col+"10",border:`1px solid ${col}30`,borderRadius:8,padding:"2px 8px"}}>
+      <div style={{width:6,height:6,borderRadius:3,background:col}}/>
+      <span style={{fontSize:10,fontWeight:800,color:col}}>{pct}% covered</span>
     </div>
   );
 }
@@ -4272,25 +4587,8 @@ function HandTargetPreview({hand,scoredHandObj,chosenSec,chosenSecObj,iq,onCoach
   if(!scoredHandObj||!hand||!hand.length)return null;
   const groups=decodeHandLabel(scoredHandObj.label,chosenSec);
   const cardColors=HAND_CARD_COLORS[scoredHandObj.label]||[];
-  // Coverage calculation
-  const rackPool=[...hand];
-  const pull=(pred,need)=>{let f=0;const r=[];for(const t of rackPool){if(f<need&&pred(t))f++;else r.push(t);}rackPool.length=0;rackPool.push(...r);return f;};
-  let held=0,total=0;
-  groups.forEach((g,gi)=>{
-    total+=g.count;
-    const cc=cardColors[gi];
-    const pred=(t)=>{
-      if(g.isFlower)return t.t==="f";
-      if(g.isSoap)return t.t==="d"&&t.v==="Soap";
-      if(g.isDragon)return t.t==="d";
-      if(g.isWind)return t.t==="w";
-      if(g.isNum){const nm=t.t==="s"&&t.n===Number(g.tile);return cc==="G"?nm&&t.s==="bam":cc==="R"?nm&&t.s==="crak":nm;}
-      return false;
-    };
-    const nat=pull(pred,g.count);held+=nat;
-    if(!scoredHandObj.concealed&&g.type!=="single"&&g.type!=="pair")held+=pull(t=>t.t==="j",g.count-nat);
-  });
-  const pct=total>0?Math.round(held/total*100):0;
+  // Use shared honest coverage — guarantees display always matches direction score
+  const{held,total,pct}=computeHonestCoverage(hand,scoredHandObj);
   const barCol=pct>=80?C.jade:pct>=55?C.gold:C.cinn;
   return(
     <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden"}}>
@@ -4372,33 +4670,108 @@ function FlexibilityCard({finalRack, allSections, passLog, startingRack}){
 }
 
 function ExpertReadCard({finalRack, chosenSec, allSections, passLog, iq}){
+  const [open,setOpen]=useState(false);
   const read=computeExpertRead(finalRack,chosenSec,allSections,passLog,iq);
   if(!read)return null;
-  const riskColor={Low:C.jade,Medium:C.gold,High:C.cinn}[read.risk]||C.mut;
-  const flexColor={High:C.jade,Medium:C.gold,Low:C.cinn}[read.flexibility]||C.mut;
-  const commitColor={High:C.cinn,Medium:C.gold,Low:C.jade}[read.commitment]||C.mut;
+
+  const flexColor={High:C.jade,Medium:C.gold,Low:C.cinn};
+  const commitColor={High:C.cinn,Medium:C.gold,Low:C.jade};
+  const pivotColor={Strong:C.jade,Moderate:C.gold,Weak:C.cinn};
+  const structColor={Strong:C.jade,Developing:C.gold,Weak:C.cinn};
+  const deadColor={Low:C.jade,Medium:C.gold,High:C.cinn};
+
+  const Chip=({label,value,colorMap})=>(
+    <div style={{flex:1,padding:"9px 6px",textAlign:"center"}}>
+      <div style={{fontSize:7,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>{label}</div>
+      <div style={{fontSize:11,fontWeight:800,color:colorMap[value]||C.mut}}>{value}</div>
+    </div>
+  );
+
   return(
     <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden"}}>
+
+      {/* ── HEADER ── */}
       <div style={{background:"linear-gradient(135deg,#0F2016,#1B3A28)",padding:"11px 14px"}}>
         <div style={{fontSize:9,color:"rgba(255,255,255,0.45)",letterSpacing:2,fontWeight:700,marginBottom:2}}>EXPERT READ</div>
-        <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#fff",lineHeight:1.2}}>How strong players see this rack</div>
+        <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#fff",lineHeight:1.2}}>Strategic rack evaluation</div>
       </div>
+
+      {/* ── SECTION FIT + PRIMARY DIRECTION ── */}
       <div style={{padding:"12px 14px",borderBottom:`1px solid ${C.bdr}`}}>
-        {read.bullets.map((b,i)=>(
-          <div key={i} style={{display:"flex",alignItems:"flex-start",gap:8,marginBottom:i<read.bullets.length-1?7:0}}>
-            <span style={{fontSize:11,color:C.jade,fontWeight:900,flexShrink:0,marginTop:1}}>›</span>
-            <span style={{fontSize:12,color:C.ink,lineHeight:1.55,flex:1}}>{b}</span>
+        <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>SECTION FIT</div>
+        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
+          <div style={{fontSize:13,fontWeight:800,color:read.sectionFitConfidence==="High"?C.jade:read.sectionFitConfidence==="Medium"?C.gold:C.cinn}}>
+            {read.chosenPct}%
+          </div>
+          <div style={{fontSize:11,color:C.ink,fontWeight:600}}>{read.sectionFitLabel}</div>
+          {!read.sectionMatch&&read.topSec&&(
+            <div style={{fontSize:10,color:C.mut,marginLeft:"auto"}}>
+              Best fit: {read.topSec.icon} {read.topSec.name} ({read.topPct}%)
+            </div>
+          )}
+        </div>
+
+        <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>PRIMARY DIRECTION</div>
+        <p style={{margin:0,fontSize:12,color:C.ink,lineHeight:1.6}}>{read.primaryDirection}</p>
+      </div>
+
+      {/* ── 5-METRIC ROW ── */}
+      <div style={{display:"flex",borderBottom:`1px solid ${C.bdr}`,borderTop:`1px solid ${C.bdr}`}}>
+        {[
+          {label:"FLEX",value:read.flexibility,colorMap:flexColor},
+          {label:"COMMIT",value:read.commitment,colorMap:commitColor},
+          {label:"PIVOT",value:read.pivotPotential,colorMap:pivotColor},
+          {label:"STRUCT",value:read.structuralStrength,colorMap:structColor},
+          {label:"DEAD RISK",value:read.deadnessRisk,colorMap:deadColor},
+        ].map((m,i,arr)=>(
+          <div key={i} style={{flex:1,padding:"9px 4px",textAlign:"center",borderRight:i<arr.length-1?`1px solid ${C.bdr}`:"none"}}>
+            <div style={{fontSize:6.5,color:C.mut,letterSpacing:1.2,fontWeight:700,marginBottom:3}}>{m.label}</div>
+            <div style={{fontSize:10,fontWeight:800,color:m.colorMap[m.value]||C.mut}}>{m.value}</div>
           </div>
         ))}
       </div>
-      <div style={{display:"flex",borderTop:`1px solid ${C.bdr}`}}>
-        {[{label:"Risk",value:read.risk,color:riskColor},{label:"Flexibility",value:read.flexibility,color:flexColor},{label:"Commitment",value:read.commitment,color:commitColor}].map((m,i)=>(
-          <div key={i} style={{flex:1,padding:"9px 10px",textAlign:"center",borderRight:i<2?`1px solid ${C.bdr}`:"none"}}>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>{m.label.toUpperCase()}</div>
-            <div style={{fontSize:12,fontWeight:800,color:m.color}}>{m.value}</div>
-          </div>
-        ))}
+
+      {/* ── EXPERT INSIGHT (always visible) ── */}
+      <div style={{padding:"12px 14px",background:C.sage,borderBottom:`1px solid ${C.bdr}`}}>
+        <div style={{fontSize:8,color:C.sageB,letterSpacing:1.5,fontWeight:700,marginBottom:5}}>EXPERT INSIGHT</div>
+        <p style={{margin:0,fontSize:12,color:C.ink,lineHeight:1.65,fontStyle:"italic"}}>{read.expertInsight}</p>
       </div>
+
+      {/* ── EXPAND / COLLAPSE for secondary paths + observations ── */}
+      <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",padding:"9px 14px",background:"none",border:"none",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:open?`1px solid ${C.bdr}`:"none"}}>
+        <span style={{fontSize:10,color:C.jade,fontWeight:700,letterSpacing:0.5}}>{open?"Hide details":"More detail — secondary paths & observations"}</span>
+        <span style={{fontSize:11,color:C.mut}}>{open?"▾":"▸"}</span>
+      </button>
+
+      {open&&(
+        <div className="rk-in">
+          {/* Secondary paths */}
+          {read.secondaryPaths.length>0&&(
+            <div style={{padding:"10px 14px",borderBottom:`1px solid ${C.bdr}`}}>
+              <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>SECONDARY PATHS</div>
+              {read.secondaryPaths.map((p,i)=>(
+                <div key={i} style={{display:"flex",alignItems:"flex-start",gap:7,marginBottom:i<read.secondaryPaths.length-1?6:0}}>
+                  <span style={{fontSize:10,color:C.gold,fontWeight:900,flexShrink:0,marginTop:1}}>◈</span>
+                  <span style={{fontSize:11,color:C.ink,lineHeight:1.55,flex:1}}>{p}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Key observations */}
+          {read.observations.length>0&&(
+            <div style={{padding:"10px 14px"}}>
+              <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>KEY OBSERVATIONS</div>
+              {read.observations.map((o,i)=>(
+                <div key={i} style={{display:"flex",alignItems:"flex-start",gap:7,marginBottom:i<read.observations.length-1?6:0}}>
+                  <span style={{fontSize:10,color:C.jade,fontWeight:900,flexShrink:0,marginTop:1}}>›</span>
+                  <span style={{fontSize:11,color:C.ink,lineHeight:1.55,flex:1}}>{o}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -4822,6 +5195,11 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
       {/* ④ HAND TARGET — what you were building toward */}
       <HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={onCoachMode}/>
+      {/* ④b ALTERNATIVE HANDS */}
+      {hand&&hand.length>0&&chosenSec&&(()=>{
+        const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
+        return <AltHandsCard hand={hand} resolvedHandLabel={scoredHandObj?.label||null} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecs} primaryCoveragePct={primPct}/>;
+      })()}
 
       {/* ⑤ SCORE BREAKDOWN */}
       <SectionDivider label="YOUR SCORE"/>
@@ -4925,6 +5303,12 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
 
       {/* Hand target */}
       {scoredHandObj&&<HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={null}/>}
+      {/* Alternative hands */}
+      {hand&&hand.length>0&&chosenSec&&(()=>{
+        const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
+        const sortedSecsP=allSections?[...allSections].sort((a,b)=>b.score-a.score):[];
+        return <AltHandsCard hand={hand} resolvedHandLabel={scoredHandObj?.label||null} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecsP} primaryCoveragePct={primPct}/>;
+      })()}
 
       <SectionDivider label="YOUR SCORE"/>
 
@@ -5747,7 +6131,10 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
       <PassesCard passNarrative={passNarrative}/>
 
       {/* ⑤ ALTERNATIVE HANDS */}
-      {hand&&hand.length>0&&chosenSec&&<AltHandsCard hand={hand} resolvedHandLabel={resolvedHandLabel} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecs}/>}
+      {hand&&hand.length>0&&chosenSec&&(()=>{
+        const primPct=chosenHandObj?computeHonestCoverage(hand,chosenHandObj).pct:0;
+        return <AltHandsCard hand={hand} resolvedHandLabel={resolvedHandLabel} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecs} primaryCoveragePct={primPct}/>;
+      })()}
 
       {/* ⑥ EXPERT EYE ───────────────────────────────────────────────────────── */}
       {expertNotes.length>0&&(
@@ -6070,53 +6457,256 @@ function Tutorial({onDone,onBack,setScreen}){
 }
 
 // ─── CARD GUIDE ──────────────────────────────────────────────────────────────
+// Full 2026 NMJL card reference: section strategy + every actual hand rendered.
+// Three views: Section List → Section Detail (strategy + hands) → Hand detail
+// Plus: search, filter by value/concealed, anchor tile quick-ref.
 function CardGuideScreen({home,setScreen}){
-  const [exp,setExp]=useState(null);
-  return(
+  const [view,setView]=useState("sections"); // "sections" | "section" | "search"
+  const [activeSec,setActiveSec]=useState(null);
+  const [search,setSearch]=useState("");
+  const [filterConcealed,setFilterConcealed]=useState(false);
+  const [filterValue,setFilterValue]=useState(null); // null | 25 | 30 | 35 | 40 | 50+
+
+  const secObj=activeSec?SECS.find(s=>s.id===activeSec):null;
+
+  // All hands for the active view
+  const visibleHands=(()=>{
+    let h=HAND_CATALOG;
+    if(view==="section"&&activeSec) h=h.filter(x=>x.sec===activeSec);
+    if(view==="search"&&search.trim()) h=h.filter(x=>x.label.toLowerCase().includes(search.toLowerCase())||SECS.find(s=>s.id===x.sec)?.name.toLowerCase().includes(search.toLowerCase()));
+    if(filterConcealed) h=h.filter(x=>x.concealed);
+    if(filterValue) h=h.filter(x=>filterValue===50?x.value>=50:x.value===filterValue);
+    return h;
+  })();
+
+  // Anchor tile quick-ref data
+  const ANCHORS={
+    "2026":{tiles:["2","6","Soap"],note:"2s and 6s appear in every hand. Soap (White Dragon) in 3 of 4."},
+    "2468":{tiles:["6","2","8","4"],note:"6 appears in 7 of 8 hands — the non-negotiable anchor."},
+    "369":{tiles:["6","3","9"],note:"6 is in 100% of hands. 3 and 9 in 5 of 6."},
+    "13579":{tiles:["5","3","1","7","9"],note:"5 and 3 appear in 9 of 10 hands — prioritize these first."},
+    "cr":{tiles:["Run","Depth"],note:"No single anchor number. Identify your 3–4 number window early."},
+    "wd":{tiles:["Winds","Dragons"],note:"Winds in 7 of 8 hands. Dragons in 5 of 8."},
+    "aln":{tiles:["One #","×14"],note:"Pick one number value and fill every tile slot with it."},
+    "q":{tiles:["🃏🃏","Nat ×3"],note:"Requires 2+ Jokers. 3–4 natural copies of one tile to stack."},
+    "sp":{tiles:["Pairs","No 🃏"],note:"Concealed only. Jokers cannot be used — pass them immediately."},
+  };
+
+  const goSection=(id)=>{setActiveSec(id);setView("section");window.scrollTo(0,0);};
+  const goBack=()=>{if(view==="section"){setView("sections");setActiveSec(null);}else if(view==="search"){setView("sections");setSearch("");}else{home();}};
+
+  // ── SECTION LIST VIEW ─────────────────────────────────────────────────────
+  if(view==="sections"){return(
     <div style={S.pg} className="rk-pg">
       <RackleHeader onBack={home} setScreen={setScreen}/>
-      <div style={{marginBottom:20,marginTop:4}}>
-        <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>2026 Card Guide</div>
-        <p style={{fontSize:12,color:C.mut,margin:0,lineHeight:1.6}}>Hold and pass tips for all 9 sections. Tap any to study it.</p>
+      <div style={{marginBottom:14,marginTop:4}}>
+        <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>2026 Card Reference</div>
+        <p style={{fontSize:12,color:C.mut,margin:"0 0 12px",lineHeight:1.6}}>Every section, every hand. Your in-game cheat sheet.</p>
+        {/* Search bar */}
+        <div style={{position:"relative",marginBottom:14}}>
+          <input value={search} onChange={e=>{setSearch(e.target.value);if(e.target.value.trim())setView("search");}}
+            placeholder="Search hands by tile pattern…"
+            style={{width:"100%",padding:"10px 14px 10px 36px",borderRadius:12,border:`1.5px solid ${C.bdr}`,fontSize:13,fontFamily:F.b,color:C.ink,outline:"none",background:"#fff"}}/>
+          <span style={{position:"absolute",left:12,top:"50%",transform:"translateY(-50%)",fontSize:14,pointerEvents:"none"}}>🔍</span>
+        </div>
       </div>
-      {SECS.map(s=>{const o=exp===s.id;return(
-        <div key={s.id} style={{background:"#FDFAF6",border:`1px solid ${o?s.color+"40":C.bdr}`,borderRadius:14,overflow:"hidden",marginBottom:8,transition:"border-color 0.15s"}}>
-          <button onClick={()=>setExp(o?null:s.id)} aria-expanded={o} style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",padding:"14px 16px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
-            <div style={{display:"flex",alignItems:"center",gap:12}}>
-              <div style={{width:40,height:40,borderRadius:11,background:s.color+"14",border:`1px solid ${s.color}25`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{s.icon}</div>
-              <div>
-                <div style={{fontSize:14,fontWeight:800,color:o?s.color:C.ink,marginBottom:3,transition:"color 0.15s"}}>{s.name}</div>
+
+      {/* Section cards */}
+      {SECS.map(s=>{
+        const hands=HAND_CATALOG.filter(h=>h.sec===s.id);
+        const maxVal=Math.max(...hands.map(h=>h.value));
+        const hasConcealed=hands.some(h=>h.concealed);
+        const anchor=ANCHORS[s.id];
+        return(
+          <button key={s.id} onClick={()=>goSection(s.id)}
+            style={{display:"block",width:"100%",textAlign:"left",background:"#FDFAF6",border:`1px solid ${C.bdr}`,borderRadius:14,marginBottom:8,padding:"14px 16px",cursor:"pointer",transition:"border-color 0.15s"}}>
+            <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:10}}>
+              <div style={{width:44,height:44,borderRadius:12,background:s.color+"14",border:`1px solid ${s.color}25`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>{s.icon}</div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:15,fontWeight:800,color:C.ink,marginBottom:2}}>{s.name}</div>
                 <div style={{fontSize:11,color:C.mut,lineHeight:1.3}}>{s.desc}</div>
               </div>
+              <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:3}}>
+                <span style={{fontSize:10,fontWeight:700,color:C.mut}}>{hands.length} hands</span>
+                {hasConcealed&&<span style={{fontSize:8,fontWeight:700,background:"#2460A815",color:"#2460A8",borderRadius:6,padding:"2px 5px"}}>has concealed</span>}
+              </div>
             </div>
-            <div style={{display:"flex",alignItems:"center",gap:6,flexShrink:0}}>
-              <span style={{fontSize:9,color:C.mut,fontWeight:600}}>{s.hands} hands</span>
-              <span style={{fontSize:13,color:o?s.color:C.mut,transition:"color 0.15s"}}>{o?"▾":"▸"}</span>
+            {/* Anchor tile chips */}
+            {anchor&&<div style={{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap",marginBottom:8}}>
+              <span style={{fontSize:8,color:C.mut,fontWeight:700,letterSpacing:1,flexShrink:0}}>ANCHOR:</span>
+              {anchor.tiles.map((tile,i)=>(
+                <span key={i} style={{fontSize:10,fontWeight:700,padding:"3px 8px",borderRadius:8,background:s.color+"14",color:s.color,border:`1px solid ${s.color}25`}}>{tile}</span>
+              ))}
+            </div>}
+            {/* Hold / pass mini-row */}
+            <div style={{display:"flex",gap:6}}>
+              <div style={{flex:1,background:C.jade+"08",borderRadius:8,padding:"6px 8px",border:`1px solid ${C.jade}15`}}>
+                <div style={{fontSize:7,color:C.jade,fontWeight:700,letterSpacing:1.5,marginBottom:2}}>✓ HOLD</div>
+                <div style={{fontSize:10,color:C.ink,lineHeight:1.5}}>{s.hold}</div>
+              </div>
+              <div style={{flex:1,background:C.cinn+"06",borderRadius:8,padding:"6px 8px",border:`1px solid ${C.cinn}15`}}>
+                <div style={{fontSize:7,color:C.cinn,fontWeight:700,letterSpacing:1.5,marginBottom:2}}>✗ PASS</div>
+                <div style={{fontSize:10,color:C.ink,lineHeight:1.5}}>{s.pass}</div>
+              </div>
+            </div>
+            <div style={{marginTop:8,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+              <span style={{fontSize:10,color:C.mut}}>Max value: <b style={{color:C.ink}}>{maxVal}pts</b></span>
+              <span style={{fontSize:11,color:s.color,fontWeight:700}}>See all {hands.length} hands →</span>
             </div>
           </button>
-          {o&&<div style={{borderTop:`1px solid ${s.color}20`,background:`${s.color}04`}} className="rk-in">
-            <div style={{display:"flex",gap:8,padding:"12px 16px 0"}}>
-              <div style={{flex:1,background:"#fff",border:`1px solid ${C.jade}20`,borderRadius:10,padding:"10px 12px"}}>
-                <div style={{fontSize:8,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>✓ HOLD</div>
-                <div style={{fontSize:11,color:C.ink,lineHeight:1.6}}>{s.hold}</div>
-              </div>
-              <div style={{flex:1,background:"#fff",border:`1px solid ${C.cinn}15`,borderRadius:10,padding:"10px 12px"}}>
-                <div style={{fontSize:8,color:C.cinn,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>✗ PASS</div>
-                <div style={{fontSize:11,color:C.ink,lineHeight:1.6}}>{s.pass}</div>
-              </div>
+        );
+      })}
+
+      {/* Dragon matching guide */}
+      <div style={{...S.card,marginTop:4,background:"linear-gradient(145deg,#FFFFF8,#F4EFE3)",borderColor:C.gold+"30"}}>
+        <div style={{fontSize:8,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:8}}>🐉 DRAGON MATCHING GUIDE</div>
+        {[
+          {suit:"Bam",dragon:"Green Dragon",suitCol:SC.bam,dragonCol:"#1B7D4E",tiles:[{t:"s",s:"bam",n:5},{t:"d",v:"Grn"}]},
+          {suit:"Crak",dragon:"Red Dragon",suitCol:SC.crak,dragonCol:"#B83232",tiles:[{t:"s",s:"crak",n:5},{t:"d",v:"Red"}]},
+          {suit:"Dot",dragon:"Soap / White Dragon",suitCol:SC.dot,dragonCol:"#6B6560",tiles:[{t:"s",s:"dot",n:5},{t:"d",v:"Soap"}]},
+        ].map(row=>(
+          <div key={row.suit} style={{display:"flex",alignItems:"center",gap:10,padding:"6px 8px",background:"#fff",borderRadius:8,marginBottom:6}}>
+            <div style={{display:"flex",gap:3}}>{row.tiles.map((t,i)=><Ti key={i} t={t}/>)}</div>
+            <div style={{flex:1}}>
+              <span style={{fontSize:11,fontWeight:700,color:row.suitCol}}>{row.suit}</span>
+              <span style={{fontSize:10,color:C.mut}}> → </span>
+              <span style={{fontSize:11,fontWeight:700,color:row.dragonCol}}>{row.dragon}</span>
             </div>
-            <div style={{padding:"10px 16px",margin:"10px 16px 0",background:"#fff",border:`1px solid ${C.gold}20`,borderRadius:10,marginBottom:s.joker?0:16}}>
-              <div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>💡 STRATEGY</div>
-              <div style={{fontSize:11,color:C.ink,lineHeight:1.65}}>{s.combos}</div>
-            </div>
-            {s.joker&&<div style={{padding:"10px 16px",margin:"10px 16px 16px",background:"#fff",border:`1px solid ${C.gold}20`,borderRadius:10}}>
-              <div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>🃏 JOKER TIP</div>
-              <div style={{fontSize:11,color:C.ink,lineHeight:1.65}}>{s.joker}</div>
-            </div>}
-            {!s.joker&&<div style={{height:4}}/>}
-          </div>}
-        </div>);})}
+          </div>
+        ))}
+        <div style={{fontSize:10,color:C.mut,lineHeight:1.6,marginTop:4}}>"Matching Dragon" = use the dragon that matches your suit color. "Opposite Dragon" = use the non-matching one.</div>
+      </div>
       <Footer/>
+    </div>
+  );}
+
+  // ── SEARCH RESULTS VIEW ───────────────────────────────────────────────────
+  if(view==="search"){return(
+    <div style={S.pg} className="rk-pg">
+      <RackleHeader onBack={()=>{setView("sections");setSearch("");}} setScreen={setScreen}/>
+      <div style={{marginBottom:12,marginTop:4}}>
+        <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:8}}>Search Results</div>
+        <div style={{position:"relative",marginBottom:10}}>
+          <input value={search} onChange={e=>setSearch(e.target.value)} autoFocus
+            placeholder="Search hands…"
+            style={{width:"100%",padding:"10px 14px 10px 36px",borderRadius:12,border:`1.5px solid ${C.jade}40`,fontSize:13,fontFamily:F.b,color:C.ink,outline:"none",background:"#fff"}}/>
+          <span style={{position:"absolute",left:12,top:"50%",transform:"translateY(-50%)",fontSize:14}}>🔍</span>
+        </div>
+        <div style={{fontSize:11,color:C.mut,marginBottom:8}}>{visibleHands.length} result{visibleHands.length!==1?"s":""}</div>
+      </div>
+      {visibleHands.length===0&&<div style={{textAlign:"center",padding:"40px 0",color:C.mut,fontSize:13}}>No hands matched "{search}"</div>}
+      {visibleHands.map((h,i)=><HandRenderer key={i} hand={h}/>)}
+      <Footer/>
+    </div>
+  );}
+
+  // ── SECTION DETAIL VIEW ───────────────────────────────────────────────────
+  const secHands=HAND_CATALOG.filter(h=>h.sec===activeSec);
+  const anchor=ANCHORS[activeSec]||{};
+  const vals=[...new Set(secHands.map(h=>h.value))].sort((a,b)=>a-b);
+
+  let filtered=secHands;
+  if(filterConcealed) filtered=filtered.filter(h=>h.concealed);
+  if(filterValue) filtered=filtered.filter(h=>filterValue===50?h.value>=50:h.value===filterValue);
+
+  return(
+    <div style={S.pg} className="rk-pg">
+      <RackleHeader onBack={()=>{setView("sections");setActiveSec(null);setFilterConcealed(false);setFilterValue(null);}} setScreen={setScreen}/>
+
+      {/* Section header */}
+      <div style={{marginBottom:14,marginTop:4}}>
+        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
+          <div style={{width:44,height:44,borderRadius:12,background:secObj?.color+"14",border:`1px solid ${secObj?.color}25`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>{secObj?.icon}</div>
+          <div>
+            <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.ink,letterSpacing:-0.5}}>{secObj?.name}</div>
+            <div style={{fontSize:11,color:C.mut}}>{secHands.length} hands · {secObj?.desc}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Anchor tile row */}
+      {anchor.tiles&&(
+        <div style={{...S.card,marginBottom:8,padding:"10px 14px",background:`${secObj?.color}08`,borderColor:`${secObj?.color}25`}}>
+          <div style={{fontSize:8,color:secObj?.color,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>⚓ ANCHOR TILES</div>
+          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:6}}>
+            {anchor.tiles.map((tile,i)=>(
+              <span key={i} style={{fontSize:12,fontWeight:800,padding:"4px 10px",borderRadius:10,background:"#fff",color:secObj?.color,border:`1px solid ${secObj?.color}30`}}>{tile}</span>
+            ))}
+          </div>
+          <div style={{fontSize:11,color:C.ink,lineHeight:1.6}}>{anchor.note}</div>
+        </div>
+      )}
+
+      {/* Hold / Pass / Strategy accordion */}
+      <SectionStrategyCard sec={secObj}/>
+
+      {/* Filter row */}
+      <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:10,alignItems:"center"}}>
+        <span style={{fontSize:9,color:C.mut,fontWeight:700,letterSpacing:1}}>FILTER:</span>
+        <button onClick={()=>setFilterConcealed(f=>!f)} style={{padding:"4px 10px",borderRadius:20,border:`1px solid ${filterConcealed?"#2460A8":C.bdr}`,background:filterConcealed?"#2460A812":"#fff",fontSize:10,fontWeight:filterConcealed?700:400,color:filterConcealed?"#2460A8":C.mut,cursor:"pointer"}}>
+          🔒 Concealed
+        </button>
+        {vals.map(v=>(
+          <button key={v} onClick={()=>setFilterValue(filterValue===v?null:v)} style={{padding:"4px 10px",borderRadius:20,border:`1px solid ${filterValue===v?C.gold:C.bdr}`,background:filterValue===v?C.gold+"12":"#fff",fontSize:10,fontWeight:filterValue===v?700:400,color:filterValue===v?C.gold:C.mut,cursor:"pointer"}}>
+            {v}pts
+          </button>
+        ))}
+        {(filterConcealed||filterValue)&&(
+          <button onClick={()=>{setFilterConcealed(false);setFilterValue(null);}} style={{padding:"4px 8px",borderRadius:20,border:`1px solid ${C.cinn}40`,background:C.cinn+"08",fontSize:10,color:C.cinn,cursor:"pointer",fontWeight:600}}>Clear</button>
+        )}
+      </div>
+
+      {/* Hand count */}
+      <div style={{fontSize:11,color:C.mut,marginBottom:8}}>
+        {filtered.length < secHands.length?`${filtered.length} of ${secHands.length} hands`:`All ${secHands.length} hands`}
+        {filtered.length===0&&" — no hands match these filters"}
+      </div>
+
+      {/* Hands */}
+      {filtered.map((h,i)=><HandRenderer key={i} hand={h} defaultOpen={secHands.length<=3}/>)}
+
+      {/* Joker note for section */}
+      {secObj?.joker&&(
+        <div style={{...S.card,marginTop:4,background:"#FFF9E6",borderColor:C.gold+"30"}}>
+          <div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:5}}>🃏 JOKER TIPS FOR {secObj.name.toUpperCase()}</div>
+          <div style={{fontSize:11,color:C.ink,lineHeight:1.65}}>{secObj.joker}</div>
+        </div>
+      )}
+      <Footer/>
+    </div>
+  );
+}
+
+// Section strategy accordion — hold / pass / combos in a compact collapsible
+function SectionStrategyCard({sec}){
+  const [open,setOpen]=useState(false);
+  if(!sec)return null;
+  return(
+    <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden"}}>
+      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"11px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
+        <div style={{fontSize:12,fontWeight:700,color:C.ink}}>Strategy & Charleston Tips</div>
+        <span style={{fontSize:11,color:C.mut}}>{open?"▾":"▸"}</span>
+      </button>
+      {open&&(
+        <div className="rk-in" style={{borderTop:`1px solid ${C.bdr}`}}>
+          <div style={{display:"flex",gap:8,padding:"10px 14px"}}>
+            <div style={{flex:1,background:C.jade+"08",borderRadius:8,padding:"8px 10px",border:`1px solid ${C.jade}15`}}>
+              <div style={{fontSize:7,color:C.jade,fontWeight:700,letterSpacing:1.5,marginBottom:4}}>✓ HOLD</div>
+              <div style={{fontSize:11,color:C.ink,lineHeight:1.6}}>{sec.hold}</div>
+            </div>
+            <div style={{flex:1,background:C.cinn+"06",borderRadius:8,padding:"8px 10px",border:`1px solid ${C.cinn}15`}}>
+              <div style={{fontSize:7,color:C.cinn,fontWeight:700,letterSpacing:1.5,marginBottom:4}}>✗ PASS</div>
+              <div style={{fontSize:11,color:C.ink,lineHeight:1.6}}>{sec.pass}</div>
+            </div>
+          </div>
+          <div style={{padding:"0 14px 10px"}}>
+            <div style={{background:C.gold+"08",borderRadius:8,padding:"8px 10px",border:`1px solid ${C.gold}15`}}>
+              <div style={{fontSize:7,color:C.gold,fontWeight:700,letterSpacing:1.5,marginBottom:4}}>💡 STRATEGY</div>
+              <div style={{fontSize:11,color:C.ink,lineHeight:1.65}}>{sec.combos}</div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -9145,6 +9735,49 @@ const HAND_CARD_COLORS={
 };
 
 // Render a single decoded group as tile chips — card-accurate color coding
+// ── HONEST COVERAGE — same tile-pull logic used by HandTargetPreview display ──
+// Returns {held, total, pct} using the literal decoded label + card colors.
+// This is the ground-truth "how many of the 14 hand tiles does this rack actually hold?"
+// Unlike fit() which picks best-case suit permutations, this is suit-specific and strict.
+function computeHonestCoverage(rack, handObj){
+  if(!rack||!handObj)return{held:0,total:0,pct:0};
+  const groups=decodeHandLabel(handObj.label,handObj.sec);
+  const cardColors=HAND_CARD_COLORS[handObj.label]||[];
+  const rackPool=[...rack];
+  const pull=(pred,need)=>{
+    let f=0;const r=[];
+    for(const t of rackPool){if(f<need&&pred(t))f++;else r.push(t);}
+    rackPool.length=0;rackPool.push(...r);
+    return f;
+  };
+  let held=0,total=0;
+  groups.forEach((g,gi)=>{
+    total+=g.count;
+    const cc=cardColors[gi];
+    const pred=(t)=>{
+      if(g.isFlower)return t.t==="f";
+      if(g.isSoap)return t.t==="d"&&t.v==="Soap";
+      if(g.isDragon)return t.t==="d";
+      if(g.isWind)return t.t==="w"&&(g.tile?t.v===g.tile:true);
+      if(g.isNum){
+        const nm=t.t==="s"&&t.n===Number(g.tile);
+        // "K" (any suit) = any suit, otherwise suit-specific
+        return cc==="K"||!cc?nm:(cc==="G"?nm&&t.s==="bam":cc==="R"?nm&&t.s==="crak":cc==="B"?nm&&t.s==="dot":nm);
+      }
+      return false;
+    };
+    const nat=pull(pred,g.count);
+    held+=nat;
+    // Jokers fill pungs/kongs in open hands
+    if(!handObj.concealed&&g.type!=="single"&&g.type!=="pair"){
+      held+=pull(t=>t.t==="j",g.count-nat);
+    }
+  });
+  const pct=total>0?Math.round(held/total*100):0;
+  return{held,total,pct};
+}
+
+
 function HandGroupChips({group, cardColor}){
   // Map color code to actual color
   const col=
