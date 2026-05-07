@@ -32,6 +32,7 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .rk-banner-in{animation:rkBannerIn 0.4s ease}
 
 .rk-pulse{animation:rkPulse 2s ease-in-out infinite}
+@keyframes rkPulse{0%,100%{transform:scale(1);opacity:0.4}50%{transform:scale(2.2);opacity:0}}
 @keyframes rkTickIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 .rk-tick{animation:rkTickIn 0.15s ease}
 `;
@@ -3863,8 +3864,9 @@ function Chip({label,type}){
 }
 
 // ─── SPECIFIC HAND RECOMMENDER CARD ─────────────────────────────────────────
-function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideLabel,pinnedHandLabel}){
+function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideLabel,pinnedHandLabel,showFit=true}){
   const [open,setOpen]=useState(defaultOpen);
+  const [fitVisible,setFitVisible]=useState(showFit);
   if(!finalRack||!sectionId)return null;
   // Get all scored hands for section, sorted by fit
   const allHands=HAND_CATALOG.filter(h=>h.sec===sectionId)
@@ -3904,6 +3906,15 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
       </button>
 
       {open&&<div className="rk-in">
+        {/* Fit toggle — only shown in practice mode (showFit=false by default) */}
+        {!showFit&&(
+          <div style={{padding:"8px 14px",borderBottom:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"space-between",background:C.bg2}}>
+            <span style={{fontSize:10,color:C.mut,fontWeight:600}}>Rack fit scores hidden — practice mode</span>
+            <button onClick={()=>setFitVisible(v=>!v)} style={{fontSize:10,fontWeight:700,color:fitVisible?C.cinn:C.jade,background:"none",border:`1px solid ${fitVisible?C.cinn+"40":C.jade+"40"}`,borderRadius:20,padding:"3px 10px",cursor:"pointer"}}>
+              {fitVisible?"Hide scores":"Reveal scores"}
+            </button>
+          </div>
+        )}
         {hands.map((hand,i)=>{
           const pct=Math.round(hand.fit*100);
           const barColor=pct>=70?C.jade:pct>=45?C.gold:C.cinn;
@@ -3973,18 +3984,27 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
                     {hand.concealed&&<span style={{fontSize:9,fontWeight:700,background:"#2460A820",color:"#2460A8",borderRadius:10,padding:"2px 7px",letterSpacing:0.5}}>CONCEALED</span>}
                     <span style={{fontSize:9,fontWeight:700,background:"#00000009",color:C.mut,borderRadius:10,padding:"2px 7px"}}>×{hand.value}</span>
                   </div>
-                  <div style={{fontSize:11,color:verdictColor,fontWeight:600}}>{verdict}</div>
+                  {fitVisible&&<div style={{fontSize:11,color:verdictColor,fontWeight:600}}>{verdict}</div>}
                 </div>
-                <div style={{textAlign:"right",flexShrink:0}}>
-                  <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:barColor,lineHeight:1}}>{pct}<span style={{fontSize:10,fontWeight:400,color:C.mut}}>%</span></div>
-                  <div style={{fontSize:9,color:C.mut}}>rack fit</div>
-                </div>
+                {fitVisible?(
+                  <div style={{textAlign:"right",flexShrink:0}}>
+                    <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:barColor,lineHeight:1}}>{pct}<span style={{fontSize:10,fontWeight:400,color:C.mut}}>%</span></div>
+                    <div style={{fontSize:9,color:C.mut}}>rack fit</div>
+                  </div>
+                ):(
+                  <div style={{flexShrink:0,width:36,height:36,borderRadius:10,background:C.bg2,border:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"center"}}>
+                    <span style={{fontSize:16}}>?</span>
+                  </div>
+                )}
               </div>
 
-              {/* Fit bar */}
-              <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden",marginBottom:12}}>
-                <div className="rk-bar" style={{height:"100%",borderRadius:3,background:`linear-gradient(90deg,${barColor},${barColor}CC)`,width:`${pct}%`,"--w":`${pct}%`}}/>
-              </div>
+              {/* Fit bar — hidden in practice until revealed */}
+              {fitVisible&&(
+                <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden",marginBottom:12}}>
+                  <div className="rk-bar" style={{height:"100%",borderRadius:3,background:`linear-gradient(90deg,${barColor},${barColor}CC)`,width:`${pct}%`,"--w":`${pct}%`}}/>
+                </div>
+              )}
+              {!fitVisible&&<div style={{height:5,borderRadius:3,background:C.bdr,marginBottom:12,opacity:0.3}}/>}
 
               {/* Have / Need panels */}
               <div style={{display:"flex",gap:8,marginBottom:10}}>
@@ -4203,7 +4223,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
         {hand&&hand.length>0&&<SortableRack hand={hand}/>}
 
         {/* Hand Targets */}
-        {hand&&hand.length>0&&chosenSec&&<SpecificHandCard finalRack={hand} sectionId={chosenSec}/>}
+        {hand&&hand.length>0&&chosenSec&&<SpecificHandCard finalRack={hand} sectionId={chosenSec} showFit={false}/>}
 
         {/* Score bars */}
         <div style={{...S.card,marginBottom:8}}>
@@ -6473,23 +6493,62 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
       {dDone&&<MidnightCountdown dn={dn}/>}
 
-      {/* SOCIAL PROOF STRIP — always visible, before practice button */}
+      {/* COMMUNITY PULSE STRIP */}
       {(ds||clubPlayers)&&(()=>{
-        const parts=[];
-        if(ds?.total)parts.push({icon:"🟢",text:`${ds.total} ${ds.total===1?"player":"players"} today`});
-        if(ds?.avg)parts.push({icon:"📊",text:`Avg IQ ${ds.avg}`});
-        if(clubPlayers&&club)parts.push({icon:"🀄",text:`${clubPlayers} from ${club.name}`,action:()=>setScreen("leaderboard")});
-        if(parts.length===0)return null;
+        const total=ds?.total||0;
+        const avg=ds?.avg||null;
+        const hasClub=!!(clubPlayers&&club);
+        // Animated dot pulse via inline keyframe trick
         return(
-          <div style={{display:"flex",alignItems:"center",gap:0,marginBottom:14,borderRadius:12,overflow:"hidden",border:`1px solid ${C.bdr}`,background:"#fff"}}>
-            {parts.map((p,i)=>(
-              <div key={i} onClick={p.action||undefined}
-                style={{flex:1,padding:"9px 6px",textAlign:"center",borderRight:i<parts.length-1?`1px solid ${C.bdr}`:"none",cursor:p.action?"pointer":undefined,background:p.action?C.sage:"#fff"}}>
-                <div style={{fontSize:10,fontWeight:700,color:p.action?C.sageB:C.ink,lineHeight:1.3,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
-                  <span style={{marginRight:4}}>{p.icon}</span>{p.text}
-                </div>
+          <div style={{marginBottom:16,borderRadius:16,overflow:"hidden",border:`1px solid ${C.jade}25`,background:`linear-gradient(135deg,${C.jade}08,${C.jade}04)`,boxShadow:`0 2px 12px ${C.jade}10`}}>
+            {/* Header row */}
+            <div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 14px 8px",borderBottom:`1px solid ${C.jade}15`}}>
+              <div style={{position:"relative",width:8,height:8,flexShrink:0}}>
+                <div style={{width:8,height:8,borderRadius:4,background:C.jade,position:"absolute"}}/>
+                <div style={{width:8,height:8,borderRadius:4,background:C.jade,position:"absolute",opacity:0.4,animation:"rkPulse 1.8s ease-in-out infinite"}}/>
               </div>
-            ))}
+              <span style={{fontSize:9,fontWeight:800,color:C.jade,letterSpacing:2}}>LIVE TODAY</span>
+              <div style={{flex:1,height:1,background:`linear-gradient(90deg,${C.jade}20,transparent)`}}/>
+              <span style={{fontSize:9,color:C.mut,fontWeight:600}}>Day #{dn}</span>
+            </div>
+
+            {/* Stats row */}
+            <div style={{display:"flex",gap:0}}>
+              {/* Players today */}
+              {total>0&&(
+                <div style={{flex:1,padding:"12px 14px",borderRight:`1px solid ${C.jade}15`}}>
+                  <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.jade,lineHeight:1,marginBottom:2}}>{total}</div>
+                  <div style={{fontSize:9,color:C.mut,fontWeight:700,letterSpacing:1}}>PLAYERS TODAY</div>
+                </div>
+              )}
+              {/* Avg IQ */}
+              {avg&&(
+                <div style={{flex:1,padding:"12px 14px",borderRight:hasClub?`1px solid ${C.jade}15`:"none"}}>
+                  <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,lineHeight:1,marginBottom:2}}>{avg}</div>
+                  <div style={{fontSize:9,color:C.mut,fontWeight:700,letterSpacing:1}}>AVG IQ</div>
+                </div>
+              )}
+              {/* Club count — tappable */}
+              {hasClub&&(
+                <button onClick={()=>setScreen("leaderboard")}
+                  style={{flex:1,padding:"12px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left",display:"flex",flexDirection:"column",justifyContent:"center"}}>
+                  <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.jade,lineHeight:1,marginBottom:2}}>{clubPlayers}</div>
+                  <div style={{fontSize:9,color:C.mut,fontWeight:700,letterSpacing:1,lineHeight:1.4}}>FROM YOUR<br/>CLUB ›</div>
+                </button>
+              )}
+            </div>
+
+            {/* Club name footer — only if in a club */}
+            {hasClub&&(
+              <button onClick={()=>setScreen("leaderboard")}
+                style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"8px 14px",background:`${C.jade}08`,border:"none",borderTop:`1px solid ${C.jade}15`,cursor:"pointer",textAlign:"left"}}>
+                <div style={{display:"flex",alignItems:"center",gap:6}}>
+                  <span style={{fontSize:12}}>{club.emoji||"🀄"}</span>
+                  <span style={{fontSize:11,fontWeight:700,color:C.jade}}>{club.name} leaderboard</span>
+                </div>
+                <span style={{fontSize:11,color:C.jade,fontWeight:700}}>›</span>
+              </button>
+            )}
           </div>
         );
       })()}
@@ -7137,7 +7196,7 @@ function Game({mode,home,onDone,settings,setScreen}){
   const [sel,setSel]=useState([]);const [passed,setPassed]=useState([]);
   const [passLog,setPassLog]=useState([]);
   const [newIdx,setNewIdx]=useState([]);const [jw,setJw]=useState(false);
-  const [chosenSec,setChosenSec]=useState(null);const [chosenHand,setChosenHand]=useState(null);const [showRef,setShowRef]=useState(false);
+  const [chosenSec,setChosenSec]=useState(null);const [chosenHand,setChosenHand]=useState(null);const [showRef,setShowRef]=useState(false);const [showFitHints,setShowFitHints]=useState(false);
   const [showHint,setShowHint]=useState(false);const [hintExp,setHintExp]=useState(null);
   const [cn,setCn]=useState(1);const [pi,setPi]=useState(0);
   const [st,setSt]=useState(null);const [el,setEl]=useState(0);const [td,setTd]=useState(false);
@@ -7322,6 +7381,19 @@ function Game({mode,home,onDone,settings,setScreen}){
           {getDisplayTime()&&<div style={{textAlign:"center",marginBottom:4}}><span style={{fontSize:12,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {getDisplayTime()}</span></div>}
           <h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 2px",textAlign:"center"}}>What hand are you playing?</h2>
           <p style={{fontSize:12,color:C.mut,marginBottom:10,textAlign:"center"}}>Pick the exact hand from your card.</p>
+
+          {/* Fit hints toggle — practice mode only */}
+          {mode!=="daily"&&(
+            <button onClick={()=>setShowFitHints(v=>!v)} style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"8px 12px",marginBottom:8,borderRadius:10,border:`1px solid ${showFitHints?C.jade+"50":C.bdr}`,background:showFitHints?C.sage:"#fff",cursor:"pointer"}}>
+              <div style={{display:"flex",alignItems:"center",gap:8}}>
+                <span style={{fontSize:13}}>{showFitHints?"👁":"👁‍🗨"}</span>
+                <span style={{fontSize:11,fontWeight:600,color:showFitHints?C.sageB:C.mut}}>{showFitHints?"Fit hints on — tap to hide":"Show fit hints"}</span>
+              </div>
+              <div style={{width:32,height:18,borderRadius:9,background:showFitHints?C.jade:C.bdr,position:"relative",transition:"background 0.2s",flexShrink:0}}>
+                <div style={{width:14,height:14,borderRadius:7,background:"#fff",position:"absolute",top:2,left:showFitHints?16:2,transition:"left 0.2s",boxShadow:"0 1px 3px rgba(0,0,0,0.2)"}}/>
+              </div>
+            </button>
+          )}
           <Rack hand={hand} label="YOUR RACK" showSort onSort={()=>setHand(sortHand(hand))} large={large}/>
           <button onClick={()=>setShowRef(!showRef)} aria-expanded={showRef} style={{...S.card,width:"100%",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8,background:showRef?C.gold+"06":"#fff"}}>
             <span style={{fontSize:12,fontWeight:600,color:showRef?C.gold:C.ink}}>📖 {showRef?"Hide":"Show"} 2026 Card Guide</span><span aria-hidden="true" style={{color:C.mut}}>{showRef?"▾":"▸"}</span>
@@ -7339,7 +7411,7 @@ function Game({mode,home,onDone,settings,setScreen}){
                 <div style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
                   {ranked.map((s,idx)=>{
                     const pct=Math.round(s.score*100);
-                    const isTop=idx===0;
+                    const isTop=idx===0&&s.score>=0.1;
                     return(
                       <button key={s.id} onClick={()=>{haptic(20);setChosenSec(s.id);setChosenHand(null);}} aria-label={`${s.name}: ${s.desc}`}
                         style={{cursor:"pointer",display:"flex",alignItems:"center",gap:0,borderRadius:12,overflow:"hidden",
@@ -7351,13 +7423,13 @@ function Game({mode,home,onDone,settings,setScreen}){
                         <div style={{flex:1,minWidth:0,padding:"10px 8px 10px 4px"}}>
                           <div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:2}}>
                             <span style={{fontSize:13,fontWeight:800,color:isTop?s.color:C.ink,lineHeight:1.2}}>{s.name}</span>
-                            {isTop&&<span style={{fontSize:8,fontWeight:700,background:s.color+"20",color:s.color,borderRadius:8,padding:"1px 6px",letterSpacing:0.5}}>BEST FIT</span>}
+                            {isTop&&(mode==="daily"||showFitHints)&&<span style={{fontSize:8,fontWeight:700,background:s.color+"20",color:s.color,borderRadius:8,padding:"1px 6px",letterSpacing:0.5}}>BEST FIT</span>}
                           </div>
                           <div style={{fontSize:10,color:C.mut,lineHeight:1.3}}>{s.desc}</div>
                         </div>
                         <div style={{padding:"0 12px",textAlign:"right",flexShrink:0}}>
-                          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:isTop?s.color:C.mut}}>{pct}%</div>
-                          <div style={{fontSize:8,color:C.mut}}>fit</div>
+                          {(mode==="daily"||showFitHints)&&<><div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:isTop?s.color:C.mut}}>{pct}%</div>
+                          <div style={{fontSize:8,color:C.mut}}>fit</div></>}
                         </div>
                       </button>
                     );
@@ -7386,6 +7458,7 @@ function Game({mode,home,onDone,settings,setScreen}){
                     const isSel=chosenHand===h.label;
                     const pct=Math.round(h.fit*100);
                     const barColor=pct>=70?C.jade:pct>=45?C.gold:C.cinn;
+                    const showPct=mode==="daily"||showFitHints;
                     return(
                       <button key={i} onClick={()=>{haptic(20);setChosenHand(h.label);}} aria-checked={isSel}
                         style={{cursor:"pointer",display:"flex",alignItems:"center",gap:10,borderRadius:12,padding:"10px 12px",
@@ -7397,12 +7470,14 @@ function Game({mode,home,onDone,settings,setScreen}){
                           <div style={{fontSize:12,fontWeight:700,color:isSel?(secObj?.color||C.jade):C.ink,lineHeight:1.3,marginBottom:2}}>{h.label}</div>
                           <div style={{fontSize:10,color:C.mut}}>{h.concealed?"Concealed · no jokers":"Open"} · {h.value} pts</div>
                         </div>
-                        <div style={{textAlign:"right",flexShrink:0,minWidth:44}}>
-                          <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:barColor,lineHeight:1}}>{pct}%</div>
-                          <div style={{width:40,height:3,borderRadius:2,background:C.bdr,marginTop:3}}>
-                            <div style={{width:`${pct}%`,height:"100%",borderRadius:2,background:barColor}}/>
+                        {showPct&&(
+                          <div style={{textAlign:"right",flexShrink:0,minWidth:44}}>
+                            <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:barColor,lineHeight:1}}>{pct}%</div>
+                            <div style={{width:40,height:3,borderRadius:2,background:C.bdr,marginTop:3}}>
+                              <div style={{width:`${pct}%`,height:"100%",borderRadius:2,background:barColor}}/>
+                            </div>
                           </div>
-                        </div>
+                        )}
                         <div style={{width:22,height:22,borderRadius:11,flexShrink:0,
                           background:isSel?(secObj?.color||C.jade):"none",
                           border:isSel?"none":`2px solid ${C.bdr}`,
