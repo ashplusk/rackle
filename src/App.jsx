@@ -8532,12 +8532,14 @@ function Game({mode,home,onDone,settings,setScreen}){
   const [sel,setSel]=useState([]);const [passed,setPassed]=useState([]);
   const [passLog,setPassLog]=useState([]);
   const [newIdx,setNewIdx]=useState([]);const [jw,setJw]=useState(false);
-  const [chosenSec,setChosenSec]=useState(null);const [chosenHand,setChosenHand]=useState(null);const [showRef,setShowRef]=useState(false);const [showFitHints,setShowFitHints]=useState(false);
+  const [chosenSec,setChosenSec]=useState(null);const chosenSecRef=useRef(null);const setChosenSecBoth=(v)=>{chosenSecRef.current=v;setChosenSec(v);};const [chosenHand,setChosenHand]=useState(null);const [showRef,setShowRef]=useState(false);const [showFitHints,setShowFitHints]=useState(false);
   const [showHint,setShowHint]=useState(false);const [hintExp,setHintExp]=useState(null);
   const [cn,setCn]=useState(1);const [pi,setPi]=useState(0);
   const [st,setSt]=useState(null);const [el,setEl]=useState(0);const [td,setTd]=useState(false);
   const [showLeave,setShowLeave]=useState(false);
   const [iqResult,setIqResult]=useState(null);
+  const iqResultRef=useRef(null);
+  const setIqResultBoth=(v)=>{iqResultRef.current=v;setIqResult(v);};
   const elRef=useRef(0);const stRef=useRef(null);const lastPassElRef=useRef(0);
   const cs=cn===1?F1C:S2C;const cp=cs[pi];
   const large=settings?.tileSize==="large";
@@ -8663,14 +8665,14 @@ function Game({mode,home,onDone,settings,setScreen}){
       startingRack,finalRack:hand,passedTilesByRound:passLog,
       totalTime:totalEl,sectionId:chosenSec,chosenHand,
     },getDailySeed(),isD,dn);
-    setIqResult(iq);
+    setIqResultBoth(iq);
 
     const result={
       rating:RATS[gi],emoji:REMO[gi],section:`${top.icon} ${top.name}`,sid:top.id,
       score:top.score,time:totalEl,gi,iqScore:iq?iq.totalScore:null,iq,
       finalRack:hand,startingRack,passLog,chosenSec,chosenHand,allSections:ev(hand),
     };
-    onDone(result);
+    try{onDone(result);}catch(e){}
     window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;
     setPhase("result");
   };
@@ -8679,8 +8681,8 @@ function Game({mode,home,onDone,settings,setScreen}){
     window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;
     const d=shuffle(buildDeck());const dealt=d.slice(0,13);
     setHand(dealt);setStartingRack(dealt);setPool(d.slice(13).filter(t=>t.t!=="j"));
-    setSel([]);setPassed([]);setPassLog([]);setNewIdx([]);setCn(1);setPi(0);setChosenSec(null);setChosenHand(null);
-    setShowRef(false);setShowHint(false);setHintExp(null);setIqResult(null);
+    setSel([]);setPassed([]);setPassLog([]);setNewIdx([]);setCn(1);setPi(0);setChosenSecBoth(null);setChosenHand(null);
+    setShowRef(false);setShowHint(false);setHintExp(null);setIqResultBoth(null);
     setTd(false);elRef.current=0;stRef.current=null;setEl(0);setFlipped([]);setReady(false);
     setPhase("deal");
   };
@@ -8716,18 +8718,18 @@ function Game({mode,home,onDone,settings,setScreen}){
         </>
       )}
 
-      {phase==="result"&&iqResult&&(
+      {phase==="result"&&(iqResult||iqResultRef.current)&&(
         <div className="rk-in">
           <RackleHeader onBack={home}/>
           <IQScorecard
-            iq={iqResult}
+            iq={iqResult||iqResultRef.current}
             hand={hand}
             startingRack={startingRack}
             passLog={passLog}
             isDaily={mode==="daily"}
             dayNum={dn}
             section={`${ev(hand)[0].icon} ${ev(hand)[0].name}`}
-            chosenSec={chosenSec}
+            chosenSec={chosenSec||chosenSecRef.current}
             allSections={ev(hand)}
             onHome={home}
             onDealAgain={restart}
@@ -8766,58 +8768,50 @@ function Game({mode,home,onDone,settings,setScreen}){
             <span style={{fontSize:12,fontWeight:600,color:showRef?C.gold:C.ink}}>📖 {showRef?"Hide":"Show"} 2026 Card Guide</span><span aria-hidden="true" style={{color:C.mut}}>{showRef?"▾":"▸"}</span>
           </button>
           {showRef&&<CG onClose={()=>setShowRef(false)}/>}
-          {(()=>{
-            const scored=ev(hand);
-            const ranked=SECS.map(s=>scored.find(e=>e.id===s.id)).filter(Boolean);
-            return(
-              <>
-                <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>TAP TO SCORE YOUR ROUND</div>
-                <div style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
-                  {ranked.map((s,idx)=>{
-                    const pct=Math.round(s.score*100);
-                    const isTop=idx===0&&s.score>=0.1;
-                    return(
-                      <button key={s.id} onClick={()=>{haptic(20);setChosenSec(s.id);setChosenHand(null);/* fire confirm after state settles */setTimeout(()=>{
-                        if(!s.id)return;
-                        setTd(true);
-                        const e=ev(hand),top=e[0],gi=gri(top.score);
-                        const totalEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);
-                        const dn2=getDayNum();
-                        const isD=mode==="daily";
-                        const iq=calculateCharlestonIQ({startingRack,finalRack:hand,passedTilesByRound:passLog,totalTime:totalEl,sectionId:s.id,chosenHand:null},getDailySeed(),isD,dn2);
-                        setIqResult(iq);
-                        const result={rating:RATS[gi],emoji:REMO[gi],section:`${top.icon} ${top.name}`,sid:top.id,score:top.score,time:totalEl,gi,iqScore:iq?iq.totalScore:null,iq,finalRack:hand,startingRack,passLog,chosenSec:s.id,chosenHand:null,allSections:ev(hand)};
-                        onDone(result);
-                        window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;
-                        setPhase("result");
-                      },0);}} aria-label={`${s.name}: ${s.desc}`}
-                        style={{cursor:"pointer",display:"flex",alignItems:"center",gap:0,borderRadius:12,overflow:"hidden",
-                          border:`1.5px solid ${C.bdr}`,
-                          background:"#fff",
-                          textAlign:"left",transition:"all 0.15s"}}>
-                        <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:s.color+"40"}}/>
-                        <div style={{width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,margin:"0 2px"}}>{s.icon}</div>
-                        <div style={{flex:1,minWidth:0,padding:"10px 8px 10px 4px"}}>
-                          <div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:2}}>
-                            <span style={{fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.2}}>{s.name}</span>
-                            {isTop&&mode!=="daily"&&showFitHints&&<span style={{fontSize:8,fontWeight:700,background:s.color+"20",color:s.color,borderRadius:8,padding:"1px 6px",letterSpacing:0.5}}>BEST FIT</span>}
-                          </div>
-                          <div style={{fontSize:10,color:C.mut,lineHeight:1.3}}>{s.desc}</div>
-                        </div>
-                        <div style={{padding:"0 12px",textAlign:"right",flexShrink:0}}>
-                          {mode!=="daily"&&showFitHints&&<><div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:isTop?s.color:C.mut}}>{pct}%</div>
-                          <div style={{fontSize:8,color:C.mut}}>fit</div></>}
-                        </div>
-                        <div style={{width:28,height:28,borderRadius:14,background:`linear-gradient(135deg,${s.color},${s.color}CC)`,display:"flex",alignItems:"center",justifyContent:"center",marginRight:10,flexShrink:0}}>
-                          <span style={{fontSize:12,color:"#fff",fontWeight:900}}>→</span>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </>
-            );
-          })()}
+          <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>TAP TO SCORE YOUR ROUND</div>
+          <div style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
+            {SECS.map((s,idx)=>{
+              const pct=Math.round((ev(hand).find(e=>e.id===s.id)?.score||0)*100);
+              const isTop=idx===0;
+              return(
+                <button key={s.id} onClick={()=>{
+                  haptic(20);
+                  setTd(true);
+                  const e=ev(hand),top=e[0],gi=gri(top.score);
+                  const totalEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);
+                  const dn2=getDayNum();
+                  const isD=mode==="daily";
+                  const sr=startingRack&&startingRack.length>0?startingRack:hand;
+                  const iq=calculateCharlestonIQ({startingRack:sr,finalRack:hand,passedTilesByRound:passLog,totalTime:totalEl,sectionId:s.id,chosenHand:null},getDailySeed(),isD,dn2);
+                  setChosenSecBoth(s.id);
+                  setChosenHand(null);
+                  setIqResultBoth(iq);
+                  const result={rating:RATS[gi],emoji:REMO[gi],section:`${top.icon} ${top.name}`,sid:top.id,score:top.score,time:totalEl,gi,iqScore:iq?iq.totalScore:null,iq,finalRack:hand,startingRack:sr,passLog,chosenSec:s.id,chosenHand:null,allSections:ev(hand)};
+                  try{onDone(result);}catch(e){}
+                  window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;
+                  setPhase("result");
+                }} aria-label={`${s.name}: ${s.desc}`}
+                  style={{cursor:"pointer",display:"flex",alignItems:"center",gap:0,borderRadius:12,overflow:"hidden",border:`1.5px solid ${C.bdr}`,background:"#fff",textAlign:"left",transition:"all 0.15s"}}>
+                  <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:s.color+"40"}}/>
+                  <div style={{width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,margin:"0 2px"}}>{s.icon}</div>
+                  <div style={{flex:1,minWidth:0,padding:"10px 8px 10px 4px"}}>
+                    <div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:2}}>
+                      <span style={{fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.2}}>{s.name}</span>
+                      {isTop&&mode!=="daily"&&showFitHints&&<span style={{fontSize:8,fontWeight:700,background:s.color+"20",color:s.color,borderRadius:8,padding:"1px 6px",letterSpacing:0.5}}>BEST FIT</span>}
+                    </div>
+                    <div style={{fontSize:10,color:C.mut,lineHeight:1.3}}>{s.desc}</div>
+                  </div>
+                  <div style={{padding:"0 12px",textAlign:"right",flexShrink:0}}>
+                    {mode!=="daily"&&showFitHints&&<><div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:isTop?s.color:C.mut}}>{pct}%</div>
+                    <div style={{fontSize:8,color:C.mut}}>fit</div></>}
+                  </div>
+                  <div style={{width:28,height:28,borderRadius:14,background:`linear-gradient(135deg,${s.color},${s.color}CC)`,display:"flex",alignItems:"center",justifyContent:"center",marginRight:10,flexShrink:0}}>
+                    <span style={{fontSize:12,color:"#fff",fontWeight:900}}>→</span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </>
       )}
 
