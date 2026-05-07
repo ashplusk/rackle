@@ -365,10 +365,10 @@ const SECS=[
     const distinctEvens=Object.keys(c).length;
     const flowers=h.filter(t=>t.t==="f").length;
     const dragons=h.filter(t=>t.t==="d").length;
-    const ew=h.filter(t=>t.t==="w"&&(t.v==="East"||t.v==="West")).length;
+    const ew=h.filter(t=>t.t==="w"&&(t.v==="E"||t.v==="W")).length;
     const jk=h.filter(t=>t.t==="j").length;
     const odds=h.filter(t=>t.t==="s"&&t.n%2===1).length;
-    const nsWinds=h.filter(t=>t.t==="w"&&(t.v==="North"||t.v==="South")).length;
+    const nsWinds=h.filter(t=>t.t==="w"&&(t.v==="N"||t.v==="S")).length;
     // Group depth in even tiles — singles give 0 credit
     const evenGroupDepth=Object.values(c).reduce((a,n)=>a+(n>=4?4:n>=3?3:n>=2?2:0),0);
     const groupScore=evenGroupDepth>=10?0.40:evenGroupDepth>=8?0.32:evenGroupDepth>=6?0.24:evenGroupDepth>=4?0.16:evenGroupDepth>=2?0.08:evens.length*0.012;
@@ -418,8 +418,8 @@ const SECS=[
     const distinctOdds=Object.keys(c).length;
     const flowers=h.filter(t=>t.t==="f").length;
     const dragons=h.filter(t=>t.t==="d").length;
-    const ns=h.filter(t=>t.t==="w"&&(t.v==="North"||t.v==="South")).length;
-    const ew=h.filter(t=>t.t==="w"&&(t.v==="East"||t.v==="West")).length;
+    const ns=h.filter(t=>t.t==="w"&&(t.v==="N"||t.v==="S")).length;
+    const ew=h.filter(t=>t.t==="w"&&(t.v==="E"||t.v==="W")).length;
     const jk=h.filter(t=>t.t==="j").length;
     const evens=h.filter(t=>t.t==="s"&&t.n%2===0).length;
     // Group depth in odd tiles — singles give 0 credit
@@ -627,20 +627,50 @@ const SECTION_META={
 // concealed flag, value, and a fit() function that scores the rack 0-1.
 // fit() counts tiles already in rack vs tiles needed.
 // Jokers are wild for pungs/kongs (not singles/pairs/flowers).
+//
+// CONSTRAINT ENFORCEMENT — all card parentheticals are now modeled:
+//  • "Any 1 Suit"      → countNumSuit per suit, Math.max over suits
+//  • "Any 2 Suits"     → try all 3 suit-pair combos, Math.max
+//  • "Any 3 Suits"     → requires tiles spread across all 3 suits
+//  • "Matching Dragon" → dragon color must match primary suit
+//                        bam→Grn, crak→Red, dot→Soap (closest match / wild)
+//  • "Opp Dragon"      → dragon color must differ from primary suit
+//  • "North/South Only"→ only N/S wind tiles counted (E/W get 0)
+//  • "East/West Only"  → only E/W wind tiles counted
+//  • "These Nos. Only" → fixed pattern hands (implicit from specific countNum calls)
+//  • "Kong X or Y"     → explicit number filters already in countNum calls
+//  • Concealed hands   → jokerPool=0, all groups noJoker:true
 
 function mkHand(label,sec,value,concealed,fit){return{label,sec,value,concealed,fit};}
 
 function countTile(rack,fn){return rack.filter(fn).length;}
 function countNum(rack,n){return countTile(rack,t=>t.t==="s"&&t.n===n);}
 function countNumSuit(rack,n,s){return countTile(rack,t=>t.t==="s"&&t.n===n&&t.s===s);}
+function countSuit(rack,s){return countTile(rack,t=>t.t==="s"&&t.s===s);}
 function jokers(rack){return countTile(rack,t=>t.t==="j");}
 function flowers(rack){return countTile(rack,t=>t.t==="f");}
 function winds(rack,v){return v?countTile(rack,t=>t.t==="w"&&t.v===v):countTile(rack,t=>t.t==="w");}
 function dragons(rack,v){return v?countTile(rack,t=>t.t==="d"&&t.v===v):countTile(rack,t=>t.t==="d");}
 
+// Dragon matching convention (2026 card):
+//   bam  → matching=Grn,  opposite=Red  (Soap counts as matching for any suit)
+//   crak → matching=Red,  opposite=Grn
+//   dot  → matching=Soap, opposite=Red or Grn (Soap is the "white/dot" dragon)
+// For scoring: matchingDragon(r,suit) = count of dragons that legally match
+//              oppDragon(r,suit)      = count of dragons that are legally opposite
+function matchingDragon(rack,suit){
+  if(suit==="bam") return dragons(rack,"Grn")+dragons(rack,"Soap");
+  if(suit==="crak")return dragons(rack,"Red")+dragons(rack,"Soap");
+  return dragons(rack,"Soap")+dragons(rack,"Grn")+dragons(rack,"Red"); // dot — Soap matches, others ok
+}
+function oppDragon(rack,suit){
+  if(suit==="bam") return dragons(rack,"Red")+dragons(rack,"Soap");
+  if(suit==="crak")return dragons(rack,"Grn")+dragons(rack,"Soap");
+  return dragons(rack,"Red")+dragons(rack,"Grn"); // dot opp = Red or Grn
+}
+
 // Score how many "slots" of a group a rack can fill (with joker assist for pungs/kongs)
 function groupFit(have,jokerPool,need){
-  // Returns [tilesUsed, jokersUsed]
   const natural=Math.min(have,need);
   const rem=need-natural;
   const jk=Math.min(rem,jokerPool);
@@ -648,13 +678,12 @@ function groupFit(have,jokerPool,need){
 }
 
 // Score a hand's fit: returns 0–1 (fraction of hand slots filled by rack)
-// groups = array of {have, need, label} where have = tiles in rack, need = tiles required
+// groups = array of {have, need} where have = tiles in rack, need = tiles required
 // jokerPool = jokers available (jokers can sub for pungs/kongs but not singles/pairs/flowers)
 function handFitScore(groups,jokerPool,totalSlots){
   let filled=0,jkLeft=jokerPool;
   for(const g of groups){
     if(g.noJoker){
-      // singles, pairs, flowers — jokers can't sub
       filled+=Math.min(g.have,g.need);
     } else {
       const natural=Math.min(g.have,g.need);
@@ -667,360 +696,1045 @@ function handFitScore(groups,jokerPool,totalSlots){
   return Math.min(filled/totalSlots,1);
 }
 
+// Try all 2-suit combinations and return the best fit score
+const SUIT_PAIRS=[["bam","crak"],["bam","dot"],["crak","dot"]];
+const ALL_SUITS=["bam","crak","dot"];
+
 const HAND_CATALOG=[
-  // ── 2026 ──────────────────────────────────────────────────────────────────────
+  // ════════════════════════════════════════════════════════════════
+  // 2026 SECTION
+  // ════════════════════════════════════════════════════════════════
+
+  // 222 000 2222 6666 — Any 2 Suits
+  // 2s from one suit, Soap (0) from any, 2s from same/other suit, 6s from a suit
+  // Enforce: 2s and 6s must come from at most 2 suits combined
   mkHand("222 000 2222 6666","2026",25,false,r=>{
-    const jk=jokers(r);
-    const g=[
-      {have:countTile(r,t=>t.t==="s"&&t.n===2),need:3},
-      {have:dragons(r,"Soap"),need:3},
-      {have:countTile(r,t=>t.t==="s"&&t.n===2),need:4},
-      {have:countTile(r,t=>t.t==="s"&&t.n===6),need:4},
-    ];
-    // 2s shared between pung+kong — need 7 total 2s or jokers
-    const twos=countTile(r,t=>t.t==="s"&&t.n===2);
-    const soap=dragons(r,"Soap");
-    const sixes=countTile(r,t=>t.t==="s"&&t.n===6);
-    return handFitScore([
-      {have:twos,need:7},{have:soap,need:3},{have:sixes,need:4}
-    ],jk,14);
+    const jk=jokers(r);const soap=dragons(r,"Soap");
+    return Math.max(...SUIT_PAIRS.map(([s1,s2])=>{
+      const t2=countNumSuit(r,2,s1)+countNumSuit(r,2,s2);
+      const t6=countNumSuit(r,6,s1)+countNumSuit(r,6,s2);
+      // 2s needed: pung(3) + kong(4) = 7 total; 000 = 3 Soap; 6666 = kong 6
+      return handFitScore([{have:t2,need:7},{have:soap,need:3},{have:t6,need:4}],jk,14);
+    }));
   }),
+
+  // 2026 DDD 2222 DDD — Any 2 Suits w Matching Dragons, Kong 2 or 6
+  // Singles: 2-soap-2-6 (the "2026" sequence); DDD = pung matching dragon; 2222 = kong 2; DDD = pung matching dragon
+  // "Kong 2 or 6" means the kong group is 2s OR 6s (try both)
   mkHand("2026 DDD 2222 DDD","2026",25,false,r=>{
-    const twos=countTile(r,t=>t.t==="s"&&t.n===2);
-    const sixes=countTile(r,t=>t.t==="s"&&t.n===6);
-    const soap=dragons(r,"Soap");
-    const dr=dragons(r);
-    const jk=jokers(r);
-    // 2026 = 2+soap+2+6 as singles; then DDD 2222 DDD = pung d + kong 2 + pung d
-    return handFitScore([
-      {have:twos,need:3,noJoker:false},{have:soap,need:1,noJoker:true},
-      {have:sixes,need:1,noJoker:true},{have:dr,need:6},{have:twos,need:4}
-    ],jk,15);
-  }),
-  mkHand("FFF 2026 222 6666","2026",25,false,r=>{
-    const fl=flowers(r);const twos=countTile(r,t=>t.t==="s"&&t.n===2);
-    const sixes=countTile(r,t=>t.t==="s"&&t.n===6);const soap=dragons(r,"Soap");
-    const jk=jokers(r);
-    return handFitScore([
-      {have:fl,need:3,noJoker:true},{have:twos,need:3},{have:soap,need:1,noJoker:true},
-      {have:sixes,need:1,noJoker:true},{have:twos,need:3},{have:sixes,need:4}
-    ],jk,15);
-  }),
-  mkHand("22 00 222 666 NEWS","2026",30,false,r=>{
-    const twos=countTile(r,t=>t.t==="s"&&t.n===2);
-    const sixes=countTile(r,t=>t.t==="s"&&t.n===6);
-    const soap=dragons(r,"Soap");const w=winds(r);const jk=jokers(r);
-    return handFitScore([
-      {have:twos,need:2,noJoker:true},{have:soap,need:2,noJoker:true},
-      {have:twos,need:3},{have:sixes,need:3},{have:w,need:4,noJoker:true}
-    ],jk,14);
-  }),
-
-  // ── 2468 ──────────────────────────────────────────────────────────────────────
-  mkHand("222 444 6666 8888","2468",25,false,r=>{
-    const t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
-    return handFitScore([{have:t2,need:3},{have:t4,need:3},{have:t6,need:4},{have:t8,need:4}],jokers(r),14);
-  }),
-  mkHand("FF 2222 44 66 8888","2468",30,false,r=>{
-    const fl=flowers(r),t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
-    return handFitScore([{have:fl,need:2,noJoker:true},{have:t2,need:4},{have:t4,need:2,noJoker:true},{have:t6,need:2,noJoker:true},{have:t8,need:4}],jokers(r),14);
-  }),
-  mkHand("EE 22 444 666 88 WW","2468",30,false,r=>{
-    const ew=countTile(r,t=>t.t==="w"&&(t.v==="East"||t.v==="West"));
-    const t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
-    return handFitScore([{have:ew,need:2,noJoker:true},{have:t2,need:2,noJoker:true},{have:t4,need:3},{have:t6,need:3},{have:t8,need:2,noJoker:true},{have:ew,need:2,noJoker:true}],jokers(r),14);
-  }),
-  mkHand("2222 DDD 8888 DDD","2468",25,false,r=>{
-    const t2=countNum(r,2),t8=countNum(r,8),dr=dragons(r);
-    return handFitScore([{have:t2,need:4},{have:dr,need:3},{have:t8,need:4},{have:dr,need:3}],jokers(r),14);
-  }),
-  mkHand("FFF 22 44 666 8888","2468",25,false,r=>{
-    const fl=flowers(r),t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
-    return handFitScore([{have:fl,need:3,noJoker:true},{have:t2,need:2,noJoker:true},{have:t4,need:2,noJoker:true},{have:t6,need:3},{have:t8,need:4}],jokers(r),14);
-  }),
-  mkHand("2468 2222 D 2222 D","2468",25,false,r=>{
-    const t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8),dr=dragons(r);
-    return handFitScore([{have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t8,need:1,noJoker:true},{have:t2,need:4},{have:dr,need:1,noJoker:true},{have:t2,need:4},{have:dr,need:1,noJoker:true}],jokers(r),14);
-  }),
-  mkHand("FFF 2468 FFF 2222","2468",30,false,r=>{
-    const fl=flowers(r),t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
-    return handFitScore([{have:fl,need:3,noJoker:true},{have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t8,need:1,noJoker:true},{have:fl,need:3,noJoker:true},{have:t2,need:4}],jokers(r),14);
-  }),
-  mkHand("FF 246 888 246 888","2468",30,true,r=>{
-    const fl=flowers(r),t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
-    // Concealed — no jokers
-    return handFitScore([{have:fl,need:2,noJoker:true},{have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t8,need:3,noJoker:true},{have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t8,need:3,noJoker:true}],0,14);
-  }),
-
-  // ── 369 ───────────────────────────────────────────────────────────────────────
-  mkHand("333 666 6666 9999","369",25,false,r=>{
-    const t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9);
-    return handFitScore([{have:t3,need:3},{have:t6,need:3},{have:t6,need:4},{have:t9,need:4}],jokers(r),14);
-  }),
-  mkHand("33 66 333 666 9999","369",25,false,r=>{
-    const t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9);
-    return handFitScore([{have:t3,need:2,noJoker:true},{have:t6,need:2,noJoker:true},{have:t3,need:3},{have:t6,need:3},{have:t9,need:4}],jokers(r),14);
-  }),
-  mkHand("FFF 33 666 99 DDDD","369",25,false,r=>{
-    const fl=flowers(r),t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9),dr=dragons(r);
-    return handFitScore([{have:fl,need:3,noJoker:true},{have:t3,need:2,noJoker:true},{have:t6,need:3},{have:t9,need:2,noJoker:true},{have:dr,need:4}],jokers(r),14);
-  }),
-  mkHand("33 66 666 999 NEWS","369",30,false,r=>{
-    const t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9),w=winds(r);
-    return handFitScore([{have:t3,need:2,noJoker:true},{have:t6,need:2,noJoker:true},{have:t6,need:3},{have:t9,need:3},{have:w,need:4,noJoker:true}],jokers(r),14);
-  }),
-  mkHand("FF 3369 3333 3333","369",25,false,r=>{
-    const fl=flowers(r),t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9);
-    return handFitScore([{have:fl,need:2,noJoker:true},{have:t3,need:2,noJoker:true},{have:t6,need:1,noJoker:true},{have:t9,need:1,noJoker:true},{have:t3,need:4},{have:t3,need:4}],jokers(r),14);
-  }),
-  mkHand("FF 333 666 999 369","369",30,true,r=>{
-    const fl=flowers(r),t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9);
-    return handFitScore([{have:fl,need:2,noJoker:true},{have:t3,need:3,noJoker:true},{have:t6,need:3,noJoker:true},{have:t9,need:3,noJoker:true},{have:t3,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t9,need:1,noJoker:true}],0,14);
-  }),
-
-  // ── 13579 ─────────────────────────────────────────────────────────────────────
-  mkHand("11 333 55 777 9999","13579",25,false,r=>{
-    const t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5),t7=countNum(r,7),t9=countNum(r,9);
-    return handFitScore([{have:t1,need:2,noJoker:true},{have:t3,need:3},{have:t5,need:2,noJoker:true},{have:t7,need:3},{have:t9,need:4}],jokers(r),14);
-  }),
-  mkHand("111 333 3333 5555","13579",25,false,r=>{
-    const t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5);
-    return handFitScore([{have:t1,need:3},{have:t3,need:3},{have:t3,need:4},{have:t5,need:4}],jokers(r),14);
-  }),
-  mkHand("NN 1111 33 5555 SS","13579",30,false,r=>{
-    const n=winds(r,"North"),s=winds(r,"South"),t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5);
-    return handFitScore([{have:n,need:2,noJoker:true},{have:t1,need:4},{have:t3,need:2,noJoker:true},{have:t5,need:4},{have:s,need:2,noJoker:true}],jokers(r),14);
-  }),
-  mkHand("113579 1111 1111","13579",25,false,r=>{
-    const t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5),t7=countNum(r,7),t9=countNum(r,9);
-    return handFitScore([{have:t1,need:2,noJoker:true},{have:t1,need:1,noJoker:true},{have:t3,need:1,noJoker:true},{have:t5,need:1,noJoker:true},{have:t7,need:1,noJoker:true},{have:t9,need:1,noJoker:true},{have:t1,need:4},{have:t1,need:4}],jokers(r),15);
-  }),
-  mkHand("FFF 11 33 555 DDDD","13579",25,false,r=>{
-    const fl=flowers(r),t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5),dr=dragons(r);
-    return handFitScore([{have:fl,need:3,noJoker:true},{have:t1,need:2,noJoker:true},{have:t3,need:2,noJoker:true},{have:t5,need:3},{have:dr,need:4}],jokers(r),14);
-  }),
-  mkHand("11 33 111 333 5555","13579",25,false,r=>{
-    const t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5);
-    return handFitScore([{have:t1,need:2,noJoker:true},{have:t3,need:2,noJoker:true},{have:t1,need:3},{have:t3,need:3},{have:t5,need:4}],jokers(r),14);
-  }),
-  mkHand("1111 33 55 77 9999","13579",30,false,r=>{
-    const t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5),t7=countNum(r,7),t9=countNum(r,9);
-    return handFitScore([{have:t1,need:4},{have:t3,need:2,noJoker:true},{have:t5,need:2,noJoker:true},{have:t7,need:2,noJoker:true},{have:t9,need:4}],jokers(r),14);
-  }),
-  mkHand("FF 11 33 55 111 111","13579",35,true,r=>{
-    const fl=flowers(r),t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5);
-    return handFitScore([{have:fl,need:2,noJoker:true},{have:t1,need:2,noJoker:true},{have:t3,need:2,noJoker:true},{have:t5,need:2,noJoker:true},{have:t1,need:3,noJoker:true},{have:t1,need:3,noJoker:true}],0,14);
-  }),
-  mkHand("FF 135 777 999 DDD","13579",30,true,r=>{
-    const fl=flowers(r),t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5),t7=countNum(r,7),t9=countNum(r,9),dr=dragons(r);
-    return handFitScore([{have:fl,need:2,noJoker:true},{have:t1,need:1,noJoker:true},{have:t3,need:1,noJoker:true},{have:t5,need:1,noJoker:true},{have:t7,need:3,noJoker:true},{have:t9,need:3,noJoker:true},{have:dr,need:3,noJoker:true}],0,14);
-  }),
-
-  // ── Consecutive Run ───────────────────────────────────────────────────────────
-  mkHand("11 222 33 444 5555","cr",25,false,r=>{
-    // Any 1 suit — score each suit, take best
-    return Math.max(...["bam","crak","dot"].map(s=>handFitScore([
-      {have:countNumSuit(r,1,s),need:2,noJoker:true},{have:countNumSuit(r,2,s),need:3},{have:countNumSuit(r,3,s),need:2,noJoker:true},{have:countNumSuit(r,4,s),need:3},{have:countNumSuit(r,5,s),need:4}
-    ],jokers(r),14)));
-  }),
-  mkHand("55 666 77 888 9999","cr",25,false,r=>{
-    return Math.max(...["bam","crak","dot"].map(s=>handFitScore([
-      {have:countNumSuit(r,5,s),need:2,noJoker:true},{have:countNumSuit(r,6,s),need:3},{have:countNumSuit(r,7,s),need:2,noJoker:true},{have:countNumSuit(r,8,s),need:3},{have:countNumSuit(r,9,s),need:4}
-    ],jokers(r),14)));
-  }),
-  mkHand("FFF 1111 234 5555","cr",25,false,r=>{
-    const fl=flowers(r);
-    return Math.max(...["bam","crak","dot"].map(s=>handFitScore([
-      {have:fl,need:3,noJoker:true},{have:countNumSuit(r,1,s),need:4},{have:countNumSuit(r,2,s),need:1,noJoker:true},{have:countNumSuit(r,3,s),need:1,noJoker:true},{have:countNumSuit(r,4,s),need:1,noJoker:true},{have:countNumSuit(r,5,s),need:4}
-    ],jokers(r),14)));
-  }),
-  mkHand("11 22 111 222 3333","cr",25,false,r=>{
-    return Math.max(...["bam","crak","dot"].map(s=>handFitScore([
-      {have:countNumSuit(r,1,s),need:2,noJoker:true},{have:countNumSuit(r,2,s),need:2,noJoker:true},{have:countNumSuit(r,1,s),need:3},{have:countNumSuit(r,2,s),need:3},{have:countNumSuit(r,3,s),need:4}
-    ],jokers(r),14)));
-  }),
-  mkHand("111 222 3333 4444","cr",25,false,r=>{
-    return Math.max(...["bam","crak","dot"].map(s=>handFitScore([
-      {have:countNumSuit(r,1,s),need:3},{have:countNumSuit(r,2,s),need:3},{have:countNumSuit(r,3,s),need:4},{have:countNumSuit(r,4,s),need:4}
-    ],jokers(r),14)));
-  }),
-  mkHand("FFF 11 22 333 DDDD","cr",25,false,r=>{
-    const fl=flowers(r),dr=dragons(r);
-    return Math.max(...["bam","crak","dot"].map(s=>handFitScore([
-      {have:fl,need:3,noJoker:true},{have:countNumSuit(r,1,s),need:2,noJoker:true},{have:countNumSuit(r,2,s),need:2,noJoker:true},{have:countNumSuit(r,3,s),need:3},{have:dr,need:4}
-    ],jokers(r),14)));
-  }),
-  mkHand("1111 FFFFFF 2222","cr",30,false,r=>{
-    const fl=flowers(r);
-    return Math.max(...["bam","crak","dot"].map(s=>handFitScore([
-      {have:countNumSuit(r,1,s),need:4},{have:fl,need:6,noJoker:true},{have:countNumSuit(r,2,s),need:4}
-    ],jokers(r),14)));
-  }),
-  mkHand("FF 1111 2222 3333","cr",25,false,r=>{
-    const fl=flowers(r);
-    return Math.max(...["bam","crak","dot"].map(s=>handFitScore([
-      {have:fl,need:2,noJoker:true},{have:countNumSuit(r,1,s),need:4},{have:countNumSuit(r,2,s),need:4},{have:countNumSuit(r,3,s),need:4}
-    ],jokers(r),14)));
-  }),
-  mkHand("1 22 333 1 22 333 44","cr",35,true,r=>{
-    // Concealed — no jokers. Any 3 suits, any 4 consec nos.
-    const nums=[1,2,3,4,5,6,7,8,9];
+    const jk=jokers(r);const soap=dragons(r,"Soap");
     let best=0;
-    for(let start=1;start<=6;start++){
-      const [a,b,c,d]=[start,start+1,start+2,start+3];
-      for(const s of ["bam","crak","dot"]){
-        const score=handFitScore([
-          {have:countNumSuit(r,a,s),need:1,noJoker:true},{have:countNumSuit(r,b,s),need:2,noJoker:true},{have:countNumSuit(r,c,s),need:3,noJoker:true},
-          {have:countNumSuit(r,a,s),need:1,noJoker:true},{have:countNumSuit(r,b,s),need:2,noJoker:true},{have:countNumSuit(r,c,s),need:3,noJoker:true},
-          {have:countNumSuit(r,d,s),need:2,noJoker:true}
-        ],0,14);
-        if(score>best)best=score;
-      }
-    }
-    return best;
-  }),
-
-  // ── Winds & Dragons ──────────────────────────────────────────────────────────
-  mkHand("NNNN EEE WWW SSSS","wd",25,false,r=>{
-    const n=winds(r,"North"),e=winds(r,"East"),w=winds(r,"West"),s=winds(r,"South");
-    return handFitScore([{have:n,need:4},{have:e,need:3},{have:w,need:3},{have:s,need:4}],jokers(r),14);
-  }),
-  mkHand("NNN EEEE WWWW SSS","wd",25,false,r=>{
-    const n=winds(r,"North"),e=winds(r,"East"),w=winds(r,"West"),s=winds(r,"South");
-    return handFitScore([{have:n,need:3},{have:e,need:4},{have:w,need:4},{have:s,need:3}],jokers(r),14);
-  }),
-  mkHand("1234 DDD DDD DDDD","wd",25,false,r=>{
-    // 4 consec nos in 1 suit + 3 dragon groups
-    const dr=dragons(r);
-    return Math.max(...["bam","crak","dot"].map(s=>Math.max(...[1,2,3,4,5,6].map(start=>
-      handFitScore([
-        {have:countNumSuit(r,start,s),need:1,noJoker:true},{have:countNumSuit(r,start+1,s),need:1,noJoker:true},{have:countNumSuit(r,start+2,s),need:1,noJoker:true},{have:countNumSuit(r,start+3,s),need:1,noJoker:true},{have:dr,need:10}
-      ],jokers(r),14)))));
-  }),
-  mkHand("NNN 1111 1111 SSS","wd",25,false,r=>{
-    const n=winds(r,"North"),s=winds(r,"South");
-    const nums=[1,3,5,7,9];let best=0;
-    for(const n1 of nums)for(const n2 of nums){if(n1===n2)continue;
-      const t1=countNum(r,n1),t2=countNum(r,n2);
-      const sc=handFitScore([{have:n,need:3},{have:t1,need:4},{have:t2,need:4},{have:s,need:3}],jokers(r),14);
-      if(sc>best)best=sc;}
-    return best;
-  }),
-  mkHand("EEE 2222 2222 WWW","wd",25,false,r=>{
-    const e=winds(r,"East"),w=winds(r,"West");
-    const evens=[2,4,6,8];let best=0;
-    for(const n1 of evens)for(const n2 of evens){if(n1===n2)continue;
-      const t1=countNum(r,n1),t2=countNum(r,n2);
-      const sc=handFitScore([{have:e,need:3},{have:t1,need:4},{have:t2,need:4},{have:w,need:3}],jokers(r),14);
-      if(sc>best)best=sc;}
-    return best;
-  }),
-  mkHand("FFF NNNN FFF DDDD","wd",25,false,r=>{
-    const fl=flowers(r),n=winds(r,"North"),dr=dragons(r);
-    return handFitScore([{have:fl,need:3,noJoker:true},{have:n,need:4},{have:fl,need:3,noJoker:true},{have:dr,need:4}],jokers(r),14);
-  }),
-  mkHand("1 N 2 EE 3 WWW 4 SSSS","wd",25,false,r=>{
-    const n=winds(r,"North"),e=winds(r,"East"),w=winds(r,"West"),s=winds(r,"South");
-    return Math.max(...["bam","crak","dot"].map(su=>handFitScore([
-      {have:countNumSuit(r,1,su),need:1,noJoker:true},{have:n,need:1,noJoker:true},{have:countNumSuit(r,2,su),need:1,noJoker:true},{have:e,need:2,noJoker:true},{have:countNumSuit(r,3,su),need:1,noJoker:true},{have:w,need:3,noJoker:true},{have:countNumSuit(r,4,su),need:1,noJoker:true},{have:s,need:4,noJoker:true}
-    ],jokers(r),14)));
-  }),
-  mkHand("FF NNNN SSSS DD DD","wd",25,false,r=>{
-    const fl=flowers(r),n=winds(r,"North"),s=winds(r,"South"),dr=dragons(r);
-    return handFitScore([{have:fl,need:2,noJoker:true},{have:n,need:4},{have:s,need:4},{have:dr,need:2,noJoker:true},{have:dr,need:2,noJoker:true}],jokers(r),14);
-  }),
-  mkHand("NN EEE 2026 WWW SS","wd",30,true,r=>{
-    // Concealed. 2026 = 2+soap+2+6 singles from any 1 suit
-    const n=winds(r,"North"),e=winds(r,"East"),w=winds(r,"West"),s=winds(r,"South");
-    const soap=dragons(r,"Soap");const t2=countNum(r,2),t6=countNum(r,6);
-    return handFitScore([{have:n,need:2,noJoker:true},{have:e,need:3,noJoker:true},{have:t2,need:1,noJoker:true},{have:soap,need:1,noJoker:true},{have:t2,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:w,need:3,noJoker:true},{have:s,need:2,noJoker:true}],0,14);
-  }),
-
-  // ── Any Like Numbers ──────────────────────────────────────────────────────────
-  mkHand("1111 FFFFFF 1111","aln",30,false,r=>{
-    const fl=flowers(r);
-    let best=0;
-    for(let n=1;n<=9;n++){const t=countNum(r,n);const sc=handFitScore([{have:t,need:4},{have:fl,need:6,noJoker:true},{have:t,need:4}],jokers(r),14);if(sc>best)best=sc;}
-    return best;
-  }),
-  mkHand("1111 D 111 D 1111 D","aln",25,false,r=>{
-    const dr=dragons(r);
-    let best=0;
-    for(let n=1;n<=9;n++){const t=countNum(r,n);const sc=handFitScore([{have:t,need:4},{have:dr,need:1,noJoker:true},{have:t,need:3},{have:dr,need:1,noJoker:true},{have:t,need:4},{have:dr,need:1,noJoker:true}],jokers(r),14);if(sc>best)best=sc;}
-    return best;
-  }),
-  mkHand("FF 1111 11 1111 DD","aln",25,false,r=>{
-    const fl=flowers(r),dr=dragons(r);
-    let best=0;
-    for(let n=1;n<=9;n++){const t=countNum(r,n);const sc=handFitScore([{have:fl,need:2,noJoker:true},{have:t,need:4},{have:t,need:2,noJoker:true},{have:t,need:4},{have:dr,need:2}],jokers(r),14);if(sc>best)best=sc;}
-    return best;
-  }),
-
-  // ── Quints ───────────────────────────────────────────────────────────────────
-  mkHand("11111 1111 11111","q",40,false,r=>{
-    // 3 suits, any like nos — quints of 1 number in suit A, kong in suit B, quint in suit C
-    let best=0;
-    for(let n=1;n<=9;n++){
-      const counts=["bam","crak","dot"].map(s=>countNumSuit(r,n,s)).sort((a,b)=>b-a);
-      const sc=handFitScore([{have:counts[0],need:5},{have:counts[1],need:4},{have:counts[2],need:5}],jokers(r),14);
-      if(sc>best)best=sc;
-    }
-    return best;
-  }),
-  mkHand("FF 11111 22 33333","q",45,false,r=>{
-    const fl=flowers(r);
-    return Math.max(...["bam","crak","dot"].map(s=>Math.max(...[1,2,3,4,5,6,7].map(start=>
-      handFitScore([{have:fl,need:2,noJoker:true},{have:countNumSuit(r,start,s),need:5},{have:countNumSuit(r,start+1,s),need:2,noJoker:true},{have:countNumSuit(r,start+2,s),need:5}],jokers(r),14)))));
-  }),
-  mkHand("11111 44444 DDDD","q",40,false,r=>{
-    // 2 nos in 1 suit w opp dragon — score all number pairs
-    let best=0;
-    for(let n1=1;n1<=9;n1++)for(let n2=n1+1;n2<=9;n2++){
-      for(const s of ["bam","crak","dot"]){
-        const dr=dragons(r);// opp dragon — any dragon works for scoring
-        const sc=handFitScore([{have:countNumSuit(r,n1,s),need:5},{have:countNumSuit(r,n2,s),need:5},{have:dr,need:4}],jokers(r),14);
+    for(const [s1,s2] of SUIT_PAIRS){
+      for(const kongNum of [2,6]){
+        const t2s1=countNumSuit(r,2,s1),t2s2=countNumSuit(r,2,s2);
+        const t6s1=countNumSuit(r,6,s1),t6s2=countNumSuit(r,6,s2);
+        const t2=t2s1+t2s2,t6=t6s1+t6s2;
+        const kongTile=kongNum===2?t2:t6;
+        // "2026" singles: need one 2, one Soap(0), one 2, one 6 — all noJoker
+        // Matching dragon = best matching dragon across s1/s2
+        const md=Math.max(matchingDragon(r,s1),matchingDragon(r,s2));
+        const sc=handFitScore([
+          {have:t2,need:1,noJoker:true},{have:soap,need:1,noJoker:true},
+          {have:t2,need:1,noJoker:true},{have:t6,need:1,noJoker:true},
+          {have:md,need:3},{have:kongTile,need:4},{have:md,need:3}
+        ],jk,14);
         if(sc>best)best=sc;
       }
     }
     return best;
   }),
 
-  // ── Singles & Pairs ───────────────────────────────────────────────────────────
-  mkHand("NN EE WW SS 1D 1D 1D","sp",50,true,r=>{
-    const n=winds(r,"North"),e=winds(r,"East"),w=winds(r,"West"),s=winds(r,"South");
+  // FFF 2026 222 6666 — Any 3 Suits
+  // Flowers(3) + 2026 singles (one each: 2,0,2,6) + pung 2 + kong 6
+  // "Any 3 Suits" means the number tiles should come from 3 different suits
+  mkHand("FFF 2026 222 6666","2026",25,false,r=>{
+    const jk=jokers(r);const fl=flowers(r);const soap=dragons(r,"Soap");
+    // Score best 3-suit allocation: pick suit for 2s pung, suit for 6s kong, use all suits
     let best=0;
-    for(let num=1;num<=9;num++){
-      const dr=dragons(r);const t=countNum(r,num);
-      const sc=handFitScore([{have:n,need:2,noJoker:true},{have:e,need:2,noJoker:true},{have:w,need:2,noJoker:true},{have:s,need:2,noJoker:true},{have:t,need:1,noJoker:true},{have:dr,need:1,noJoker:true},{have:t,need:1,noJoker:true},{have:dr,need:1,noJoker:true},{have:t,need:1,noJoker:true},{have:dr,need:1,noJoker:true}],0,14);
+    for(const s1 of ALL_SUITS)for(const s2 of ALL_SUITS){if(s1===s2)continue;
+      const t2=countNumSuit(r,2,s1);const t6=countNumSuit(r,6,s2);
+      const sc=handFitScore([
+        {have:fl,need:3,noJoker:true},
+        {have:t2,need:1,noJoker:true},{have:soap,need:1,noJoker:true},
+        {have:t2,need:1,noJoker:true},{have:t6,need:1,noJoker:true},
+        {have:t2,need:3},{have:t6,need:4}
+      ],jk,15);
       if(sc>best)best=sc;
     }
     return best;
   }),
+
+  // 22 00 222 666 NEWS — Any 2 Suits
+  // Pair 2 + pair Soap + pung 2 + pung 6 + NEWS (all 4 winds, one each)
+  mkHand("22 00 222 666 NEWS","2026",30,false,r=>{
+    const jk=jokers(r);const soap=dragons(r,"Soap");const w=winds(r);
+    return Math.max(...SUIT_PAIRS.map(([s1,s2])=>{
+      const t2=countNumSuit(r,2,s1)+countNumSuit(r,2,s2);
+      const t6=countNumSuit(r,6,s1)+countNumSuit(r,6,s2);
+      return handFitScore([
+        {have:t2,need:2,noJoker:true},{have:soap,need:2,noJoker:true},
+        {have:t2,need:3},{have:t6,need:3},{have:w,need:4,noJoker:true}
+      ],jk,14);
+    }));
+  }),
+
+  // ════════════════════════════════════════════════════════════════
+  // 2468 SECTION
+  // ════════════════════════════════════════════════════════════════
+
+  // 222 444 6666 8888 — Any 1 or 2 Suits
+  // Try 1-suit (per suit) and 2-suit combos, take best
+  mkHand("222 444 6666 8888","2468",25,false,r=>{
+    const jk=jokers(r);
+    const single=Math.max(...ALL_SUITS.map(s=>handFitScore([
+      {have:countNumSuit(r,2,s),need:3},{have:countNumSuit(r,4,s),need:3},
+      {have:countNumSuit(r,6,s),need:4},{have:countNumSuit(r,8,s),need:4}
+    ],jk,14)));
+    const double=Math.max(...SUIT_PAIRS.map(([s1,s2])=>{
+      const t2=countNumSuit(r,2,s1)+countNumSuit(r,2,s2);
+      const t4=countNumSuit(r,4,s1)+countNumSuit(r,4,s2);
+      const t6=countNumSuit(r,6,s1)+countNumSuit(r,6,s2);
+      const t8=countNumSuit(r,8,s1)+countNumSuit(r,8,s2);
+      return handFitScore([{have:t2,need:3},{have:t4,need:3},{have:t6,need:4},{have:t8,need:4}],jk,14);
+    }));
+    return Math.max(single,double);
+  }),
+
+  // FF 2222 44 66 8888 — Any 2 Suits
+  // Flowers(2) + kong 2 + pair 4 + pair 6 + kong 8 — pairs are noJoker
+  mkHand("FF 2222 44 66 8888","2468",30,false,r=>{
+    const jk=jokers(r);const fl=flowers(r);
+    return Math.max(...SUIT_PAIRS.map(([s1,s2])=>{
+      const t2=countNumSuit(r,2,s1)+countNumSuit(r,2,s2);
+      const t4=countNumSuit(r,4,s1)+countNumSuit(r,4,s2);
+      const t6=countNumSuit(r,6,s1)+countNumSuit(r,6,s2);
+      const t8=countNumSuit(r,8,s1)+countNumSuit(r,8,s2);
+      return handFitScore([
+        {have:fl,need:2,noJoker:true},{have:t2,need:4},
+        {have:t4,need:2,noJoker:true},{have:t6,need:2,noJoker:true},{have:t8,need:4}
+      ],jk,14);
+    }));
+  }),
+
+  // EE 22 444 666 88 WW — Any 1 Suit, East and West Only
+  // All number tiles must be same suit; winds must be E and W only
+  mkHand("EE 22 444 666 88 WW","2468",30,false,r=>{
+    const jk=jokers(r);
+    const e=winds(r,"E"),w=winds(r,"W");
+    return Math.max(...ALL_SUITS.map(s=>handFitScore([
+      {have:e,need:2,noJoker:true},{have:countNumSuit(r,2,s),need:2,noJoker:true},
+      {have:countNumSuit(r,4,s),need:3},{have:countNumSuit(r,6,s),need:3},
+      {have:countNumSuit(r,8,s),need:2,noJoker:true},{have:w,need:2,noJoker:true}
+    ],jk,14)));
+  }),
+
+  // 2222 DDD 8888 DDD — Any 2 Suits w Matching Dragons, These Nos. Only (2 and 8)
+  // Two kongs of 2 and 8; two pungs of matching dragons
+  mkHand("2222 DDD 8888 DDD","2468",25,false,r=>{
+    const jk=jokers(r);
+    return Math.max(...SUIT_PAIRS.map(([s1,s2])=>{
+      const t2=countNumSuit(r,2,s1)+countNumSuit(r,2,s2);
+      const t8=countNumSuit(r,8,s1)+countNumSuit(r,8,s2);
+      const md=Math.max(matchingDragon(r,s1),matchingDragon(r,s2));
+      return handFitScore([{have:t2,need:4},{have:md,need:3},{have:t8,need:4},{have:md,need:3}],jk,14);
+    }));
+  }),
+
+  // FFF 22 44 666 8888 — Any 1 Suit
+  // Flowers(3) + pair 2 + pair 4 + pung 6 + kong 8
+  mkHand("FFF 22 44 666 8888","2468",25,false,r=>{
+    const jk=jokers(r);const fl=flowers(r);
+    return Math.max(...ALL_SUITS.map(s=>handFitScore([
+      {have:fl,need:3,noJoker:true},
+      {have:countNumSuit(r,2,s),need:2,noJoker:true},
+      {have:countNumSuit(r,4,s),need:2,noJoker:true},
+      {have:countNumSuit(r,6,s),need:3},{have:countNumSuit(r,8,s),need:4}
+    ],jk,14)));
+  }),
+
+  // 2468 2222 D 2222 D — Any 3 Suits, Like Kongs 2,4,6 or 8 w Matching Dragon
+  // Singles of 2,4,6,8 (each from any suit), then two groups: kong of same number + matching dragon single
+  // "Kong 2,4,6 or 8" = the repeated kong number is one of these evens
+  mkHand("2468 2222 D 2222 D","2468",25,false,r=>{
+    const jk=jokers(r);
+    let best=0;
+    for(const kongNum of [2,4,6,8]){
+      // Singles 2,4,6,8 from any suits (cross-suit OK for singles row)
+      const t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
+      const kongTile=kongNum===2?t2:kongNum===4?t4:kongNum===6?t6:t8;
+      // Matching dragon — try each suit for the kong group
+      for(const s of ALL_SUITS){
+        const md=matchingDragon(r,s);
+        const sc=handFitScore([
+          {have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},
+          {have:t6,need:1,noJoker:true},{have:t8,need:1,noJoker:true},
+          {have:countNumSuit(r,kongNum,s),need:4},{have:md,need:1,noJoker:true},
+          {have:countNumSuit(r,kongNum,s),need:4},{have:md,need:1,noJoker:true}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // FFF 2468 FFF 2222 — Any 2 Suits, Kong 2,4,6 or 8
+  // Flowers(3) + singles 2,4,6,8 + Flowers(3) + kong of one even number
+  mkHand("FFF 2468 FFF 2222","2468",30,false,r=>{
+    const jk=jokers(r);const fl=flowers(r);
+    let best=0;
+    for(const kongNum of [2,4,6,8]){
+      for(const [s1,s2] of SUIT_PAIRS){
+        const t2=countNumSuit(r,2,s1)+countNumSuit(r,2,s2);
+        const t4=countNumSuit(r,4,s1)+countNumSuit(r,4,s2);
+        const t6=countNumSuit(r,6,s1)+countNumSuit(r,6,s2);
+        const t8=countNumSuit(r,8,s1)+countNumSuit(r,8,s2);
+        const kongTile=kongNum===2?t2:kongNum===4?t4:kongNum===6?t6:t8;
+        const sc=handFitScore([
+          {have:fl,need:3,noJoker:true},
+          {have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},
+          {have:t6,need:1,noJoker:true},{have:t8,need:1,noJoker:true},
+          {have:fl,need:3,noJoker:true},{have:kongTile,need:4}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // FF 246 888 246 888 — Any 2 Suits — CONCEALED
+  // Two identical groups of singles(2,4,6)+pung(8), each from same 2 suits
+  mkHand("FF 246 888 246 888","2468",30,true,r=>{
+    const fl=flowers(r);
+    return Math.max(...SUIT_PAIRS.map(([s1,s2])=>{
+      const t2=countNumSuit(r,2,s1)+countNumSuit(r,2,s2);
+      const t4=countNumSuit(r,4,s1)+countNumSuit(r,4,s2);
+      const t6=countNumSuit(r,6,s1)+countNumSuit(r,6,s2);
+      const t8=countNumSuit(r,8,s1)+countNumSuit(r,8,s2);
+      return handFitScore([
+        {have:fl,need:2,noJoker:true},
+        {have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t8,need:3,noJoker:true},
+        {have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t8,need:3,noJoker:true}
+      ],0,14);
+    }));
+  }),
+
+  // ════════════════════════════════════════════════════════════════
+  // 369 SECTION
+  // ════════════════════════════════════════════════════════════════
+
+  // 333 666 6666 9999 — Any 2 or 3 Suits
+  mkHand("333 666 6666 9999","369",25,false,r=>{
+    const jk=jokers(r);
+    const two=Math.max(...SUIT_PAIRS.map(([s1,s2])=>{
+      const t3=countNumSuit(r,3,s1)+countNumSuit(r,3,s2);
+      const t6=countNumSuit(r,6,s1)+countNumSuit(r,6,s2);
+      const t9=countNumSuit(r,9,s1)+countNumSuit(r,9,s2);
+      return handFitScore([{have:t3,need:3},{have:t6,need:3},{have:t6,need:4},{have:t9,need:4}],jk,14);
+    }));
+    // Also try 3 suits (pool all tiles)
+    const t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9);
+    const three=handFitScore([{have:t3,need:3},{have:t6,need:3},{have:t6,need:4},{have:t9,need:4}],jk,14);
+    return Math.max(two,three);
+  }),
+
+  // 33 66 333 666 9999 — Any 3 Suits
+  mkHand("33 66 333 666 9999","369",25,false,r=>{
+    const jk=jokers(r);
+    const t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9);
+    return handFitScore([
+      {have:t3,need:2,noJoker:true},{have:t6,need:2,noJoker:true},
+      {have:t3,need:3},{have:t6,need:3},{have:t9,need:4}
+    ],jk,14);
+  }),
+
+  // FFF 33 666 99 DDDD — 1 Suit w Matching or Opp Dragon
+  // Try both matching and opposite dragon for each suit
+  mkHand("FFF 33 666 99 DDDD","369",25,false,r=>{
+    const jk=jokers(r);const fl=flowers(r);
+    let best=0;
+    for(const s of ALL_SUITS){
+      const t3=countNumSuit(r,3,s),t6=countNumSuit(r,6,s),t9=countNumSuit(r,9,s);
+      const md=matchingDragon(r,s),od=oppDragon(r,s);
+      for(const dr of [md,od]){
+        const sc=handFitScore([
+          {have:fl,need:3,noJoker:true},{have:t3,need:2,noJoker:true},
+          {have:t6,need:3},{have:t9,need:2,noJoker:true},{have:dr,need:4}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // 33 66 666 999 NEWS — Any 2 Suits
+  mkHand("33 66 666 999 NEWS","369",30,false,r=>{
+    const jk=jokers(r);const w=winds(r);
+    return Math.max(...SUIT_PAIRS.map(([s1,s2])=>{
+      const t3=countNumSuit(r,3,s1)+countNumSuit(r,3,s2);
+      const t6=countNumSuit(r,6,s1)+countNumSuit(r,6,s2);
+      const t9=countNumSuit(r,9,s1)+countNumSuit(r,9,s2);
+      return handFitScore([
+        {have:t3,need:2,noJoker:true},{have:t6,need:2,noJoker:true},
+        {have:t6,need:3},{have:t9,need:3},{have:w,need:4,noJoker:true}
+      ],jk,14);
+    }));
+  }),
+
+  // FF 3369 3333 3333 — Any 3 Suits, Pair 3,6, or 9, Kongs Match Pair
+  // FF + singles(pairNum, pairNum, other1, other2) + kong pairNum (suit A) + kong pairNum (suit B)
+  // "Pair 3,6 or 9" = pairNum can be 3, 6, or 9; the other two singles are the remaining two of {3,6,9}
+  mkHand("FF 3369 3333 3333","369",25,false,r=>{
+    const jk=jokers(r);const fl=flowers(r);
+    let best=0;
+    for(const pairNum of [3,6,9]){
+      const others=[3,6,9].filter(n=>n!==pairNum);
+      const tP=countNum(r,pairNum);
+      const tO1=countNum(r,others[0]),tO2=countNum(r,others[1]);
+      // Kongs of pairNum across any 2 of 3 suits
+      for(const [s1,s2] of SUIT_PAIRS){
+        const k1=countNumSuit(r,pairNum,s1),k2=countNumSuit(r,pairNum,s2);
+        const sc=handFitScore([
+          {have:fl,need:2,noJoker:true},
+          {have:tP,need:2,noJoker:true},{have:tO1,need:1,noJoker:true},{have:tO2,need:1,noJoker:true},
+          {have:k1,need:4},{have:k2,need:4}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // FF 333 666 999 369 — Any 2 Suits — CONCEALED
+  mkHand("FF 333 666 999 369","369",30,true,r=>{
+    const fl=flowers(r);
+    return Math.max(...SUIT_PAIRS.map(([s1,s2])=>{
+      const t3=countNumSuit(r,3,s1)+countNumSuit(r,3,s2);
+      const t6=countNumSuit(r,6,s1)+countNumSuit(r,6,s2);
+      const t9=countNumSuit(r,9,s1)+countNumSuit(r,9,s2);
+      return handFitScore([
+        {have:fl,need:2,noJoker:true},
+        {have:t3,need:3,noJoker:true},{have:t6,need:3,noJoker:true},{have:t9,need:3,noJoker:true},
+        {have:t3,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t9,need:1,noJoker:true}
+      ],0,14);
+    }));
+  }),
+
+  // ════════════════════════════════════════════════════════════════
+  // 13579 SECTION
+  // ════════════════════════════════════════════════════════════════
+
+  // 11 333 55 777 9999 — Any 1 or 3 Suits
+  mkHand("11 333 55 777 9999","13579",25,false,r=>{
+    const jk=jokers(r);
+    const single=Math.max(...ALL_SUITS.map(s=>handFitScore([
+      {have:countNumSuit(r,1,s),need:2,noJoker:true},{have:countNumSuit(r,3,s),need:3},
+      {have:countNumSuit(r,5,s),need:2,noJoker:true},{have:countNumSuit(r,7,s),need:3},{have:countNumSuit(r,9,s),need:4}
+    ],jk,14)));
+    const t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5),t7=countNum(r,7),t9=countNum(r,9);
+    const three=handFitScore([
+      {have:t1,need:2,noJoker:true},{have:t3,need:3},
+      {have:t5,need:2,noJoker:true},{have:t7,need:3},{have:t9,need:4}
+    ],jk,14);
+    return Math.max(single,three);
+  }),
+
+  // 111 333 3333 5555 -or- 555 777 7777 9999 — Any 2 Suits
+  // Pattern: pung(A) + pung(B) + kong(B) + kong(C) where A,B,C are consecutive odd nos.
+  // Card shows 1,3,5 and 5,7,9 as examples; all consecutive odd triples are valid.
+  mkHand("111 333 3333 5555","13579",25,false,r=>{
+    const jk=jokers(r);
+    const oddTriples=[[1,3,5],[3,5,7],[5,7,9]];
+    let best=0;
+    for(const [a,b,c] of oddTriples){
+      for(const [s1,s2] of SUIT_PAIRS){
+        const tA=countNumSuit(r,a,s1)+countNumSuit(r,a,s2);
+        const tB=countNumSuit(r,b,s1)+countNumSuit(r,b,s2);
+        const tC=countNumSuit(r,c,s1)+countNumSuit(r,c,s2);
+        const sc=handFitScore([{have:tA,need:3},{have:tB,need:3},{have:tB,need:4},{have:tC,need:4}],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // NN 1111 33 5555 SS -or- NN 5555 77 9999 SS — Any 1 Suit, North and South Only
+  // Pattern: NN + kong(A) + pair(B) + kong(C) + SS where A,B,C are consecutive odds.
+  mkHand("NN 1111 33 5555 SS","13579",30,false,r=>{
+    const jk=jokers(r);const n=winds(r,"N"),s=winds(r,"S");
+    const oddTriples=[[1,3,5],[5,7,9]];
+    let best=0;
+    for(const [a,b,c] of oddTriples){
+      for(const su of ALL_SUITS){
+        const sc=handFitScore([
+          {have:n,need:2,noJoker:true},{have:countNumSuit(r,a,su),need:4},
+          {have:countNumSuit(r,b,su),need:2,noJoker:true},{have:countNumSuit(r,c,su),need:4},
+          {have:s,need:2,noJoker:true}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // 113579 1111 1111 — Any 3 Suits, Pair Any Odd No., Kongs Match Pair
+  // Singles: 1,1,3,5,7,9; then two kongs of the same odd number (matching pair)
+  // 113579 1111 1111 — Any 3 Suits, Pair Any Odd No., Kongs Match Pair
+  // Singles: pairNum pairNum 3 5 7 9 (with pairNum appearing twice, others once each)
+  // Kongs: two kongs of pairNum, one per suit (in 2 of the 3 suits)
+  mkHand("113579 1111 1111","13579",25,false,r=>{
+    const jk=jokers(r);
+    let best=0;
+    for(const pairNum of [1,3,5,7,9]){
+      const tP=countNum(r,pairNum);
+      // Singles row: pairNum x2, then the other four odds x1 each
+      const others=[1,3,5,7,9].filter(n=>n!==pairNum);
+      const tO=others.map(n=>countNum(r,n));
+      for(const [s1,s2] of SUIT_PAIRS){
+        const k1=countNumSuit(r,pairNum,s1),k2=countNumSuit(r,pairNum,s2);
+        const sc=handFitScore([
+          {have:tP,need:1,noJoker:true},{have:tP,need:1,noJoker:true},
+          {have:tO[0],need:1,noJoker:true},{have:tO[1],need:1,noJoker:true},
+          {have:tO[2],need:1,noJoker:true},{have:tO[3],need:1,noJoker:true},
+          {have:k1,need:4},{have:k2,need:4}
+        ],jk,15);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // FFF 11 33 555 DDDD -or- FFF 55 77 999 DDDD — Any 1 Suit w Matching Dragon
+  // Pattern: FFF + pair(A) + pair(B) + pung(C) + dragon kong, A,B,C consecutive odds
+  mkHand("FFF 11 33 555 DDDD","13579",25,false,r=>{
+    const jk=jokers(r);const fl=flowers(r);
+    const oddTriples=[[1,3,5],[5,7,9]];
+    let best=0;
+    for(const [a,b,c] of oddTriples){
+      for(const s of ALL_SUITS){
+        const md=matchingDragon(r,s);
+        const sc=handFitScore([
+          {have:fl,need:3,noJoker:true},
+          {have:countNumSuit(r,a,s),need:2,noJoker:true},{have:countNumSuit(r,b,s),need:2,noJoker:true},
+          {have:countNumSuit(r,c,s),need:3},{have:md,need:4}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // 11 33 111 333 5555 -or- 55 77 555 777 9999 — Any 3 Suits
+  // Pattern: pair(A) + pair(B) + pung(A) + pung(B) + kong(C), A,B,C consecutive odds
+  mkHand("11 33 111 333 5555","13579",25,false,r=>{
+    const jk=jokers(r);
+    const oddTriples=[[1,3,5],[5,7,9]];
+    let best=0;
+    for(const [a,b,c] of oddTriples){
+      const tA=countNum(r,a),tB=countNum(r,b),tC=countNum(r,c);
+      const sc=handFitScore([
+        {have:tA,need:2,noJoker:true},{have:tB,need:2,noJoker:true},
+        {have:tA,need:3},{have:tB,need:3},{have:tC,need:4}
+      ],jk,14);
+      if(sc>best)best=sc;
+    }
+    return best;
+  }),
+
+  // 1111 33 55 77 9999 — Any 1 or 2 Suits
+  mkHand("1111 33 55 77 9999","13579",30,false,r=>{
+    const jk=jokers(r);
+    const single=Math.max(...ALL_SUITS.map(s=>handFitScore([
+      {have:countNumSuit(r,1,s),need:4},
+      {have:countNumSuit(r,3,s),need:2,noJoker:true},{have:countNumSuit(r,5,s),need:2,noJoker:true},
+      {have:countNumSuit(r,7,s),need:2,noJoker:true},{have:countNumSuit(r,9,s),need:4}
+    ],jk,14)));
+    const double=Math.max(...SUIT_PAIRS.map(([s1,s2])=>{
+      const t1=countNumSuit(r,1,s1)+countNumSuit(r,1,s2);
+      const t3=countNumSuit(r,3,s1)+countNumSuit(r,3,s2);
+      const t5=countNumSuit(r,5,s1)+countNumSuit(r,5,s2);
+      const t7=countNumSuit(r,7,s1)+countNumSuit(r,7,s2);
+      const t9=countNumSuit(r,9,s1)+countNumSuit(r,9,s2);
+      return handFitScore([
+        {have:t1,need:4},{have:t3,need:2,noJoker:true},{have:t5,need:2,noJoker:true},
+        {have:t7,need:2,noJoker:true},{have:t9,need:4}
+      ],jk,14);
+    }));
+    return Math.max(single,double);
+  }),
+
+  // FF 11 33 55 111 111 -or- FF 55 77 99 555 555 — Any 3 Suits, These Nos. Only — CONCEALED
+  // Pattern: FF + pair(A) + pair(B) + pair(C) + pung(A,s1) + pung(A,s2), all 3 consecutive odds
+  // "These Nos. Only" = A,B,C must be 1,3,5 or 5,7,9
+  mkHand("FF 11 33 55 111 111","13579",35,true,r=>{
+    const fl=flowers(r);
+    const oddTriples=[[1,3,5],[5,7,9]];
+    let best=0;
+    for(const [a,b,c] of oddTriples){
+      const tA=countNum(r,a),tB=countNum(r,b),tC=countNum(r,c);
+      for(const [s1,s2] of SUIT_PAIRS){
+        const pAs1=countNumSuit(r,a,s1),pAs2=countNumSuit(r,a,s2);
+        const sc=handFitScore([
+          {have:fl,need:2,noJoker:true},
+          {have:tA,need:2,noJoker:true},{have:tB,need:2,noJoker:true},{have:tC,need:2,noJoker:true},
+          {have:pAs1,need:3,noJoker:true},{have:pAs2,need:3,noJoker:true}
+        ],0,16);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // FF 135 777 999 DDD — Any 1 Suit w Opp Dragon — CONCEALED
+  mkHand("FF 135 777 999 DDD","13579",30,true,r=>{
+    const fl=flowers(r);
+    let best=0;
+    for(const s of ALL_SUITS){
+      const od=oppDragon(r,s);
+      const sc=handFitScore([
+        {have:fl,need:2,noJoker:true},
+        {have:countNumSuit(r,1,s),need:1,noJoker:true},{have:countNumSuit(r,3,s),need:1,noJoker:true},{have:countNumSuit(r,5,s),need:1,noJoker:true},
+        {have:countNumSuit(r,7,s),need:3,noJoker:true},{have:countNumSuit(r,9,s),need:3,noJoker:true},{have:od,need:3,noJoker:true}
+      ],0,14);
+      if(sc>best)best=sc;
+    }
+    return best;
+  }),
+
+  // ════════════════════════════════════════════════════════════════
+  // CONSECUTIVE RUN SECTION
+  // ════════════════════════════════════════════════════════════════
+
+  // 11 222 33 444 5555 — Any 1 Suit, These Nos. Only
+  mkHand("11 222 33 444 5555","cr",25,false,r=>{
+    const jk=jokers(r);
+    return Math.max(...ALL_SUITS.map(s=>handFitScore([
+      {have:countNumSuit(r,1,s),need:2,noJoker:true},{have:countNumSuit(r,2,s),need:3},
+      {have:countNumSuit(r,3,s),need:2,noJoker:true},{have:countNumSuit(r,4,s),need:3},{have:countNumSuit(r,5,s),need:4}
+    ],jk,14)));
+  }),
+
+  // 55 666 77 888 9999 — Any 1 Suit, These Nos. Only
+  mkHand("55 666 77 888 9999","cr",25,false,r=>{
+    const jk=jokers(r);
+    return Math.max(...ALL_SUITS.map(s=>handFitScore([
+      {have:countNumSuit(r,5,s),need:2,noJoker:true},{have:countNumSuit(r,6,s),need:3},
+      {have:countNumSuit(r,7,s),need:2,noJoker:true},{have:countNumSuit(r,8,s),need:3},{have:countNumSuit(r,9,s),need:4}
+    ],jk,14)));
+  }),
+
+  // FFF 1111 234 5555 — Any 1 or 2 Suits, Any 5 Consec Nos.
+  mkHand("FFF 1111 234 5555","cr",25,false,r=>{
+    const jk=jokers(r);const fl=flowers(r);
+    let best=0;
+    for(let start=1;start<=5;start++){
+      const [a,b,c,d,e]=[start,start+1,start+2,start+3,start+4];
+      // 1 suit version
+      for(const s of ALL_SUITS){
+        const sc=handFitScore([
+          {have:fl,need:3,noJoker:true},{have:countNumSuit(r,a,s),need:4},
+          {have:countNumSuit(r,b,s),need:1,noJoker:true},{have:countNumSuit(r,c,s),need:1,noJoker:true},
+          {have:countNumSuit(r,d,s),need:1,noJoker:true},{have:countNumSuit(r,e,s),need:4}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+      // 2 suit version
+      for(const [s1,s2] of SUIT_PAIRS){
+        const t={};
+        for(const n of [a,b,c,d,e])t[n]=countNumSuit(r,n,s1)+countNumSuit(r,n,s2);
+        const sc=handFitScore([
+          {have:fl,need:3,noJoker:true},{have:t[a],need:4},
+          {have:t[b],need:1,noJoker:true},{have:t[c],need:1,noJoker:true},
+          {have:t[d],need:1,noJoker:true},{have:t[e],need:4}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // 11 22 111 222 3333 — Any 1 or 3 Suits, Any 3 Consec Nos.
+  mkHand("11 22 111 222 3333","cr",25,false,r=>{
+    const jk=jokers(r);
+    let best=0;
+    for(let start=1;start<=7;start++){
+      const [a,b,c]=[start,start+1,start+2];
+      // 1 suit
+      for(const s of ALL_SUITS){
+        const sc=handFitScore([
+          {have:countNumSuit(r,a,s),need:2,noJoker:true},{have:countNumSuit(r,b,s),need:2,noJoker:true},
+          {have:countNumSuit(r,a,s),need:3},{have:countNumSuit(r,b,s),need:3},{have:countNumSuit(r,c,s),need:4}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+      // 3 suits (pool)
+      const ta=countNum(r,a),tb=countNum(r,b),tc=countNum(r,c);
+      const sc3=handFitScore([
+        {have:ta,need:2,noJoker:true},{have:tb,need:2,noJoker:true},
+        {have:ta,need:3},{have:tb,need:3},{have:tc,need:4}
+      ],jk,14);
+      if(sc3>best)best=sc3;
+    }
+    return best;
+  }),
+
+  // 111 222 3333 4444 — Any 1 or 2 Suits, Any 4 Consec Nos.
+  mkHand("111 222 3333 4444","cr",25,false,r=>{
+    const jk=jokers(r);
+    let best=0;
+    for(let start=1;start<=6;start++){
+      const [a,b,c,d]=[start,start+1,start+2,start+3];
+      for(const s of ALL_SUITS){
+        const sc=handFitScore([
+          {have:countNumSuit(r,a,s),need:3},{have:countNumSuit(r,b,s),need:3},
+          {have:countNumSuit(r,c,s),need:4},{have:countNumSuit(r,d,s),need:4}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+      for(const [s1,s2] of SUIT_PAIRS){
+        const ta=countNumSuit(r,a,s1)+countNumSuit(r,a,s2);
+        const tb=countNumSuit(r,b,s1)+countNumSuit(r,b,s2);
+        const tc=countNumSuit(r,c,s1)+countNumSuit(r,c,s2);
+        const td=countNumSuit(r,d,s1)+countNumSuit(r,d,s2);
+        const sc=handFitScore([{have:ta,need:3},{have:tb,need:3},{have:tc,need:4},{have:td,need:4}],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // FFF 11 22 333 DDDD — 1 or 2 Suits, Any Run, Dragons Match Middle No.
+  // "Ds Match Middle No." = dragon matches suit of the MIDDLE number in the run
+  mkHand("FFF 11 22 333 DDDD","cr",25,false,r=>{
+    const jk=jokers(r);const fl=flowers(r);
+    let best=0;
+    for(let start=1;start<=7;start++){
+      const [a,b,c]=[start,start+1,start+2]; // b = middle
+      for(const s of ALL_SUITS){
+        const md=matchingDragon(r,s); // dragon matches suit of middle number
+        const sc=handFitScore([
+          {have:fl,need:3,noJoker:true},
+          {have:countNumSuit(r,a,s),need:2,noJoker:true},{have:countNumSuit(r,b,s),need:2,noJoker:true},
+          {have:countNumSuit(r,c,s),need:3},{have:md,need:4}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+      // 2-suit variant
+      for(const [s1,s2] of SUIT_PAIRS){
+        const ta=countNumSuit(r,a,s1)+countNumSuit(r,a,s2);
+        const tb=countNumSuit(r,b,s1)+countNumSuit(r,b,s2);
+        const tc=countNumSuit(r,c,s1)+countNumSuit(r,c,s2);
+        const md=Math.max(matchingDragon(r,s1),matchingDragon(r,s2));
+        const sc=handFitScore([
+          {have:fl,need:3,noJoker:true},
+          {have:ta,need:2,noJoker:true},{have:tb,need:2,noJoker:true},
+          {have:tc,need:3},{have:md,need:4}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // 1111 FFFFFF 2222 — Any 1 Suit, Any 2 Consec Nos.
+  mkHand("1111 FFFFFF 2222","cr",30,false,r=>{
+    const jk=jokers(r);const fl=flowers(r);
+    let best=0;
+    for(let n=1;n<=8;n++){
+      for(const s of ALL_SUITS){
+        const sc=handFitScore([
+          {have:countNumSuit(r,n,s),need:4},{have:fl,need:6,noJoker:true},{have:countNumSuit(r,n+1,s),need:4}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // FF 1111 2222 3333 — Any 1 or 3 Suits, Any 3 Consec Nos.
+  mkHand("FF 1111 2222 3333","cr",25,false,r=>{
+    const jk=jokers(r);const fl=flowers(r);
+    let best=0;
+    for(let start=1;start<=7;start++){
+      const [a,b,c]=[start,start+1,start+2];
+      for(const s of ALL_SUITS){
+        const sc=handFitScore([
+          {have:fl,need:2,noJoker:true},{have:countNumSuit(r,a,s),need:4},
+          {have:countNumSuit(r,b,s),need:4},{have:countNumSuit(r,c,s),need:4}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+      // 3-suit pool
+      const sc3=handFitScore([
+        {have:fl,need:2,noJoker:true},{have:countNum(r,a),need:4},
+        {have:countNum(r,b),need:4},{have:countNum(r,c),need:4}
+      ],jk,14);
+      if(sc3>best)best=sc3;
+    }
+    return best;
+  }),
+
+  // 1 22 333 1 22 333 44 — Any 3 Suits, Any 4 Consec Nos. — CONCEALED
+  mkHand("1 22 333 1 22 333 44","cr",35,true,r=>{
+    let best=0;
+    for(let start=1;start<=6;start++){
+      const [a,b,c,d]=[start,start+1,start+2,start+3];
+      // Use pooled (any 3 suits) tile counts — concealed, no jokers
+      const ta=countNum(r,a),tb=countNum(r,b),tc=countNum(r,c),td=countNum(r,d);
+      const sc=handFitScore([
+        {have:ta,need:1,noJoker:true},{have:tb,need:2,noJoker:true},{have:tc,need:3,noJoker:true},
+        {have:ta,need:1,noJoker:true},{have:tb,need:2,noJoker:true},{have:tc,need:3,noJoker:true},
+        {have:td,need:2,noJoker:true}
+      ],0,14);
+      if(sc>best)best=sc;
+    }
+    return best;
+  }),
+
+  // ════════════════════════════════════════════════════════════════
+  // WINDS & DRAGONS SECTION
+  // ════════════════════════════════════════════════════════════════
+
+  // NNNN EEE WWW SSSS / NNN EEEE WWWW SSS — (both forms, Any Winds)
+  mkHand("NNNN EEE WWW SSSS","wd",25,false,r=>{
+    const jk=jokers(r);
+    const n=winds(r,"N"),e=winds(r,"E"),w=winds(r,"W"),s=winds(r,"S");
+    return handFitScore([{have:n,need:4},{have:e,need:3},{have:w,need:3},{have:s,need:4}],jk,14);
+  }),
+  mkHand("NNN EEEE WWWW SSS","wd",25,false,r=>{
+    const jk=jokers(r);
+    const n=winds(r,"N"),e=winds(r,"E"),w=winds(r,"W"),s=winds(r,"S");
+    return handFitScore([{have:n,need:3},{have:e,need:4},{have:w,need:4},{have:s,need:3}],jk,14);
+  }),
+
+  // 1234 DDD DDD DDDD — Any 4 Consec Nos. in Any 1 Suit, Any 3 Dragons
+  // Singles: 4 consecutive number tiles (same suit). Dragon groups: pung Red + pung Grn + kong Soap (or any permutation of 3 dragon types)
+  // "Any 3 Dragons" = one group of each of the 3 dragon types (pung+pung+kong = 3+3+4=10)
+  mkHand("1234 DDD DDD DDDD","wd",25,false,r=>{
+    const jk=jokers(r);
+    const red=dragons(r,"Red"),grn=dragons(r,"Grn"),soap=dragons(r,"Soap");
+    let best=0;
+    // Try all permutations of which dragon type gets the kong (4) vs pungs (3)
+    for(const [kongD,p1D,p2D] of [
+      ["Red","Grn","Soap"],["Grn","Red","Soap"],["Soap","Red","Grn"]
+    ]){
+      const dk=dragons(r,kongD),dp1=dragons(r,p1D),dp2=dragons(r,p2D);
+      for(let start=1;start<=6;start++){
+        for(const s of ALL_SUITS){
+          const sc=handFitScore([
+            {have:countNumSuit(r,start,s),need:1,noJoker:true},
+            {have:countNumSuit(r,start+1,s),need:1,noJoker:true},
+            {have:countNumSuit(r,start+2,s),need:1,noJoker:true},
+            {have:countNumSuit(r,start+3,s),need:1,noJoker:true},
+            {have:dp1,need:3},{have:dp2,need:3},{have:dk,need:4}
+          ],jk,14);
+          if(sc>best)best=sc;
+        }
+      }
+    }
+    return best;
+  }),
+
+  // NNN 1111 1111 SSS — Any Like Odd Nos. in Any 2 Suits
+  mkHand("NNN 1111 1111 SSS","wd",25,false,r=>{
+    const jk=jokers(r);const n=winds(r,"N"),s=winds(r,"S");
+    let best=0;
+    for(const oddNum of [1,3,5,7,9]){
+      for(const [s1,s2] of SUIT_PAIRS){
+        const k1=countNumSuit(r,oddNum,s1),k2=countNumSuit(r,oddNum,s2);
+        const sc=handFitScore([{have:n,need:3},{have:k1,need:4},{have:k2,need:4},{have:s,need:3}],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // EEE 2222 2222 WWW — Any Like Even Nos. in Any 2 Suits
+  mkHand("EEE 2222 2222 WWW","wd",25,false,r=>{
+    const jk=jokers(r);const e=winds(r,"E"),w=winds(r,"W");
+    let best=0;
+    for(const evenNum of [2,4,6,8]){
+      for(const [s1,s2] of SUIT_PAIRS){
+        const k1=countNumSuit(r,evenNum,s1),k2=countNumSuit(r,evenNum,s2);
+        const sc=handFitScore([{have:e,need:3},{have:k1,need:4},{have:k2,need:4},{have:w,need:3}],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // FFF NNNN FFF DDDD — Any Wind, Any Dragon
+  // Try each wind type for the kong, and each dragon type for the dragon kong
+  mkHand("FFF NNNN FFF DDDD","wd",25,false,r=>{
+    const jk=jokers(r);const fl=flowers(r);
+    let best=0;
+    for(const windVal of ["N","E","W","S"]){
+      const wt=winds(r,windVal);
+      for(const drType of ["Red","Grn","Soap"]){
+        const dt=dragons(r,drType);
+        const sc=handFitScore([
+          {have:fl,need:3,noJoker:true},{have:wt,need:4},
+          {have:fl,need:3,noJoker:true},{have:dt,need:4}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // 1 N 2 EE 3 WWW 4 SSSS — Any 1 Suit, These Nos. Only
+  mkHand("1 N 2 EE 3 WWW 4 SSSS","wd",25,false,r=>{
+    const jk=jokers(r);
+    const n=winds(r,"N"),e=winds(r,"E"),w=winds(r,"W"),s=winds(r,"S");
+    return Math.max(...ALL_SUITS.map(su=>handFitScore([
+      {have:countNumSuit(r,1,su),need:1,noJoker:true},{have:n,need:1,noJoker:true},
+      {have:countNumSuit(r,2,su),need:1,noJoker:true},{have:e,need:2,noJoker:true},
+      {have:countNumSuit(r,3,su),need:1,noJoker:true},{have:w,need:3,noJoker:true},
+      {have:countNumSuit(r,4,su),need:1,noJoker:true},{have:s,need:4,noJoker:true}
+    ],jk,14)));
+  }),
+
+  // FF NNNN SSSS DD DD -or- FF EEEE WWWW DD DD — Any 2 Dragons
+  // Two flowers + kong of one wind pair + two pairs of ANY two dragon types (can be same or different)
+  mkHand("FF NNNN SSSS DD DD","wd",25,false,r=>{
+    const jk=jokers(r);const fl=flowers(r);
+    const n=winds(r,"N"),s=winds(r,"S"),e=winds(r,"E"),w=winds(r,"W");
+    let best=0;
+    const drTypes=["Red","Grn","Soap"];
+    // Try both wind variants (N+S or E+W)
+    for(const [wa,wb] of [[n,s],[e,w]]){
+      // "Any 2 Dragons" — two pairs; try all ordered combos of dragon types
+      for(const d1 of drTypes){
+        const dr1=dragons(r,d1);
+        // Same dragon type for both pairs (4 of same dragon split as 2+2)
+        const scSame=handFitScore([
+          {have:fl,need:2,noJoker:true},{have:wa,need:4},{have:wb,need:4},
+          {have:dr1,need:2,noJoker:true},{have:dr1,need:2,noJoker:true}
+        ],jk,14);
+        if(scSame>best)best=scSame;
+        // Two different dragon types
+        for(const d2 of drTypes){if(d2===d1)continue;
+          const dr2=dragons(r,d2);
+          const scDiff=handFitScore([
+            {have:fl,need:2,noJoker:true},{have:wa,need:4},{have:wb,need:4},
+            {have:dr1,need:2,noJoker:true},{have:dr2,need:2,noJoker:true}
+          ],jk,14);
+          if(scDiff>best)best=scDiff;
+        }
+      }
+    }
+    return best;
+  }),
+
+  // NN EEE 2026 WWW SS — 2026 Any 1 Suit — CONCEALED
+  mkHand("NN EEE 2026 WWW SS","wd",30,true,r=>{
+    const soap=dragons(r,"Soap");
+    const n=winds(r,"N"),e=winds(r,"E"),w=winds(r,"W"),s=winds(r,"S");
+    return Math.max(...ALL_SUITS.map(su=>handFitScore([
+      {have:n,need:2,noJoker:true},{have:e,need:3,noJoker:true},
+      {have:countNumSuit(r,2,su),need:1,noJoker:true},{have:soap,need:1,noJoker:true},
+      {have:countNumSuit(r,2,su),need:1,noJoker:true},{have:countNumSuit(r,6,su),need:1,noJoker:true},
+      {have:w,need:3,noJoker:true},{have:s,need:2,noJoker:true}
+    ],0,14)));
+  }),
+
+  // ════════════════════════════════════════════════════════════════
+  // ANY LIKE NUMBERS SECTION
+  // ════════════════════════════════════════════════════════════════
+
+  // 1111 FFFFFF 1111 — Any 2 Suits
+  mkHand("1111 FFFFFF 1111","aln",30,false,r=>{
+    const jk=jokers(r);const fl=flowers(r);
+    let best=0;
+    for(let n=1;n<=9;n++){
+      for(const [s1,s2] of SUIT_PAIRS){
+        const k1=countNumSuit(r,n,s1),k2=countNumSuit(r,n,s2);
+        const sc=handFitScore([{have:k1,need:4},{have:fl,need:6,noJoker:true},{have:k2,need:4}],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // 1111 D 111 D 1111 D — Any 3 Suits w Matching Dragon
+  // Three groups of same number across all 3 suits, each group has a matching dragon single.
+  // "Matching Dragon" = the dragon color matches its adjacent suit group.
+  // For scoring: use the best matching dragon for the dominant suit spread.
+  mkHand("1111 D 111 D 1111 D","aln",25,false,r=>{
+    const jk=jokers(r);
+    let best=0;
+    for(let n=1;n<=9;n++){
+      const perSuit=ALL_SUITS.map(s=>({s,c:countNumSuit(r,n,s)})).sort((a,b)=>b.c-a.c);
+      // Use all 3 suits; the "matching dragon" for each suit must match that suit's dragon
+      // Score: for each suit ordering, use its own matchingDragon
+      const md0=matchingDragon(r,perSuit[0].s);
+      const md1=matchingDragon(r,perSuit[1].s);
+      const md2=matchingDragon(r,perSuit[2].s);
+      // We need 3 dragon singles total — one matching each suit group (noJoker)
+      // Best approximation: use the dragon pool that best covers all 3
+      const sc=handFitScore([
+        {have:perSuit[0].c,need:4},{have:md0,need:1,noJoker:true},
+        {have:perSuit[1].c,need:3},{have:md1,need:1,noJoker:true},
+        {have:perSuit[2].c,need:4},{have:md2,need:1,noJoker:true}
+      ],jk,14);
+      if(sc>best)best=sc;
+    }
+    return best;
+  }),
+
+  // FF 1111 11 1111 DD — Any 3 Suits w Any Dragon
+  mkHand("FF 1111 11 1111 DD","aln",25,false,r=>{
+    const jk=jokers(r);const fl=flowers(r);const dr=dragons(r);
+    let best=0;
+    for(let n=1;n<=9;n++){
+      const counts=ALL_SUITS.map(s=>countNumSuit(r,n,s)).sort((a,b)=>b-a);
+      const sc=handFitScore([
+        {have:fl,need:2,noJoker:true},
+        {have:counts[0],need:4},{have:counts[1],need:2,noJoker:true},{have:counts[2],need:4},
+        {have:dr,need:2}
+      ],jk,14);
+      if(sc>best)best=sc;
+    }
+    return best;
+  }),
+
+  // ════════════════════════════════════════════════════════════════
+  // QUINTS SECTION
+  // ════════════════════════════════════════════════════════════════
+
+  // 11111 1111 11111 — Any 3 Suits, Any Like Nos.
+  // Quint (5) in suit A, Kong (4) in suit B, Quint (5) in suit C — same number
+  mkHand("11111 1111 11111","q",40,false,r=>{
+    const jk=jokers(r);
+    let best=0;
+    for(let n=1;n<=9;n++){
+      const counts=ALL_SUITS.map(s=>countNumSuit(r,n,s)).sort((a,b)=>b-a);
+      const sc=handFitScore([{have:counts[0],need:5},{have:counts[1],need:4},{have:counts[2],need:5}],jk,14);
+      if(sc>best)best=sc;
+    }
+    return best;
+  }),
+
+  // FF 11111 22 33333 — Any 1 Suit, Any 3 Consec Nos.
+  mkHand("FF 11111 22 33333","q",45,false,r=>{
+    const jk=jokers(r);const fl=flowers(r);
+    let best=0;
+    for(let start=1;start<=7;start++){
+      const [a,b,c]=[start,start+1,start+2];
+      for(const s of ALL_SUITS){
+        const sc=handFitScore([
+          {have:fl,need:2,noJoker:true},{have:countNumSuit(r,a,s),need:5},
+          {have:countNumSuit(r,b,s),need:2,noJoker:true},{have:countNumSuit(r,c,s),need:5}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // 11111 44444 DDDD — Any 2 Nos. in Any 1 Suit w Opp Dragon
+  mkHand("11111 44444 DDDD","q",40,false,r=>{
+    const jk=jokers(r);
+    let best=0;
+    for(let n1=1;n1<=9;n1++)for(let n2=n1+1;n2<=9;n2++){
+      for(const s of ALL_SUITS){
+        const od=oppDragon(r,s);
+        const sc=handFitScore([
+          {have:countNumSuit(r,n1,s),need:5},{have:countNumSuit(r,n2,s),need:5},{have:od,need:4}
+        ],jk,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // ════════════════════════════════════════════════════════════════
+  // SINGLES & PAIRS SECTION — CONCEALED, NO JOKERS
+  // ════════════════════════════════════════════════════════════════
+
+  // NN EE WW SS 1D 1D 1D — Any 3 Suits, Any Like No. w Matching Dragon
+  mkHand("NN EE WW SS 1D 1D 1D","sp",50,true,r=>{
+    let best=0;
+    const n=winds(r,"N"),e=winds(r,"E"),w=winds(r,"W"),s=winds(r,"S");
+    for(let num=1;num<=9;num++){
+      // "Matching Dragon" — try each suit for the number tiles
+      for(const su of ALL_SUITS){
+        const t=countNumSuit(r,num,su);
+        const md=matchingDragon(r,su);
+        const sc=handFitScore([
+          {have:n,need:2,noJoker:true},{have:e,need:2,noJoker:true},
+          {have:w,need:2,noJoker:true},{have:s,need:2,noJoker:true},
+          {have:t,need:1,noJoker:true},{have:md,need:1,noJoker:true},
+          {have:t,need:1,noJoker:true},{have:md,need:1,noJoker:true},
+          {have:t,need:1,noJoker:true},{have:md,need:1,noJoker:true}
+        ],0,14);
+        if(sc>best)best=sc;
+      }
+    }
+    return best;
+  }),
+
+  // 2 4 66 88 2 4 66 88 88 — Any 3 Suits, These Nos. Only
+  // All tiles are singles or pairs from 2,4,6,8 spread across 3 suits
   mkHand("2 4 66 88 2 4 66 88 88","sp",50,true,r=>{
     const t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
-    return handFitScore([{have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},{have:t6,need:2,noJoker:true},{have:t8,need:2,noJoker:true},{have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},{have:t6,need:2,noJoker:true},{have:t8,need:2,noJoker:true},{have:t8,need:2,noJoker:true}],0,14);
+    return handFitScore([
+      {have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},
+      {have:t6,need:2,noJoker:true},{have:t8,need:2,noJoker:true},
+      {have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},
+      {have:t6,need:2,noJoker:true},{have:t8,need:2,noJoker:true},
+      {have:t8,need:2,noJoker:true}
+    ],0,16);
   }),
+
+  // FF 3369 3669 3699 — Any 3 Suits
   mkHand("FF 3369 3669 3699","sp",50,true,r=>{
     const fl=flowers(r),t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9);
-    return handFitScore([{have:fl,need:2,noJoker:true},{have:t3,need:2,noJoker:true},{have:t6,need:1,noJoker:true},{have:t9,need:1,noJoker:true},{have:t3,need:1,noJoker:true},{have:t6,need:2,noJoker:true},{have:t9,need:1,noJoker:true},{have:t3,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t9,need:2,noJoker:true}],0,14);
+    return handFitScore([
+      {have:fl,need:2,noJoker:true},
+      {have:t3,need:2,noJoker:true},{have:t6,need:1,noJoker:true},{have:t9,need:1,noJoker:true},
+      {have:t3,need:1,noJoker:true},{have:t6,need:2,noJoker:true},{have:t9,need:1,noJoker:true},
+      {have:t3,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t9,need:2,noJoker:true}
+    ],0,14);
   }),
+
+  // 11 22 33 44 55 66 77 — Any 1 Suit, Any 7 Consec Nos.
   mkHand("11 22 33 44 55 66 77","sp",50,true,r=>{
-    // Any 1 suit, any 7 consec nos — score each suit+start
     let best=0;
-    for(const s of ["bam","crak","dot"])for(let start=1;start<=3;start++){
-      const tiles=[start,start+1,start+2,start+3,start+4,start+5,start+6].map(n=>countNumSuit(r,n,s));
+    for(const s of ALL_SUITS)for(let start=1;start<=3;start++){
+      const tiles=[0,1,2,3,4,5,6].map(i=>countNumSuit(r,start+i,s));
       const sc=handFitScore(tiles.map(have=>({have,need:2,noJoker:true})),0,14);
       if(sc>best)best=sc;
     }
     return best;
   }),
+
+  // 11 357 99 11 357 99 — Any 2 Suits
   mkHand("11 357 99 11 357 99","sp",50,true,r=>{
-    const t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5),t7=countNum(r,7),t9=countNum(r,9);
-    return handFitScore([{have:t1,need:2,noJoker:true},{have:t3,need:1,noJoker:true},{have:t5,need:1,noJoker:true},{have:t7,need:1,noJoker:true},{have:t9,need:2,noJoker:true},{have:t1,need:2,noJoker:true},{have:t3,need:1,noJoker:true},{have:t5,need:1,noJoker:true},{have:t7,need:1,noJoker:true},{have:t9,need:2,noJoker:true}],0,14);
+    return Math.max(...SUIT_PAIRS.map(([s1,s2])=>{
+      const t1=countNumSuit(r,1,s1)+countNumSuit(r,1,s2);
+      const t3=countNumSuit(r,3,s1)+countNumSuit(r,3,s2);
+      const t5=countNumSuit(r,5,s1)+countNumSuit(r,5,s2);
+      const t7=countNumSuit(r,7,s1)+countNumSuit(r,7,s2);
+      const t9=countNumSuit(r,9,s1)+countNumSuit(r,9,s2);
+      return handFitScore([
+        {have:t1,need:2,noJoker:true},{have:t3,need:1,noJoker:true},{have:t5,need:1,noJoker:true},
+        {have:t7,need:1,noJoker:true},{have:t9,need:2,noJoker:true},
+        {have:t1,need:2,noJoker:true},{have:t3,need:1,noJoker:true},{have:t5,need:1,noJoker:true},
+        {have:t7,need:1,noJoker:true},{have:t9,need:2,noJoker:true}
+      ],0,14);
+    }));
   }),
+
+  // FF 2026 2026 2026 — Any 3 Suits
+  // Three repetitions of the 2026 pattern (2, Soap, 2, 6) across 3 suits
   mkHand("FF 2026 2026 2026","sp",75,true,r=>{
     const fl=flowers(r),t2=countNum(r,2),t6=countNum(r,6),soap=dragons(r,"Soap");
-    return handFitScore([{have:fl,need:2,noJoker:true},{have:t2,need:1,noJoker:true},{have:soap,need:1,noJoker:true},{have:t2,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t2,need:1,noJoker:true},{have:soap,need:1,noJoker:true},{have:t2,need:1,noJoker:true},{have:t6,need:1,noJoker:true},{have:t2,need:1,noJoker:true},{have:soap,need:1,noJoker:true},{have:t2,need:1,noJoker:true},{have:t6,need:1,noJoker:true}],0,14);
+    return handFitScore([
+      {have:fl,need:2,noJoker:true},
+      {have:t2,need:1,noJoker:true},{have:soap,need:1,noJoker:true},{have:t2,need:1,noJoker:true},{have:t6,need:1,noJoker:true},
+      {have:t2,need:1,noJoker:true},{have:soap,need:1,noJoker:true},{have:t2,need:1,noJoker:true},{have:t6,need:1,noJoker:true},
+      {have:t2,need:1,noJoker:true},{have:soap,need:1,noJoker:true},{have:t2,need:1,noJoker:true},{have:t6,need:1,noJoker:true}
+    ],0,14);
   }),
 ];
 
@@ -1029,7 +1743,7 @@ function recommendSpecificHands(rack,sectionId){
   if(!rack||!sectionId)return[];
   const hands=HAND_CATALOG.filter(h=>h.sec===sectionId);
   const scored=hands.map(h=>({...h,fit:h.fit(rack)})).sort((a,b)=>b.fit-a.fit);
-  return scored.slice(0,2).filter(h=>h.fit>0.05);
+  return scored.slice(0,3).filter(h=>h.fit>0.05);
 }
 
 // ─── HAND FAMILIES ───────────────────────────────────────────────────────────
@@ -1120,6 +1834,9 @@ function generateHandPaths(finalRack,sortedSections,chosenSecId){
   const primary=top2[0];
   const secondary=top2.find(s=>s.id!==primary?.id&&s.score>0.05);
 
+  // Format a fit % as a readable label (kept for potential future use)
+  function fitLabel(fit){const p=Math.round(fit*100);return p>=80?"🔥 "+p+"%":p>=60?"✓ "+p+"%":p>=40?"~ "+p+"%":""+p+"%";}
+
   function pathForSection(sec){
     if(!sec)return null;
     const id=sec.id;
@@ -1140,8 +1857,7 @@ function generateHandPaths(finalRack,sortedSections,chosenSecId){
     } else if(id==="cr"){
       const w=crWindow;
       anchor=w?`${w.suit[0].toUpperCase()}${w.suit.slice(1)} ${w.nums[0]}–${w.nums[3]} window`:"Best consecutive window";
-      const depthStr=w?`group depth ${w.depth}`:"shallow depth";
-      why=[w?`Your ${w.suit} suit has the strongest consecutive grouping (${depthStr}) — that's your CR window.`:"No deep window yet — look for 3-4 numbers with multiple tiles in one suit.",flowers>=2?`${flowers} flowers help — one CR hand uses a flower sextette.`:"",jokers>=1?`${jokers} joker${jokers>1?"s":""} can plug gaps in your window.`:""];
+      why=[w?`Your ${w.suit} suit has the strongest consecutive grouping (depth ${w.depth}) — that's your CR window.`:"No deep window yet — look for 3-4 numbers with multiple tiles in one suit.",flowers>=2?`${flowers} flowers help — one CR hand uses a flower sextette.`:"",jokers>=1?`${jokers} joker${jokers>1?"s":""} can plug gaps in your window.`:""];
       why=why.filter(Boolean);
       keep=w?[`All ${w.suit} tiles in the ${w.nums[0]}–${w.nums[3]} range`,"All Flowers","All Jokers"]:["Identify your 4-number window before next discard","All Jokers","All Flowers"];
       pivot="If your window stays shallow after 2 draws, pivot to 2468 or 13579 depending on your number parity.";
@@ -1149,7 +1865,7 @@ function generateHandPaths(finalRack,sortedSections,chosenSecId){
       const sixStr=sixes>0?`${sixes}× 6`:"missing 6s";
       const total=evens.reduce((s,e)=>s+e.c,0);
       anchor=`${total} even tiles — ${sixStr} (your anchor)`;
-      const deepest=evens.sort((a,b)=>b.c-a.c)[0];
+      const deepest=[...evens].sort((a,b)=>b.c-a.c)[0];
       why=[sixes>=2?`${sixes} sixes are a strong anchor — 6 appears in 7 of 8 hands.`:"You need 6s — they appear in 7 of 8 hands. Draw priority.",deepest&&deepest.c>=2?`${deepest.c}× ${deepest.n} is your next deepest group — build on it.`:"Start pairing your even numbers.",flowers>=2?`${flowers} flowers support this section well.`:""];
       why=why.filter(Boolean);
       keep=[sixes>0?"All 6s (never pass)":null,evens.filter(e=>e.c>=2).map(e=>`${e.n}s (${e.c} tiles)`),"All Flowers","All Jokers"].flat().filter(Boolean);
@@ -1165,7 +1881,7 @@ function generateHandPaths(finalRack,sortedSections,chosenSecId){
       const total=odds.reduce((s,e)=>s+e.c,0);
       const threes=numCounts[3]||0,fives=numCounts[5]||0;
       anchor=`${total} odd tiles — ${threes>0?`${threes}× 3`:""}${fives>0?`, ${fives}× 5`:""}`;
-      why=[threes>=2||fives>=2?`${threes}× 3 and ${fives}× 5 — these appear in 9 of 10 hands. Core anchors.`:"Prioritize drawing 3s and 5s — they appear in 9 of 10 hands.",odds.filter(e=>e.c>=2).length>0?`Pairs in ${odds.filter(e=>e.c>=2).map(e=>e.n).join("/")} — protect these.`:"Build pairs in your odd numbers before the game starts.",winds.length>=2?`${winds.length} winds are possible — some 13579 hands use N/S winds.`:""];
+      why=[threes>=2||fives>=2?`${threes}× 3 and ${fives}× 5 — these appear in 9 of 10 hands. Core anchors.`:"Prioritize drawing 3s and 5s — they appear in 9 of 10 hands.",odds.filter(e=>e.c>=2).length>0?`Pairs in ${odds.filter(e=>e.c>=2).map(e=>e.n).join("/")} — protect these.`:"Build pairs in your odd numbers before the game starts.",winds.length>=2?`${winds.length} winds present — some 13579 hands use N/S winds.`:""];
       why=why.filter(Boolean);
       keep=["All 3s and 5s (top priority)","All other odds","All Flowers","All Jokers"];
       pivot="If odds stay thin, check if 369 works — 3s and 9s cross both sections.";
@@ -1220,7 +1936,20 @@ function iqLongestRun(rack){
   return mr;
 }
 
-function iqDirection(finalRack,sectionId){
+function iqDirection(finalRack,sectionId,chosenHandObj){
+  // If a specific hand was chosen, score direction as fit against that exact hand
+  if(chosenHandObj){
+    const fit=chosenHandObj.fit(finalRack); // 0–1
+    const pct=Math.round(fit*100);
+    const directionScore=Math.round(fit*40); // scale to 0–40
+    const directionExplanation=
+      pct>=85?`${pct}% fit for ${chosenHandObj.label} — your rack is almost complete for this hand.`:
+      pct>=65?`${pct}% fit for ${chosenHandObj.label} — solid foundation, a few key tiles still needed.`:
+      pct>=45?`${pct}% fit for ${chosenHandObj.label} — partial match. More tiles needed to commit to this hand.`:
+      pct>=25?`${pct}% fit for ${chosenHandObj.label} — low fit. This hand needed a different tile distribution.`:
+      `${pct}% fit for ${chosenHandObj.label} — very low fit. The tiles you held don't support this hand well.`;
+    return{directionScore:Math.max(2,Math.min(40,directionScore)),directionExplanation};
+  }
   const meta=SECTION_META[sectionId]||{};
   const jk=finalRack.filter(t=>t.t==="j").length;
   const fl=finalRack.filter(t=>t.t==="f").length;
@@ -1314,7 +2043,7 @@ function iqDirection(finalRack,sectionId){
     const totalEvens=Object.values(ec).reduce((a,b)=>a+b,0);
     const distinctEvens=Object.keys(ec).length;
     const odds=finalRack.filter(t=>t.t==="s"&&t.n%2===1).length;
-    const nsWinds=finalRack.filter(t=>t.t==="w"&&(t.v==="North"||t.v==="South")).length;
+    const nsWinds=finalRack.filter(t=>t.t==="w"&&(t.v==="N"||t.v==="S")).length;
     // 6 anchor bonus
     const sixBonus=(ec[6]||0)>=2?8:(ec[6]||0)>=1?4:0;
     const densScore=totalEvens>=9?24:totalEvens>=7?18:totalEvens>=5?13:totalEvens>=3?8:totalEvens*2;
@@ -1347,8 +2076,8 @@ function iqDirection(finalRack,sectionId){
     const totalOdds=Object.values(oc).reduce((a,b)=>a+b,0);
     const distinctOdds=Object.keys(oc).length;
     const evens=finalRack.filter(t=>t.t==="s"&&t.n%2===0).length;
-    const ns=finalRack.filter(t=>t.t==="w"&&(t.v==="North"||t.v==="South")).length;
-    const ew=finalRack.filter(t=>t.t==="w"&&(t.v==="East"||t.v==="West")).length;
+    const ns=finalRack.filter(t=>t.t==="w"&&(t.v==="N"||t.v==="S")).length;
+    const ew=finalRack.filter(t=>t.t==="w"&&(t.v==="E"||t.v==="W")).length;
     // 5 and 3 are the primary anchors
     const fiveBonus=(oc[5]||0)>=2?8:(oc[5]||0)>=1?4:0;
     const threeBonus=(oc[3]||0)>=2?6:(oc[3]||0)>=1?3:0;
@@ -1364,7 +2093,15 @@ function iqDirection(finalRack,sectionId){
   return{directionScore:Math.max(0,Math.min(40,Math.round(directionScore))),directionExplanation};
 }
 
-function iqTileStrength(finalRack,sectionId){
+function iqTileStrength(finalRack,sectionId,chosenHandObj){
+  // If a specific hand was chosen, tile strength = how well the rack supports that hand's groups
+  if(chosenHandObj){
+    const fit=chosenHandObj.fit(finalRack);
+    const pct=Math.round(fit*100);
+    // Scale fit to 0–25, with a slight curve to reward high fits
+    const raw=pct>=90?25:pct>=80?22:pct>=70?18:pct>=60?14:pct>=50?11:pct>=40?8:pct>=25?5:Math.round(fit*20);
+    return{tileStrengthScore:Math.max(0,Math.min(25,raw))};
+  }
   const meta=SECTION_META[sectionId]||{};
   const jk=finalRack.filter(t=>t.t==="j").length;
   const fl=finalRack.filter(t=>t.t==="f").length;
@@ -1469,8 +2206,8 @@ function iqTileStrength(finalRack,sectionId){
     const distinctEvens=Object.keys(ec).length;
     const odds=finalRack.filter(t=>t.t==="s"&&t.n%2===1).length;
     const dragons=finalRack.filter(t=>t.t==="d").length;
-    const ew=finalRack.filter(t=>t.t==="w"&&(t.v==="East"||t.v==="West")).length;
-    const nsW=finalRack.filter(t=>t.t==="w"&&(t.v==="North"||t.v==="South")).length;
+    const ew=finalRack.filter(t=>t.t==="w"&&(t.v==="E"||t.v==="W")).length;
+    const nsW=finalRack.filter(t=>t.t==="w"&&(t.v==="N"||t.v==="S")).length;
     // Group depth within even tiles
     const evenGroupScore=Object.values(ec).reduce((a,n)=>a+(n>=4?8:n>=3?5:n>=2?3:n>=1?1:0),0);
     // 6 anchor bonus
@@ -1510,8 +2247,8 @@ function iqTileStrength(finalRack,sectionId){
     const totalOdds=Object.values(oc).reduce((a,b)=>a+b,0);
     const distinctOdds=Object.keys(oc).length;
     const evens=finalRack.filter(t=>t.t==="s"&&t.n%2===0).length;
-    const ns=finalRack.filter(t=>t.t==="w"&&(t.v==="North"||t.v==="South")).length;
-    const ew=finalRack.filter(t=>t.t==="w"&&(t.v==="East"||t.v==="West")).length;
+    const ns=finalRack.filter(t=>t.t==="w"&&(t.v==="N"||t.v==="S")).length;
+    const ew=finalRack.filter(t=>t.t==="w"&&(t.v==="E"||t.v==="W")).length;
     const dragons=finalRack.filter(t=>t.t==="d").length;
     // Group depth in odd tiles — weight 5 and 3 higher (appear in 9/10 hands)
     const fiveGrp=(oc[5]||0)>=4?10:(oc[5]||0)>=3?7:(oc[5]||0)>=2?4:(oc[5]||0)*1;
@@ -1531,29 +2268,51 @@ function iqTileStrength(finalRack,sectionId){
   return{tileStrengthScore:raw};
 }
 
-function iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId){
+function iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId,chosenHandObj){
   if(!passedTilesByRound||passedTilesByRound.length===0)return{passQualityScore:10,passInsights:[]};
-  const meta=SECTION_META[sectionId]||{};
-  const strongNums=meta.strongNums||[];
-  const weakNums=meta.weakNums||[];
-  const strongTypes=meta.strongTypes||[];
-  const weakTypes=meta.weakTypes||[];
 
+  // Hand-specific strong/weak tile definitions
   const isStrongTile=(t)=>{
-    if(t.t==="j"&&sectionId!=="sp")return true; // jokers worthless in S&P
+    if(chosenHandObj){
+      if(t.t==="j"&&!chosenHandObj.concealed)return true;
+      if(t.t==="f"&&chosenHandObj.label.includes("F"))return true;
+      if(t.t==="d"){const dl=chosenHandObj.label;return dl.includes("DDD")||dl.includes("DD")||dl.includes("Soap");}
+      if(t.t==="w"){const wl=chosenHandObj.label;return wl.includes("N")||wl.includes("E")||wl.includes("W")||wl.includes("S")||wl.includes("NEWS");}
+      if(t.t==="s"){
+        const nums=[...new Set((chosenHandObj.label.match(/\d/g)||[]).map(Number).filter(n=>n>=1&&n<=9))];
+        return nums.includes(t.n);
+      }
+      return false;
+    }
+    // Fallback to section meta
+    const meta=SECTION_META[sectionId]||{};
+    if(t.t==="j"&&sectionId!=="sp")return true;
     if(t.t==="f"&&meta.wantsFlowers)return true;
-    if(strongTypes.includes(t.t))return true;
-    if(t.t==="s"&&strongNums.includes(t.n))return true;
-    // 2026 special: Soap (White Dragon) is a strong tile
+    if((meta.strongTypes||[]).includes(t.t))return true;
+    if(t.t==="s"&&(meta.strongNums||[]).includes(t.n))return true;
     if(sectionId==="2026"&&t.t==="d"&&t.v==="Soap")return true;
     return false;
   };
+
   const isWeakTile=(t)=>{
-    // In S&P, jokers are structurally useless — treat as weak so passing them scores well
+    if(chosenHandObj){
+      if(sectionId==="sp"&&t.t==="j")return true;
+      if(chosenHandObj.concealed&&t.t==="j")return true;
+      // A tile is weak if it doesn't appear in the hand at all
+      if(t.t==="s"){
+        const nums=[...new Set((chosenHandObj.label.match(/\d/g)||[]).map(Number).filter(n=>n>=1&&n<=9))];
+        return !nums.includes(t.n);
+      }
+      if(t.t==="f"&&!chosenHandObj.label.includes("F"))return true;
+      if(t.t==="w"){const wl=chosenHandObj.label;return!(wl.includes("N")||wl.includes("E")||wl.includes("W")||wl.includes("S")||wl.includes("NEWS"));}
+      if(t.t==="d"){const dl=chosenHandObj.label;return!(dl.includes("DDD")||dl.includes("DD")||dl.includes("Soap"));}
+      return false;
+    }
+    // Fallback to section meta
+    const meta=SECTION_META[sectionId]||{};
     if(sectionId==="sp"&&t.t==="j")return true;
-    if(weakTypes.includes(t.t)&&t.t!=="j")return true;
-    if(t.t==="s"&&weakNums.includes(t.n))return true;
-    // In W/D, number tiles 5-9 are weak (1-4 may be valid kongs so not flagged weak)
+    if((meta.weakTypes||[]).includes(t.t)&&t.t!=="j")return true;
+    if(t.t==="s"&&(meta.weakNums||[]).includes(t.n))return true;
     if(sectionId==="wd"&&t.t==="s"&&![1,2,3,4].includes(t.n))return true;
     return false;
   };
@@ -1946,46 +2705,66 @@ function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScor
 }
 
 function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
-  const{startingRack,finalRack,passedTilesByRound,totalTime,sectionId}=gameState;
+  const{startingRack,finalRack,passedTilesByRound,totalTime,sectionId,chosenHand}=gameState;
   if(!startingRack||!finalRack||!sectionId)return null;
 
+  // Resolve the specific chosen hand from the catalog
+  const chosenHandObj=chosenHand
+    ?HAND_CATALOG.find(h=>h.sec===sectionId&&h.label===chosenHand)
+    :null;
+
   const roundCount=Math.max((passedTilesByRound||[]).length,1);
-  let{directionScore,directionExplanation}=iqDirection(finalRack,sectionId);
-  let{tileStrengthScore}=iqTileStrength(finalRack,sectionId);
-  const{passQualityScore,passInsights,brokenPairsCount}=iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId);
+
+  // ── DIRECTION SCORE: now based on fit against the specific hand ──────────────
+  let{directionScore,directionExplanation}=iqDirection(finalRack,sectionId,chosenHandObj);
+
+  // ── TILE STRENGTH: also hand-aware ───────────────────────────────────────────
+  let{tileStrengthScore}=iqTileStrength(finalRack,sectionId,chosenHandObj);
+
+  // ── PASS QUALITY: hand-aware strong/weak tile determination ──────────────────
+  const{passQualityScore,passInsights,brokenPairsCount}=iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId,chosenHandObj);
   const{timingScore,timingInsight}=iqTiming(totalTime||0,roundCount,passedTilesByRound);
 
   // ── DEAL QUALITY FLOOR ──────────────────────────────────────────────────────
-  const meta=SECTION_META[sectionId]||{};
-  const strongNums=meta.strongNums||[];
-  const strongTypes=meta.strongTypes||[];
-  // Section-aware strong tile definition — mirrors isStrongTile in iqPassQuality
-  const isStrongForSection=(t)=>{
+  // Use hand-specific tile value if we have a chosen hand, else fall back to section meta
+  const isStrongForHand=(t)=>{
+    if(chosenHandObj){
+      // A tile is strong for this hand if it appears in the hand label or is a structural support tile
+      if(t.t==="j"&&!chosenHandObj.concealed)return true;
+      if(t.t==="f"&&chosenHandObj.label.includes("F"))return true;
+      if(t.t==="d"&&chosenHandObj.label.match(/D{2,}|Soap/))return true;
+      if(t.t==="w"&&chosenHandObj.label.match(/[NESW]{2,}|NEWS/))return true;
+      if(t.t==="s"){
+        const nums=[...new Set((chosenHandObj.label.match(/\d/g)||[]).map(Number).filter(n=>n>=1&&n<=9))];
+        return nums.includes(t.n);
+      }
+      return false;
+    }
+    // Fallback to section meta
+    const meta=SECTION_META[sectionId]||{};
     if(t.t==="j"&&sectionId!=="sp")return true;
     if(t.t==="f"&&meta.wantsFlowers)return true;
-    if(strongTypes.includes(t.t))return true;
-    if(t.t==="s"&&strongNums.includes(t.n))return true;
+    if((meta.strongTypes||[]).includes(t.t))return true;
+    if(t.t==="s"&&(meta.strongNums||[]).includes(t.n))return true;
     if(sectionId==="2026"&&t.t==="d"&&t.v==="Soap")return true;
     return false;
   };
-  const dealStrong=startingRack.filter(t=>isStrongForSection(t)).length;
-  const finalStrong=finalRack.filter(t=>isStrongForSection(t)).length;
+
+  const dealStrong=startingRack.filter(t=>isStrongForHand(t)).length;
+  const finalStrong=finalRack.filter(t=>isStrongForHand(t)).length;
   const retentionRate=dealStrong>0?finalStrong/dealStrong:0;
-  // Retention bonus capped at +2 (was +4) — prevents stacking inflation
   if(retentionRate>=0.85&&dealStrong>=5){
     directionScore=Math.min(40,directionScore+2);
     tileStrengthScore=Math.min(25,tileStrengthScore+(tileStrengthScore<20?3:0));
   } else if(retentionRate>=0.7&&dealStrong>=5){
     directionScore=Math.min(40,directionScore+1);
   }
-  // Poor deal floor — only if truly starved (≤2 strong tiles dealt)
   if(dealStrong<=2){
     directionScore=Math.max(directionScore,16);
     tileStrengthScore=Math.max(tileStrengthScore,10);
   }
 
   // ── SECTION DOMINANCE BONUS ─────────────────────────────────────────────────
-  // Capped at +2 total (was +4) — direction should be earned, not awarded
   const allSectionScores=SECS.map(s=>s.ck(finalRack));
   const chosenIdx=SECS.findIndex(s=>s.id===sectionId);
   const chosenScore=chosenIdx>=0?allSectionScores[chosenIdx]:0;
@@ -3084,10 +3863,22 @@ function Chip({label,type}){
 }
 
 // ─── SPECIFIC HAND RECOMMENDER CARD ─────────────────────────────────────────
-function SpecificHandCard({finalRack,sectionId,defaultOpen=false}){
+function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideLabel,pinnedHandLabel}){
   const [open,setOpen]=useState(defaultOpen);
   if(!finalRack||!sectionId)return null;
-  const hands=recommendSpecificHands(finalRack,sectionId);
+  // Get all scored hands for section, sorted by fit
+  const allHands=HAND_CATALOG.filter(h=>h.sec===sectionId)
+    .map(h=>({...h,fit:h.fit(finalRack)}))
+    .sort((a,b)=>b.fit-a.fit);
+  // If a pinned hand is specified, put it first
+  let hands=allHands;
+  if(pinnedHandLabel){
+    const pinned=allHands.find(h=>h.label===pinnedHandLabel);
+    const rest=allHands.filter(h=>h.label!==pinnedHandLabel).filter(h=>h.fit>0.05).slice(0,2);
+    hands=pinned?[pinned,...rest]:allHands.slice(0,3).filter(h=>h.fit>0.05);
+  } else {
+    hands=allHands.slice(0,3).filter(h=>h.fit>0.05);
+  }
   if(!hands||hands.length===0)return null;
   const sec=SECS.find(s=>s.id===sectionId);
   const fam=getHandFamily(sectionId);
@@ -3105,7 +3896,7 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false}){
           <span style={{fontSize:22}}>{hEmoji}</span>
           <div>
             <div style={{fontSize:8,color:hColor,letterSpacing:2,fontWeight:700,marginBottom:2}}>HAND TARGETS · 2026 NMJL</div>
-            <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:hColor,lineHeight:1.2}}>{hLabel}</div>
+            <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:hColor,lineHeight:1.2}}>{overrideLabel||hLabel}</div>
             {hDesc&&<div style={{fontSize:11,color:hColor,opacity:0.7,lineHeight:1.3,marginTop:1}}>{hDesc}</div>}
           </div>
         </div>
@@ -3178,6 +3969,7 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false}){
                 <div style={{flex:1}}>
                   <div style={{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap",marginBottom:4}}>
                     <span style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,letterSpacing:0.3}}>{label}</span>
+                    {pinnedHandLabel&&hand.label===pinnedHandLabel&&<span style={{fontSize:9,fontWeight:700,background:C.jade+"20",color:C.jade,borderRadius:10,padding:"2px 7px",letterSpacing:0.5}}>YOUR HAND</span>}
                     {hand.concealed&&<span style={{fontSize:9,fontWeight:700,background:"#2460A820",color:"#2460A8",borderRadius:10,padding:"2px 7px",letterSpacing:0.5}}>CONCEALED</span>}
                     <span style={{fontSize:9,fontWeight:700,background:"#00000009",color:C.mut,borderRadius:10,padding:"2px 7px"}}>×{hand.value}</span>
                   </div>
@@ -3214,108 +4006,6 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false}){
   );
 }
 
-// ─── HAND FAMILY CARD — Best Hand Family + 1–2 Concrete Paths ────────────────
-function HandFamilyCard({finalRack,allSections,chosenSecId}){
-  const [expanded,setExpanded]=useState(false);
-  if(!finalRack||!allSections||allSections.length===0)return null;
-  const sorted=[...allSections].sort((a,b)=>b.score-a.score);
-  const{primary,secondary}=generateHandPaths(finalRack,sorted,chosenSecId);
-  if(!primary)return null;
-  const fam=primary.family;
-  if(!fam)return null;
-
-  const [hfOpen,setHfOpen]=useState(false);
-  return(
-    <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden",borderColor:fam.border}}>
-      {/* Family header — clickable toggle */}
-      <button onClick={()=>setHfOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"12px 14px",background:fam.bg,border:"none",cursor:"pointer",textAlign:"left",borderBottom:hfOpen?`1px solid ${fam.border}`:"none"}}>
-        <div style={{display:"flex",alignItems:"center",gap:10}}>
-          <span style={{fontSize:22}}>{fam.emoji}</span>
-          <div>
-            <div style={{fontSize:8,color:fam.color,letterSpacing:2,fontWeight:700,marginBottom:2}}>BEST HAND FAMILY</div>
-            <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:fam.color,lineHeight:1.2}}>{fam.label}</div>
-            <div style={{fontSize:11,color:fam.color,opacity:0.7,lineHeight:1.3,marginTop:1}}>{fam.desc}</div>
-          </div>
-        </div>
-        <span style={{fontSize:12,color:fam.color,flexShrink:0,opacity:0.7}}>{hfOpen?"▾":"▸"}</span>
-      </button>
-      {hfOpen&&<div className="rk-in">
-
-      {/* Primary path */}
-      <div style={{padding:"12px 14px",borderBottom:secondary?`1px solid ${C.bdr}`:"none"}}>
-        <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:8}}>
-          <span style={{fontSize:14}}>{primary.icon}</span>
-          <div style={{flex:1}}>
-            <span style={{fontSize:11,fontWeight:800,color:C.ink}}>{primary.name}</span>
-            <span style={{fontSize:10,color:C.mut,marginLeft:6}}>{primary.pct}% fit</span>
-          </div>
-          <div style={{fontSize:9,background:fam.color,color:"#fff",borderRadius:12,padding:"2px 8px",fontWeight:700,letterSpacing:0.5}}>PRIMARY</div>
-        </div>
-        {/* Anchor */}
-        <div style={{background:fam.bg,borderRadius:8,padding:"7px 10px",marginBottom:8,border:`1px solid ${fam.border}`}}>
-          <div style={{fontSize:9,color:fam.color,fontWeight:700,letterSpacing:1,marginBottom:2}}>YOUR ANCHOR</div>
-          <div style={{fontSize:11,color:C.ink,fontWeight:600}}>{primary.anchor||"—"}</div>
-        </div>
-        {/* Why it fits */}
-        {primary.why&&primary.why.length>0&&(
-          <div style={{marginBottom:8}}>
-            {primary.why.map((w,i)=>(
-              <div key={i} style={{display:"flex",gap:6,alignItems:"flex-start",marginBottom:i<primary.why.length-1?5:0}}>
-                <span style={{color:fam.color,fontSize:10,marginTop:1,flexShrink:0}}>▸</span>
-                <span style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{w}</span>
-              </div>
-            ))}
-          </div>
-        )}
-        {/* Keep chips */}
-        {primary.keep&&primary.keep.length>0&&(
-          <div>
-            <div style={{fontSize:9,color:C.mut,fontWeight:700,letterSpacing:1,marginBottom:4}}>PROTECT</div>
-            <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
-              {primary.keep.slice(0,4).map((k,i)=>(
-                <span key={i} style={{fontSize:10,fontWeight:600,background:C.sage,color:C.sageB,border:`1px solid ${C.sageB}30`,borderRadius:16,padding:"3px 9px"}}>{k}</span>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Secondary path — collapsible */}
-      {secondary&&(
-        <div>
-          <button onClick={()=>setExpanded(e=>!e)} style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",padding:"10px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
-            <div style={{display:"flex",alignItems:"center",gap:6}}>
-              <span style={{fontSize:13}}>{secondary.icon}</span>
-              <span style={{fontSize:11,fontWeight:700,color:C.mut}}>{secondary.name} — Backup ({secondary.pct}%)</span>
-            </div>
-            <span style={{fontSize:12,color:C.mut}}>{expanded?"▾":"▸"}</span>
-          </button>
-          {expanded&&(
-            <div style={{padding:"0 14px 12px",background:"#fff"}} className="rk-in">
-              {secondary.anchor&&<div style={{fontSize:11,color:C.ink,fontWeight:600,marginBottom:6}}>Anchor: {secondary.anchor}</div>}
-              {secondary.why&&secondary.why.slice(0,2).map((w,i)=>(
-                <div key={i} style={{display:"flex",gap:6,alignItems:"flex-start",marginBottom:i<Math.min(secondary.why.length,2)-1?5:0}}>
-                  <span style={{color:C.mut,fontSize:10,marginTop:1,flexShrink:0}}>▸</span>
-                  <span style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{w}</span>
-                </div>
-              ))}
-              {secondary.pivot&&<div style={{marginTop:8,fontSize:10,color:C.mut,lineHeight:1.5,background:"#fff",borderRadius:6,padding:"6px 9px",border:`1px solid ${C.bdr}`}}>↩ Pivot condition: {secondary.pivot}</div>}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Primary pivot note */}
-      {primary.pivot&&!secondary&&(
-        <div style={{padding:"0 14px 12px"}}>
-          <div style={{fontSize:10,color:C.mut,lineHeight:1.5,background:C.bg2,borderRadius:6,padding:"6px 9px",border:`1px solid ${C.bdr}`}}>↩ Pivot condition: {primary.pivot}</div>
-        </div>
-      )}
-      </div>}
-    </div>
-  );
-}
-
 // ─── SORTABLE RACK — final rack display with sort button ──────────────────────
 function SortableRack({hand:initialHand}){
   const [rack,setRack]=useState(initialHand);
@@ -3340,11 +4030,11 @@ function DailyIQScorecard({iq,hand,passLog,dayNum,section,chosenSec,allSections,
   const [passOpen,setPassOpen]=useState(false);
   const [dailyStats,setDailyStats]=useState(null);
   if(!iq)return null;
-  const shareText=iq.shareText||`🀄 Daily Rackle #${dayNum} · IQ ${iq.totalScore} · ${iq.level}\nThink you can beat it?\nplayrackle.com`;
+  const passEmoji=(iq.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
+  const shareText=`🀄 Daily Rackle #${dayNum} · IQ ${iq.totalScore} · ${iq.level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Think you can beat it?\nplayrackle.com`;
   useEffect(()=>{fetchDailyStats().then(s=>{
     if(s&&s.total>=1){
-      // Add 1 for the current player — their score may not yet be committed to DB
-      setDailyStats({...s,total:s.total+1});
+      setDailyStats(s);
     }
   });},[]);
 
@@ -3494,6 +4184,8 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
   const [tab,setTab]=useState(0);
   const [sfOpen,setSfOpen]=useState(false);
   if(!iq)return null;
+  const passEmoji=(iq.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
+  const freshShareText=`🀄 Rackle Practice · IQ ${iq.totalScore} · ${iq.level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Play the daily Charleston challenge!\nplayrackle.com`;
   const dist=iq.distanceToOptimal||{};
   const tins=iq.tileInsights||{};
 
@@ -3564,9 +4256,9 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
         {/* Share */}
         <div style={{...S.card,marginBottom:8}}>
           <div style={{fontFamily:"monospace",fontSize:10,color:C.mut,background:C.bg2,borderRadius:8,padding:"10px 12px",marginBottom:10,textAlign:"center",borderBottom:`1px solid ${C.bdr}`}}>
-            {(iq.shareText||"").split("\n").map((line,i)=>line===""?<div key={i} style={{height:8}}/>:<div key={i} style={{lineHeight:1.9}}>{line}</div>)}
+            {freshShareText.split("\n").map((line,i)=>line===""?<div key={i} style={{height:8}}/>:<div key={i} style={{lineHeight:1.9}}>{line}</div>)}
           </div>
-          <ShareButton text={iq.shareText}/>
+          <ShareButton text={freshShareText}/>
         </div>
       </div>}
 
@@ -3743,12 +4435,13 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
 }
 
 // ─── COACH MODE SCREEN — deep analysis page ──────────────────────────────────
-function CoachModeScreen({iq,hand,passLog,dayNum,section,chosenSec,allSections,onBack,setScreen}){
+function CoachModeScreen({iq,hand,passLog,dayNum,section,chosenSec,chosenHand,allSections,onBack,setScreen}){
   const [passOpen,setPassOpen]=useState(false);
   const [sfOpen,setSfOpen]=useState(false);
   if(!iq)return null;
 
   const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
+  const chosenHandObj=chosenHand?HAND_CATALOG.find(h=>h.sec===chosenSec&&h.label===chosenHand):null;
   const sortedSecs=allSections?[...allSections].sort((a,b)=>b.score-a.score):[];
   const bestFitSec=sortedSecs[0];
   const chosenFit=chosenSec&&allSections?allSections.find(s=>s.id===chosenSec):null;
@@ -3796,9 +4489,15 @@ function CoachModeScreen({iq,hand,passLog,dayNum,section,chosenSec,allSections,o
       {/* Direction note */}
       {iq.directionExplanation&&<div style={{fontSize:11,color:C.mut,lineHeight:1.55,background:C.bg2,borderRadius:10,padding:"9px 12px",marginBottom:10,borderLeft:`3px solid ${scoreColor(iq.directionScore,40)}`}}>{iq.directionExplanation}</div>}
 
-      {/* Section Read */}
+      {/* Section + Hand Read */}
       {chosenSecObj&&<div style={{...S.card,marginBottom:10,padding:"12px 14px"}}>
-        <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>SECTION READ</div>
+        <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>YOUR TARGET</div>
+        {/* Chosen hand label */}
+        {chosenHandObj&&<div style={{background:C.sage,borderRadius:10,padding:"10px 12px",marginBottom:8,border:`1px solid ${C.sageB}20`}}>
+          <div style={{fontSize:8,color:C.sageB,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>CHOSEN HAND</div>
+          <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:C.ink,marginBottom:2}}>{chosenHandObj.label}</div>
+          <div style={{fontSize:10,color:C.mut}}>{chosenHandObj.concealed?"Concealed · no jokers":"Open hand"} · {chosenHandObj.value} pts · {chosenSecObj.name}</div>
+        </div>}
         <div style={{display:"flex",gap:8,marginBottom:sectionMatch?0:8}}>
           <div style={{flex:1,borderRadius:10,padding:"10px",background:sectionMatch?C.jade+"08":"#FFF0E8",border:`1.5px solid ${sectionMatch?C.jade+"30":"#C0602025"}`}}>
             <div style={{fontSize:8,color:sectionMatch?C.jade:"#8A3010",letterSpacing:1.5,fontWeight:700,marginBottom:4}}>YOU CHOSE</div>
@@ -3806,7 +4505,7 @@ function CoachModeScreen({iq,hand,passLog,dayNum,section,chosenSec,allSections,o
               <span style={{fontSize:16}}>{chosenSecObj.icon}</span>
               <div>
                 <div style={{fontSize:12,fontWeight:800,color:C.ink}}>{chosenSecObj.name}</div>
-                {chosenPct!=null&&<div style={{fontSize:10,color:C.mut}}>{chosenPct}% fit</div>}
+                {chosenPct!=null&&<div style={{fontSize:10,color:C.mut}}>{chosenPct}% section fit</div>}
               </div>
             </div>
           </div>
@@ -3816,16 +4515,23 @@ function CoachModeScreen({iq,hand,passLog,dayNum,section,chosenSec,allSections,o
               <span style={{fontSize:16}}>{bestFitSec?.icon}</span>
               <div>
                 <div style={{fontSize:12,fontWeight:800,color:C.ink}}>{bestFitSec?.name}</div>
-                {bestPct!=null&&<div style={{fontSize:10,color:C.mut}}>{bestPct}% fit</div>}
+                {bestPct!=null&&<div style={{fontSize:10,color:C.mut}}>{bestPct}% section fit</div>}
               </div>
             </div>
           </div>
         </div>
-        {!sectionMatch&&<div style={{fontSize:11,color:"#8A3010",lineHeight:1.55,background:"#FFF5F0",borderRadius:8,padding:"7px 10px"}}>💡 {bestFitSec?.icon} {bestFitSec?.name} was the stronger fit. An earlier pivot could have scored higher.</div>}
+        {!sectionMatch&&<div style={{fontSize:11,color:"#8A3010",lineHeight:1.55,background:"#FFF5F0",borderRadius:8,padding:"7px 10px"}}>💡 {bestFitSec?.icon} {bestFitSec?.name} was the stronger section fit. An earlier pivot could have scored higher.</div>}
       </div>}
 
-      {/* Hand Targets */}
-      {hand&&hand.length>0&&chosenSec&&<SpecificHandCard finalRack={hand} sectionId={chosenSec} defaultOpen={true}/>}
+      {/* Hand Targets — chosen hand pinned first, then alternatives */}
+      {hand&&hand.length>0&&chosenSec&&(
+        <SpecificHandCard finalRack={hand} sectionId={chosenSec} pinnedHandLabel={chosenHand} defaultOpen={true} label="Your Hand — Rack Analysis"/>
+      )}
+
+      {/* Hand Targets — best fit section (when different) */}
+      {hand&&hand.length>0&&bestFitSec&&bestFitSec.id!==chosenSec&&(
+        <SpecificHandCard finalRack={hand} sectionId={bestFitSec.id} defaultOpen={false} label={`${bestFitSec.name} — What Could Have Been`}/>
+      )}
 
       {/* All sections — collapsed by default */}
       {allSections&&allSections.length>0&&(()=>{
@@ -3904,9 +4610,9 @@ function CoachModeScreen({iq,hand,passLog,dayNum,section,chosenSec,allSections,o
 function IQScorecard({iq,hand,passLog,isDaily,dayNum,section,chosenSec,allSections,onHome,onDealAgain,onPractice,setScreen}){
   const [coachMode,setCoachMode]=useState(false);
   if(isDaily&&coachMode)return(
-    <CoachModeScreen iq={iq} hand={hand} passLog={passLog} dayNum={dayNum} section={section} chosenSec={chosenSec} allSections={allSections} onBack={()=>setCoachMode(false)} setScreen={setScreen}/>
+    <CoachModeScreen iq={iq} hand={hand} passLog={passLog} dayNum={dayNum} section={section} chosenSec={chosenSec} chosenHand={chosenHand} allSections={allSections} onBack={()=>setCoachMode(false)} setScreen={setScreen}/>
   );
-  if(isDaily)return <DailyIQScorecard iq={iq} hand={hand} passLog={passLog} dayNum={dayNum} section={section} chosenSec={chosenSec} allSections={allSections} onHome={onHome} onPractice={onPractice} onCoachMode={()=>setCoachMode(true)}/>;
+  if(isDaily)return <DailyIQScorecard iq={iq} hand={hand} passLog={passLog} dayNum={dayNum} section={section} chosenSec={chosenSec} chosenHand={chosenHand} allSections={allSections} onHome={onHome} onPractice={onPractice} onCoachMode={()=>setCoachMode(true)}/>;
   return <PracticeIQScorecard iq={iq} hand={hand} passLog={passLog} section={section} chosenSec={chosenSec} allSections={allSections} onHome={onHome} onDealAgain={onDealAgain}/>;
 }
 
@@ -3929,7 +4635,7 @@ function ScorecardScreen({res,home,dayNum,onPractice,setScreen}){
   return(
     <div style={S.pg} className="rk-pg">
       <RackleHeader onBack={home} setScreen={setScreen}/>
-      <DailyIQScorecard iq={res.iq} hand={res.finalRack||[]} passLog={res.passLog||[]} dayNum={dayNum} section={res.section} chosenSec={res.chosenSec} allSections={res.allSections||[]} onHome={home} onPractice={onPractice} onCoachMode={()=>setCoachMode(true)}/>
+      <DailyIQScorecard iq={res.iq} hand={res.finalRack||[]} passLog={res.passLog||[]} dayNum={dayNum} section={res.section} chosenSec={res.chosenSec} chosenHand={res.chosenHand} allSections={res.allSections||[]} onHome={home} onPractice={onPractice} onCoachMode={()=>setCoachMode(true)}/>
       <Footer/>
     </div>
   );
@@ -4337,7 +5043,7 @@ function InlineCodeEntry({setScreen}){
       </button>
       {open&&(
         <div className="rk-in" style={{padding:"0 14px 14px"}}>
-          <div style={{display:"flex",gap:8}}>
+          <div style={{display:"flex",gap:8,width:"100%",boxSizing:"border-box"}}>
             <input
               value={code}
               onChange={e=>{setCode(e.target.value.replace(/\D/g,"").slice(0,4));setErr("");}}
@@ -4345,9 +5051,9 @@ function InlineCodeEntry({setScreen}){
               placeholder="----"
               maxLength={4}
               autoFocus
-              style={{flex:1,padding:"10px 14px",borderRadius:10,border:`1.5px solid ${err?C.cinn:C.jade+"40"}`,fontSize:20,fontFamily:F.d,fontWeight:700,color:C.ink,outline:"none",textAlign:"center",letterSpacing:5,background:"#fff"}}
+              style={{flex:1,minWidth:0,padding:"10px 14px",borderRadius:10,border:`1.5px solid ${err?C.cinn:C.jade+"40"}`,fontSize:20,fontFamily:F.d,fontWeight:700,color:C.ink,outline:"none",textAlign:"center",letterSpacing:5,background:"#fff"}}
             />
-            <button onClick={join} style={{padding:"10px 20px",borderRadius:10,border:"none",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:F.b,whiteSpace:"nowrap"}}>Join →</button>
+            <button onClick={join} style={{flexShrink:0,padding:"10px 16px",borderRadius:10,border:"none",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:F.b}}>Join →</button>
           </div>
           {err&&<div style={{fontSize:11,color:C.cinn,marginTop:6}}>{err}</div>}
           <button onClick={()=>{setOpen(false);setScreen("clubs");}} style={{marginTop:10,width:"100%",background:"none",border:"none",fontSize:11,color:C.mut,cursor:"pointer",fontWeight:600,padding:0,textAlign:"center"}}>Don't have a code? Browse the club directory →</button>
@@ -4661,6 +5367,8 @@ function ClubDirectoryScreen({home,setScreen}){
   const [selected,setSelected]=useState(null);
   const [code,setCode]=useState("");
   const [codeErr,setCodeErr]=useState("");
+  const [pubEntries,setPubEntries]=useState([]);
+  const [pubLoading,setPubLoading]=useState(false);
   const allClubs=Object.entries(CLUBS);
 
   // Pre-select from URL slug e.g. playrackle.com/clubs/apex-mahjong-club
@@ -4668,6 +5376,13 @@ function ClubDirectoryScreen({home,setScreen}){
     const slug=getUrlParam("club");
     if(slug){const match=clubBySlug(slug);if(match)setSelected(match[0]);}
   },[]);
+
+  // Fetch public leaderboard whenever a club is selected
+  useEffect(()=>{
+    if(!selected)return;
+    setPubLoading(true);setPubEntries([]);
+    fetchLBEntries(selected).then(rows=>{setPubEntries(rows);setPubLoading(false);});
+  },[selected]);
 
   const filtered=query.trim()===""
     ?allClubs
@@ -4685,103 +5400,156 @@ function ClubDirectoryScreen({home,setScreen}){
   };
 
   const clubUrl=(clubCode)=>{
-    const c=CLUBS[clubCode];
-    if(!c)return "";
-    return `playrackle.com/clubs/${toSlug(c.name)}`;
+    const c=CLUBS[clubCode];if(!c)return"";
+    return`playrackle.com/clubs/${toSlug(c.name)}`;
   };
+
+  const isMember=getClubCode()===selected;
+  const dn=getDayNum();
 
   return(
     <div style={S.pg} className="rk-pg">
       <RackleHeader onBack={home} setScreen={setScreen}/>
 
-      {/* Page title */}
-      <div style={{marginBottom:20,marginTop:4,textAlign:"center"}}>
-        <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>Club Directory</div>
-        <div style={{fontSize:12,color:C.mut}}>Find your Mahjong club and join its leaderboard.</div>
-      </div>
+      {/* If a club is deep-linked, show its full public page */}
+      {selected?(()=>{
+        const club=CLUBS[selected];if(!club)return null;
+        const todayEntries=pubEntries.filter(e=>{
+          const d=new Date(e.created_at||0);
+          return d.toDateString()===new Date().toDateString();
+        });
+        const showEntries=pubEntries.slice(0,20);
+        return(
+          <div>
+            {/* Club header */}
+            <div style={{textAlign:"center",marginBottom:20,marginTop:4}}>
+              <div style={{fontSize:36,marginBottom:6}}>{club.emoji||"🀄"}</div>
+              <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>{club.name}</div>
+              <div style={{fontSize:12,color:C.mut,marginBottom:12}}>{club.location}</div>
+              {/* Share link */}
+              <div style={{display:"inline-flex",alignItems:"center",gap:8,background:C.sage,borderRadius:10,padding:"7px 12px",border:`1px solid ${C.sageB}20`}}>
+                <span style={{fontSize:11,color:C.sageB,fontWeight:600}}>{clubUrl(selected)}</span>
+                <button onClick={()=>navigator.clipboard?.writeText(`https://${clubUrl(selected)}`)} style={{background:"none",border:`1px solid ${C.sageB}40`,borderRadius:6,padding:"3px 8px",fontSize:10,color:C.sageB,fontWeight:700,cursor:"pointer"}}>Copy</button>
+              </div>
+            </div>
 
-      {/* Search */}
-      <div style={{position:"relative",marginBottom:14}}>
-        <span style={{position:"absolute",left:12,top:"50%",transform:"translateY(-50%)",fontSize:14,color:C.mut,pointerEvents:"none"}}>🔍</span>
-        <input
-          value={query}
-          onChange={e=>{setQuery(e.target.value);setSelected(null);setCode("");setCodeErr("");}}
-          placeholder="Search by club name or city…"
-          style={{width:"100%",padding:"11px 12px 11px 36px",borderRadius:12,border:`1.5px solid ${C.bdr}`,fontSize:13,fontFamily:F.b,color:C.ink,outline:"none",background:"#fff"}}
-        />
-      </div>
+            {/* Leaderboard — public, no code needed */}
+            <div style={{...S.card,marginBottom:12,padding:0,overflow:"hidden"}}>
+              <div style={{padding:"12px 14px",borderBottom:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>TODAY'S LEADERBOARD</div>
+                <div style={{fontSize:10,color:C.mut}}>Day #{dn}</div>
+              </div>
+              {pubLoading?(
+                <div style={{padding:"24px",textAlign:"center",color:C.mut,fontSize:12}}>Loading scores…</div>
+              ):showEntries.length===0?(
+                <div style={{padding:"24px",textAlign:"center"}}>
+                  <div style={{fontSize:24,marginBottom:8}}>🀄</div>
+                  <div style={{fontSize:13,color:C.mut}}>No scores yet today.</div>
+                  <div style={{fontSize:11,color:C.mut,marginTop:4}}>Be the first — play today's Daily Rackle and post your score.</div>
+                </div>
+              ):(
+                <div>
+                  {showEntries.map((e,i)=>{
+                    const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":null;
+                    return(
+                      <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"11px 14px",borderBottom:i<showEntries.length-1?`1px solid ${C.bdr}`:"none",background:i===0?"#FFFBF0":"#fff"}}>
+                        <div style={{width:24,textAlign:"center",flexShrink:0}}>
+                          {medal?<span style={{fontSize:16}}>{medal}</span>:<span style={{fontSize:12,color:C.mut,fontWeight:700}}>#{i+1}</span>}
+                        </div>
+                        <div style={{flex:1,minWidth:0}}>
+                          <div style={{fontSize:13,fontWeight:700,color:C.ink,lineHeight:1.2}}>{e.name}</div>
+                        </div>
+                        <div style={{textAlign:"right",flexShrink:0}}>
+                          <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:C.jade}}>IQ {e.iqScore}</div>
+                          {e.streak>1&&<div style={{fontSize:9,color:C.gold,fontWeight:700}}>🔥 {e.streak} day streak</div>}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
 
-      {/* Club list */}
-      {filtered.length===0?(
-        <div style={{textAlign:"center",padding:"32px 0",color:C.mut,fontSize:13}}>
-          <div style={{fontSize:28,marginBottom:8}}>🀄</div>
-          No clubs found for "{query}".
-          <div style={{marginTop:12}}>
-            <a href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20" style={{fontSize:12,color:C.jade,fontWeight:700,textDecoration:"none"}}>+ Get your club listed →</a>
+            {/* Code entry — only needed to post a score */}
+            {!isMember&&(
+              <div style={{...S.card,marginBottom:12,padding:"14px"}}>
+                <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>POST YOUR SCORE</div>
+                <div style={{fontSize:12,color:C.mut,marginBottom:10,lineHeight:1.5}}>Enter your club's 4-digit code to join and post your IQ score to the leaderboard.</div>
+                <div style={{display:"flex",gap:8,marginBottom:6}}>
+                  <input
+                    value={code}
+                    onChange={e=>{setCode(e.target.value.replace(/\D/g,"").slice(0,4));setCodeErr("");}}
+                    onKeyDown={e=>e.key==="Enter"&&join(selected)}
+                    placeholder="----"
+                    maxLength={4}
+                    style={{flex:1,padding:"10px 14px",borderRadius:10,border:`1.5px solid ${codeErr?C.cinn:C.bdr}`,fontSize:18,fontFamily:F.d,fontWeight:700,color:C.ink,outline:"none",textAlign:"center",letterSpacing:5,background:"#fff"}}
+                  />
+                  <button onClick={()=>join(selected)} style={{padding:"10px 20px",borderRadius:10,border:"none",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:F.b,whiteSpace:"nowrap"}}>Join →</button>
+                </div>
+                {codeErr&&<div style={{fontSize:11,color:C.cinn}}>{codeErr}</div>}
+                <div style={{fontSize:11,color:C.mut,marginTop:6}}>Don't have a code? Ask your club organiser.</div>
+              </div>
+            )}
+            {isMember&&(
+              <button onClick={()=>setScreen("leaderboard")} style={{...S.greenBtn,width:"100%",marginBottom:12}}>Go to My Club Leaderboard →</button>
+            )}
+            <button onClick={()=>setSelected(null)} style={{width:"100%",background:"none",border:`1.5px solid ${C.bdr}`,borderRadius:12,padding:"12px",fontSize:13,color:C.mut,fontWeight:600,cursor:"pointer"}}>← All Clubs</button>
           </div>
-        </div>
-      ):(
-        <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:16}}>
-          {filtered.map(([clubCode,club])=>{
-            const isSelected=selected===clubCode;
-            return(
-              <div key={clubCode} style={{borderRadius:14,border:`1.5px solid ${isSelected?C.jade:C.bdr}`,background:isSelected?C.sage:"#FDFAF6",overflow:"hidden",transition:"border-color 0.15s"}}>
-                <button
-                  onClick={()=>{setSelected(isSelected?null:clubCode);setCode("");setCodeErr("");}}
-                  style={{width:"100%",padding:"14px 16px",background:"none",border:"none",cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",gap:12}}
-                >
-                  <div style={{width:40,height:40,borderRadius:10,background:isSelected?C.jade+"20":C.bg2,border:`1px solid ${isSelected?C.jade+"40":C.bdr}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>
+        );
+      })():(
+        <>
+          {/* Page title */}
+          <div style={{marginBottom:20,marginTop:4,textAlign:"center"}}>
+            <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>Club Directory</div>
+            <div style={{fontSize:12,color:C.mut}}>Find your Mahjong club and join its leaderboard.</div>
+          </div>
+
+          {/* Search */}
+          <div style={{position:"relative",marginBottom:14}}>
+            <span style={{position:"absolute",left:12,top:"50%",transform:"translateY(-50%)",fontSize:14,color:C.mut,pointerEvents:"none"}}>🔍</span>
+            <input
+              value={query}
+              onChange={e=>{setQuery(e.target.value);setCode("");setCodeErr("");}}
+              placeholder="Search by club name or city…"
+              style={{width:"100%",padding:"11px 12px 11px 36px",borderRadius:12,border:`1.5px solid ${C.bdr}`,fontSize:13,fontFamily:F.b,color:C.ink,outline:"none",background:"#fff"}}
+            />
+          </div>
+
+          {/* Club list */}
+          {filtered.length===0?(
+            <div style={{textAlign:"center",padding:"32px 0",color:C.mut,fontSize:13}}>
+              <div style={{fontSize:28,marginBottom:8}}>🀄</div>
+              No clubs found for "{query}".
+              <div style={{marginTop:12}}>
+                <a href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20" style={{fontSize:12,color:C.jade,fontWeight:700,textDecoration:"none"}}>+ Get your club listed →</a>
+              </div>
+            </div>
+          ):(
+            <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:16}}>
+              {filtered.map(([clubCode,club])=>(
+                <button key={clubCode}
+                  onClick={()=>setSelected(clubCode)}
+                  style={{cursor:"pointer",display:"flex",alignItems:"center",gap:12,borderRadius:14,padding:"14px 16px",border:`1.5px solid ${C.bdr}`,background:"#FDFAF6",textAlign:"left"}}>
+                  <div style={{width:40,height:40,borderRadius:10,background:C.bg2,border:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>
                     {club.emoji||"🀄"}
                   </div>
                   <div style={{flex:1,minWidth:0}}>
-                    <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:isSelected?C.jade:C.ink,lineHeight:1.2,marginBottom:2}}>{club.name}</div>
+                    <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2,marginBottom:2}}>{club.name}</div>
                     <div style={{fontSize:11,color:C.mut}}>{club.location}</div>
                   </div>
-                  <span style={{fontSize:14,color:isSelected?C.jade:C.mut,fontWeight:700,flexShrink:0}}>{isSelected?"▴":"▾"}</span>
+                  <span style={{fontSize:14,color:C.mut,fontWeight:700,flexShrink:0}}>▸</span>
                 </button>
+              ))}
+            </div>
+          )}
 
-                {/* Expanded panel — code entry + share URL */}
-                {isSelected&&(
-                  <div className="rk-in" style={{padding:"0 16px 16px"}}>
-                    <div style={{height:1,background:C.jade+"20",marginBottom:14}}/>
-                    <div style={{fontSize:11,color:C.mut,marginBottom:10,lineHeight:1.5}}>Enter your club's 4-digit code to join. Ask your organiser if you don't have it.</div>
-                    <div style={{display:"flex",gap:8,marginBottom:6}}>
-                      <input
-                        value={code}
-                        onChange={e=>{setCode(e.target.value.replace(/\D/g,"").slice(0,4));setCodeErr("");}}
-                        onKeyDown={e=>e.key==="Enter"&&join(clubCode)}
-                        placeholder="----"
-                        maxLength={4}
-                        autoFocus
-                        style={{flex:1,padding:"10px 14px",borderRadius:10,border:`1.5px solid ${codeErr?C.cinn:C.bdr}`,fontSize:18,fontFamily:F.d,fontWeight:700,color:C.ink,outline:"none",textAlign:"center",letterSpacing:5,background:"#fff"}}
-                      />
-                      <button onClick={()=>join(clubCode)} style={{padding:"10px 20px",borderRadius:10,border:"none",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:F.b,whiteSpace:"nowrap"}}>Join →</button>
-                    </div>
-                    {codeErr&&<div style={{fontSize:11,color:C.cinn,marginBottom:8}}>{codeErr}</div>}
-                    <div style={{background:C.jade+"06",borderRadius:10,padding:"8px 12px",border:`1px solid ${C.jade}15`,display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,marginTop:4}}>
-                      <div>
-                        <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:2}}>CLUB LINK</div>
-                        <div style={{fontSize:11,color:C.ink,fontFamily:F.b,fontWeight:600}}>{clubUrl(clubCode)}</div>
-                      </div>
-                      <button
-                        onClick={()=>navigator.clipboard?.writeText(`https://${clubUrl(clubCode)}`)}
-                        style={{background:"none",border:`1px solid ${C.jade}30`,borderRadius:8,padding:"5px 10px",fontSize:11,color:C.jade,fontWeight:700,cursor:"pointer",flexShrink:0}}
-                      >Copy</button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+          {/* Get listed CTA */}
+          <div style={{textAlign:"center",padding:"16px 0",borderTop:`1px solid ${C.bdr}`,marginTop:4}}>
+            <div style={{fontSize:12,color:C.mut,marginBottom:6}}>Don't see your club?</div>
+            <a href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20" style={{fontSize:13,color:C.jade,fontWeight:700,textDecoration:"none"}}>+ Get your club on Rackle →</a>
+          </div>
+        </>
       )}
-
-      {/* Get listed CTA */}
-      <div style={{textAlign:"center",padding:"16px 0",borderTop:`1px solid ${C.bdr}`,marginTop:4}}>
-        <div style={{fontSize:12,color:C.mut,marginBottom:6}}>Don't see your club?</div>
-        <a href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20" style={{fontSize:13,color:C.jade,fontWeight:700,textDecoration:"none"}}>+ Get your club on Rackle →</a>
-      </div>
-
       <Footer/>
     </div>
   );
@@ -5705,6 +6473,27 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
       {dDone&&<MidnightCountdown dn={dn}/>}
 
+      {/* SOCIAL PROOF STRIP — always visible, before practice button */}
+      {(ds||clubPlayers)&&(()=>{
+        const parts=[];
+        if(ds?.total)parts.push({icon:"🟢",text:`${ds.total} ${ds.total===1?"player":"players"} today`});
+        if(ds?.avg)parts.push({icon:"📊",text:`Avg IQ ${ds.avg}`});
+        if(clubPlayers&&club)parts.push({icon:"🀄",text:`${clubPlayers} from ${club.name}`,action:()=>setScreen("leaderboard")});
+        if(parts.length===0)return null;
+        return(
+          <div style={{display:"flex",alignItems:"center",gap:0,marginBottom:14,borderRadius:12,overflow:"hidden",border:`1px solid ${C.bdr}`,background:"#fff"}}>
+            {parts.map((p,i)=>(
+              <div key={i} onClick={p.action||undefined}
+                style={{flex:1,padding:"9px 6px",textAlign:"center",borderRight:i<parts.length-1?`1px solid ${C.bdr}`:"none",cursor:p.action?"pointer":undefined,background:p.action?C.sage:"#fff"}}>
+                <div style={{fontSize:10,fontWeight:700,color:p.action?C.sageB:C.ink,lineHeight:1.3,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
+                  <span style={{marginRight:4}}>{p.icon}</span>{p.text}
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+      })()}
+
       <button onClick={()=>go("free")} aria-label="Play Practice Mode" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:20,borderRadius:16,padding:"14px 16px",textAlign:"left",background:dDone?`linear-gradient(135deg,${C.jade}18,${C.jade}08)`:`linear-gradient(135deg,${C.cinn}05,#fff)`,border:`1.5px solid ${dDone?C.jade+"40":C.cinn+"20"}`}}>
         <div aria-hidden="true" style={{width:48,height:48,borderRadius:14,background:dDone?`linear-gradient(135deg,${C.jade},#115C38)`:`linear-gradient(135deg,${C.cinn}20,${C.cinn}10)`,border:`1px solid ${dDone?C.jade+"60":C.cinn+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0,boxShadow:dDone?`0 4px 14px ${C.jade}30`:"none"}}>🀄</div>
         <div style={{flex:1}}>
@@ -6348,7 +7137,7 @@ function Game({mode,home,onDone,settings,setScreen}){
   const [sel,setSel]=useState([]);const [passed,setPassed]=useState([]);
   const [passLog,setPassLog]=useState([]);
   const [newIdx,setNewIdx]=useState([]);const [jw,setJw]=useState(false);
-  const [chosenSec,setChosenSec]=useState(null);const [showRef,setShowRef]=useState(false);
+  const [chosenSec,setChosenSec]=useState(null);const [chosenHand,setChosenHand]=useState(null);const [showRef,setShowRef]=useState(false);
   const [showHint,setShowHint]=useState(false);const [hintExp,setHintExp]=useState(null);
   const [cn,setCn]=useState(1);const [pi,setPi]=useState(0);
   const [st,setSt]=useState(null);const [el,setEl]=useState(0);const [td,setTd]=useState(false);
@@ -6436,14 +7225,14 @@ function Game({mode,home,onDone,settings,setScreen}){
     // Run new IQ engine
     const iq=calculateCharlestonIQ({
       startingRack,finalRack:hand,passedTilesByRound:passLog,
-      totalTime:totalEl,sectionId:chosenSec,
+      totalTime:totalEl,sectionId:chosenSec,chosenHand,
     },getDailySeed(),isD,dn);
     setIqResult(iq);
 
     const result={
       rating:RATS[gi],emoji:REMO[gi],section:`${top.icon} ${top.name}`,sid:top.id,
       score:top.score,time:totalEl,gi,iqScore:iq?iq.totalScore:null,iq,
-      finalRack:hand,passLog,chosenSec,allSections:ev(hand),
+      finalRack:hand,passLog,chosenSec,chosenHand,allSections:ev(hand),
     };
     onDone(result);
     setPhase("result");
@@ -6452,7 +7241,7 @@ function Game({mode,home,onDone,settings,setScreen}){
   const restart=()=>{
     const d=shuffle(buildDeck());const dealt=d.slice(0,13);
     setHand(dealt);setStartingRack(dealt);setPool(d.slice(13).filter(t=>t.t!=="j"));
-    setSel([]);setPassed([]);setPassLog([]);setNewIdx([]);setCn(1);setPi(0);setChosenSec(null);
+    setSel([]);setPassed([]);setPassLog([]);setNewIdx([]);setCn(1);setPi(0);setChosenSec(null);setChosenHand(null);
     setShowRef(false);setShowHint(false);setHintExp(null);setIqResult(null);
     setTd(false);elRef.current=0;stRef.current=null;setEl(0);setFlipped([]);setReady(false);
     setPhase("deal");
@@ -6532,7 +7321,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           <RackleHeader onBack={()=>setShowLeave(true)}/>
           {getDisplayTime()&&<div style={{textAlign:"center",marginBottom:4}}><span style={{fontSize:12,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {getDisplayTime()}</span></div>}
           <h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 2px",textAlign:"center"}}>What hand are you playing?</h2>
-          <p style={{fontSize:12,color:C.mut,marginBottom:10,textAlign:"center"}}>Pick your target section.</p>
+          <p style={{fontSize:12,color:C.mut,marginBottom:10,textAlign:"center"}}>Pick the exact hand from your card.</p>
           <Rack hand={hand} label="YOUR RACK" showSort onSort={()=>setHand(sortHand(hand))} large={large}/>
           <button onClick={()=>setShowRef(!showRef)} aria-expanded={showRef} style={{...S.card,width:"100%",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8,background:showRef?C.gold+"06":"#fff"}}>
             <span style={{fontSize:12,fontWeight:600,color:showRef?C.gold:C.ink}}>📖 {showRef?"Hide":"Show"} 2026 Card Guide</span><span aria-hidden="true" style={{color:C.mut}}>{showRef?"▾":"▸"}</span>
@@ -6542,51 +7331,92 @@ function Game({mode,home,onDone,settings,setScreen}){
             const scored=ev(hand);
             const ranked=SECS.map(s=>scored.find(e=>e.id===s.id)).filter(Boolean);
             const topPct=scored[0]?.score||0;
-            return(<>
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
-                <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>CHOOSE YOUR SECTION</div>
 
-              </div>
-              <div style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
-                {ranked.map((s,idx)=>{
-                  const isSel=chosenSec===s.id;
-                  const pct=Math.round(s.score*100);
-                  const viable=s.score>0.05;
-                  const isTop=idx===0;
-                  const barW=topPct>0?Math.round((s.score/topPct)*100):pct;
-                  return(
-                    <button key={s.id} onClick={()=>{haptic(20);setChosenSec(s.id);}} role="radio" aria-checked={isSel} aria-label={`${s.name}: ${s.desc}`}
-                      style={{cursor:"pointer",display:"flex",alignItems:"center",gap:0,borderRadius:12,overflow:"hidden",
-                        border:`1.5px solid ${isSel?s.color:C.bdr}`,
-                        background:isSel?s.color+"0C":"#fff",
-                        textAlign:"left",transition:"all 0.15s",
-                        boxShadow:isSel?`0 2px 12px ${s.color}20`:"none"}}>
-                      {/* Left accent bar */}
-                      <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:isSel?s.color:s.color+"40",transition:"background 0.15s"}}/>
-                      {/* Icon */}
-                      <div style={{width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,margin:"0 2px"}}>{s.icon}</div>
-                      {/* Content */}
-                      <div style={{flex:1,minWidth:0,padding:"10px 8px 10px 4px"}}>
-                        <div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:3}}>
-                          <span style={{fontSize:13,fontWeight:800,color:isSel?s.color:C.ink,lineHeight:1.2}}>{s.name}</span>
-                          {/* BEST FIT indicator removed for daily */}
-                          {isSel&&<span style={{fontSize:8,fontWeight:700,background:s.color+"20",color:s.color,borderRadius:8,padding:"1px 6px",letterSpacing:0.5}}>SELECTED</span>}
+            // Step 1: pick section
+            if(!chosenSec) return(
+              <>
+                <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>STEP 1 — PICK YOUR SECTION</div>
+                <div style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
+                  {ranked.map((s,idx)=>{
+                    const pct=Math.round(s.score*100);
+                    const isTop=idx===0;
+                    return(
+                      <button key={s.id} onClick={()=>{haptic(20);setChosenSec(s.id);setChosenHand(null);}} aria-label={`${s.name}: ${s.desc}`}
+                        style={{cursor:"pointer",display:"flex",alignItems:"center",gap:0,borderRadius:12,overflow:"hidden",
+                          border:`1.5px solid ${isTop?s.color:C.bdr}`,
+                          background:isTop?s.color+"08":"#fff",
+                          textAlign:"left",transition:"all 0.15s"}}>
+                        <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:isTop?s.color:s.color+"40"}}/>
+                        <div style={{width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,margin:"0 2px"}}>{s.icon}</div>
+                        <div style={{flex:1,minWidth:0,padding:"10px 8px 10px 4px"}}>
+                          <div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:2}}>
+                            <span style={{fontSize:13,fontWeight:800,color:isTop?s.color:C.ink,lineHeight:1.2}}>{s.name}</span>
+                            {isTop&&<span style={{fontSize:8,fontWeight:700,background:s.color+"20",color:s.color,borderRadius:8,padding:"1px 6px",letterSpacing:0.5}}>BEST FIT</span>}
+                          </div>
+                          <div style={{fontSize:10,color:C.mut,lineHeight:1.3}}>{s.desc}</div>
                         </div>
-                        <div style={{fontSize:10,color:C.mut,lineHeight:1.3,marginBottom:5}}>{s.desc}</div>
-                      </div>
-                      {/* Check indicator */}
-                      <div style={{width:36,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                        {isSel
-                          ?<div style={{width:22,height:22,borderRadius:11,background:s.color,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:11,color:"#fff",fontWeight:900}}>✓</span></div>
-                          :<div style={{width:22,height:22,borderRadius:11,border:`2px solid ${C.bdr}`}}/>}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </>);
+                        <div style={{padding:"0 12px",textAlign:"right",flexShrink:0}}>
+                          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:isTop?s.color:C.mut}}>{pct}%</div>
+                          <div style={{fontSize:8,color:C.mut}}>fit</div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
+            );
+
+            // Step 2: pick specific hand from the chosen section
+            const secHands=HAND_CATALOG.filter(h=>h.sec===chosenSec)
+              .map(h=>({...h,fit:h.fit(hand)}))
+              .sort((a,b)=>b.fit-a.fit);
+            const secObj=SECS.find(s=>s.id===chosenSec);
+            return(
+              <>
+                {/* Section header with back */}
+                <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+                  <button onClick={()=>{setChosenSec(null);setChosenHand(null);}} style={{...S.back,fontSize:11,padding:"4px 0"}}>← Sections</button>
+                  <div style={{flex:1,textAlign:"center"}}>
+                    <span style={{fontSize:11,fontWeight:700,color:secObj?.color||C.jade}}>{secObj?.icon} {secObj?.name}</span>
+                  </div>
+                </div>
+                <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>STEP 2 — PICK YOUR EXACT HAND</div>
+                <div style={{display:"flex",flexDirection:"column",gap:4,marginBottom:10}}>
+                  {secHands.map((h,i)=>{
+                    const isSel=chosenHand===h.label;
+                    const pct=Math.round(h.fit*100);
+                    const barColor=pct>=70?C.jade:pct>=45?C.gold:C.cinn;
+                    return(
+                      <button key={i} onClick={()=>{haptic(20);setChosenHand(h.label);}} aria-checked={isSel}
+                        style={{cursor:"pointer",display:"flex",alignItems:"center",gap:10,borderRadius:12,padding:"10px 12px",
+                          border:`1.5px solid ${isSel?(secObj?.color||C.jade):C.bdr}`,
+                          background:isSel?(secObj?.color||C.jade)+"0C":"#fff",
+                          textAlign:"left",transition:"all 0.15s",
+                          boxShadow:isSel?`0 2px 12px ${secObj?.color||C.jade}20`:"none"}}>
+                        <div style={{flex:1,minWidth:0}}>
+                          <div style={{fontSize:12,fontWeight:700,color:isSel?(secObj?.color||C.jade):C.ink,lineHeight:1.3,marginBottom:2}}>{h.label}</div>
+                          <div style={{fontSize:10,color:C.mut}}>{h.concealed?"Concealed · no jokers":"Open"} · {h.value} pts</div>
+                        </div>
+                        <div style={{textAlign:"right",flexShrink:0,minWidth:44}}>
+                          <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:barColor,lineHeight:1}}>{pct}%</div>
+                          <div style={{width:40,height:3,borderRadius:2,background:C.bdr,marginTop:3}}>
+                            <div style={{width:`${pct}%`,height:"100%",borderRadius:2,background:barColor}}/>
+                          </div>
+                        </div>
+                        <div style={{width:22,height:22,borderRadius:11,flexShrink:0,
+                          background:isSel?(secObj?.color||C.jade):"none",
+                          border:isSel?"none":`2px solid ${C.bdr}`,
+                          display:"flex",alignItems:"center",justifyContent:"center"}}>
+                          {isSel&&<span style={{fontSize:11,color:"#fff",fontWeight:900}}>✓</span>}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
+            );
           })()}
-          <button onClick={confirm} disabled={!chosenSec} style={{...S.greenBtn,width:"100%",marginTop:4,opacity:chosenSec?1:0.3}}>Rate My Hand →</button>
+          <button onClick={confirm} disabled={!chosenSec||!chosenHand} style={{...S.greenBtn,width:"100%",marginTop:4,opacity:(chosenSec&&chosenHand)?1:0.3}}>Rate My Hand →</button>
         </>
       )}
 
