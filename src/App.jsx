@@ -4447,22 +4447,20 @@ function PassesCard({passNarrative}){
 }
 
 function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,primaryCoveragePct}){
-  // Auto-expand when primary coverage is low — player needs alternatives immediately visible
-  const [open,setOpen]=useState((primaryCoveragePct||0)<35);
-
   // Score all hands in the chosen section by honest coverage
   const sectionHands=HAND_CATALOG.filter(h=>h.sec===chosenSec)
     .map(h=>{const{pct}=computeHonestCoverage(hand,h);return{...h,coveragePct:pct};})
     .sort((a,b)=>b.coveragePct-a.coveragePct);
 
-  // Top 2 alternates in the same section (excluding the primary scored hand)
-  const altSectionHands=sectionHands.filter(h=>h.label!==resolvedHandLabel&&h.coveragePct>3).slice(0,2);
+  // Top 3 alternates in the same section (excluding the primary scored hand)
+  const altSectionHands=sectionHands.filter(h=>h.label!==resolvedHandLabel&&h.coveragePct>3).slice(0,3);
 
-  // Best hand from up to 2 other sections by honest coverage
+  // Best hand from other sections to reach 4 total alts
+  const remaining=Math.max(0,4-altSectionHands.length);
   const altSecHands=[];
   for(const sec of sortedSecs){
     if(sec.id===chosenSec)continue;
-    if(altSecHands.length>=2)break;
+    if(altSecHands.length>=remaining)break;
     const best=HAND_CATALOG.filter(h=>h.sec===sec.id)
       .map(h=>{const{pct}=computeHonestCoverage(hand,h);return{...h,coveragePct:pct,secObj:sec};})
       .sort((a,b)=>b.coveragePct-a.coveragePct)[0];
@@ -4473,42 +4471,31 @@ function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,
   if(!hasAnything)return null;
 
   return(
-    <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden"}}>
-      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"11px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
-        <div>
-          <div style={{fontSize:8,color:C.gold,letterSpacing:2,fontWeight:700}}>OTHER HANDS YOUR RACK COULD TARGET</div>
-          <div style={{fontSize:12,fontWeight:700,color:C.ink,marginTop:1}}>
-            {altSectionHands.length+altSecHands.length} alternative{altSectionHands.length+altSecHands.length!==1?"s":""} worth knowing
+    <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden"}}>
+      {/* Same-section alternates */}
+      {altSectionHands.map((h,i)=>(
+        <div key={h.label} style={{borderBottom:i<altSectionHands.length-1||altSecHands.length>0?`1px solid ${C.bdr}`:"none",padding:"10px 14px"}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}>
+            <div style={{fontSize:8,color:chosenSecObj?.color||C.mut,letterSpacing:1.5,fontWeight:700}}>
+              {chosenSecObj?.icon} {chosenSecObj?.name?.toUpperCase()} · SAME SECTION
+            </div>
+            <CoverageChip pct={h.coveragePct}/>
           </div>
+          <RackVsHandOverlay hand={hand} handObj={h} passLog={[]} sectionId={chosenSec} handWasInferred={false} secObj={chosenSecObj}/>
         </div>
-        <span style={{fontSize:12,color:C.mut}}>{open?"▾":"▸"}</span>
-      </button>
-      {open&&<div style={{borderTop:`1px solid ${C.bdr}`}} className="rk-in">
-        {/* Same-section alternates */}
-        {altSectionHands.map((h,i)=>(
-          <div key={h.label} style={{borderBottom:i<altSectionHands.length-1||altSecHands.length>0?`1px solid ${C.bdr}`:"none",padding:"10px 14px"}}>
-            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}>
-              <div style={{fontSize:8,color:chosenSecObj?.color||C.mut,letterSpacing:1.5,fontWeight:700}}>
-                {chosenSecObj?.icon} {chosenSecObj?.name?.toUpperCase()} · SAME SECTION
-              </div>
-              <CoverageChip pct={h.coveragePct}/>
+      ))}
+      {/* Cross-section alternates */}
+      {altSecHands.map((h,i)=>(
+        <div key={h.label} style={{borderBottom:i<altSecHands.length-1?`1px solid ${C.bdr}`:"none",padding:"10px 14px"}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}>
+            <div style={{fontSize:8,color:h.secObj?.color||C.mut,letterSpacing:1.5,fontWeight:700}}>
+              {h.secObj?.icon} {h.secObj?.name?.toUpperCase()} · DIFFERENT SECTION
             </div>
-            <RackVsHandOverlay hand={hand} handObj={h} passLog={[]} sectionId={chosenSec} handWasInferred={false} secObj={chosenSecObj}/>
+            <CoverageChip pct={h.coveragePct}/>
           </div>
-        ))}
-        {/* Cross-section alternates */}
-        {altSecHands.map((h,i)=>(
-          <div key={h.label} style={{borderBottom:i<altSecHands.length-1?`1px solid ${C.bdr}`:"none",padding:"10px 14px"}}>
-            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}>
-              <div style={{fontSize:8,color:h.secObj?.color||C.mut,letterSpacing:1.5,fontWeight:700}}>
-                {h.secObj?.icon} {h.secObj?.name?.toUpperCase()} · DIFFERENT SECTION
-              </div>
-              <CoverageChip pct={h.coveragePct}/>
-            </div>
-            <RackVsHandOverlay hand={hand} handObj={h} passLog={[]} sectionId={h.sec} handWasInferred={false} secObj={h.secObj}/>
-          </div>
-        ))}
-      </div>}
+          <RackVsHandOverlay hand={hand} handObj={h} passLog={[]} sectionId={h.sec} handWasInferred={false} secObj={h.secObj}/>
+        </div>
+      ))}
     </div>
   );
 }
@@ -5138,15 +5125,110 @@ function SortableRack({hand:initialHand}){
   );
 }
 
+// ─── COLLAPSIBLE SECTION HEADER — tap to expand/collapse ──────────────────────
+function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
+  return(
+    <div style={{marginTop:8,marginBottom:0}}>
+      <button
+        onClick={onToggle}
+        aria-expanded={open}
+        style={{
+          width:"100%",cursor:"pointer",textAlign:"left",
+          display:"flex",alignItems:"center",gap:12,
+          padding:"13px 16px",
+          borderRadius:14,
+          background:open
+            ?"linear-gradient(135deg,#FDFAF5 0%,#F5F0E6 100%)"
+            :"linear-gradient(135deg,#EDE7DA 0%,#E6DFD0 100%)",
+          border:`1.5px solid ${open?"#C8DDD2":"#D6CFC2"}`,
+          boxShadow:open
+            ?"0 2px 12px rgba(23,107,66,0.08), 0 1px 3px rgba(0,0,0,0.04)"
+            :"0 1px 2px rgba(0,0,0,0.03)",
+          transition:"all 0.2s ease",
+        }}
+      >
+        {/* Icon in a small inset box */}
+        {icon&&(
+          <div style={{
+            width:36,height:36,borderRadius:9,flexShrink:0,
+            background:open?"rgba(255,255,255,0.7)":"rgba(255,255,255,0.45)",
+            border:`1px solid ${open?"rgba(23,107,66,0.12)":"rgba(0,0,0,0.06)"}`,
+            display:"flex",alignItems:"center",justifyContent:"center",
+            fontSize:17,lineHeight:1,
+            transition:"all 0.2s",
+            boxShadow:"0 1px 3px rgba(0,0,0,0.06)",
+          }}>{icon}</div>
+        )}
+
+        {/* Label + desc */}
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{
+            fontSize:14,fontWeight:800,fontFamily:F.b,
+            color:open?"#1A1410":"#3D3530",
+            lineHeight:1.2,letterSpacing:-0.1,
+          }}>{label}</div>
+          {desc&&(
+            <div style={{
+              fontSize:11,marginTop:3,lineHeight:1.35,
+              color:open?"#7A6E64":"#8A7E72",
+              fontWeight:500,
+            }}>{desc}</div>
+          )}
+        </div>
+
+        {/* Badge */}
+        {badge&&(
+          <span style={{
+            fontSize:12,fontWeight:900,fontFamily:F.d,flexShrink:0,
+            color:open?"#2D6B4A":"#6B6157",
+            background:open?"rgba(23,107,66,0.10)":"rgba(0,0,0,0.06)",
+            borderRadius:20,padding:"3px 10px",lineHeight:1.6,
+            border:`1px solid ${open?"rgba(23,107,66,0.15)":"rgba(0,0,0,0.07)"}`,
+            transition:"all 0.2s",
+          }}>{badge}</span>
+        )}
+
+        {/* Chevron */}
+        <div style={{
+          width:24,height:24,borderRadius:7,flexShrink:0,
+          background:open?"rgba(23,107,66,0.12)":"rgba(0,0,0,0.07)",
+          display:"flex",alignItems:"center",justifyContent:"center",
+          transition:"background 0.2s, transform 0.25s ease",
+          transform:open?"rotate(180deg)":"rotate(0deg)",
+        }}>
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
+            <path d="M1 1L5 5L9 1" stroke={open?"#176B42":"#8A7E72"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+      </button>
+
+      {open&&(
+        <div className="rk-in" style={{marginTop:6}}>
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── DAILY SCORECARD — simplified, no tabs, no coach note ─────────────────────
-function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onHome,onPractice,onCoachMode}){
+function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onHome,onPractice,onCoachMode,setScreen}){
   const [dailyStats,setDailyStats]=useState(null);
+  const [globalEntries,setGlobalEntries]=useState([]);
+  const [clubEntries,setClubEntries]=useState([]);
+  const [openSec,setOpenSec]=useState({hand:false,alts:false,score:false,next:false});
+  const toggle=(k)=>setOpenSec(s=>({...s,[k]:!s[k]}));
   if(!iq)return null;
 
   const passEmoji=(iq.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
   const shareText=`🀄 Daily Rackle #${dayNum} · IQ ${iq.totalScore} · ${iq.level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Think you can beat it?\nplayrackle.com`;
 
-  useEffect(()=>{fetchDailyStats().then(s=>{if(s&&s.total>=1)setDailyStats(s);});},[]);
+  useEffect(()=>{
+    fetchDailyStats().then(s=>{if(s&&s.total>=1)setDailyStats(s);});
+    fetchGlobalEntries().then(rows=>{if(rows)setGlobalEntries(rows);});
+    const clubCode=getClubCode();
+    if(clubCode)fetchLBEntries(clubCode).then(rows=>{if(rows)setClubEntries(rows);});
+  },[]);
 
   const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
   const sortedSecs=allSections?[...allSections].sort((a,b)=>b.score-a.score):[];
@@ -5169,12 +5251,102 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <IQHero iq={iq} isDaily dayNum={dayNum} section={section} totalTime={iq.totalTime||0} chosenSec={chosenSec} allSections={allSections}/>
       </div>
 
-      {/* ② DAILY CONTEXT — X players today, above/below average */}
+      {/* ② SOCIAL — ranks + share, always visible, right after hero */}
+      {(()=>{
+        const myScore=iq.totalScore;
+        const globalRank=globalEntries.length>0?globalEntries.findIndex(e=>e.iqScore<=myScore)+1:null;
+        const globalTotal=globalEntries.length||dailyStats?.total||null;
+        const clubCode=getClubCode();
+        const clubName=clubCode?CLUBS[clubCode]?.name:null;
+        const clubRank=clubEntries.length>0?clubEntries.findIndex(e=>e.iqScore<=myScore)+1:null;
+        const clubTotal=clubEntries.length||null;
+
+        // Enrich share text with rank context
+        const rankLine=globalRank&&globalTotal?`#${globalRank} of ${globalTotal} players today${clubRank&&clubTotal?` · #${clubRank} in my club`:""}`:
+          clubRank&&clubTotal?`#${clubRank} of ${clubTotal} in my club`:"";
+        const richShareText=`🀄 Daily Rackle #${dayNum} · IQ ${iq.totalScore} · ${iq.level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}${rankLine?`${rankLine}\n`:""}Think you can beat it?\nplayrackle.com`;
+
+        const copyInvite=()=>{if(navigator.clipboard)navigator.clipboard.writeText("https://playrackle.com").catch(()=>{});};
+
+        return(
+          <div style={{marginBottom:10}}>
+            {/* Rank pills — only when data has loaded */}
+            {(globalRank||clubRank)&&(
+              <div style={{display:"flex",gap:8,marginBottom:8}}>
+                {/* Global rank */}
+                {globalRank&&globalTotal&&(
+                  <div style={{
+                    flex:1,borderRadius:12,padding:"11px 14px",
+                    background:globalRank<=3?`linear-gradient(135deg,${C.gilt}20,${C.gilt}08)`:"#FDFAF5",
+                    border:`1px solid ${globalRank<=3?C.gilt+"60":C.bdr}`,
+                  }}>
+                    <div style={{fontSize:9,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>GLOBAL</div>
+                    <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                      <span style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:globalRank<=3?C.gold:C.ink,lineHeight:1}}>#{globalRank}</span>
+                      <span style={{fontSize:11,color:C.mut,lineHeight:1}}>of {globalTotal}</span>
+                    </div>
+                    <div style={{fontSize:9,fontWeight:700,marginTop:3,color:globalRank===1?C.gold:globalRank<=3?C.gold:C.mut}}>
+                      {globalRank===1?"🏆 Top score today":globalRank<=3?"🥉 Top 3 today":globalRank<=10?"Top 10":""}
+                    </div>
+                  </div>
+                )}
+                {/* Club rank — tappable */}
+                {clubRank&&clubTotal&&clubName?(
+                  <button onClick={()=>setScreen&&setScreen("leaderboard")} style={{
+                    flex:1,borderRadius:12,padding:"11px 14px",cursor:"pointer",textAlign:"left",
+                    background:clubRank===1?`linear-gradient(135deg,${C.jade}16,${C.jade}06)`:"#FDFAF5",
+                    border:`1px solid ${clubRank<=3?C.jade+"50":C.bdr}`,
+                  }}>
+                    <div style={{fontSize:9,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>CLUB</div>
+                    <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                      <span style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:clubRank<=3?C.jade:C.ink,lineHeight:1}}>#{clubRank}</span>
+                      <span style={{fontSize:11,color:C.mut,lineHeight:1}}>of {clubTotal}</span>
+                    </div>
+                    <div style={{fontSize:9,color:C.jade,fontWeight:600,marginTop:3,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
+                      {clubRank===1?"🏆 Club leader":clubRank<=3?"Top 3":clubName} ›
+                    </div>
+                  </button>
+                ):(
+                  /* No club — nudge to join */
+                  <button onClick={()=>setScreen&&setScreen("profile")} style={{
+                    flex:1,borderRadius:12,padding:"11px 14px",cursor:"pointer",textAlign:"left",
+                    background:C.bg2,border:`1px dashed ${C.bdr}`,
+                  }}>
+                    <div style={{fontSize:9,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>CLUB RANK</div>
+                    <div style={{fontSize:12,fontWeight:700,color:C.mut,lineHeight:1.3}}>Join a club</div>
+                    <div style={{fontSize:9,color:C.jade,fontWeight:600,marginTop:3}}>Set up profile ›</div>
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Share block */}
+            <div style={{background:"linear-gradient(145deg,#FDFAF4,#F5EFE2)",border:`1px solid ${C.gold}25`,borderRadius:14,padding:"13px 14px 11px"}}>
+              {/* Share text preview */}
+              <div style={{fontFamily:"monospace",fontSize:10,color:"#7A6040",background:"rgba(0,0,0,0.035)",borderRadius:8,padding:"9px 12px",marginBottom:10,textAlign:"center",lineHeight:1.85,letterSpacing:0.1}}>
+                {richShareText.split("\n").map((line,i)=>line===""?<div key={i} style={{height:5}}/>:<div key={i}>{line}</div>)}
+              </div>
+              <div style={{display:"flex",gap:8}}>
+                <div style={{flex:1}}>
+                  <ShareButton text={richShareText}/>
+                </div>
+                <button onClick={copyInvite} title="Copy invite link" style={{
+                  width:44,height:44,borderRadius:10,flexShrink:0,
+                  background:"rgba(0,0,0,0.04)",border:`1px solid rgba(0,0,0,0.08)`,
+                  cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,
+                }}>🔗</button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* ③ DAILY CONTEXT — avg/above-below, below share so it's secondary info */}
       {dailyStats&&(()=>{
         const isFirst=!ST.get("hadFirstDaily",false)||ST.get("rnd",0)<=1;
         return(
-          <div className="rk-in" style={{display:"flex",alignItems:"center",gap:10,background:C.jade+"08",border:`1px solid ${C.jade}20`,borderRadius:12,padding:"10px 14px",marginBottom:8}}>
-            <span style={{fontSize:18,flexShrink:0}}>🀄</span>
+          <div className="rk-in" style={{display:"flex",alignItems:"center",gap:10,background:C.jade+"08",border:`1px solid ${C.jade}20`,borderRadius:12,padding:"10px 14px",marginBottom:4}}>
+            <span style={{fontSize:16,flexShrink:0}}>🀄</span>
             <div style={{flex:1}}>
               {isFirst
                 ?<div style={{fontSize:12,fontWeight:700,color:C.jade,fontFamily:F.d}}>Welcome to Rackle! You're player #{dailyStats.total} today.</div>
@@ -5189,105 +5361,139 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         );
       })()}
 
-      {/* ③ YOUR RACK — always visible, no collapse */}
-      <SectionDivider label="YOUR HAND"/>
-      <SortableRack hand={hand}/>
+      {/* ③ YOUR HAND — collapsible, open by default (rack only) */}
+      <CollapsibleSection label="Your Hand" desc="Your final 13 tiles" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
+        <SortableRack hand={hand}/>
+      </CollapsibleSection>
 
-      {/* ④ HAND TARGET — what you were building toward */}
+      {/* ④ HAND TARGET — always visible */}
       <HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={onCoachMode}/>
-      {/* ④b ALTERNATIVE HANDS */}
+
+      {/* ④b ALT HANDS — own collapsible section, closed by default */}
       {hand&&hand.length>0&&chosenSec&&(()=>{
         const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
-        return <AltHandsCard hand={hand} resolvedHandLabel={scoredHandObj?.label||null} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecs} primaryCoveragePct={primPct}/>;
-      })()}
-
-      {/* ⑤ SCORE BREAKDOWN */}
-      <SectionDivider label="YOUR SCORE"/>
-      <div style={{...S.card,marginBottom:8,padding:"12px 14px"}}>
-        <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>SCORE BREAKDOWN</div>
-        {[
-          {label:"Direction",v:iq.directionScore,max:40,note:iq.directionExplanation},
-          {label:"Pass Quality",v:iq.passQualityScore,max:25},
-          {label:"Tile Strength",v:iq.tileStrengthScore,max:25},
-          {label:"Timing",v:iq.timingScore,max:10,note:iq.timingInsight},
-        ].map(({label,v,max,note},i,arr)=>{
-          const pct=Math.round(v/max*100);
-          const col=scoreColor(v,max);
-          return(
-            <div key={label} style={{marginBottom:i<arr.length-1?10:0}}>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
-                <span style={{fontSize:11,fontWeight:600,color:C.ink}}>{label}</span>
-                <span style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:col}}>{v}<span style={{fontSize:9,color:C.mut,fontWeight:400}}>/{max}</span></span>
-              </div>
-              <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden",marginBottom:note?3:0}}>
-                <div style={{height:"100%",borderRadius:3,background:`linear-gradient(90deg,${col},${col}CC)`,width:`${pct}%`}}/>
-              </div>
-              {note&&<div style={{fontSize:10,color:C.mut,lineHeight:1.4}}>{note}</div>}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* ⑥ COACH MODE BUTTON */}
-      <SectionDivider label="NEXT STEPS"/>
-      {onCoachMode&&(
-        <button onClick={onCoachMode} style={{width:"100%",borderRadius:14,background:"#fff",border:`2px solid ${C.jade}30`,cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"13px 16px",marginBottom:8,textAlign:"left",boxShadow:`0 2px 12px ${C.jade}12`}}>
-          <div style={{width:42,height:42,borderRadius:12,background:`linear-gradient(135deg,${C.jade},#115C38)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0,boxShadow:`0 3px 10px ${C.jade}30`}}>🎓</div>
-          <div style={{flex:1}}>
-            <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:2}}>DEEP DIVE</div>
-            <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:C.ink,lineHeight:1.2,marginBottom:2}}>Coach Mode</div>
-            <div style={{fontSize:11,color:C.mut,lineHeight:1.4}}>Rack vs hand · Pass breakdown · Coach advice</div>
-          </div>
-          <span style={{fontSize:18,color:C.jade,flexShrink:0,fontWeight:700}}>›</span>
-        </button>
-      )}
-
-      {/* ⑦ SHARE */}
-      <div style={{...S.card,marginBottom:8}}>
-        <div style={{fontFamily:"monospace",fontSize:10,color:C.mut,background:C.bg2,borderRadius:8,padding:"10px 12px",marginBottom:10,textAlign:"center"}}>
-          {shareText.split("\n").map((line,i)=>line===""?<div key={i} style={{height:8}}/>:<div key={i} style={{lineHeight:1.9}}>{line}</div>)}
-        </div>
-        <ShareButton text={shareText}/>
-      </div>
-
-      {/* ⑧ PRACTICE CTA */}
-      {(()=>{
-        const lowDir=iq.directionScore<24;
-        const wrongSec=!sectionMatch&&bestFitSec;
-        let headline="Another Round?";
-        let sub="Unlimited hands · Build real instincts";
-        if(wrongSec){headline=`Try ${bestFitSec.name} Next Time`;sub=`Your tiles leaned that way — practice reading it faster`;}
-        else if(lowDir){headline="Work on Your Section Read";sub="Direction is worth 40pts — it's where IQ is won or lost";}
-        else if(iq.passQualityScore<15){headline="Sharpen Your Passes";sub="Practice makes the Charleston feel automatic";}
         return(
-          <button onClick={onPractice} style={{width:"100%",borderRadius:14,background:C.sage,border:`1.5px solid ${C.sageB}30`,cursor:"pointer",display:"flex",alignItems:"center",gap:14,padding:"14px 16px",marginBottom:8,textAlign:"left"}}>
-            <div style={{width:40,height:40,borderRadius:11,background:C.sageB+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🀄</div>
-            <div style={{flex:1}}>
-              <div style={{fontSize:8,color:C.sageB,letterSpacing:2,fontWeight:700,marginBottom:1}}>KEEP PRACTISING</div>
-              <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:"#1A3D28",lineHeight:1.3}}>{headline}</div>
-              <div style={{fontSize:11,color:C.sageB,lineHeight:1.5,marginTop:1}}>{sub}</div>
-            </div>
-            <span style={{fontSize:14,color:C.sageB,fontWeight:700,flexShrink:0}}>›</span>
-          </button>
+          <CollapsibleSection label="Other Hands" desc="4 alternatives your rack could've targeted" icon="🔀" open={openSec.alts} onToggle={()=>toggle("alts")}>
+            <AltHandsCard hand={hand} resolvedHandLabel={scoredHandObj?.label||null} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecs} primaryCoveragePct={primPct}/>
+          </CollapsibleSection>
         );
       })()}
 
-      {/* ⑨ COUNTDOWN + HOME */}
-      <MidnightCountdown dn={dayNum}/>
-      <button onClick={onHome} style={{...S.oBtn,width:"100%"}}>← Home</button>
+      {/* ⑤ SCORE BREAKDOWN — collapsible */}
+      <CollapsibleSection label="Your Score" desc="Direction · Pass Quality · Tile Strength · Timing" icon="📊" open={openSec.score} onToggle={()=>toggle("score")} badge={`${iq.totalScore}/100`}>
+        <div style={{...S.card,marginBottom:8,padding:"12px 14px"}}>
+          <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>SCORE BREAKDOWN</div>
+          {[
+            {label:"Direction",v:iq.directionScore,max:40,note:iq.directionExplanation},
+            {label:"Pass Quality",v:iq.passQualityScore,max:25},
+            {label:"Tile Strength",v:iq.tileStrengthScore,max:25},
+            {label:"Timing",v:iq.timingScore,max:10,note:iq.timingInsight},
+          ].map(({label,v,max,note},i,arr)=>{
+            const pct=Math.round(v/max*100);
+            const col=scoreColor(v,max);
+            return(
+              <div key={label} style={{marginBottom:i<arr.length-1?10:0}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
+                  <span style={{fontSize:11,fontWeight:600,color:C.ink}}>{label}</span>
+                  <span style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:col}}>{v}<span style={{fontSize:9,color:C.mut,fontWeight:400}}>/{max}</span></span>
+                </div>
+                <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden",marginBottom:note?3:0}}>
+                  <div style={{height:"100%",borderRadius:3,background:`linear-gradient(90deg,${col},${col}CC)`,width:`${pct}%`}}/>
+                </div>
+                {note&&<div style={{fontSize:10,color:C.mut,lineHeight:1.4}}>{note}</div>}
+              </div>
+            );
+          })}
+        </div>
+      </CollapsibleSection>
+
+      {/* ⑥ NEXT STEPS — collapsible */}
+      <CollapsibleSection label="Next Steps" desc="Coach Mode · practice recommendations" icon="🎯" open={openSec.next} onToggle={()=>toggle("next")}>
+        <div style={{display:"flex",flexDirection:"column",gap:8,paddingBottom:4}}>
+          {/* Coach Mode — primary action, full-bleed dark green */}
+          {onCoachMode&&(
+            <button onClick={onCoachMode} style={{
+              width:"100%",borderRadius:14,border:"none",cursor:"pointer",
+              background:`linear-gradient(135deg,${C.hero2} 0%,${C.hero1} 100%)`,
+              display:"flex",alignItems:"center",gap:14,padding:"15px 18px",
+              textAlign:"left",boxShadow:`0 4px 20px ${C.jade}28`,
+              position:"relative",overflow:"hidden",
+            }}>
+              {/* Subtle shimmer stripe */}
+              <div style={{position:"absolute",top:0,left:0,right:0,height:"40%",background:"linear-gradient(180deg,rgba(255,255,255,0.06),transparent)",borderRadius:"14px 14px 0 0",pointerEvents:"none"}}/>
+              <div style={{width:44,height:44,borderRadius:12,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>🎓</div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:8,color:C.gilt,letterSpacing:2.5,fontWeight:700,marginBottom:3,opacity:0.85}}>DEEP DIVE</div>
+                <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:"#fff",lineHeight:1.2,marginBottom:2}}>Coach Mode</div>
+                <div style={{fontSize:11,color:"rgba(255,255,255,0.55)",lineHeight:1.4}}>Rack vs hand · Pass breakdown · Coach advice</div>
+              </div>
+              <div style={{width:28,height:28,borderRadius:8,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                <span style={{fontSize:14,color:"rgba(255,255,255,0.7)",fontWeight:700}}>›</span>
+              </div>
+            </button>
+          )}
+          {/* Practice CTA — secondary, warm sage */}
+          {(()=>{
+            const lowDir=iq.directionScore<24;
+            const wrongSec=!sectionMatch&&bestFitSec;
+            let headline="Practice Mode";
+            let sub="Unlimited hands · Build real instincts";
+            if(wrongSec){headline=`Try ${bestFitSec.name}`;sub=`Your tiles leaned that way — practice reading it faster`;}
+            else if(lowDir){headline="Work on Section Reads";sub="Direction is worth 40pts — it's where IQ is won or lost";}
+            else if(iq.passQualityScore<15){headline="Sharpen Your Passes";sub="Practice makes the Charleston feel automatic";}
+            return(
+              <button onClick={onPractice} style={{
+                width:"100%",borderRadius:14,cursor:"pointer",
+                background:"#fff",border:`1.5px solid ${C.bdr}`,
+                display:"flex",alignItems:"center",gap:14,padding:"13px 16px",
+                textAlign:"left",boxShadow:"0 1px 6px rgba(0,0,0,0.05)",
+              }}>
+                <div style={{width:40,height:40,borderRadius:11,background:C.jade+"12",border:`1px solid ${C.jade}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:19,flexShrink:0}}>🀄</div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:2}}>FREE PLAY</div>
+                  <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.3}}>{headline}</div>
+                  <div style={{fontSize:11,color:C.mut,lineHeight:1.4,marginTop:1}}>{sub}</div>
+                </div>
+                <div style={{width:26,height:26,borderRadius:7,background:C.bg2,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                  <span style={{fontSize:13,color:C.mut,fontWeight:700}}>›</span>
+                </div>
+              </button>
+            );
+          })()}
+        </div>
+      </CollapsibleSection>
+
+      {/* ⑧ COUNTDOWN + HOME */}
+      <div style={{marginTop:20,paddingBottom:4}}>
+        <MidnightCountdown dn={dayNum}/>
+        <button onClick={onHome} style={{
+          width:"100%",border:`1px solid ${C.bdr}`,borderRadius:12,
+          background:"transparent",color:C.mut,
+          fontSize:12,fontWeight:700,cursor:"pointer",
+          padding:"11px 0",letterSpacing:0.5,
+          display:"flex",alignItems:"center",justifyContent:"center",gap:6,
+        }}>
+          <span style={{fontSize:11,opacity:0.6}}>←</span> Home
+        </button>
+      </div>
     </div>
   );
 }
 
-// ─── PRACTICE SCORECARD — full tabbed ─────────────────────────────────────────
+// ─── PRACTICE SCORECARD — collapsible sections, matching daily vibe ───────────
 function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHome,onDealAgain}){
   if(!iq)return null;
   const scoreColor=(v,max)=>v/max>=0.8?C.jade:v/max>=0.55?C.gold:C.cinn;
   const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
   const scoredHandLabel=iq.scoredHandLabel||null;
   const scoredHandObj=scoredHandLabel?HAND_CATALOG.find(h=>h.sec===chosenSec&&h.label===scoredHandLabel):null;
+  const sortedSecsP=allSections?[...allSections].sort((a,b)=>b.score-a.score):[];
 
-  const [passesOpen,setPassesOpen]=useState(false);
+  const [openSec,setOpenSec]=useState({hand:false,alts:false,score:false,passes:false});
+  const toggle=(k)=>setOpenSec(s=>({...s,[k]:!s[k]}));
+
+  // Pass quality dots for badge
+  const passDots=(iq.passInsights||[]).map(p=>({strong:"🟢",weak:"🔴",mixed:"🟡",neutral:"⚪"}[p.quality]||"⚪")).join("");
 
   return(
     <div>
@@ -5296,103 +5502,101 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
         <IQHero iq={iq} isDaily={false} section={section} totalTime={iq.totalTime||0} chosenSec={chosenSec} allSections={allSections}/>
       </div>
 
-      <SectionDivider label="YOUR HAND"/>
+      {/* YOUR HAND — rack only, closed */}
+      <CollapsibleSection label="Your Hand" desc="Your final 13 tiles" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
+        {hand&&hand.length>0&&<SortableRack hand={hand}/>}
+        {scoredHandObj&&<HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={null}/>}
+      </CollapsibleSection>
 
-      {/* Final rack */}
-      {hand&&hand.length>0&&<SortableRack hand={hand}/>}
-
-      {/* Hand target */}
-      {scoredHandObj&&<HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={null}/>}
-      {/* Alternative hands */}
+      {/* OTHER HANDS — closed */}
       {hand&&hand.length>0&&chosenSec&&(()=>{
         const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
-        const sortedSecsP=allSections?[...allSections].sort((a,b)=>b.score-a.score):[];
-        return <AltHandsCard hand={hand} resolvedHandLabel={scoredHandObj?.label||null} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecsP} primaryCoveragePct={primPct}/>;
+        return(
+          <CollapsibleSection label="Other Hands" desc="4 alternatives your rack could've targeted" icon="🔀" open={openSec.alts} onToggle={()=>toggle("alts")}>
+            <AltHandsCard hand={hand} resolvedHandLabel={scoredHandObj?.label||null} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecsP} primaryCoveragePct={primPct}/>
+          </CollapsibleSection>
+        );
       })()}
 
-      <SectionDivider label="YOUR SCORE"/>
-
-      {/* Score breakdown */}
-      <div style={{...S.card,marginBottom:8,padding:"12px 14px"}}>
-        {[
-          {label:"Direction",v:iq.directionScore,max:40,note:iq.directionExplanation},
-          {label:"Pass Quality",v:iq.passQualityScore,max:25},
-          {label:"Tile Strength",v:iq.tileStrengthScore,max:25},
-          {label:"Timing",v:iq.timingScore,max:10,note:iq.timingInsight},
-        ].map(({label,v,max,note},i,arr)=>{
-          const col=scoreColor(v,max);
-          return(
-            <div key={label} style={{marginBottom:i<arr.length-1?10:0}}>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
-                <span style={{fontSize:11,fontWeight:600,color:C.ink}}>{label}</span>
-                <span style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:col}}>{v}<span style={{fontSize:9,color:C.mut,fontWeight:400}}>/{max}</span></span>
+      {/* YOUR SCORE — closed, with score badge */}
+      <CollapsibleSection label="Your Score" desc="Direction · Pass Quality · Tile Strength · Timing" icon="📊" open={openSec.score} onToggle={()=>toggle("score")} badge={`${iq.totalScore}/100`}>
+        <div style={{...S.card,marginBottom:8,padding:"12px 14px"}}>
+          {[
+            {label:"Direction",v:iq.directionScore,max:40,note:iq.directionExplanation},
+            {label:"Pass Quality",v:iq.passQualityScore,max:25},
+            {label:"Tile Strength",v:iq.tileStrengthScore,max:25},
+            {label:"Timing",v:iq.timingScore,max:10,note:iq.timingInsight},
+          ].map(({label,v,max,note},i,arr)=>{
+            const col=scoreColor(v,max);
+            return(
+              <div key={label} style={{marginBottom:i<arr.length-1?10:0}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
+                  <span style={{fontSize:11,fontWeight:600,color:C.ink}}>{label}</span>
+                  <span style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:col}}>{v}<span style={{fontSize:9,color:C.mut,fontWeight:400}}>/{max}</span></span>
+                </div>
+                <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden",marginBottom:note?3:0}}>
+                  <div style={{height:"100%",borderRadius:3,background:`linear-gradient(90deg,${col},${col}CC)`,width:`${Math.round(v/max*100)}%`}}/>
+                </div>
+                {note&&<div style={{fontSize:10,color:C.mut,lineHeight:1.4}}>{note}</div>}
               </div>
-              <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden",marginBottom:note?3:0}}>
-                <div style={{height:"100%",borderRadius:3,background:col,width:`${Math.round(v/max*100)}%`}}/>
-              </div>
-              {note&&<div style={{fontSize:10,color:C.mut,lineHeight:1.4}}>{note}</div>}
-            </div>
-          );
-        })}
-      </div>
-
-      <SectionDivider label="YOUR PASSES"/>
-
-      {/* Per-pass breakdown — collapsible */}
-      {iq.passInsights&&iq.passInsights.length>0&&(
-        <div style={{marginBottom:8}}>
-          <button onClick={()=>setPassesOpen(o=>!o)} style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",background:passesOpen?C.bg2:"#fff",border:`1px solid ${C.bdr}`,borderRadius:passesOpen?"12px 12px 0 0":12,padding:"10px 14px",cursor:"pointer",textAlign:"left",marginBottom:0}}>
-            <div style={{display:"flex",alignItems:"center",gap:8}}>
-              <span style={{fontSize:12,color:C.ink,fontWeight:700}}>Pass breakdown</span>
-              <div style={{display:"flex",gap:3}}>
-                {iq.passInsights.map((p,i)=>{
-                  const col={strong:C.jade,weak:C.cinn,mixed:C.amberB,neutral:C.mut}[p.quality]||C.mut;
-                  return <div key={i} style={{width:8,height:8,borderRadius:4,background:col}}/>;
-                })}
-              </div>
-            </div>
-            <span style={{fontSize:11,color:C.mut,transform:passesOpen?"rotate(180deg)":"none",display:"inline-block",transition:"transform 0.2s"}}>▾</span>
-          </button>
-          {passesOpen&&(
-            <div className="rk-in" style={{border:`1px solid ${C.bdr}`,borderTop:"none",borderRadius:"0 0 12px 12px",overflow:"hidden"}}>
-              <div style={{display:"flex",flexDirection:"column",gap:0}}>
-                {iq.passInsights.map((p,i)=>{
-                  const qBg={strong:"#EDF5F0",weak:"#FEF0F0",mixed:"#FBF3E2",neutral:"#fff"};
-                  const qColor={strong:C.jade,weak:C.cinn,mixed:C.amberB,neutral:C.mut};
-                  const qLabel={strong:"Good pass",weak:"Costly pass",mixed:"Mixed pass",neutral:"Neutral"};
-                  return(
-                    <div key={i} style={{background:qBg[p.quality]||"#fff",borderTop:i>0?`1px solid ${qColor[p.quality]||C.bdr}15`:"none"}}>
-                      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"9px 14px",borderBottom:p.passedTiles?.length?`1px solid ${qColor[p.quality]||C.bdr}15`:"none"}}>
-                        <div style={{display:"flex",alignItems:"center",gap:6}}>
-                          <div style={{width:20,height:20,borderRadius:10,background:(qColor[p.quality]||C.mut)+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:900,color:qColor[p.quality]||C.mut,flexShrink:0}}>{i+1}</div>
-                          <span style={{fontSize:11,fontWeight:700,color:C.ink}}>{p.roundName||`Pass ${i+1}`}</span>
-                        </div>
-                        <span style={{fontSize:9,fontWeight:700,color:qColor[p.quality]||C.mut}}>{qLabel[p.quality]||""}</span>
-                      </div>
-                      {p.passedTiles&&p.passedTiles.length>0&&(
-                        <div style={{padding:"7px 14px",borderBottom:`1px solid ${qColor[p.quality]||C.bdr}15`}}>
-                          <div style={{display:"flex",flexWrap:"wrap",gap:3}}>{p.passedTiles.map((t,j)=><Ti key={j} t={t}/>)}</div>
-                        </div>
-                      )}
-                      <div style={{padding:"7px 14px"}}>
-                        <p style={{fontSize:11,color:C.ink,margin:0,lineHeight:1.55}}>{p.insight}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+            );
+          })}
         </div>
+      </CollapsibleSection>
+
+      {/* YOUR PASSES — closed, dots badge */}
+      {iq.passInsights&&iq.passInsights.length>0&&(
+        <CollapsibleSection label="Your Passes" desc="Pass-by-pass quality breakdown" icon="🔄" open={openSec.passes} onToggle={()=>toggle("passes")} badge={passDots||undefined}>
+          <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden"}}>
+            {iq.passInsights.map((p,i)=>{
+              const qBg={strong:"#EDF5F0",weak:"#FEF0F0",mixed:"#FBF3E2",neutral:"#fff"};
+              const qColor={strong:C.jade,weak:C.cinn,mixed:C.amberB,neutral:C.mut};
+              const qLabel={strong:"Good pass",weak:"Costly pass",mixed:"Mixed pass",neutral:"Neutral"};
+              return(
+                <div key={i} style={{background:qBg[p.quality]||"#fff",borderTop:i>0?`1px solid ${C.bdr}`:"none"}}>
+                  <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"9px 14px",borderBottom:p.passedTiles?.length?`1px solid ${C.bdr}40`:"none"}}>
+                    <div style={{display:"flex",alignItems:"center",gap:6}}>
+                      <div style={{width:20,height:20,borderRadius:10,background:(qColor[p.quality]||C.mut)+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:900,color:qColor[p.quality]||C.mut,flexShrink:0}}>{i+1}</div>
+                      <span style={{fontSize:11,fontWeight:700,color:C.ink}}>{p.roundName||`Pass ${i+1}`}</span>
+                    </div>
+                    <span style={{fontSize:9,fontWeight:700,color:qColor[p.quality]||C.mut,background:(qColor[p.quality]||C.mut)+"15",borderRadius:20,padding:"2px 8px"}}>{qLabel[p.quality]||""}</span>
+                  </div>
+                  {p.passedTiles&&p.passedTiles.length>0&&(
+                    <div style={{padding:"7px 14px",borderBottom:`1px solid ${C.bdr}40`}}>
+                      <div style={{display:"flex",flexWrap:"wrap",gap:3}}>{p.passedTiles.map((t,j)=><Ti key={j} t={t}/>)}</div>
+                    </div>
+                  )}
+                  <div style={{padding:"7px 14px"}}>
+                    <p style={{fontSize:11,color:C.ink,margin:0,lineHeight:1.55}}>{p.insight}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </CollapsibleSection>
       )}
 
       {/* Mahjong Identity */}
       <MahjongIdentityCard iq={iq} chosenSec={chosenSec} passLog={passLog} finalRack={hand}/>
 
       {/* Actions */}
-      <div style={{display:"flex",gap:8,marginTop:12}}>
-        <button onClick={onHome} style={{...S.oBtn,flex:1}}>← Home</button>
-        <button onClick={onDealAgain} style={{flex:2,padding:"13px 0",background:`linear-gradient(135deg,${C.jade},#0F5535)`,color:"#fff",border:"none",borderRadius:12,fontSize:14,fontFamily:F.d,fontWeight:800,letterSpacing:0.5,cursor:"pointer",boxShadow:`0 4px 16px rgba(27,125,78,0.3)`,display:"flex",alignItems:"center",justifyContent:"center",gap:6,minHeight:48}}>
+      <div style={{display:"flex",gap:8,marginTop:16}}>
+        <button onClick={onHome} style={{
+          flex:1,border:`1px solid ${C.bdr}`,borderRadius:12,
+          background:"transparent",color:C.mut,
+          fontSize:12,fontWeight:700,cursor:"pointer",
+          padding:"11px 0",display:"flex",alignItems:"center",justifyContent:"center",gap:6,
+        }}>
+          <span style={{opacity:0.6}}>←</span> Home
+        </button>
+        <button onClick={onDealAgain} style={{
+          flex:2,padding:"13px 0",
+          background:`linear-gradient(135deg,${C.jade},#0F5535)`,
+          color:"#fff",border:"none",borderRadius:12,
+          fontSize:14,fontFamily:F.d,fontWeight:800,letterSpacing:0.5,
+          cursor:"pointer",boxShadow:`0 4px 16px rgba(27,125,78,0.3)`,
+          display:"flex",alignItems:"center",justifyContent:"center",gap:6,minHeight:48,
+        }}>
           <span>🀄</span><span>Deal Again</span>
         </button>
       </div>
@@ -6249,7 +6453,7 @@ function ScorecardScreen({res,home,dayNum,onPractice,setScreen}){
   return(
     <div style={S.pg} className="rk-pg">
       <RackleHeader onBack={home} setScreen={setScreen}/>
-      <DailyIQScorecard iq={res.iq} hand={res.finalRack||[]} startingRack={res.startingRack||[]} passLog={res.passLog||[]} dayNum={dayNum} section={res.section} chosenSec={res.chosenSec} chosenHand={res.chosenHand} allSections={res.allSections||[]} onHome={home} onPractice={onPractice} onCoachMode={enterCoach}/>
+      <DailyIQScorecard iq={res.iq} hand={res.finalRack||[]} startingRack={res.startingRack||[]} passLog={res.passLog||[]} dayNum={dayNum} section={res.section} chosenSec={res.chosenSec} chosenHand={res.chosenHand} allSections={res.allSections||[]} onHome={home} onPractice={onPractice} onCoachMode={enterCoach} setScreen={setScreen}/>
       <Footer/>
     </div>
   );
