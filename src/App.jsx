@@ -2478,6 +2478,13 @@ function iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId,chose
   raw-=brokenPairsTotal*2;
   raw=Math.max(0,Math.min(25,raw));
 
+  // OUTCOME VALIDATION FLOOR — if direction and tile strength are both high,
+  // the final rack proves the passes were correct regardless of what was passed.
+  // A player who ends with 90%+ direction and tile strength made good decisions.
+  // We don't penalise process when the outcome is objectively strong.
+  // This is injected here using the raw scores from the calling context via closure — 
+  // but since we don't have them here, we apply the floor post-hoc in calculateCharlestonIQ.
+
   raw=Math.max(0,Math.min(25,Math.round(raw)));
   return{passQualityScore:raw,passInsights,brokenPairsCount:brokenPairsTotal,brokenPairKeys};
 }
@@ -2828,8 +2835,18 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   let{tileStrengthScore}=iqTileStrength(finalRack,sectionId,chosenHandObj);
 
   // ── PASS QUALITY: hand-aware strong/weak tile determination ──────────────────
-  const{passQualityScore,passInsights,brokenPairsCount}=iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId,chosenHandObj);
+  let{passQualityScore,passInsights,brokenPairsCount}=iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId,chosenHandObj);
   const{timingScore,timingInsight}=iqTiming(totalTime||0,roundCount,passedTilesByRound);
+
+  // ── OUTCOME VALIDATION FLOOR ─────────────────────────────────────────────────
+  // If direction and tile strength are both strong, the final rack proves the passes
+  // were correct. A player cannot end up with a 90%+ direction rack by making bad passes.
+  // Floor scales with how good the outcome is — great rack = passes were at least decent.
+  const dirRatio=directionScore/40;
+  const tileRatio=tileStrengthScore/25;
+  const outcomeStrength=(dirRatio+tileRatio)/2;
+  const passFloor=outcomeStrength>=0.88?18:outcomeStrength>=0.80?15:outcomeStrength>=0.70?12:0;
+  if(passQualityScore<passFloor)passQualityScore=passFloor;
 
   // ── DEAL QUALITY FLOOR ──────────────────────────────────────────────────────
   // Use hand-specific tile value if we have a chosen hand, else fall back to section meta
@@ -4292,9 +4309,9 @@ function HandTargetPreview({hand,scoredHandObj,chosenSec,chosenSecObj,iq,onCoach
         </div>
       </button>
       {open&&<div className="rk-in" style={{borderTop:`1px solid ${C.bdr}`}}>
-        <div style={{padding:"10px 14px",background:C.bg2,overflowX:"auto"}}>
+        <div style={{padding:"10px 14px",background:C.bg2}}>
           <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>TARGET PATTERN</div>
-          <div style={{display:"flex",gap:6,flexWrap:"wrap",alignItems:"flex-end",minWidth:"max-content"}}>
+          <div style={{display:"flex",gap:6,flexWrap:"wrap",alignItems:"flex-end"}}>
             {groups.map((g,i)=><HandGroupChips key={i} group={g} cardColor={cardColors[i]}/>)}
           </div>
         </div>
@@ -4718,6 +4735,17 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
   );
 }
 
+// ─── SHARED SECTION DIVIDER ───────────────────────────────────────────────────
+function SectionDivider({label}){
+  return(
+    <div style={{display:"flex",alignItems:"center",gap:10,margin:"14px 0 10px"}}>
+      <div style={{flex:1,height:1,background:`linear-gradient(90deg,${C.bdr},transparent)`}}/>
+      <span style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700,flexShrink:0}}>{label}</span>
+      <div style={{flex:1,height:1,background:`linear-gradient(90deg,transparent,${C.bdr})`}}/>
+    </div>
+  );
+}
+
 // ─── SORTABLE RACK — final rack display with sort button ──────────────────────
 function SortableRack({hand:initialHand}){
   const [rack,setRack]=useState(initialHand);
@@ -4788,7 +4816,15 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         );
       })()}
 
-      {/* ③ SCORE BREAKDOWN — compact bars */}
+      {/* ③ YOUR RACK — always visible, no collapse */}
+      <SectionDivider label="YOUR HAND"/>
+      <SortableRack hand={hand}/>
+
+      {/* ④ HAND TARGET — what you were building toward */}
+      <HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={onCoachMode}/>
+
+      {/* ⑤ SCORE BREAKDOWN */}
+      <SectionDivider label="YOUR SCORE"/>
       <div style={{...S.card,marginBottom:8,padding:"12px 14px"}}>
         <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>SCORE BREAKDOWN</div>
         {[
@@ -4814,26 +4850,21 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         })}
       </div>
 
-      {/* ④½ RACK VIEWER */}
-      <RackViewer hand={hand} startingRack={startingRack}/>
-
-      {/* ④¾ HAND TARGET PREVIEW */}
-      <HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={onCoachMode}/>
-
-      {/* ⑤ COACH MODE BUTTON — prominent */}
+      {/* ⑥ COACH MODE BUTTON */}
+      <SectionDivider label="NEXT STEPS"/>
       {onCoachMode&&(
         <button onClick={onCoachMode} style={{width:"100%",borderRadius:14,background:"#fff",border:`2px solid ${C.jade}30`,cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"13px 16px",marginBottom:8,textAlign:"left",boxShadow:`0 2px 12px ${C.jade}12`}}>
           <div style={{width:42,height:42,borderRadius:12,background:`linear-gradient(135deg,${C.jade},#115C38)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0,boxShadow:`0 3px 10px ${C.jade}30`}}>🎓</div>
           <div style={{flex:1}}>
             <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:2}}>DEEP DIVE</div>
             <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:C.ink,lineHeight:1.2,marginBottom:2}}>Coach Mode</div>
-            <div style={{fontSize:11,color:C.mut,lineHeight:1.4}}>Rack vs hand · Starting deal · Pass breakdown · Expert eye</div>
+            <div style={{fontSize:11,color:C.mut,lineHeight:1.4}}>Rack vs hand · Pass breakdown · Coach advice</div>
           </div>
           <span style={{fontSize:18,color:C.jade,flexShrink:0,fontWeight:700}}>›</span>
         </button>
       )}
 
-      {/* ⑥ SHARE */}
+      {/* ⑦ SHARE */}
       <div style={{...S.card,marginBottom:8}}>
         <div style={{fontFamily:"monospace",fontSize:10,color:C.mut,background:C.bg2,borderRadius:8,padding:"10px 12px",marginBottom:10,textAlign:"center"}}>
           {shareText.split("\n").map((line,i)=>line===""?<div key={i} style={{height:8}}/>:<div key={i} style={{lineHeight:1.9}}>{line}</div>)}
@@ -4841,7 +4872,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <ShareButton text={shareText}/>
       </div>
 
-      {/* ⑦ PRACTICE CTA */}
+      {/* ⑧ PRACTICE CTA */}
       {(()=>{
         const lowDir=iq.directionScore<24;
         const wrongSec=!sectionMatch&&bestFitSec;
@@ -4863,7 +4894,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         );
       })()}
 
-      {/* ⑧ COUNTDOWN + HOME */}
+      {/* ⑨ COUNTDOWN + HOME */}
       <MidnightCountdown dn={dayNum}/>
       <button onClick={onHome} style={{...S.oBtn,width:"100%"}}>← Home</button>
     </div>
@@ -4872,267 +4903,119 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
 // ─── PRACTICE SCORECARD — full tabbed ─────────────────────────────────────────
 function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHome,onDealAgain}){
-  const [tab,setTab]=useState(0);
-  const [sfOpen,setSfOpen]=useState(false);
   if(!iq)return null;
-  const passEmoji=(iq.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
-  const freshShareText=`🀄 Rackle Practice · IQ ${iq.totalScore} · ${iq.level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Play the daily Charleston challenge!\nplayrackle.com`;
-  const dist=iq.distanceToOptimal||{};
-  const tins=iq.tileInsights||{};
+  const scoreColor=(v,max)=>v/max>=0.8?C.jade:v/max>=0.55?C.gold:C.cinn;
+  const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
+  const scoredHandLabel=iq.scoredHandLabel||null;
+  const scoredHandObj=scoredHandLabel?HAND_CATALOG.find(h=>h.sec===chosenSec&&h.label===scoredHandLabel):null;
 
-  const tabs=["Overview","Passes","Tiles"];
+  const [passesOpen,setPassesOpen]=useState(false);
+
   return(
     <div>
-      <div style={{marginBottom:10}}><IQHero iq={iq} isDaily={false} section={section} totalTime={iq.totalTime||0} chosenSec={chosenSec} allSections={allSections}/></div>
-      <div style={{display:"flex",gap:4,marginBottom:12,background:C.bg2,borderRadius:10,padding:3}}>
-        {tabs.map((t,i)=>(<button key={i} onClick={()=>setTab(i)} style={{flex:1,padding:"8px 0",borderRadius:8,border:"none",background:tab===i?"#fff":"transparent",color:tab===i?C.ink:C.mut,fontSize:12,fontWeight:700,cursor:"pointer",transition:"all 0.2s",boxShadow:tab===i?"0 1px 4px rgba(0,0,0,0.08)":"none"}}>{t}</button>))}
+      {/* IQ Hero */}
+      <div style={{marginBottom:10}}>
+        <IQHero iq={iq} isDaily={false} section={section} totalTime={iq.totalTime||0} chosenSec={chosenSec} allSections={allSections}/>
       </div>
 
-      {/* TAB 0 — OVERVIEW */}
-      {tab===0&&<div className="rk-in">
-        {/* Final Rack — shown first */}
-        {hand&&hand.length>0&&<SortableRack hand={hand}/>}
+      <SectionDivider label="YOUR HAND"/>
 
-        {/* Hand Targets */}
-        {hand&&hand.length>0&&chosenSec&&<SpecificHandCard finalRack={hand} sectionId={chosenSec} showFit={false}/>}
+      {/* Final rack */}
+      {hand&&hand.length>0&&<SortableRack hand={hand}/>}
 
-        {/* Score bars */}
-        <div style={{...S.card,marginBottom:8}}>
-          <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:14}}>SCORE BREAKDOWN</div>
-          <ScoreBar label="Direction" score={iq.directionScore} max={40} note={iq.directionExplanation}/>
-          <ScoreBar label="Tile Strength" score={iq.tileStrengthScore} max={25}/>
-          <ScoreBar label="Pass Quality" score={iq.passQualityScore} max={25}/>
-          <ScoreBar label="Timing" score={iq.timingScore} max={10} note={iq.timingInsight}/>
-        </div>
+      {/* Hand target */}
+      {scoredHandObj&&<HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={null}/>}
 
-        {/* COACHING LAYER */}
-        {chosenSec&&hand&&hand.length>0&&<>
-          <RackBecomingCard finalRack={hand} startingRack={hand} chosenSec={chosenSec} passLog={passLog}/>
-          <ExpertReadCard finalRack={hand} chosenSec={chosenSec} allSections={allSections} passLog={passLog} iq={iq}/>
-          <FlexibilityCard finalRack={hand} allSections={allSections} passLog={passLog} startingRack={hand}/>
-          <MahjongIdentityCard iq={iq} chosenSec={chosenSec} passLog={passLog} finalRack={hand}/>
-        </>}
+      <SectionDivider label="YOUR SCORE"/>
 
-        {/* Section comparison — collapsible */}
-        {allSections&&allSections.length>0&&(()=>{
-          const topSec=[...allSections].sort((a,b)=>b.score-a.score)[0];
+      {/* Score breakdown */}
+      <div style={{...S.card,marginBottom:8,padding:"12px 14px"}}>
+        {[
+          {label:"Direction",v:iq.directionScore,max:40,note:iq.directionExplanation},
+          {label:"Pass Quality",v:iq.passQualityScore,max:25},
+          {label:"Tile Strength",v:iq.tileStrengthScore,max:25},
+          {label:"Timing",v:iq.timingScore,max:10,note:iq.timingInsight},
+        ].map(({label,v,max,note},i,arr)=>{
+          const col=scoreColor(v,max);
           return(
-            <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden"}}>
-              <button onClick={()=>setSfOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"12px 14px",background:"#fff",border:"none",cursor:"pointer",textAlign:"left",borderBottom:sfOpen?`1px solid ${C.bdr}`:"none"}}>
-                <div style={{display:"flex",alignItems:"center",gap:10}}>
-                  <span style={{fontSize:22}}>{topSec?.icon||"📊"}</span>
-                  <div>
-                    <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:2}}>SECTION FIT</div>
-                    <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:C.ink,lineHeight:1.2}}>All sections ranked</div>
-                  </div>
-                </div>
-                <span style={{fontSize:12,color:C.mut,flexShrink:0}}>{sfOpen?"▾":"▸"}</span>
-              </button>
-              {sfOpen&&<div style={{padding:"12px 14px"}} className="rk-in">
-                {allSections.slice(0,5).map((s,i)=>{
-                  const isChosen=s.id===chosenSec;const isTop=i===0;
-                  const pct=Math.round(s.score*100);
+            <div key={label} style={{marginBottom:i<arr.length-1?10:0}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
+                <span style={{fontSize:11,fontWeight:600,color:C.ink}}>{label}</span>
+                <span style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:col}}>{v}<span style={{fontSize:9,color:C.mut,fontWeight:400}}>/{max}</span></span>
+              </div>
+              <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden",marginBottom:note?3:0}}>
+                <div style={{height:"100%",borderRadius:3,background:col,width:`${Math.round(v/max*100)}%`}}/>
+              </div>
+              {note&&<div style={{fontSize:10,color:C.mut,lineHeight:1.4}}>{note}</div>}
+            </div>
+          );
+        })}
+      </div>
+
+      <SectionDivider label="YOUR PASSES"/>
+
+      {/* Per-pass breakdown — collapsible */}
+      {iq.passInsights&&iq.passInsights.length>0&&(
+        <div style={{marginBottom:8}}>
+          <button onClick={()=>setPassesOpen(o=>!o)} style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",background:passesOpen?C.bg2:"#fff",border:`1px solid ${C.bdr}`,borderRadius:passesOpen?"12px 12px 0 0":12,padding:"10px 14px",cursor:"pointer",textAlign:"left",marginBottom:0}}>
+            <div style={{display:"flex",alignItems:"center",gap:8}}>
+              <span style={{fontSize:12,color:C.ink,fontWeight:700}}>Pass breakdown</span>
+              <div style={{display:"flex",gap:3}}>
+                {iq.passInsights.map((p,i)=>{
+                  const col={strong:C.jade,weak:C.cinn,mixed:C.amberB,neutral:C.mut}[p.quality]||C.mut;
+                  return <div key={i} style={{width:8,height:8,borderRadius:4,background:col}}/>;
+                })}
+              </div>
+            </div>
+            <span style={{fontSize:11,color:C.mut,transform:passesOpen?"rotate(180deg)":"none",display:"inline-block",transition:"transform 0.2s"}}>▾</span>
+          </button>
+          {passesOpen&&(
+            <div className="rk-in" style={{border:`1px solid ${C.bdr}`,borderTop:"none",borderRadius:"0 0 12px 12px",overflow:"hidden"}}>
+              <div style={{display:"flex",flexDirection:"column",gap:0}}>
+                {iq.passInsights.map((p,i)=>{
+                  const qBg={strong:"#EDF5F0",weak:"#FEF0F0",mixed:"#FBF3E2",neutral:"#fff"};
+                  const qColor={strong:C.jade,weak:C.cinn,mixed:C.amberB,neutral:C.mut};
+                  const qLabel={strong:"Good pass",weak:"Costly pass",mixed:"Mixed pass",neutral:"Neutral"};
                   return(
-                    <div key={s.id} style={{display:"flex",alignItems:"center",gap:8,marginBottom:i<4?8:0}}>
-                      <span style={{fontSize:13,flexShrink:0}}>{s.icon}</span>
-                      <div style={{flex:1,minWidth:0}}>
-                        <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
-                          <span style={{fontSize:11,fontWeight:isChosen?700:500,color:isChosen?C.ink:C.mut}}>{s.name}{isChosen?" · your pick":""}{isTop&&!isChosen?" · best fit":""}</span>
-                          <span style={{fontSize:11,fontWeight:700,color:isChosen?C.jade:C.mut,fontFamily:F.d}}>{pct}%</span>
+                    <div key={i} style={{background:qBg[p.quality]||"#fff",borderTop:i>0?`1px solid ${qColor[p.quality]||C.bdr}15`:"none"}}>
+                      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"9px 14px",borderBottom:p.passedTiles?.length?`1px solid ${qColor[p.quality]||C.bdr}15`:"none"}}>
+                        <div style={{display:"flex",alignItems:"center",gap:6}}>
+                          <div style={{width:20,height:20,borderRadius:10,background:(qColor[p.quality]||C.mut)+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:900,color:qColor[p.quality]||C.mut,flexShrink:0}}>{i+1}</div>
+                          <span style={{fontSize:11,fontWeight:700,color:C.ink}}>{p.roundName||`Pass ${i+1}`}</span>
                         </div>
-                        <div style={{height:4,borderRadius:2,background:C.bdr,overflow:"hidden"}}>
-                          <div style={{height:"100%",borderRadius:2,width:`${pct}%`,background:isChosen?C.jade:isTop&&!isChosen?C.gold:"#D5CFC5"}}/>
+                        <span style={{fontSize:9,fontWeight:700,color:qColor[p.quality]||C.mut}}>{qLabel[p.quality]||""}</span>
+                      </div>
+                      {p.passedTiles&&p.passedTiles.length>0&&(
+                        <div style={{padding:"7px 14px",borderBottom:`1px solid ${qColor[p.quality]||C.bdr}15`}}>
+                          <div style={{display:"flex",flexWrap:"wrap",gap:3}}>{p.passedTiles.map((t,j)=><Ti key={j} t={t}/>)}</div>
                         </div>
+                      )}
+                      <div style={{padding:"7px 14px"}}>
+                        <p style={{fontSize:11,color:C.ink,margin:0,lineHeight:1.55}}>{p.insight}</p>
                       </div>
                     </div>
                   );
                 })}
-              </div>}
+              </div>
             </div>
-          );
-        })()}
-
-        {/* Share */}
-        <div style={{...S.card,marginBottom:8}}>
-          <div style={{fontFamily:"monospace",fontSize:10,color:C.mut,background:C.bg2,borderRadius:8,padding:"10px 12px",marginBottom:10,textAlign:"center",borderBottom:`1px solid ${C.bdr}`}}>
-            {freshShareText.split("\n").map((line,i)=>line===""?<div key={i} style={{height:8}}/>:<div key={i} style={{lineHeight:1.9}}>{line}</div>)}
-          </div>
-          <ShareButton text={freshShareText}/>
+          )}
         </div>
-      </div>}
+      )}
 
-      {/* TAB 1 — PASSES */}
-      {tab===1&&<div className="rk-in">
-        {/* Pass summary header */}
-        {iq.passInsights&&iq.passInsights.length>0&&(()=>{
-          const allPassed=iq.passInsights.flatMap(p=>p.passedTiles||[]);
-          const qualCounts={strong:0,mixed:0,weak:0,neutral:0};
-          iq.passInsights.forEach(p=>{qualCounts[p.quality]=(qualCounts[p.quality]||0)+1;});
-          const cleanRounds=qualCounts.strong;
-          // Use pre-computed riskyPassed from tileInsights — already section-aware
-          const riskyCount=(iq.tileInsights&&iq.tileInsights.riskyPassed)?iq.tileInsights.riskyPassed.length:allPassed.filter(t=>t.t==="j"||t.t==="f").length;
-          return(
-          <div style={{...S.card,background:"linear-gradient(135deg,#F8F4EB,#FBF9F4)",marginBottom:10,borderColor:C.gold+"25"}}>
-            <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>PASS SUMMARY</div>
-            <div style={{display:"flex",gap:8,marginBottom:8}}>
-              <div style={{flex:1,background:"#fff",borderRadius:8,padding:"8px 10px",textAlign:"center",border:`1px solid ${C.bdr}`}}>
-                <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>TILES PASSED</div>
-                <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink}}>{allPassed.length}</div>
-              </div>
-              <div style={{flex:1,background:C.sage,borderRadius:8,padding:"8px 10px",textAlign:"center",border:`1px solid ${C.sageB}20`}}>
-                <div style={{fontSize:8,color:C.sageB,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>CLEAN ROUNDS</div>
-                <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.sageB}}>{cleanRounds}/{iq.passInsights.length}</div>
-              </div>
-              <div style={{flex:1,background:riskyCount>0?"#FDF0E8":C.sage,borderRadius:8,padding:"8px 10px",textAlign:"center",border:`1px solid ${riskyCount>0?"#8A301020":C.sageB+"20"}`}}>
-                <div style={{fontSize:8,color:riskyCount>0?"#8A3010":C.sageB,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>VALUABLES PASSED</div>
-                <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:riskyCount>0?"#8A3010":C.sageB}}>{riskyCount}</div>
-              </div>
-            </div>
-            <div style={{fontSize:10,color:C.mut,lineHeight:1.5}}>Pass score: <strong style={{color:iq.passQualityScore>=20?C.jade:iq.passQualityScore>=14?C.ink:C.cinn,fontFamily:F.d}}>{iq.passQualityScore}/25</strong></div>
-          </div>
-          );
-        })()}
+      {/* Mahjong Identity */}
+      <MahjongIdentityCard iq={iq} chosenSec={chosenSec} passLog={passLog} finalRack={hand}/>
 
-        {iq.passInsights&&iq.passInsights.length>0?iq.passInsights.map((p,i)=>{
-          const qBg={strong:C.sage,weak:"#FDF0E8",mixed:C.amber,neutral:"#fff"};
-          const qColor={strong:C.sageB,weak:"#8A3010",mixed:C.amberB,neutral:C.mut};
-          const qIcon={strong:"✓",weak:"✗",mixed:"≈",neutral:"·"};
-          // Section-aware: jokers are NOT risky in S&P; Soap IS risky in 2026
-          const sid=section&&section.id?section.id:(chosenSec||"2026");
-          const passedStrong=(p.passedTiles||[]).filter(t=>{
-            if(t.t==="j"&&sid==="sp")return false; // jokers are weak/worthless in S&P
-            if(t.t==="j")return true;
-            if(t.t==="f")return true;
-            if(sid==="2026"&&t.t==="d"&&t.v==="Soap")return true;
-            return false;
-          }).length;
-          const passedCount=(p.passedTiles||[]).length;
-          return(
-            <div key={i} style={{...S.card,background:qBg[p.quality]||"#fff",marginBottom:8,padding:0,overflow:"hidden"}}>
-              {/* Header row */}
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 14px 8px"}}>
-                <div style={{display:"flex",alignItems:"center",gap:7}}>
-                  <div style={{width:22,height:22,borderRadius:11,background:qColor[p.quality]||C.mut,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,color:"#fff",fontWeight:900,flexShrink:0}}>{qIcon[p.quality]||"·"}</div>
-                  <span style={{fontSize:12,color:C.ink,fontWeight:700}}>{p.roundName||"Pass"}</span>
-                </div>
-                <QualityPip quality={p.quality}/>
-              </div>
-              {/* Tiles passed */}
-              {p.passedTiles&&p.passedTiles.length>0&&<div style={{padding:"0 14px 10px"}}>
-                <div style={{fontSize:8,color:qColor[p.quality]||C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>{passedCount} TILE{passedCount!==1?"S":""} PASSED</div>
-                <div style={{display:"flex",flexWrap:"wrap",gap:3,marginBottom:6}}>{p.passedTiles.map((t,j)=><Ti key={j} t={t}/>)}</div>
-                {/* Tile value tags */}
-                <div style={{display:"flex",flexWrap:"wrap",gap:3,marginTop:2}}>
-                  {p.passedTiles.map((t,j)=>{
-                    const isJoker=t.t==="j";const isFlower=t.t==="f";
-                    const bg=isJoker?"#5C3010":isFlower?"#7A2A60":"#1A3D28";
-                    return <span key={j} style={{fontSize:9,fontWeight:700,borderRadius:20,padding:"2px 8px",background:bg,color:"#fff"}}>{tLabel(t)}{isJoker?" 🃏":isFlower?" 🌸":""}</span>;
-                  })}
-                </div>
-                {passedStrong>0&&<div style={{marginTop:7,fontSize:10,color:"#8A3010",fontWeight:600,display:"flex",alignItems:"center",gap:4}}>
-                  <span>⚠️</span><span>{passedStrong} high-value tile{passedStrong>1?"s":""} left your rack</span>
-                </div>}
-              </div>}
-              {/* Insight */}
-              <div style={{borderTop:`1px solid ${qColor[p.quality]||C.bdr}25`,padding:"8px 14px"}}>
-                <p style={{fontSize:11,color:C.ink,margin:0,lineHeight:1.55}}>{p.insight}</p>
-              </div>
-            </div>
-          );
-        }):<div style={{...S.card,textAlign:"center",padding:"24px 14px"}}>
-          <div style={{fontSize:11,color:C.mut}}>No pass data recorded for this round.</div>
-        </div>}
-
-        {/* All passed tiles summary */}
-        {passLog&&passLog.length>0&&<div style={S.card}>
-          <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>ALL TILES PASSED</div>
-          <div style={{display:"flex",flexWrap:"wrap",gap:3}}>
-            {passLog.flatMap(p=>p.out||[]).map((t,i)=><Ti key={i} t={t}/>)}
-          </div>
-        </div>}
-
-        {/* Timing — moved here from Overview */}
-        {(()=>{const totalSec=iq.totalTime||0;const rc=3;const avg=Math.round(totalSec/rc);const pace=iq.timingScore>=9?"Elite":iq.timingScore>=7?"Solid":iq.timingScore>=5?"Slow":iq.timingScore>=3?"Deliberate":"Too fast";const paceColor=iq.timingScore>=9?C.jade:iq.timingScore>=7?"#2460A8":iq.timingScore>=5?C.gold:C.cinn;return(
-        <div style={{background:C.parch,border:`1px solid ${C.bdr}`,borderRadius:12,padding:"14px",marginBottom:8}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
-            <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>TIMING</div>
-            <div style={{display:"flex",alignItems:"baseline",gap:3}}>
-              <span style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:paceColor,lineHeight:1}}>{iq.timingScore}</span>
-              <span style={{fontSize:10,color:C.mut,fontWeight:400}}>/10</span>
-            </div>
-          </div>
-          <div style={{display:"flex",gap:10,marginBottom:10}}>
-            <div style={{flex:1,background:"#fff",borderRadius:8,padding:"8px 10px",textAlign:"center",border:`1px solid ${C.bdr}`}}>
-              <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>TOTAL TIME</div>
-              <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink}}>{fT(totalSec)}</div>
-            </div>
-            <div style={{flex:1,background:"#fff",borderRadius:8,padding:"8px 10px",textAlign:"center",border:`1px solid ${C.bdr}`}}>
-              <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>AVG PER PASS</div>
-              <div style={{fontFamily:F.d,fontSize:16,fontWeight:800,color:C.ink}}>{avg}s</div>
-            </div>
-            <div style={{flex:1,background:paceColor+"12",borderRadius:8,padding:"8px 10px",textAlign:"center",border:`1.5px solid ${paceColor}30`}}>
-              <div style={{fontSize:8,color:paceColor,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>PACE</div>
-              <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:paceColor}}>{pace}</div>
-            </div>
-          </div>
-          <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{iq.timingInsight}</div>
-          <div style={{marginTop:6,fontSize:10,color:C.mut,lineHeight:1.4}}>Target: <strong style={{color:C.jade}}>8–12s per pass</strong> — decisive, not rushed.</div>
-        </div>
-        );})()}
-      </div>}
-
-      {/* TAB 2 — TILES */}
-      {tab===2&&<div className="rk-in">
-        {/* Deal Again shortcut — premium look */}
-        <button onClick={onDealAgain} style={{width:"100%",marginBottom:10,padding:"15px 0",borderRadius:14,border:"none",cursor:"pointer",
-          background:`linear-gradient(135deg,${C.jade},#0F5535)`,color:"#fff",
-          fontSize:15,fontFamily:F.d,fontWeight:800,letterSpacing:0.8,
-          boxShadow:`0 6px 24px rgba(27,125,78,0.35)`,
-          display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
-          <span style={{fontSize:18}}>🀄</span>
-          <span>Deal Again</span>
-          <span style={{fontSize:13,opacity:0.7,fontFamily:F.b,fontWeight:600,letterSpacing:0}}>→</span>
-        </button>
-        {/* Final rack */}
-        {hand&&<SortableRack hand={hand}/>}
-
-        {tins.protectedTiles&&tins.protectedTiles.length>0&&<div style={{background:C.sage,border:`1px solid ${C.sageB}20`,borderRadius:12,padding:"12px 14px",marginBottom:8}}>
-          <div style={{fontSize:9,color:C.sageB,letterSpacing:2,fontWeight:700,marginBottom:6}}>PROTECTED TILES</div>
-          <div style={{display:"flex",flexWrap:"wrap"}}>{tins.protectedTiles.map((l,i)=><Chip key={i} label={l} type="protect"/>)}</div>
-        </div>}
-
-        {tins.weakKept&&tins.weakKept.length>0&&<div style={{background:C.amber,border:`1px solid ${C.amberB}20`,borderRadius:12,padding:"12px 14px",marginBottom:8}}>
-          <div style={{fontSize:9,color:C.amberB,letterSpacing:2,fontWeight:700,marginBottom:6}}>OFF-DIRECTION TILES KEPT</div>
-          <div style={{display:"flex",flexWrap:"wrap"}}>{tins.weakKept.map((l,i)=><Chip key={i} label={l} type="weak"/>)}</div>
-        </div>}
-
-        {tins.missedTiles&&tins.missedTiles.length>0&&<div style={{background:"#F5EDE6",border:"1px solid rgba(92,48,16,0.12)",borderRadius:12,padding:"12px 14px",marginBottom:8}}>
-          <div style={{fontSize:9,color:"#5C3010",letterSpacing:2,fontWeight:700,marginBottom:6}}>USEFUL TILES PASSED</div>
-          <div style={{display:"flex",flexWrap:"wrap"}}>{tins.missedTiles.map((l,i)=><Chip key={i} label={l} type="bad"/>)}</div>
-        </div>}
-
-        {tins.missedOpportunities&&tins.missedOpportunities.length>0&&<div style={{background:C.amber,border:`1px solid ${C.amberB}20`,borderRadius:12,padding:"12px 14px",marginBottom:8}}>
-          <div style={{fontSize:9,color:C.amberB,letterSpacing:2,fontWeight:700,marginBottom:6}}>MISSED OPPORTUNITIES</div>
-          {tins.missedOpportunities.map((m,i)=>(
-            <div key={i} style={{display:"flex",alignItems:"flex-start",gap:6,marginBottom:i<tins.missedOpportunities.length-1?4:0}}>
-              <span style={{color:C.amberB,fontWeight:900,fontSize:12}}>›</span>
-              <span style={{fontSize:12,color:C.ink,lineHeight:1.5}}>{m}</span>
-            </div>
-          ))}
-        </div>}
-      </div>}
-
-      {/* ACTIONS */}
+      {/* Actions */}
       <div style={{display:"flex",gap:8,marginTop:12}}>
         <button onClick={onHome} style={{...S.oBtn,flex:1}}>← Home</button>
         <button onClick={onDealAgain} style={{flex:2,padding:"13px 0",background:`linear-gradient(135deg,${C.jade},#0F5535)`,color:"#fff",border:"none",borderRadius:12,fontSize:14,fontFamily:F.d,fontWeight:800,letterSpacing:0.5,cursor:"pointer",boxShadow:`0 4px 16px rgba(27,125,78,0.3)`,display:"flex",alignItems:"center",justifyContent:"center",gap:6,minHeight:48}}>
           <span>🀄</span><span>Deal Again</span>
         </button>
       </div>
+      <Footer/>
     </div>
   );
 }
-
 // ─── RACK VS HAND OVERLAY ─────────────────────────────────────────────────────
 // The centrepiece of Coach Mode. Shows the target hand tile-by-tile, with each
 // slot annotated: ✓ held, ✗ passed in round N, ○ never had it.
@@ -5817,7 +5700,8 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
         <div style={{fontSize:11,color:C.mut}}>Day #{dayNum} · {chosenSecObj?.name||section}</div>
       </div>
 
-      {/* ① VERDICT ─────────────────────────────────────────────────────────── */}
+      {/* ① VERDICT */}
+      <SectionDivider label="THE VERDICT"/>
       <div style={{borderRadius:14,background:"#fff",border:`1.5px solid ${C.bdr}`,padding:"16px 18px",marginBottom:10,boxShadow:"0 2px 12px rgba(0,0,0,0.04)"}}>
         <div style={{fontSize:8,color:C.jade,letterSpacing:2.5,fontWeight:700,marginBottom:8}}>THE VERDICT</div>
         <p style={{fontSize:13,color:C.ink,lineHeight:1.7,margin:"0 0 14px",fontStyle:"italic"}}>{verdictText}</p>
@@ -5838,10 +5722,12 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
         </div>
       </div>
 
-      {/* ①½ COACH ADVICE — tile-specific coaching ────────────────────────────── */}
+      {/* ①½ COACH ADVICE */}
+      <SectionDivider label="COACH ADVICE"/>
       <CoachAdvice hand={hand} passLog={passLog} chosenSec={chosenSec} allSections={allSections} iq={iq} chosenHandObj={chosenHandObj}/>
 
-      {/* ② RACK VS HAND OVERLAY — centrepiece ─────────────────────────────── */}
+      {/* ② RACK VS HAND */}
+      {chosenHandObj&&<SectionDivider label="YOUR RACK VS THE HAND"/>}
       {chosenHandObj&&(
         <RackVsHandOverlay
           hand={hand}
@@ -5854,6 +5740,7 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
       )}
 
       {/* ③ YOUR STARTING DEAL */}
+      <SectionDivider label="PASS ANALYSIS"/>
       <StartingDealCard startingRack={startingRack} chosenHandObj={chosenHandObj}/>
 
       {/* ④ YOUR PASSES */}
@@ -5883,10 +5770,8 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
         </div>
       )}
 
-      {/* ⑦ MAHJONG IDENTITY ─────────────────────────────────────────────────── */}
-      <MahjongIdentityCard iq={iq} chosenSec={chosenSec} passLog={passLog} finalRack={hand}/>
-
-      {/* ⑧ ONE THING — elevated before reference data ───────────────────────── */}
+      {/* ⑧ ONE THING */}
+      <SectionDivider label="ONE THING TO TAKE AWAY"/>
       <div style={{borderRadius:14,background:`linear-gradient(145deg,${C.jade}06,${C.jade}02)`,border:`1.5px solid ${C.jade}20`,padding:"15px 16px",marginBottom:10}}>
         <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
           <div style={{width:28,height:28,borderRadius:8,background:`linear-gradient(135deg,${C.jade},#115C38)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,flexShrink:0}}>💡</div>
@@ -5895,7 +5780,8 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
         <p style={{fontSize:12,color:C.ink,lineHeight:1.7,margin:0,fontWeight:500}}>{oneThing}</p>
       </div>
 
-      {/* ⑨ SECTION LANDSCAPE — reference, collapsed ─────────────────────────── */}
+      {/* ⑨ SECTION LANDSCAPE */}
+      {allSections&&allSections.length>0&&<SectionDivider label="REFERENCE"/>}
       {allSections&&allSections.length>0&&(
         <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden"}}>
           <button onClick={()=>setSfOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"11px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
@@ -7814,66 +7700,6 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       })()}
 
       {dDone&&<MidnightCountdown dn={dn}/>}
-
-      {/* COMMUNITY PULSE STRIP */}
-      {(ds||clubPlayers)&&(()=>{
-        const total=ds?.total||0;
-        const avg=ds?.avg||null;
-        const hasClub=!!(clubPlayers&&club);
-        // Animated dot pulse via inline keyframe trick
-        return(
-          <div style={{marginBottom:16,borderRadius:16,overflow:"hidden",border:`1px solid ${C.jade}25`,background:`linear-gradient(135deg,${C.jade}08,${C.jade}04)`,boxShadow:`0 2px 12px ${C.jade}10`}}>
-            {/* Header row */}
-            <div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 14px 8px",borderBottom:`1px solid ${C.jade}15`}}>
-              <div style={{position:"relative",width:8,height:8,flexShrink:0}}>
-                <div style={{width:8,height:8,borderRadius:4,background:C.jade,position:"absolute"}}/>
-                <div style={{width:8,height:8,borderRadius:4,background:C.jade,position:"absolute",opacity:0.4,animation:"rkPulse 1.8s ease-in-out infinite"}}/>
-              </div>
-              <span style={{fontSize:9,fontWeight:800,color:C.jade,letterSpacing:2}}>LIVE TODAY</span>
-              <div style={{flex:1,height:1,background:`linear-gradient(90deg,${C.jade}20,transparent)`}}/>
-              <span style={{fontSize:9,color:C.mut,fontWeight:600}}>Day #{dn}</span>
-            </div>
-
-            {/* Stats row */}
-            <div style={{display:"flex",gap:0}}>
-              {/* Players today */}
-              {total>0&&(
-                <div style={{flex:1,padding:"12px 14px",borderRight:`1px solid ${C.jade}15`}}>
-                  <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.jade,lineHeight:1,marginBottom:2}}>{total}</div>
-                  <div style={{fontSize:9,color:C.mut,fontWeight:700,letterSpacing:1}}>PLAYERS TODAY</div>
-                </div>
-              )}
-              {/* Avg IQ */}
-              {avg&&(
-                <div style={{flex:1,padding:"12px 14px",borderRight:hasClub?`1px solid ${C.jade}15`:"none"}}>
-                  <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,lineHeight:1,marginBottom:2}}>{avg}</div>
-                  <div style={{fontSize:9,color:C.mut,fontWeight:700,letterSpacing:1}}>AVG IQ</div>
-                </div>
-              )}
-              {/* Club count — tappable */}
-              {hasClub&&(
-                <button onClick={()=>setScreen("leaderboard")}
-                  style={{flex:1,padding:"12px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left",display:"flex",flexDirection:"column",justifyContent:"center"}}>
-                  <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.jade,lineHeight:1,marginBottom:2}}>{clubPlayers}</div>
-                  <div style={{fontSize:9,color:C.mut,fontWeight:700,letterSpacing:1,lineHeight:1.4}}>FROM YOUR<br/>CLUB ›</div>
-                </button>
-              )}
-            </div>
-
-            {/* Club name footer — only if in a club */}
-            {hasClub&&(
-              <button onClick={()=>setScreen("leaderboard")}
-                style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"8px 14px",background:`${C.jade}08`,border:"none",borderTop:`1px solid ${C.jade}15`,cursor:"pointer",textAlign:"left"}}>
-                <div style={{display:"flex",alignItems:"center",gap:6}}>
-                  <span style={{fontSize:12}}>{club.emoji||"🀄"}</span>
-                  <span style={{fontSize:11,fontWeight:700,color:C.jade}}>{club.name} leaderboard</span>
-                </div>
-                <span style={{fontSize:11,color:C.jade,fontWeight:700}}>›</span>
-              </button>
-            )}
-          </div>
-        );
-      })()}
 
       <button onClick={()=>go("free")} aria-label="Play Practice Mode" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:20,borderRadius:16,padding:"14px 16px",textAlign:"left",background:dDone?`linear-gradient(135deg,${C.jade}18,${C.jade}08)`:`linear-gradient(135deg,${C.cinn}05,#fff)`,border:`1.5px solid ${dDone?C.jade+"40":C.cinn+"20"}`}}>
         <div aria-hidden="true" style={{width:48,height:48,borderRadius:14,background:dDone?`linear-gradient(135deg,${C.jade},#115C38)`:`linear-gradient(135deg,${C.cinn}20,${C.cinn}10)`,border:`1px solid ${dDone?C.jade+"60":C.cinn+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0,boxShadow:dDone?`0 4px 14px ${C.jade}30`:"none"}}>🀄</div>
