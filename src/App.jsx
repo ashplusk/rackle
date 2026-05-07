@@ -759,7 +759,7 @@ const HAND_CATALOG=[
         {have:t2,need:1,noJoker:true},{have:soap,need:1,noJoker:true},
         {have:t2,need:1,noJoker:true},{have:t6,need:1,noJoker:true},
         {have:t2,need:3},{have:t6,need:4}
-      ],jk,15);
+      ],jk,14);
       if(sc>best)best=sc;
     }
     return best;
@@ -1097,7 +1097,7 @@ const HAND_CATALOG=[
           {have:tO[0],need:1,noJoker:true},{have:tO[1],need:1,noJoker:true},
           {have:tO[2],need:1,noJoker:true},{have:tO[3],need:1,noJoker:true},
           {have:k1,need:4},{have:k2,need:4}
-        ],jk,15);
+        ],jk,14);
         if(sc>best)best=sc;
       }
     }
@@ -1178,7 +1178,7 @@ const HAND_CATALOG=[
           {have:fl,need:2,noJoker:true},
           {have:tA,need:2,noJoker:true},{have:tB,need:2,noJoker:true},{have:tC,need:2,noJoker:true},
           {have:pAs1,need:3,noJoker:true},{have:pAs2,need:3,noJoker:true}
-        ],0,16);
+        ],0,14);
         if(sc>best)best=sc;
       }
     }
@@ -1684,7 +1684,7 @@ const HAND_CATALOG=[
       {have:t2,need:1,noJoker:true},{have:t4,need:1,noJoker:true},
       {have:t6,need:2,noJoker:true},{have:t8,need:2,noJoker:true},
       {have:t8,need:2,noJoker:true}
-    ],0,16);
+    ],0,14);
   }),
 
   // FF 3369 3669 3699 — Any 3 Suits
