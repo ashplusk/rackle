@@ -1811,8 +1811,8 @@ HAND_CATALOG.forEach(h=>{if(HAND_CONSTRAINTS[h.label])h.constraint=HAND_CONSTRAI
 function recommendSpecificHands(rack,sectionId){
   if(!rack||!sectionId)return[];
   const hands=HAND_CATALOG.filter(h=>h.sec===sectionId);
-  const scored=hands.map(h=>({...h,fit:h.fit(rack)})).sort((a,b)=>b.fit-a.fit);
-  return scored.slice(0,3).filter(h=>h.fit>0.05);
+  const scored=hands.map(h=>({...h,fitScore:h.fit(rack)})).sort((a,b)=>b.fitScore-a.fitScore);
+  return scored.slice(0,3).filter(h=>h.fitScore>0.05);
 }
 
 // ─── HAND FAMILIES ───────────────────────────────────────────────────────────
@@ -4156,13 +4156,13 @@ function PassesCard({passNarrative}){
 function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs}){
   const [open,setOpen]=useState(false);
   const sectionHands=HAND_CATALOG.filter(h=>h.sec===chosenSec)
-    .map(h=>({...h,fit:h.fit(hand)}))
-    .sort((a,b)=>b.fit-a.fit);
-  const altHand=sectionHands.find(h=>h.label!==resolvedHandLabel&&h.fit>0.08);
+    .map(h=>({...h,fitScore:h.fit(hand)}))
+    .sort((a,b)=>b.fitScore-a.fitScore);
+  const altHand=sectionHands.find(h=>h.label!==resolvedHandLabel&&h.fitScore>0.08);
   const altSec=sortedSecs.find(s=>s.id!==chosenSec&&s.score>0.08);
   const altSecHand=altSec?HAND_CATALOG.filter(h=>h.sec===altSec.id)
-    .map(h=>({...h,fit:h.fit(hand)}))
-    .sort((a,b)=>b.fit-a.fit)[0]:null;
+    .map(h=>({...h,fitScore:h.fit(hand)}))
+    .sort((a,b)=>b.fitScore-a.fitScore)[0]:null;
   if(!altHand&&!altSecHand)return null;
   return(
     <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden"}}>
@@ -4176,13 +4176,13 @@ function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs}
       {open&&<div style={{borderTop:`1px solid ${C.bdr}`,padding:"10px 14px"}} className="rk-in">
         {altHand&&(
           <div style={{marginBottom:altSecHand?10:0}}>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:5}}>SAME SECTION · {Math.round(altHand.fit*100)}% COVERAGE</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:5}}>SAME SECTION · {Math.round(altHand.fitScore*100)}% COVERAGE</div>
             <RackVsHandOverlay hand={hand} handObj={altHand} passLog={[]} sectionId={chosenSec} handWasInferred={false} secObj={chosenSecObj}/>
           </div>
         )}
         {altSecHand&&altSec&&(
           <div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:5}}>{altSec.icon} {altSec.name.toUpperCase()} · {Math.round(altSecHand.fit*100)}% COVERAGE</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:5}}>{altSec.icon} {altSec.name.toUpperCase()} · {Math.round(altSecHand.fitScore*100)}% COVERAGE</div>
             <RackVsHandOverlay hand={hand} handObj={altSecHand} passLog={[]} sectionId={altSec.id} handWasInferred={false} secObj={altSec}/>
           </div>
         )}
@@ -4562,16 +4562,16 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
   if(!finalRack||!sectionId)return null;
   // Get all scored hands for section, sorted by fit
   const allHands=HAND_CATALOG.filter(h=>h.sec===sectionId)
-    .map(h=>({...h,fit:h.fit(finalRack)}))
-    .sort((a,b)=>b.fit-a.fit);
+    .map(h=>({...h,fitScore:h.fit(finalRack)}))
+    .sort((a,b)=>b.fitScore-a.fitScore);
   // If a pinned hand is specified, put it first
   let hands=allHands;
   if(pinnedHandLabel){
     const pinned=allHands.find(h=>h.label===pinnedHandLabel);
-    const rest=allHands.filter(h=>h.label!==pinnedHandLabel).filter(h=>h.fit>0.05).slice(0,2);
-    hands=pinned?[pinned,...rest]:allHands.slice(0,3).filter(h=>h.fit>0.05);
+    const rest=allHands.filter(h=>h.label!==pinnedHandLabel).filter(h=>h.fitScore>0.05).slice(0,2);
+    hands=pinned?[pinned,...rest]:allHands.slice(0,3).filter(h=>h.fitScore>0.05);
   } else {
-    hands=allHands.slice(0,3).filter(h=>h.fit>0.05);
+    hands=allHands.slice(0,3).filter(h=>h.fitScore>0.05);
   }
   if(!hands||hands.length===0)return null;
   const sec=SECS.find(s=>s.id===sectionId);
@@ -4608,7 +4608,7 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
           </div>
         )}
         {hands.map((hand,i)=>{
-          const pct=Math.round(hand.fit*100);
+          const pct=Math.round(hand.fitScore*100);
           const barColor=pct>=70?C.jade:pct>=45?C.gold:C.cinn;
           const verdict=pct>=80?"Very close — you could win this hand":pct>=60?"Good foundation — a few key tiles away":pct>=40?"Partial fit — possible with better passing":"Low fit — this hand needed different tiles";
           const verdictColor=pct>=80?C.jade:pct>=60?C.gold:pct>=40?C.amberB:C.cinn;
@@ -8718,6 +8718,8 @@ function Game({mode,home,onDone,settings,setScreen}){
         </>
       )}
 
+      {phase.startsWith("score-")&&null}
+
       {phase==="result"&&(iqResult||iqResultRef.current)&&(
         <div className="rk-in">
           <RackleHeader onBack={home}/>
@@ -8770,47 +8772,38 @@ function Game({mode,home,onDone,settings,setScreen}){
           {showRef&&<CG onClose={()=>setShowRef(false)}/>}
           <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>TAP TO SCORE YOUR ROUND</div>
           <div style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
-            {SECS.map((s,idx)=>{
-              const pct=Math.round((ev(hand).find(e=>e.id===s.id)?.score||0)*100);
-              const isTop=idx===0;
-              return(
-                <button key={s.id} onClick={()=>{
-                  haptic(20);
-                  setTd(true);
-                  const e=ev(hand),top=e[0],gi=gri(top.score);
-                  const totalEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);
-                  const dn2=getDayNum();
-                  const isD=mode==="daily";
-                  const sr=startingRack&&startingRack.length>0?startingRack:hand;
-                  const iq=calculateCharlestonIQ({startingRack:sr,finalRack:hand,passedTilesByRound:passLog,totalTime:totalEl,sectionId:s.id,chosenHand:null},getDailySeed(),isD,dn2);
-                  setChosenSecBoth(s.id);
-                  setChosenHand(null);
-                  setIqResultBoth(iq);
-                  const result={rating:RATS[gi],emoji:REMO[gi],section:`${top.icon} ${top.name}`,sid:top.id,score:top.score,time:totalEl,gi,iqScore:iq?iq.totalScore:null,iq,finalRack:hand,startingRack:sr,passLog,chosenSec:s.id,chosenHand:null,allSections:ev(hand)};
-                  try{onDone(result);}catch(e){}
-                  window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;
-                  setPhase("result");
-                }} aria-label={`${s.name}: ${s.desc}`}
-                  style={{cursor:"pointer",display:"flex",alignItems:"center",gap:0,borderRadius:12,overflow:"hidden",border:`1.5px solid ${C.bdr}`,background:"#fff",textAlign:"left",transition:"all 0.15s"}}>
-                  <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:s.color+"40"}}/>
-                  <div style={{width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,margin:"0 2px"}}>{s.icon}</div>
-                  <div style={{flex:1,minWidth:0,padding:"10px 8px 10px 4px"}}>
-                    <div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:2}}>
-                      <span style={{fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.2}}>{s.name}</span>
-                      {isTop&&mode!=="daily"&&showFitHints&&<span style={{fontSize:8,fontWeight:700,background:s.color+"20",color:s.color,borderRadius:8,padding:"1px 6px",letterSpacing:0.5}}>BEST FIT</span>}
-                    </div>
-                    <div style={{fontSize:10,color:C.mut,lineHeight:1.3}}>{s.desc}</div>
-                  </div>
-                  <div style={{padding:"0 12px",textAlign:"right",flexShrink:0}}>
-                    {mode!=="daily"&&showFitHints&&<><div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:isTop?s.color:C.mut}}>{pct}%</div>
-                    <div style={{fontSize:8,color:C.mut}}>fit</div></>}
-                  </div>
-                  <div style={{width:28,height:28,borderRadius:14,background:`linear-gradient(135deg,${s.color},${s.color}CC)`,display:"flex",alignItems:"center",justifyContent:"center",marginRight:10,flexShrink:0}}>
-                    <span style={{fontSize:12,color:"#fff",fontWeight:900}}>→</span>
-                  </div>
-                </button>
-              );
-            })}
+            {SECS.map((s)=>(
+              <button key={s.id} onClick={()=>{
+                haptic(20);
+                setTd(true);
+                const e=ev(hand),top=e[0],gi=gri(top.score);
+                const totalEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);
+                const dn2=getDayNum();
+                const isD=mode==="daily";
+                const sr=startingRack&&startingRack.length>0?startingRack:hand;
+                const iq=calculateCharlestonIQ({startingRack:sr,finalRack:hand,passedTilesByRound:passLog,totalTime:totalEl,sectionId:s.id,chosenHand:null},getDailySeed(),isD,dn2);
+                chosenSecRef.current=s.id;
+                iqResultRef.current=iq;
+                setChosenSec(s.id);
+                setChosenHand(null);
+                setIqResult(iq);
+                const result={rating:RATS[gi],emoji:REMO[gi],section:`${top.icon} ${top.name}`,sid:top.id,score:top.score,time:totalEl,gi,iqScore:iq?iq.totalScore:null,iq,finalRack:hand,startingRack:sr,passLog,chosenSec:s.id,chosenHand:null,allSections:ev(hand)};
+                setTimeout(()=>{try{onDone(result);}catch(_){}},0);
+                window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;
+                setPhase("result");
+              }}
+                style={{cursor:"pointer",display:"flex",alignItems:"center",gap:0,borderRadius:12,overflow:"hidden",border:`1.5px solid ${C.bdr}`,background:"#fff",textAlign:"left",padding:0,transition:"all 0.15s"}}>
+                <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:s.color+"40"}}/>
+                <div style={{width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,margin:"0 2px"}}>{s.icon}</div>
+                <div style={{flex:1,minWidth:0,padding:"10px 8px 10px 4px"}}>
+                  <div style={{fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.2,marginBottom:2}}>{s.name}</div>
+                  <div style={{fontSize:10,color:C.mut,lineHeight:1.3}}>{s.desc}</div>
+                </div>
+                <div style={{width:28,height:28,borderRadius:14,background:`linear-gradient(135deg,${s.color},${s.color}CC)`,display:"flex",alignItems:"center",justifyContent:"center",marginRight:10,flexShrink:0}}>
+                  <span style={{fontSize:12,color:"#fff",fontWeight:900}}>→</span>
+                </div>
+              </button>
+            ))}
           </div>
         </>
       )}
