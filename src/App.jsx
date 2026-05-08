@@ -5587,8 +5587,10 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         const globalTotal=globalEntries.length||dailyStats?.total||null;
         const clubCode=getClubCode();
         const clubName=clubCode?CLUBS[clubCode]?.name:null;
-        const clubRank=clubEntries.length>0?clubEntries.findIndex(e=>e.iqScore<=myScore)+1:null;
-        const clubTotal=clubEntries.length||null;
+        const profileName=(getProfile()?.nickname||getOrCreateAnonymousName()).trim().toLowerCase();
+        const currentAlreadyOnClubBoard=clubEntries.some(e=>(e.name||"").trim().toLowerCase()===profileName);
+        const clubRank=clubCode?clubEntries.filter(e=>(Number(e.iqScore)||0)>myScore).length+1:null;
+        const clubTotal=clubCode?clubEntries.length+(currentAlreadyOnClubBoard?0:1):null;
 
         // Enrich share text with rank context
         const rankLine=globalRank&&globalTotal?`#${globalRank} of ${globalTotal} players today${clubRank&&clubTotal?` · #${clubRank} in my club`:""}`:
@@ -8419,16 +8421,15 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
   );
 }
 
-function ClubPulseCard({club,clubPlayers,setScreen}){
+function ClubPulseCard({club,clubPlayers,clubEntries=[],currentScore=0,currentRank=null,setScreen}){
   if(!club)return null;
-  const names=["Elaine","Michael","Susan","Robin","Nancy","Beth"];
-  const seed=getDayNum();
-  const moved=names[seed%names.length];
-  const score=78+(seed%15);
+  const realEntries=Array.isArray(clubEntries)?clubEntries.filter(e=>Number.isFinite(Number(e.iqScore))):[];
+  const topEntry=realEntries[0]||null;
+  const actualCount=Math.max(realEntries.length,clubPlayers||0,currentScore?1:0);
   const lines=[
-    `${clubPlayers||1} club ${clubPlayers===1?"member has":"members have"} played today`,
-    `${moved} posted ${score} today`,
-    clubPlayers>1?`You are one good rack from moving up`:"Start the club board today",
+    `${actualCount||1} club ${(actualCount||1)===1?"member has":"members have"} played today`,
+    topEntry?`${topEntry.name||"Club leader"} leads today with ${topEntry.iqScore}`:(currentScore?`Your ${currentScore} is on the club board.`:"Your club board is waiting for today's scores."),
+    currentRank===1?"You're leading your club today.":currentRank?`You're #${currentRank} in your club today.`:"Play the daily Rackle to join the race.",
   ];
   return(
     <div style={{background:"#fff",border:`1px solid ${C.jade}18`,borderRadius:14,padding:14,marginBottom:10,boxShadow:"0 2px 12px rgba(0,0,0,0.03)"}}>
@@ -8564,13 +8565,21 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const [leOpen,setLeOpen]=useState(false);
   const [menuOpen,setMenuOpen]=useState(false);
   const [clubPlayers,setClubPlayers]=useState(null);
+  const [homeClubEntries,setHomeClubEntries]=useState([]);
   const [ds,setDs]=useState(null);
   const dismissNudge=()=>{ST.set("nudgeDismissed",getDailySeed());setNudgeDismissed(true);};
 
   useEffect(()=>{
     fetchDailyStats().then(s=>{if(s&&s.total>=1)setDs(s);});
     const code=getClubCode();
-    if(code){fetchLBEntries(code).then(rows=>{if(rows&&rows.length>0)setClubPlayers(rows.length);});}
+    if(code){
+      fetchLBEntries(code).then(rows=>{
+        if(rows){
+          setHomeClubEntries(rows);
+          if(rows.length>0)setClubPlayers(rows.length);
+        }
+      });
+    }
   },[]);
 
   const ydIQ=yd?.iq?.totalScore||null;
@@ -8578,6 +8587,11 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const topToday=Math.max(ds?.topScore||0,iq?.totalScore||0,86);
   const bestScore=Number.isFinite(Number(bestIQ?.score ?? bestIQ))?Number(bestIQ?.score ?? bestIQ):0;
   const currentScore=Number.isFinite(Number(iq?.totalScore))?Number(iq.totalScore):0;
+  const currentName=(profile?.nickname||getOrCreateAnonymousName()).trim().toLowerCase();
+  const currentAlreadyOnClubBoard=homeClubEntries.some(e=>(e.name||"").trim().toLowerCase()===currentName);
+  const hasClubScore=!!(club&&dDone&&currentScore>0);
+  const homeClubRank=hasClubScore?homeClubEntries.filter(e=>(Number(e.iqScore)||0)>currentScore).length+1:null;
+  const homeClubTotal=club?homeClubEntries.length+(hasClubScore&&!currentAlreadyOnClubBoard?1:0):null;
   const pb=Math.max(bestScore,currentScore,100);
   const firstName=profile?.nickname?profile.nickname.split(" ")[0]:"";
   const streakTitle=streak>1?`${streak}-day streak${firstName?`, ${firstName}`:""}. Keep the heat on.`:streak===1?"Tomorrow’s rack is already waiting.":"Start your streak with today's Rackle.";
@@ -8716,7 +8730,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <MiniStat value={`#${Math.min(todayPlayers,Math.max(1,todayPlayers-1))}`} label="GLOBAL RANK" accent={brightScoreColor}/>
           </button>
           <button onClick={goClubRank} style={{border:"none",padding:0,background:"transparent",cursor:"pointer",textAlign:"left"}} aria-label={club?"View club leaderboard":"Browse club directory"}>
-            <MiniStat value={club?"club":"join"} label="CLUB RANK"/>
+            <MiniStat value={club?(homeClubRank?`#${homeClubRank}`:"pending"):"join"} label="CLUB RANK" accent={homeClubRank===1?brightScoreColor:undefined}/>
           </button>
         </div>
       </div>
@@ -8774,7 +8788,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <ClubCodeEntry onJoin={()=>setScreen("leaderboard")} setScreen={setScreen}/>
         <InlineCodeEntry setScreen={setScreen}/>
       </div>
-      <ClubPulseCard club={club} clubPlayers={clubPlayers} setScreen={setScreen}/>
+      <ClubPulseCard club={club} clubPlayers={clubPlayers} clubEntries={homeClubEntries} currentScore={currentScore} currentRank={homeClubRank} setScreen={setScreen}/>
       {!getClubCode()&&(
         <div style={{margin:"18px 0 12px",background:"linear-gradient(135deg,#F2FAF6,#EAF5EF)",padding:"18px",border:`1.5px solid ${C.jade}22`,borderRadius:18,boxShadow:`0 4px 18px ${C.jade}08`}}>
           <div style={{fontSize:9,color:C.jade,letterSpacing:2.2,fontWeight:900,marginBottom:6}}>FOR CLUB ORGANIZERS</div>
