@@ -8500,19 +8500,17 @@ function TomorrowPreviewCard(){
         <div style={{width:38,height:38,borderRadius:13,background:urgency?C.cinn+"0D":C.jade+"0D",border:`1px solid ${urgency?C.cinn+"20":C.jade+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.d,fontSize:18,fontWeight:900,color:urgency?C.cinn:C.jade,flexShrink:0}}>✦</div>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:8,color:urgency?C.cinn:C.jade,letterSpacing:1.7,fontWeight:900,marginBottom:4}}>TOMORROW'S RACKLE</div>
-          <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.15,letterSpacing:-0.15,marginBottom:4}}>{headline}</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.18,letterSpacing:-0.18,marginBottom:4}}>{headline}</div>
           <div style={{fontSize:11,color:C.mut,lineHeight:1.4}}>Hint: {hint}</div>
         </div>
-        <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:5,flexShrink:0}}>
-          <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:urgency?C.cinn:C.jade,lineHeight:1,letterSpacing:-0.4}}>{compactTime}</div>
-          <div style={{fontSize:8,color:C.mut,fontWeight:800,letterSpacing:1.1,textTransform:"uppercase"}}>New rack</div>
-          <div style={{fontSize:14,color:C.jade,fontWeight:900,lineHeight:1,transform:open?"rotate(90deg)":"rotate(0deg)",transition:"transform 0.18s ease"}}>›</div>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"center",width:28,height:28,borderRadius:999,background:open?C.jade+"12":"transparent",flexShrink:0}}>
+          <div style={{fontSize:16,color:C.jade,fontWeight:900,lineHeight:1,transform:open?"rotate(90deg)":"rotate(0deg)",transition:"transform 0.18s ease"}}>›</div>
         </div>
       </button>
 
       {open&&<div className="rk-in" style={{position:"relative",padding:"0 14px 14px"}}>
         <div style={{height:1,background:`linear-gradient(90deg,transparent,${C.bdr},transparent)`,marginBottom:12}}/>
-        <div style={{fontSize:12,color:C.ink,lineHeight:1.45,fontWeight:700,marginBottom:10}}>{subline}</div>
+        <div style={{fontSize:12,color:C.ink,lineHeight:1.45,fontWeight:750,marginBottom:10,textAlign:"center"}}>{subline}</div>
         <div style={{background:`linear-gradient(145deg,${C.jade}0B,#fff)`,border:`1px solid ${urgency?C.cinn+"1A":C.jade+"16"}`,borderRadius:14,padding:"10px",boxShadow:"inset 0 1px 0 rgba(255,255,255,0.8)",marginBottom:10}}>
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,marginBottom:8}}>
             <div style={{fontSize:8,color:urgency?C.cinn:C.jade,letterSpacing:1.4,fontWeight:900}}>NEW RACK IN</div>
@@ -8921,12 +8919,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
       {dDone&&<TomorrowPreviewCard/>}
 
-      <button onClick={()=>go("free")} aria-label="Play Practice Mode" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:24,borderRadius:16,padding:"14px 16px",textAlign:"left",background:dDone?`linear-gradient(135deg,${C.jade}18,${C.jade}08)`:`linear-gradient(135deg,${C.cinn}05,#fff)`,border:`1.5px solid ${dDone?C.jade+"40":C.cinn+"20"}`}}>
-        <div aria-hidden="true" style={{width:48,height:48,borderRadius:14,background:dDone?`linear-gradient(135deg,${C.jade},#115C38)`:`linear-gradient(135deg,${C.cinn}20,${C.cinn}10)`,border:`1px solid ${dDone?C.jade+"60":C.cinn+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0,boxShadow:dDone?`0 4px 14px ${C.jade}30`:"none"}}>🀄</div>
+      <button onClick={()=>go("free")} aria-label="Play Practice Mode" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:24,borderRadius:16,padding:"14px 16px",textAlign:"left",background:dDone?`linear-gradient(135deg,#fff,${C.jade}06)`:`linear-gradient(135deg,${C.cinn}05,#fff)`,border:`1.5px solid ${dDone?C.jade+"24":C.cinn+"20"}`,boxShadow:dDone?"0 3px 14px rgba(0,0,0,0.025)":"none"}}>
+        <div aria-hidden="true" style={{width:48,height:48,borderRadius:14,background:dDone?`linear-gradient(135deg,${C.jade}12,#fff)`: `linear-gradient(135deg,${C.cinn}20,${C.cinn}10)`,border:`1px solid ${dDone?C.jade+"22":C.cinn+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0,boxShadow:dDone?`0 3px 10px ${C.jade}10`:"none"}}>🀄</div>
         <div style={{flex:1}}>
           <div style={{fontSize:9,color:dDone?C.jade:C.cinn,letterSpacing:2,fontWeight:700,marginBottom:3}}>{dDone?"KEEP SHARPENING":"UNLIMITED PRACTICE"}</div>
-          <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:dDone?C.jade:C.ink,marginBottom:3,lineHeight:1.1}}>{dDone?"Practice Mode":"Practice Mode"}</div>
-          <div style={{fontSize:11,color:dDone?C.jade+"CC":C.mut,lineHeight:1.5}}>{dDone?"Daily done — now build the instincts that make tomorrow's hand automatic.":"New deal every time. Work every section until the right pass feels obvious."}</div>
+          <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:C.ink,marginBottom:3,lineHeight:1.1}}>Practice Mode</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.5}}>{dDone?"Daily done — sharpen one more rack before tomorrow.":"New deal every time. Work every section until the right pass feels obvious."}</div>
         </div>
         <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3,flexShrink:0}}>
           <span aria-hidden="true" style={{fontSize:16,color:dDone?C.jade:C.mut,fontWeight:700}}>›</span>
