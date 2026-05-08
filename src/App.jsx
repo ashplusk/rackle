@@ -25,7 +25,7 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 @media(min-width:600px){
   .rk-outer{padding:24px 0!important}
   .rk-app{border-radius:20px!important;min-height:auto!important;box-shadow:0 8px 60px rgba(0,0,0,0.12),0 0 0 1px rgba(0,0,0,0.04)!important;border:none!important;margin-top:16px}
-  .rk-pg{padding:20px 32px 44px!important}
+  .rk-pg{padding:24px 34px 56px!important}
 }
 @keyframes rkFlip{0%{transform:rotateY(90deg);opacity:0}100%{transform:rotateY(0deg);opacity:1}}
 .rk-flip{animation:rkFlip 0.35s ease forwards}
@@ -5429,8 +5429,8 @@ function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
         style={{
           width:"100%",cursor:"pointer",textAlign:"left",
           display:"flex",alignItems:"center",gap:11,
-          padding:"12px 13px",
-          borderRadius:16,
+          padding:"13px 14px",
+          borderRadius:17,
           background:open?"linear-gradient(145deg,#FFFFFF,#FFF9F1)":"linear-gradient(145deg,#FFFFFF,#FFFCF7)",
           border:`1px solid ${open?C.jade+"32":"#E7DFD2"}`,
           boxShadow:open
@@ -5457,8 +5457,8 @@ function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
         <div style={{flex:1,minWidth:0}}>
           <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:2,flexWrap:"wrap"}}>
             <div style={{
-              fontSize:14,fontWeight:900,fontFamily:F.d,
-              color:C.ink,lineHeight:1.08,letterSpacing:-0.15,
+              fontSize:15,fontWeight:900,fontFamily:F.d,
+              color:C.ink,lineHeight:1.06,letterSpacing:-0.2,
             }}>{headerLabel}</div>
             {badge&&(
               <span style={{
@@ -5472,7 +5472,7 @@ function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
           </div>
           {desc&&(
             <div style={{
-              fontSize:10.5,marginTop:1,lineHeight:1.3,
+              fontSize:11,marginTop:2,lineHeight:1.35,
               color:C.mut,fontWeight:500,letterSpacing:0.01,
             }}>{headerDesc}</div>
           )}
@@ -5613,13 +5613,13 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
                   </button>
                 ):(
                   /* No club — nudge to join */
-                  <button onClick={()=>setScreen&&setScreen("profile")} style={{
+                  <button onClick={()=>setScreen&&setScreen("clubs")} style={{
                     flex:1,borderRadius:12,padding:"11px 14px",cursor:"pointer",textAlign:"left",
                     background:C.bg2,border:`1px dashed ${C.bdr}`,
                   }}>
                     <div style={{fontSize:9,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>CLUB RANK</div>
-                    <div style={{fontSize:12,fontWeight:700,color:C.mut,lineHeight:1.3}}>Join a club</div>
-                    <div style={{fontSize:9,color:C.jade,fontWeight:600,marginTop:3}}>Set up profile ›</div>
+                    <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.ink,lineHeight:1.15}}>Join club rank</div>
+                    <div style={{fontSize:9,color:C.jade,fontWeight:700,marginTop:4}}>Browse club directory ›</div>
                   </button>
                 )}
               </div>
@@ -6764,7 +6764,7 @@ function RackleHeader({onBack,setScreen}){
   const profile=getProfile();
   const hasProfile=!!(profile&&profile.nickname);
   return(
-    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",position:"relative",marginBottom:20,paddingTop:10,paddingBottom:12,borderBottom:`1px solid ${C.bdr}`}}>
+    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",position:"relative",marginBottom:22,paddingTop:12,paddingBottom:14,borderBottom:`1px solid ${C.bdr}`}}>
       <button onClick={onBack} style={S.back} aria-label="Back to home">← Back</button>
       <div style={{textAlign:"center",position:"absolute",left:"50%",transform:"translateX(-50%)"}}>
         <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div>
@@ -6778,7 +6778,7 @@ function RackleHeader({onBack,setScreen}){
           <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
         </button>
         {menuOpen&&(
-          <div className="rk-in" style={{position:"absolute",top:"100%",right:0,zIndex:50,background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:12,boxShadow:"0 8px 32px rgba(0,0,0,0.12)",minWidth:140,maxWidth:160,marginTop:6,overflow:"hidden"}}>
+          <div className="rk-in" style={{position:"absolute",top:"100%",right:0,zIndex:50,background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:16,boxShadow:"0 14px 42px rgba(0,0,0,0.13)",minWidth:140,maxWidth:160,marginTop:6,overflow:"hidden"}}>
             {hasProfile?(
               <button onClick={()=>{setMenuOpen(false);setScreen&&setScreen("profile");}} style={{width:"100%",display:"flex",alignItems:"center",gap:10,padding:"12px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left",borderBottom:`1px solid ${C.bdr}`}}>
                 <div style={{width:28,height:28,borderRadius:14,background:C.jade+"18",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:C.jade,flexShrink:0}}>
@@ -6838,7 +6838,7 @@ function Settings({home,settings,setSettings,showTutorial,setScreen}){
     <div style={S.pg} className="rk-pg">
       <RackleHeader onBack={home} setScreen={setScreen}/>
       <div style={{marginBottom:20,marginTop:4,textAlign:"center"}}>
-        <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>Settings</div>
+        <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:C.ink,letterSpacing:-0.55,marginBottom:5,lineHeight:1.05}}>Settings</div>
         <div style={{fontSize:12,color:C.mut}}>Customise your Rackle experience.</div>
       </div>
       <div style={S.card}>
@@ -6891,7 +6891,7 @@ function Tutorial({onDone,onBack,setScreen}){
         <div style={{display:"flex",justifyContent:"center",gap:4,marginBottom:14}}>
           {TUTORIAL_STEPS.map((_,i)=>(<div key={i} aria-hidden="true" style={{width:i===step?20:6,height:6,borderRadius:3,background:i===step?C.jade:i<step?C.jade+"50":C.bdr,transition:"all 0.3s"}}/>))}
         </div>
-        <h2 style={{fontFamily:F.d,fontSize:20,color:C.ink,margin:"0 0 10px",fontWeight:800}}>{st.title}</h2>
+        <h2 style={{fontFamily:F.d,fontSize:22,color:C.ink,margin:"0 0 10px",fontWeight:900,letterSpacing:-0.35,lineHeight:1.05}}>{st.title}</h2>
         <p style={{fontSize:14,color:C.ink,lineHeight:1.7,margin:"0 0 8px",fontWeight:500}}>{st.body}</p>
         <p style={{fontSize:12,color:C.mut,lineHeight:1.7,margin:0}}>{st.detail}</p>
       </div>
@@ -7300,7 +7300,7 @@ function InlineCodeEntry({setScreen}){
         <div style={{display:"flex",alignItems:"center",gap:10}}>
           <div style={{width:30,height:30,borderRadius:8,background:C.jade+"15",border:`1px solid ${C.jade}25`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,flexShrink:0}}>🔑</div>
           <div>
-            <div style={{fontSize:13,fontWeight:700,color:C.jade,fontFamily:F.b}}>I have a club code</div>
+            <div style={{fontSize:13,fontWeight:800,color:C.jade,fontFamily:F.d,letterSpacing:-0.05}}>I have a club code</div>
             <div style={{fontSize:10,color:C.mut,marginTop:1}}>Enter it to join your club's leaderboard</div>
           </div>
         </div>
@@ -7368,7 +7368,7 @@ function ClubCodeEntry({setScreen}){
       <button onClick={()=>savedClub?setOpen(o=>!o):setScreen("clubs")} style={{width:"100%",display:"flex",alignItems:"flex-start",justifyContent:"space-between",padding:"16px 14px",borderRadius:open?"0":"0 0 12px 12px",background:C.jade+"06",border:"none",borderTop:`1px solid ${C.bdr}`,cursor:"pointer",textAlign:"left"}}>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:8}}>{savedClub?"YOUR CLUB · TODAY":"JOIN YOUR CLUB"}</div>
-          <div style={{fontFamily:F.b,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.22,marginBottom:10}}>{savedClub?savedClub.name:"Club Leaderboard"}</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.14,letterSpacing:-0.2,marginBottom:10}}>{savedClub?savedClub.name:"Club Leaderboard"}</div>
           {/* Live stat pills for club members */}
           {savedClub&&clubStats?(
             <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
@@ -7403,7 +7403,7 @@ function ClubCodeEntry({setScreen}){
               <div style={{fontSize:11,fontWeight:700,color:C.jade,marginBottom:3}}>Why join a club?</div>
               <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>Your score posts automatically after every Daily. See how you rank against your Mahj group — and give them something to beat.</div>
             </div>
-            <button onClick={()=>setScreen("clubs")} style={{width:"100%",padding:"11px 0",borderRadius:10,border:"none",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:F.b,marginBottom:8}}>Browse Club Directory →</button>
+            <button onClick={()=>setScreen("clubs")} style={{width:"100%",padding:"11px 0",borderRadius:10,border:"none",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:F.d,letterSpacing:-0.1,marginBottom:8}}>Browse Club Directory →</button>
             <button onClick={()=>{setCodeOpen(o=>!o);setErr("");setCode("");}} style={{width:"100%",padding:"9px 0",borderRadius:10,border:`1px solid ${C.bdr}`,background:codeOpen?C.bg2:"transparent",color:C.mut,fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:F.b,marginBottom:codeOpen?8:0}}>
               {codeOpen?"▴ Cancel":"I have a code"}
             </button>
@@ -7470,7 +7470,7 @@ function GlobalLeaderboardPill({setScreen}){
       <button onClick={toggle} style={{width:"100%",display:"flex",alignItems:"flex-start",justifyContent:"space-between",padding:"16px 14px",borderRadius:open?"12px 12px 0 0":"12px 12px 0 0",background:"#2460A806",border:"none",borderBottom:open?"none":`1px solid #2460A815`,cursor:"pointer",textAlign:"left"}}>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:9,color:"#2460A8",letterSpacing:1.5,fontWeight:700,marginBottom:8}}>🌍 GLOBAL · DAY #{dn}</div>
-          <div style={{fontFamily:F.b,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.22,marginBottom:10}}>Rackle Leaderboard</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.14,letterSpacing:-0.2,marginBottom:10}}>Rackle Leaderboard</div>
           {/* Live stat pills */}
           {hasData?(
             <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
@@ -7689,7 +7689,7 @@ function ClubDirectoryScreen({home,setScreen}){
             {/* Club header */}
             <div style={{textAlign:"center",marginBottom:20,marginTop:4}}>
               <div style={{fontSize:36,marginBottom:6}}>{club.emoji||"🀄"}</div>
-              <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>{club.name}</div>
+              <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:C.ink,letterSpacing:-0.55,marginBottom:5,lineHeight:1.05}}>{club.name}</div>
               <div style={{fontSize:12,color:C.mut,marginBottom:12}}>{club.location}</div>
               {/* Share link */}
               <div style={{display:"inline-flex",alignItems:"center",gap:8,background:C.sage,borderRadius:10,padding:"7px 12px",border:`1px solid ${C.sageB}20`}}>
@@ -8488,7 +8488,7 @@ function TomorrowPreviewCard(){
   const urgency=timeLeft.urgent;
   const compactTime=`${timeLeft.hh}:${timeLeft.mm}:${timeLeft.ss}`;
   const hint=getTomorrowHint();
-  const headline=urgency?"Last call before the next rack.":"A new rack drops at midnight.";
+  const headline=urgency?"Last call before the next rack.":"A new rack drops soon.";
   const subline=urgency
     ?"One more look before the club board resets."
     :"Come back tomorrow and climb the club board.";
@@ -8514,7 +8514,7 @@ function TomorrowPreviewCard(){
         <div style={{background:`linear-gradient(145deg,${C.jade}0B,#fff)`,border:`1px solid ${urgency?C.cinn+"1A":C.jade+"16"}`,borderRadius:14,padding:"10px",boxShadow:"inset 0 1px 0 rgba(255,255,255,0.8)",marginBottom:10}}>
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,marginBottom:8}}>
             <div style={{fontSize:8,color:urgency?C.cinn:C.jade,letterSpacing:1.4,fontWeight:900}}>NEW RACK IN</div>
-            <div style={{fontSize:9,color:C.mut,fontWeight:750}}>Midnight reset</div>
+            
           </div>
           <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:7,width:"100%"}}>
             {[{v:timeLeft.hh,l:"hrs"},{v:timeLeft.mm,l:"min"},{v:timeLeft.ss,l:"sec"}].map((part)=>(
@@ -8677,12 +8677,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div style={{padding:16,display:"grid",gap:12}}>
         <button onClick={copyShare} style={{width:"100%",border:`1px solid ${C.gold}25`,background:`linear-gradient(135deg,#FFF9ED,#F7EFE0)`,borderRadius:14,padding:"13px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left"}}>
           <div style={{width:39,height:39,borderRadius:12,background:C.gold+"14",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>📲</div>
-          <div style={{flex:1}}><div style={{fontFamily:F.b,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.15}}>Challenge Your Club</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Tap to copy · drop it in your group chat</div></div>
+          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>Challenge Your Club</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Tap to copy · drop it in your group chat</div></div>
           <span style={{fontSize:18,color:C.gold}}>›</span>
         </button>
         <button onClick={showScorecard} style={{width:"100%",border:`1px solid ${C.jade}20`,background:C.jade+"06",borderRadius:14,padding:"13px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left"}}>
           <div style={{width:39,height:39,borderRadius:12,background:C.jade+"13",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>🎓</div>
-          <div style={{flex:1}}><div style={{fontFamily:F.b,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.15}}>See the Better Play</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Best path · other hands · next move</div></div>
+          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>See the Better Play</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Best path · other hands · next move</div></div>
           <span style={{fontSize:18,color:C.jade}}>›</span>
         </button>
       </div>
@@ -8697,10 +8697,9 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div style={{width:42,height:42,borderRadius:14,background:C.jade+"10",border:`1px solid ${C.jade}18`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>✦</div>
         <div style={{flex:1,minWidth:0,position:"relative"}}>
           <div style={{fontSize:9,color:C.jade,letterSpacing:2.1,fontWeight:900,marginBottom:5}}>TOMORROW'S RACKLE</div>
-          <div style={{fontFamily:F.b,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.16,marginBottom:5}}>A new rack drops in {resetLabel}</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2,marginBottom:5}}>A new rack drops in {resetLabel}</div>
           <div style={{fontSize:12,color:C.mut,lineHeight:1.45}}>Hint: {tomorrowHint}</div>
         </div>
-        <div style={{background:C.jade+"0D",border:`1px solid ${C.jade}16`,borderRadius:999,padding:"6px 9px",fontSize:10,color:C.jade,fontWeight:900,whiteSpace:"nowrap",position:"relative"}}>Midnight</div>
       </div>
     );
   };
@@ -8710,7 +8709,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div style={{width:48,height:48,borderRadius:15,background:dDone?C.jade+"10":C.cinn+"10",border:`1px solid ${dDone?C.jade+"20":C.cinn+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:21,flexShrink:0}}>🀄</div>
       <div style={{flex:1}}>
         <div style={{fontSize:9,color:dDone?C.jade:C.cinn,letterSpacing:2.2,fontWeight:900,marginBottom:3}}>{dDone?"KEEP SHARPENING":"UNLIMITED PRACTICE"}</div>
-        <div style={{fontFamily:F.b,fontSize:16,fontWeight:900,color:C.ink,marginBottom:5,lineHeight:1.12}}>Practice Mode</div>
+        <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:C.ink,marginBottom:5,lineHeight:1.08,letterSpacing:-0.2}}>Practice Mode</div>
         <div style={{fontSize:12,color:C.mut,lineHeight:1.45}}>{dDone?"Daily done — sharpen one more rack before tomorrow.":"New deal every time. Work every section until the right pass feels obvious."}</div>
       </div>
       <span style={{fontSize:18,color:dDone?C.jade:C.mut,fontWeight:900}}>›</span>
@@ -8733,7 +8732,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       {!getClubCode()&&(
         <div style={{margin:"18px 0 12px",background:"linear-gradient(135deg,#F2FAF6,#EAF5EF)",padding:"18px",border:`1.5px solid ${C.jade}22`,borderRadius:18,boxShadow:`0 4px 18px ${C.jade}08`}}>
           <div style={{fontSize:9,color:C.jade,letterSpacing:2.2,fontWeight:900,marginBottom:6}}>FOR CLUB ORGANIZERS</div>
-          <div style={{fontFamily:F.b,fontSize:18,fontWeight:900,color:C.ink,lineHeight:1.18,marginBottom:10}}>Your club should be on Rackle</div>
+          <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:C.ink,lineHeight:1.12,marginBottom:10,letterSpacing:-0.25}}>Your club should be on Rackle</div>
           <div style={{fontSize:12,color:C.mut,lineHeight:1.6,marginBottom:15}}>Give your group a daily leaderboard. Free to start, takes 2 minutes, and every score posts after each Daily.</div>
           <div style={{display:"flex",gap:9}}>
             <a href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20" style={{flex:2,display:"flex",alignItems:"center",justifyContent:"center",padding:"13px 0",borderRadius:12,background:`linear-gradient(135deg,${C.jade},#115C38)`,color:"#fff",fontSize:14,fontWeight:900,fontFamily:F.d,textDecoration:"none"}}>Add my club →</a>
@@ -8749,7 +8748,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <button onClick={()=>setLeOpen(o=>!o)} aria-expanded={leOpen} style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,background:leOpen?`linear-gradient(135deg,${C.jade}14,${C.jade}08)`:`linear-gradient(135deg,${C.jade}10,${C.jade}05)`,border:`1.5px solid ${C.jade}25`,borderRadius:leOpen?"16px 16px 0 0":16,cursor:"pointer",padding:"13px 15px",textAlign:"left"}}>
         <div style={{display:"flex",alignItems:"center",gap:11}}>
           <div style={{width:38,height:38,borderRadius:12,background:C.jade+"18",border:`1px solid ${C.jade}24`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>📚</div>
-          <div><div style={{fontSize:13,fontWeight:900,color:C.jade}}>Learn & Explore</div><div style={{fontSize:11,color:C.jade,opacity:0.72,marginTop:1}}>Tutorial · Card guide · Stats · How to play</div></div>
+          <div><div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.jade,letterSpacing:-0.1}}>Learn & Explore</div><div style={{fontSize:11,color:C.jade,opacity:0.72,marginTop:1}}>Tutorial · Card guide · Stats · How to play</div></div>
         </div>
         <span style={{fontSize:13,color:C.jade,transform:leOpen?"rotate(180deg)":"rotate(0deg)",display:"inline-block"}}>▾</span>
       </button>
