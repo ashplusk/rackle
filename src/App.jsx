@@ -6381,16 +6381,27 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
 
 // ─── COACH MODE SCREEN — narrative-first deep analysis ───────────────────────
 function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onBack,setScreen}){
-  if(!iq)return null;
+  if(!iq){
+    return(
+      <div style={S.pg} className="rk-pg">
+        <RackleHeader onBack={onBack} setScreen={setScreen}/>
+        <div style={{...S.card,textAlign:"center",padding:"28px 18px"}}>
+          <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,marginBottom:8}}>Table Talk</div>
+          <div style={{fontSize:13,color:C.mut,lineHeight:1.55}}>No rack read available yet.</div>
+        </div>
+        <button onClick={onBack} style={{...S.oBtn,width:"100%"}}>← Back to Scorecard</button>
+      </div>
+    );
+  }
 
   const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
   const sortedSecs=Array.isArray(allSections)?[...allSections].sort((a,b)=>(b.score||0)-(a.score||0)):[];
   const bestFitSec=sortedSecs[0]||null;
   const sectionMatch=chosenSec&&bestFitSec?chosenSec===bestFitSec.id:true;
   const passInsights=Array.isArray(iq.passInsights)?iq.passInsights:[];
-  const tableLine=getTableReadLine(iq)||"You built a cleaner read today.";
   const passDots=passInsights.map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join(" ");
   const firstName=(getProfile()?.nickname||"").trim().split(" ")[0];
+  const tableLine=(typeof getTableReadLine==="function"?getTableReadLine(iq):null)||"You built a cleaner read today.";
 
   const softVerdict=(()=>{
     const score=iq.totalScore||0;
@@ -6473,30 +6484,26 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
 
       <SectionDivider label="ONE THING"/>
       <div style={{borderRadius:14,background:"#fff",border:`1px solid ${C.bdr}`,padding:"14px 16px",marginBottom:12}}>
-        <div style={{fontSize:8,color:C.jade,letterSpacing:2.4,fontWeight:800,marginBottom:7}}>TAKE THIS TO THE NEXT RACK</div>
-        <div style={{fontSize:14,color:C.ink,lineHeight:1.55,fontWeight:800}}>{oneThing}</div>
-      </div>
-
-      <SectionDivider label="PASS READ"/>
-      <div style={{...S.card,padding:0,overflow:"hidden",marginBottom:12}}>
-        {passRows.length?passRows.map((p,i)=>(
-          <div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",padding:"12px 14px",borderBottom:i<passRows.length-1?`1px solid ${C.bdr}`:"none",background:i%2?C.bg2:"#fff"}}>
-            <div style={{width:28,height:28,borderRadius:9,background:p.bg,color:p.color,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:900,flexShrink:0}}>{p.round}</div>
-            <div style={{flex:1,minWidth:0}}>
-              <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",gap:8,marginBottom:3}}>
-                <div style={{fontSize:12,fontWeight:900,color:p.color}}>{p.label} pass</div>
-                {p.tiles&&<div style={{fontSize:10,color:C.mut,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:170}}>{p.tiles}</div>}
-              </div>
-              <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{p.line}</div>
-            </div>
-          </div>
-        )):<div style={{padding:14,fontSize:12,color:C.mut}}>No pass details available for this rack.</div>}
+        <div style={{fontSize:13,color:C.ink,lineHeight:1.55,fontWeight:700}}>{oneThing}</div>
       </div>
 
       <SectionDivider label="TABLE WISDOM"/>
-      <div style={{borderRadius:14,background:C.sage,border:`1px solid ${C.jade}22`,padding:"13px 15px",marginBottom:12}}>
-        <div style={{fontSize:12,color:C.ink,lineHeight:1.55,fontWeight:700}}>{tableWisdom}</div>
+      <div style={{borderRadius:14,background:C.sage,border:`1px solid ${C.jade}22`,padding:"14px 16px",marginBottom:12}}>
+        <div style={{fontSize:13,color:C.ink,lineHeight:1.55}}>{tableWisdom}</div>
       </div>
+
+      {passRows.length>0&&<SectionDivider label="YOUR PASSES"/>}
+      {passRows.length>0&&<div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:12}}>
+        {passRows.map(row=>(
+          <div key={row.round} style={{borderRadius:13,background:row.bg,border:`1px solid ${row.color}22`,padding:"11px 12px"}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:4}}>
+              <div style={{fontSize:12,fontWeight:900,color:row.color}}>Pass {row.round}: {row.label}</div>
+              {row.tiles&&<div style={{fontSize:10,color:C.mut,textAlign:"right",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:170}}>{row.tiles}</div>}
+            </div>
+            <div style={{fontSize:11,color:C.mut,lineHeight:1.45}}>{row.line}</div>
+          </div>
+        ))}
+      </div>}
 
       {firstName&&<div style={{fontSize:11,color:C.mut,textAlign:"center",margin:"2px 0 10px"}}>Nice rack, {firstName}. Now beat it tomorrow.</div>}
 
