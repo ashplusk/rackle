@@ -8563,7 +8563,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const currentScore=Number.isFinite(Number(iq?.totalScore))?Number(iq.totalScore):0;
   const pb=Math.max(bestScore,currentScore,100);
   const firstName=profile?.nickname?profile.nickname.split(" ")[0]:"";
-  const streakText=streak>1?`${streak}-day streak${firstName?` ${firstName}`:""}. Your Charleston is becoming a habit.`:streak===1?"You showed up today. That's how it starts.":"Start your streak with today's Rackle.";
+  const streakText=streak>1?`${streak}-day streak${firstName?`, ${firstName}`:""}. Keep the heat on.`:streak===1?"First streak locked. Come back tomorrow and make it real.":"Start your streak with today's Rackle.";
 
   const tomorrowHints=[
     "Pairs may matter more than they look.",
@@ -8613,7 +8613,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     return(
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:10,marginBottom:2,position:"relative"}}>
         {streak>0?(
-          <button onClick={()=>setScreen("profile")} style={{border:`1px solid ${C.cinn}25`,background:C.cinn+"08",color:C.cinn,borderRadius:12,padding:"8px 13px",fontSize:13,fontWeight:900,cursor:"pointer"}}>{streak}-day streak</button>
+          <button onClick={()=>setScreen("profile")} aria-label="View streak" style={{display:"inline-flex",alignItems:"center",gap:6,border:`1px solid ${C.gold}30`,background:`linear-gradient(135deg,#FFF9EA,${C.cinn}08)`,color:C.cinn,borderRadius:999,padding:"5px 9px 5px 7px",fontSize:11,fontWeight:900,cursor:"pointer",boxShadow:`0 4px 14px ${C.cinn}10`,minHeight:30}}>
+            <span style={{width:19,height:19,borderRadius:99,display:"inline-flex",alignItems:"center",justifyContent:"center",background:C.cinn+"12",fontSize:10,lineHeight:1}}>🔥</span>
+            <span style={{fontFamily:F.d,fontSize:12,fontWeight:900,lineHeight:1}}>{streak}d</span>
+            <span style={{fontSize:9,fontWeight:900,letterSpacing:0.5,textTransform:"uppercase",opacity:0.72}}>streak</span>
+            <span style={{fontSize:9,color:C.gold,marginLeft:1}}>›</span>
+          </button>
         ):<div/>}
         <button onClick={()=>setMenuOpen(o=>!o)} aria-label="Menu" style={{width:40,height:40,background:menuOpen?C.bg2:"transparent",border:`1px solid ${menuOpen?C.bdr:"transparent"}`,borderRadius:12,cursor:"pointer",display:"flex",flexDirection:"column",gap:4,alignItems:"center",justifyContent:"center"}}>
           <span style={{display:"block",width:17,height:1.6,background:C.ink,borderRadius:2}}/>
@@ -8664,7 +8669,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <MiniStat value={topToday} label="TOP TODAY"/>
           <MiniStat value={streak>0?`${streak}d`:"start"} label="STREAK" accent={C.gilt}/>
         </div>
-        <div style={{position:"absolute",right:26,top:104,width:88,height:88,borderRadius:88,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 12px 34px rgba(0,0,0,0.18)"}}>
+        <div style={{position:"absolute",right:26,top:86,width:88,height:88,borderRadius:88,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 12px 34px rgba(0,0,0,0.18)"}}>
           <span style={{width:0,height:0,borderTop:"13px solid transparent",borderBottom:"13px solid transparent",borderLeft:`22px solid ${C.jade}`,marginLeft:6}}/>
         </div>
       </div>
