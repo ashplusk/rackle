@@ -1,7 +1,7 @@
 import { Analytics } from '@vercel/analytics/react';
 import { useState, useEffect, useRef, useCallback } from "react";
-// RACKLE — Daily Charleston + Practice. The Daily Mahjong Workout. 2026 NMJL. v93.1
-// v2.0 — Full Rackle Score Scoring Engine, IQScorecard, ScorecardScreen
+// RACKLE, Daily Charleston + Practice. The Daily Mahjong Workout. 2026 NMJL. v93.1
+// v2.0, Full Rackle Score Scoring Engine, IQScorecard, ScorecardScreen
 
 // DESIGN
 const C={bg:"#F8F4EE",bg2:"#EDE7DA",ink:"#1A1410",mut:"#6B6157",jade:"#176B42",gold:"#A07828",cinn:"#B02A2A",bdr:"#DDD6C8",
@@ -67,7 +67,7 @@ function loadHtml2Canvas(){
   });
 }
 
-// ─── SHARE CARD IMAGE — visible card + save button ───────────────────────────
+// ─── SHARE CARD IMAGE, visible card + save button ───────────────────────────
 function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
   const [saving,setSaving]=useState(false);
   const [done,setDone]=useState(false);
@@ -76,7 +76,7 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
   const club=profile?.clubCode?CLUBS[profile.clubCode]:null;
   const playerName=profile?.nickname||null;
 
-  // Text-only pass indicators — emoji are unreliable in html2canvas
+  // Text-only pass indicators, emoji are unreliable in html2canvas
   const passRow=(passInsights||[]).map(p=>p.quality==="strong"?"●":p.quality==="weak"?"○":"◐").join(" ");
   const passEmoji=(passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
 
@@ -103,7 +103,7 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
           setSaving(false);return;
         }catch(e){}
       }
-      // Desktop fallback — download
+      // Desktop fallback, download
       const url=URL.createObjectURL(blob);
       const a=document.createElement("a");
       a.href=url;a.download=`rackle-day${dayNum}.png`;a.click();
@@ -133,7 +133,7 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
 
   return(
     <div>
-      {/* ── VISIBLE CARD — captured directly by html2canvas ── */}
+      {/* ── VISIBLE CARD, captured directly by html2canvas ── */}
       <div ref={cardRef} style={{
         background:"#061F12",
         borderRadius:14,
@@ -144,10 +144,10 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
         position:"relative",
       }}>
 
-        {/* Subtle tile watermark — pure CSS, no image */}
+        {/* Subtle tile watermark, pure CSS, no image */}
         <div aria-hidden style={{position:"absolute",right:12,bottom:10,fontSize:64,opacity:0.04,lineHeight:1,userSelect:"none",pointerEvents:"none"}}>🀄</div>
 
-        {/* ── TOP ROW — logo + day badge ── */}
+        {/* ── TOP ROW, logo + day badge ── */}
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}>
           {/* Logo: tile glyph + wordmark */}
           <div style={{display:"flex",alignItems:"center",gap:7}}>
@@ -212,7 +212,7 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
           })}
         </div>
 
-        {/* ── FOOTER — club + clickable URL ── */}
+        {/* ── FOOTER, club + clickable URL ── */}
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <div style={{fontSize:9,color:"rgba(255,255,255,0.25)",fontFamily:SANS}}>
             {club?`🀄 ${club.name}`:"🀄 American Mahjong"}
@@ -247,14 +247,14 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
         <span style={{fontSize:16,color:"rgba(255,255,255,0.5)",flexShrink:0}}>{done?"":"›"}</span>
       </button>
 
-      {/* Emoji row shown below for copy — doesn't go into canvas */}
+      {/* Emoji row shown below for copy, doesn't go into canvas */}
       {passEmoji&&<div style={{textAlign:"center",marginTop:6,fontSize:12,letterSpacing:2,color:C.mut}}>{passEmoji}</div>}
     </div>
   );
 }
 
-// ─── CARD SEASON BANNER — shown once when new NMJL card year detected ─────────
-// ─── URL PARAM HELPERS — for club deep-links ─────────────────────────────────
+// ─── CARD SEASON BANNER, shown once when new NMJL card year detected ─────────
+// ─── URL PARAM HELPERS, for club deep-links ─────────────────────────────────
 function getUrlParam(key){
   try{return new URLSearchParams(window.location.search).get(key);}catch{return null;}
 }
@@ -271,34 +271,34 @@ function sortHand(t){return[...t].sort((a,b)=>sortVal(a)-sortVal(b));}
 function tL(t){if(t.t==="j")return"🃏";if(t.t==="f")return"🌸";if(t.t==="w")return t.v;if(t.t==="d")return t.v==="Red"?"中":t.v==="Grn"?"發":"白";return`${t.n}`;}
 function tS(t){if(t.t==="j")return"Joker";if(t.t==="f")return"Flower";if(t.t==="w")return"Wind";if(t.t==="d")return t.v==="Soap"?"Soap":t.v==="Red"?"Red":"Green";return SN[t.s];}
 function tC(t){if(t.t==="j")return"#B08A35";if(t.t==="f")return"#B54E7A";if(t.t==="w")return"#5C5247";if(t.t==="d")return t.v==="Red"?"#B83232":t.v==="Grn"?"#1B7D4E":"#6B6560";return SC[t.s];}
-function fT(s){if(!s&&s!==0)return"—";return`${Math.floor(s/60)}:${(s%60<10?"0":"")+(s%60)}`;}
+function fT(s){if(!s&&s!==0)return",";return`${Math.floor(s/60)}:${(s%60<10?"0":"")+(s%60)}`;}
 function tAria(t){if(t.t==="j")return"Joker tile";if(t.t==="f")return"Flower tile";if(t.t==="w")return`${t.v} Wind tile`;if(t.t==="d")return`${tS(t)} Dragon tile`;return`${t.n} ${SN[t.s]} tile`;}
 function tLabel(t){if(t.t==="j")return"Joker";if(t.t==="f")return"Flower";if(t.t==="w")return`${t.v} Wind`;if(t.t==="d")return`${tS(t)} Dragon`;return`${t.n} ${SN[t.s]}`;}
 
 // ─── SECTION DEFINITIONS ─────────────────────────────────────────────────────
-// 2026 NMJL Card — validated against all 3 card images.
+// 2026 NMJL Card, validated against all 3 card images.
 // Scoring philosophy derived from hand-count analysis per section:
 //   2026: 4 hands | 2468: 8 hands | ALN: 3 hands | QUINTS: 3 hands
 //   CR: 8 hands   | 13579: 9 hands  | W/D: 8 hands | 369: 6 hands | S&P: 6 hands
 // Key 2026-card tile weights (frequency across all hands):
-//   6 → highest (appears in 2026, 2468, 369, W/D concealed) — NEVER pass a 6
+//   6 → highest (appears in 2026, 2468, 369, W/D concealed), NEVER pass a 6
 //   Flowers → appear in majority of hands across all numeric sections
 //   1 → lowest utility (fewest hands), 9 → low utility (only 13579, CR)
 //   Soap/0 → only 2026 section; very specific but free to any suit
 //   Winds → appear only in 13579 (NN/SS) and W/D; pass from all other sections
 function cg(h,fn){const v=h.filter(fn),jk=h.filter(t=>t.t==="j").length,c={};v.forEach(t=>{const k=`${t.t}-${t.s||""}-${t.n||""}-${t.v||""}`;c[k]=(c[k]||0)+1;});const ct=Object.values(c);let kg=0,pg=0,pr=0;ct.forEach(n=>{if(n>=4)kg++;else if(n>=3)pg++;else if(n>=2)pr++;});return{v:v.length,jk,kg,pg,pr};}
 
-// Consecutive Run scoring — window-based group depth.
+// Consecutive Run scoring, window-based group depth.
 // The 2026 CR hands are NOT about long runs of singles. They are about
-// having pungs/kongs/pairs of numbers that fall within a tight 3–5 number window.
+// having pungs/kongs/pairs of numbers that fall within a tight 3-5 number window.
 // e.g. 111 222 3333 4444 → window [1,2,3,4], groups: 3+3+4+4 = 14 tiles, very deep.
 // e.g. 11 222 33 444 5555 → window [1,2,3,4,5], groups: 2+3+2+3+4 = 14 tiles, 5-wide.
 // Scorer: find the best N-wide window where GROUPED tiles is maximised.
-// Singles (lone tiles) give 0 group credit — CR needs pungs/kongs, not lone stragglers.
+// Singles (lone tiles) give 0 group credit, CR needs pungs/kongs, not lone stragglers.
 // Steeper width penalties (5-wide=2, 4-wide=1) vs old (1.5/0.5) to tighten requirement.
 function crWindowScore(h){
   // CR hands are SAME-SUIT sequences. Score per suit, take the best.
-  // Pooling across suits is wrong — 3Bam + 3Crk + 3Dot is NOT a CR group.
+  // Pooling across suits is wrong, 3Bam + 3Crk + 3Dot is NOT a CR group.
   const suits=["bam","crak","dot"];
   let best={score:0,window:0,depth:0,windowNums:[],groupDepth:0,distinctPresent:0,groupCount:0,suit:null};
 
@@ -313,13 +313,13 @@ function crWindowScore(h){
         for(let i=0;i<w;i++)wNums.push(start+i);
         const distinctPresent=wNums.filter(n=>(gc[n]||0)>=1).length;
         if(distinctPresent<2)continue;
-        // Singles (cnt===1) give 0 — CR needs actual groups (pairs/pungs/kongs)
+        // Singles (cnt===1) give 0, CR needs actual groups (pairs/pungs/kongs)
         const groupDepth=wNums.reduce((sum,n)=>{
           const cnt=Math.min(gc[n]||0,4);
           return sum+(cnt>=4?4:cnt>=3?3:cnt>=2?2:0);
         },0);
         const groupCount=wNums.filter(n=>(gc[n]||0)>=2).length;
-        // Steeper width penalties — 3-wide has the most hand options
+        // Steeper width penalties, 3-wide has the most hand options
         const widthPenalty=w===5?2:w===4?1:0;
         const score=groupDepth*2+groupCount-widthPenalty;
         if(score>best.score){
@@ -336,11 +336,11 @@ const SECS=[
 // Hands: 222 000 2222 6666 | 2026 DDD 2222 DDD | FFF 2026 222 6666 | 22 00 222 666 NEWS
 // Key: 2 and 6 always together. Soap (0/White Dragon) acts as wild. 1 NEWS hand needs all 4 winds.
 // Flowers appear in hand 3. Dragons appear in hands 1,2,3. 6 is required in all 4 hands.
-{id:"2026",name:"2026",color:"#B54E7A",icon:"📅",desc:"Year tiles — 2s, 0 (Soap), 6s",hold:"2s, 6s, Soap (White Dragon) — highest priority. Red & Green Dragons. Flowers only if you have 2+",pass:"All odd numbers (1,3,5,7,9), 4s, 8s — Winds only if building the NEWS hand",combos:"6 appears in all 4 hands — it is your most critical tile. Soap (White Dragon) is uniquely valuable here: it is suit-wild, meaning it counts as any suit's 0. Red and Green Dragons also appear. Flowers only appear in 1 of 4 hands — don't hold a lone Flower for this section.",joker:null,hands:4,
+{id:"2026",name:"2026",color:"#B54E7A",icon:"📅",desc:"Year tiles, 2s, 0 (Soap), 6s",hold:"2s, 6s, Soap (White Dragon), highest priority. Red & Green Dragons. Flowers only if you have 2+",pass:"All odd numbers (1,3,5,7,9), 4s, 8s, Winds only if building the NEWS hand",combos:"6 appears in all 4 hands, it is your most critical tile. Soap (White Dragon) is uniquely valuable here: it is suit-wild, meaning it counts as any suit's 0. Red and Green Dragons also appear. Flowers only appear in 1 of 4 hands, don't hold a lone Flower for this section.",joker:null,hands:4,
   ck:h=>{
     const twos=h.filter(t=>t.t==="s"&&t.n===2).length;
     const sixes=h.filter(t=>t.t==="s"&&t.n===6).length;
-    // Both anchors required — missing either is a strong signal against 2026
+    // Both anchors required, missing either is a strong signal against 2026
     if(!twos||!sixes)return 0.01;
     const soap=h.filter(t=>t.t==="d"&&t.v==="Soap").length;
     const anyDragon=h.filter(t=>t.t==="d").length;
@@ -348,7 +348,7 @@ const SECS=[
     const winds=h.filter(t=>t.t==="w").length;
     const jk=h.filter(t=>t.t==="j").length;
     const offNums=h.filter(t=>t.t==="s"&&![2,6].includes(t.n)).length;
-    // Group quality for 2s and 6s — scale with count
+    // Group quality for 2s and 6s, scale with count
     const twoScore=twos>=4?0.24:twos>=3?0.18:twos>=2?0.12:0.06;
     const sixScore=sixes>=4?0.28:sixes>=3?0.20:sixes>=2?0.13:0.07;
     const support=soap*0.08+anyDragon*0.025+flowers*0.02+jk*0.05;
@@ -363,7 +363,7 @@ const SECS=[
 //        FFF 2468 FFF 2222 | FF 246 888 246 888
 // Key: 6 is in 7/8 hands. 2 in 7/8. 8 in 7/8. 4 in 6/8. Flowers in 5/8. Dragons in 4/8.
 // East+West winds in 1 hand only (EE/WW). 8 hands = largest section after CR.
-{id:"2468",name:"2468",color:"#B83232",icon:"🔴",desc:"Even numbers — 2, 4, 6, 8",hold:"2s, 4s, 6s, 8s, Flowers, Jokers, any Dragon",pass:"All odds (1,3,5,7,9), North/South Winds",combos:"6 is in 7 of 8 hands — never pass it. 2 is next most common (7/8), then 8 (6/8), then 4 (6/8). The last hand (FF 246 888 246 888) is concealed — no jokers allowed.",joker:null,hands:8,
+{id:"2468",name:"2468",color:"#B83232",icon:"🔴",desc:"Even numbers, 2, 4, 6, 8",hold:"2s, 4s, 6s, 8s, Flowers, Jokers, any Dragon",pass:"All odds (1,3,5,7,9), North/South Winds",combos:"6 is in 7 of 8 hands, never pass it. 2 is next most common (7/8), then 8 (6/8), then 4 (6/8). The last hand (FF 246 888 246 888) is concealed, no jokers allowed.",joker:null,hands:8,
   ck:h=>{
     const evens=h.filter(t=>t.t==="s"&&t.n%2===0);
     const c={};evens.forEach(t=>{c[t.n]=(c[t.n]||0)+1;});
@@ -374,7 +374,7 @@ const SECS=[
     const jk=h.filter(t=>t.t==="j").length;
     const odds=h.filter(t=>t.t==="s"&&t.n%2===1).length;
     const nsWinds=h.filter(t=>t.t==="w"&&(t.v==="N"||t.v==="S")).length;
-    // Group depth in even tiles — singles give 0 credit
+    // Group depth in even tiles, singles give 0 credit
     const evenGroupDepth=Object.values(c).reduce((a,n)=>a+(n>=4?4:n>=3?3:n>=2?2:0),0);
     const groupScore=evenGroupDepth>=10?0.40:evenGroupDepth>=8?0.32:evenGroupDepth>=6?0.24:evenGroupDepth>=4?0.16:evenGroupDepth>=2?0.08:evens.length*0.012;
     const sixBonus=(c[6]||0)>=3?0.12:(c[6]||0)>=2?0.08:(c[6]||0)>=1?0.04:0;
@@ -389,7 +389,7 @@ const SECS=[
 //        33 66 666 999 NEWS | FF 3369 3333 3333 | FF 333 666 999 369
 // Key: 6 in 6/6 hands (100%). 3 and 9 in 5/6. Flowers in 3/6. Dragons in 2/6. 1 NEWS hand.
 // Last hand (FF 333 666 999 369) is CONCEALED.
-{id:"369",name:"369",color:"#B84A72",icon:"💗",desc:"Multiples of 3 — 3, 6, 9",hold:"3s, 6s, 9s, any Dragon — Flowers only if you have 2+ (appear in 3/6 hands)",pass:"1s, 2s, 4s, 5s, 7s, 8s, lone Flowers, Winds (unless building NEWS hand)",combos:"6 is in every single 369 hand — the most locked-in anchor on the entire card. Never pass a 6 if you're considering this section. Dragons appear in 2 hands. The final hand (FF 333 666 999 369) is fully concealed — no exposures allowed.",joker:null,hands:6,
+{id:"369",name:"369",color:"#B84A72",icon:"💗",desc:"Multiples of 3, 3, 6, 9",hold:"3s, 6s, 9s, any Dragon, Flowers only if you have 2+ (appear in 3/6 hands)",pass:"1s, 2s, 4s, 5s, 7s, 8s, lone Flowers, Winds (unless building NEWS hand)",combos:"6 is in every single 369 hand, the most locked-in anchor on the entire card. Never pass a 6 if you're considering this section. Dragons appear in 2 hands. The final hand (FF 333 666 999 369) is fully concealed, no exposures allowed.",joker:null,hands:6,
   ck:h=>{
     const threes=h.filter(t=>t.t==="s"&&t.n===3).length;
     const sixes=h.filter(t=>t.t==="s"&&t.n===6).length;
@@ -399,7 +399,7 @@ const SECS=[
     const winds=h.filter(t=>t.t==="w").length;
     const jk=h.filter(t=>t.t==="j").length;
     const offNums=h.filter(t=>t.t==="s"&&![3,6,9].includes(t.n)).length;
-    // Group depth for 369 tiles — singles give 0 credit
+    // Group depth for 369 tiles, singles give 0 credit
     const dep369=[threes,sixes,nines].reduce((a,n)=>a+(n>=4?4:n>=3?3:n>=2?2:0),0);
     const groupScore=dep369>=9?0.44:dep369>=7?0.34:dep369>=5?0.25:dep369>=3?0.16:dep369>=1?0.08:(threes+sixes+nines)*0.015;
     const sixBonus=sixes>=3?0.10:sixes>=2?0.07:sixes>=1?0.04:0;
@@ -416,7 +416,7 @@ const SECS=[
 //        1111 33 55 77 9999 | FF 11 33 55 111 111 | FF 135 777 999 DDD
 // Key: 5 in 9/10 hands. 3 in 9/10. 1 in 8/10. Flowers in 4/10. Winds (N,S) in 2/10.
 // Dragons in 4/10. 9 in 4/10. 7 in 4/10. 1 is the least flexible odd.
-{id:"13579",name:"13579",color:"#D48A2A",icon:"🟠",desc:"Odd numbers — 1, 3, 5, 7, 9",hold:"5s and 3s (top priority), 1s, 7s, 9s, N/S Winds, Flowers, Dragons",pass:"All evens, E/W Winds",combos:"5 and 3 are the most-used odds — appear in 9 of 10 hands. North and South Winds appear in 2 hands (pass East/West freely). Dragons appear in 4 hands — worth holding a pair. Two hands use Dragon kongs: one needs a MATCHING Dragon, one needs an OPPOSITE Dragon. Flowers appear in 4 of 10 hands.",joker:null,hands:10,
+{id:"13579",name:"13579",color:"#D48A2A",icon:"🟠",desc:"Odd numbers, 1, 3, 5, 7, 9",hold:"5s and 3s (top priority), 1s, 7s, 9s, N/S Winds, Flowers, Dragons",pass:"All evens, E/W Winds",combos:"5 and 3 are the most-used odds, appear in 9 of 10 hands. North and South Winds appear in 2 hands (pass East/West freely). Dragons appear in 4 hands, worth holding a pair. Two hands use Dragon kongs: one needs a MATCHING Dragon, one needs an OPPOSITE Dragon. Flowers appear in 4 of 10 hands.",joker:null,hands:10,
   ck:h=>{
     const odds=h.filter(t=>t.t==="s"&&t.n%2===1);
     const c={};odds.forEach(t=>{c[t.n]=(c[t.n]||0)+1;});
@@ -427,7 +427,7 @@ const SECS=[
     const ew=h.filter(t=>t.t==="w"&&(t.v==="E"||t.v==="W")).length;
     const jk=h.filter(t=>t.t==="j").length;
     const evens=h.filter(t=>t.t==="s"&&t.n%2===0).length;
-    // Group depth in odd tiles — singles give 0 credit
+    // Group depth in odd tiles, singles give 0 credit
     const oddGroupDepth=Object.values(c).reduce((a,n)=>a+(n>=4?4:n>=3?3:n>=2?2:0),0);
     const groupScore=oddGroupDepth>=10?0.38:oddGroupDepth>=8?0.30:oddGroupDepth>=6?0.22:oddGroupDepth>=4?0.15:oddGroupDepth>=2?0.08:odds.length*0.01;
     // 5 and 3 are the heaviest anchors
@@ -443,12 +443,12 @@ const SECS=[
 // Hands: 11 222 33 444 5555 | FFF 1111 234 5555 | 11 22 111 222 3333 |
 //        111 222 3333 4444 | FFF 11 22 333 DDDD | 1111 FFFFFF 2222 |
 //        FF 1111 2222 3333 | 1 22 333 1 22 333 44 (C) | 55 666 77 888 9999
-// Key insight: CR is about GROUP DEPTH within a 3–5 number window, NOT run length.
+// Key insight: CR is about GROUP DEPTH within a 3-5 number window, NOT run length.
 // 111 222 3333 4444 (4-wide window, kongs+pungs) beats 1 2 3 4 5 6 7 (7 singles).
-// The FFFFFF sextette appears in hand 6 — flowers are critical here.
-// One hand (FFF 11 22 333 DDDD) uses a Dragon kong — any dragon.
+// The FFFFFF sextette appears in hand 6, flowers are critical here.
+// One hand (FFF 11 22 333 DDDD) uses a Dragon kong, any dragon.
 // Concealed hand: 1 22 333 1 22 333 44.
-{id:"cr",name:"Consec. Run",color:"#1B7D4E",icon:"🟢",desc:"Sequential numbers — pungs & kongs in a 3–5 number window",hold:"Groups (pungs/kongs) of consecutive numbers, all Flowers, Jokers",pass:"Isolated singles outside your run window, all Winds, scattered numbers",combos:"You need pungs or kongs of 3–4 consecutive numbers — not a long string of singles. One hand uses 6 Flowers as a group. One hand uses a Dragon kong — the Dragon must match the MIDDLE number of your run.",joker:null,hands:8,
+{id:"cr",name:"Consec. Run",color:"#1B7D4E",icon:"🟢",desc:"Sequential numbers, pungs & kongs in a 3-5 number window",hold:"Groups (pungs/kongs) of consecutive numbers, all Flowers, Jokers",pass:"Isolated singles outside your run window, all Winds, scattered numbers",combos:"You need pungs or kongs of 3-4 consecutive numbers, not a long string of singles. One hand uses 6 Flowers as a group. One hand uses a Dragon kong, the Dragon must match the MIDDLE number of your run.",joker:null,hands:8,
   ck:h=>{
     const ws=crWindowScore(h);
     const flowers=h.filter(t=>t.t==="f").length;
@@ -460,7 +460,7 @@ const SECS=[
     if(ws.groupCount<2||ws.groupDepth<4){
       return Math.min(ws.groupDepth*0.015+flowers*0.01+jk*0.01,0.08);
     }
-    // Normalise window score — max realistic score ~32 with 13 tiles
+    // Normalise window score, max realistic score ~32 with 13 tiles
     const windowVal=Math.min(ws.score/32,1);
     // presentBonus only awarded when group structure is already meaningful
     const presentBonus=ws.groupDepth>=6?(ws.distinctPresent>=4?0.05:ws.distinctPresent>=3?0.02:0):0;
@@ -478,7 +478,7 @@ const SECS=[
 // Key: Winds in 7/8 hands. Dragons in 5/8. Numbers appear in 5/8 (!) but usually as kongs.
 // Hand 2: 1234 with 3 dragon groups (very specific consecutive). Hand 3/4: like-number kongs.
 // Hand 6: specific 1N 2EE 3WWW 4SSSS (1 suit, specific numbers). Flowers in 2/8.
-{id:"wd",name:"Winds & Dragons",color:"#5C5247",icon:"🌀",desc:"Winds, Dragons — and specific number kongs",hold:"All Winds, all Dragons, Jokers — number kongs of 1–4 if you have 4+ of one value",pass:"Most number tiles, Flowers (appear in only 2 of 8 hands — don't hold a lone Flower)",combos:"Winds appear in 7 of 8 hands — they are your most important tiles here. Dragons appear in 5 of 8. Two hands use kongs of like numbers (1s or 2s), so 4-of-a-kind number tiles can fit. Flowers appear in only 2 hands — only hold them if you're stacking multiple.",joker:null,hands:8,
+{id:"wd",name:"Winds & Dragons",color:"#5C5247",icon:"🌀",desc:"Winds, Dragons, and specific number kongs",hold:"All Winds, all Dragons, Jokers, number kongs of 1-4 if you have 4+ of one value",pass:"Most number tiles, Flowers (appear in only 2 of 8 hands, don't hold a lone Flower)",combos:"Winds appear in 7 of 8 hands, they are your most important tiles here. Dragons appear in 5 of 8. Two hands use kongs of like numbers (1s or 2s), so 4-of-a-kind number tiles can fit. Flowers appear in only 2 hands, only hold them if you're stacking multiple.",joker:null,hands:8,
   ck:h=>{
     const winds=h.filter(t=>t.t==="w");
     const dragons=h.filter(t=>t.t==="d");
@@ -491,7 +491,7 @@ const SECS=[
     const nkc={};numKongs.forEach(t=>{nkc[t.n]=(nkc[t.n]||0)+1;});
     const hasKong=Object.values(nkc).some(v=>v>=4);
     const nums=h.filter(t=>t.t==="s").length;
-    // Honor group depth — singles give 0 credit
+    // Honor group depth, singles give 0 credit
     const windGroupDepth=Object.values(wc).reduce((a,n)=>a+(n>=4?4:n>=3?3:n>=2?2:0),0);
     const dragonGroupDepth=Object.values(dc).reduce((a,n)=>a+(n>=4?4:n>=3?3:n>=2?2:0),0);
     const honorDepth=windGroupDepth+dragonGroupDepth;
@@ -509,7 +509,7 @@ const SECS=[
 // Key: "1" here = any one number. All 3 hands use the SAME number throughout.
 // Flowers appear in hands 1 and 3 (as pairs or sextette of 6). Dragons in hands 2 and 3.
 // Critical: you must pick ONE number and mass all its copies.
-{id:"aln",name:"Like Numbers",color:"#2460A8",icon:"🔵",desc:"All one number — kongs & pairs of the same number",hold:"4+ of one number, Flowers, Jokers, Dragons",pass:"All other numbers — spread is your enemy. Pass any number that isn't your target immediately",combos:"Pick your number by round 1 and commit hard — spreading across two numbers kills your score. Flowers are critical: one hand uses a sextette of 6 Flowers (1111 FFFFFF 1111). Dragons appear in 2 of 3 hands. You need 8–12 tiles of a single number, so Jokers are essential.",joker:null,hands:3,
+{id:"aln",name:"Like Numbers",color:"#2460A8",icon:"🔵",desc:"All one number, kongs & pairs of the same number",hold:"4+ of one number, Flowers, Jokers, Dragons",pass:"All other numbers, spread is your enemy. Pass any number that isn't your target immediately",combos:"Pick your number by round 1 and commit hard, spreading across two numbers kills your score. Flowers are critical: one hand uses a sextette of 6 Flowers (1111 FFFFFF 1111). Dragons appear in 2 of 3 hands. You need 8-12 tiles of a single number, so Jokers are essential.",joker:null,hands:3,
   ck:h=>{
     const nc={};h.filter(t=>t.t==="s").forEach(t=>{nc[t.n]=(nc[t.n]||0)+1;});
     const vals=Object.values(nc);
@@ -519,7 +519,7 @@ const SECS=[
     const dragons=h.filter(t=>t.t==="d").length;
     const jk=h.filter(t=>t.t==="j").length;
     const winds=h.filter(t=>t.t==="w").length;
-    // Concentration scoring — must have deep stacks of ONE number
+    // Concentration scoring, must have deep stacks of ONE number
     const dens=best>=7?0.52:best>=6?0.42:best>=5?0.32:best>=4?0.22:best>=3?0.13:best>=2?0.06:0;
     const flBonus=flowers>=4?0.12:flowers>=2?0.06:flowers>=1?0.03:0;
     const support=dragons*0.03+jk*0.07;
@@ -533,12 +533,12 @@ const SECS=[
 // Hands: 11111 1111 11111 (3 suits, any like nos.) |
 //        FF 11111 22 33333 (1 suit, any 3 consec. nos.) |
 //        11111 44444 DDDD (2 nos. in 1 suit w opp. dragon)
-// Key: Only 3 hands. Quints require 5 of a single tile — impossible without 2+ Jokers.
+// Key: Only 3 hands. Quints require 5 of a single tile, impossible without 2+ Jokers.
 // Two Jokers are the MINIMUM entry requirement. Without them, abandon immediately.
-{id:"q",name:"Quints",color:"#7B5CB0",icon:"🟣",desc:"Five of a kind — requires 2+ Jokers",hold:"Jokers (mandatory — need 2+), 3–4 of any tile, Flowers",pass:"Everything else if you don't have 2 Jokers — pivot immediately",combos:"Without 2 Jokers, this section is unreachable — abandon it in round 1. With 2+ Jokers and 3–4 of a specific tile, commit to stacking that tile. Flowers appear in hand 2 (FF 11111 22 33333). The third hand requires the OPPOSITE Dragon (not matching) — hold both dragon types if you have them.",joker:null,hands:3,
+{id:"q",name:"Quints",color:"#7B5CB0",icon:"🟣",desc:"Five of a kind, requires 2+ Jokers",hold:"Jokers (mandatory, need 2+), 3-4 of any tile, Flowers",pass:"Everything else if you don't have 2 Jokers, pivot immediately",combos:"Without 2 Jokers, this section is unreachable, abandon it in round 1. With 2+ Jokers and 3-4 of a specific tile, commit to stacking that tile. Flowers appear in hand 2 (FF 11111 22 33333). The third hand requires the OPPOSITE Dragon (not matching), hold both dragon types if you have them.",joker:null,hands:3,
   ck:h=>{
     const jk=h.filter(t=>t.t==="j").length;
-    // Without 2 jokers, quints are nearly impossible — hard floor
+    // Without 2 jokers, quints are nearly impossible, hard floor
     if(jk<2)return Math.max(0,(jk*0.04));
     const c={};
     h.filter(t=>t.t==="s").forEach(t=>{const k=`${t.s}|${t.n}`;c[k]=(c[k]||0)+1;});
@@ -553,14 +553,14 @@ const SECS=[
     return Math.max(0,Math.min(base+tileBonus+support,1));
   }},
 
-// ── Singles & Pairs (6 hands) — CONCEALED ONLY, NO JOKERS ───────────────────
+// ── Singles & Pairs (6 hands), CONCEALED ONLY, NO JOKERS ───────────────────
 // Hands: NN EE WW SS 1D 1D 1D | 2 4 66 88 2 4 66 88 88 |
 //        FF 3369 3669 3699 | 11 22 33 44 55 66 77 (1 suit, any 7 consec.) |
 //        11 357 99 11 357 99 | FF 2026 2026 2026
 // CONCEALED_ONLY: no exposures. JOKERS_PROHIBITED: jokers cannot be used in singles or pairs.
 // Key: All pairs and singles. Flowers appear in 3/6 hands. Specific number pairs.
 // The 7-consecutive hand (11 22 33 44 55 66 77) is very specific.
-{id:"sp",name:"Singles & Pairs",color:"#2E9485",icon:"🩵",desc:"Only singles and pairs — fully concealed, no Jokers",hold:"Pairs (especially 2026 tiles, 369 tiles, consecutive same-suit pairs), Flowers",pass:"Triples and quads — any group of 3+ is structurally wrong here",combos:"Fully concealed — no exposures allowed. Jokers are completely useless (cannot be a single or in a pair) and cannot be passed in the Charleston, so you're stuck with any you're dealt. Build pairs of matching tiles across all three suits. Flowers count as natural pairs (FF together). One hand uses 7 consecutive same-suit pairs — if you see a run of paired numbers in one suit, protect them.",joker:"Jokers CANNOT be used in Singles & Pairs — not as a single, not in a pair. They have zero value here and cannot be passed away during the Charleston. If you're dealt Jokers and commit to S&P, you're playing shorthanded — factor this in before choosing this section.",hands:6,
+{id:"sp",name:"Singles & Pairs",color:"#2E9485",icon:"🩵",desc:"Only singles and pairs, fully concealed, no Jokers",hold:"Pairs (especially 2026 tiles, 369 tiles, consecutive same-suit pairs), Flowers",pass:"Triples and quads, any group of 3+ is structurally wrong here",combos:"Fully concealed, no exposures allowed. Jokers are completely useless (cannot be a single or in a pair) and cannot be passed in the Charleston, so you're stuck with any you're dealt. Build pairs of matching tiles across all three suits. Flowers count as natural pairs (FF together). One hand uses 7 consecutive same-suit pairs, if you see a run of paired numbers in one suit, protect them.",joker:"Jokers CANNOT be used in Singles & Pairs, not as a single, not in a pair. They have zero value here and cannot be passed away during the Charleston. If you're dealt Jokers and commit to S&P, you're playing shorthanded, factor this in before choosing this section.",hands:6,
   ck:h=>{
     // For S&P: group by exact tile identity
     const c={};
@@ -574,9 +574,9 @@ const SECS=[
     const flowers=h.filter(t=>t.t==="f").length;
     // Jokers are anti-tiles for this section
     const jkPenalty=jk*0.08;
-    // Triples are structurally wrong — hard penalty
+    // Triples are structurally wrong, hard penalty
     const triplePenalty=triples*0.10;
-    // Pairs are the primary signal — boosted scale
+    // Pairs are the primary signal, boosted scale
     const pairScore=pairs>=7?0.58:pairs>=6?0.48:pairs>=5?0.37:pairs>=4?0.26:pairs>=3?0.16:pairs>=2?0.08:pairs*0.03;
     // Flowers act as pairs in S&P (they count as natural pairs)
     const flBonus=flowers>=2?0.05:flowers>=1?0.025:0;
@@ -600,7 +600,7 @@ const SECS=[
   }},
 ];
 
-// Section metadata for IQ scoring — calibrated to 2026 NMJL card hand analysis
+// Section metadata for IQ scoring, calibrated to 2026 NMJL card hand analysis
 // strongNums: numbers appearing in majority of section's hands (hold priority)
 // weakNums: numbers that never or rarely appear in this section (pass immediately)
 // riskyPass: numbers so valuable they cost points if accidentally passed
@@ -633,7 +633,7 @@ const SECTION_META={
 // fit() counts tiles already in rack vs tiles needed.
 // Jokers are wild for pungs/kongs (not singles/pairs/flowers).
 //
-// CONSTRAINT ENFORCEMENT — all card parentheticals are now modeled:
+// CONSTRAINT ENFORCEMENT, all card parentheticals are now modeled:
 //  • "Any 1 Suit"      → countNumSuit per suit, Math.max over suits
 //  • "Any 2 Suits"     → try all 3 suit-pair combos, Math.max
 //  • "Any 3 Suits"     → requires tiles spread across all 3 suits
@@ -666,7 +666,7 @@ function dragons(rack,v){return v?countTile(rack,t=>t.t==="d"&&t.v===v):countTil
 function matchingDragon(rack,suit){
   if(suit==="bam") return dragons(rack,"Grn")+dragons(rack,"Soap");
   if(suit==="crak")return dragons(rack,"Red")+dragons(rack,"Soap");
-  return dragons(rack,"Soap")+dragons(rack,"Grn")+dragons(rack,"Red"); // dot — Soap matches, others ok
+  return dragons(rack,"Soap")+dragons(rack,"Grn")+dragons(rack,"Red"); // dot, Soap matches, others ok
 }
 function oppDragon(rack,suit){
   if(suit==="bam") return dragons(rack,"Red")+dragons(rack,"Soap");
@@ -682,7 +682,7 @@ function groupFit(have,jokerPool,need){
   return{natural,jk,total:natural+jk,complete:natural+jk>=need};
 }
 
-// Score a hand's fit: returns 0–1 (fraction of hand slots filled by rack)
+// Score a hand's fit: returns 0-1 (fraction of hand slots filled by rack)
 // groups = array of {have, need} where have = tiles in rack, need = tiles required
 // jokerPool = jokers available (jokers can sub for pungs/kongs but not singles/pairs/flowers)
 function handFitScore(groups,jokerPool,totalSlots){
@@ -710,7 +710,7 @@ const HAND_CATALOG=[
   // 2026 SECTION
   // ════════════════════════════════════════════════════════════════
 
-  // 222 000 2222 6666 — Any 2 Suits
+  // 222 000 2222 6666, Any 2 Suits
   // 2s from one suit, Soap (0) from any, 2s from same/other suit, 6s from a suit
   // Enforce: 2s and 6s must come from at most 2 suits combined
   mkHand("222 000 2222 6666","2026",25,false,r=>{
@@ -723,7 +723,7 @@ const HAND_CATALOG=[
     }));
   }),
 
-  // 2026 DDD 2222 DDD — Any 2 Suits w Matching Dragons, Kong 2 or 6
+  // 2026 DDD 2222 DDD, Any 2 Suits w Matching Dragons, Kong 2 or 6
   // Singles: 2-soap-2-6 (the "2026" sequence); DDD = pung matching dragon; 2222 = kong 2; DDD = pung matching dragon
   // "Kong 2 or 6" means the kong group is 2s OR 6s (try both)
   mkHand("2026 DDD 2222 DDD","2026",25,false,r=>{
@@ -735,7 +735,7 @@ const HAND_CATALOG=[
         const t6s1=countNumSuit(r,6,s1),t6s2=countNumSuit(r,6,s2);
         const t2=t2s1+t2s2,t6=t6s1+t6s2;
         const kongTile=kongNum===2?t2:t6;
-        // "2026" singles: need one 2, one Soap(0), one 2, one 6 — all noJoker
+        // "2026" singles: need one 2, one Soap(0), one 2, one 6, all noJoker
         // Matching dragon = best matching dragon across s1/s2
         const md=Math.max(matchingDragon(r,s1),matchingDragon(r,s2));
         const sc=handFitScore([
@@ -749,7 +749,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // FFF 2026 222 6666 — Any 3 Suits
+  // FFF 2026 222 6666, Any 3 Suits
   // Flowers(3) + 2026 singles (one each: 2,0,2,6) + pung 2 + kong 6
   // "Any 3 Suits" means the number tiles should come from 3 different suits
   mkHand("FFF 2026 222 6666","2026",25,false,r=>{
@@ -769,7 +769,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // 22 00 222 666 NEWS — Any 2 Suits
+  // 22 00 222 666 NEWS, Any 2 Suits
   // Pair 2 + pair Soap + pung 2 + pung 6 + NEWS (all 4 winds, one each)
   mkHand("22 00 222 666 NEWS","2026",30,false,r=>{
     const jk=jokers(r);const soap=dragons(r,"Soap");const w=winds(r);
@@ -787,7 +787,7 @@ const HAND_CATALOG=[
   // 2468 SECTION
   // ════════════════════════════════════════════════════════════════
 
-  // 222 444 6666 8888 — Any 1 or 2 Suits
+  // 222 444 6666 8888, Any 1 or 2 Suits
   // Try 1-suit (per suit) and 2-suit combos, take best
   mkHand("222 444 6666 8888","2468",25,false,r=>{
     const jk=jokers(r);
@@ -805,8 +805,8 @@ const HAND_CATALOG=[
     return Math.max(single,double);
   }),
 
-  // FF 2222 44 66 8888 — Any 2 Suits
-  // Flowers(2) + kong 2 + pair 4 + pair 6 + kong 8 — pairs are noJoker
+  // FF 2222 44 66 8888, Any 2 Suits
+  // Flowers(2) + kong 2 + pair 4 + pair 6 + kong 8, pairs are noJoker
   mkHand("FF 2222 44 66 8888","2468",30,false,r=>{
     const jk=jokers(r);const fl=flowers(r);
     return Math.max(...SUIT_PAIRS.map(([s1,s2])=>{
@@ -821,7 +821,7 @@ const HAND_CATALOG=[
     }));
   }),
 
-  // EE 22 444 666 88 WW — Any 1 Suit, East and West Only
+  // EE 22 444 666 88 WW, Any 1 Suit, East and West Only
   // All number tiles must be same suit; winds must be E and W only
   mkHand("EE 22 444 666 88 WW","2468",30,false,r=>{
     const jk=jokers(r);
@@ -833,7 +833,7 @@ const HAND_CATALOG=[
     ],jk,14)));
   }),
 
-  // 2222 DDD 8888 DDD — Any 2 Suits w Matching Dragons, These Nos. Only (2 and 8)
+  // 2222 DDD 8888 DDD, Any 2 Suits w Matching Dragons, These Nos. Only (2 and 8)
   // Two kongs of 2 and 8; two pungs of matching dragons
   mkHand("2222 DDD 8888 DDD","2468",25,false,r=>{
     const jk=jokers(r);
@@ -845,7 +845,7 @@ const HAND_CATALOG=[
     }));
   }),
 
-  // FFF 22 44 666 8888 — Any 1 Suit
+  // FFF 22 44 666 8888, Any 1 Suit
   // Flowers(3) + pair 2 + pair 4 + pung 6 + kong 8
   mkHand("FFF 22 44 666 8888","2468",25,false,r=>{
     const jk=jokers(r);const fl=flowers(r);
@@ -857,7 +857,7 @@ const HAND_CATALOG=[
     ],jk,14)));
   }),
 
-  // 2468 2222 D 2222 D — Any 3 Suits, Like Kongs 2,4,6 or 8 w Matching Dragon
+  // 2468 2222 D 2222 D, Any 3 Suits, Like Kongs 2,4,6 or 8 w Matching Dragon
   // Singles of 2,4,6,8 (each from any suit), then two groups: kong of same number + matching dragon single
   // "Kong 2,4,6 or 8" = the repeated kong number is one of these evens
   mkHand("2468 2222 D 2222 D","2468",25,false,r=>{
@@ -867,7 +867,7 @@ const HAND_CATALOG=[
       // Singles 2,4,6,8 from any suits (cross-suit OK for singles row)
       const t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
       const kongTile=kongNum===2?t2:kongNum===4?t4:kongNum===6?t6:t8;
-      // Matching dragon — try each suit for the kong group
+      // Matching dragon, try each suit for the kong group
       for(const s of ALL_SUITS){
         const md=matchingDragon(r,s);
         const sc=handFitScore([
@@ -882,7 +882,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // FFF 2468 FFF 2222 — Any 2 Suits, Kong 2,4,6 or 8
+  // FFF 2468 FFF 2222, Any 2 Suits, Kong 2,4,6 or 8
   // Flowers(3) + singles 2,4,6,8 + Flowers(3) + kong of one even number
   mkHand("FFF 2468 FFF 2222","2468",30,false,r=>{
     const jk=jokers(r);const fl=flowers(r);
@@ -906,7 +906,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // FF 246 888 246 888 — Any 2 Suits — CONCEALED
+  // FF 246 888 246 888, Any 2 Suits, CONCEALED
   // Two identical groups of singles(2,4,6)+pung(8), each from same 2 suits
   mkHand("FF 246 888 246 888","2468",30,true,r=>{
     const fl=flowers(r);
@@ -927,7 +927,7 @@ const HAND_CATALOG=[
   // 369 SECTION
   // ════════════════════════════════════════════════════════════════
 
-  // 333 666 6666 9999 — Any 2 or 3 Suits
+  // 333 666 6666 9999, Any 2 or 3 Suits
   mkHand("333 666 6666 9999","369",25,false,r=>{
     const jk=jokers(r);
     const two=Math.max(...SUIT_PAIRS.map(([s1,s2])=>{
@@ -942,7 +942,7 @@ const HAND_CATALOG=[
     return Math.max(two,three);
   }),
 
-  // 33 66 333 666 9999 — Any 3 Suits
+  // 33 66 333 666 9999, Any 3 Suits
   mkHand("33 66 333 666 9999","369",25,false,r=>{
     const jk=jokers(r);
     const t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9);
@@ -952,7 +952,7 @@ const HAND_CATALOG=[
     ],jk,14);
   }),
 
-  // FFF 33 666 99 DDDD — 1 Suit w Matching or Opp Dragon
+  // FFF 33 666 99 DDDD, 1 Suit w Matching or Opp Dragon
   // Try both matching and opposite dragon for each suit
   mkHand("FFF 33 666 99 DDDD","369",25,false,r=>{
     const jk=jokers(r);const fl=flowers(r);
@@ -971,7 +971,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // 33 66 666 999 NEWS — Any 2 Suits
+  // 33 66 666 999 NEWS, Any 2 Suits
   mkHand("33 66 666 999 NEWS","369",30,false,r=>{
     const jk=jokers(r);const w=winds(r);
     return Math.max(...SUIT_PAIRS.map(([s1,s2])=>{
@@ -985,7 +985,7 @@ const HAND_CATALOG=[
     }));
   }),
 
-  // FF 3369 3333 3333 — Any 3 Suits, Pair 3,6, or 9, Kongs Match Pair
+  // FF 3369 3333 3333, Any 3 Suits, Pair 3,6, or 9, Kongs Match Pair
   // FF + singles(pairNum, pairNum, other1, other2) + kong pairNum (suit A) + kong pairNum (suit B)
   // "Pair 3,6 or 9" = pairNum can be 3, 6, or 9; the other two singles are the remaining two of {3,6,9}
   mkHand("FF 3369 3333 3333","369",25,false,r=>{
@@ -1009,7 +1009,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // FF 333 666 999 369 — Any 2 Suits — CONCEALED
+  // FF 333 666 999 369, Any 2 Suits, CONCEALED
   mkHand("FF 333 666 999 369","369",30,true,r=>{
     const fl=flowers(r);
     return Math.max(...SUIT_PAIRS.map(([s1,s2])=>{
@@ -1028,7 +1028,7 @@ const HAND_CATALOG=[
   // 13579 SECTION
   // ════════════════════════════════════════════════════════════════
 
-  // 11 333 55 777 9999 — Any 1 or 3 Suits
+  // 11 333 55 777 9999, Any 1 or 3 Suits
   mkHand("11 333 55 777 9999","13579",25,false,r=>{
     const jk=jokers(r);
     const single=Math.max(...ALL_SUITS.map(s=>handFitScore([
@@ -1043,7 +1043,7 @@ const HAND_CATALOG=[
     return Math.max(single,three);
   }),
 
-  // 111 333 3333 5555 -or- 555 777 7777 9999 — Any 2 Suits
+  // 111 333 3333 5555 -or- 555 777 7777 9999, Any 2 Suits
   // Pattern: pung(A) + pung(B) + kong(B) + kong(C) where A,B,C are consecutive odd nos.
   // Card shows 1,3,5 and 5,7,9 as examples; all consecutive odd triples are valid.
   mkHand("111 333 3333 5555","13579",25,false,r=>{
@@ -1062,7 +1062,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // NN 1111 33 5555 SS -or- NN 5555 77 9999 SS — Any 1 Suit, North and South Only
+  // NN 1111 33 5555 SS -or- NN 5555 77 9999 SS, Any 1 Suit, North and South Only
   // Pattern: NN + kong(A) + pair(B) + kong(C) + SS where A,B,C are consecutive odds.
   mkHand("NN 1111 33 5555 SS","13579",30,false,r=>{
     const jk=jokers(r);const n=winds(r,"N"),s=winds(r,"S");
@@ -1081,9 +1081,9 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // 113579 1111 1111 — Any 3 Suits, Pair Any Odd No., Kongs Match Pair
+  // 113579 1111 1111, Any 3 Suits, Pair Any Odd No., Kongs Match Pair
   // Singles: 1,1,3,5,7,9; then two kongs of the same odd number (matching pair)
-  // 113579 1111 1111 — Any 3 Suits, Pair Any Odd No., Kongs Match Pair
+  // 113579 1111 1111, Any 3 Suits, Pair Any Odd No., Kongs Match Pair
   // Singles: pairNum pairNum 3 5 7 9 (with pairNum appearing twice, others once each)
   // Kongs: two kongs of pairNum, one per suit (in 2 of the 3 suits)
   mkHand("113579 1111 1111","13579",25,false,r=>{
@@ -1108,7 +1108,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // FFF 11 33 555 DDDD -or- FFF 55 77 999 DDDD — Any 1 Suit w Matching Dragon
+  // FFF 11 33 555 DDDD -or- FFF 55 77 999 DDDD, Any 1 Suit w Matching Dragon
   // Pattern: FFF + pair(A) + pair(B) + pung(C) + dragon kong, A,B,C consecutive odds
   mkHand("FFF 11 33 555 DDDD","13579",25,false,r=>{
     const jk=jokers(r);const fl=flowers(r);
@@ -1128,7 +1128,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // 11 33 111 333 5555 -or- 55 77 555 777 9999 — Any 3 Suits
+  // 11 33 111 333 5555 -or- 55 77 555 777 9999, Any 3 Suits
   // Pattern: pair(A) + pair(B) + pung(A) + pung(B) + kong(C), A,B,C consecutive odds
   mkHand("11 33 111 333 5555","13579",25,false,r=>{
     const jk=jokers(r);
@@ -1145,7 +1145,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // 1111 33 55 77 9999 — Any 1 or 2 Suits
+  // 1111 33 55 77 9999, Any 1 or 2 Suits
   mkHand("1111 33 55 77 9999","13579",30,false,r=>{
     const jk=jokers(r);
     const single=Math.max(...ALL_SUITS.map(s=>handFitScore([
@@ -1167,7 +1167,7 @@ const HAND_CATALOG=[
     return Math.max(single,double);
   }),
 
-  // FF 11 33 55 111 111 -or- FF 55 77 99 555 555 — Any 3 Suits, These Nos. Only — CONCEALED
+  // FF 11 33 55 111 111 -or- FF 55 77 99 555 555, Any 3 Suits, These Nos. Only, CONCEALED
   // Pattern: FF + pair(A) + pair(B) + pair(C) + pung(A,s1) + pung(A,s2), all 3 consecutive odds
   // "These Nos. Only" = A,B,C must be 1,3,5 or 5,7,9
   mkHand("FF 11 33 55 111 111","13579",35,true,r=>{
@@ -1189,7 +1189,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // FF 135 777 999 DDD — Any 1 Suit w Opp Dragon — CONCEALED
+  // FF 135 777 999 DDD, Any 1 Suit w Opp Dragon, CONCEALED
   mkHand("FF 135 777 999 DDD","13579",30,true,r=>{
     const fl=flowers(r);
     let best=0;
@@ -1209,7 +1209,7 @@ const HAND_CATALOG=[
   // CONSECUTIVE RUN SECTION
   // ════════════════════════════════════════════════════════════════
 
-  // 11 222 33 444 5555 — Any 1 Suit, These Nos. Only
+  // 11 222 33 444 5555, Any 1 Suit, These Nos. Only
   mkHand("11 222 33 444 5555","cr",25,false,r=>{
     const jk=jokers(r);
     return Math.max(...ALL_SUITS.map(s=>handFitScore([
@@ -1218,7 +1218,7 @@ const HAND_CATALOG=[
     ],jk,14)));
   }),
 
-  // 55 666 77 888 9999 — Any 1 Suit, These Nos. Only
+  // 55 666 77 888 9999, Any 1 Suit, These Nos. Only
   mkHand("55 666 77 888 9999","cr",25,false,r=>{
     const jk=jokers(r);
     return Math.max(...ALL_SUITS.map(s=>handFitScore([
@@ -1227,7 +1227,7 @@ const HAND_CATALOG=[
     ],jk,14)));
   }),
 
-  // FFF 1111 234 5555 — Any 1 or 2 Suits, Any 5 Consec Nos.
+  // FFF 1111 234 5555, Any 1 or 2 Suits, Any 5 Consec Nos.
   mkHand("FFF 1111 234 5555","cr",25,false,r=>{
     const jk=jokers(r);const fl=flowers(r);
     let best=0;
@@ -1257,7 +1257,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // 11 22 111 222 3333 — Any 1 or 3 Suits, Any 3 Consec Nos.
+  // 11 22 111 222 3333, Any 1 or 3 Suits, Any 3 Consec Nos.
   mkHand("11 22 111 222 3333","cr",25,false,r=>{
     const jk=jokers(r);
     let best=0;
@@ -1282,7 +1282,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // 111 222 3333 4444 — Any 1 or 2 Suits, Any 4 Consec Nos.
+  // 111 222 3333 4444, Any 1 or 2 Suits, Any 4 Consec Nos.
   mkHand("111 222 3333 4444","cr",25,false,r=>{
     const jk=jokers(r);
     let best=0;
@@ -1307,7 +1307,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // FFF 11 22 333 DDDD — 1 or 2 Suits, Any Run, Dragons Match Middle No.
+  // FFF 11 22 333 DDDD, 1 or 2 Suits, Any Run, Dragons Match Middle No.
   // "Ds Match Middle No." = dragon matches suit of the MIDDLE number in the run
   mkHand("FFF 11 22 333 DDDD","cr",25,false,r=>{
     const jk=jokers(r);const fl=flowers(r);
@@ -1340,7 +1340,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // 1111 FFFFFF 2222 — Any 1 Suit, Any 2 Consec Nos.
+  // 1111 FFFFFF 2222, Any 1 Suit, Any 2 Consec Nos.
   mkHand("1111 FFFFFF 2222","cr",30,false,r=>{
     const jk=jokers(r);const fl=flowers(r);
     let best=0;
@@ -1355,7 +1355,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // FF 1111 2222 3333 — Any 1 or 3 Suits, Any 3 Consec Nos.
+  // FF 1111 2222 3333, Any 1 or 3 Suits, Any 3 Consec Nos.
   mkHand("FF 1111 2222 3333","cr",25,false,r=>{
     const jk=jokers(r);const fl=flowers(r);
     let best=0;
@@ -1378,12 +1378,12 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // 1 22 333 1 22 333 44 — Any 3 Suits, Any 4 Consec Nos. — CONCEALED
+  // 1 22 333 1 22 333 44, Any 3 Suits, Any 4 Consec Nos., CONCEALED
   mkHand("1 22 333 1 22 333 44","cr",35,true,r=>{
     let best=0;
     for(let start=1;start<=6;start++){
       const [a,b,c,d]=[start,start+1,start+2,start+3];
-      // Use pooled (any 3 suits) tile counts — concealed, no jokers
+      // Use pooled (any 3 suits) tile counts, concealed, no jokers
       const ta=countNum(r,a),tb=countNum(r,b),tc=countNum(r,c),td=countNum(r,d);
       const sc=handFitScore([
         {have:ta,need:1,noJoker:true},{have:tb,need:2,noJoker:true},{have:tc,need:3,noJoker:true},
@@ -1399,7 +1399,7 @@ const HAND_CATALOG=[
   // WINDS & DRAGONS SECTION
   // ════════════════════════════════════════════════════════════════
 
-  // NNNN EEE WWW SSSS -or- NNN EEEE WWWW SSS — Any Winds
+  // NNNN EEE WWW SSSS -or- NNN EEEE WWWW SSS, Any Winds
   // Card shows this as ONE hand with two valid wind distributions. Both forms scored.
   mkHand("NNNN EEE WWW SSSS","wd",25,false,r=>{
     const jk=jokers(r);
@@ -1409,7 +1409,7 @@ const HAND_CATALOG=[
     return Math.max(formA,formB);
   }),
 
-  // 1234 DDD DDD DDDD — Any 4 Consec Nos. in Any 1 Suit, Any 3 Dragons
+  // 1234 DDD DDD DDDD, Any 4 Consec Nos. in Any 1 Suit, Any 3 Dragons
   // Singles: 4 consecutive number tiles (same suit). Dragon groups: pung Red + pung Grn + kong Soap (or any permutation of 3 dragon types)
   // "Any 3 Dragons" = one group of each of the 3 dragon types (pung+pung+kong = 3+3+4=10)
   mkHand("1234 DDD DDD DDDD","wd",25,false,r=>{
@@ -1437,7 +1437,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // NNN 1111 1111 SSS — Any Like Odd Nos. in Any 2 Suits
+  // NNN 1111 1111 SSS, Any Like Odd Nos. in Any 2 Suits
   mkHand("NNN 1111 1111 SSS","wd",25,false,r=>{
     const jk=jokers(r);const n=winds(r,"N"),s=winds(r,"S");
     let best=0;
@@ -1451,7 +1451,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // EEE 2222 2222 WWW — Any Like Even Nos. in Any 2 Suits
+  // EEE 2222 2222 WWW, Any Like Even Nos. in Any 2 Suits
   mkHand("EEE 2222 2222 WWW","wd",25,false,r=>{
     const jk=jokers(r);const e=winds(r,"E"),w=winds(r,"W");
     let best=0;
@@ -1465,7 +1465,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // FFF NNNN FFF DDDD — Any Wind, Any Dragon
+  // FFF NNNN FFF DDDD, Any Wind, Any Dragon
   // Try each wind type for the kong, and each dragon type for the dragon kong
   mkHand("FFF NNNN FFF DDDD","wd",25,false,r=>{
     const jk=jokers(r);const fl=flowers(r);
@@ -1484,7 +1484,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // 1 N 2 EE 3 WWW 4 SSSS — Any 1 Suit, These Nos. Only
+  // 1 N 2 EE 3 WWW 4 SSSS, Any 1 Suit, These Nos. Only
   mkHand("1 N 2 EE 3 WWW 4 SSSS","wd",25,false,r=>{
     const jk=jokers(r);
     const n=winds(r,"N"),e=winds(r,"E"),w=winds(r,"W"),s=winds(r,"S");
@@ -1496,7 +1496,7 @@ const HAND_CATALOG=[
     ],jk,14)));
   }),
 
-  // FF NNNN SSSS DD DD -or- FF EEEE WWWW DD DD — Any 2 Dragons
+  // FF NNNN SSSS DD DD -or- FF EEEE WWWW DD DD, Any 2 Dragons
   // Two flowers + kong of one wind pair + two pairs of ANY two dragon types (can be same or different)
   mkHand("FF NNNN SSSS DD DD","wd",25,false,r=>{
     const jk=jokers(r);const fl=flowers(r);
@@ -1505,7 +1505,7 @@ const HAND_CATALOG=[
     const drTypes=["Red","Grn","Soap"];
     // Try both wind variants (N+S or E+W)
     for(const [wa,wb] of [[n,s],[e,w]]){
-      // "Any 2 Dragons" — two pairs; try all ordered combos of dragon types
+      // "Any 2 Dragons", two pairs; try all ordered combos of dragon types
       for(const d1 of drTypes){
         const dr1=dragons(r,d1);
         // Same dragon type for both pairs (4 of same dragon split as 2+2)
@@ -1528,7 +1528,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // NN EEE 2026 WWW SS — 2026 Any 1 Suit — CONCEALED
+  // NN EEE 2026 WWW SS, 2026 Any 1 Suit, CONCEALED
   mkHand("NN EEE 2026 WWW SS","wd",30,true,r=>{
     const soap=dragons(r,"Soap");
     const n=winds(r,"N"),e=winds(r,"E"),w=winds(r,"W"),s=winds(r,"S");
@@ -1544,7 +1544,7 @@ const HAND_CATALOG=[
   // ANY LIKE NUMBERS SECTION
   // ════════════════════════════════════════════════════════════════
 
-  // 1111 FFFFFF 1111 — Any 2 Suits
+  // 1111 FFFFFF 1111, Any 2 Suits
   mkHand("1111 FFFFFF 1111","aln",30,false,r=>{
     const jk=jokers(r);const fl=flowers(r);
     let best=0;
@@ -1558,7 +1558,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // 1111 D 111 D 1111 D — Any 3 Suits w Matching Dragon
+  // 1111 D 111 D 1111 D, Any 3 Suits w Matching Dragon
   // Three groups of same number across all 3 suits, each group has a matching dragon single.
   // "Matching Dragon" = the dragon color matches its adjacent suit group.
   // For scoring: use the best matching dragon for the dominant suit spread.
@@ -1572,7 +1572,7 @@ const HAND_CATALOG=[
       const md0=matchingDragon(r,perSuit[0].s);
       const md1=matchingDragon(r,perSuit[1].s);
       const md2=matchingDragon(r,perSuit[2].s);
-      // We need 3 dragon singles total — one matching each suit group (noJoker)
+      // We need 3 dragon singles total, one matching each suit group (noJoker)
       // Best approximation: use the dragon pool that best covers all 3
       const sc=handFitScore([
         {have:perSuit[0].c,need:4},{have:md0,need:1,noJoker:true},
@@ -1584,7 +1584,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // FF 1111 11 1111 DD — Any 3 Suits w Any Dragon
+  // FF 1111 11 1111 DD, Any 3 Suits w Any Dragon
   mkHand("FF 1111 11 1111 DD","aln",25,false,r=>{
     const jk=jokers(r);const fl=flowers(r);const dr=dragons(r);
     let best=0;
@@ -1604,8 +1604,8 @@ const HAND_CATALOG=[
   // QUINTS SECTION
   // ════════════════════════════════════════════════════════════════
 
-  // 11111 1111 11111 — Any 3 Suits, Any Like Nos.
-  // Quint (5) in suit A, Kong (4) in suit B, Quint (5) in suit C — same number
+  // 11111 1111 11111, Any 3 Suits, Any Like Nos.
+  // Quint (5) in suit A, Kong (4) in suit B, Quint (5) in suit C, same number
   mkHand("11111 1111 11111","q",40,false,r=>{
     const jk=jokers(r);
     let best=0;
@@ -1617,7 +1617,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // FF 11111 22 33333 — Any 1 Suit, Any 3 Consec Nos.
+  // FF 11111 22 33333, Any 1 Suit, Any 3 Consec Nos.
   mkHand("FF 11111 22 33333","q",45,false,r=>{
     const jk=jokers(r);const fl=flowers(r);
     let best=0;
@@ -1634,7 +1634,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // 11111 44444 DDDD — Any 2 Nos. in Any 1 Suit w Opp Dragon
+  // 11111 44444 DDDD, Any 2 Nos. in Any 1 Suit w Opp Dragon
   mkHand("11111 44444 DDDD","q",40,false,r=>{
     const jk=jokers(r);
     let best=0;
@@ -1651,15 +1651,15 @@ const HAND_CATALOG=[
   }),
 
   // ════════════════════════════════════════════════════════════════
-  // SINGLES & PAIRS SECTION — CONCEALED, NO JOKERS
+  // SINGLES & PAIRS SECTION, CONCEALED, NO JOKERS
   // ════════════════════════════════════════════════════════════════
 
-  // NN EE WW SS 1D 1D 1D — Any 3 Suits, Any Like No. w Matching Dragon
+  // NN EE WW SS 1D 1D 1D, Any 3 Suits, Any Like No. w Matching Dragon
   mkHand("NN EE WW SS 1D 1D 1D","sp",50,true,r=>{
     let best=0;
     const n=winds(r,"N"),e=winds(r,"E"),w=winds(r,"W"),s=winds(r,"S");
     for(let num=1;num<=9;num++){
-      // "Matching Dragon" — try each suit for the number tiles
+      // "Matching Dragon", try each suit for the number tiles
       for(const su of ALL_SUITS){
         const t=countNumSuit(r,num,su);
         const md=matchingDragon(r,su);
@@ -1676,7 +1676,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // 2 4 66 88 2 4 66 88 88 — Any 3 Suits, These Nos. Only
+  // 2 4 66 88 2 4 66 88 88, Any 3 Suits, These Nos. Only
   // All tiles are singles or pairs from 2,4,6,8 spread across 3 suits
   mkHand("2 4 66 88 2 4 66 88 88","sp",50,true,r=>{
     const t2=countNum(r,2),t4=countNum(r,4),t6=countNum(r,6),t8=countNum(r,8);
@@ -1689,7 +1689,7 @@ const HAND_CATALOG=[
     ],0,14);
   }),
 
-  // FF 3369 3669 3699 — Any 3 Suits
+  // FF 3369 3669 3699, Any 3 Suits
   mkHand("FF 3369 3669 3699","sp",50,true,r=>{
     const fl=flowers(r),t3=countNum(r,3),t6=countNum(r,6),t9=countNum(r,9);
     return handFitScore([
@@ -1700,7 +1700,7 @@ const HAND_CATALOG=[
     ],0,14);
   }),
 
-  // 11 22 33 44 55 66 77 — Any 1 Suit, Any 7 Consec Nos.
+  // 11 22 33 44 55 66 77, Any 1 Suit, Any 7 Consec Nos.
   mkHand("11 22 33 44 55 66 77","sp",50,true,r=>{
     let best=0;
     for(const s of ALL_SUITS)for(let start=1;start<=3;start++){
@@ -1711,7 +1711,7 @@ const HAND_CATALOG=[
     return best;
   }),
 
-  // 11 357 99 11 357 99 — Any 2 Suits
+  // 11 357 99 11 357 99, Any 2 Suits
   mkHand("11 357 99 11 357 99","sp",50,true,r=>{
     return Math.max(...SUIT_PAIRS.map(([s1,s2])=>{
       const t1=countNumSuit(r,1,s1)+countNumSuit(r,1,s2);
@@ -1728,7 +1728,7 @@ const HAND_CATALOG=[
     }));
   }),
 
-  // FF 2026 2026 2026 — Any 3 Suits
+  // FF 2026 2026 2026, Any 3 Suits
   // Three repetitions of the 2026 pattern (2, Soap, 2, 6) across 3 suits
   mkHand("FF 2026 2026 2026","sp",75,true,r=>{
     const fl=flowers(r),t2=countNum(r,2),t6=countNum(r,6),soap=dragons(r,"Soap");
@@ -1741,7 +1741,7 @@ const HAND_CATALOG=[
   }),
 ];
 
-// ── HAND CONSTRAINTS — card-accurate suit/rule annotations for the Hand Browser ──
+// ── HAND CONSTRAINTS, card-accurate suit/rule annotations for the Hand Browser ──
 // Injected after catalog so the fit functions remain clean.
 const HAND_CONSTRAINTS={
   // 2026
@@ -1815,7 +1815,7 @@ HAND_CATALOG.forEach(h=>{if(HAND_CONSTRAINTS[h.label])h.constraint=HAND_CONSTRAI
 function recommendSpecificHands(rack,sectionId){
   if(!rack||!sectionId)return[];
   const hands=HAND_CATALOG.filter(h=>h.sec===sectionId);
-  // Use honest coverage (same as display) — not fit() which picks best-case suit permutations.
+  // Use honest coverage (same as display), not fit() which picks best-case suit permutations.
   // This ensures the inferred hand actually reflects what tiles the player is holding.
   const scored=hands.map(h=>{
     const{pct}=computeHonestCoverage(rack,h);
@@ -1829,16 +1829,16 @@ function recommendSpecificHands(rack,sectionId){
 // Each section belongs to exactly one family. Family determines coaching language.
 const HAND_FAMILIES={
   "Power":  {label:"Power Hand",emoji:"💪",color:"#7B5CB0",bg:"#F4EFFC",border:"#C4A8E8",
-    desc:"Built on jokers and set stacking. Your strength is raw tile depth — pungs and kongs.",
+    desc:"Built on jokers and set stacking. Your strength is raw tile depth, pungs and kongs.",
     sections:["q","aln"]},
   "Run":    {label:"Consecutive Run",emoji:"🟢",color:"#1B7D4E",bg:"#EDF7F1",border:"#8FC9A8",
-    desc:"Built on connected number sequences. Pungs and kongs within a tight 3–4 number window.",
+    desc:"Built on connected number sequences. Pungs and kongs within a tight 3-4 number window.",
     sections:["cr"]},
   "Number Pattern":{label:"Number Pattern",emoji:"🔢",color:"#B83232",bg:"#FEF0F0",border:"#E8A8A8",
-    desc:"Built on a specific number family — odds, evens, or multiples of 3.",
+    desc:"Built on a specific number family, odds, evens, or multiples of 3.",
     sections:["13579","2468","369"]},
   "Year":   {label:"Year Hand (2026)",emoji:"📅",color:"#B54E7A",bg:"#FDF0F6",border:"#E8A8CC",
-    desc:"Built on 2s, 6s, and Soap. Highly specific — needs both anchors from the start.",
+    desc:"Built on 2s, 6s, and Soap. Highly specific, needs both anchors from the start.",
     sections:["2026"]},
   "Honor":  {label:"Winds & Dragons",emoji:"🌀",color:"#5C5247",bg:"#F3F1EF",border:"#C0B8B0",
     desc:"Built on honor tiles. Pass all number tiles early and stack winds and dragons.",
@@ -1853,8 +1853,8 @@ function getHandFamily(sectionId){
 }
 
 // ─── CONCRETE PATH GENERATOR ──────────────────────────────────────────────────
-// Produces 1–2 specific, tile-grounded paths for the scorecard.
-// Uses the actual finalRack tile counts — never generic advice.
+// Produces 1-2 specific, tile-grounded paths for the scorecard.
+// Uses the actual finalRack tile counts, never generic advice.
 function generateHandPaths(finalRack,sortedSections,chosenSecId){
   if(!finalRack||!sortedSections||sortedSections.length===0)return{primary:null,secondary:null};
 
@@ -1892,7 +1892,7 @@ function generateHandPaths(finalRack,sortedSections,chosenSecId){
   const twos=numCounts[2]||0,sixes=numCounts[6]||0;
   const soap=countOf(t=>t.t==="d"&&t.v==="Soap");
 
-  // CR window analysis — find the best 4-wide window
+  // CR window analysis, find the best 4-wide window
   const crWindow=(()=>{
     const suitsPresent=["bam","crak","dot"];
     let bestW=null,bestDepth=0;
@@ -1923,67 +1923,67 @@ function generateHandPaths(finalRack,sortedSections,chosenSecId){
 
     if(id==="q"){
       anchor=jokers>=2?`${jokers} Jokers + ${bestNum?`${bestNum[1]}× ${bestNum[0]}`:"your best tile group"}`:"Jokers (need 2+)";
-      why=[jokers>=2?`${jokers} jokers let you build a quint around any tile you stack.`:"You're short on jokers — quints require 2+.",bestNum&&bestNum[1]>=3?`${bestNum[1]}× ${bestNum[0]} is already near-quint depth — stack it.`:"Identify your deepest tile group and commit to it now."];
+      why=[jokers>=2?`${jokers} jokers let you build a quint around any tile you stack.`:"You're short on jokers, quints require 2+.",bestNum&&bestNum[1]>=3?`${bestNum[1]}× ${bestNum[0]} is already near-quint depth, stack it.`:"Identify your deepest tile group and commit to it now."];
       keep=jokers>=2?["All Jokers",bestNum?`${bestNum[0]}s (your deepest group)`:"Your best tile group","Flowers"]:[`Need ${2-jokers} more joker(s) to make Quints viable`];
       pivot="If you don't draw another joker in the first 2 turns, pivot to Any Like Numbers.";
     } else if(id==="aln"){
       anchor=bestNum?`${bestNum[1]}× ${bestNum[0]}`:"Your deepest number";
-      why=[bestNum?`${bestNum[1]} of ${bestNum[0]} is your current best stack — ALN needs 8–12 of one number.`:"Identify one number to commit to immediately.",jokers>=1?`${jokers} joker${jokers>1?"s":""} help fill out kongs quickly.`:"No jokers — you'll need to draw your number consistently.",flowers>=2?`${flowers} flowers cover the sextette hand (1111 FFFFFF 1111).`:""];
+      why=[bestNum?`${bestNum[1]} of ${bestNum[0]} is your current best stack, ALN needs 8-12 of one number.`:"Identify one number to commit to immediately.",jokers>=1?`${jokers} joker${jokers>1?"s":""} help fill out kongs quickly.`:"No jokers, you'll need to draw your number consistently.",flowers>=2?`${flowers} flowers cover the sextette hand (1111 FFFFFF 1111).`:""];
       why=why.filter(Boolean);
       keep=[bestNum?`All ${bestNum[0]}s`:"Your target number","All Jokers","All Flowers"];
       pivot="If another player keeps drawing your number, shift to Any Like Numbers with the next best stack.";
     } else if(id==="cr"){
       const w=crWindow;
-      anchor=w?`${w.suit[0].toUpperCase()}${w.suit.slice(1)} ${w.nums[0]}–${w.nums[3]} window`:"Best consecutive window";
-      why=[w?`Your ${w.suit} suit has the strongest consecutive grouping (depth ${w.depth}) — that's your CR window.`:"No deep window yet — look for 3-4 numbers with multiple tiles in one suit.",flowers>=2?`${flowers} flowers help — one CR hand uses a flower sextette.`:"",jokers>=1?`${jokers} joker${jokers>1?"s":""} can plug gaps in your window.`:""];
+      anchor=w?`${w.suit[0].toUpperCase()}${w.suit.slice(1)} ${w.nums[0]}-${w.nums[3]} window`:"Best consecutive window";
+      why=[w?`Your ${w.suit} suit has the strongest consecutive grouping (depth ${w.depth}), that's your CR window.`:"No deep window yet, look for 3-4 numbers with multiple tiles in one suit.",flowers>=2?`${flowers} flowers help, one CR hand uses a flower sextette.`:"",jokers>=1?`${jokers} joker${jokers>1?"s":""} can plug gaps in your window.`:""];
       why=why.filter(Boolean);
-      keep=w?[`All ${w.suit} tiles in the ${w.nums[0]}–${w.nums[3]} range`,"All Flowers","All Jokers"]:["Identify your 4-number window before next discard","All Jokers","All Flowers"];
+      keep=w?[`All ${w.suit} tiles in the ${w.nums[0]}-${w.nums[3]} range`,"All Flowers","All Jokers"]:["Identify your 4-number window before next discard","All Jokers","All Flowers"];
       pivot="If your window stays shallow after 2 draws, pivot to 2468 or 13579 depending on your number parity.";
     } else if(id==="2468"){
       const sixStr=sixes>0?`${sixes}× 6`:"missing 6s";
       const total=evens.reduce((s,e)=>s+e.c,0);
-      anchor=`${total} even tiles — ${sixStr} (your anchor)`;
+      anchor=`${total} even tiles, ${sixStr} (your anchor)`;
       const deepest=[...evens].sort((a,b)=>b.c-a.c)[0];
-      why=[sixes>=2?`${sixes} sixes are a strong anchor — 6 appears in 7 of 8 hands.`:"You need 6s — they appear in 7 of 8 hands. Draw priority.",deepest&&deepest.c>=2?`${deepest.c}× ${deepest.n} is your next deepest group — build on it.`:"Start pairing your even numbers.",flowers>=2?`${flowers} flowers support this section well.`:""];
+      why=[sixes>=2?`${sixes} sixes are a strong anchor, 6 appears in 7 of 8 hands.`:"You need 6s, they appear in 7 of 8 hands. Draw priority.",deepest&&deepest.c>=2?`${deepest.c}× ${deepest.n} is your next deepest group, build on it.`:"Start pairing your even numbers.",flowers>=2?`${flowers} flowers support this section well.`:""];
       why=why.filter(Boolean);
       keep=[sixes>0?"All 6s (never pass)":null,evens.filter(e=>e.c>=2).map(e=>`${e.n}s (${e.c} tiles)`),"All Flowers","All Jokers"].flat().filter(Boolean);
-      pivot="If evens stay thin after 3 draws, check if 369 fits better — 6s serve both sections.";
+      pivot="If evens stay thin after 3 draws, check if 369 fits better, 6s serve both sections.";
     } else if(id==="369"){
       const total=t369.reduce((s,e)=>s+e.c,0);
-      anchor=`${total} tiles of 3/6/9${sixes>0?` — ${sixes}× 6 (anchor)`:""} `;
-      why=[sixes>=1?`${sixes} six${sixes>1?"es":""} — 6 is in 100% of 369 hands. It's your core.`:"Missing 6s — they appear in every 369 hand. Draw priority.",t369.filter(e=>e.c>=2).length>0?`You have pairs in ${t369.filter(e=>e.c>=2).map(e=>e.n).join("/")} — protect them.`:"Stack 3s and 9s to pair with your 6s.",flowers>=2?`${flowers} flowers support this section.`:""];
+      anchor=`${total} tiles of 3/6/9${sixes>0?`, ${sixes}× 6 (anchor)`:""} `;
+      why=[sixes>=1?`${sixes} six${sixes>1?"es":""}, 6 is in 100% of 369 hands. It's your core.`:"Missing 6s, they appear in every 369 hand. Draw priority.",t369.filter(e=>e.c>=2).length>0?`You have pairs in ${t369.filter(e=>e.c>=2).map(e=>e.n).join("/")}, protect them.`:"Stack 3s and 9s to pair with your 6s.",flowers>=2?`${flowers} flowers support this section.`:""];
       why=why.filter(Boolean);
       keep=["All 6s (never pass)","All 3s and 9s","All Flowers","All Jokers"].filter(Boolean);
-      pivot="If you hold both 6s and 2s, 2468 is your backup — they share the same anchor.";
+      pivot="If you hold both 6s and 2s, 2468 is your backup, they share the same anchor.";
     } else if(id==="13579"){
       const total=odds.reduce((s,e)=>s+e.c,0);
       const threes=numCounts[3]||0,fives=numCounts[5]||0;
-      anchor=`${total} odd tiles — ${threes>0?`${threes}× 3`:""}${fives>0?`, ${fives}× 5`:""}`;
-      why=[threes>=2||fives>=2?`${threes}× 3 and ${fives}× 5 — these appear in 9 of 10 hands. Core anchors.`:"Prioritize drawing 3s and 5s — they appear in 9 of 10 hands.",odds.filter(e=>e.c>=2).length>0?`Pairs in ${odds.filter(e=>e.c>=2).map(e=>e.n).join("/")} — protect these.`:"Build pairs in your odd numbers before the game starts.",winds.length>=2?`${winds.length} winds present — some 13579 hands use N/S winds.`:""];
+      anchor=`${total} odd tiles, ${threes>0?`${threes}× 3`:""}${fives>0?`, ${fives}× 5`:""}`;
+      why=[threes>=2||fives>=2?`${threes}× 3 and ${fives}× 5, these appear in 9 of 10 hands. Core anchors.`:"Prioritize drawing 3s and 5s, they appear in 9 of 10 hands.",odds.filter(e=>e.c>=2).length>0?`Pairs in ${odds.filter(e=>e.c>=2).map(e=>e.n).join("/")}, protect these.`:"Build pairs in your odd numbers before the game starts.",winds.length>=2?`${winds.length} winds present, some 13579 hands use N/S winds.`:""];
       why=why.filter(Boolean);
       keep=["All 3s and 5s (top priority)","All other odds","All Flowers","All Jokers"];
-      pivot="If odds stay thin, check if 369 works — 3s and 9s cross both sections.";
+      pivot="If odds stay thin, check if 369 works, 3s and 9s cross both sections.";
     } else if(id==="2026"){
       anchor=`${twos}× 2, ${sixes}× 6${soap>0?`, ${soap}× Soap`:""}`;
-      why=[twos>=1&&sixes>=1?`${twos}× 2 and ${sixes}× 6 — both appear in all 4 hands. Core anchors established.`:twos>=1?`You have ${twos}× 2 but need 6s — both are required in every hand.`:`You have ${sixes}× 6 but need 2s — both are required in every hand.`,soap>=1?`${soap} Soap — suit-wild, covers any 0 position. Very strong for this section.`:"Draw Soap (White Dragon) — it's suit-flexible and appears in 3 of 4 hands.",dragons.length>1?`${dragons.length} dragons support the hand options further.`:""];
+      why=[twos>=1&&sixes>=1?`${twos}× 2 and ${sixes}× 6, both appear in all 4 hands. Core anchors established.`:twos>=1?`You have ${twos}× 2 but need 6s, both are required in every hand.`:`You have ${sixes}× 6 but need 2s, both are required in every hand.`,soap>=1?`${soap} Soap, suit-wild, covers any 0 position. Very strong for this section.`:"Draw Soap (White Dragon), it's suit-flexible and appears in 3 of 4 hands.",dragons.length>1?`${dragons.length} dragons support the hand options further.`:""];
       why=why.filter(Boolean);
       keep=["All 2s","All 6s","Soap (White Dragon)","All Dragons","All Jokers"];
-      pivot="If you can't find 6s in the first 3 draws, pivot to 2468 — your 2s still contribute.";
+      pivot="If you can't find 6s in the first 3 draws, pivot to 2468, your 2s still contribute.";
     } else if(id==="wd"){
       const honorCount=winds.length+dragons.length;
       anchor=`${winds.length} Winds + ${dragons.length} Dragons (${honorCount} honors)`;
       const windGroups=pairsOf(t=>t.t==="w");
-      why=[honorCount>=6?`${honorCount} honor tiles is a deep W&D rack — keep passing number tiles.`:`${honorCount} honors — W&D needs 7+. Pass all number tiles without hesitation.`,windGroups.length>0?`Pairs in ${windGroups.map(g=>g.key).join("/")} Wind — protect these.`:"Stack your most common wind for the best grouping.",dragons.length>=2?`${dragons.length} dragons add flexibility across the 5 hands that use them.`:""];
+      why=[honorCount>=6?`${honorCount} honor tiles is a deep W&D rack, keep passing number tiles.`:`${honorCount} honors, W&D needs 7+. Pass all number tiles without hesitation.`,windGroups.length>0?`Pairs in ${windGroups.map(g=>g.key).join("/")} Wind, protect these.`:"Stack your most common wind for the best grouping.",dragons.length>=2?`${dragons.length} dragons add flexibility across the 5 hands that use them.`:""];
       why=why.filter(Boolean);
       keep=["All Winds","All Dragons","All Jokers"];
       pivot="If honor tiles stop coming, pivot to Any Like Numbers using any number groups you've kept.";
     } else if(id==="sp"){
       const prs=pairsOf(t=>t.t!=="j");
       anchor=`${prs.length} natural pair${prs.length!==1?"s":""} + ${flowers>=2?`${Math.floor(flowers/2)} flower pair${Math.floor(flowers/2)>1?"s":""}`:""}`;
-      why=[prs.length>=4?`${prs.length} natural pairs — that's strong S&P territory. Protect every pair.`:prs.length>=2?`${prs.length} pairs so far — keep building. S&P needs 6–7 pairs to win.`:"Very few pairs — S&P needs 6-7. Consider whether another section fits better.",jokers>0?`${jokers} joker${jokers>1?"s":""} are dead weight in S&P — you can't pass them and they can't be pairs. Factor this in.`:"No jokers — that's perfect for S&P.",flowers>=2?`${flowers} flowers count as natural pairs here.`:""];
+      why=[prs.length>=4?`${prs.length} natural pairs, that's strong S&P territory. Protect every pair.`:prs.length>=2?`${prs.length} pairs so far, keep building. S&P needs 6-7 pairs to win.`:"Very few pairs, S&P needs 6-7. Consider whether another section fits better.",jokers>0?`${jokers} joker${jokers>1?"s":""} are dead weight in S&P, you can't pass them and they can't be pairs. Factor this in.`:"No jokers, that's perfect for S&P.",flowers>=2?`${flowers} flowers count as natural pairs here.`:""];
       why=why.filter(Boolean);
       keep=["All natural pairs (never break)","Flowers (count as pairs)"];
-      pivot=jokers>0?`With ${jokers} joker${jokers>1?"s":""} stuck in your hand, consider switching — jokers cannot form pairs and cannot be passed.`:"If you can't get to 6 pairs by mid-game, pivot to any section where jokers help.";
+      pivot=jokers>0?`With ${jokers} joker${jokers>1?"s":""} stuck in your hand, consider switching, jokers cannot form pairs and cannot be passed.`:"If you can't get to 6 pairs by mid-game, pivot to any section where jokers help.";
     }
 
     return{id,name:sec.name,icon:sec.icon,pct,anchor,why,keep,pivot,family:getHandFamily(id)};
@@ -2015,7 +2015,7 @@ function iqLongestRun(rack){
 }
 
 function iqDirection(finalRack,sectionId,chosenHandObj){
-  // If a specific hand was chosen, score direction using honest suit-specific coverage —
+  // If a specific hand was chosen, score direction using honest suit-specific coverage ,
   // the same calculation shown in the HandTargetPreview display. This prevents fit()
   // from inflating direction scores by picking best-case suit permutations.
   if(chosenHandObj){
@@ -2024,7 +2024,7 @@ function iqDirection(finalRack,sectionId,chosenHandObj){
     const scored=`Scored against ${chosenHandObj.label}: ${held} of ${total} tiles covered (${pct}%).`;
     const directionExplanation=
       pct>=85?`${scored} Your rack is almost complete for this hand.`:
-      pct>=65?`${scored} Solid foundation — a few key tiles still needed.`:
+      pct>=65?`${scored} Solid foundation, a few key tiles still needed.`:
       pct>=45?`${scored} Partial match. More tiles needed to commit to this hand.`:
       pct>=25?`${scored} Low coverage. This hand needed a different tile distribution.`:
       `${scored} Very low coverage. The tiles held don't support this hand well.`;
@@ -2042,12 +2042,12 @@ function iqDirection(finalRack,sectionId,chosenHandObj){
     if(fl>=4)directionScore=Math.min(40,directionScore+5);
     else if(fl>=2)directionScore=Math.min(40,directionScore+2);
     directionScore=Math.max(2,directionScore-finalRack.filter(t=>t.t==="w").length*2);
-    const suitNames={bam:"Bam",crak:"Crk",dot:"Dot"};const suitStr=ws.suit?` (${suitNames[ws.suit]||ws.suit})`:"";const wStr=ws.windowNums&&ws.windowNums.length?` within [${ws.windowNums[0]}–${ws.windowNums[ws.windowNums.length-1]}]${suitStr}`:"";
-    directionExplanation=gd>=12?`Strong group depth${wStr} — pungs and kongs locked in a tight window.`:gd>=7?`Decent group depth${wStr}. Keep consolidating within your number window.`:gd>=4?`Some grouped tiles${wStr}, but you need pungs/kongs — singles don't win CR hands.`:`Shallow structure. CR rewards pungs & kongs of 3–4 consecutive numbers, not long single runs.`;
+    const suitNames={bam:"Bam",crak:"Crk",dot:"Dot"};const suitStr=ws.suit?` (${suitNames[ws.suit]||ws.suit})`:"";const wStr=ws.windowNums&&ws.windowNums.length?` within [${ws.windowNums[0]}-${ws.windowNums[ws.windowNums.length-1]}]${suitStr}`:"";
+    directionExplanation=gd>=12?`Strong group depth${wStr}, pungs and kongs locked in a tight window.`:gd>=7?`Decent group depth${wStr}. Keep consolidating within your number window.`:gd>=4?`Some grouped tiles${wStr}, but you need pungs/kongs, singles don't win CR hands.`:`Shallow structure. CR rewards pungs & kongs of 3-4 consecutive numbers, not long single runs.`;
 
   } else if(sectionId==="wd"){
     // Winds in 7/8 hands, Dragons in 5/8. Numbers 1-4 are valid as kongs (3 hands). 5-9 never valid.
-    // NORMALIZATION: W&D develops later than number sections — early honor counts of 6-8 are
+    // NORMALIZATION: W&D develops later than number sections, early honor counts of 6-8 are
     // strategically strong even though raw tile totals look lower than consecutive sections.
     // The curve is calibrated so that 7+ honors (a genuinely committed W&D rack) scores 28+,
     // matching what 7-8 odds would score in 13579 at equivalent commitment depth.
@@ -2056,52 +2056,52 @@ function iqDirection(finalRack,sectionId,chosenHandObj){
     const honors=winds+dragons;
     const validNums=finalRack.filter(t=>t.t==="s"&&[1,2,3,4].includes(t.n)).length;
     const badNums=finalRack.filter(t=>t.t==="s"&&![1,2,3,4].includes(t.n)).length;
-    // Wind group quality — grouped winds are far more valuable than singles
+    // Wind group quality, grouped winds are far more valuable than singles
     const wc={};finalRack.filter(t=>t.t==="w").forEach(t=>{wc[t.v]=(wc[t.v]||0)+1;});
     const windGroupBonus=Object.values(wc).reduce((a,n)=>a+(n>=4?5:n>=3?3:n>=2?1:0),0);
-    // Raised wind score curve — winds are the backbone (7 of 8 hands)
+    // Raised wind score curve, winds are the backbone (7 of 8 hands)
     const windScore=winds>=7?20:winds>=6?17:winds>=5?14:winds>=4?11:winds>=3?7:winds>=2?4:winds*1;
-    // Dragon score — dragons appear in 5/8 hands, meaningful structural support
+    // Dragon score, dragons appear in 5/8 hands, meaningful structural support
     const dragonScore=dragons>=5?10:dragons>=4?8:dragons>=3?6:dragons>=2?3:dragons*1;
     const numKongBonus=validNums>=4?5:validNums>=2?2:0;
-    // Joker support — W&D hands use jokers for honor kongs
+    // Joker support, W&D hands use jokers for honor kongs
     const jkBonus=jk>=2?3:jk>=1?1:0;
     const flBonus=fl>=2?2:fl>=1?1:0;
-    // Normalized: 7 honors (committed W&D rack) now reliably scores 28–32 before penalties
+    // Normalized: 7 honors (committed W&D rack) now reliably scores 28-32 before penalties
     directionScore=Math.min(40,Math.max(2,windScore+dragonScore+windGroupBonus+numKongBonus+jkBonus+flBonus-(badNums*4)));
-    directionExplanation=honors>=10?`${winds} Winds + ${dragons} Dragons — a deep honor rack. W&D is your lane.`:honors>=8?`${honors} honor tiles is a committed W&D foundation. Keep passing number tiles.`:honors>=6?`${honors} honors — solid start. W&D needs 7+ to fully commit; keep drawing winds.`:honors>=4?`${honors} honors is a start, but W&D needs 7+. Pass all 5-9 tiles aggressively.`:`Only ${honors} honor tiles. Pass all number tiles and wait for winds.`;
+    directionExplanation=honors>=10?`${winds} Winds + ${dragons} Dragons, a deep honor rack. W&D is your lane.`:honors>=8?`${honors} honor tiles is a committed W&D foundation. Keep passing number tiles.`:honors>=6?`${honors} honors, solid start. W&D needs 7+ to fully commit; keep drawing winds.`:honors>=4?`${honors} honors is a start, but W&D needs 7+. Pass all 5-9 tiles aggressively.`:`Only ${honors} honor tiles. Pass all number tiles and wait for winds.`;
 
   } else if(sectionId==="aln"){
     // ALN: all 3 hands are kongs of one number + flowers/dragons. Concentration is everything.
-    // NORMALIZATION: ALN requires patience — 3-4 of a number early IS strong commitment for this
+    // NORMALIZATION: ALN requires patience, 3-4 of a number early IS strong commitment for this
     // section, even though it looks thin compared to 7-8 odd tiles in 13579. The curve is
     // calibrated so that 4+ of one number scores 22+ (matching 13579 at 7 odds) and 3 of a number
     // scores 14+ (matching 13579 at 5 odds), reflecting the tighter tile-frequency expectations.
     const nc={};finalRack.filter(t=>t.t==="s").forEach(t=>{nc[t.n]=(nc[t.n]||0)+1;});
     const vals=Object.values(nc),mx=vals.length?Math.max(...vals):0,spread=Object.keys(nc).length;
-    // Flowers act as tile-fillers in hand 1 (1111 FFFFFF 1111) — count them as supporting
+    // Flowers act as tile-fillers in hand 1 (1111 FFFFFF 1111), count them as supporting
     const flBonus=fl>=4?6:fl>=2?3:fl>=1?1:0;
     const jkBonus=jk>=2?4:jk>=1?2:0;
     // Raised curve: 4 of a number is genuinely committed for ALN (only 4 copies of each tile exist)
     const baseScore=mx>=7?38:mx>=6?32:mx>=5?26:mx>=4?20:mx>=3?13:mx>=2?6:mx*2;
     const spreadPenalty=Math.max(0,spread-1)*4; // spreading across numbers is fatal, slightly softened
     directionScore=Math.min(40,Math.max(2,baseScore+flBonus+jkBonus-spreadPenalty));
-    directionExplanation=mx>=6?`${mx} of one number — excellent consolidation. That's ALN territory.`:mx>=4?`${mx} of a number is a strong nucleus for ALN — only 4 natural copies exist. Pass everything else ruthlessly.`:mx>=3?`${mx} of a number — committed start. ALN needs 8-12 total (with jokers) of one number.`:`Only ${mx} of any single number. Pick one number immediately and consolidate hard.`;
+    directionExplanation=mx>=6?`${mx} of one number, excellent consolidation. That's ALN territory.`:mx>=4?`${mx} of a number is a strong nucleus for ALN, only 4 natural copies exist. Pass everything else ruthlessly.`:mx>=3?`${mx} of a number, committed start. ALN needs 8-12 total (with jokers) of one number.`:`Only ${mx} of any single number. Pick one number immediately and consolidate hard.`;
 
   } else if(sectionId==="sp"){
     // S&P: all 6 hands are singles and pairs. Count flowers correctly (each flower = 1 tile, pairs if 2+).
-    // iqCountGroups maps all flowers to key "f" — so 2 flowers = count 2 = 1 pair. That's correct.
+    // iqCountGroups maps all flowers to key "f", so 2 flowers = count 2 = 1 pair. That's correct.
     const grps=iqCountGroups(finalRack);
     const allVals=Object.values(grps);
     const pairs=allVals.filter(v=>v===2).length;
     const triples=allVals.filter(v=>v>=3).length;
     const jkCount=finalRack.filter(t=>t.t==="j").length;
-    // Jokers count as triples structurally — they can't be singles or pairs, so they break the pattern
+    // Jokers count as triples structurally, they can't be singles or pairs, so they break the pattern
     directionScore=pairs>=6&&triples===0&&jkCount===0?40:pairs>=5&&triples===0?34:pairs>=4&&triples===0?26:pairs>=3&&triples<=1?18:pairs>=2?10:pairs*4;
-    directionExplanation=pairs>=6&&jkCount===0?`${pairs} pairs, no triples, no jokers — textbook S&P structure.`:pairs>=4?`${pairs} pairs is strong. Avoid any triples and get rid of those jokers.`:pairs>=2?`${pairs} pairs is a start. You need 6+ pairs to win — build more.`:`Only ${pairs} pairs. Singles & Pairs needs 6 clean pairs to complete.`;
+    directionExplanation=pairs>=6&&jkCount===0?`${pairs} pairs, no triples, no jokers, textbook S&P structure.`:pairs>=4?`${pairs} pairs is strong. Avoid any triples and get rid of those jokers.`:pairs>=2?`${pairs} pairs is a start. You need 6+ pairs to win, build more.`:`Only ${pairs} pairs. Singles & Pairs needs 6 clean pairs to complete.`;
 
   } else if(sectionId==="q"){
-    // Quints: 5 of one tile. Max natural is 4 (one of each suit) — always needs 1+ joker per quint.
+    // Quints: 5 of one tile. Max natural is 4 (one of each suit), always needs 1+ joker per quint.
     // Hand 1: 11111 1111 11111 = 3 different quints = needs 2 jokers minimum for 2 of the 3 quints.
     // Hand 2: FF 11111 22 33333 = 1 suit, 2 quints over 3 consec numbers + FF.
     // Hand 3: 11111 44444 DDDD = 2 quints + dragon kong, 1 suit.
@@ -2113,10 +2113,10 @@ function iqDirection(finalRack,sectionId,chosenHandObj){
     let hasConsecSuit=false;Object.values(suitNums).forEach(ns=>{const a=[...ns].sort((a,b)=>a-b);for(let i=0;i<a.length-1;i++){if(a[i+1]===a[i]+1)hasConsecSuit=true;}});
     directionScore=jk>=2&&mx>=3?40:jk>=2&&mx>=2?30:jk>=2?20:jk>=1&&mx>=3?22:jk>=1?12:(mx>=3?8:mx*2);
     if(jk>=2&&hasConsecSuit)directionScore=Math.min(40,directionScore+4);
-    directionExplanation=jk>=2&&mx>=3?`${jk} jokers and ${mx} of a tile — well positioned for a quint.`:jk>=2?`${jk} jokers is the entry requirement — now build tile depth (need 3-4 of one tile).`:jk>=1?`Only ${jk} joker. Quints needs at least 2 — this section is risky without more.`:"No jokers. Quints is unreachable without at least 2 jokers.";
+    directionExplanation=jk>=2&&mx>=3?`${jk} jokers and ${mx} of a tile, well positioned for a quint.`:jk>=2?`${jk} jokers is the entry requirement, now build tile depth (need 3-4 of one tile).`:jk>=1?`Only ${jk} joker. Quints needs at least 2, this section is risky without more.`:"No jokers. Quints is unreachable without at least 2 jokers.";
 
   } else if(sectionId==="2026"){
-    // 2026: count 2s, 6s, Soap, and dragons — this section's "strong tiles" span tile types.
+    // 2026: count 2s, 6s, Soap, and dragons, this section's "strong tiles" span tile types.
     // Treat Soap + any Dragon as supporting since they appear in 3/4 hands.
     const twos=finalRack.filter(t=>t.t==="s"&&t.n===2).length;
     const sixes=finalRack.filter(t=>t.t==="s"&&t.n===6).length;
@@ -2124,7 +2124,7 @@ function iqDirection(finalRack,sectionId,chosenHandObj){
     const otherDragons=finalRack.filter(t=>t.t==="d"&&t.v!=="Soap").length;
     const winds=finalRack.filter(t=>t.t==="w").length;
     const offNums=finalRack.filter(t=>t.t==="s"&&![2,6].includes(t.n)).length;
-    // 6 is in all 4 hands, 2 is in all 4 hands — both required
+    // 6 is in all 4 hands, 2 is in all 4 hands, both required
     const sixScore=sixes>=3?16:sixes>=2?12:sixes>=1?6:0;
     const twoScore=twos>=3?12:twos>=2?8:twos>=1?4:0;
     const soapBonus=soap>=1?5:0;
@@ -2133,7 +2133,7 @@ function iqDirection(finalRack,sectionId,chosenHandObj){
     const flBonus=fl>=1?2:0;
     const offPenalty=Math.min(offNums*4,20);
     directionScore=Math.min(40,Math.max(2,sixScore+twoScore+soapBonus+dragonBonus+windBonus+flBonus-offPenalty));
-    const coreStr=sixes>0&&twos>0?`${twos} Twos + ${sixes} Sixes — the 2026 core is there.`:sixes>0?`${sixes} Sixes but missing 2s — you need both for every 2026 hand.`:`${twos} Twos but missing 6s — 6 appears in all 4 hands, it's critical.`;
+    const coreStr=sixes>0&&twos>0?`${twos} Twos + ${sixes} Sixes, the 2026 core is there.`:sixes>0?`${sixes} Sixes but missing 2s, you need both for every 2026 hand.`:`${twos} Twos but missing 6s, 6 appears in all 4 hands, it's critical.`;
     directionExplanation=offNums>=4?coreStr+` But ${offNums} off-direction tiles are diluting the rack.`:coreStr;
 
   } else if(sectionId==="2468"){
@@ -2150,10 +2150,10 @@ function iqDirection(finalRack,sectionId,chosenHandObj){
     const flBonus=fl>=2?3:fl>=1?1:0;
     const offPenalty=(odds*3)+(nsWinds*2);
     directionScore=Math.min(40,Math.max(2,densScore+sixBonus+divBonus+flBonus-offPenalty));
-    directionExplanation=totalEvens>=8?`${totalEvens} even tiles across ${distinctEvens} values — strong 2468 rack.`:totalEvens>=5?`${totalEvens} even tiles. Focus on deepening groups, not spreading across more values.`:totalEvens>=3?`${totalEvens} even tiles — viable but needs more depth. Pass odds aggressively.`:`Only ${totalEvens} even tiles. Pass all odd tiles immediately.`;
+    directionExplanation=totalEvens>=8?`${totalEvens} even tiles across ${distinctEvens} values, strong 2468 rack.`:totalEvens>=5?`${totalEvens} even tiles. Focus on deepening groups, not spreading across more values.`:totalEvens>=3?`${totalEvens} even tiles, viable but needs more depth. Pass odds aggressively.`:`Only ${totalEvens} even tiles. Pass all odd tiles immediately.`;
 
   } else if(sectionId==="369"){
-    // 369: 3, 6, 9 only. 6 in 100% of hands — most critical tile on the entire card for this section.
+    // 369: 3, 6, 9 only. 6 in 100% of hands, most critical tile on the entire card for this section.
     const threes=finalRack.filter(t=>t.t==="s"&&t.n===3).length;
     const sixes=finalRack.filter(t=>t.t==="s"&&t.n===6).length;
     const nines=finalRack.filter(t=>t.t==="s"&&t.n===9).length;
@@ -2167,10 +2167,10 @@ function iqDirection(finalRack,sectionId,chosenHandObj){
     const flBonus=fl>=2?2:fl>=1?1:0;
     const offPenalty=(offNums*4)+(winds>=3?0:winds*2); // winds only ok if NEWS hand possible
     directionScore=Math.min(40,Math.max(2,densScore+sixScore+spreadBonus+flBonus-offPenalty));
-    directionExplanation=sixes===0?`No 6s — 6 appears in every 369 hand. This section needs 6s urgently.`:total>=8?`${total} tiles across 3/6/9 — strong structure.`:total>=5?`${total} tiles of 3/6/9. Keep building and pass non-multiples of 3 first.`:`Only ${total} tiles of 3/6/9 — pass all other numbers immediately.`;
+    directionExplanation=sixes===0?`No 6s, 6 appears in every 369 hand. This section needs 6s urgently.`:total>=8?`${total} tiles across 3/6/9, strong structure.`:total>=5?`${total} tiles of 3/6/9. Keep building and pass non-multiples of 3 first.`:`Only ${total} tiles of 3/6/9, pass all other numbers immediately.`;
 
   } else if(sectionId==="13579"){
-    // 13579: 10 hands — 5 and 3 in 9/10, N+S winds in 2 hands, flowers in 4/10, dragons in 4/10.
+    // 13579: 10 hands, 5 and 3 in 9/10, N+S winds in 2 hands, flowers in 4/10, dragons in 4/10.
     const oc={};finalRack.filter(t=>t.t==="s"&&t.n%2===1).forEach(t=>{oc[t.n]=(oc[t.n]||0)+1;});
     const totalOdds=Object.values(oc).reduce((a,b)=>a+b,0);
     const distinctOdds=Object.keys(oc).length;
@@ -2186,7 +2186,7 @@ function iqDirection(finalRack,sectionId,chosenHandObj){
     const flBonus=fl>=2?2:fl>=1?1:0;
     const offPenalty=(evens*3)+(ew*2);
     directionScore=Math.min(40,Math.max(2,densScore+fiveBonus+threeBonus+divBonus+nsBonus+flBonus-offPenalty));
-    directionExplanation=totalOdds>=8?`${totalOdds} odd tiles — a committed 13579 rack.`:totalOdds>=5?`${totalOdds} odd tiles. Focus on 5s and 3s — they appear in every hand.`:totalOdds>=3?`${totalOdds} odds — pass all even tiles immediately.`:`Only ${totalOdds} odd tiles. 13579 needs 8+ odds to be competitive.`;
+    directionExplanation=totalOdds>=8?`${totalOdds} odd tiles, a committed 13579 rack.`:totalOdds>=5?`${totalOdds} odd tiles. Focus on 5s and 3s, they appear in every hand.`:totalOdds>=3?`${totalOdds} odds, pass all even tiles immediately.`:`Only ${totalOdds} odd tiles. 13579 needs 8+ odds to be competitive.`;
   }
 
   return{directionScore:Math.max(0,Math.min(40,Math.round(directionScore))),directionExplanation};
@@ -2210,17 +2210,17 @@ function iqTileStrength(finalRack,sectionId,chosenHandObj){
   let raw=0;
 
   if(sectionId==="sp"){
-    // S&P — CONCEALED, NO JOKERS. Pairs only (no pungs/kongs). Flowers count as pairs.
+    // S&P, CONCEALED, NO JOKERS. Pairs only (no pungs/kongs). Flowers count as pairs.
     // 6 hands: need 6 pairs + 1 single OR 7 pairs (depending on hand).
     // Flowers: iqCountGroups maps all flowers to "f", so 2 flowers = pair. Correct.
     const jkCount=finalRack.filter(t=>t.t==="j").length;
     raw+=pairs>=7?25:pairs>=6?22:pairs>=5?17:pairs>=4?12:pairs>=3?7:pairs>=2?4:pairs*1;
     raw-=(pungs+kongs)*8; // pungs/kongs structurally break S&P
-    raw-=jkCount*8;       // jokers cannot be singles or pairs — poison
+    raw-=jkCount*8;       // jokers cannot be singles or pairs, poison
     raw=Math.max(0,raw);
 
   } else if(sectionId==="cr"){
-    // CR — window depth is the primary signal
+    // CR, window depth is the primary signal
     const ws=crWindowScore(finalRack);
     const gd=ws.groupDepth||0;
     const dp=ws.distinctPresent||0;
@@ -2231,16 +2231,16 @@ function iqTileStrength(finalRack,sectionId,chosenHandObj){
     raw-=finalRack.filter(t=>t.t==="w").length*2;
 
   } else if(sectionId==="wd"){
-    // W/D — winds and dragons. Number kongs of 1-4 are valid (3 hands). 5-9 never valid.
+    // W/D, winds and dragons. Number kongs of 1-4 are valid (3 hands). 5-9 never valid.
     // NORMALIZATION: Honor groups are harder to build than number groups (only 4 of each wind exist).
     // A wind pung scores equivalently to an even-number pung in 2468. A kong is proportionally rewarded.
-    // Calibrated so 2 wind pungs + 1 dragon pair = 18–20 (matching 2468 at equivalent group depth).
+    // Calibrated so 2 wind pungs + 1 dragon pair = 18-20 (matching 2468 at equivalent group depth).
     const wds_winds=finalRack.filter(t=>t.t==="w").length;
     const wds_dragons=finalRack.filter(t=>t.t==="d").length;
     const honors=wds_winds+wds_dragons;
     const validNums=finalRack.filter(t=>t.t==="s"&&[1,2,3,4].includes(t.n)).length;
     const badNums=finalRack.filter(t=>t.t==="s"&&![1,2,3,4].includes(t.n)).length;
-    // Wind groups: raised curves — winds are backbone of 7/8 hands
+    // Wind groups: raised curves, winds are backbone of 7/8 hands
     const wc={};finalRack.filter(t=>t.t==="w").forEach(t=>{wc[t.v]=(wc[t.v]||0)+1;});
     const dc={};finalRack.filter(t=>t.t==="d").forEach(t=>{dc[t.v]=(dc[t.v]||0)+1;});
     const windGroupScore=Object.values(wc).reduce((a,n)=>a+(n>=4?9:n>=3?7:n>=2?4:1),0);
@@ -2250,15 +2250,15 @@ function iqTileStrength(finalRack,sectionId,chosenHandObj){
     raw+=fl>=2?2:fl>=1?1:0;
     raw+=validNums>=4?4:validNums>=2?2:0; // valid number kong bonus
     raw-=badNums*3;
-    // Honor density floor — a clean honor rack should never be unfairly penalized
+    // Honor density floor, a clean honor rack should never be unfairly penalized
     if(honors>=8&&badNums===0)raw=Math.max(raw,14);
     else if(honors>=6&&badNums<=1)raw=Math.max(raw,10);
 
   } else if(sectionId==="aln"){
-    // ALN — all 3 hands use kongs of ONE number. Flowers fill one hand (sextette).
+    // ALN, all 3 hands use kongs of ONE number. Flowers fill one hand (sextette).
     // Need 8-12 tiles of the same number (with joker help). Spreading = fatal.
     // NORMALIZATION: Only 4 natural copies of any number exist. Having 4 of one number is
-    // maximum natural depth — equivalent to having a full pung/kong in other sections.
+    // maximum natural depth, equivalent to having a full pung/kong in other sections.
     // Calibrated so 4-of-a-number scores 14+ (matching 13579 at 7 total odds).
     const nc={};finalRack.filter(t=>t.t==="s").forEach(t=>{nc[t.n]=(nc[t.n]||0)+1;});
     const vals2=Object.values(nc);
@@ -2272,12 +2272,12 @@ function iqTileStrength(finalRack,sectionId,chosenHandObj){
     raw-=Math.max(0,spread-1)*4; // spreading is fatal; slightly softened from 5 to reflect realistic early racks
 
   } else if(sectionId==="q"){
-    // Quints — 3 hands. 2 jokers minimum. Stack one tile type deep.
-    // Hand 3 (11111 44444 DDDD) uses a dragon kong — dragons have minor value.
+    // Quints, 3 hands. 2 jokers minimum. Stack one tile type deep.
+    // Hand 3 (11111 44444 DDDD) uses a dragon kong, dragons have minor value.
     const c={};finalRack.filter(t=>t.t==="s").forEach(t=>{const k=`${t.s}|${t.n}`;c[k]=(c[k]||0)+1;});
     const mx=Object.values(c).length?Math.max(...Object.values(c)):0;
     const dragons=finalRack.filter(t=>t.t==="d").length;
-    if(jk<2){raw=jk*3;}  // hard floor — quints without 2 jokers is nearly impossible
+    if(jk<2){raw=jk*3;}  // hard floor, quints without 2 jokers is nearly impossible
     else{
       raw+=jk>=3?14:12;  // 2 jokers = entry, 3 = great
       raw+=mx>=4?10:mx>=3?7:mx>=2?4:0;
@@ -2286,14 +2286,14 @@ function iqTileStrength(finalRack,sectionId,chosenHandObj){
     }
 
   } else if(sectionId==="2026"){
-    // 2026 — 4 hands. Count 2s, 6s, Soap, other dragons, winds (NEWS hand), flowers.
+    // 2026, 4 hands. Count 2s, 6s, Soap, other dragons, winds (NEWS hand), flowers.
     const twos=finalRack.filter(t=>t.t==="s"&&t.n===2).length;
     const sixes=finalRack.filter(t=>t.t==="s"&&t.n===6).length;
     const soap=finalRack.filter(t=>t.t==="d"&&t.v==="Soap").length;
     const otherD=finalRack.filter(t=>t.t==="d"&&t.v!=="Soap").length;
     const winds=finalRack.filter(t=>t.t==="w").length;
     const offNums=finalRack.filter(t=>t.t==="s"&&![2,6].includes(t.n)).length;
-    // Group quality for 2s and 6s — kongs and pungs are used in all hands
+    // Group quality for 2s and 6s, kongs and pungs are used in all hands
     const twoGrp=twos>=4?10:twos>=3?7:twos>=2?4:twos*1;
     const sixGrp=sixes>=4?12:sixes>=3?8:sixes>=2?5:sixes*1;
     raw+=twoGrp+sixGrp;
@@ -2305,8 +2305,8 @@ function iqTileStrength(finalRack,sectionId,chosenHandObj){
     raw-=offNums*3;
 
   } else if(sectionId==="2468"){
-    // 2468 — 8 hands. 6 in 7/8, 2+8 in 7/8, 4 in 6/8. Flowers in 5/8. Dragons in 4/8.
-    // E+W winds in 1 hand only. Last hand (FF 246 888 246 888) is concealed — pairs.
+    // 2468, 8 hands. 6 in 7/8, 2+8 in 7/8, 4 in 6/8. Flowers in 5/8. Dragons in 4/8.
+    // E+W winds in 1 hand only. Last hand (FF 246 888 246 888) is concealed, pairs.
     const ec={};finalRack.filter(t=>t.t==="s"&&t.n%2===0).forEach(t=>{ec[t.n]=(ec[t.n]||0)+1;});
     const totalEvens=Object.values(ec).reduce((a,b)=>a+b,0);
     const distinctEvens=Object.keys(ec).length;
@@ -2327,7 +2327,7 @@ function iqTileStrength(finalRack,sectionId,chosenHandObj){
     raw-=odds*3+nsW*2;
 
   } else if(sectionId==="369"){
-    // 369 — 6 hands. 6 in all 6. 3+9 in 5/6. Flowers in 3/6. Dragons in 2/6.
+    // 369, 6 hands. 6 in all 6. 3+9 in 5/6. Flowers in 3/6. Dragons in 2/6.
     // Last hand concealed. NEWS hand needs all 4 winds.
     const threes=finalRack.filter(t=>t.t==="s"&&t.n===3).length;
     const sixes=finalRack.filter(t=>t.t==="s"&&t.n===6).length;
@@ -2335,7 +2335,7 @@ function iqTileStrength(finalRack,sectionId,chosenHandObj){
     const offNums=finalRack.filter(t=>t.t==="s"&&![3,6,9].includes(t.n)).length;
     const dragons=finalRack.filter(t=>t.t==="d").length;
     const winds=finalRack.filter(t=>t.t==="w").length;
-    // Group quality — kongs and pungs of 3/6/9
+    // Group quality, kongs and pungs of 3/6/9
     const threeGrp=threes>=4?8:threes>=3?5:threes>=2?3:threes*1;
     const sixGrp=sixes>=4?10:sixes>=3?7:sixes>=2?4:sixes*1; // 6 = highest value
     const nineGrp=nines>=4?8:nines>=3?5:nines>=2?3:nines*1;
@@ -2347,7 +2347,7 @@ function iqTileStrength(finalRack,sectionId,chosenHandObj){
     raw-=offNums*3;
 
   } else if(sectionId==="13579"){
-    // 13579 — 9 hands. 5+3 in 9/9. N+S winds in 2/10. Flowers in 4/10. Dragons in 4/10.
+    // 13579, 9 hands. 5+3 in 9/9. N+S winds in 2/10. Flowers in 4/10. Dragons in 4/10.
     // 1, 7, 9 each appear in ~4/10 hands. E+W winds never used.
     const oc={};finalRack.filter(t=>t.t==="s"&&t.n%2===1).forEach(t=>{oc[t.n]=(oc[t.n]||0)+1;});
     const totalOdds=Object.values(oc).reduce((a,b)=>a+b,0);
@@ -2356,7 +2356,7 @@ function iqTileStrength(finalRack,sectionId,chosenHandObj){
     const ns=finalRack.filter(t=>t.t==="w"&&(t.v==="N"||t.v==="S")).length;
     const ew=finalRack.filter(t=>t.t==="w"&&(t.v==="E"||t.v==="W")).length;
     const dragons=finalRack.filter(t=>t.t==="d").length;
-    // Group depth in odd tiles — weight 5 and 3 higher (appear in 9/10 hands)
+    // Group depth in odd tiles, weight 5 and 3 higher (appear in 9/10 hands)
     const fiveGrp=(oc[5]||0)>=4?10:(oc[5]||0)>=3?7:(oc[5]||0)>=2?4:(oc[5]||0)*1;
     const threeGrp=(oc[3]||0)>=4?8:(oc[3]||0)>=3?6:(oc[3]||0)>=2?3:(oc[3]||0)*1;
     const otherOddGrp=Object.entries(oc).filter(([n])=>![3,5].includes(Number(n)))
@@ -2434,13 +2434,13 @@ function iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId,chose
     }
   });
 
-  // FIX 1: AVAILABILITY-AWARE — measure weak clearance rate
+  // FIX 1: AVAILABILITY-AWARE, measure weak clearance rate
   const totalWeakInStart=startingRack.filter(t=>isWeakTile(t)).length;
   const allPassed=passedTilesByRound.flatMap(p=>p.out||[]);
   const totalWeakPassed=allPassed.filter(t=>isWeakTile(t)).length;
   const weakClearRate=totalWeakInStart>0?totalWeakPassed/totalWeakInStart:1;
 
-  // FIX 2: BLIND PASS LENIENCY — halve the strong-tile penalty on blind passes
+  // FIX 2: BLIND PASS LENIENCY, halve the strong-tile penalty on blind passes
   let totalRoundScore=0;
   const passInsights=passedTilesByRound.map(p=>{
     const tiles=p.out||[];
@@ -2452,7 +2452,7 @@ function iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId,chose
       else if(isWeakTile(t))weakPassed++;
       else neutralPassed++;
     });
-    // Blind pass: strong-tile penalty halved — less information available
+    // Blind pass: strong-tile penalty halved, less information available
     const strongPenalty=isBlind?2:4;
     let roundScore=10+(weakPassed*3)-(strongPassed*strongPenalty)+(neutralPassed*1);
     roundScore=Math.max(0,Math.min(15,roundScore));
@@ -2462,17 +2462,17 @@ function iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId,chose
     if(strongPassed>0&&weakPassed===0){
       quality="weak";
       insight=isBlind
-        ?`Passed ${strongPassed} useful tile${strongPassed>1?"s":""} — a tough spot on a blind pass.`
+        ?`Passed ${strongPassed} useful tile${strongPassed>1?"s":""}, a tough spot on a blind pass.`
         :`Passed ${strongPassed} tile${strongPassed>1?"s":""} your section wanted to keep.`;
     } else if(weakPassed>0&&strongPassed===0){
       quality="strong";
-      insight=`Passed ${weakPassed} off-direction tile${weakPassed>1?"s":""} — clean${isBlind?" blind":""} round.`;
+      insight=`Passed ${weakPassed} off-direction tile${weakPassed>1?"s":""}, clean${isBlind?" blind":""} round.`;
     } else if(strongPassed>0&&weakPassed>0){
       quality="mixed";
-      insight=isBlind?"Mixed blind pass — gave away a useful tile but cleared some weak ones too.":"Mixed round — passed some useful tiles alongside the weaker ones.";
+      insight=isBlind?"Mixed blind pass, gave away a useful tile but cleared some weak ones too.":"Mixed round, passed some useful tiles alongside the weaker ones.";
     } else{
       quality="neutral";
-      insight=`Neutral${isBlind?" blind":""} pass — tiles were neither clearly strong nor weak for your section.`;
+      insight=`Neutral${isBlind?" blind":""} pass, tiles were neither clearly strong nor weak for your section.`;
     }
     return{roundName:p.label||p.roundName||"Pass",passedTiles:tiles,quality,insight};
   });
@@ -2487,11 +2487,11 @@ function iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId,chose
   raw-=brokenPairsTotal*2;
   raw=Math.max(0,Math.min(25,raw));
 
-  // OUTCOME VALIDATION FLOOR — if direction and tile strength are both high,
+  // OUTCOME VALIDATION FLOOR, if direction and tile strength are both high,
   // the final rack proves the passes were correct regardless of what was passed.
   // A player who ends with 90%+ direction and tile strength made good decisions.
   // We don't penalise process when the outcome is objectively strong.
-  // This is injected here using the raw scores from the calling context via closure — 
+  // This is injected here using the raw scores from the calling context via closure, 
   // but since we don't have them here, we apply the floor post-hoc in calculateCharlestonIQ.
 
   raw=Math.max(0,Math.min(25,Math.round(raw)));
@@ -2515,42 +2515,42 @@ function iqTiming(totalTime,roundCount,passLog){
   let timingScore,timingInsight;
 
   // Real-world average decision time in a Charleston: 16.7s per pass.
-  // Sweet spot: 10–25s per pass. Below 6s = reflexive. Above 35s = second-guessing.
+  // Sweet spot: 10-25s per pass. Below 6s = reflexive. Above 35s = second-guessing.
   const slowPasses_=passTimes.filter(s=>s>35).length;
   const fastPasses_=passTimes.filter(s=>s<6).length;
   if(avg>=10&&avg<=25){
     timingScore=10;
     if(hasMixedBag){
-      timingInsight=`Good overall pace (avg ${Math.round(avg)}s). ${slowPasses_} pass${slowPasses_>1?"es were":"was"} slow — trust your first read on those.`;
+      timingInsight=`Good overall pace (avg ${Math.round(avg)}s). ${slowPasses_} pass${slowPasses_>1?"es were":"was"} slow, trust your first read on those.`;
     } else {
-      timingInsight=`Excellent pace — avg ${Math.round(avg)}s per pass. Deliberate without second-guessing. Right in the zone.`;
+      timingInsight=`Excellent pace, avg ${Math.round(avg)}s per pass. Deliberate without second-guessing. Right in the zone.`;
     }
   } else if(avg>25&&avg<=35){
     timingScore=8;
     if(slowPasses_>=2){
-      timingInsight=`${slowPasses_} passes took over 35s — once you see a clear discard, commit to it.`;
+      timingInsight=`${slowPasses_} passes took over 35s, once you see a clear discard, commit to it.`;
     } else {
       timingInsight=`A touch deliberate (avg ${Math.round(avg)}s), but not by much. Try committing to your section read by pass 1.`;
     }
   } else if(avg>35&&avg<=50){
     timingScore=6;
     timingInsight=slowPasses_>=2
-      ?`${slowPasses_} passes took a long time. Name your target section before touching any tiles — it speeds up every decision after that.`
+      ?`${slowPasses_} passes took a long time. Name your target section before touching any tiles, it speeds up every decision after that.`
       :"Taking longer than ideal. Lock in your section before the first pass and the rest follows faster.";
   } else if(avg>50){
     timingScore=Math.max(2,Math.round(4-((avg-50)/25)));
-    timingInsight="Very long pauses between passes. Commit to a section before you start — once you know what you're building, the right tiles become obvious.";
+    timingInsight="Very long pauses between passes. Commit to a section before you start, once you know what you're building, the right tiles become obvious.";
   } else if(avg>=6&&avg<10){
     timingScore=8;
-    timingInsight=`Slightly quick (avg ${Math.round(avg)}s) — a few more seconds per pass lets you catch a better option before committing.`;
+    timingInsight=`Slightly quick (avg ${Math.round(avg)}s), a few more seconds per pass lets you catch a better option before committing.`;
   } else if(avg>=3&&avg<6){
     timingScore=5;
     timingInsight=fastPasses_>=2
-      ?`${fastPasses_} passes went very fast. Each one shapes your whole hand — give yourself at least 10 seconds.`
-      :"Moving a bit fast. Give yourself a breath before each pass — your instincts are good, but a moment to confirm helps.";
+      ?`${fastPasses_} passes went very fast. Each one shapes your whole hand, give yourself at least 10 seconds.`
+      :"Moving a bit fast. Give yourself a breath before each pass, your instincts are good, but a moment to confirm helps.";
   } else {
     timingScore=2;
-    timingInsight="Passing reflexively — slow down and read the rack before each discard. Speed doesn't score points here.";
+    timingInsight="Passing reflexively, slow down and read the rack before each discard. Speed doesn't score points here.";
   }
 
   return{timingScore:Math.max(2,Math.min(10,timingScore)),timingInsight};
@@ -2558,15 +2558,15 @@ function iqTiming(totalTime,roundCount,passLog){
 
 const IQ_TIERS=[
   {
-    min:95,max:100,range:"95–100",level:"Mahjong Master",color:C.jade,bg:C.jade+"12",
+    min:95,max:100,range:"95-100",level:"Mahjong Master",color:C.jade,bg:C.jade+"12",
     notes:[
       "You saw everything. Clean reads and total control.",
       "Elite Charleston. You dictated the rack from start to finish.",
-      "Nothing got past you — perfect instincts today."
+      "Nothing got past you, perfect instincts today."
     ]
   },
   {
-    min:90,max:94,range:"90–94",level:"Table Controller",color:C.jade,bg:C.jade+"10",
+    min:90,max:94,range:"90-94",level:"Table Controller",color:C.jade,bg:C.jade+"10",
     notes:[
       "You controlled the flow of the Charleston.",
       "Strong reads with confident direction throughout.",
@@ -2574,7 +2574,7 @@ const IQ_TIERS=[
     ]
   },
   {
-    min:85,max:89,range:"85–89",level:"Sharp Player",color:C.jade,bg:C.jade+"08",
+    min:85,max:89,range:"85-89",level:"Sharp Player",color:C.jade,bg:C.jade+"08",
     notes:[
       "Strong reads with confident passing.",
       "Clean Charleston with one small edge to unlock.",
@@ -2582,23 +2582,23 @@ const IQ_TIERS=[
     ]
   },
   {
-    min:80,max:84,range:"80–84",level:"Confident Reader",color:C.jade,bg:C.jade+"06",
+    min:80,max:84,range:"80-84",level:"Confident Reader",color:C.jade,bg:C.jade+"06",
     notes:[
       "You played with confidence and direction.",
-      "Good instincts — now tighten a few passes.",
+      "Good instincts, now tighten a few passes.",
       "You saw the board clearly most of the way."
     ]
   },
   {
-    min:75,max:79,range:"75–79",level:"Table Ready",color:"#2460A8",bg:"#2460A810",
+    min:75,max:79,range:"75-79",level:"Table Ready",color:"#2460A8",bg:"#2460A810",
     notes:[
-      "You’re ready for the table — just refine execution.",
+      "You’re ready for the table, just refine execution.",
       "Good instincts with room to sharpen.",
       "Solid direction throughout the Charleston."
     ]
   },
   {
-    min:70,max:74,range:"70–74",level:"Steady Player",color:"#2460A8",bg:"#2460A808",
+    min:70,max:74,range:"70-74",level:"Steady Player",color:"#2460A8",bg:"#2460A808",
     notes:[
       "You stayed steady with improving reads.",
       "A few cleaner decisions unlock more.",
@@ -2606,23 +2606,23 @@ const IQ_TIERS=[
     ]
   },
   {
-    min:65,max:69,range:"65–69",level:"Finding Your Flow",color:C.gold,bg:C.gold+"10",
+    min:65,max:69,range:"65-69",level:"Finding Your Flow",color:C.gold,bg:C.gold+"10",
     notes:[
-      "Your instincts are forming — trust them earlier.",
-      "You had strong ideas — commit with more confidence.",
+      "Your instincts are forming, trust them earlier.",
+      "You had strong ideas, commit with more confidence.",
       "You’re starting to see the shape."
     ]
   },
   {
-    min:60,max:64,range:"60–64",level:"Building Rhythm",color:C.gold,bg:C.gold+"08",
+    min:60,max:64,range:"60-64",level:"Building Rhythm",color:C.gold,bg:C.gold+"08",
     notes:[
-      "You’re finding rhythm — stay flexible a bit longer.",
+      "You’re finding rhythm, stay flexible a bit longer.",
       "The reads are coming together.",
       "You’re close to cleaner passing."
     ]
   },
   {
-    min:55,max:59,range:"55–59",level:"Reading the Rack",color:C.gold,bg:C.gold+"06",
+    min:55,max:59,range:"55-59",level:"Reading the Rack",color:C.gold,bg:C.gold+"06",
     notes:[
       "You’re starting to read the rack better.",
       "Try narrowing your direction earlier.",
@@ -2630,7 +2630,7 @@ const IQ_TIERS=[
     ]
   },
   {
-    min:50,max:54,range:"50–54",level:"Warming Up",color:C.cinn,bg:C.cinn+"10",
+    min:50,max:54,range:"50-54",level:"Warming Up",color:C.cinn,bg:C.cinn+"10",
     notes:[
       "You’re getting into the flow of the Charleston.",
       "Focus on simplifying early decisions.",
@@ -2817,7 +2817,7 @@ function iqDistanceToOptimal(finalRack,startingRack,passedTilesByRound,sectionId
   finalRack.forEach(t=>{if(isWeak(t))offDir.push(tLabel(t));});
   const offDirectionTiles=offDir.slice(0,5);
 
-  // Key mistake round — which pass gave away the most useful tiles
+  // Key mistake round, which pass gave away the most useful tiles
   let keyMistakeRound=null;let worstAdj=-99;
   (passedTilesByRound||[]).forEach(p=>{
     const tiles=p.out||[];
@@ -2842,17 +2842,17 @@ function iqDistanceToOptimal(finalRack,startingRack,passedTilesByRound,sectionId
     }
   });
 
-  // Depth gap for CR — window depth based
+  // Depth gap for CR, window depth based
   let runGap=0;
   if(sectionId==="cr"){const ws=crWindowScore(finalRack);runGap=Math.max(0,Math.round(7-(ws.groupDepth||0)));}
 
   const distanceCount=Math.min(missingStrongTiles.length,3)+Math.min(offDirectionTiles.length,2)+runGap+brokenPairs.length;
 
   let explanation="Your final rack was well-optimised for your target direction.";
-  if(runGap>4)explanation="Your number tiles didn't consolidate into groups — CR needs pungs and kongs within a 3–4 number window, not singles.";
-  else if(runGap>0)explanation="You had the right number window but needed deeper groups — aim for pungs/kongs rather than singles.";
+  if(runGap>4)explanation="Your number tiles didn't consolidate into groups, CR needs pungs and kongs within a 3-4 number window, not singles.";
+  else if(runGap>0)explanation="You had the right number window but needed deeper groups, aim for pungs/kongs rather than singles.";
   else if(brokenPairs.length>0)explanation=`You broke ${brokenPairs.length} pair${brokenPairs.length>1?"s":""} (${brokenPairs.join(", ")}) during the Charleston.`;
-  else if(missingStrongTiles.length>0)explanation=`Your rack was missing ${missingStrongTiles.slice(0,2).join(" and ")} — key tiles for this section.`;
+  else if(missingStrongTiles.length>0)explanation=`Your rack was missing ${missingStrongTiles.slice(0,2).join(" and ")}, key tiles for this section.`;
   else if(offDirectionTiles.length>0)explanation=`${offDirectionTiles.length} off-direction tile${offDirectionTiles.length>1?"s":""} stayed in your rack.`;
 
   return{missingStrongTiles,offDirectionTiles,keyMistakeRound,brokenPairs,distanceCount,explanation};
@@ -2923,9 +2923,9 @@ function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScor
   if(directionScore<20)weaknesses.push("Your rack stayed a little too wide.");
   if(tileStrengthScore<=10)weaknesses.push("Your final rack needed more connected tiles.");
   if(passQualityScore<=12)weaknesses.push("A few risky passes gave away useful tiles.");
-  // Section-specific pair feedback — in S&P, breaking triples into pairs is good
+  // Section-specific pair feedback, in S&P, breaking triples into pairs is good
   if(brokenPairsCount>0&&sectionId!=="sp"){
-    weaknesses.push(`Broke ${brokenPairsCount} pair${brokenPairsCount>1?"s":""} during the Charleston — protect your pairs.`);
+    weaknesses.push(`Broke ${brokenPairsCount} pair${brokenPairsCount>1?"s":""} during the Charleston, protect your pairs.`);
   }
   if(timingScore<=5)weaknesses.push("Your pace got uneven. Take a breath, read the rack, then pass.");
 
@@ -2937,23 +2937,23 @@ function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScor
 
   // Section-specific coach notes
   if(sectionId==="sp"){
-    if(directionScore<20&&passQualityScore<=12)coachNote="S&P is fully concealed — you can't expose tiles. Focus on building pairs and getting rid of jokers and triples early.";
+    if(directionScore<20&&passQualityScore<=12)coachNote="S&P is fully concealed, you can't expose tiles. Focus on building pairs and getting rid of jokers and triples early.";
     else if(passQualityScore<=12)coachNote="You were playing S&P, but passed tiles that would have been good pairs. For S&P: hold pairs, pass jokers, pass triples.";
-    else if(directionScore<20)coachNote="Your rack had too many singles. S&P needs 6+ clean pairs to win — consolidate toward fewer, deeper pairs.";
+    else if(directionScore<20)coachNote="Your rack had too many singles. S&P needs 6+ clean pairs to win, consolidate toward fewer, deeper pairs.";
     else coachNote="S&P is a discipline game. Keep holding pairs, keep releasing jokers, and you'll complete it.";
   } else if(sectionId==="q"){
-    if(directionScore<20)coachNote="Quints without 2 jokers is nearly impossible. Identify joker count in deal — if you have fewer than 2, pivot immediately.";
+    if(directionScore<20)coachNote="Quints without 2 jokers is nearly impossible. Identify joker count in deal, if you have fewer than 2, pivot immediately.";
     else coachNote="With 2 jokers, focus entirely on stacking 3-4 of one specific tile. Spread is your enemy in Quints.";
   } else if(sectionId==="cr"){
-    if(directionScore<20)coachNote="Consecutive Run isn't about long strings of singles — it's pungs and kongs within a 3-4 number window. Identify your window by pass 1.";
+    if(directionScore<20)coachNote="Consecutive Run isn't about long strings of singles, it's pungs and kongs within a 3-4 number window. Identify your window by pass 1.";
     else if(tileStrengthScore<=10)coachNote="You had the right window, but not enough group depth. Pass tiles outside the window ruthlessly to deepen groups within it.";
     else coachNote="Good CR instincts. Next level: pick the tightest window possible (3-wide > 5-wide) for more hand options.";
   } else if(sectionId==="wd"){
     if(directionScore<20)coachNote="W&D needs 7+ honor tiles. Pass all number tiles in round 1 unless you have a complete kong of 1-4.";
-    else coachNote="Winds are your backbone — 7 of 8 hands use them. Stack same-wind groups before dragons.";
+    else coachNote="Winds are your backbone, 7 of 8 hands use them. Stack same-wind groups before dragons.";
   } else if(sectionId==="2026"){
-    if(directionScore<20)coachNote="2026 needs both 2s and 6s — they appear in all 4 hands. Soap (White Dragon) is wild-suit zero. These three tiles are your filter.";
-    else coachNote="Strong 2026 read. Soap (White Dragon) makes it easier — it plays as any suit, so hold it whenever you're building this section.";
+    if(directionScore<20)coachNote="2026 needs both 2s and 6s, they appear in all 4 hands. Soap (White Dragon) is wild-suit zero. These three tiles are your filter.";
+    else coachNote="Strong 2026 read. Soap (White Dragon) makes it easier, it plays as any suit, so hold it whenever you're building this section.";
   } else if(directionScore<20&&passQualityScore<=12){
     coachNote="Your passing and direction both need attention. The key habit: identify your strongest group before your very first pass, then protect it ruthlessly.";
   } else if(passQualityScore<=12){
@@ -2961,28 +2961,28 @@ function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScor
   } else if(directionScore<20){
     coachNote="Your passing was disciplined, but the rack didn't commit to a clear path. Try to name your section by the second pass and filter from there.";
   } else if(brokenPairsCount>0){
-    coachNote="Watch your pairs. A pair broken early often can't be rebuilt — they're structural anchors for most hands.";
+    coachNote="Watch your pairs. A pair broken early often can't be rebuilt, they're structural anchors for most hands.";
   } else {
-    coachNote="Push higher by paying attention to your middle tiles — the ones that could serve two sections. Committing early to one path unlocks a sharper Charleston.";
+    coachNote="Push higher by paying attention to your middle tiles, the ones that could serve two sections. Committing early to one path unlocks a sharper Charleston.";
   }
 
   // Section-specific tryNextTime tips
   const secTips={
     "2026":"Hold every 2, 6, and Soap you see. In round 1, pass all odd numbers except via a Soap or Dragon connection.",
-    "2468":"Pass odds immediately in round 1. Your 6s are the anchor — never pass a 6 in any round.",
-    "369":"6 is in every 369 hand — never pass it. Round 1: pass everything except 3s, 6s, 9s, jokers, and flowers.",
-    "13579":"5 and 3 appear in every 13579 hand — prioritize them above all other odds. Pass all even tiles in round 1 without hesitation.",
+    "2468":"Pass odds immediately in round 1. Your 6s are the anchor, never pass a 6 in any round.",
+    "369":"6 is in every 369 hand, never pass it. Round 1: pass everything except 3s, 6s, 9s, jokers, and flowers.",
+    "13579":"5 and 3 appear in every 13579 hand, prioritize them above all other odds. Pass all even tiles in round 1 without hesitation.",
     "cr":"Identify your 3-4 number window by your first pass. Then pass every tile outside that window, even if it hurts.",
     "wd":"Pass every number tile round 1 unless you have 4 of one number (1-4 only). Winds first, then dragons.",
-    "aln":"Pick your number immediately. Pass everything else — every round — until you have 8+ of that one number.",
+    "aln":"Pick your number immediately. Pass everything else, every round, until you have 8+ of that one number.",
     "q":"Count jokers first. If you have 2+, pick your target tile and stack it. If fewer than 2, pivot to another section.",
-    "sp":"Pass jokers immediately — they're worthless here. Hold every pair. Break no pairs to chase anything.",
+    "sp":"Pass jokers immediately, they're worthless here. Hold every pair. Break no pairs to chase anything.",
   };
   const scores=[
     {name:"direction",ratio:directionScore/40,tip:secTips[sectionId]||"Before your first pass, identify the section your rack most favors. Everything else follows from that read."},
     {name:"tiles",ratio:tileStrengthScore/25,tip:"Before passing any tile, ask: does it support my main group, a pair, or a window? If no to all three, it goes."},
     {name:"passes",ratio:passQualityScore/25,tip:"Before each pass, check: does this tile connect to anything I'm keeping? Tiles that connect to nothing are the ones to pass."},
-    {name:"timing",ratio:timingScore/10,tip:"Aim for 10–25 seconds per pass — the real-world average is about 17s. Enough to read the rack without second-guessing your first instinct."},
+    {name:"timing",ratio:timingScore/10,tip:"Aim for 10-25 seconds per pass, the real-world average is about 17s. Enough to read the rack without second-guessing your first instinct."},
   ];
   const worst=scores.sort((a,b)=>a.ratio-b.ratio)[0];
   tryNextTime=worst.tip;
@@ -3005,7 +3005,7 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
     ?recommendSpecificHands(finalRack,sectionId)[0]||null
     :null;
   const chosenHandObj=explicitHandObj||inferredHandObj;
-  // Flag whether the hand was inferred vs explicitly chosen — used for explanation text
+  // Flag whether the hand was inferred vs explicitly chosen, used for explanation text
   const handWasInferred=!explicitHandObj&&!!inferredHandObj;
 
   const roundCount=Math.max((passedTilesByRound||[]).length,1);
@@ -3066,7 +3066,7 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
     directionScore=Math.min(40,directionScore+1);
     tileStrengthScore=Math.min(25,tileStrengthScore+(tileStrengthScore<18?2:0));
   }
-  // Poor deal floors — a player shouldn't be punished for bad luck
+  // Poor deal floors, a player shouldn't be punished for bad luck
   // NORMALIZATION: W&D and ALN floors are raised because random deals almost never
   // produce 7+ honors or 4+ of one number naturally. A player who correctly identifies
   // and commits to these sections on a lean deal deserves protection from the floor too.
@@ -3092,19 +3092,19 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   const chosenScore=chosenIdx>=0?allSectionScores[chosenIdx]:0;
   const otherScores=allSectionScores.filter((_,i)=>i!==chosenIdx);
   const bestOther=otherScores.length?Math.max(...otherScores):0;
-  // Section difficulty multiplier — harder sections need a lower dominance threshold to earn the bonus
+  // Section difficulty multiplier, harder sections need a lower dominance threshold to earn the bonus
   // W&D and ALN require tighter commitment and have lower natural ck() ceilings, so the bar is lower
   const sectionDifficultyThreshold={"wd":1.6,"aln":1.6,"q":1.4,"sp":1.8}[sectionId]||2.5;
   const sectionDominanceCap={"wd":2.0,"aln":2.0,"q":1.8,"sp":2.2}[sectionId]||3.5;
   if(chosenScore>=0.08&&chosenScore>=bestOther*sectionDifficultyThreshold){
     directionScore=Math.min(40,directionScore+3);
-    directionExplanation+=" Your rack clearly committed to this section — that's decisive.";
+    directionExplanation+=" Your rack clearly committed to this section, that's decisive.";
   } else if(chosenScore>=0.05&&chosenScore>=bestOther*Math.min(sectionDominanceCap,sectionDifficultyThreshold*0.85)){
     directionScore=Math.min(40,directionScore+1);
   } else if(chosenScore>=0.2&&chosenScore>=bestOther*2.5){
-    // Legacy threshold for easy flexible sections — unchanged
+    // Legacy threshold for easy flexible sections, unchanged
     directionScore=Math.min(40,directionScore+2);
-    directionExplanation+=" Your rack had nowhere else to go — that's a decisive deal.";
+    directionExplanation+=" Your rack had nowhere else to go, that's a decisive deal.";
   } else if(chosenScore>=0.2&&chosenScore>=bestOther*1.8){
     directionScore=Math.min(40,directionScore+1);
   }
@@ -3168,9 +3168,9 @@ function adv(hand,cid){
   const p=ch?(ch.score*100).toFixed(0):"0";
   const topPct=(top.score*100).toFixed(0);
   let r;
-  if(v==="Strong choice"){r=`${p}% fit — your tiles aligned well with ${ch?.name}. Solid passing instincts.`;}
+  if(v==="Strong choice"){r=`${p}% fit, your tiles aligned well with ${ch?.name}. Solid passing instincts.`;}
   else if(v==="Playable but risky"){r=`${p}% fit for ${ch?.name}, but your tiles leaned more toward ${top.name} (${topPct}%). A pivot earlier could have paid off.`;}
-  else{r=`Only ${p}% fit for ${ch?.name}. Your tiles were a much better match for ${top.name} (${topPct}%) — worth practicing that read.`;}
+  else{r=`Only ${p}% fit for ${ch?.name}. Your tiles were a much better match for ${top.name} (${topPct}%), worth practicing that read.`;}
   return{verdict:v,emoji:em,reason:r,alts,top,chosen:ch};
 }
 
@@ -3283,7 +3283,7 @@ function getYesterday(){
 function getWeekly(){const w=Math.floor((Date.now()-new Date(2026,0,1))/604800000);const ids=["2468","13579","369","cr","wd","aln","sp","2026","q"];return SECS.find(s=>s.id===ids[w%ids.length]);}
 
 // ─── CLUB LEADERBOARD ─────────────────────────────────────────────────────────
-// ─── CLUBS — fetched from Supabase, falls back to seed ───────────────────────
+// ─── CLUBS, fetched from Supabase, falls back to seed ───────────────────────
 const CLUBS_SEED={"1873":{name:"Apex Mahjong Club",emoji:"",location:"Apex, NC"}};
 let CLUBS=CLUBS_SEED;
 async function fetchClubs(){
@@ -3298,7 +3298,7 @@ async function fetchClubs(){
   }catch{}
 }
 
-// ─── STATS SYNC — push game history to Supabase ───────────────────────────────
+// ─── STATS SYNC, push game history to Supabase ───────────────────────────────
 async function pushGameHistory(entry,playerId){
   if(!playerId)return;
   try{
@@ -3345,7 +3345,7 @@ function setClubName(n){ST.set("clubName",n);}
 function getProfile(){return ST.get("profile",null);}
 function setProfile(p){ST.set("profile",p);}
 
-// Upsert profile to Supabase — single source of truth for all profile writes
+// Upsert profile to Supabase, single source of truth for all profile writes
 async function upsertProfile(profile){
   try{
     const body={
@@ -3393,7 +3393,7 @@ async function fetchPasswordHash(playerId){
   }catch{return null;}
 }
 
-// Fetch full profile row by email — used for cross-device login
+// Fetch full profile row by email, used for cross-device login
 async function fetchProfileByEmail(email){
   try{
     const res=await fetch(`${SB_URL}/rest/v1/profiles?email=eq.${encodeURIComponent(email)}&select=*&limit=1`,{headers:SB_HEADERS});
@@ -3563,7 +3563,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
   const invite=()=>{
     const code=profile.clubCode;const club=CLUBS[code];
     const url=code?`playrackle.com?club=${code}`:"playrackle.com";
-    const text=`🀄 Play Rackle with me — the daily Charleston workout for American Mahjong!\n\nJoin ${club?club.name:"our club"} on the leaderboard:\n${url}${code?"\n\nYour club is pre-filled — just tap and join!":""}`;
+    const text=`🀄 Play Rackle with me, the daily Charleston workout for American Mahjong!\n\nJoin ${club?club.name:"our club"} on the leaderboard:\n${url}${code?"\n\nYour club is pre-filled, just tap and join!":""}`;
     window.location.href=`sms:?&body=${encodeURIComponent(text)}`;
     setInviting(true);setTimeout(()=>setInviting(false),3000);
   };
@@ -3602,7 +3602,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
             </div>
           </div>
           <div style={{marginBottom:10}}>
-            <div style={{fontSize:11,color:C.mut,fontWeight:600,marginBottom:5}}>Email <span style={{color:C.mut,fontWeight:400}}>(private — for account recovery)</span></div>
+            <div style={{fontSize:11,color:C.mut,fontWeight:600,marginBottom:5}}>Email <span style={{color:C.mut,fontWeight:400}}>(private, for account recovery)</span></div>
             <input type="email" value={profile.email||""} onChange={e=>setProfileState(p=>({...p,email:e.target.value}))} placeholder="your@email.com" style={{...inputStyle,border:`1.5px solid ${profile.email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email)?C.cinn:C.bdr}`}}/>
             {profile.email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email)&&<div style={{fontSize:10,color:C.cinn,marginTop:4}}>Enter a valid email address.</div>}
           </div>
@@ -3610,12 +3610,12 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
             <div style={{fontSize:11,color:C.mut,fontWeight:600,marginBottom:5}}>Your Club</div>
             <select value={profile.clubCode} onChange={e=>setProfileState(p=>({...p,clubCode:e.target.value}))} style={{...inputStyle}}>
               <option value="">No club yet</option>
-              {Object.entries(CLUBS).map(([code,club])=>(<option key={code} value={code}>{club.name} — {club.location}</option>))}
+              {Object.entries(CLUBS).map(([code,club])=>(<option key={code} value={code}>{club.name}, {club.location}</option>))}
             </select>
           </div>
           <div style={{height:1,background:C.bdr,margin:"14px 0"}}/>
           <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>SET A PASSWORD</div>
-          <div style={{fontSize:11,color:C.mut,lineHeight:1.5,marginBottom:10}}>At least 6 characters. Stored securely — lets you log in on any device.</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.5,marginBottom:10}}>At least 6 characters. Stored securely, lets you log in on any device.</div>
           <div style={{marginBottom:8}}>
             <div style={{fontSize:11,color:C.mut,fontWeight:600,marginBottom:5}}>Password</div>
             <div style={{position:"relative"}}>
@@ -3657,7 +3657,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
     );
   }
 
-  // ── SIGN IN — existing account, new device ────────────────────────────────
+  // ── SIGN IN, existing account, new device ────────────────────────────────
   if(mode==="signin"){
     const emailValid=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginEmail);
     return(
@@ -3666,7 +3666,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
         <div style={{textAlign:"center",padding:"24px 0 16px"}}>
           <div style={{fontSize:36,marginBottom:8}}>🀄</div>
           <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,marginBottom:6}}>Welcome back, Rackler</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.6}}>Pick up where you left off — your streak, score history, and club ranking are waiting.</div>
+          <div style={{fontSize:12,color:C.mut,lineHeight:1.6}}>Pick up where you left off, your streak, score history, and club ranking are waiting.</div>
         </div>
         <div style={S.card}>
           <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:12}}>YOUR ACCOUNT</div>
@@ -3787,7 +3787,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
       <div style={{...S.card,marginBottom:8,background:C.jade+"06",borderColor:C.jade+"25"}}>
         <div style={{fontSize:9,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:8}}>INVITE FRIENDS TO RACKLE</div>
         <div style={{fontSize:12,color:C.ink,lineHeight:1.6,marginBottom:10}}>
-          {profile.clubCode?<>Challenge your club — share code <strong>{profile.clubCode}</strong> and get everyone on the leaderboard.</>:"Share Rackle with your mahjong friends and build your club community."}
+          {profile.clubCode?<>Challenge your club, share code <strong>{profile.clubCode}</strong> and get everyone on the leaderboard.</>:"Share Rackle with your mahjong friends and build your club community."}
         </div>
         <button onClick={invite} style={{...S.greenBtn,width:"100%",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
           <span>📲</span><span>{inviting?"Opening Messages…":"Invite via Text"}</span>
@@ -3802,7 +3802,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
         </div>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:`1px solid ${C.bdr}`}}>
           <span style={{fontSize:12,color:C.mut,fontWeight:600}}>Email</span>
-          <span style={{fontSize:13,fontWeight:700,color:C.ink}}>{profile.email||"—"}</span>
+          <span style={{fontSize:13,fontWeight:700,color:C.ink}}>{profile.email||","}</span>
         </div>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",marginBottom:10}}>
           <span style={{fontSize:12,color:C.mut,fontWeight:600}}>Club</span>
@@ -3921,7 +3921,7 @@ async function deleteLBEntry(code,name){
   }catch{}
 }
 
-// Fetch global daily stats — total unique players + avg score across all clubs today
+// Fetch global daily stats, total unique players + avg score across all clubs today
 // Reuses fetchGlobalEntries to guarantee the count matches the global leaderboard exactly
 async function fetchDailyStats(){
   try{
@@ -3948,7 +3948,7 @@ function getOrCreateAnonymousName(){
 
 // Post to global leaderboard table (no club filter)
 async function upsertGlobalEntry(name,iqScore,time,streak,clubCode){
-  // Uses the existing `leaderboard` table — same table as club leaderboards.
+  // Uses the existing `leaderboard` table, same table as club leaderboards.
   // club_code stores the player's actual club (or null). Queried globally by omitting club_code filter.
   // Deduplication key: name + day_seed (same as club LB).
   try{
@@ -3956,7 +3956,7 @@ async function upsertGlobalEntry(name,iqScore,time,streak,clubCode){
     // If player has a club, their score is already submitted via upsertLBEntry.
     // For players without a club, write a global-only entry with club_code=null.
     if(clubCode){
-      // Already submitted to club table — no duplicate needed.
+      // Already submitted to club table, no duplicate needed.
       return true;
     }
     const res=await fetch(`${SB_URL}/rest/v1/leaderboard`,{
@@ -3980,7 +3980,7 @@ async function upsertGlobalEntry(name,iqScore,time,streak,clubCode){
   }
 }
 
-// Fetch global leaderboard — all scores today from the leaderboard table, no club filter
+// Fetch global leaderboard, all scores today from the leaderboard table, no club filter
 async function fetchGlobalEntries(){
   try{
     const seed=getDailySeed();
@@ -3995,7 +3995,7 @@ async function fetchGlobalEntries(){
       return[];
     }
     const rows=await res.json();
-    // Deduplicate by name — keep highest score
+    // Deduplicate by name, keep highest score
     const seen={};
     const deduped=[];
     rows.forEach(r=>{
@@ -4017,7 +4017,7 @@ async function fetchGlobalEntries(){
   }
 }
 
-// Personal best score — scans history for highest iqScore
+// Personal best score, scans history for highest iqScore
 function getBestIQ(){
   const h=getHist();
   if(!h.length)return null;
@@ -4028,7 +4028,7 @@ function getBestIQ(){
   return{score:best.iqScore,daysAgo,ts:best.ts};
 }
 
-// Nudge — shown after noon if daily not done and user has played before
+// Nudge, shown after noon if daily not done and user has played before
 function shouldShowNudge(dDone){
   if(dDone)return false;
   if(new Date().getHours()<12)return false;
@@ -4059,8 +4059,8 @@ function Ti({t,sel,isNew,onClick,dim,large}){
   </div>);}
 
 // ═══════════════════════════════════════════════════════════════════════════
-// COACHING ENGINE — rack narrative, flexibility, expert read, identity
-// Pure computation — no API, derived entirely from existing rack data.
+// COACHING ENGINE, rack narrative, flexibility, expert read, identity
+// Pure computation, no API, derived entirely from existing rack data.
 // ═══════════════════════════════════════════════════════════════════════════
 
 // ── 1. WHAT YOUR RACK WAS BECOMING ─────────────────────────────────────────
@@ -4076,30 +4076,30 @@ function computeRackBecoming(finalRack, startingRack, chosenSec, passLog){
   const honorTotal=windCount+dragonCount;
   const numTiles=finalRack.filter(t=>t.t==="s").length;
 
-  // Honor tile weight — check FIRST so W&D racks don't get a spurious suit label
-  if(honorTotal>=6)bullets.push("Honor-heavy rack — Winds & Dragons direction was becoming very clear");
-  else if(windCount>=4)bullets.push("Wind concentration — strong pull toward Winds & Dragons");
-  else if(windCount>=3&&dragonCount>=2)bullets.push("Honor tiles building — W&D section momentum was forming");
-  else if(honorTotal>=4)bullets.push("Meaningful honor presence — W&D worth considering");
+  // Honor tile weight, check FIRST so W&D racks don't get a spurious suit label
+  if(honorTotal>=6)bullets.push("Honor-heavy rack, Winds & Dragons direction was becoming very clear");
+  else if(windCount>=4)bullets.push("Wind concentration, strong pull toward Winds & Dragons");
+  else if(windCount>=3&&dragonCount>=2)bullets.push("Honor tiles building, W&D section momentum was forming");
+  else if(honorTotal>=4)bullets.push("Meaningful honor presence, W&D worth considering");
 
-  // Suit concentration — only meaningful when number tiles dominate the rack
+  // Suit concentration, only meaningful when number tiles dominate the rack
   if(numTiles>=6){
     const sc={bam:0,crak:0,dot:0};
     finalRack.filter(t=>t.t==="s").forEach(t=>{sc[t.s]++;});
     const dominant=Object.entries(sc).sort((a,b)=>b[1]-a[1])[0];
     const dominantName={bam:"Bamboo",crak:"Character",dot:"Circle"}[dominant[0]];
-    if(dominant[1]/numTiles>=0.6)bullets.push(`${dominantName}-heavy structure — your tiles were pulling toward one suit`);
-    else if(dominant[1]/numTiles>=0.45)bullets.push(`Leaning ${dominantName} — some suit concentration forming, not yet locked in`);
+    if(dominant[1]/numTiles>=0.6)bullets.push(`${dominantName}-heavy structure, your tiles were pulling toward one suit`);
+    else if(dominant[1]/numTiles>=0.45)bullets.push(`Leaning ${dominantName}, some suit concentration forming, not yet locked in`);
   }
 
-  // Number character — odd vs even
+  // Number character, odd vs even
   const odds=finalRack.filter(t=>t.t==="s"&&t.n%2===1).length;
   const evens=finalRack.filter(t=>t.t==="s"&&t.n%2===0).length;
   if(odds+evens>=5){
     const ratio=odds/(odds+evens);
-    if(ratio>=0.75)bullets.push("Odd-heavy rack — strong instinct toward odd-number sections");
-    else if(ratio<=0.28)bullets.push("Even-heavy rack — pointing toward 2468 or multiples-of-3 territory");
-    else if(odds+evens>=7)bullets.push("Mixed number parity — rack still had flexibility across odd and even sections");
+    if(ratio>=0.75)bullets.push("Odd-heavy rack, strong instinct toward odd-number sections");
+    else if(ratio<=0.28)bullets.push("Even-heavy rack, pointing toward 2468 or multiples-of-3 territory");
+    else if(odds+evens>=7)bullets.push("Mixed number parity, rack still had flexibility across odd and even sections");
   }
 
   // Pair/pung/kong structure
@@ -4111,31 +4111,31 @@ function computeRackBecoming(finalRack, startingRack, chosenSec, passLog){
   const pairs=Object.values(groups).filter(v=>v===2).length;
   const pungs=Object.values(groups).filter(v=>v===3).length;
   const kongs=Object.values(groups).filter(v=>v>=4).length;
-  if(kongs>=2)bullets.push("Deep group concentration — two or more kongs forming");
-  else if(pungs>=2)bullets.push("Pung-rich structure — multiple groups of three building");
-  else if(pairs>=4)bullets.push("Pair-based flexibility — rack was becoming pair-dense");
-  else if(pairs>=2&&numTiles>=6)bullets.push("Early pair structure — good foundation, still wide open");
+  if(kongs>=2)bullets.push("Deep group concentration, two or more kongs forming");
+  else if(pungs>=2)bullets.push("Pung-rich structure, multiple groups of three building");
+  else if(pairs>=4)bullets.push("Pair-based flexibility, rack was becoming pair-dense");
+  else if(pairs>=2&&numTiles>=6)bullets.push("Early pair structure, good foundation, still wide open");
 
   // Joker situation
-  if(jk>=3)bullets.push("Three jokers — exceptional wild-tile support for any open hand");
-  else if(jk===2)bullets.push("Two jokers — strong support for pung or kong completion");
-  else if(jk===1)bullets.push("One joker in hand — useful but commit carefully on where to use it");
-  else if(chosenSec!=="sp"&&bullets.length<3)bullets.push("No jokers — rack needed natural group depth to compete");
+  if(jk>=3)bullets.push("Three jokers, exceptional wild-tile support for any open hand");
+  else if(jk===2)bullets.push("Two jokers, strong support for pung or kong completion");
+  else if(jk===1)bullets.push("One joker in hand, useful but commit carefully on where to use it");
+  else if(chosenSec!=="sp"&&bullets.length<3)bullets.push("No jokers, rack needed natural group depth to compete");
 
   // Flowers
-  if(fl>=3)bullets.push("Flower-rich deal — multiple sections could absorb them");
-  else if(fl>=2)bullets.push("Two flowers — solid support for flower-inclusive hands");
+  if(fl>=3)bullets.push("Flower-rich deal, multiple sections could absorb them");
+  else if(fl>=2)bullets.push("Two flowers, solid support for flower-inclusive hands");
 
   // CR window signal
   if(chosenSec==="cr"||(numTiles>=8&&!chosenSec)){
     const cw=crWindowScore(finalRack);
-    if((cw.groupDepth||0)>=8)bullets.push("Consecutive Run depth — tight number window forming with multiple groups");
-    else if((cw.groupDepth||0)>=4)bullets.push("Early run structure — a window was starting to form in your numbers");
+    if((cw.groupDepth||0)>=8)bullets.push("Consecutive Run depth, tight number window forming with multiple groups");
+    else if((cw.groupDepth||0)>=4)bullets.push("Early run structure, a window was starting to form in your numbers");
   }
 
   // S&P signal
   if((chosenSec==="sp"||pairs>=5)&&jk===0&&pairs>=5){
-    bullets.push("Pair-only potential — a Soap & Pairs path was visible");
+    bullets.push("Pair-only potential, a Soap & Pairs path was visible");
   }
 
   return bullets.slice(0,5);
@@ -4164,7 +4164,7 @@ function computeFlexibility(finalRack, allSections, passLog, startingRack){
   score+=Math.min(livePaths*12,40);      // live paths (max 40)
   score+=Math.min(strongPaths*10,30);    // strong paths (max 30)
   score+=concentration<0.6?20:concentration<0.75?12:concentration<0.9?5:0; // openness bonus
-  // Pass quality modifies flexibility — passing strong tiles collapses options
+  // Pass quality modifies flexibility, passing strong tiles collapses options
   const weakPasses=(passLog||[]).filter(p=>(p.out||[]).some(t=>t.t==="j")).length;
   score-=weakPasses*8;
   score=Math.max(0,Math.min(100,Math.round(score)));
@@ -4178,10 +4178,10 @@ function computeFlexibility(finalRack, allSections, passLog, startingRack){
     desc="Your rack stayed adaptable while building structure. You have a clear direction but haven't closed off alternatives yet.";
   } else if(score>=38){
     label="Narrowing";color=C.gold;
-    desc="Your passes committed you earlier than most players would prefer. Still playable — but pivoting now costs tiles.";
+    desc="Your passes committed you earlier than most players would prefer. Still playable, but pivoting now costs tiles.";
   } else {
     label="Locked-In";color=C.cinn;
-    desc="Your rack became highly dependent on one outcome. Strong commitment has its place — but watch for the moments you overcommit.";
+    desc="Your rack became highly dependent on one outcome. Strong commitment has its place, but watch for the moments you overcommit.";
   }
 
   return{label,color,desc,livePaths,strongPaths,score};
@@ -4261,7 +4261,7 @@ function computeExpertRead(finalRack, chosenSec, allSections, passLog, iq){
   let flexScore=0;
   flexScore+=Math.min(strongPaths*15,40);
   flexScore+=livePaths>=5?20:livePaths>=3?12:livePaths>=2?6:0;
-  // Concentration penalty — one section dominating collapses options
+  // Concentration penalty, one section dominating collapses options
   const topConcentration=topPct>0?(topPct/(topPct+(sortedSecs[1]?.score||0.001)*100)):0;
   flexScore+=topConcentration<0.55?20:topConcentration<0.7?10:topConcentration<0.85?4:0;
   // Jokers add flexibility to any open hand
@@ -4344,30 +4344,30 @@ function computeExpertRead(finalRack, chosenSec, allSections, passLog, iq){
   if(chosenSec==="13579"){
     const has3=nc[3]||0,has5=nc[5]||0,has7=nc[7]||0;
     const anchor=has5>=2?"5s as anchor":(has3>=2?"3s as anchor":(has7>=2?"7s as anchor":"building odd structure"));
-    primaryDirection=`Odd number build centered on ${anchor}. ${strongPaths>=3?"Multiple viable 13579 hand patterns remain live — don't commit to a single hand yet.":"Narrow the field by deepening pungs rather than spreading across all five odd values."}`;
+    primaryDirection=`Odd number build centered on ${anchor}. ${strongPaths>=3?"Multiple viable 13579 hand patterns remain live, don't commit to a single hand yet.":"Narrow the field by deepening pungs rather than spreading across all five odd values."}`;
   } else if(chosenSec==="2468"){
     const has6=nc[6]||0,has2=nc[2]||0,has8=nc[8]||0;
-    primaryDirection=`Even structure${has6>=2?" with 6 as primary anchor — correctly prioritized":" still forming — 6 appears in 7 of 8 hands and must be the first pung you build"}. ${has2>=2||has8>=2?"Secondary pairs are developing on time.":"Deepen your even-number groups before the tiles you need become unavailable."}`;
+    primaryDirection=`Even structure${has6>=2?" with 6 as primary anchor, correctly prioritized":" still forming, 6 appears in 7 of 8 hands and must be the first pung you build"}. ${has2>=2||has8>=2?"Secondary pairs are developing on time.":"Deepen your even-number groups before the tiles you need become unavailable."}`;
   } else if(chosenSec==="369"){
     const has6=nc[6]||0,has3=nc[3]||0,has9=nc[9]||0;
-    primaryDirection=`369 build — ${has6>=2?"6 pung forming (correctly anchored)":"6 not yet paired — this is the most critical tile in the section"}. ${has3>=2||has9>=2?"Co-anchors forming.":"Pass everything outside 3-6-9 without hesitation."}`;
+    primaryDirection=`369 build, ${has6>=2?"6 pung forming (correctly anchored)":"6 not yet paired, this is the most critical tile in the section"}. ${has3>=2||has9>=2?"Co-anchors forming.":"Pass everything outside 3-6-9 without hesitation."}`;
   } else if(chosenSec==="2026"){
     const has2=nc[2]||0,has6=nc[6]||0,soap=dragTiles.filter(t=>t.v==="Soap").length;
-    primaryDirection=`2026 structure${has2>=2&&has6>=2?" — both anchors present, strong position":(has2>=1||has6>=1)?" — partial anchors; need depth in both 2s and 6s":" — anchors missing; this section needs significant tile improvement"}. ${soap>=1?"Soap (White Dragon) in hand — the critical wildcard is protected.":"Hunt for Soap — it appears in 3 of 4 hands."}`;
+    primaryDirection=`2026 structure${has2>=2&&has6>=2?", both anchors present, strong position":(has2>=1||has6>=1)?", partial anchors; need depth in both 2s and 6s":", anchors missing; this section needs significant tile improvement"}. ${soap>=1?"Soap (White Dragon) in hand, the critical wildcard is protected.":"Hunt for Soap, it appears in 3 of 4 hands."}`;
   } else if(chosenSec==="cr"){
     const runLen=iqLongestRun(finalRack);
-    primaryDirection=`Consecutive Run build — ${runLen>=4?"a ${runLen}-wide window is forming":runLen>=2?"partial run continuity, window needs tightening":"no clear window yet"}. Depth within a 3-4 number window is more valuable than a wide spread of singles.`;
+    primaryDirection=`Consecutive Run build, ${runLen>=4?"a ${runLen}-wide window is forming":runLen>=2?"partial run continuity, window needs tightening":"no clear window yet"}. Depth within a 3-4 number window is more valuable than a wide spread of singles.`;
   } else if(chosenSec==="wd"){
-    primaryDirection=`Winds & Dragons — ${honorTotal>=7?"strong honor concentration, committed to this section":honorTotal>=5?"credible foundation, pass all 5-9 tiles immediately":honorTotal>=3?"early honor presence — needs significant development":"very thin honor count; aggressive passing of number tiles required"}. ${windPungs>=1?"Wind pung already forming — excellent.":"Stack one wind value before chasing variety."}`;
+    primaryDirection=`Winds & Dragons, ${honorTotal>=7?"strong honor concentration, committed to this section":honorTotal>=5?"credible foundation, pass all 5-9 tiles immediately":honorTotal>=3?"early honor presence, needs significant development":"very thin honor count; aggressive passing of number tiles required"}. ${windPungs>=1?"Wind pung already forming, excellent.":"Stack one wind value before chasing variety."}`;
   } else if(chosenSec==="aln"){
     const topNum=Object.entries(nc).sort((a,b)=>b[1]-a[1])[0];
-    primaryDirection=`Any Like Numbers — ${topNum&&topNum[1]>=3?`${topNum[0]}s are your number (${topNum[1]} in hand — good depth)`:topNum&&topNum[1]>=2?`${topNum[0]}s leading, but need more depth — pass everything else ruthlessly`:"number not yet identified — choose your deepest tile and commit completely"}. ALN rewards extreme focus; every off-number is a liability.`;
+    primaryDirection=`Any Like Numbers, ${topNum&&topNum[1]>=3?`${topNum[0]}s are your number (${topNum[1]} in hand, good depth)`:topNum&&topNum[1]>=2?`${topNum[0]}s leading, but need more depth, pass everything else ruthlessly`:"number not yet identified, choose your deepest tile and commit completely"}. ALN rewards extreme focus; every off-number is a liability.`;
   } else if(chosenSec==="q"){
-    primaryDirection=`Quints — ${jk>=3?"three jokers gives exceptional ceiling":jk>=2?"two jokers means the section is accessible":jk===1?"only one joker — you need a second before fully committing":"no jokers means Quints is unavailable; start planning your exit now"}. ${kongs>=1||pungs>=1?"Natural depth forming alongside jokers — stack it.":"Need 3-4 natural copies of a tile to pair with jokers."}`;
+    primaryDirection=`Quints, ${jk>=3?"three jokers gives exceptional ceiling":jk>=2?"two jokers means the section is accessible":jk===1?"only one joker, you need a second before fully committing":"no jokers means Quints is unavailable; start planning your exit now"}. ${kongs>=1||pungs>=1?"Natural depth forming alongside jokers, stack it.":"Need 3-4 natural copies of a tile to pair with jokers."}`;
   } else if(chosenSec==="sp"){
-    primaryDirection=`Singles & Pairs — ${jk===0?"correctly joker-free for a concealed hand":jk>0?`${jk} joker${jk>1?"s":""} remaining — pass them, they cannot be used here`:""}. ${pairs>=4?"Strong pair density — this rack is building well for S&P":pairs>=2?"pairs forming, need 6 total for completion":"pair count is low — focus every draw decision on matching tiles"}. No exposures allowed.`;
+    primaryDirection=`Singles & Pairs, ${jk===0?"correctly joker-free for a concealed hand":jk>0?`${jk} joker${jk>1?"s":""} remaining, pass them, they cannot be used here`:""}. ${pairs>=4?"Strong pair density, this rack is building well for S&P":pairs>=2?"pairs forming, need 6 total for completion":"pair count is low, focus every draw decision on matching tiles"}. No exposures allowed.`;
   } else {
-    primaryDirection=`${chosenName} — ${chosenPct}% structural fit after the Charleston.`;
+    primaryDirection=`${chosenName}, ${chosenPct}% structural fit after the Charleston.`;
   }
 
   // ── SECONDARY PATHS ─────────────────────────────────────────────────────────
@@ -4387,7 +4387,7 @@ function computeExpertRead(finalRack, chosenSec, allSections, passLog, iq){
       "q":"joker count makes a Quints pivot theoretically available",
       "sp":"pair density keeps S&P as a live escape route",
     }[s.id]||`${pct}% fit keeps this alive`;
-    secondaryPaths.push(`${s.icon||""} ${secNames[s.id]||s.id} (${pct}% fit) — ${why}`);
+    secondaryPaths.push(`${s.icon||""} ${secNames[s.id]||s.id} (${pct}% fit), ${why}`);
   });
 
   // ── KEY OBSERVATIONS ─────────────────────────────────────────────────────────
@@ -4396,39 +4396,39 @@ function computeExpertRead(finalRack, chosenSec, allSections, passLog, iq){
   // Suit usage
   if(totalNums>=5){
     const suitRatio=dominantSuitCount/totalNums;
-    if(suitRatio>=0.75)observations.push(`Suit concentration: ${Math.round(suitRatio*100)}% of number tiles are ${suitName[dominantSuit]||dominantSuit} — natural pull toward single-suit hands. Strong efficiency for section hands that allow one suit.`);
-    else if(suitRatio>=0.5)observations.push(`Suit lean toward ${suitName[dominantSuit]||dominantSuit} (${dominantSuitCount} of ${totalNums} number tiles) with real secondary presence in the other suits — multi-suit hands remain very viable.`);
-    else observations.push(`Suit spread is balanced across all three suits — this rack has cross-suit flexibility but will need to consolidate for most final hands.`);
+    if(suitRatio>=0.75)observations.push(`Suit concentration: ${Math.round(suitRatio*100)}% of number tiles are ${suitName[dominantSuit]||dominantSuit}, natural pull toward single-suit hands. Strong efficiency for section hands that allow one suit.`);
+    else if(suitRatio>=0.5)observations.push(`Suit lean toward ${suitName[dominantSuit]||dominantSuit} (${dominantSuitCount} of ${totalNums} number tiles) with real secondary presence in the other suits, multi-suit hands remain very viable.`);
+    else observations.push(`Suit spread is balanced across all three suits, this rack has cross-suit flexibility but will need to consolidate for most final hands.`);
   }
 
   // Group concentration
-  if(kongs>=2)observations.push(`Two or more kong-depth groups — exceptional concentration. The rack is structurally locked but positioned to complete quickly.`);
-  else if(kongs>=1)observations.push(`Kong-depth group forming — that tile is effectively claimed. Build the rest of the rack around this anchor.`);
-  else if(pungs>=2)observations.push(`Multiple pungs building — strong group structure without over-commitment. Flexibility is higher than the depth suggests.`);
-  else if(pungs>=1)observations.push(`One pung established — a useful anchor. The remaining tiles still allow directional adjustment.`);
-  else if(pairs>=3)observations.push(`Pair-dense rack (${pairs} pairs) without pungs — useful for S&P or as a base for further development, but depth is needed to win most other sections.`);
-  else if(pairs>=1)observations.push(`Early pair structure forming. Pairs are the building blocks — protect them and look to deepen into pungs.`);
+  if(kongs>=2)observations.push(`Two or more kong-depth groups, exceptional concentration. The rack is structurally locked but positioned to complete quickly.`);
+  else if(kongs>=1)observations.push(`Kong-depth group forming, that tile is effectively claimed. Build the rest of the rack around this anchor.`);
+  else if(pungs>=2)observations.push(`Multiple pungs building, strong group structure without over-commitment. Flexibility is higher than the depth suggests.`);
+  else if(pungs>=1)observations.push(`One pung established, a useful anchor. The remaining tiles still allow directional adjustment.`);
+  else if(pairs>=3)observations.push(`Pair-dense rack (${pairs} pairs) without pungs, useful for S&P or as a base for further development, but depth is needed to win most other sections.`);
+  else if(pairs>=1)observations.push(`Early pair structure forming. Pairs are the building blocks, protect them and look to deepen into pungs.`);
 
   // Joker insight
-  if(jk>=3)observations.push(`Three jokers — rare and powerful. This rack can complete almost any open hand. Don't over-specify your target; let the draw refine the direction.`);
-  else if(jk===2)observations.push(`Two jokers support any open pung or kong. Keep the rack structure simple — jokers fill the gaps you leave.`);
+  if(jk>=3)observations.push(`Three jokers, rare and powerful. This rack can complete almost any open hand. Don't over-specify your target; let the draw refine the direction.`);
+  else if(jk===2)observations.push(`Two jokers support any open pung or kong. Keep the rack structure simple, jokers fill the gaps you leave.`);
   else if(jk===1)observations.push(`One joker provides a single flexible wildcard. Assign it mentally to your hardest-to-complete group and protect that direction.`);
-  else if(chosenSec!=="sp")observations.push(`No jokers — every group must be completed naturally. The rack needs higher tile concentration to compensate.`);
+  else if(chosenSec!=="sp")observations.push(`No jokers, every group must be completed naturally. The rack needs higher tile concentration to compensate.`);
 
   // Isolated tile risk
-  if(isolatedTiles>=5)observations.push(`${isolatedTiles} isolated tiles (singletons without a matching pair) create vulnerability — too many specific draws are needed to salvage them. Consider narrowing focus.`);
-  else if(isolatedTiles>=3)observations.push(`${isolatedTiles} isolated tiles. These need to either find pairs through draws or leave via future passes — watch which direction the rack is moving.`);
-  else if(isolatedTiles<=1&&totalNums>=6)observations.push(`Low isolated tile count — almost every number tile in the rack has structural company. Efficient.`);
+  if(isolatedTiles>=5)observations.push(`${isolatedTiles} isolated tiles (singletons without a matching pair) create vulnerability, too many specific draws are needed to salvage them. Consider narrowing focus.`);
+  else if(isolatedTiles>=3)observations.push(`${isolatedTiles} isolated tiles. These need to either find pairs through draws or leave via future passes, watch which direction the rack is moving.`);
+  else if(isolatedTiles<=1&&totalNums>=6)observations.push(`Low isolated tile count, almost every number tile in the rack has structural company. Efficient.`);
 
   // Flower note
-  if(fl>=3)observations.push(`Three Flowers — above-average flower count supports the majority of hands that use them. High-value hold.`);
+  if(fl>=3)observations.push(`Three Flowers, above-average flower count supports the majority of hands that use them. High-value hold.`);
   else if(fl>=2)observations.push(`Two Flowers provide solid support for flower-inclusive hands across most sections.`);
-  else if(fl===0&&chosenSec!=="wd"&&chosenSec!=="sp")observations.push(`No Flowers — many winning hands use at least one. This is not critical yet but worth noting.`);
+  else if(fl===0&&chosenSec!=="wd"&&chosenSec!=="sp")observations.push(`No Flowers, many winning hands use at least one. This is not critical yet but worth noting.`);
 
   // Pass quality note
-  if(passedJokers>0)observations.push(`Joker${passedJokers>1?"s":""} passed during the Charleston — almost always the wrong move. Jokers are the most flexible tile on the board.`);
-  if(passRatio>=0.8)observations.push(`Pass execution was strong — the right tiles left the rack on time.`);
-  else if(passRatio<=0.4)observations.push(`Pass decisions cost this rack structure — tiles the section needed were allowed to leave.`);
+  if(passedJokers>0)observations.push(`Joker${passedJokers>1?"s":""} passed during the Charleston, almost always the wrong move. Jokers are the most flexible tile on the board.`);
+  if(passRatio>=0.8)observations.push(`Pass execution was strong, the right tiles left the rack on time.`);
+  else if(passRatio<=0.4)observations.push(`Pass decisions cost this rack structure, tiles the section needed were allowed to leave.`);
 
   // ── EXPERT INSIGHT ───────────────────────────────────────────────────────────
   let expertInsight="";
@@ -4440,17 +4440,17 @@ function computeExpertRead(finalRack, chosenSec, allSections, passLog, iq){
   // Signal 1: group depth signal
   if(kongs>=1&&pungs>=1)signals.push(`a kong and a pung already anchoring the rack`);
   else if(pungs>=2)signals.push(`two pungs giving the rack real structural depth`);
-  else if(pairs>=3&&pungs===0)signals.push(`${pairs} pairs without pungs — good base but needing deeper group development`);
+  else if(pairs>=3&&pungs===0)signals.push(`${pairs} pairs without pungs, good base but needing deeper group development`);
   else if(isolatedTiles>=4)signals.push(`too many singleton tiles requiring specific draws`);
 
   // Signal 2: flexibility signal
   if(flexibility==="High"&&commitment==="Low")signals.push(`strong optionality across ${strongPaths} live section paths`);
-  else if(flexibility==="Low"&&commitment==="High")signals.push(`a rack that's committed early — the upside is speed, the risk is deadness if key tiles don't arrive`);
+  else if(flexibility==="Low"&&commitment==="High")signals.push(`a rack that's committed early, the upside is speed, the risk is deadness if key tiles don't arrive`);
   else if(pivotPotential==="Strong")signals.push(`real pivot options still available if the primary direction stalls`);
 
   // Signal 3: joker signal
   if(jk>=2)signals.push(`${jk} jokers providing significant wildcard ceiling`);
-  else if(jk===0&&commitment==="High")signals.push(`no joker support in a committed rack — natural tile draws become critical`);
+  else if(jk===0&&commitment==="High")signals.push(`no joker support in a committed rack, natural tile draws become critical`);
 
   // Signal 4: suit signal
   if(totalNums>=5&&dominantSuitCount/totalNums>=0.7)signals.push(`strong ${suitName[dominantSuit]||dominantSuit} concentration building natural suit efficiency`);
@@ -4462,23 +4462,23 @@ function computeExpertRead(finalRack, chosenSec, allSections, passLog, iq){
     if(signals[2])expertInsight+=`${signals[2].charAt(0).toUpperCase()+signals[2].slice(1)}. `;
     // Add section-specific closer
     const closers={
-      "13579":"The section has enough hand variety that staying flexible a few more draws is the right play — don't lock onto one specific 13579 hand until a second pung forms.",
-      "2468":"Six is the non-negotiable anchor in this section — every decision from here should protect it first.",
-      "369":"369 is the most unforgiving section for tile discipline — if it isn't 3, 6, or 9, it should be leaving the rack.",
-      "2026":"This section has only four hands, so tile specificity matters more than in larger sections — know which hand you're building toward.",
-      "cr":"Consecutive Run rewards depth over width — a tight 3-4 number window with pungs is worth more than six different numbers with singles.",
-      "wd":"Honor tiles compound slowly — patience through the early draws is part of the W&D strategy.",
+      "13579":"The section has enough hand variety that staying flexible a few more draws is the right play, don't lock onto one specific 13579 hand until a second pung forms.",
+      "2468":"Six is the non-negotiable anchor in this section, every decision from here should protect it first.",
+      "369":"369 is the most unforgiving section for tile discipline, if it isn't 3, 6, or 9, it should be leaving the rack.",
+      "2026":"This section has only four hands, so tile specificity matters more than in larger sections, know which hand you're building toward.",
+      "cr":"Consecutive Run rewards depth over width, a tight 3-4 number window with pungs is worth more than six different numbers with singles.",
+      "wd":"Honor tiles compound slowly, patience through the early draws is part of the W&D strategy.",
       "aln":"ALN is won by extreme focus; the rack that commits earliest and passes most ruthlessly usually finishes first.",
-      "q":"Quints is the highest-ceiling, narrowest-path section on the card — know your exit point if the second joker doesn't arrive.",
+      "q":"Quints is the highest-ceiling, narrowest-path section on the card, know your exit point if the second joker doesn't arrive.",
       "sp":"S&P is entirely concealed with no joker help, so every draw decision reduces to one question: does this tile match something I'm holding?",
     };
-    expertInsight+=(closers[chosenSec]||`The Charleston ended at a reasonable position — the next few draws will clarify which specific hand within ${sn} is the right target.`);
+    expertInsight+=(closers[chosenSec]||`The Charleston ended at a reasonable position, the next few draws will clarify which specific hand within ${sn} is the right target.`);
   } else {
     // Fallback for sparse racks
     expertInsight=`The rack exited the Charleston with ${flexibility.toLowerCase()} flexibility and ${commitment.toLowerCase()} commitment to ${sn}. `;
-    expertInsight+=deadnessRisk==="High"?"Deadness risk is elevated — pivot options should be identified now before tiles become unavailable.":
+    expertInsight+=deadnessRisk==="High"?"Deadness risk is elevated, pivot options should be identified now before tiles become unavailable.":
       deadnessRisk==="Medium"?"A few more draws will clarify whether the primary direction is viable or a pivot is needed.":
-      "The structure is sound and multiple paths remain live — let the draws lead the final hand decision.";
+      "The structure is sound and multiple paths remain live, let the draws lead the final hand decision.";
   }
 
   // Section fit for display
@@ -4534,11 +4534,11 @@ function computeMahjongIdentity(iq, chosenSec, passLog, finalRack){
   if(jk>=3&&pr>=0.7)return{archetype:"The Joker Keeper",tagline:"You held your wildcards and built around them. High-ceiling play."};
   if(dr>=0.7&&pr<0.5)return{archetype:"The Committed Player",tagline:"Strong direction, but your passes didn't always protect the plan. Two sides of the same coin."};
   if(dr<0.5&&pr>=0.75)return{archetype:"The Careful Passer",tagline:"Disciplined discards, but the section read was still forming. Trust your instincts earlier."};
-  if(tmr<=0.4&&dr>=0.7)return{archetype:"The Methodical Planner",tagline:"You took your time and committed to a direction. Slow and intentional — that's a style."};
-  if(passedJokers>0)return{archetype:"The Risk-Taker",tagline:"Passing a joker takes nerve. Sometimes it pays off — was this one of those times?"};
+  if(tmr<=0.4&&dr>=0.7)return{archetype:"The Methodical Planner",tagline:"You took your time and committed to a direction. Slow and intentional, that's a style."};
+  if(passedJokers>0)return{archetype:"The Risk-Taker",tagline:"Passing a joker takes nerve. Sometimes it pays off, was this one of those times?"};
   if(fl>=3&&tr>=0.6)return{archetype:"The Flower Collector",tagline:"Your flowers added real structural support. You recognized their value."};
   if(chosenSec==="sp")return{archetype:"The Pair Builder",tagline:"S&P is the disciplined path. Pairs only, no jokers, all instinct."};
-  if(chosenSec==="q")return{archetype:"The High Roller",tagline:"Quints or nothing. You swung for the fence — no shame in that."};
+  if(chosenSec==="q")return{archetype:"The High Roller",tagline:"Quints or nothing. You swung for the fence, no shame in that."};
   if(dr<0.5&&pr<0.5)return{archetype:"The Exploratory Player",tagline:"This rack kept you guessing. Sometimes the best round is the one that teaches you something."};
   return{archetype:"The Adaptive Player",tagline:"You adjusted as the rack evolved. Flexibility is an underrated skill in Mahjong."};
 }
@@ -4566,10 +4566,10 @@ function StartingDealCard({startingRack,chosenHandObj}){
         {startCoverage!=null&&chosenHandObj&&(
           <div style={{fontSize:11,color:C.ink,lineHeight:1.6,background:C.bg2,borderRadius:8,padding:"8px 10px"}}>
             {startCoverage>=60
-              ?`Your starting deal already covered ${startCoverage}% of ${chosenHandObj.label} — strong raw material. The Charleston was about protecting it.`
+              ?`Your starting deal already covered ${startCoverage}% of ${chosenHandObj.label}, strong raw material. The Charleston was about protecting it.`
               :startCoverage>=35
-              ?`Your deal gave you ${startCoverage}% of ${chosenHandObj.label} to start — a workable foundation. Each pass had a job to do.`
-              :`Only ${startCoverage}% starting coverage for ${chosenHandObj.label} — a tough deal. The Charleston had to do a lot of work.`
+              ?`Your deal gave you ${startCoverage}% of ${chosenHandObj.label} to start, a workable foundation. Each pass had a job to do.`
+              :`Only ${startCoverage}% starting coverage for ${chosenHandObj.label}, a tough deal. The Charleston had to do a lot of work.`
             }
           </div>
         )}
@@ -4835,14 +4835,14 @@ function RackViewer({hand,startingRack}){
         </div>
         <div style={{padding:"12px 14px"}}>
           {tab==="final"&&<>
-            <div style={{fontSize:9,color:C.mut,marginBottom:8}}>Your rack after the Charleston — what you scored on.</div>
+            <div style={{fontSize:9,color:C.mut,marginBottom:8}}>Your rack after the Charleston, what you scored on.</div>
             <SortableRack hand={hand}/>
           </>}
           {tab==="starting"&&hasStarting&&<>
             <div style={{fontSize:9,color:C.mut,marginBottom:8}}>The 13 tiles you were dealt before any passes.</div>
             <SortableRack hand={startingRack}/>
           </>}
-          {tab==="starting"&&!hasStarting&&<div style={{fontSize:11,color:C.mut,textAlign:"center",padding:"16px 0"}}>Starting rack not available — play a new game to see your deal.</div>}
+          {tab==="starting"&&!hasStarting&&<div style={{fontSize:11,color:C.mut,textAlign:"center",padding:"16px 0"}}>Starting rack not available, play a new game to see your deal.</div>}
         </div>
       </div>}
     </div>
@@ -5003,7 +5003,7 @@ function ExpertReadCard({finalRack, chosenSec, allSections, passLog, iq}){
 
       {/* ── EXPAND / COLLAPSE for secondary paths + observations ── */}
       <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",padding:"9px 14px",background:"none",border:"none",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:open?`1px solid ${C.bdr}`:"none"}}>
-        <span style={{fontSize:10,color:C.jade,fontWeight:700,letterSpacing:0.5}}>{open?"Hide details":"More detail — secondary paths & observations"}</span>
+        <span style={{fontSize:10,color:C.jade,fontWeight:700,letterSpacing:0.5}}>{open?"Hide details":"More detail, secondary paths & observations"}</span>
         <span style={{fontSize:11,color:C.mut}}>{open?"▾":"▸"}</span>
       </button>
 
@@ -5053,7 +5053,7 @@ function MahjongIdentityCard({iq, chosenSec, passLog, finalRack}){
   );
 }
 
-// IQ HERO — shared dark jade gradient hero card used in scorecard + home
+// IQ HERO, shared dark jade gradient hero card used in scorecard + home
 function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHome=false}){
   if(!iq)return null;
   iq=withIQStyle(iq);
@@ -5254,10 +5254,10 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
       </button>
 
       {open&&<div className="rk-in">
-        {/* Fit toggle — only shown in practice mode (showFit=false by default) */}
+        {/* Fit toggle, only shown in free play (showFit=false by default) */}
         {!showFit&&(
           <div style={{padding:"8px 14px",borderBottom:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"space-between",background:C.bg2}}>
-            <span style={{fontSize:10,color:C.mut,fontWeight:600}}>Rack fit scores hidden — practice mode</span>
+            <span style={{fontSize:10,color:C.mut,fontWeight:600}}>Rack fit scores hidden, free play</span>
             <button onClick={()=>setFitVisible(v=>!v)} style={{fontSize:10,fontWeight:700,color:fitVisible?C.cinn:C.jade,background:"none",border:`1px solid ${fitVisible?C.cinn+"40":C.jade+"40"}`,borderRadius:20,padding:"3px 10px",cursor:"pointer"}}>
               {fitVisible?"Hide scores":"Reveal scores"}
             </button>
@@ -5266,7 +5266,7 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
         {hands.map((hand,i)=>{
           const pct=Math.round(hand.fitScore*100);
           const barColor=pct>=70?C.jade:pct>=45?C.gold:C.cinn;
-          const verdict=pct>=80?"Very close — you could win this hand":pct>=60?"Good foundation — a few key tiles away":pct>=40?"Partial fit — possible with better passing":"Low fit — this hand needed different tiles";
+          const verdict=pct>=80?"Very close, you could win this hand":pct>=60?"Good foundation, a few key tiles away":pct>=40?"Partial fit, possible with better passing":"Low fit, this hand needed different tiles";
           const verdictColor=pct>=80?C.jade:pct>=60?C.gold:pct>=40?C.amberB:C.cinn;
 
           // Tile analysis
@@ -5280,9 +5280,9 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
           const numRefs=[...new Set((label.match(/\d+/g)||[]).map(Number).filter(n=>n>=1&&n<=9))];
           const strengths=[];const gaps=[];
 
-          if(jk>=2&&!hand.concealed)strengths.push(`${jk} jokers — can fill any gap`);
-          else if(jk===1&&!hand.concealed)strengths.push(`1 joker — use it on your weakest group`);
-          if(hand.concealed&&jk>0)gaps.push(`Concealed hand — jokers can't be used`);
+          if(jk>=2&&!hand.concealed)strengths.push(`${jk} jokers, can fill any gap`);
+          else if(jk===1&&!hand.concealed)strengths.push(`1 joker, use it on your weakest group`);
+          if(hand.concealed&&jk>0)gaps.push(`Concealed hand, jokers can't be used`);
 
           numRefs.forEach(n=>{
             const have=numCounts[n]||0;
@@ -5290,7 +5290,7 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
             const approxNeed=Math.min(appearances,4);
             if(have>=approxNeed&&have>=2)strengths.push(`${have}× ${n} ✓`);
             else if(have>0&&have<approxNeed)gaps.push(`Need ${approxNeed-have} more ${n}s (have ${have})`);
-            else if(have===0&&approxNeed>=2)gaps.push(`Missing ${n}s — critical for this hand`);
+            else if(have===0&&approxNeed>=2)gaps.push(`Missing ${n}s, critical for this hand`);
           });
           if(label.includes("NEWS")||label.match(/[NEWS]{2,}/)){
             const w=Object.values(wCounts).reduce((a,b)=>a+b,0);
@@ -5316,7 +5316,7 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
           // Tiles still needed count
           const tilesNeeded=gaps.length;
           const passAdvice=pct>=70
-            ?"Hold everything — this rack is nearly there."
+            ?"Hold everything, this rack is nearly there."
             :gaps.length>0
             ?`Pass tiles not in this hand. Priority: keep ${strengths.length>0?strengths[0].split(" ✓")[0]:"your strongest groups"}.`
             :"Focus on protecting your existing groups.";
@@ -5346,7 +5346,7 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
                 )}
               </div>
 
-              {/* Fit bar — hidden in practice until revealed */}
+              {/* Fit bar, hidden in practice until revealed */}
               {fitVisible&&(
                 <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden",marginBottom:12}}>
                   <div className="rk-bar" style={{height:"100%",borderRadius:3,background:`linear-gradient(90deg,${barColor},${barColor}CC)`,width:`${pct}%`,"--w":`${pct}%`}}/>
@@ -5385,7 +5385,7 @@ function SectionDivider({label}){
   );
 }
 
-// ─── SORTABLE RACK — final rack display with sort button ──────────────────────
+// ─── SORTABLE RACK, final rack display with sort button ──────────────────────
 function SortableRack({hand:initialHand}){
   const [rack,setRack]=useState(initialHand);
   const [sorted,setSorted]=useState(false);
@@ -5404,7 +5404,7 @@ function SortableRack({hand:initialHand}){
   );
 }
 
-// ─── COLLAPSIBLE SECTION HEADER — tap to expand/collapse ──────────────────────
+// ─── COLLAPSIBLE SECTION HEADER, tap to expand/collapse ──────────────────────
 function sectionTitleCase(text){
   if(!text)return text;
   return String(text).split(" ").map(word=>{
@@ -5543,7 +5543,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <IQHero iq={iq} isDaily dayNum={dayNum} section={section} totalTime={iq.totalTime||0} chosenSec={chosenSec} allSections={allSections}/>
       </div>
 
-      {/* ①b STYLE — light identity layer */}
+      {/* ①b STYLE, light identity layer */}
       {iq.styleName&&<div style={{...S.card,display:"flex",alignItems:"center",gap:10,marginBottom:10,background:C.sage,border:`1px solid ${C.jade}20`}}>
         <div style={{width:32,height:32,borderRadius:10,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>✨</div>
         <div style={{flex:1}}>
@@ -5553,7 +5553,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </div>}
 
-      {/* ② SOCIAL — ranks + share, always visible, right after hero */}
+      {/* ② SOCIAL, ranks + share, always visible, right after hero */}
       {(()=>{
         const myScore=iq.totalScore;
         const globalRank=globalEntries.length>0?globalEntries.findIndex(e=>e.iqScore<=myScore)+1:null;
@@ -5577,7 +5577,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
         return(
           <div style={{marginBottom:10}}>
-            {/* Rank pills — only when data has loaded */}
+            {/* Rank pills, only when data has loaded */}
             {(globalRank||clubRank)&&(
               <div style={{display:"flex",gap:8,marginBottom:8}}>
                 {/* Global rank */}
@@ -5597,7 +5597,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
                     </div>
                   </div>
                 )}
-                {/* Club rank — tappable */}
+                {/* Club rank, tappable */}
                 {clubRank&&clubTotal&&clubName?(
                   <button onClick={()=>setScreen&&setScreen("leaderboard")} style={{
                     flex:1,borderRadius:12,padding:"11px 14px",cursor:"pointer",textAlign:"left",
@@ -5614,7 +5614,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
                     </div>
                   </button>
                 ):(
-                  /* No club — nudge to join */
+                  /* No club, nudge to join */
                   <button onClick={()=>setScreen&&setScreen("clubs")} style={{
                     flex:1,borderRadius:12,padding:"11px 14px",cursor:"pointer",textAlign:"left",
                     background:C.bg2,border:`1px dashed ${C.bdr}`,
@@ -5639,7 +5639,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         );
       })()}
 
-      {/* ③ YOUR HAND — collapsible, open by default */}
+      {/* ③ YOUR HAND, collapsible, open by default */}
       <CollapsibleSection label="Your Hand" desc="Final rack · Best path" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
         <SortableRack hand={hand}/>
         <div style={{marginTop:8}}>
@@ -5647,7 +5647,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </CollapsibleSection>
 
-      {/* ④b ALT HANDS — own collapsible section, closed by default */}
+      {/* ④b ALT HANDS, own collapsible section, closed by default */}
       {hand&&hand.length>0&&chosenSec&&(()=>{
         const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
         return(
@@ -5657,15 +5657,15 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         );
       })()}
 
-      {/* ⑤ SCORE BREAKDOWN — collapsible */}
+      {/* ⑤ SCORE BREAKDOWN, collapsible */}
       <CollapsibleSection label="What strong players noticed" desc="Today's read" icon="💬" open={openSec.score} onToggle={()=>toggle("score")} badge={iq.level}>
         <TableTalkRead iq={iq}/>
       </CollapsibleSection>
 
-      {/* ⑥ NEXT STEPS — collapsible */}
+      {/* ⑥ NEXT STEPS, collapsible */}
       <CollapsibleSection label="Next Steps" desc="Coach Mode · Recommendations" icon="🎯" open={openSec.next} onToggle={()=>toggle("next")}>
         <div style={{display:"flex",flexDirection:"column",gap:8,paddingBottom:4}}>
-          {/* Coach Mode — primary action, full-bleed dark green */}
+          {/* Coach Mode, primary action, full-bleed dark green */}
           {onCoachMode&&(
             <button onClick={onCoachMode} style={{
               width:"100%",borderRadius:14,border:"none",cursor:"pointer",
@@ -5686,13 +5686,13 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
               </div>
             </button>
           )}
-          {/* Practice CTA — secondary, warm sage */}
+          {/* Practice CTA, secondary, warm sage */}
           {(()=>{
             const lowDir=iq.directionScore<24;
             const wrongSec=!sectionMatch&&bestFitSec;
-            let headline="Practice Mode";
+            let headline="Free Play";
             let sub="Unlimited hands · Build real instincts";
-            if(wrongSec){headline=`Try ${bestFitSec.name}`;sub=`Your tiles leaned that way — practice reading it faster`;}
+            if(wrongSec){headline=`Try ${bestFitSec.name}`;sub=`Your tiles leaned that way, practice reading it faster`;}
             else if(lowDir){headline="Work on Section Reads";sub="Your first read sets up the whole Charleston";}
             else if(iq.passQualityScore<15){headline="Sharpen Your Passes";sub="Practice makes the Charleston feel automatic";}
             return(
@@ -5734,7 +5734,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   );
 }
 
-// ─── PRACTICE SCORECARD — collapsible sections, matching daily vibe ───────────
+// ─── PRACTICE SCORECARD, collapsible sections, matching daily vibe ───────────
 function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHome,onDealAgain}){
   if(!iq)return null;
   const scoreColor=(v,max)=>v/max>=0.8?C.jade:v/max>=0.55?C.gold:C.cinn;
@@ -5756,13 +5756,13 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
         <IQHero iq={iq} isDaily={false} section={section} totalTime={iq.totalTime||0} chosenSec={chosenSec} allSections={allSections}/>
       </div>
 
-      {/* YOUR HAND — rack only, closed */}
+      {/* YOUR HAND, rack only, closed */}
       <CollapsibleSection label="Your Hand" desc="Final rack · Best path" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
         {hand&&hand.length>0&&<SortableRack hand={hand}/>}
         {scoredHandObj&&<HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={null}/>}
       </CollapsibleSection>
 
-      {/* OTHER HANDS — closed */}
+      {/* OTHER HANDS, closed */}
       {hand&&hand.length>0&&chosenSec&&(()=>{
         const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
         return(
@@ -5772,12 +5772,12 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
         );
       })()}
 
-      {/* YOUR SCORE — closed, with score badge */}
+      {/* YOUR SCORE, closed, with score badge */}
       <CollapsibleSection label="What strong players noticed" desc="Today's read" icon="💬" open={openSec.score} onToggle={()=>toggle("score")} badge={iq.level}>
         <TableTalkRead iq={iq}/>
       </CollapsibleSection>
 
-      {/* YOUR PASSES — closed, dots badge */}
+      {/* YOUR PASSES, closed, dots badge */}
       {iq.passInsights&&iq.passInsights.length>0&&(
         <CollapsibleSection label="Your Passes" desc="The passes that shaped the Charleston" icon="🔄" open={openSec.passes} onToggle={()=>toggle("passes")} badge={passDots||undefined}>
           <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden"}}>
@@ -5838,7 +5838,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
 // ─── RACK VS HAND OVERLAY ─────────────────────────────────────────────────────
 // The centrepiece of Coach Mode. Shows the target hand tile-by-tile, with each
 // slot annotated: ✓ held, ✗ passed in round N, ○ never had it.
-// Also surfaces the "gap sentence" — the precise tiles that stood between the
+// Also surfaces the "gap sentence", the precise tiles that stood between the
 // player and completing this hand.
 function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, secObj}){
   if(!handObj||!hand)return null;
@@ -5883,7 +5883,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
       }
       return false;
     };
-    // Joker pred — only if group allows jokers
+    // Joker pred, only if group allows jokers
     const jokerPred=(t)=>t.t==="j"&&!handObj.concealed&&g.type!=="single"&&g.type!=="pair";
 
     const need=g.count;
@@ -5917,7 +5917,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
     gapParts.push(`${s.gap} more ${tileName}${suitHint}`);
   });
   const gapSentence=gapParts.length===0
-    ?"Your rack covered every group in this hand — exceptional."
+    ?"Your rack covered every group in this hand, exceptional."
     :`You needed ${gapParts.slice(0,3).join(", ")} to complete this hand.`;
 
   // Critical pass sentence
@@ -5925,7 +5925,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
     ?`${criticalPasses.map(s=>{
         const tileName=s.g.isFlower?"Flower":s.g.isSoap?"Soap":s.g.isWind?`${s.g.tile} Wind`:s.g.isDragon?"Dragon":`${s.g.tile}`;
         return`${s.passedMatching.length}× ${tileName} (${s.passedRounds.join(", ")})`;
-      }).slice(0,2).join(" and ")} — tiles this hand needed — left your rack during passing.`
+      }).slice(0,2).join(" and ")}, tiles this hand needed, left your rack during passing.`
     :null;
 
   const barCol=pct>=80?C.jade:pct>=55?C.gold:C.cinn;
@@ -5955,7 +5955,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
 
     const sub=isFilled
       ?(isJoker?"Joker":cc==="G"?"Bam":cc==="R"?"Crak":cc==="K"?"✓":g.isFlower?"✓":g.isWind?"✓":g.isDragon?"✓":"✓")
-      :wasPassed?`P${(passedRounds[0]||"").charAt(0)||"?"}`:"—";
+      :wasPassed?`P${(passedRounds[0]||"").charAt(0)||"?"}`:",";
 
     return(
       <div style={{
@@ -5978,7 +5978,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
       {/* Header */}
       <div style={{padding:"10px 14px",background:handWasInferred?C.amber:C.sage,borderBottom:`1px solid ${handWasInferred?C.amberB+"30":C.sageB+"20"}`}}>
         <div style={{fontSize:8,color:handWasInferred?C.amberB:C.sageB,letterSpacing:2,fontWeight:700,marginBottom:3}}>
-          {handWasInferred?"BEST-FIT HAND — INFERRED":"YOUR TARGET HAND"}
+          {handWasInferred?"BEST-FIT HAND, INFERRED":"YOUR TARGET HAND"}
         </div>
         <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,letterSpacing:-0.3,marginBottom:2}}>
           {handObj.label}
@@ -5989,7 +5989,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
       {/* Inferred note */}
       {handWasInferred&&(
         <div style={{padding:"8px 14px",background:"#FBF3E2",borderBottom:`1px solid ${C.amberB}20`}}>
-          <p style={{fontSize:11,color:C.amberB,margin:0,lineHeight:1.5}}>You picked <strong>{secObj?.name}</strong> — this was your strongest hand within it. Picking a specific hand next time unlocks suit-level scoring.</p>
+          <p style={{fontSize:11,color:C.amberB,margin:0,lineHeight:1.5}}>You picked <strong>{secObj?.name}</strong>, this was your strongest hand within it. Picking a specific hand next time unlocks suit-level scoring.</p>
         </div>
       )}
 
@@ -6022,7 +6022,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
         </div>
       </div>
 
-      {/* Tile-by-tile overlay — each group with its slots */}
+      {/* Tile-by-tile overlay, each group with its slots */}
       <div style={{padding:"12px 14px",background:C.bg2,overflowX:"hidden"}}>
         <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:8}}>HAND PATTERN vs YOUR RACK</div>
         <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"flex-end",width:"100%",maxWidth:"100%"}}>
@@ -6056,7 +6056,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
         {totalGap===0&&(
           <div style={{display:"flex",alignItems:"flex-start",gap:8,background:"#EDF5F0",borderRadius:8,padding:"8px 10px",marginTop:6,border:`1px solid ${C.jade}20`}}>
             <span style={{fontSize:14,flexShrink:0}}>🏆</span>
-            <p style={{fontSize:11,color:C.ink,margin:0,lineHeight:1.55}}>Your final rack covered every tile group in this hand. That's a completable hand — exceptional Charleston.</p>
+            <p style={{fontSize:11,color:C.ink,margin:0,lineHeight:1.55}}>Your final rack covered every tile group in this hand. That's a completable hand, exceptional Charleston.</p>
           </div>
         )}
       </div>
@@ -6072,14 +6072,14 @@ function NarrativeFeedback(){
       <span style={{fontSize:10,color:C.mut,flex:1}}>Was this useful?</span>
       <button onClick={()=>setVote("up")} style={{background:vote==="up"?C.jade+"15":"none",border:`1px solid ${vote==="up"?C.jade+"40":C.bdr}`,borderRadius:8,padding:"4px 10px",cursor:"pointer",fontSize:14,transition:"all 0.15s"}}>👍</button>
       <button onClick={()=>setVote("down")} style={{background:vote==="down"?"#FEF0F0":"none",border:`1px solid ${vote==="down"?C.cinn+"40":C.bdr}`,borderRadius:8,padding:"4px 10px",cursor:"pointer",fontSize:14,transition:"all 0.15s"}}>👎</button>
-      {vote&&<span style={{fontSize:10,color:vote==="up"?C.jade:C.mut,fontWeight:600}}>{vote==="up"?"Thanks!":"Got it — we'll keep improving."}</span>}
+      {vote&&<span style={{fontSize:10,color:vote==="up"?C.jade:C.mut,fontWeight:600}}>{vote==="up"?"Thanks!":"Got it, we'll keep improving."}</span>}
     </div>
   );
 }
 
-// ─── COACH ADVICE ENGINE — deterministic, tile-specific coaching ──────────────
+// ─── COACH ADVICE ENGINE, deterministic, tile-specific coaching ──────────────
 // Generates a structured coaching read from actual rack data.
-// No API call — runs instantly, works offline, free for all players.
+// No API call, runs instantly, works offline, free for all players.
 function computeCoachAdvice(hand, passLog, chosenSec, allSections, iq, chosenHandObj){
   if(!hand||!hand.length||!chosenSec)return null;
 
@@ -6138,52 +6138,52 @@ function computeCoachAdvice(hand, passLog, chosenSec, allSections, iq, chosenHan
     takeaway:"",     // single closing idea
   };
 
-  // ── RACK READ — section-specific ──────────────────────────────────────────
+  // ── RACK READ, section-specific ──────────────────────────────────────────
   if(chosenSec==="2026"){
     const twos=nc[2]||0,sixes=nc[6]||0,soap=dragTiles.filter(t=>t.v==="Soap").length;
     const reDrags=dragTiles.filter(t=>t.v==="Red").length+dragTiles.filter(t=>t.v==="Grn").length;
     advice.rackRead=twos>=2&&sixes>=2
-      ?`Good 2026 foundation — you've got ${twos} Twos and ${sixes} Sixes which are both required in every hand. ${soap>=1?"Soap is locked in — that's your wildcard tile.":"You're missing Soap, which appears in three of the four hands."}${jk>=1?" "+jk+" Joker"+(jk>1?"s":"")+" gives you real flexibility here.":""}`
+      ?`Good 2026 foundation, you've got ${twos} Twos and ${sixes} Sixes which are both required in every hand. ${soap>=1?"Soap is locked in, that's your wildcard tile.":"You're missing Soap, which appears in three of the four hands."}${jk>=1?" "+jk+" Joker"+(jk>1?"s":"")+" gives you real flexibility here.":""}`
       :twos>=1||sixes>=1
-      ?("Partial 2026 structure — you have "+(twos>0?(twos+" Two"+(twos>1?"s":"")):"no Twos")+" and "+(sixes>0?(sixes+" Six"+(sixes>1?"s":"")):"no Sixes")+". Both numbers appear in every 2026 hand, so you need depth in both."+(soap>=1?" Soap is a genuine bonus here.":""))
-      :`Thin 2026 foundation — both 2s and 6s are required for every hand in this section and you're short on both. The section needs a different tile distribution to really take hold.`;
+      ?("Partial 2026 structure, you have "+(twos>0?(twos+" Two"+(twos>1?"s":"")):"no Twos")+" and "+(sixes>0?(sixes+" Six"+(sixes>1?"s":"")):"no Sixes")+". Both numbers appear in every 2026 hand, so you need depth in both."+(soap>=1?" Soap is a genuine bonus here.":""))
+      :`Thin 2026 foundation, both 2s and 6s are required for every hand in this section and you're short on both. The section needs a different tile distribution to really take hold.`;
     advice.primaryLane=`Build pungs of 2s and 6s${soap>=1?" with Soap as your wildcard":" and hunt for Soap (White Dragon)"}. Your best 2026 hand is the one that deepens the groups you already have.`;
-    advice.altLane=reDrags>=1||sixes>=2?`The ${sixes>=3?"DD 2222 DDD":"DD 2222 DD"} style hands use two Dragon pungs — if you're picking up Red or Green Dragons alongside your 2s, that path opens up.`:"";
+    advice.altLane=reDrags>=1||sixes>=2?`The ${sixes>=3?"DD 2222 DDD":"DD 2222 DD"} style hands use two Dragon pungs, if you're picking up Red or Green Dragons alongside your 2s, that path opens up.`:"";
     advice.foundation=twos>=2?[`${twos}× Twos (anchor)`]:sixes>=2?[`${sixes}× Sixes (anchor)`]:[];
     if(soap>=1)advice.foundation.push("Soap (critical wildcard)");
     if(jk>=1)advice.foundation.push(`${jk} Joker${jk>1?"s":""}`);
-    advice.weakness=twos===0?["No Twos — required in every hand"]:sixes===0?["No Sixes — required in every hand"]:[];
-    advice.keyTile=twos<2?`Another ${2-twos} Two${2-twos>1?"s":""} — they're in every hand and you need a pung at minimum.`:sixes<3?`A third Six to form a pung — that's where the hand locks.`:`More 2s and 6s to deepen from pairs into pungs and kongs.`;
+    advice.weakness=twos===0?["No Twos, required in every hand"]:sixes===0?["No Sixes, required in every hand"]:[];
+    advice.keyTile=twos<2?`Another ${2-twos} Two${2-twos>1?"s":""}, they're in every hand and you need a pung at minimum.`:sixes<3?`A third Six to form a pung, that's where the hand locks.`:`More 2s and 6s to deepen from pairs into pungs and kongs.`;
   }
   else if(chosenSec==="2468"){
     const evens=[2,4,6,8].map(n=>({n,c:nc[n]||0}));
     const strongEvens=evens.filter(e=>e.c>=2);
     const sixCount=nc[6]||0,twoCount=nc[2]||0,eightCount=nc[8]||0;
     advice.rackRead=sixCount>=2
-      ?`Your Sixes are a proper anchor — 6 appears in seven of the eight 2468 hands, more than any other even number. You have ${strongEvens.length} even number${strongEvens.length!==1?"s":""} with at least a pair: ${strongEvens.map(e=>`${e.c}× ${e.n}`).join(", ")}. ${dominantSuitCount>=4?`The ${dominantSuitName} concentration is starting to focus your suit direction.`:""}`
-      :`6 appears in 7 of 8 hands in this section and you currently have ${sixCount===0?"none":"only one"} — that's the number to hunt. Your strongest evens right now are ${strongEvens.length>0?strongEvens.map(e=>`${e.c}× ${e.n}`).join(", "):"still forming"}.`;
-    advice.primaryLane=`Push depth on your strongest even tiles, starting with 6. ${twoCount>=2&&eightCount>=2?"2s and 8s paired with your 6s opens several hands — keep tightening the structure.":"Build toward pungs and kongs of 2, 6, and 8 — those three appear most frequently."}`;
-    advice.altLane=fl>=2?`With ${fl} Flowers you can access the FFF 22 44 666 8888 hand — a strong option if you keep drawing Flowers.`:"";
+      ?`Your Sixes are a proper anchor, 6 appears in seven of the eight 2468 hands, more than any other even number. You have ${strongEvens.length} even number${strongEvens.length!==1?"s":""} with at least a pair: ${strongEvens.map(e=>`${e.c}× ${e.n}`).join(", ")}. ${dominantSuitCount>=4?`The ${dominantSuitName} concentration is starting to focus your suit direction.`:""}`
+      :`6 appears in 7 of 8 hands in this section and you currently have ${sixCount===0?"none":"only one"}, that's the number to hunt. Your strongest evens right now are ${strongEvens.length>0?strongEvens.map(e=>`${e.c}× ${e.n}`).join(", "):"still forming"}.`;
+    advice.primaryLane=`Push depth on your strongest even tiles, starting with 6. ${twoCount>=2&&eightCount>=2?"2s and 8s paired with your 6s opens several hands, keep tightening the structure.":"Build toward pungs and kongs of 2, 6, and 8, those three appear most frequently."}`;
+    advice.altLane=fl>=2?`With ${fl} Flowers you can access the FFF 22 44 666 8888 hand, a strong option if you keep drawing Flowers.`:"";
     advice.foundation=evens.filter(e=>e.c>=2).map(e=>`${e.c}× ${e.n}s`);
     if(fl>=2)advice.foundation.push(`${fl} Flowers`);
     advice.weakness=evens.filter(e=>e.c<=1&&e.n===6).length>0?["Only 1 Six (appears in 7/8 hands)"]:evens.filter(e=>e.c===0).map(e=>`No ${e.n}s`);
-    advice.keyTile=sixCount<2?`A second 6 — it's in seven of the eight hands and you need a pair at minimum.`:eightCount<2&&twoCount<2?`Another 2 or 8 — you need pungs of both for the strongest hands.`:`A third 6 to form a pung — that unlocks the most powerful 2468 hands.`;
+    advice.keyTile=sixCount<2?`A second 6, it's in seven of the eight hands and you need a pair at minimum.`:eightCount<2&&twoCount<2?`Another 2 or 8, you need pungs of both for the strongest hands.`:`A third 6 to form a pung, that unlocks the most powerful 2468 hands.`;
   }
   else if(chosenSec==="369"){
     const threes=nc[3]||0,sixes=nc[6]||0,nines=nc[9]||0;
     const total369=threes+sixes+nines;
     advice.rackRead=sixes===0
-      ?`Six appears in every single 369 hand — it's the non-negotiable anchor — and you don't have one. You have ${threes} Three${threes!==1?"s":""} and ${nines} Nine${nines!==1?"s":""} to work with, but you must find 6s.`
+      ?`Six appears in every single 369 hand, it's the non-negotiable anchor, and you don't have one. You have ${threes} Three${threes!==1?"s":""} and ${nines} Nine${nines!==1?"s":""} to work with, but you must find 6s.`
       :total369>=6
-      ?`Strong 369 core — ${threes} Threes, ${sixes} Sixes, ${nines} Nines gives you ${total369} anchor tiles total. You're building real depth here. ${dominantSuitCount>=4?`The ${dominantSuitName} lean is starting to define your suit.`:""}`
-      :`${total369} anchor tiles (3s, 6s, 9s) — viable but needs more depth. The section rewards having pungs and kongs of all three numbers.`;
-    advice.primaryLane=`Deepen your 6s first — they're required everywhere. Then build equal depth in 3s and 9s. Single-suit structures are easier to complete than multi-suit.`;
-    advice.altLane=fl>=2?`${fl} Flowers opens the FFF hand paths in 369 — hold them.`:"";
+      ?`Strong 369 core, ${threes} Threes, ${sixes} Sixes, ${nines} Nines gives you ${total369} anchor tiles total. You're building real depth here. ${dominantSuitCount>=4?`The ${dominantSuitName} lean is starting to define your suit.`:""}`
+      :`${total369} anchor tiles (3s, 6s, 9s), viable but needs more depth. The section rewards having pungs and kongs of all three numbers.`;
+    advice.primaryLane=`Deepen your 6s first, they're required everywhere. Then build equal depth in 3s and 9s. Single-suit structures are easier to complete than multi-suit.`;
+    advice.altLane=fl>=2?`${fl} Flowers opens the FFF hand paths in 369, hold them.`:"";
     advice.foundation=[sixes>=2?`${sixes}× Sixes (anchor)`:null,threes>=2?`${threes}× Threes`:null,nines>=2?`${nines}× Nines`:null].filter(Boolean);
-    advice.weakness=sixes===0?["No Sixes — required in every 369 hand"]:[];
-    if(threes===0)advice.weakness.push("No Threes — appears in 5 of 6 hands");
-    if(nines===0)advice.weakness.push("No Nines — appears in 5 of 6 hands");
-    advice.keyTile=sixes<2?`A second 6 — it's in every hand and you need at least a pair.`:threes<2||nines<2?`Another ${threes<2?"3":"9"} — you need pungs of all three numbers in the strongest hands.`:`More group depth — pungs and kongs of 3, 6, and 9 close this section out.`;
+    advice.weakness=sixes===0?["No Sixes, required in every 369 hand"]:[];
+    if(threes===0)advice.weakness.push("No Threes, appears in 5 of 6 hands");
+    if(nines===0)advice.weakness.push("No Nines, appears in 5 of 6 hands");
+    advice.keyTile=sixes<2?`A second 6, it's in every hand and you need at least a pair.`:threes<2||nines<2?`Another ${threes<2?"3":"9"}, you need pungs of all three numbers in the strongest hands.`:`More group depth, pungs and kongs of 3, 6, and 9 close this section out.`;
   }
   else if(chosenSec==="13579"){
     const odds=[1,3,5,7,9].map(n=>({n,c:nc[n]||0}));
@@ -6192,30 +6192,30 @@ function computeCoachAdvice(hand, passLog, chosenSec, allSections, iq, chosenHan
     const totalOdds=odds.reduce((a,o)=>a+o.c,0);
     const nsWinds=windTiles.filter(t=>t.v==="N"||t.v==="S").length;
     advice.rackRead=totalOdds>=7
-      ?`Committed 13579 rack — ${totalOdds} odd tiles with ${strongOdds.length} grouped values. ${fiveCount>=2&&threeCount>=2?"5s and 3s are both in every hand — your two anchor values are set.":fiveCount>=2?"5s anchored well — 3s appear alongside them in every hand, so that's the next priority.":threeCount>=2?"3s anchored — 5s appear in every hand too, hunt them next.":"Keep building toward pairs and pungs of 5 and 3 — those appear in all 9 hands."}`
-      :`${totalOdds} odd tiles — the core is forming. 5 appears in every 13579 hand and 3 is close behind. Everything even can go.`;
-    advice.primaryLane=`5 and 3 are in every hand — build pungs of those first. ${nsWinds>=1?`N/S Winds are an asset here — one hand uses them.`:"Other winds can be passed unless you're building the wind hand."}`;
-    advice.altLane=fl>=2?`Flowers appear in 4 of 9 hands — worth holding if you have two or more.`:"";
+      ?`Committed 13579 rack, ${totalOdds} odd tiles with ${strongOdds.length} grouped values. ${fiveCount>=2&&threeCount>=2?"5s and 3s are both in every hand, your two anchor values are set.":fiveCount>=2?"5s anchored well, 3s appear alongside them in every hand, so that's the next priority.":threeCount>=2?"3s anchored, 5s appear in every hand too, hunt them next.":"Keep building toward pairs and pungs of 5 and 3, those appear in all 9 hands."}`
+      :`${totalOdds} odd tiles, the core is forming. 5 appears in every 13579 hand and 3 is close behind. Everything even can go.`;
+    advice.primaryLane=`5 and 3 are in every hand, build pungs of those first. ${nsWinds>=1?`N/S Winds are an asset here, one hand uses them.`:"Other winds can be passed unless you're building the wind hand."}`;
+    advice.altLane=fl>=2?`Flowers appear in 4 of 9 hands, worth holding if you have two or more.`:"";
     advice.foundation=strongOdds.map(o=>`${o.c}× ${o.n}s`);
     if(nsWinds>=2)advice.foundation.push(`${nsWinds}× N/S Winds`);
-    advice.weakness=odds.filter(o=>o.n===5&&o.c===0).length>0?["No Fives — in every 13579 hand"]:[];
-    if(odds.find(o=>o.n===3&&o.c===0))advice.weakness.push("No Threes — in 9 of 9 hands");
-    advice.keyTile=fiveCount<2?`A second 5 — it's in every hand, you need at least a pair.`:threeCount<2?`Another 3 — pairs and pungs of 3 and 5 are the spine of this section.`:`Depth on your best odd number — go from pair to pung, pung to kong.`;
+    advice.weakness=odds.filter(o=>o.n===5&&o.c===0).length>0?["No Fives, in every 13579 hand"]:[];
+    if(odds.find(o=>o.n===3&&o.c===0))advice.weakness.push("No Threes, in 9 of 9 hands");
+    advice.keyTile=fiveCount<2?`A second 5, it's in every hand, you need at least a pair.`:threeCount<2?`Another 3, pairs and pungs of 3 and 5 are the spine of this section.`:`Depth on your best odd number, go from pair to pung, pung to kong.`;
   }
   else if(chosenSec==="cr"){
     const cw=crWindowScore(hand);
     const window=cw.windowNums||[];
     const suitName={bam:"Bamboo",crak:"Character",dot:"Circle"}[cw.suit]||"";
     advice.rackRead=cw.groupDepth>=8
-      ?`Strong Consecutive Run structure — your best window is ${window.join("-")} in ${suitName}, with ${cw.groupDepth} tiles of depth across ${cw.groupCount} grouped numbers. This is a completable CR rack.`
+      ?`Strong Consecutive Run structure, your best window is ${window.join("-")} in ${suitName}, with ${cw.groupDepth} tiles of depth across ${cw.groupCount} grouped numbers. This is a completable CR rack.`
       :cw.groupDepth>=4
-      ?`A CR window is forming in ${suitName||"your number tiles"} around ${window.length>0?window.join("-"):"a 3-4 number range"}. You need pungs and kongs inside that window — singles don't score.`
-      :`Still early for Consecutive Run. The section needs 3-4 consecutive numbers all as pungs or kongs — scattered singles across different values won't get there.`;
+      ?`A CR window is forming in ${suitName||"your number tiles"} around ${window.length>0?window.join("-"):"a 3-4 number range"}. You need pungs and kongs inside that window, singles don't score.`
+      :`Still early for Consecutive Run. The section needs 3-4 consecutive numbers all as pungs or kongs, scattered singles across different values won't get there.`;
     advice.primaryLane=window.length>0?`Stay tight to your ${window.join("-")} window in ${suitName}. Every tile outside that window is a pass.`:"Identify your best 3-4 number window in one suit and pass everything outside it, including the other suits.";
-    advice.altLane=fl>=2?`The Flower sextette hand in CR uses 6 Flowers — if they keep coming, that path opens.`:"";
+    advice.altLane=fl>=2?`The Flower sextette hand in CR uses 6 Flowers, if they keep coming, that path opens.`:"";
     advice.foundation=cw.groupDepth>=4?[`${window.join("-")} window in ${suitName} (${cw.groupDepth} tiles deep)`]:[`${totalNums} number tiles forming`];
-    advice.weakness=cw.groupCount<2?["Fewer than 2 grouped numbers in window — need pungs not singles"]:[`${Object.entries(nc).filter(([n,c])=>c===1&&window.map(Number).includes(Number(n))).length} lone tiles inside the window eating up space`];
-    advice.keyTile=window.length>0?`Another tile in your ${window[0]}-${window[window.length-1]} window in ${suitName} — ideally one that forms a pung rather than a lone single.`:`A pung of any number in your target window — that's when the window becomes real.`;
+    advice.weakness=cw.groupCount<2?["Fewer than 2 grouped numbers in window, need pungs not singles"]:[`${Object.entries(nc).filter(([n,c])=>c===1&&window.map(Number).includes(Number(n))).length} lone tiles inside the window eating up space`];
+    advice.keyTile=window.length>0?`Another tile in your ${window[0]}-${window[window.length-1]} window in ${suitName}, ideally one that forms a pung rather than a lone single.`:`A pung of any number in your target window, that's when the window becomes real.`;
   }
   else if(chosenSec==="wd"){
     const wc={};windTiles.forEach(t=>{wc[t.v]=(wc[t.v]||0)+1;});
@@ -6224,86 +6224,86 @@ function computeCoachAdvice(hand, passLog, chosenSec, allSections, iq, chosenHan
     const strongWinds=Object.entries(wc).filter(([,c])=>c>=2).map(([v,c])=>`${c}× ${v}`);
     const strongDrags=Object.entries(dc).filter(([,c])=>c>=2).map(([v,c])=>`${c}× ${v==="Soap"?"Soap":v==="Red"?"Red Dragon":"Green Dragon"}`);
     advice.rackRead=honorTotal>=8
-      ?`Deep honor rack — ${windTiles.length} Winds and ${dragTiles.length} Dragons gives you ${honorTotal} honor tiles total. ${strongWinds.length>0?`You have pairs of ${strongWinds.join(" and ")} — that's real structure.`:""} W&D is your committed path.`
+      ?`Deep honor rack, ${windTiles.length} Winds and ${dragTiles.length} Dragons gives you ${honorTotal} honor tiles total. ${strongWinds.length>0?`You have pairs of ${strongWinds.join(" and ")}, that's real structure.`:""} W&D is your committed path.`
       :honorTotal>=5
-      ?`${honorTotal} honor tiles — a credible W&D foundation. You need 9-10 to really commit. Pass all numbers 5 and above immediately and wait for more winds.`
-      :`Only ${honorTotal} honor tiles. W&D is a high-commitment section — you need winds and dragons, nothing else. Pass every number tile aggressively.`;
-    advice.primaryLane=strongWinds.length>0?`Build on your ${strongWinds.join(" and ")} pairs — concentrate on one or two wind values rather than spreading across all four.`:"Pick your strongest wind value and collect it exclusively — depth beats variety in W&D.";
-    advice.altLane=numTiles.some(t=>t.n<=4)&&honorTotal>=4?`Some W&D hands use small numbers (1-4) in kongs — if you're drawing 1s or 2s alongside honors, that path opens.`:"";
+      ?`${honorTotal} honor tiles, a credible W&D foundation. You need 9-10 to really commit. Pass all numbers 5 and above immediately and wait for more winds.`
+      :`Only ${honorTotal} honor tiles. W&D is a high-commitment section, you need winds and dragons, nothing else. Pass every number tile aggressively.`;
+    advice.primaryLane=strongWinds.length>0?`Build on your ${strongWinds.join(" and ")} pairs, concentrate on one or two wind values rather than spreading across all four.`:"Pick your strongest wind value and collect it exclusively, depth beats variety in W&D.";
+    advice.altLane=numTiles.some(t=>t.n<=4)&&honorTotal>=4?`Some W&D hands use small numbers (1-4) in kongs, if you're drawing 1s or 2s alongside honors, that path opens.`:"";
     advice.foundation=[...strongWinds,...strongDrags];
-    advice.weakness=numTiles.filter(t=>t.n>=5).length>0?[`${numTiles.filter(t=>t.n>=5).length} high number tile${numTiles.filter(t=>t.n>=5).length>1?"s":""} to pass — W&D doesn't want them`]:honorTotal<5?["Not enough honor tiles yet to commit"]:[];
-    advice.keyTile=strongWinds.length===0?`A pung of any wind value — that becomes your first anchor.`:`A third ${Object.entries(wc).sort((a,b)=>b[1]-a[1])[0]?.[0]||"wind"} Wind to form a pung — once you have two pungs of honors, the hand takes shape.`;
+    advice.weakness=numTiles.filter(t=>t.n>=5).length>0?[`${numTiles.filter(t=>t.n>=5).length} high number tile${numTiles.filter(t=>t.n>=5).length>1?"s":""} to pass, W&D doesn't want them`]:honorTotal<5?["Not enough honor tiles yet to commit"]:[];
+    advice.keyTile=strongWinds.length===0?`A pung of any wind value, that becomes your first anchor.`:`A third ${Object.entries(wc).sort((a,b)=>b[1]-a[1])[0]?.[0]||"wind"} Wind to form a pung, once you have two pungs of honors, the hand takes shape.`;
   }
   else if(chosenSec==="aln"){
     const numCounts=Object.entries(nc).sort((a,b)=>b[1]-a[1]);
     const topNum=numCounts[0]||[null,0];
     const depth=Number(topNum[1]);
     advice.rackRead=depth>=4
-      ?`Strong ALN foundation — ${depth} tiles of ${topNum[0]}. You've identified your number. Now you need 8-12 total copies (with jokers) of that same value across your suit slots. Everything else passes.`
+      ?`Strong ALN foundation, ${depth} tiles of ${topNum[0]}. You've identified your number. Now you need 8-12 total copies (with jokers) of that same value across your suit slots. Everything else passes.`
       :depth>=3
-      ?`${depth} tiles of ${topNum[0]} — a clear ALN nucleus. You've made your number choice. The section rewards extreme focus: pass every tile that isn't ${topNum[0]}.`
-      :`The number isn't locked yet. You have ${depth===0?"no clear leader":topNum[0]+" with only "+depth+" tiles"} — you need to pick one number immediately and pass everything else without hesitation.`;
-    advice.primaryLane=topNum[0]?`Build exclusively on ${topNum[0]}s — every hand in ALN uses the same number throughout. Once you commit, pass anything that isn't ${topNum[0]}, ${topNum[0]}, ${topNum[0]}.`:"Pick your number now — look at your deepest tile count and commit to it.";
+      ?`${depth} tiles of ${topNum[0]}, a clear ALN nucleus. You've made your number choice. The section rewards extreme focus: pass every tile that isn't ${topNum[0]}.`
+      :`The number isn't locked yet. You have ${depth===0?"no clear leader":topNum[0]+" with only "+depth+" tiles"}, you need to pick one number immediately and pass everything else without hesitation.`;
+    advice.primaryLane=topNum[0]?`Build exclusively on ${topNum[0]}s, every hand in ALN uses the same number throughout. Once you commit, pass anything that isn't ${topNum[0]}, ${topNum[0]}, ${topNum[0]}.`:"Pick your number now, look at your deepest tile count and commit to it.";
     advice.altLane=fl>=2?`The Flower sextette exists in ALN. If you're drawing Flowers consistently, you could pivot to the Flower hand.`:"";
     advice.foundation=depth>=2?[`${depth}× ${topNum[0]}s (your number)`]:[`${numCounts[0]?numCounts[0][0]+"s forming":""}`];
     if(jk>=1)advice.foundation.push(`${jk} Joker${jk>1?"s":""} (fills gaps)`);
     advice.weakness=numTiles.filter(t=>t.n!==Number(topNum[0])).length>0?[`${numTiles.filter(t=>t.n!==Number(topNum[0])).length} off-number tiles diluting the rack`]:[];
-    advice.keyTile=depth<4?`More ${topNum[0]}s — you need 8-12 total to fill the hand patterns. The sooner you deepen this number, the better.`:`A sixth or seventh ${topNum[0]} — you need to fill every slot with this number and jokers.`;
+    advice.keyTile=depth<4?`More ${topNum[0]}s, you need 8-12 total to fill the hand patterns. The sooner you deepen this number, the better.`:`A sixth or seventh ${topNum[0]}, you need to fill every slot with this number and jokers.`;
   }
   else if(chosenSec==="q"){
     advice.rackRead=jk>=3
-      ?`Three Jokers — exceptional quint potential. You have the wildcards; now you need 3-4 natural copies of one tile to build around them.`
+      ?`Three Jokers, exceptional quint potential. You have the wildcards; now you need 3-4 natural copies of one tile to build around them.`
       :jk>=2
-      ?`Two Jokers — the entry requirement for Quints. Now concentrate on one tile value: you need 3-4 natural copies to pair with your Jokers for a pung or kong.`
+      ?`Two Jokers, the entry requirement for Quints. Now concentrate on one tile value: you need 3-4 natural copies to pair with your Jokers for a pung or kong.`
       :jk===1
-      ?`Only one Joker. Quints needs at least two — without a second Joker arriving, this section is unreachable. Consider having an exit plan.`
-      :`No Jokers. Quints is genuinely not available without at least two. If you're committed to this section, you need two Jokers to arrive — that's the entry ticket.`;
-    advice.primaryLane=jk>=2?`Stack your deepest tile value — get 3-4 naturals of one tile plus your Jokers. That becomes your quint group. Pass everything else.`:"Wait for a second Joker before committing fully. Until then, keep your options open.";
+      ?`Only one Joker. Quints needs at least two, without a second Joker arriving, this section is unreachable. Consider having an exit plan.`
+      :`No Jokers. Quints is genuinely not available without at least two. If you're committed to this section, you need two Jokers to arrive, that's the entry ticket.`;
+    advice.primaryLane=jk>=2?`Stack your deepest tile value, get 3-4 naturals of one tile plus your Jokers. That becomes your quint group. Pass everything else.`:"Wait for a second Joker before committing fully. Until then, keep your options open.";
     advice.altLane="";
     advice.foundation=jk>=2?[`${jk} Jokers (required)`]:[];
     if(maxOfOne>=2)advice.foundation.push(`${maxOfOne}× ${maxNum}s (tile to stack)`);
-    advice.weakness=jk<2?[`Only ${jk} Joker${jk!==1?"s":""} — need 2 minimum to play Quints`]:[];
-    advice.keyTile=jk<2?`A second Joker — without it, Quints isn't on the table.`:maxOfOne<3?`Three naturals of ${maxNum} to pair with your Jokers — that's when the quint becomes real.`:`More of the tile you're stacking — you need 5 in one slot.`;
+    advice.weakness=jk<2?[`Only ${jk} Joker${jk!==1?"s":""}, need 2 minimum to play Quints`]:[];
+    advice.keyTile=jk<2?`A second Joker, without it, Quints isn't on the table.`:maxOfOne<3?`Three naturals of ${maxNum} to pair with your Jokers, that's when the quint becomes real.`:`More of the tile you're stacking, you need 5 in one slot.`;
   }
   else if(chosenSec==="sp"){
     const pairCount=pairs+pungs+kongs; // every group is usable
     const passedJk=passedJokers.length;
     advice.rackRead=passedJk>0
-      ?`You passed ${passedJk} Joker${passedJk>1?"s":""} — that's exactly right for Singles & Pairs. Jokers are useless here and you made the correct call. ${pairCount>=3?`You have ${pairCount} paired groups forming — solid structure.`:"Keep building pairs across all values."}`
+      ?`You passed ${passedJk} Joker${passedJk>1?"s":""}, that's exactly right for Singles & Pairs. Jokers are useless here and you made the correct call. ${pairCount>=3?`You have ${pairCount} paired groups forming, solid structure.`:"Keep building pairs across all values."}`
       :jk>0
-      ?`You still have ${jk} Joker${jk>1?"s":""} in the rack. S&P is concealed — Jokers cannot be used here. Pass them in your next opportunity.`
-      :`Clean rack for S&P — no Jokers cluttering a concealed hand. ${pairCount>=3?`${pairCount} pairs forming — you need 6+ to finish.`:pairCount>=1?`${pairCount} pair${pairCount!==1?"s":""} so far — keep building. You need 7 total slots of pairs and singles.`:"Pairs are still forming — protect any matching tiles you're drawing."}`;
-    advice.primaryLane=`Build 6 pairs — every pass decision is simple: does this tile match something I have? If not, it goes. Never break a pair you have.`;
+      ?`You still have ${jk} Joker${jk>1?"s":""} in the rack. S&P is concealed, Jokers cannot be used here. Pass them in your next opportunity.`
+      :`Clean rack for S&P, no Jokers cluttering a concealed hand. ${pairCount>=3?`${pairCount} pairs forming, you need 6+ to finish.`:pairCount>=1?`${pairCount} pair${pairCount!==1?"s":""} so far, keep building. You need 7 total slots of pairs and singles.`:"Pairs are still forming, protect any matching tiles you're drawing."}`;
+    advice.primaryLane=`Build 6 pairs, every pass decision is simple: does this tile match something I have? If not, it goes. Never break a pair you have.`;
     advice.altLane="";
     advice.foundation=pairs>=2?[`${pairs} pair${pairs!==1?"s":""} in hand`]:["Building pair structure"];
     if(fl>=1)advice.foundation.push(`${fl} Flower${fl>1?"s":""} (counts toward S&P hands)`);
-    advice.weakness=jk>0?[`${jk} Joker${jk>1?"s":""} — cannot be used in S&P, pass them now`]:pairCount<2?["Fewer than 2 pairs — need to find matching tiles"]:[];
-    advice.keyTile=pairCount<4?`Any tile that pairs with something you already hold — S&P lives and dies on pair density.`:`A sixth pair to lock the hand — you're building toward the finish.`;
+    advice.weakness=jk>0?[`${jk} Joker${jk>1?"s":""}, cannot be used in S&P, pass them now`]:pairCount<2?["Fewer than 2 pairs, need to find matching tiles"]:[];
+    advice.keyTile=pairCount<4?`Any tile that pairs with something you already hold, S&P lives and dies on pair density.`:`A sixth pair to lock the hand, you're building toward the finish.`;
   }
 
-  // ── PASS READ — honest assessment of the passes ───────────────────────────
+  // ── PASS READ, honest assessment of the passes ───────────────────────────
   const passReadParts=[];
-  if(passedJokers.length>0)passReadParts.push(`Passing ${passedJokers.length} Joker${passedJokers.length>1?"s":""} ${chosenSec==="sp"?"was the right call for S&P — Jokers can't be used here":"is almost never the right move — Jokers are too flexible to give away"}.`);
-  if(passedFlowers.length>0&&chosenSec!=="wd")passReadParts.push(`${passedFlowers.length} Flower${passedFlowers.length>1?"s":""} went out — Flowers appear in the majority of winning hands across most sections. Hold them unless you're certain they don't fit.`);
-  if(iq.passQualityScore>=20)passReadParts.push(`Your passes were disciplined — you gave away the right tiles and protected your section.`);
-  else if(iq.passQualityScore<=10)passReadParts.push(`The passes hurt this rack more than they helped — several tiles that this section needed left in the Charleston.`);
+  if(passedJokers.length>0)passReadParts.push(`Passing ${passedJokers.length} Joker${passedJokers.length>1?"s":""} ${chosenSec==="sp"?"was the right call for S&P, Jokers can't be used here":"is almost never the right move, Jokers are too flexible to give away"}.`);
+  if(passedFlowers.length>0&&chosenSec!=="wd")passReadParts.push(`${passedFlowers.length} Flower${passedFlowers.length>1?"s":""} went out, Flowers appear in the majority of winning hands across most sections. Hold them unless you're certain they don't fit.`);
+  if(iq.passQualityScore>=20)passReadParts.push(`Your passes were disciplined, you gave away the right tiles and protected your section.`);
+  else if(iq.passQualityScore<=10)passReadParts.push(`The passes hurt this rack more than they helped, several tiles that this section needed left in the Charleston.`);
   if(!sectionMatch&&bestFitSec){
     const bestPct=Math.round((sortedSecs[0]?.score||0)*100);
     const chosenPct=Math.round((allSections?.find(s=>s.id===chosenSec)?.score||0)*100);
     const gap=bestPct-chosenPct;
-    if(gap>=15)passReadParts.push(`Your tile distribution was pulling toward ${bestFitSec.name} (${bestPct}% fit vs ${chosenPct}% for ${secObj?.name}) — worth noting next time you see a similar deal.`);
+    if(gap>=15)passReadParts.push(`Your tile distribution was pulling toward ${bestFitSec.name} (${bestPct}% fit vs ${chosenPct}% for ${secObj?.name}), worth noting next time you see a similar deal.`);
   }
   advice.passRead=passReadParts.slice(0,2).join(" ")||"Pass quality was reasonable given the deal.";
 
-  // ── TAKEAWAY — one closing coaching idea ──────────────────────────────────
+  // ── TAKEAWAY, one closing coaching idea ──────────────────────────────────
   const takeaways={
-    "2026":"The 2026 section lives on 2s and 6s — if you ever have a pung of both, the hand is 60% complete before you've touched anything else.",
+    "2026":"The 2026 section lives on 2s and 6s, if you ever have a pung of both, the hand is 60% complete before you've touched anything else.",
     "2468":"Six is the universal even tile. Before every pass, ask: is this a 6? If yes, it stays. Everything else is negotiable.",
-    "369":"This section rewards extreme specificity — 3s, 6s, and 9s only. Anything else passing through your hand should leave immediately.",
-    "13579":"5 and 3 are in every hand. Build pungs of those two numbers first, then fill the rest — that's the 13579 algorithm.",
+    "369":"This section rewards extreme specificity, 3s, 6s, and 9s only. Anything else passing through your hand should leave immediately.",
+    "13579":"5 and 3 are in every hand. Build pungs of those two numbers first, then fill the rest, that's the 13579 algorithm.",
     "cr":"Consecutive Run is about depth, not width. Three pungs of three consecutive numbers beats nine singles of nine different numbers every time.",
-    "wd":"W&D is won by concentration — pick two wind values and stack them. Spreading across all four winds gets you nowhere.",
-    "aln":"One number. Every slot. No exceptions. ALN is the most focused section on the card — that's the whole strategy.",
+    "wd":"W&D is won by concentration, pick two wind values and stack them. Spreading across all four winds gets you nowhere.",
+    "aln":"One number. Every slot. No exceptions. ALN is the most focused section on the card, that's the whole strategy.",
     "q":"Quints requires two Jokers to enter and extreme tile depth to win. Know your exit point if the Jokers don't come.",
     "sp":"S&P is the most disciplined section on the card. Every tile you hold should be part of a pair. If it isn't paired, it's a liability.",
   };
@@ -6315,7 +6315,7 @@ function computeCoachAdvice(hand, passLog, chosenSec, allSections, iq, chosenHan
 function humanCoachText(text){
   if(!text)return text;
   return String(text)
-    .replace(/Your tile distribution was pulling toward ([^(]+) \([^)]*\) — worth noting next time you see a similar deal\./g,"Your rack was quietly pointing toward $1. Next time, notice that pull a little earlier.")
+    .replace(/Your tile distribution was pulling toward ([^(]+) \([^)]*\), worth noting next time you see a similar deal\./g,"Your rack was quietly pointing toward $1. Next time, notice that pull a little earlier.")
     .replace(/Pass tiles not in this hand\. Priority: keep ([^.]+)\./g,"Keep $1 and let the floaters go.")
     .replace(/Pass tiles not in this hand\./g,"Let go of the tiles that are not helping your lane.")
     .replace(/This section rewards extreme specificity/g,"This section rewards a very clear lane")
@@ -6327,10 +6327,10 @@ function humanCoachText(text){
     .replace(/pung/g,"group")
     .replace(/kongs/g,"big groups")
     .replace(/kong/g,"big group")
-    .replace(/—/g,".");
+    .replace(/,/g,".");
 }
 
-// ─── COACH ADVICE CARD — renders the computed advice ─────────────────────────
+// ─── COACH ADVICE CARD, renders the computed advice ─────────────────────────
 function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
   const advice=computeCoachAdvice(hand,passLog,chosenSec,allSections,iq,chosenHandObj);
   if(!advice)return null;
@@ -6397,7 +6397,7 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
 
 
 
-// ─── COACH MODE SCREEN — narrative-first deep analysis ───────────────────────
+// ─── COACH MODE SCREEN, narrative-first deep analysis ───────────────────────
 function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onBack,setScreen}){
   const [sfOpen,setSfOpen]=useState(false);
   if(!iq)return null;
@@ -6413,26 +6413,26 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
   const sectionMatch=chosenSec===bestFitSec?.id;
   const scoreColor=(v,max)=>v/max>=0.8?C.jade:v/max>=0.55?C.gold:C.cinn;
 
-  // ── VERDICT — one honest sentence about this round ──────────────────────────
+  // ── VERDICT, one honest sentence about this round ──────────────────────────
   const verdictText=(()=>{
     const total=iq.totalScore;
     const dir=iq.directionScore/40;
     const pass=iq.passQualityScore/25;
     const tile=iq.tileStrengthScore/25;
     const handName=chosenHandObj?.label||chosenSecObj?.name||"your section";
-    if(total>=88)return`Excellent Charleston. Your direction was clear from the start and your passes protected it — this is what disciplined play looks like.`;
-    if(total>=75&&dir>=0.8)return`Strong read on ${chosenSecObj?.name||"your section"}. Your section instinct was right — the passes kept the structure intact.`;
-    if(total>=75&&pass>=0.8)return`Your passing was the standout this round — you gave away the right tiles consistently. The direction just needed to sharpen a bit earlier.`;
-    if(total>=65&&dir>=0.7&&pass<0.55)return`You saw the right section but gave away tiles that would have made it. Direction was there — the passing cost you.`;
-    if(total>=65&&pass>=0.7&&dir<0.55)return`Disciplined passing without a clear target is only half the equation. Your discard instincts are good — commit to a section earlier.`;
-    if(total>=55&&!sectionMatch)return`Your tiles were pulling toward ${bestFitSec?.name||"another section"}, but you went a different direction. Not wrong — just a pivot opportunity worth noting.`;
-    if(total>=55)return`A workable Charleston. The structure was there in pieces — the goal next time is locking in earlier so each pass has a job to do.`;
+    if(total>=88)return`Excellent Charleston. Your direction was clear from the start and your passes protected it, this is what disciplined play looks like.`;
+    if(total>=75&&dir>=0.8)return`Strong read on ${chosenSecObj?.name||"your section"}. Your section instinct was right, the passes kept the structure intact.`;
+    if(total>=75&&pass>=0.8)return`Your passing was the standout this round, you gave away the right tiles consistently. The direction just needed to sharpen a bit earlier.`;
+    if(total>=65&&dir>=0.7&&pass<0.55)return`You saw the right section but gave away tiles that would have made it. Direction was there, the passing cost you.`;
+    if(total>=65&&pass>=0.7&&dir<0.55)return`Disciplined passing without a clear target is only half the equation. Your discard instincts are good, commit to a section earlier.`;
+    if(total>=55&&!sectionMatch)return`Your tiles were pulling toward ${bestFitSec?.name||"another section"}, but you went a different direction. Not wrong, just a pivot opportunity worth noting.`;
+    if(total>=55)return`A workable Charleston. The structure was there in pieces, the goal next time is locking in earlier so each pass has a job to do.`;
     if(dir<0.4&&pass<0.4)return`This round, the direction and passes weren't speaking the same language. Before your first pass: name your section, then ask "does this tile help it?"`;
     if(dir<0.4)return`The passes were reasonable, but without a clear section target the rack drifted. Lock in your direction by the first pass and everything else follows.`;
-    return`The fundamentals are there. Pick your section before you touch a single tile — that one habit makes every pass decision automatic.`;
+    return`The fundamentals are there. Pick your section before you touch a single tile, that one habit makes every pass decision automatic.`;
   })();
 
-  // ── WHAT HAPPENED TO YOUR PASSES — narrative per round ──────────────────────
+  // ── WHAT HAPPENED TO YOUR PASSES, narrative per round ──────────────────────
   const passNarrative=(iq.passInsights||[]).map((p,i)=>{
     const qualColor={strong:C.jade,weak:C.cinn,mixed:C.gold,neutral:C.mut};
     const qualBg={strong:"#EDF5F0",weak:"#FEF0F0",mixed:"#FBF3E2",neutral:C.bg2};
@@ -6441,7 +6441,7 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
     return{...p,qualColor:qualColor[p.quality]||C.mut,qualBg:qualBg[p.quality]||C.bg2,qualLabel:qualLabel[p.quality]||"Pass",tiles,roundNum:i+1};
   });
 
-  // ── WHAT AN EXPERT WOULD NOTICE — specific to actual tiles ──────────────────
+  // ── WHAT AN EXPERT WOULD NOTICE, specific to actual tiles ──────────────────
   const expertNotes=(()=>{
     const notes=[];
     const jk=(hand||[]).filter(t=>t.t==="j").length;
@@ -6452,16 +6452,16 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
 
     // Joker handling
     if(passedJokers.length>0){
-      notes.push({icon:"⚠️",text:`You passed ${passedJokers.length} joker${passedJokers.length>1?"s":""} — jokers are almost never worth giving away. They're the most flexible tile on the board.`,type:"warn"});
+      notes.push({icon:"⚠️",text:`You passed ${passedJokers.length} joker${passedJokers.length>1?"s":""}, jokers are almost never worth giving away. They're the most flexible tile on the board.`,type:"warn"});
     } else if(jk>=2){
-      notes.push({icon:"✓",text:`${jk} jokers held — that's the right call. Jokers don't get passed unless you have no choice.`,type:"good"});
+      notes.push({icon:"✓",text:`${jk} jokers held, that's the right call. Jokers don't get passed unless you have no choice.`,type:"good"});
     }
 
     // Flower handling
     if(passedFlowers.length>0&&chosenSec!=="wd"){
-      notes.push({icon:"⚠️",text:`You passed ${passedFlowers.length} flower${passedFlowers.length>1?"s":""}. Flowers appear in the majority of winning hands — hold them unless you're certain they don't fit.`,type:"warn"});
+      notes.push({icon:"⚠️",text:`You passed ${passedFlowers.length} flower${passedFlowers.length>1?"s":""}. Flowers appear in the majority of winning hands, hold them unless you're certain they don't fit.`,type:"warn"});
     } else if(fl>=2){
-      notes.push({icon:"✓",text:`${fl} flowers in your final rack. These are structural support for most sections — well held.`,type:"good"});
+      notes.push({icon:"✓",text:`${fl} flowers in your final rack. These are structural support for most sections, well held.`,type:"good"});
     }
 
     // Hand-specific tile gaps
@@ -6471,7 +6471,7 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
       const nc={};(hand||[]).filter(t=>t.t==="s").forEach(t=>{nc[t.n]=(nc[t.n]||0)+1;});
       const missingAnchors=neededNums.filter(n=>!nc[n]);
       if(missingAnchors.length>0){
-        notes.push({icon:"🎯",text:`Your final rack was missing ${missingAnchors.slice(0,2).map(n=>`${n}s`).join(" and ")} — tiles that appear in this hand. ${missingAnchors.length===1?"That single group":"Those groups"} would have made the difference.`,type:"gap"});
+        notes.push({icon:"🎯",text:`Your final rack was missing ${missingAnchors.slice(0,2).map(n=>`${n}s`).join(" and ")}, tiles that appear in this hand. ${missingAnchors.length===1?"That single group":"Those groups"} would have made the difference.`,type:"gap"});
       }
       // Suit concentration check
       const suitCounts={bam:0,crak:0,dot:0};
@@ -6480,7 +6480,7 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
       const total3=Object.values(suitCounts).reduce((a,b)=>a+b,0);
       if(dominantSuit&&dominantSuit[1]/total3>=0.65&&total3>=5){
         const suitName={bam:"Bamboo",crak:"Character",dot:"Circle"}[dominantSuit[0]];
-        notes.push({icon:"🃏",text:`Your number tiles were heavily concentrated in ${suitName} — which helps with single-suit hands but can reduce flexibility in multi-suit hands like this one.`,type:"info"});
+        notes.push({icon:"🃏",text:`Your number tiles were heavily concentrated in ${suitName}, which helps with single-suit hands but can reduce flexibility in multi-suit hands like this one.`,type:"info"});
       }
     }
 
@@ -6490,7 +6490,7 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
       if(gap>=20){
         notes.push({icon:"↗️",text:`${bestFitSec.icon} ${bestFitSec.name} had a ${gap}% stronger section fit. An expert player would have spotted the pull toward that section by the second pass.`,type:"pivot"});
       } else if(gap>=10){
-        notes.push({icon:"↗️",text:`${bestFitSec.icon} ${bestFitSec.name} was a slightly stronger fit (${gap}% gap). Both sections were viable — this was a judgment call, not a clear miss.`,type:"info"});
+        notes.push({icon:"↗️",text:`${bestFitSec.icon} ${bestFitSec.name} was a slightly stronger fit (${gap}% gap). Both sections were viable, this was a judgment call, not a clear miss.`,type:"info"});
       }
     }
 
@@ -6502,7 +6502,7 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
     return notes.slice(0,5);
   })();
 
-  // ── ONE THING — the single most impactful habit change ─────────────────────
+  // ── ONE THING, the single most impactful habit change ─────────────────────
   const oneThing=(()=>{
     const dir=iq.directionScore/40;
     const pass=iq.passQualityScore/25;
@@ -6511,9 +6511,9 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
     // Find the weakest dimension
     const dims=[
       {k:"dir",r:dir,tip:`Before your next game: look at your starting rack and say out loud which section you're going to play. Then make every pass answer to that decision.`},
-      {k:"pass",r:pass,tip:`Before each pass, ask one question: "Does this tile connect to what I'm keeping?" If no — it goes. If yes — it stays. That's the whole decision.`},
+      {k:"pass",r:pass,tip:`Before each pass, ask one question: "Does this tile connect to what I'm keeping?" If no, it goes. If yes, it stays. That's the whole decision.`},
       {k:"tile",r:tile,tip:`Focus on group depth over coverage. Three tiles of the same thing beats one of everything. Pairs and pungs are worth more than variety.`},
-      {k:"tm",r:tm,tip:`Aim for 10–20 seconds per pass. Enough to read the rack, not enough to second-guess a good first instinct. Set a mental clock.`},
+      {k:"tm",r:tm,tip:`Aim for 10-20 seconds per pass. Enough to read the rack, not enough to second-guess a good first instinct. Set a mental clock.`},
     ].sort((a,b)=>a.r-b.r);
     return dims[0].tip;
   })();
@@ -6666,7 +6666,7 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
   );
 }
 
-// IQScorecard router — daily gets simplified, practice gets tabbed
+// IQScorecard router, daily gets simplified, practice gets tabbed
 function IQScorecard({iq,hand,startingRack,passLog,isDaily,dayNum,section,chosenSec,chosenHand,allSections,onHome,onDealAgain,onPractice,setScreen}){
   const [coachMode,setCoachMode]=useState(false);
   const scrollTop=()=>{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;};
@@ -6710,10 +6710,10 @@ function ScorecardScreen({res,home,dayNum,onPractice,setScreen}){
 
 // ─── TUTORIAL STEPS ───────────────────────────────────────────────────────────
 const TUTORIAL_STEPS=[
-  {title:"Welcome to Rackle! 🀄",body:"Rackle trains your Charleston strategy for American Mahjong (NMJL 2026 card).",detail:"The Charleston is the tile-passing ritual before play. Better passing = better hands. Quick to learn — let's go.",icon:"🀄",tip:null},
+  {title:"Welcome to Rackle! 🀄",body:"Rackle trains your Charleston strategy for American Mahjong (NMJL 2026 card).",detail:"The Charleston is the tile-passing ritual before play. Better passing = better hands. Quick to learn, let's go.",icon:"🀄",tip:null},
   {title:"Your Rack",body:"You're dealt 13 tiles. Each tile belongs to a category: Bam, Crak, Dot, Winds, Dragons, Flowers, or Jokers.",detail:"The goal is to end the Charleston with tiles that align to and can be flexible within a section.",icon:"🎴",tip:null,showTiles:true},
-  {title:"The Charleston",body:"You pass tiles in 3 rounds — Right (3 tiles), Over (3 tiles), Left (0–3 tiles, blind).",detail:"'Blind' means you pass before seeing what you receive. Pass your worst tiles. Keep your best.",icon:"👉",tip:"Jokers can NEVER be passed. And why would you want to? They're too valuable!"},
-  {title:"Pick Your Section",body:"After passing, choose which hand category you were leaning toward — like 2468, 369, or Consecutive Run.",detail:"Rackle gives you a quick rack read so you can see what worked and what to try next.",icon:"🎯",tip:"The 2026 Card in-game guide shows tips for each section."},
+  {title:"The Charleston",body:"You pass tiles in 3 rounds, Right (3 tiles), Over (3 tiles), Left (0-3 tiles, blind).",detail:"'Blind' means you pass before seeing what you receive. Pass your worst tiles. Keep your best.",icon:"👉",tip:"Jokers can NEVER be passed. And why would you want to? They're too valuable!"},
+  {title:"Pick Your Section",body:"After passing, choose which hand category you were leaning toward, like 2468, 369, or Consecutive Run.",detail:"Rackle gives you a quick rack read so you can see what worked and what to try next.",icon:"🎯",tip:"The 2026 Card in-game guide shows tips for each section."},
   {title:"Get Rated",body:"Your Rackle score gives you a quick read on how your Charleston felt today.",detail:"Get a simple rack read, see what stood out, and share with your Mahj group.",icon:"🏆",tip:"Play the Daily for a fresh deal every day shared by all players."},
 ];
 
@@ -6935,14 +6935,14 @@ function CardGuideScreen({home,setScreen}){
   // Anchor tile quick-ref data
   const ANCHORS={
     "2026":{tiles:["2","6","Soap"],note:"2s and 6s appear in every hand. Soap (White Dragon) in 3 of 4."},
-    "2468":{tiles:["6","2","8","4"],note:"6 appears in 7 of 8 hands — the non-negotiable anchor."},
+    "2468":{tiles:["6","2","8","4"],note:"6 appears in 7 of 8 hands, the non-negotiable anchor."},
     "369":{tiles:["6","3","9"],note:"6 is in 100% of hands. 3 and 9 in 5 of 6."},
-    "13579":{tiles:["5","3","1","7","9"],note:"5 and 3 appear in 9 of 10 hands — prioritize these first."},
-    "cr":{tiles:["Run","Depth"],note:"No single anchor number. Identify your 3–4 number window early."},
+    "13579":{tiles:["5","3","1","7","9"],note:"5 and 3 appear in 9 of 10 hands, prioritize these first."},
+    "cr":{tiles:["Run","Depth"],note:"No single anchor number. Identify your 3-4 number window early."},
     "wd":{tiles:["Winds","Dragons"],note:"Winds in 7 of 8 hands. Dragons in 5 of 8."},
     "aln":{tiles:["One #","×14"],note:"Pick one number value and fill every tile slot with it."},
-    "q":{tiles:["🃏🃏","Nat ×3"],note:"Requires 2+ Jokers. 3–4 natural copies of one tile to stack."},
-    "sp":{tiles:["Pairs","No 🃏"],note:"Concealed only. Jokers cannot be used — pass them immediately."},
+    "q":{tiles:["🃏🃏","Nat ×3"],note:"Requires 2+ Jokers. 3-4 natural copies of one tile to stack."},
+    "sp":{tiles:["Pairs","No 🃏"],note:"Concealed only. Jokers cannot be used, pass them immediately."},
   };
 
   const goSection=(id)=>{setActiveSec(id);setView("section");window.scrollTo(0,0);};
@@ -7112,7 +7112,7 @@ function CardGuideScreen({home,setScreen}){
       {/* Hand count */}
       <div style={{fontSize:11,color:C.mut,marginBottom:8}}>
         {filtered.length < secHands.length?`${filtered.length} of ${secHands.length} hands`:`All ${secHands.length} hands`}
-        {filtered.length===0&&" — no hands match these filters"}
+        {filtered.length===0&&", no hands match these filters"}
       </div>
 
       {/* Hands */}
@@ -7130,7 +7130,7 @@ function CardGuideScreen({home,setScreen}){
   );
 }
 
-// Section strategy accordion — hold / pass / combos in a compact collapsible
+// Section strategy accordion, hold / pass / combos in a compact collapsible
 function SectionStrategyCard({sec}){
   const [open,setOpen]=useState(false);
   if(!sec)return null;
@@ -7205,7 +7205,7 @@ function MidnightCountdown({dn}){
     ["No two hands are the same.", "That's the point."],
     ["Midnight is closer than you think.", "So is a better score."],
     ["The table is set.", "The question is who sits down."],
-    ["One more day. One more shot.", "Same hand for every player — including the ones trying to beat you."],
+    ["One more day. One more shot.", "Same hand for every player, including the ones trying to beat you."],
   ];
   const tagline=taglines[dn%taglines.length];
   const urgent=h<2;
@@ -7284,7 +7284,7 @@ function EmailSignup(){
   );
 }
 
-// ─── INLINE CODE ENTRY — "I have a code" pill on homepage ───────────────────
+// ─── INLINE CODE ENTRY, "I have a code" pill on homepage ───────────────────
 function InlineCodeEntry({setScreen}){
   const [open,setOpen]=useState(false);
   const [code,setCode]=useState("");
@@ -7403,7 +7403,7 @@ function ClubCodeEntry({setScreen}){
           <>
             <div style={{background:C.jade+"08",borderRadius:10,padding:"10px 12px",marginBottom:12,border:`1px solid ${C.jade}20`}}>
               <div style={{fontSize:11,fontWeight:700,color:C.jade,marginBottom:3}}>Why join a club?</div>
-              <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>Your score posts automatically after every Daily. See how you rank against your Mahj group — and give them something to beat.</div>
+              <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>Your score posts automatically after every Daily. See how you rank against your Mahj group, and give them something to beat.</div>
             </div>
             <button onClick={()=>setScreen("clubs")} style={{width:"100%",padding:"11px 0",borderRadius:10,border:"none",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:F.d,letterSpacing:-0.1,marginBottom:8}}>Browse Club Directory →</button>
             <button onClick={()=>{setCodeOpen(o=>!o);setErr("");setCode("");}} style={{width:"100%",padding:"9px 0",borderRadius:10,border:`1px solid ${C.bdr}`,background:codeOpen?C.bg2:"transparent",color:C.mut,fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:F.b,marginBottom:codeOpen?8:0}}>
@@ -7506,7 +7506,7 @@ function GlobalLeaderboardPill({setScreen}){
         ):top5.length===0?(
           <div style={{textAlign:"center",padding:"24px 14px"}}>
             <div style={{fontSize:26,marginBottom:8}}>🀄</div>
-            <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.ink,marginBottom:4}}>Board's empty — be first</div>
+            <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.ink,marginBottom:4}}>Board's empty, be first</div>
             <div style={{fontSize:11,color:C.mut,lineHeight:1.6,marginBottom:12}}>Play today's Daily and put your name at the top.</div>
             <button onClick={refresh} style={{fontSize:11,color:"#2460A8",fontWeight:700,background:"#2460A808",border:`1px solid #2460A825`,borderRadius:8,padding:"6px 14px",cursor:"pointer"}}>↻ Refresh</button>
           </div>
@@ -7594,7 +7594,7 @@ function PeriodTable({code,period,myName,showTime,fetchFn}){
     <div style={{textAlign:"center",padding:"28px 14px"}}>
       <div style={{fontSize:26,marginBottom:8}}>🀄</div>
       <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,marginBottom:4}}>{period==="yesterday"?"No scores yesterday":"No scores yet"}</div>
-      <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>{period==="yesterday"?"Looks like nobody played yesterday — don't let that happen today.":"Be the first to post a score for this period."}</div>
+      <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>{period==="yesterday"?"Looks like nobody played yesterday, don't let that happen today.":"Be the first to post a score for this period."}</div>
     </div>
   );
 
@@ -7617,7 +7617,7 @@ function PeriodTable({code,period,myName,showTime,fetchFn}){
             <div style={{fontSize:13}}>{medal||<span style={{fontFamily:F.d,fontSize:12,fontWeight:700,color:C.mut}}>{i+1}</span>}</div>
             <div style={{fontFamily:F.d,fontSize:13,fontWeight:isMe?800:600,color:isMe?C.jade:C.ink,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{e.name}{isMe?" (you)":""}</div>
             <div style={{textAlign:"center"}}><span style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:e.iqScore>=80?C.jade:e.iqScore>=60?C.gold:C.cinn}}>{e.iqScore}</span></div>
-            {showTime&&<div style={{textAlign:"center",fontSize:11,color:C.mut,fontFamily:F.d,fontWeight:600}}>{e.time?fT(e.time):"—"}</div>}
+            {showTime&&<div style={{textAlign:"center",fontSize:11,color:C.mut,fontFamily:F.d,fontWeight:600}}>{e.time?fT(e.time):","}</div>}
             <div style={{textAlign:"center",fontSize:11,color:C.cinn}}>{e.streak>1?e.streak:""}</div>
           </div>
         );
@@ -7700,7 +7700,7 @@ function ClubDirectoryScreen({home,setScreen}){
               </div>
             </div>
 
-            {/* Leaderboard — public, no code needed */}
+            {/* Leaderboard, public, no code needed */}
             <div style={{...S.card,marginBottom:12,padding:0,overflow:"hidden"}}>
               <div style={{padding:"12px 14px",borderBottom:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
                 <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>TODAY'S LEADERBOARD</div>
@@ -7712,7 +7712,7 @@ function ClubDirectoryScreen({home,setScreen}){
                 <div style={{padding:"24px",textAlign:"center"}}>
                   <div style={{fontSize:24,marginBottom:8}}>🀄</div>
                   <div style={{fontSize:13,color:C.mut}}>No scores yet today.</div>
-                  <div style={{fontSize:11,color:C.mut,marginTop:4}}>Be the first — play today's Daily Rackle and post your score.</div>
+                  <div style={{fontSize:11,color:C.mut,marginTop:4}}>Be the first, play today's Daily Rackle and post your score.</div>
                 </div>
               ):(
                 <div>
@@ -7737,7 +7737,7 @@ function ClubDirectoryScreen({home,setScreen}){
               )}
             </div>
 
-            {/* Code entry — only needed to post a score */}
+            {/* Code entry, only needed to post a score */}
             {!isMember&&(
               <div style={{...S.card,marginBottom:12,padding:"14px"}}>
                 <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>POST YOUR SCORE</div>
@@ -7858,7 +7858,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
       const updated=await fetchLBEntries(code);
       setEntries(updated);setSubmitted(true);
     } else {
-      setNameErr("Couldn't post score — check your connection and try again.");
+      setNameErr("Couldn't post score, check your connection and try again.");
     }
     setSubmitting(false);
   };
@@ -7920,7 +7920,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
         )}
       </div>
 
-      {/* SUBMIT YOUR SCORE — always visible inline card when daily done */}
+      {/* SUBMIT YOUR SCORE, always visible inline card when daily done */}
       {iq&&!submitted&&(
         <div style={{borderRadius:16,overflow:"hidden",marginBottom:10,border:`1px solid ${C.bdr}`,background:"#fff",boxShadow:"0 2px 8px rgba(0,0,0,0.04)"}}>
           {/* Score preview banner */}
@@ -7969,9 +7969,9 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
         </div>
         {/* Invite your club prompt */}
         <div style={{padding:"12px 14px"}}>
-          <div style={{fontSize:11,color:C.sageB,marginBottom:8,lineHeight:1.5}}>📣 Not everyone in your club is on the board yet — invite them to play today.</div>
+          <div style={{fontSize:11,color:C.sageB,marginBottom:8,lineHeight:1.5}}>📣 Not everyone in your club is on the board yet, invite them to play today.</div>
           {(()=>{
-            const smsText=encodeURIComponent(`🀄 I scored ${myEntry?.iqScore} on today's Rackle — #${myRank} in ${club?.name||"our club"}.\nThink you can beat me?\nplayrackle.com · Club code: ${code}`);
+            const smsText=encodeURIComponent(`🀄 I scored ${myEntry?.iqScore} on today's Rackle, #${myRank} in ${club?.name||"our club"}.\nThink you can beat me?\nplayrackle.com · Club code: ${code}`);
             return(
               <a
                 href={`sms:?&body=${smsText}`}
@@ -8027,7 +8027,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
                     <div style={{fontSize:13}}>{medal||<span style={{fontFamily:F.d,fontSize:12,fontWeight:700,color:C.mut}}>{i+1}</span>}</div>
                     <div style={{fontFamily:F.d,fontSize:13,fontWeight:isMe?800:600,color:isMe?C.jade:C.ink,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{e.name}{isMe?" (you)":""}</div>
                     <div style={{textAlign:"center"}}><span style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:e.iqScore>=80?C.jade:e.iqScore>=60?C.gold:C.cinn}}>{e.iqScore}</span></div>
-                    <div style={{textAlign:"center",fontSize:11,color:C.mut,fontFamily:F.d,fontWeight:600}}>{e.time?fT(e.time):"—"}</div>
+                    <div style={{textAlign:"center",fontSize:11,color:C.mut,fontFamily:F.d,fontWeight:600}}>{e.time?fT(e.time):","}</div>
                     <div style={{textAlign:"center",fontSize:11,color:C.cinn}}>{e.streak>1?e.streak:""}</div>
                   </div>
                 );
@@ -8037,7 +8037,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
             <div style={{textAlign:"center",padding:"28px 20px"}}>
               <div style={{fontSize:30,marginBottom:10}}>🥇</div>
               <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:C.ink,marginBottom:6}}>Be first on the board today</div>
-              <div style={{fontSize:12,color:C.mut,lineHeight:1.7,maxWidth:240,margin:"0 auto"}}>No one from {club?.name||"your club"} has posted yet — play the Daily and claim the top spot.</div>
+              <div style={{fontSize:12,color:C.mut,lineHeight:1.7,maxWidth:240,margin:"0 auto"}}>No one from {club?.name||"your club"} has posted yet, play the Daily and claim the top spot.</div>
             </div>
           )
         ):period==="yesterday"?(
@@ -8048,7 +8048,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
       </div>
 
       <div style={{fontSize:10,color:C.mut,textAlign:"center",lineHeight:1.5,opacity:0.7,marginBottom:12}}>
-        {period==="yesterday"?"Yesterday's final board":period==="today"?"Resets daily at midnight":period==="weekly"?"Best score per player · Mon–Sun":period==="monthly"?"Best score per player · this month":"Best score per player · all time"} · Code: {code}
+        {period==="yesterday"?"Yesterday's final board":period==="today"?"Resets daily at midnight":period==="weekly"?"Best score per player · Mon-Sun":period==="monthly"?"Best score per player · this month":"Best score per player · all time"} · Code: {code}
       </div>
       <div style={{display:"flex",gap:8,marginBottom:8}}>
         <button onClick={home} style={{...S.oBtn,flex:1}}>← Home</button>
@@ -8059,13 +8059,13 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
   );
 }
 
-// ─── STATS PILL — collapsed by default, tap to expand ────────────────────────
+// ─── STATS PILL, collapsed by default, tap to expand ────────────────────────
 function Statspill({streak,rounds,bestIQ,streakBadge}){
   const [open,setOpen]=useState(false);
   const visibleStreak=streak>0?streak:0;
   const hasAny=visibleStreak>0||rounds>0||bestIQ;
 
-  // Compact status pill — day 1 should feel earned, not oversized.
+  // Compact status pill, day 1 should feel earned, not oversized.
   const icon=visibleStreak>0?(streakBadge?streakBadge.badge:"🔥"):bestIQ?"⭐":"🎲";
   const value=visibleStreak>0?`${visibleStreak}d`:bestIQ?bestIQ.score:rounds;
   const label=visibleStreak>0?"streak":bestIQ?"best":"rounds";
@@ -8113,29 +8113,29 @@ function Statspill({streak,rounds,bestIQ,streakBadge}){
   );
 }
 
-// ─── IQ SPARKLINE — last 7 scored games ──────────────────────────────────────
-// ─── STREAK + SPARKLINE CARD — collapsible, merged ───────────────────────────
+// ─── IQ SPARKLINE, last 7 scored games ──────────────────────────────────────
+// ─── STREAK + SPARKLINE CARD, collapsible, merged ───────────────────────────
 function getStreakNudge(streak,pct,daysLeft,nextBadge,bestIQ,clubName){
   const seed=(getDayNum()+streak)%7;
   const closePool=daysLeft===1?[
-    `One more day — ${nextBadge?.title} is yours.`,
+    `One more day, ${nextBadge?.title} is yours.`,
     `Tomorrow it's official. Don't break now.`,
     `You're one tile away from glory.`,
   ]:daysLeft<=2?[
     `${nextBadge?.title} is right there. Keep showing up.`,
-    `Almost — don't let the tiles cool off now.`,
+    `Almost, don't let the tiles cool off now.`,
     `Two days. You've got this.`,
   ]:[];
   const highPctPool=pct>=70?[
-    `You're in the home stretch — most players quit before this point.`,
+    `You're in the home stretch, most players quit before this point.`,
     `Consistency is its own skill. You're proving it.`,
     `${clubName?`${clubName} is watching. `:""}Keep the streak alive.`,
   ]:[];
   const bestIQPool=bestIQ&&bestIQ.score>=80?[
-    `Strong score, strong streak — you're playing serious Mahj.`,
+    `Strong score, strong streak, you're playing serious Mahj.`,
     `Your tiles know what they're doing. Keep it up.`,
   ]:bestIQ&&bestIQ.score>=60?[
-    `Your game is improving — the streak is how you get there.`,
+    `Your game is improving, the streak is how you get there.`,
     `Daily practice is how your rack reads get sharper.`,
   ]:[];
   const generalPool=[
@@ -8145,7 +8145,7 @@ function getStreakNudge(streak,pct,daysLeft,nextBadge,bestIQ,clubName){
     `Most players never make it past ${streak} days. You have.`,
     `Show up tomorrow and the tiles will follow.`,
     `Streaks compound. So does Rackle Score.`,
-    `The best players aren't more talented — they just play every day.`,
+    `The best players aren't more talented, they just play every day.`,
   ];
   const pool=[...closePool,...highPctPool,...bestIQPool,...generalPool];
   return pool[seed%pool.length];
@@ -8179,7 +8179,7 @@ function StreakCard({streak,streakBadge,bestIQ,clubName,onStats,firstName}){
   return(
     <div style={{...S.card,padding:0,marginBottom:8,marginTop:8,background:C.gold+"06",borderColor:C.gold+"25",overflow:"hidden"}}>
 
-      {/* Header row — always visible, tappable */}
+      {/* Header row, always visible, tappable */}
       <button
         onClick={()=>setCollapsed(c=>!c)}
         aria-label={collapsed?"Expand streak card":"Collapse streak card"}
@@ -8209,17 +8209,17 @@ function StreakCard({streak,streakBadge,bestIQ,clubName,onStats,firstName}){
               </div>
             </>
           ):(
-            <div style={{fontSize:11,color:C.mut,marginBottom:6}}>You've unlocked every badge — keep the streak alive! 💎</div>
+            <div style={{fontSize:11,color:C.mut,marginBottom:6}}>You've unlocked every badge, keep the streak alive! 💎</div>
           )}
 
-          {/* Sparkline — only if enough history */}
+          {/* Sparkline, only if enough history */}
           {hasSparkline&&(
             <div style={{margin:"10px -14px -12px",background:"#fff",borderTop:`1px solid ${C.bdr}`,padding:"10px 14px 12px"}}>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}>
                 <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>LAST {scores.length} GAMES</div>
                 <div style={{display:"flex",alignItems:"center",gap:6}}>
                   <span style={{fontSize:9,color:C.mut}}>avg <strong style={{color:C.ink}}>{avg}</strong></span>
-                  <span style={{fontSize:9,fontWeight:700,color:trendCol}}>{delta!==0?(delta>0?`+${delta}`:`${delta}`):"—"}</span>
+                  <span style={{fontSize:9,fontWeight:700,color:trendCol}}>{delta!==0?(delta>0?`+${delta}`:`${delta}`):","}</span>
                 </div>
               </div>
               <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{overflow:"visible",display:"block"}}>
@@ -8245,7 +8245,7 @@ function StreakCard({streak,streakBadge,bestIQ,clubName,onStats,firstName}){
               </svg>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:4}}>
                 <div style={{fontSize:9,color:C.mut,fontStyle:"italic",opacity:0.8}}>
-                  {improving?"Trending up — keep the momentum.":"Consistency wins. Keep showing up daily."}
+                  {improving?"Trending up, keep the momentum.":"Consistency wins. Keep showing up daily."}
                 </div>
                 {onStats&&<button onClick={onStats} style={{background:"none",border:"none",fontSize:9,color:C.jade,fontWeight:700,cursor:"pointer",padding:0,flexShrink:0,marginLeft:8}}>Full stats →</button>}
               </div>
@@ -8262,17 +8262,17 @@ function StreakCard({streak,streakBadge,bestIQ,clubName,onStats,firstName}){
 function TopBanner(){
   const messages=[
     {label:"WELCOME",text:"The Daily Mahjong Workout. Same hand. Every player. Every day."},
-    {label:"TIP",text:"Pick your section before your first pass — direction is worth 40 points."},
+    {label:"TIP",text:"Pick your section before your first pass, direction is worth 40 points."},
     {label:"TIP",text:"Jokers can never be passed. Hold them and build around them."},
     {label:"TIP",text:"Flowers appear in most winning hands. Don't throw them away early."},
-    {label:"TIP",text:"6s are your most versatile tile — they appear in ~40% of hands."},
+    {label:"TIP",text:"6s are your most versatile tile, they appear in ~40% of hands."},
     {label:"TIP",text:"1s are the least useful tiles on the 2026 card. Pass them first."},
     {label:"TIP",text:"A blind left pass protects tiles you've committed to. Use it wisely."},
     {label:"TIP",text:"Your Rackle score is built from your read, passes, tile shape, and pace."},
     {label:"TIP",text:"Soap acts as a wild tile in the 2026 section only."},
-    {label:"TIP",text:"Practice Mode is unlimited. Build instincts before the daily resets."},
-    {label:"DID YOU KNOW",text:"Rackle scores every pass individually — not just your final rack."},
-    {label:"DID YOU KNOW",text:"The daily deal is seeded — every player gets the exact same 13 tiles."},
+    {label:"TIP",text:"Free Play is unlimited. Build instincts before the daily resets."},
+    {label:"DID YOU KNOW",text:"Rackle scores every pass individually, not just your final rack."},
+    {label:"DID YOU KNOW",text:"The daily deal is seeded, every player gets the exact same 13 tiles."},
     {label:"DID YOU KNOW",text:"Your Rackle Coach gives simple tips for the next Charleston."},
   ];
   const [idx,setIdx]=useState(0);
@@ -8602,7 +8602,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   };
 
   const MiniStat=({value,label,accent})=>{
-    const safeValue=(typeof value==="number"&&!Number.isFinite(value))?"—":(value==="NaN"||value==null?"—":value);
+    const safeValue=(typeof value==="number"&&!Number.isFinite(value))?",":(value==="NaN"||value==null?",":value);
     return(
       <div style={{flex:1,minWidth:0,border:`1px solid rgba(255,255,255,0.16)`,background:"rgba(255,255,255,0.08)",borderRadius:13,padding:"11px 12px"}}>
         <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:accent||"#fff",lineHeight:1,letterSpacing:-0.8}}>{safeValue}</div>
@@ -8736,14 +8736,14 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   };
 
   const PracticeCard=()=> (
-    <button onClick={()=>go("free")} aria-label="Play Practice Mode" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:22,borderRadius:18,padding:"17px 18px",textAlign:"left",background:dDone?"linear-gradient(135deg,#fff,#F4FAF6)":"linear-gradient(135deg,#FFF9F6,#fff)",border:`1.5px solid ${dDone?C.jade+"22":C.cinn+"18"}`,boxShadow:"0 5px 18px rgba(0,0,0,0.032)"}}>
-      <div style={{width:48,height:48,borderRadius:15,background:dDone?C.jade+"10":C.cinn+"10",border:`1px solid ${dDone?C.jade+"20":C.cinn+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:21,flexShrink:0}}>🀄</div>
-      <div style={{flex:1}}>
-        <div style={{fontSize:9,color:dDone?C.jade:C.cinn,letterSpacing:2.2,fontWeight:900,marginBottom:3}}>{dDone?"KEEP SHARPENING":"UNLIMITED PRACTICE"}</div>
-        <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:C.ink,marginBottom:5,lineHeight:1.08,letterSpacing:-0.2}}>Practice Mode</div>
-        <div style={{fontSize:12,color:C.mut,lineHeight:1.45}}>{dDone?"Daily done — sharpen one more rack before tomorrow.":"New deal every time. Work every section until the right pass feels obvious."}</div>
+    <button onClick={()=>go("free")} aria-label="Play Free Play" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:13,marginBottom:22,borderRadius:18,padding:"16px 18px",textAlign:"left",background:dDone?"linear-gradient(135deg,#fff,#F4FAF6)":"linear-gradient(135deg,#FFF9F6,#fff)",border:`1.5px solid ${dDone?C.jade+"22":C.cinn+"18"}`,boxShadow:"0 5px 18px rgba(0,0,0,0.032)"}}>
+      <div style={{width:44,height:44,borderRadius:14,background:dDone?C.jade+"10":C.cinn+"10",border:`1px solid ${dDone?C.jade+"20":C.cinn+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🀄</div>
+      <div style={{flex:1,minWidth:0}}>
+        <div style={{fontSize:9,color:dDone?C.jade:C.cinn,letterSpacing:2.15,fontWeight:900,marginBottom:5}}>FREE PLAY</div>
+        <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,marginBottom:7,lineHeight:1.12,letterSpacing:-0.15}}>Unlimited racks</div>
+        <div style={{fontSize:12,color:C.mut,lineHeight:1.55,maxWidth:330}}>{dDone?"Daily done. Sharpen one more rack before tomorrow.":"New deal every time. Try new reads and build your Charleston instincts."}</div>
       </div>
-      <span style={{fontSize:18,color:dDone?C.jade:C.mut,fontWeight:900}}>›</span>
+      <span style={{fontSize:18,color:dDone?C.jade:C.mut,fontWeight:900,flexShrink:0}}>›</span>
     </button>
   );
 
@@ -8888,7 +8888,7 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen}){
   const priorAvg=prior.length?prior.reduce((a,e)=>a+e.iqScore,0)/prior.length:null;
   const trajectory=recentAvg!=null&&priorAvg!=null?Math.round(recentAvg-priorAvg):null;
 
-  // Focus area — data-driven weakest sub-score
+  // Focus area, data-driven weakest sub-score
   const focusTips={
     "Direction":"You're often not committing to a section early enough. Pick your strongest 3 tiles before your first pass and build from there.",
     "Pass Quality":"You tend to pass tiles your section needs. Before passing, ask: is this tile useful for my target section?",
@@ -8900,7 +8900,7 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen}){
     focusLabel=Object.entries(pcts).sort((a,b)=>a[1]-b[1])[0][0];
   }
 
-  // Best hand fit ever — scan history for highest allSections score per section
+  // Best hand fit ever, scan history for highest allSections score per section
   const bestHandFits={};
   allHist.filter(e=>e.allSections&&e.allSections.length).forEach(e=>{
     e.allSections.forEach(s=>{
@@ -8920,7 +8920,7 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen}){
         <div style={{fontSize:12,color:C.mut,marginTop:0}}>Your Rackle Score over time</div>
       </div>
 
-      {/* Today's daily hero — if played */}
+      {/* Today's daily hero, if played */}
       {iq&&<div style={{marginBottom:16}}>
         <IQHero iq={iq} isDaily dayNum={dn} section={dRes.section} totalTime={iq.totalTime||0} chosenSec={dRes.chosenSec} allSections={dRes.allSections} isHome/>
         <button onClick={onShowScorecard} style={{width:"100%",marginTop:8,padding:"11px 16px",borderRadius:12,background:C.sage,border:`1px solid ${C.sageB}25`,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"flex-start",gap:12}}>
@@ -9146,7 +9146,7 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen}){
                         </div>
                         <div style={{fontSize:10,color:C.mut,lineHeight:1.6}}>
                           {fitPct>=70?`Your racks have come close to completing real ${sec.name} hands.`:
-                           fitPct>=45?`Good foundation. Keep building depth in ${sec.name} — you're into realistic hand territory.`:
+                           fitPct>=45?`Good foundation. Keep building depth in ${sec.name}, you're into realistic hand territory.`:
                            `Your ${sec.name} racks are still early stage. Focus on the section's anchor tiles.`}
                         </div>
                       </div>
@@ -9167,14 +9167,14 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen}){
             const weakest=triedSections.length?[...triedSections].sort((a,b)=>a.avgIQ-b.avgIQ)[0]:null;
             if(untriedSections.length>0){
               rec=untriedSections[0];
-              recReason=`You haven't practised ${rec.name} yet — blind spots are where the most improvement hides.`;
+              recReason=`You haven't practised ${rec.name} yet, blind spots are where the most improvement hides.`;
             } else if(weakest&&weakest.avgIQ<70){
               rec=SECS.find(s=>s.id===weakest.id);
-              recReason=`Your avg score in ${weakest.name} is ${weakest.avgIQ} — your weakest section. Focused reps here will lift your overall read speed fastest.`;
+              recReason=`Your avg score in ${weakest.name} is ${weakest.avgIQ}, your weakest section. Focused reps here will lift your overall read speed fastest.`;
             } else if(weakest){
               const best=triedSections[0];
               rec=SECS.find(s=>s.id===best.id);
-              recReason=`${best.name} is your strongest section at avg score ${best.avgIQ}. Keep sharpening it — consistency at your ceiling matters.`;
+              recReason=`${best.name} is your strongest section at avg score ${best.avgIQ}. Keep sharpening it, consistency at your ceiling matters.`;
             }
             if(!rec)return null;
             return(
@@ -9300,16 +9300,16 @@ function Game({mode,home,onDone,settings,setScreen}){
 
   // ── OPPONENT SIMULATION ──────────────────────────────────────────────────────
   // Pool is the undealt deck (no jokers). We pick tiles from it as if an opponent
-  // is passing back — biased toward a random mix so received tiles feel authentic.
+  // is passing back, biased toward a random mix so received tiles feel authentic.
   // The opponent's "section" rotates per Charleston so the mix feels natural.
   const oppSectionRef=useRef(null);
   if(!oppSectionRef.current){
-    // Pick a random opposing section at game start — determines their discard bias
+    // Pick a random opposing section at game start, determines their discard bias
     const oppSecs=["2468","cr","13579","369","wd","sp","aln","2026"];
     oppSectionRef.current=oppSecs[Math.floor(Math.random()*oppSecs.length)];
   }
 
-  // Score a pool tile as "discard likelihood" for the opponent — higher = more likely to pass it
+  // Score a pool tile as "discard likelihood" for the opponent, higher = more likely to pass it
   const oppDiscardScore=(t,oppSec)=>{
     // Jokers never enter the pool (filtered out on deal)
     if(t.t==="j")return 0;
@@ -9336,7 +9336,7 @@ function Game({mode,home,onDone,settings,setScreen}){
     const pt=sel.map(i=>hand[i]);setPassed(p=>[...p,...pt]);
     const rem=hand.filter((_,i)=>!sel.includes(i));
 
-    // Pick incoming tiles from pool — weighted by opponent discard likelihood
+    // Pick incoming tiles from pool, weighted by opponent discard likelihood
     const safe=pool.filter(t=>t.t!=="j");
     const scored=safe.map((t,idx)=>({t,idx,score:oppDiscardScore(t,oppSectionRef.current)}));
     scored.sort((a,b)=>b.score-a.score); // highest discard score = most likely to receive
@@ -9453,14 +9453,14 @@ function Game({mode,home,onDone,settings,setScreen}){
       )}
 
       {phase==="askSecond"&&<Ask icon="🔄" title="Continue Charleston?" desc="Another round: Left → Over → Right?" hand={hand} timer={getDisplayTime()} onSort={()=>setHand(sortHand(hand))} onNo={()=>setPhase("askCourtesy")} onYes={()=>{setCn(2);setPi(0);setSel([]);setNewIdx([]);setPhase("pass");}} large={large}/>}
-      {phase==="askCourtesy"&&<Ask icon="🤝" title="Courtesy Pass?" desc="Pass 1–3 tiles across." hand={hand} timer={getDisplayTime()} onSort={()=>setHand(sortHand(hand))} onNo={()=>{stopTimer();setSel([]);setNewIdx([]);setPhase("chooseHand");}} onYes={()=>{setSel([]);setNewIdx([]);setPhase("courtesy");}} large={large}/>}
+      {phase==="askCourtesy"&&<Ask icon="🤝" title="Courtesy Pass?" desc="Pass 1-3 tiles across." hand={hand} timer={getDisplayTime()} onSort={()=>setHand(sortHand(hand))} onNo={()=>{stopTimer();setSel([]);setNewIdx([]);setPhase("chooseHand");}} onYes={()=>{setSel([]);setNewIdx([]);setPhase("courtesy");}} large={large}/>}
 
       {phase==="courtesy"&&(
         <>
           <RackleHeader onBack={()=>setShowLeave(true)}/>
           {getDisplayTime()&&<div style={{textAlign:"center",marginBottom:4}}><span style={{fontSize:12,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {getDisplayTime()}</span></div>}
           <h2 style={{fontFamily:F.d,fontSize:17,color:C.ink,margin:"0 0 2px",textAlign:"center"}}>Courtesy Pass</h2>
-          <p style={{fontSize:12,color:C.mut,textAlign:"center",marginBottom:10}}>Select 1–3 tiles to pass across</p>
+          <p style={{fontSize:12,color:C.mut,textAlign:"center",marginBottom:10}}>Select 1-3 tiles to pass across</p>
           {jw&&<JW/>}
           <div style={S.card}><RH hand={hand} onSort={()=>setHand(sortHand(hand))}/>
             <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} dim={t.t==="j"} onClick={()=>cTog(i)} large={large}/>)}</div></div>
@@ -9534,7 +9534,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           <div style={{textAlign:"center",marginBottom:10}}>
             <span aria-hidden="true" style={{fontSize:22}}>{cp.icon}</span>
             <h2 style={{fontFamily:F.d,fontSize:17,color:C.ink,margin:"2px 0"}}>Pass {cp.dir}{isBlind?" (Blind)":""}</h2>
-            <p role="status" aria-live="polite" style={{fontSize:12,color:hasNew?C.jade:C.mut,fontWeight:hasNew?600:400}}>{hasNew?`← ${newIdx.length} tile${newIdx.length!==1?"s":""} in from ${cp.dir==="Right"?"your left":cp.dir==="Left"?"your right":cp.dir==="Over"?"across the table":"your neighbor"}`:isBlind?`Select 0–${cp.max||3} tiles to pass`:`Select exactly ${cp.req} tiles to pass`}</p>
+            <p role="status" aria-live="polite" style={{fontSize:12,color:hasNew?C.jade:C.mut,fontWeight:hasNew?600:400}}>{hasNew?`← ${newIdx.length} tile${newIdx.length!==1?"s":""} in from ${cp.dir==="Right"?"your left":cp.dir==="Left"?"your right":cp.dir==="Over"?"across the table":"your neighbor"}`:isBlind?`Select 0-${cp.max||3} tiles to pass`:`Select exactly ${cp.req} tiles to pass`}</p>
           </div>
           {jw&&<JW/>}
           <div style={S.card}>
@@ -9639,7 +9639,7 @@ function Game({mode,home,onDone,settings,setScreen}){
                                 <div style={{fontSize:10,color:C.ink,lineHeight:1.5}}>{s.pass}</div>
                               </div>
                             </div>
-                            {!viable&&<div style={{fontSize:10,color:C.cinn,marginTop:4,fontStyle:"italic"}}>Low fit — your rack doesn't lean this way yet.</div>}
+                            {!viable&&<div style={{fontSize:10,color:C.cinn,marginTop:4,fontStyle:"italic"}}>Low fit, your rack doesn't lean this way yet.</div>}
                           </div>}
                         </div>
                       );
@@ -9658,7 +9658,7 @@ function Game({mode,home,onDone,settings,setScreen}){
 // ─── SHARED GAME COMPONENTS ────────────────────────────────────────────────────
 function Ask({icon,title,desc,hand,timer,onNo,onYes,onSort,large}){
   return(<div style={S.pg} className="rk-pg"><RackleHeader onBack={onNo}/>{timer&&<div style={{textAlign:"center",marginBottom:4}}><span style={{fontSize:12,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {timer}</span></div>}<div style={{textAlign:"center",marginBottom:12}}><div aria-hidden="true" style={{fontSize:24,marginBottom:6}}>{icon}</div><h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 4px"}}>{title}</h2><p style={{fontSize:12,color:C.mut}}>{desc}</p></div><Rack hand={hand} label="YOUR RACK" showSort={!!onSort} onSort={onSort} large={large}/><div style={{display:"flex",gap:8,marginTop:12}}><button onClick={onNo} style={{...S.oBtn,flex:1}}>No, skip</button><button onClick={onYes} style={{...S.greenBtn,flex:2}}>Yes, continue →</button></div></div>);}
-function JW(){return(<div role="alert" className="rk-in" style={{padding:"6px 10px",background:C.cinn+"08",borderRadius:8,border:`1px solid ${C.cinn}15`,textAlign:"center",marginBottom:6}}><span style={{fontSize:11,color:C.cinn,fontWeight:600}}>🃏 Jokers cannot be passed — they're too valuable!</span></div>);}
+function JW(){return(<div role="alert" className="rk-in" style={{padding:"6px 10px",background:C.cinn+"08",borderRadius:8,border:`1px solid ${C.cinn}15`,textAlign:"center",marginBottom:6}}><span style={{fontSize:11,color:C.cinn,fontWeight:600}}>🃏 Jokers cannot be passed, they're too valuable!</span></div>);}
 function RH({hand,onSort,showRef,onRef}){return(<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK ({hand.length} tiles)</span><div style={{display:"flex",gap:4}}><button onClick={onSort} style={S.sortBtn}>Sort</button>{onRef&&<button onClick={onRef} aria-expanded={showRef} style={{...S.sortBtn,background:showRef?C.jade+"10":"none",color:showRef?C.jade:C.mut,borderColor:showRef?C.jade+"30":C.bdr}}>📖 2026 Card</button>}</div></div>);}
 function Rack({hand,label,showSort,onSort,large}){return(<div style={S.card}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>{label}</span>{showSort&&<button onClick={onSort} style={S.sortBtn}>Sort</button>}</div><div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>{hand.map((t,i)=><Ti key={i} t={t} large={large}/>)}</div></div>);}
 function CG({onClose}){
@@ -9668,7 +9668,7 @@ function CG({onClose}){
     {SECS.map(s=>{const o=exp===s.id;return(
       <div key={s.id} style={{borderBottom:`1px solid ${C.bdr}`}}>
         <button onClick={()=>setExp(o?null:s.id)} aria-expanded={o} style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",padding:"8px 0",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
-          <div style={{display:"flex",alignItems:"center",gap:6}}><span aria-hidden="true" style={{fontSize:13}}>{s.icon}</span><div><span style={{fontSize:12,fontWeight:700,color:C.ink}}>{s.name}</span><span style={{fontSize:10,color:C.mut,marginLeft:6}}>— {s.desc}</span></div></div>
+          <div style={{display:"flex",alignItems:"center",gap:6}}><span aria-hidden="true" style={{fontSize:13}}>{s.icon}</span><div><span style={{fontSize:12,fontWeight:700,color:C.ink}}>{s.name}</span><span style={{fontSize:10,color:C.mut,marginLeft:6}}>, {s.desc}</span></div></div>
           <span aria-hidden="true" style={{fontSize:11,color:C.mut,flexShrink:0,marginLeft:8}}>{o?"▾":"▸"}</span>
         </button>
         {o&&<div style={{paddingLeft:4,paddingBottom:10}} className="rk-in">
@@ -9739,7 +9739,7 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
       </div>
     </div>
   );
-  // Week-in-progress banner — shown any day except Sunday
+  // Week-in-progress banner, shown any day except Sunday
   const weekInProgress=!isSunday;
 
   const {avgIQ,bestEntry,daysPlayed,topSec,delta,weekRounds,dailyH}=data;
@@ -9822,7 +9822,7 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
       {delta!=null&&<div style={{...S.card,marginBottom:8,background:delta>=0?C.jade+"06":C.cinn+"06",borderColor:delta>=0?C.jade+"25":C.cinn+"25"}}>
         <div style={{fontSize:12,color:delta>=0?C.jade:C.cinn,fontWeight:700,lineHeight:1.6}}>
           {delta>=0
-            ?`↑ Up ${delta} IQ points from last week — you're improving. Keep the streak going.`
+            ?`↑ Up ${delta} IQ points from last week, you're improving. Keep the streak going.`
             :`↓ Down ${Math.abs(delta)} IQ points from last week. More practice sessions will turn this around.`}
         </div>
       </div>}
@@ -9855,11 +9855,11 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
 
 
 // ════════════════════════════════════════════════════════════════════════════
-// HAND ANATOMY DATA — plain-English breakdown of every group type
+// HAND ANATOMY DATA, plain-English breakdown of every group type
 // ════════════════════════════════════════════════════════════════════════════
 const GROUP_TYPES={
-  "pair":  {name:"Pair",     count:2, jokerOk:false, desc:"2 identical tiles. Natural only — no jokers."},
-  "pung":  {name:"Pung",     count:3, jokerOk:true,  desc:"3 identical tiles. 1–2 jokers allowed."},
+  "pair":  {name:"Pair",     count:2, jokerOk:false, desc:"2 identical tiles. Natural only, no jokers."},
+  "pung":  {name:"Pung",     count:3, jokerOk:true,  desc:"3 identical tiles. 1-2 jokers allowed."},
   "kong":  {name:"Kong",     count:4, jokerOk:true,  desc:"4 identical tiles. Up to 3 jokers allowed."},
   "quint": {name:"Quint",    count:5, jokerOk:true,  desc:"5 identical tiles. Needs at least 1 joker."},
   "single":{name:"Single",   count:1, jokerOk:false, desc:"1 tile standing alone. Natural only."},
@@ -9890,7 +9890,7 @@ function decodeHandLabel(label, sectionId){
       groups.push({type:t,tile:windChar,count:cnt,isWind:true});
       continue;
     }
-    // Dragons: DDD, DDDD, D (matching or opposite — mark as dragon)
+    // Dragons: DDD, DDDD, D (matching or opposite, mark as dragon)
     if(/^D+$/.test(tok)){
       const cnt=tok.length;
       const t=cnt===1?"single":cnt===2?"pair":cnt===3?"pung":"kong";
@@ -9940,7 +9940,7 @@ function decodeHandLabel(label, sectionId){
 //   BLACK  = Suit C / any / winds / dragons / neutral → #1A1410
 //   FLOWER = warm purple-green (always)
 //   SOAP   = grey-white (always)
-// Each hand has a `cardColors` array — one color code per token in the label.
+// Each hand has a `cardColors` array, one color code per token in the label.
 // "G"=green, "R"=red, "K"=black(any), "F"=flower, "S"=soap, "W"=wind, "D"=dragon
 const CARD_COL={
   G:"#176B42",  // green suit
@@ -9952,7 +9952,7 @@ const CARD_COL={
   D:"#8A1A1A",  // dragons (deep red)
 };
 
-// Per-hand card color sequences — one entry per whitespace token in the label.
+// Per-hand card color sequences, one entry per whitespace token in the label.
 // Matches exactly the color printing on the 2026 NMJL card.
 const HAND_CARD_COLORS={
   // ── 2026 ──────────────────────────────────────────────────────────────────
@@ -10022,8 +10022,8 @@ const HAND_CARD_COLORS={
   "FF 2026 2026 2026":        ["F","G","G","R"],
 };
 
-// Render a single decoded group as tile chips — card-accurate color coding
-// ── HONEST COVERAGE — same tile-pull logic used by HandTargetPreview display ──
+// Render a single decoded group as tile chips, card-accurate color coding
+// ── HONEST COVERAGE, same tile-pull logic used by HandTargetPreview display ──
 // Returns {held, total, pct} using the literal decoded label + card colors.
 // This is the ground-truth "how many of the 14 hand tiles does this rack actually hold?"
 // Unlike fit() which picks best-case suit permutations, this is suit-specific and strict.
@@ -10125,7 +10125,7 @@ function HandGroupChips({group, cardColor}){
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// VISUAL HAND RENDERER — shows a completed hand as tiles + plain-English breakdown
+// VISUAL HAND RENDERER, shows a completed hand as tiles + plain-English breakdown
 // ════════════════════════════════════════════════════════════════════════════
 function HandRenderer({hand, defaultOpen=false}){
   const [open,setOpen]=useState(defaultOpen);
@@ -10147,12 +10147,12 @@ function HandRenderer({hand, defaultOpen=false}){
     else if(g.isSoap) tileDesc=`${typeInfo.name} of Soap (White Dragon / 0)`;
     else if(g.isDragon) tileDesc=`${typeInfo.name} of Dragons (matching suit)`;
     else if(g.isWind) tileDesc=cnt===1?`${g.tile} Wind (single)`:`${typeInfo.name} of ${g.tile} Winds`;
-    else if(g.isNum&&g.type==="single") tileDesc=`${g.tile} — single tile, no joker${suitName?" ("+suitName+")":""}`;
-    else if(g.isNum) tileDesc=`${typeInfo.name} of ${g.tile}s${suitName?" ("+suitName+")":""}${typeInfo.jokerOk?" — jokers ok":" — natural only"}`;
+    else if(g.isNum&&g.type==="single") tileDesc=`${g.tile}, single tile, no joker${suitName?" ("+suitName+")":""}`;
+    else if(g.isNum) tileDesc=`${typeInfo.name} of ${g.tile}s${suitName?" ("+suitName+")":""}${typeInfo.jokerOk?", jokers ok":", natural only"}`;
     return{...g,tileDesc,typeInfo,cardColor:cc};
   });
 
-  // Colored label — mirrors the card's color coding in the collapsed header
+  // Colored label, mirrors the card's color coding in the collapsed header
   const coloredLabel=groups.map((g,gi)=>{
     const cc=cardColors[gi];
     const col=cc?CARD_COL[cc]||C.ink:
@@ -10235,7 +10235,7 @@ function HandRenderer({hand, defaultOpen=false}){
           {/* Concealed warning */}
           {hand.concealed&&<div style={{marginTop:8,background:"#2460A808",borderRadius:8,padding:"8px 10px",border:`1px solid #2460A820`}}>
             <div style={{fontSize:9,color:"#2460A8",letterSpacing:1.5,fontWeight:700,marginBottom:3}}>🔒 CONCEALED HAND</div>
-            <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>You can never claim a discarded tile for this hand — every tile must be drawn from the wall. Plan for a longer game and never expose any group.</div>
+            <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>You can never claim a discarded tile for this hand, every tile must be drawn from the wall. Plan for a longer game and never expose any group.</div>
           </div>}
 
           {/* Joker guidance */}
@@ -10243,8 +10243,8 @@ function HandRenderer({hand, defaultOpen=false}){
             <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>🃏 JOKER RULES FOR THIS HAND</div>
             <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>
               {breakdown.filter(g=>g.typeInfo.jokerOk).length>0
-                ?`Jokers can substitute in: ${breakdown.filter(g=>g.typeInfo.jokerOk).map(g=>g.tileDesc.split(" —")[0]).slice(0,3).join(", ")}. Jokers can NEVER go in pairs or singles.`
-                :"This hand has no joker-eligible groups — all tiles must be natural."}
+                ?`Jokers can substitute in: ${breakdown.filter(g=>g.typeInfo.jokerOk).map(g=>g.tileDesc.split(" ,")[0]).slice(0,3).join(", ")}. Jokers can NEVER go in pairs or singles.`
+                :"This hand has no joker-eligible groups, all tiles must be natural."}
             </div>
           </div>}
         </div>
@@ -10254,23 +10254,23 @@ function HandRenderer({hand, defaultOpen=false}){
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// GLOSSARY SCREEN — plain-English mahjong terms with tile examples
+// GLOSSARY SCREEN, plain-English mahjong terms with tile examples
 // ════════════════════════════════════════════════════════════════════════════
 const GLOSSARY_TERMS=[
-  {term:"Pung",emoji:"🀄",short:"3 identical tiles",detail:"Three of the same tile. You can use 1–2 jokers to complete a pung. Example: three 6-Bam tiles, or two 6-Bam + one Joker.",tiles:[{t:"s",s:"bam",n:6},{t:"s",s:"bam",n:6},{t:"s",s:"bam",n:6}]},
+  {term:"Pung",emoji:"🀄",short:"3 identical tiles",detail:"Three of the same tile. You can use 1-2 jokers to complete a pung. Example: three 6-Bam tiles, or two 6-Bam + one Joker.",tiles:[{t:"s",s:"bam",n:6},{t:"s",s:"bam",n:6},{t:"s",s:"bam",n:6}]},
   {term:"Kong",emoji:"🀄",short:"4 identical tiles",detail:"Four of the same tile. You can use up to 3 jokers. Kong hands score higher than pungs. Example: four 8-Crak, or three 8-Crak + one Joker.",tiles:[{t:"s",s:"crak",n:8},{t:"s",s:"crak",n:8},{t:"s",s:"crak",n:8},{t:"s",s:"crak",n:8}]},
-  {term:"Pair",emoji:"🩵",short:"2 identical tiles — natural only",detail:"Two of the same tile. Pairs can NEVER include jokers — both tiles must be real, matching tiles. This is the most important joker rule to remember.",tiles:[{t:"s",s:"dot",n:4},{t:"s",s:"dot",n:4}]},
-  {term:"Quint",emoji:"🟣",short:"5 identical tiles — needs jokers",detail:"Five of the same tile. There are only 4 of any number tile in the deck, so you always need at least 1 joker. Quint hands are powerful but require 2+ jokers to build.",tiles:[{t:"s",s:"bam",n:3},{t:"s",s:"bam",n:3},{t:"s",s:"bam",n:3},{t:"s",s:"bam",n:3},{t:"j"}]},
-  {term:"Sextet",emoji:"🌸",short:"6 identical tiles",detail:"Six of the same tile — usually Flowers. The Flower sextette (six Flowers in a row) is one of the most satisfying hands in the game. Requires jokers to complete.",tiles:[{t:"f"},{t:"f"},{t:"f"},{t:"f"},{t:"f"},{t:"f"}]},
+  {term:"Pair",emoji:"🩵",short:"2 identical tiles, natural only",detail:"Two of the same tile. Pairs can NEVER include jokers, both tiles must be real, matching tiles. This is the most important joker rule to remember.",tiles:[{t:"s",s:"dot",n:4},{t:"s",s:"dot",n:4}]},
+  {term:"Quint",emoji:"🟣",short:"5 identical tiles, needs jokers",detail:"Five of the same tile. There are only 4 of any number tile in the deck, so you always need at least 1 joker. Quint hands are powerful but require 2+ jokers to build.",tiles:[{t:"s",s:"bam",n:3},{t:"s",s:"bam",n:3},{t:"s",s:"bam",n:3},{t:"s",s:"bam",n:3},{t:"j"}]},
+  {term:"Sextet",emoji:"🌸",short:"6 identical tiles",detail:"Six of the same tile, usually Flowers. The Flower sextette (six Flowers in a row) is one of the most satisfying hands in the game. Requires jokers to complete.",tiles:[{t:"f"},{t:"f"},{t:"f"},{t:"f"},{t:"f"},{t:"f"}]},
   {term:"Single",emoji:"1️⃣",short:"1 tile standing alone",detail:"A single tile by itself, not grouped. Singles appear in specific hand patterns like '2026' where you need exactly one 2, one Soap, one 2, and one 6. No jokers allowed.",tiles:[{t:"s",s:"crak",n:2},{t:"d",v:"Soap"},{t:"s",s:"bam",n:2},{t:"s",s:"dot",n:6}]},
-  {term:"Joker",emoji:"🃏",short:"Wild tile — but not in pairs",detail:"A joker can substitute for any tile in a pung, kong, quint, or sextet — but NEVER in a pair or single. You cannot pass jokers during the Charleston. In Singles & Pairs, jokers are completely useless.",tiles:[{t:"j"},{t:"j"}]},
-  {term:"Flower",emoji:"🌸",short:"Special tile — interchangeable",detail:"All 8 Flower tiles are identical and interchangeable. They can form pairs, pungs, kongs, and sextettes. Flowers appear in the majority of NMJL sections — they're almost always worth holding.",tiles:[{t:"f"},{t:"f"},{t:"f"}]},
-  {term:"Soap",emoji:"白",short:"White Dragon = 0 in year hands",detail:"The White Dragon (called 'Soap') acts as zero in year hands (2026 section). It's suit-wild — it counts in any suit. Outside the year section it has no special value, but in 2026 hands it's critical.",tiles:[{t:"d",v:"Soap"},{t:"d",v:"Soap"},{t:"d",v:"Soap"}]},
+  {term:"Joker",emoji:"🃏",short:"Wild tile, but not in pairs",detail:"A joker can substitute for any tile in a pung, kong, quint, or sextet, but NEVER in a pair or single. You cannot pass jokers during the Charleston. In Singles & Pairs, jokers are completely useless.",tiles:[{t:"j"},{t:"j"}]},
+  {term:"Flower",emoji:"🌸",short:"Special tile, interchangeable",detail:"All 8 Flower tiles are identical and interchangeable. They can form pairs, pungs, kongs, and sextettes. Flowers appear in the majority of NMJL sections, they're almost always worth holding.",tiles:[{t:"f"},{t:"f"},{t:"f"}]},
+  {term:"Soap",emoji:"白",short:"White Dragon = 0 in year hands",detail:"The White Dragon (called 'Soap') acts as zero in year hands (2026 section). It's suit-wild, it counts in any suit. Outside the year section it has no special value, but in 2026 hands it's critical.",tiles:[{t:"d",v:"Soap"},{t:"d",v:"Soap"},{t:"d",v:"Soap"}]},
   {term:"Matching Dragon",emoji:"🐉",short:"Dragon color that matches your suit",detail:"Each suit has a matching dragon: Bam → Green Dragon, Crak → Red Dragon, Dot → Soap (White Dragon). When a hand says 'matching dragon,' you must use the dragon that corresponds to your number tile suit.",tiles:[{t:"s",s:"bam",n:5},{t:"d",v:"Grn"},{t:"d",v:"Grn"},{t:"d",v:"Grn"}]},
-  {term:"Concealed",emoji:"🔒",short:"Must draw all tiles — no calling",detail:"A concealed hand cannot claim any discarded tile. You must draw every tile yourself from the wall. Never expose any group. These hands often score more points but are harder to complete.",tiles:[]},
+  {term:"Concealed",emoji:"🔒",short:"Must draw all tiles, no calling",detail:"A concealed hand cannot claim any discarded tile. You must draw every tile yourself from the wall. Never expose any group. These hands often score more points but are harder to complete.",tiles:[]},
   {term:"Open",emoji:"🔓",short:"Can claim discarded tiles",detail:"An open hand lets you call a tile someone else discards to complete a pung or kong. You then expose that group face-up. Most hands on the card are open.",tiles:[]},
   {term:"Charleston",emoji:"🔄",short:"The pre-game tile exchange",detail:"Before play begins, players pass tiles to each other in three rounds: right, across, left. Then optionally a second Charleston, then an optional courtesy pass. Rackle trains this phase.",tiles:[]},
-  {term:"NEWS",emoji:"🌀",short:"All four winds in one hand",detail:"N-E-W-S means one each of North, East, West, and South wind tiles. Appears in several hands across sections. You need exactly one of each — jokers cannot substitute.",tiles:[{t:"w",v:"N"},{t:"w",v:"E"},{t:"w",v:"W"},{t:"w",v:"S"}]},
+  {term:"NEWS",emoji:"🌀",short:"All four winds in one hand",detail:"N-E-W-S means one each of North, East, West, and South wind tiles. Appears in several hands across sections. You need exactly one of each, jokers cannot substitute.",tiles:[{t:"w",v:"N"},{t:"w",v:"E"},{t:"w",v:"W"},{t:"w",v:"S"}]},
 ];
 
 function GlossaryScreen({home,setScreen}){
@@ -10317,7 +10317,7 @@ function GlossaryScreen({home,setScreen}){
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// SECTION QUIZ MODE — show 13 tiles, pick the best section
+// SECTION QUIZ MODE, show 13 tiles, pick the best section
 // ════════════════════════════════════════════════════════════════════════════
 function SectionQuizScreen({home,setScreen}){
   const ROUNDS=5;
@@ -10368,7 +10368,7 @@ function SectionQuizScreen({home,setScreen}){
       <div style={{textAlign:"center",padding:"32px 0 24px"}}>
         <div style={{fontSize:48,marginBottom:12}}>🧠</div>
         <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:8}}>Section Quiz</div>
-        <div style={{fontSize:13,color:C.mut,lineHeight:1.7,maxWidth:280,margin:"0 auto 24px"}}>You'll see a random rack of 13 tiles. Pick the section your tiles fit best. {ROUNDS} rounds — see how sharp your read is.</div>
+        <div style={{fontSize:13,color:C.mut,lineHeight:1.7,maxWidth:280,margin:"0 auto 24px"}}>You'll see a random rack of 13 tiles. Pick the section your tiles fit best. {ROUNDS} rounds, see how sharp your read is.</div>
         <div style={{display:"flex",gap:12,justifyContent:"center",marginBottom:24,flexWrap:"wrap"}}>
           {[{icon:"👁",label:"Read the rack"},{icon:"🎯",label:"Pick your section"},{icon:"📊",label:"See the fit scores"}].map((s,i)=>(
             <div key={i} style={{textAlign:"center",width:90}}>
@@ -10389,7 +10389,7 @@ function SectionQuizScreen({home,setScreen}){
       <div style={{textAlign:"center",padding:"28px 0 20px"}}>
         <div style={{fontSize:48,marginBottom:10}}>{correctCount>=4?"🏆":correctCount>=3?"🎯":correctCount>=2?"👍":"📚"}</div>
         <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>{correctCount}/{ROUNDS} correct</div>
-        <div style={{fontSize:13,color:C.mut,marginBottom:20}}>{correctCount>=4?"Sharp read — your section instincts are strong.":correctCount>=3?"Good eye. A little more practice and you'll be automatic.":correctCount>=2?"Getting there. Focus on what tiles each section needs.":"Keep studying — the pattern recognition comes with reps."}</div>
+        <div style={{fontSize:13,color:C.mut,marginBottom:20}}>{correctCount>=4?"Sharp read, your section instincts are strong.":correctCount>=3?"Good eye. A little more practice and you'll be automatic.":correctCount>=2?"Getting there. Focus on what tiles each section needs.":"Keep studying, the pattern recognition comes with reps."}</div>
       </div>
       {/* Round-by-round review */}
       <div style={{...S.card,marginBottom:12}}>
@@ -10403,7 +10403,7 @@ function SectionQuizScreen({home,setScreen}){
               <div style={{flex:1}}>
                 <div style={{fontSize:11,fontWeight:700,color:C.ink}}>Round {i+1}: You picked {chosenSec?.icon} {chosenSec?.name}</div>
                 {!s.correct&&<div style={{fontSize:10,color:C.cinn,marginTop:1}}>Best fit: {bestSec?.icon} {bestSec?.name} ({Math.round(s.bestScore*100)}%)</div>}
-                {s.correct&&<div style={{fontSize:10,color:C.jade,marginTop:1}}>Correct — {Math.round(s.chosenScore*100)}% fit</div>}
+                {s.correct&&<div style={{fontSize:10,color:C.jade,marginTop:1}}>Correct, {Math.round(s.chosenScore*100)}% fit</div>}
               </div>
             </div>
           );
@@ -10511,7 +10511,7 @@ function SectionQuizScreen({home,setScreen}){
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// HAND BROWSER — visual catalog of every hand on the 2026 card
+// HAND BROWSER, visual catalog of every hand on the 2026 card
 // (replaces/extends CardGuideScreen with per-hand visual rendering)
 // ════════════════════════════════════════════════════════════════════════════
 function HandBrowserScreen({home,setScreen}){
@@ -10582,7 +10582,7 @@ function HandBrowserScreen({home,setScreen}){
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// PERSISTENT QUICK-CARD BUTTON — floating tab always visible during live game
+// PERSISTENT QUICK-CARD BUTTON, floating tab always visible during live game
 // (rendered inside AppShell so it overlays every screen)
 // ════════════════════════════════════════════════════════════════════════════
 function QuickCardButton({setScreen,screen,goBack}){
@@ -10655,7 +10655,7 @@ export default function Rackle(){
           if(ok)setClubPostToast({clubName:CLUBS[autoCode]?.name||"your club",iqScore:result.iq.totalScore});
         });
       }
-      // Auto-post to GLOBAL leaderboard — always, even without an account
+      // Auto-post to GLOBAL leaderboard, always, even without an account
       if(result?.iq?.totalScore){
         const globalName=autoName||getOrCreateAnonymousName();
         upsertGlobalEntry(globalName,result.iq.totalScore,result.time||0,newStreak,autoCode||null);
