@@ -73,7 +73,8 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
   const [done,setDone]=useState(false);
   const cardRef=useRef(null);
   const profile=getProfile();
-  const club=profile?.clubCode?CLUBS[profile.clubCode]:null;
+  const activeClubCode=getClubCode();
+  const club=activeClubCode?CLUBS[activeClubCode]:null;
   const playerName=profile?.nickname||null;
 
   // Text-only pass indicators, emoji are unreliable in html2canvas
@@ -3336,9 +3337,24 @@ async function pullGameHistory(playerId){
   }catch{return null;}
 }
 
-function getClubCode(){return ST.get("clubCode",null);}
+function getClubCode(){
+  const stored=ST.get("clubCode",null);
+  if(stored)return stored;
+  const profile=ST.get("profile",null);
+  if(profile?.clubCode){
+    ST.set("clubCode",profile.clubCode);
+    return profile.clubCode;
+  }
+  return null;
+}
 function setClubCode(c){ST.set("clubCode",c);}
-function getClubName(){return ST.get("clubName",null);}
+function getClubName(){
+  const stored=ST.get("clubName",null);
+  if(stored)return stored;
+  const code=getClubCode();
+  const profile=ST.get("profile",null);
+  return profile?.clubName||profile?.club||CLUBS[code]?.name||null;
+}
 function setClubName(n){ST.set("clubName",n);}
 
 // ─── PROFILE SYSTEM ───────────────────────────────────────────────────────────
@@ -8587,11 +8603,23 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const topToday=Math.max(ds?.topScore||0,iq?.totalScore||0,86);
   const bestScore=Number.isFinite(Number(bestIQ?.score ?? bestIQ))?Number(bestIQ?.score ?? bestIQ):0;
   const currentScore=Number.isFinite(Number(iq?.totalScore))?Number(iq.totalScore):0;
-  const currentName=(profile?.nickname||getOrCreateAnonymousName()).trim().toLowerCase();
-  const currentAlreadyOnClubBoard=homeClubEntries.some(e=>(e.name||"").trim().toLowerCase()===currentName);
+  const currentName=(profile?.nickname||getClubName()||getOrCreateAnonymousName()).trim();
+  const currentNameKey=currentName.toLowerCase();
+  const currentAlreadyOnClubBoard=homeClubEntries.some(e=>(e.name||"").trim().toLowerCase()===currentNameKey);
   const hasClubScore=!!(club&&dDone&&currentScore>0);
-  const homeClubRank=hasClubScore?homeClubEntries.filter(e=>(Number(e.iqScore)||0)>currentScore).length+1:null;
-  const homeClubTotal=club?homeClubEntries.length+(hasClubScore&&!currentAlreadyOnClubBoard?1:0):null;
+  const optimisticClubEntry=hasClubScore&&!currentAlreadyOnClubBoard?{
+    name:currentName,
+    iqScore:currentScore,
+    time:iq?.totalTime||dRes?.time||0,
+    streak,
+    ts:Date.now(),
+    optimistic:true,
+  }:null;
+  const displayHomeClubEntries=(optimisticClubEntry?[...homeClubEntries,optimisticClubEntry]:homeClubEntries)
+    .filter(e=>Number.isFinite(Number(e.iqScore)))
+    .sort((a,b)=>(Number(b.iqScore)||0)-(Number(a.iqScore)||0)||((Number(a.time)||9999)-(Number(b.time)||9999)));
+  const homeClubRank=hasClubScore?displayHomeClubEntries.findIndex(e=>(e.name||"").trim().toLowerCase()===currentNameKey)+1:null;
+  const homeClubTotal=club?displayHomeClubEntries.length:null;
   const pb=Math.max(bestScore,currentScore,100);
   const firstName=profile?.nickname?profile.nickname.split(" ")[0]:"";
   const streakTitle=streak>1?`${streak}-day streak${firstName?`, ${firstName}`:""}. Keep the heat on.`:streak===1?"Tomorrow’s rack is already waiting.":"Start your streak with today's Rackle.";
@@ -8730,7 +8758,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <MiniStat value={`#${Math.min(todayPlayers,Math.max(1,todayPlayers-1))}`} label="GLOBAL RANK" accent={brightScoreColor}/>
           </button>
           <button onClick={goClubRank} style={{border:"none",padding:0,background:"transparent",cursor:"pointer",textAlign:"left"}} aria-label={club?"View club leaderboard":"Browse club directory"}>
-            <MiniStat value={club?(homeClubRank?`#${homeClubRank}`:"pending"):"join"} label="CLUB RANK" accent={homeClubRank===1?brightScoreColor:undefined}/>
+            <MiniStat value={club?(homeClubRank?`#${homeClubRank}`:(hasClubScore?"posting":"join")):"join"} label="CLUB RANK" accent={homeClubRank===1?brightScoreColor:undefined}/>
           </button>
         </div>
       </div>
@@ -8788,7 +8816,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <ClubCodeEntry onJoin={()=>setScreen("leaderboard")} setScreen={setScreen}/>
         <InlineCodeEntry setScreen={setScreen}/>
       </div>
-      <ClubPulseCard club={club} clubPlayers={clubPlayers} clubEntries={homeClubEntries} currentScore={currentScore} currentRank={homeClubRank} setScreen={setScreen}/>
+      <ClubPulseCard club={club} clubPlayers={clubPlayers} clubEntries={displayHomeClubEntries} currentScore={currentScore} currentRank={homeClubRank} setScreen={setScreen}/>
       {!getClubCode()&&(
         <div style={{margin:"18px 0 12px",background:"linear-gradient(135deg,#F2FAF6,#EAF5EF)",padding:"18px",border:`1.5px solid ${C.jade}22`,borderRadius:18,boxShadow:`0 4px 18px ${C.jade}08`}}>
           <div style={{fontSize:9,color:C.jade,letterSpacing:2.2,fontWeight:900,marginBottom:6}}>FOR CLUB ORGANIZERS</div>
