@@ -5078,7 +5078,7 @@ function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHom
         <span style={{fontSize:10,fontWeight:800,color:C.gilt,letterSpacing:1}}>NEW PERSONAL BEST!</span>
       </div>}
       <div style={{width:48,height:1.5,background:`linear-gradient(90deg,transparent,${C.gilt},transparent)`,margin:`${isPB?8:12}px auto 14px`}}/>
-      <div style={{fontFamily:F.d,fontSize:21,fontWeight:900,color:"#fff",letterSpacing:-0.3,marginBottom:4}}>{iq.level}</div>
+      <div style={{fontFamily:F.d,fontSize:21,fontWeight:900,color:"#fff",letterSpacing:-0.3,marginBottom:12}}>{iq.level}</div>
       {iq.styleName&&<div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"4px 11px",fontSize:11,color:C.gilt,fontWeight:900,marginBottom:10,letterSpacing:0.2}}>{iq.styleName}</div>}
       <div style={{fontSize:11,color:"rgba(255,255,255,0.55)",lineHeight:1.5,marginBottom:16,maxWidth:240,marginLeft:"auto",marginRight:"auto"}}>{iq.levelExplanation}</div>
       <div style={{width:"100%",height:0.5,background:"rgba(255,255,255,0.1)",marginBottom:14}}/>
@@ -5641,9 +5641,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
               <div style={{position:"absolute",top:0,left:0,right:0,height:"40%",background:"linear-gradient(180deg,rgba(255,255,255,0.06),transparent)",borderRadius:"14px 14px 0 0",pointerEvents:"none"}}/>
               <div style={{width:44,height:44,borderRadius:12,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>🎓</div>
               <div style={{flex:1}}>
-                <div style={{fontSize:8,color:C.gilt,letterSpacing:2.5,fontWeight:700,marginBottom:3,opacity:0.85}}>TABLE TALK</div>
-                <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:"#fff",lineHeight:1.2,marginBottom:2}}>See The Better Play</div>
-                <div style={{fontSize:11,color:"rgba(255,255,255,0.55)",lineHeight:1.4}}>What experienced players noticed in your rack</div>
+                <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:"#fff",lineHeight:1.2,marginBottom:2}}>Your Rackle Coach</div>
+                <div style={{fontSize:11,color:"rgba(255,255,255,0.62)",lineHeight:1.4}}>A friendly nudge for your next Charleston</div>
               </div>
               <div style={{width:28,height:28,borderRadius:8,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
                 <span style={{fontSize:14,color:"rgba(255,255,255,0.7)",fontWeight:700}}>›</span>
@@ -8008,15 +8007,16 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
 // ─── STATS PILL — collapsed by default, tap to expand ────────────────────────
 function Statspill({streak,rounds,bestIQ,streakBadge}){
   const [open,setOpen]=useState(false);
-  const hasAny=streak>0||rounds>0||bestIQ;
+  const visibleStreak=streak>1?streak:0;
+  const hasAny=visibleStreak>0||rounds>0||bestIQ;
 
-  // Collapsed pill — shows most prominent stat
-  const icon=streak>0?(streakBadge?streakBadge.badge:"📅"):bestIQ?"⭐":"🎲";
-  const value=streak>0?`${streak}-day`:bestIQ?bestIQ.score:rounds;
-  const label=streak>0?"streak":bestIQ?"best score":"rounds";
-  const color=streak>0?C.cinn:bestIQ?C.gold:C.mut;
-  const bg=streak>0?C.cinn+"08":bestIQ?C.gold+"08":C.bg2;
-  const border=streak>0?`1px solid ${C.cinn}20`:bestIQ?`1px solid ${C.gold}20`:`1px solid ${C.bdr}`;
+  // Collapsed pill — shows most prominent stat. Day 1 stays out of the top bar to keep the home screen clean.
+  const icon=visibleStreak>0?(streakBadge?streakBadge.badge:"📅"):bestIQ?"⭐":"🎲";
+  const value=visibleStreak>0?`${visibleStreak}-day`:bestIQ?bestIQ.score:rounds;
+  const label=visibleStreak>0?"streak":bestIQ?"best score":"rounds";
+  const color=visibleStreak>0?C.cinn:bestIQ?C.gold:C.mut;
+  const bg=visibleStreak>0?C.cinn+"08":bestIQ?C.gold+"08":C.bg2;
+  const border=visibleStreak>0?`1px solid ${C.cinn}20`:bestIQ?`1px solid ${C.gold}20`:`1px solid ${C.bdr}`;
 
   if(!hasAny)return null;
 
@@ -8031,10 +8031,10 @@ function Statspill({streak,rounds,bestIQ,streakBadge}){
 
       {/* Expanded panel */}
       {open&&<div className="rk-in" style={{marginTop:6,background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:14,padding:"10px 14px",boxShadow:"0 4px 16px rgba(0,0,0,0.06)",minWidth:180}}>
-        {streak>0&&<div style={{display:"flex",alignItems:"center",gap:8,paddingBottom:8,borderBottom:rounds>0||bestIQ?`1px solid ${C.bdr}`:"none",marginBottom:rounds>0||bestIQ?8:0}}>
+        {visibleStreak>0&&<div style={{display:"flex",alignItems:"center",gap:8,paddingBottom:8,borderBottom:rounds>0||bestIQ?`1px solid ${C.bdr}`:"none",marginBottom:rounds>0||bestIQ?8:0}}>
           <span style={{fontSize:16}}>{streakBadge?streakBadge.badge:"📅"}</span>
           <div>
-            <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.cinn,lineHeight:1}}>{streak}-day streak{streakBadge?` · ${streakBadge.title}`:""}</div>
+            <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.cinn,lineHeight:1}}>{visibleStreak}-day streak{streakBadge?` · ${streakBadge.title}`:""}</div>
             <div style={{fontSize:10,color:C.mut,marginTop:2}}>{streakBadge?streakBadge.desc:"Keep playing daily!"}</div>
           </div>
         </div>}
@@ -8611,8 +8611,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
                           if(streak===1){
                             const hadStreak=getHist().filter(e=>e.mode==="daily").length>1;
                             return hadStreak
-                              ?`We go again${n}. Today is day one 🀄`
-                              :`You showed up today${n}. That's how it starts. 🀄`;
+                              ?`We go again${n}. Today is day one.`
+                              :`You showed up today${n}. That's how it starts.`;
                           }
                           if(streak===2)return`2 days in a row${n} — momentum is building 🔥`;
                           if(streak===3)return`3-day streak${n}! Hat trick. Keep going ›`;
@@ -8721,7 +8721,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               {iq&&<>
                 <div style={{fontFamily:F.d,fontSize:52,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,textShadow:`0 2px 16px rgba(176,138,53,0.45)`,marginBottom:6}}>{iq.totalScore}</div>
                 <div style={{width:40,height:1.5,background:`linear-gradient(90deg,transparent,${C.gilt},transparent)`,margin:"12px auto 12px"}}/>
-                <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:"#fff",marginBottom:4,letterSpacing:-0.3}}>{iq.level}</div>
+                <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:"#fff",marginBottom:12,letterSpacing:-0.3}}>{iq.level}</div>
                 {iq.styleName&&<div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"4px 11px",fontSize:11,color:C.gilt,fontWeight:900,marginBottom:10,letterSpacing:0.2}}>{iq.styleName}</div>}
                 <div style={{fontSize:11,color:"rgba(255,255,255,0.6)",marginBottom:16,lineHeight:1.55,maxWidth:260,margin:"0 auto 16px"}}>{iq.levelExplanation}</div>
               </>}
@@ -8757,9 +8757,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               <button onClick={showScorecard} style={{width:"100%",borderRadius:12,background:"#fff",border:`1.5px solid ${C.jade}25`,cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"11px 14px",textAlign:"left",boxShadow:`0 2px 8px ${C.jade}10`}}>
                 <div style={{width:36,height:36,borderRadius:10,background:`linear-gradient(135deg,${C.jade},#115C38)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>🎓</div>
                 <div style={{flex:1}}>
-                  <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:1}}>TABLE TALK</div>
-                  <div style={{fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.2}}>See The Better Play</div>
-                  <div style={{fontSize:10,color:C.mut,marginTop:1}}>What experienced players noticed in your rack</div>
+                  <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.2}}>Your Rackle Coach</div>
+                  <div style={{fontSize:11,color:C.mut,marginTop:2}}>A friendly nudge for your next Charleston</div>
                 </div>
                 <span style={{fontSize:16,color:C.jade,fontWeight:700,flexShrink:0}}>›</span>
               </button>
