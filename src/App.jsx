@@ -5403,15 +5403,24 @@ function SortableRack({hand:initialHand}){
 }
 
 // ─── COLLAPSIBLE SECTION HEADER — tap to expand/collapse ──────────────────────
-function sectionSentenceCase(text){
+function sectionTitleCase(text){
   if(!text)return text;
-  const lower=String(text).toLowerCase();
-  return lower.charAt(0).toUpperCase()+lower.slice(1);
+  return String(text).split(" ").map(word=>{
+    if(!word)return word;
+    return word.charAt(0).toUpperCase()+word.slice(1);
+  }).join(" ");
+}
+function sectionDescCase(text){
+  if(!text)return text;
+  return String(text)
+    .replace(/best path/gi,"Best path")
+    .replace(/practice recommendations/gi,"Recommendations")
+    .replace(/coach mode/g,"Coach Mode");
 }
 
 function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
-  const headerLabel=sectionSentenceCase(label);
-  const headerDesc=sectionSentenceCase(desc);
+  const headerLabel=sectionTitleCase(label);
+  const headerDesc=sectionDescCase(desc);
   return(
     <div style={{marginTop:9,marginBottom:0}}>
       <button
@@ -5448,7 +5457,7 @@ function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
         <div style={{flex:1,minWidth:0}}>
           <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:2,flexWrap:"wrap"}}>
             <div style={{
-              fontSize:15,fontWeight:900,fontFamily:F.d,
+              fontSize:14,fontWeight:900,fontFamily:F.d,
               color:C.ink,lineHeight:1.08,letterSpacing:-0.15,
             }}>{headerLabel}</div>
             {badge&&(
@@ -5629,7 +5638,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       })()}
 
       {/* ③ YOUR HAND — collapsible, open by default */}
-      <CollapsibleSection label="Your Hand" desc="Final rack · best path" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
+      <CollapsibleSection label="Your Hand" desc="Final rack · Best path" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
         <SortableRack hand={hand}/>
         <div style={{marginTop:8}}>
           <HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={onCoachMode}/>
@@ -5652,7 +5661,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       </CollapsibleSection>
 
       {/* ⑥ NEXT STEPS — collapsible */}
-      <CollapsibleSection label="Next Steps" desc="Coach Mode · practice recommendations" icon="🎯" open={openSec.next} onToggle={()=>toggle("next")}>
+      <CollapsibleSection label="Next Steps" desc="Coach Mode · Recommendations" icon="🎯" open={openSec.next} onToggle={()=>toggle("next")}>
         <div style={{display:"flex",flexDirection:"column",gap:8,paddingBottom:4}}>
           {/* Coach Mode — primary action, full-bleed dark green */}
           {onCoachMode&&(
@@ -5746,7 +5755,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
       </div>
 
       {/* YOUR HAND — rack only, closed */}
-      <CollapsibleSection label="Your Hand" desc="Final rack · best path" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
+      <CollapsibleSection label="Your Hand" desc="Final rack · Best path" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
         {hand&&hand.length>0&&<SortableRack hand={hand}/>}
         {scoredHandObj&&<HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={null}/>}
       </CollapsibleSection>
