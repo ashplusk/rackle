@@ -7378,7 +7378,7 @@ function InlineCodeEntry({setScreen}){
   );
 }
 
-function ClubCodeEntry({setScreen}){
+function ClubCodeEntry({setScreen,clubEntries=[],currentScore=0,currentRank=null,clubPlayers=0}){
   const [open,setOpen]=useState(false);
   const [codeOpen,setCodeOpen]=useState(false);
   const [code,setCode]=useState("");
@@ -7412,6 +7412,16 @@ function ClubCodeEntry({setScreen}){
 
   const addClubEmail="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20";
   const totalClubs=Object.keys(CLUBS).length;
+  const realClubEntries=Array.isArray(clubEntries)?clubEntries.filter(e=>Number.isFinite(Number(e.iqScore))):[];
+  const topClubEntry=realClubEntries[0]||null;
+  const liveClubCount=Math.max(realClubEntries.length,clubStats?.total||0,clubPlayers||0,currentScore?1:0);
+  const liveClubRank=currentRank||clubStats?.myRank||null;
+  const liveClubTop=topClubEntry?.iqScore||clubStats?.topIQ||null;
+  const clubSnapshotLines=savedClub?[
+    `${liveClubCount||1} ${(liveClubCount||1)===1?"club player has":"club players have"} posted today`,
+    liveClubTop?`Score to chase: ${liveClubTop}`:(currentScore?`Your ${currentScore} is on the club board.`:"Your club board is waiting for the first score."),
+    liveClubRank===1?"You're the score your club is chasing.":liveClubRank?`You're #${liveClubRank} in your club today.`:"Post your Daily to enter the club race.",
+  ]:[];
 
   return(
     <div style={{marginBottom:0}}>
@@ -7440,13 +7450,26 @@ function ClubCodeEntry({setScreen}){
 
       {open&&<div className="rk-in" style={{background:"#fff",border:`1px solid ${C.jade+"25"}`,borderTop:"none",borderRadius:"0 0 12px 12px",padding:"14px 16px"}}>
         {savedClub?(
-          <button onClick={()=>setScreen("leaderboard")} style={{width:"100%",borderRadius:12,background:C.sage,border:`1px solid ${C.sageB}25`,cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"12px 14px",marginBottom:10,textAlign:"left"}}>
-            <div style={{flex:1,minWidth:0}}>
-              <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#1A3D28",lineHeight:1.2,marginBottom:2}}>Open {savedClub.name}</div>
-              <div style={{fontSize:11,color:C.sageB}}>See today's full board →</div>
+          <>
+            <button onClick={()=>setScreen("leaderboard")} style={{width:"100%",borderRadius:12,background:C.sage,border:`1px solid ${C.sageB}25`,cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"12px 14px",marginBottom:10,textAlign:"left"}}>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#1A3D28",lineHeight:1.2,marginBottom:2}}>Open {savedClub.name}</div>
+                <div style={{fontSize:11,color:C.sageB}}>See today's full board →</div>
+              </div>
+              <span style={{fontSize:20,flexShrink:0}}>🏆</span>
+            </button>
+            <div style={{background:"#fff",border:`1px solid ${C.jade}18`,borderRadius:12,padding:"12px 12px 10px",marginBottom:10}}>
+              <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:900,marginBottom:8}}>TODAY AT YOUR CLUB</div>
+              <div style={{display:"grid",gap:7}}>
+                {clubSnapshotLines.map((line,i)=>(
+                  <div key={i} style={{display:"flex",alignItems:"center",gap:8,fontSize:11,color:i===0?C.jade:C.mut,lineHeight:1.35}}>
+                    <span style={{width:18,height:18,borderRadius:9,background:i===0?C.jade+"14":C.bg2,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,flexShrink:0}}>{["●","↗","🏆"][i]}</span>
+                    <span>{line}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <span style={{fontSize:20,flexShrink:0}}>🏆</span>
-          </button>
+          </>
         ):(
           <>
             <div style={{background:C.jade+"08",borderRadius:10,padding:"10px 12px",marginBottom:12,border:`1px solid ${C.jade}20`}}>
@@ -8466,7 +8489,7 @@ function ClubPulseCard({club,clubPlayers,clubEntries=[],currentScore=0,currentRa
     <div style={{background:"#fff",border:`1px solid ${C.jade}18`,borderRadius:14,padding:14,marginBottom:10,boxShadow:"0 2px 12px rgba(0,0,0,0.03)"}}>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:10}}>
         <div>
-          <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:900,marginBottom:3}}>CLUB PULSE</div>
+          <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:900,marginBottom:3}}>TODAY AT YOUR CLUB</div>
           <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.15}}>{club.name}</div>
         </div>
         <button onClick={()=>setScreen("leaderboard")} style={{background:C.jade+"10",border:`1px solid ${C.jade}25`,borderRadius:999,padding:"7px 11px",fontSize:10,fontWeight:800,color:C.jade,cursor:"pointer"}}>View ranks</button>
@@ -8823,10 +8846,9 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       </div>
       <div style={{marginBottom:18,borderRadius:16,overflow:"hidden",border:`1px solid ${C.bdr}`,boxShadow:"0 4px 16px rgba(0,0,0,0.025)"}}>
         <GlobalLeaderboardPill setScreen={setScreen}/>
-        <ClubCodeEntry onJoin={()=>setScreen("leaderboard")} setScreen={setScreen}/>
+        <ClubCodeEntry onJoin={()=>setScreen("leaderboard")} setScreen={setScreen} clubEntries={displayHomeClubEntries} currentScore={currentScore} currentRank={shownClubRank} clubPlayers={clubPlayers}/>
         <InlineCodeEntry setScreen={setScreen}/>
       </div>
-      <ClubPulseCard club={club} clubPlayers={clubPlayers} clubEntries={displayHomeClubEntries} currentScore={currentScore} currentRank={shownClubRank} setScreen={setScreen}/>
       {!activeClubCode&&(
         <div style={{margin:"18px 0 12px",background:"linear-gradient(135deg,#F2FAF6,#EAF5EF)",padding:"18px",border:`1.5px solid ${C.jade}22`,borderRadius:18,boxShadow:`0 4px 18px ${C.jade}08`}}>
           <div style={{fontSize:9,color:C.jade,letterSpacing:2.2,fontWeight:900,marginBottom:6}}>FOR CLUB ORGANIZERS</div>
@@ -9366,8 +9388,8 @@ function Game({mode,home,onDone,settings,setScreen}){
   };
 
   // ── OPPONENT SIMULATION ──────────────────────────────────────────────────────
-  // Pool is the undealt deck (no jokers). We pick tiles from it as if an opponent
-  // is passing back, biased toward a random mix so received tiles feel authentic.
+  // Pool is the undealt deck with jokers removed. We pick tiles from it as if an opponent
+  // is passing back, but never include Jokers because Jokers cannot be passed in Charleston.
   // The opponent's "section" rotates per Charleston so the mix feels natural.
   const oppSectionRef=useRef(null);
   if(!oppSectionRef.current){
@@ -9398,18 +9420,30 @@ function Game({mode,home,onDone,settings,setScreen}){
     return 3+Math.random()*4;
   };
 
+  // Pick incoming Charleston tiles from the simulated opponent.
+  // American Mahjong rule: Jokers are NEVER passed in the Charleston.
+  // Keep this centralized so Daily, Free Play, blind passes, and Courtesy Pass all obey it.
+  const getIncomingTiles=(count)=>{
+    const safePool=(pool||[]).filter(t=>t&&t.t!=="j");
+    const scored=safePool
+      .map((t,idx)=>({t,idx,score:oppDiscardScore(t,oppSectionRef.current)}))
+      .sort((a,b)=>b.score-a.score);
+
+    const picked=scored.slice(0,count);
+    const pickedIdx=new Set(picked.map(x=>x.idx));
+    const incoming=picked.map(x=>x.t).filter(t=>t&&t.t!=="j");
+    const newPool=safePool.filter((_,i)=>!pickedIdx.has(i));
+
+    return{incoming,newPool};
+  };
+
   const doSwap=(count)=>{
     haptic(40);
     const pt=sel.map(i=>hand[i]);setPassed(p=>[...p,...pt]);
     const rem=hand.filter((_,i)=>!sel.includes(i));
 
-    // Pick incoming tiles from pool, weighted by opponent discard likelihood
-    const safe=pool.filter(t=>t.t!=="j");
-    const scored=safe.map((t,idx)=>({t,idx,score:oppDiscardScore(t,oppSectionRef.current)}));
-    scored.sort((a,b)=>b.score-a.score); // highest discard score = most likely to receive
-    const incoming=scored.slice(0,count).map(x=>x.t);
-    const incomingIdxSet=new Set(scored.slice(0,count).map(x=>x.idx));
-    const newPool=safe.filter((_,i)=>!incomingIdxSet.has(i));
+    // Pick incoming tiles from pool. Jokers are excluded by rule.
+    const {incoming,newPool}=getIncomingTiles(count);
     setPool(newPool);
 
     const comb=[...rem,...incoming];const ni=[];for(let i=rem.length;i<comb.length;i++)ni.push(i);
@@ -9532,7 +9566,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           <div style={S.card}><RH hand={hand} onSort={()=>setHand(sortHand(hand))}/>
             <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} dim={t.t==="j"} onClick={()=>cTog(i)} large={large}/>)}</div></div>
           <div aria-live="polite" style={{textAlign:"center",fontSize:13,color:sel.length>0?C.jade:C.mut,fontWeight:700,margin:"4px 0"}}>{sel.length}/3 selected</div>
-          <button onClick={()=>{haptic(40);if(sel.length<1){setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");return;}const pt=sel.map(i=>hand[i]);setPassed(p=>[...p,...pt]);const rem=hand.filter((_,i)=>!sel.includes(i));const safe=pool.filter(t=>t.t!=="j");const scored2=safe.map((t,idx)=>({t,idx,score:oppDiscardScore(t,oppSectionRef.current)}));scored2.sort((a,b)=>b.score-a.score);const inc=scored2.slice(0,sel.length).map(x=>x.t);const inSet=new Set(scored2.slice(0,sel.length).map(x=>x.idx));setPool(safe.filter((_,i)=>!inSet.has(i)));setHand([...rem,...inc]);const cpNowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);const cpPassEl=cpNowEl-lastPassElRef.current;lastPassElRef.current=cpNowEl;setPassLog(pl=>[...pl,{label:"Courtesy Pass",roundName:"Courtesy Pass",out:pt,in:inc,blind:false,secs:cpPassEl}]);setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");}} style={{...S.passBtn}}>{sel.length<1?"Skip →":`Pass ${sel.length} across →`}</button>
+          <button onClick={()=>{haptic(40);if(sel.length<1){setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");return;}const pt=sel.map(i=>hand[i]);setPassed(p=>[...p,...pt]);const rem=hand.filter((_,i)=>!sel.includes(i));const {incoming:inc,newPool}=getIncomingTiles(sel.length);setPool(newPool);setHand([...rem,...inc]);const cpNowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);const cpPassEl=cpNowEl-lastPassElRef.current;lastPassElRef.current=cpNowEl;setPassLog(pl=>[...pl,{label:"Courtesy Pass",roundName:"Courtesy Pass",out:pt,in:inc,blind:false,secs:cpPassEl}]);setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");}} style={{...S.passBtn}}>{sel.length<1?"Skip →":`Pass ${sel.length} across →`}</button>
         </>
       )}
 
