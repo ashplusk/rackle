@@ -93,8 +93,8 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
         try{
           await navigator.share({
             files:[new File([blob],`rackle-day${dayNum}.png`,{type:"image/png"})],
-            title:`Daily Rackle #${dayNum} · ${iq.totalScore}`,
-            text:`${iq.level}${iq.styleName?` · ${iq.styleName}`:""} · playrackle.com`,
+            title:`Daily Rackle #${dayNum} · IQ ${iq.totalScore}`,
+            text:`${iq.level} · playrackle.com`,
           });
           setDone(true);setTimeout(()=>setDone(false),3000);
           setSaving(false);return;
@@ -153,7 +153,7 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
             </div>
             <div>
               <div style={{fontFamily:SERIF,fontSize:15,fontWeight:700,color:"#fff",letterSpacing:-0.3,lineHeight:1}}>Rackle</div>
-              <div style={{fontSize:7,color:"rgba(255,255,255,0.3)",letterSpacing:1.5,fontFamily:SANS,fontWeight:700,marginTop:1}}>RACKLE SCORE</div>
+              <div style={{fontSize:7,color:"rgba(255,255,255,0.3)",letterSpacing:1.5,fontFamily:SANS,fontWeight:700,marginTop:1}}>CHARLESTON IQ</div>
             </div>
           </div>
           {/* Day badge */}
@@ -167,7 +167,6 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
           <div style={{fontFamily:SERIF,fontSize:56,fontWeight:700,color:lvlCol,lineHeight:1,letterSpacing:-2}}>{iq.totalScore}</div>
           <div style={{paddingBottom:6}}>
             <div style={{fontFamily:SERIF,fontSize:14,fontWeight:700,color:"#fff",lineHeight:1.2}}>{iq.level}</div>
-            {iq.styleName&&<div style={{fontSize:9,color:"rgba(255,255,255,0.5)",fontFamily:SANS,marginTop:3}}>{iq.styleName}</div>}
             {playerName&&<div style={{fontSize:10,color:"rgba(255,255,255,0.4)",fontFamily:SANS,marginTop:3}}>{playerName}</div>}
           </div>
         </div>
@@ -2553,207 +2552,47 @@ function iqTiming(totalTime,roundCount,passLog){
   return{timingScore:Math.max(2,Math.min(10,timingScore)),timingInsight};
 }
 
-const IQ_TIERS=[
-  {
-    min:95,max:100,range:"95–100",level:"Mahjong Master",color:C.jade,bg:C.jade+"12",
-    notes:[
-      "You saw everything. Clean reads and total control.",
-      "Elite Charleston. You dictated the rack from start to finish.",
-      "Nothing got past you — perfect instincts today."
-    ]
-  },
-  {
-    min:90,max:94,range:"90–94",level:"Table Controller",color:C.jade,bg:C.jade+"10",
-    notes:[
-      "You controlled the flow of the Charleston.",
-      "Strong reads with confident direction throughout.",
-      "You stayed ahead of the rack all game."
-    ]
-  },
-  {
-    min:85,max:89,range:"85–89",level:"Sharp Player",color:C.jade,bg:C.jade+"08",
-    notes:[
-      "Strong reads with confident passing.",
-      "Clean Charleston with one small edge to unlock.",
-      "You kept strong options alive throughout."
-    ]
-  },
-  {
-    min:80,max:84,range:"80–84",level:"Confident Reader",color:C.jade,bg:C.jade+"06",
-    notes:[
-      "You played with confidence and direction.",
-      "Good instincts — now tighten a few passes.",
-      "You saw the board clearly most of the way."
-    ]
-  },
-  {
-    min:75,max:79,range:"75–79",level:"Table Ready",color:"#2460A8",bg:"#2460A810",
-    notes:[
-      "You’re ready for the table — just refine execution.",
-      "Good instincts with room to sharpen.",
-      "Solid direction throughout the Charleston."
-    ]
-  },
-  {
-    min:70,max:74,range:"70–74",level:"Steady Player",color:"#2460A8",bg:"#2460A808",
-    notes:[
-      "You stayed steady with improving reads.",
-      "A few cleaner decisions unlock more.",
-      "You’re building strong habits."
-    ]
-  },
-  {
-    min:65,max:69,range:"65–69",level:"Finding Your Flow",color:C.gold,bg:C.gold+"10",
-    notes:[
-      "Your instincts are forming — trust them earlier.",
-      "You had strong ideas — commit with more confidence.",
-      "You’re starting to see the shape."
-    ]
-  },
-  {
-    min:60,max:64,range:"60–64",level:"Building Rhythm",color:C.gold,bg:C.gold+"08",
-    notes:[
-      "You’re finding rhythm — stay flexible a bit longer.",
-      "The reads are coming together.",
-      "You’re close to cleaner passing."
-    ]
-  },
-  {
-    min:55,max:59,range:"55–59",level:"Reading the Rack",color:C.gold,bg:C.gold+"06",
-    notes:[
-      "You’re starting to read the rack better.",
-      "Try narrowing your direction earlier.",
-      "The instincts are building."
-    ]
-  },
-  {
-    min:50,max:54,range:"50–54",level:"Warming Up",color:C.cinn,bg:C.cinn+"10",
-    notes:[
-      "You’re getting into the flow of the Charleston.",
-      "Focus on simplifying early decisions.",
-      "You’re building your base."
-    ]
-  },
-  {
-    min:0,max:49,range:"<50",level:"Feeling the Rack",color:C.cinn,bg:C.cinn+"08",
-    notes:[
-      "Start by picking a direction early.",
-      "Let the rack guide your decisions.",
-      "Try not to hold every option."
-    ]
-  }
-];
-
-const IQ_STYLES=[
-  {
-    key:"aggressive",name:"Aggressive ⚡",
-    notes:[
-      "You chased upside and committed early.",
-      "Bold passing with high reward potential.",
-      "You pushed the rack forward aggressively."
-    ]
-  },
-  {
-    key:"flexible",name:"Flexible ♻️",
-    notes:[
-      "You kept multiple paths alive.",
-      "Strong optionality throughout.",
-      "You adapted well to the rack."
-    ]
-  },
-  {
-    key:"disciplined",name:"Disciplined 🎯",
-    notes:[
-      "You stayed focused on your direction.",
-      "Clean, controlled decision-making.",
-      "You avoided unnecessary pivots."
-    ]
-  },
-  {
-    key:"adaptive",name:"Adaptive 🔄",
-    notes:[
-      "You adjusted your plan as the rack evolved.",
-      "Strong mid-Charleston pivots.",
-      "You responded well to new information."
-    ]
-  },
-  {
-    key:"defensive",name:"Defensive 🛡️",
-    notes:[
-      "You protected your options carefully.",
-      "You avoided risky commitments.",
-      "You played a safe, controlled Charleston."
-    ]
-  },
-  {
-    key:"fastReader",name:"Fast Reader ⚡",
-    notes:[
-      "You saw direction early and acted quickly.",
-      "Quick decisions with strong instincts.",
-      "You didn’t hesitate."
-    ]
-  },
-  {
-    key:"latePivot",name:"Late Pivot 🔁",
-    notes:[
-      "You changed direction late in the Charleston.",
-      "Strong recovery after early uncertainty.",
-      "You found your line late."
-    ]
-  },
-  {
-    key:"chaos",name:"Chaos Charleston 🎲",
-    notes:[
-      "You explored multiple directions throughout.",
-      "Unpredictable but creative play.",
-      "You kept the rack wide open."
-    ]
-  },
-  {
-    key:"smoothPasser",name:"Smooth Passer 🌊",
-    notes:[
-      "Your passing felt clean and natural.",
-      "You moved through decisions fluidly.",
-      "Strong rhythm throughout the Charleston."
-    ]
-  }
-];
-
-function pickNote(notes,seed=0){
-  if(!notes||!notes.length)return"";
-  return notes[Math.abs(Math.round(seed))%notes.length];
-}
-
-function getIQTier(score){
-  const safeScore=Math.max(0,Math.min(100,Math.round(score||0)));
-  return IQ_TIERS.find(t=>safeScore>=t.min&&safeScore<=t.max)||IQ_TIERS[IQ_TIERS.length-1];
-}
-
-function getIQStyle(score,directionScore,tileStrengthScore,passQualityScore,timingScore){
-  const dr=directionScore/40,tr=tileStrengthScore/25,pr=passQualityScore/25,tmr=timingScore/10;
-  const find=k=>IQ_STYLES.find(s=>s.key===k)||IQ_STYLES.find(s=>s.key==="adaptive");
-
-  // Style = how the player played, not whether they played well.
-  // Keep this light, social, and identity-driven.
-  let style;
-  if(dr>=0.82&&tr>=0.62&&pr<0.78)style=find("aggressive");
-  else if(pr>=0.86&&dr>=0.72)style=find("disciplined");
-  else if(tmr>=0.85&&dr>=0.72)style=find("fastReader");
-  else if(pr>=0.82)style=find("smoothPasser");
-  else if(dr>=0.55&&dr<0.78&&tr>=0.68)style=find("flexible");
-  else if(dr<0.55&&tr>=0.62)style=find("latePivot");
-  else if(dr<0.50&&pr>=0.62)style=find("defensive");
-  else if(dr<0.48&&pr<0.55)style=find("chaos");
-  else style=find("adaptive");
-
-  return{...style,note:pickNote(style.notes,score+directionScore+passQualityScore)};
-}
-
 function iqScoreLevel(score,directionScore,tileStrengthScore,passQualityScore,timingScore){
-  const tier=getIQTier(score);
-  const level=tier.level;
-  const levelExplanation=pickNote(tier.notes,score+directionScore+tileStrengthScore+passQualityScore+timingScore);
-  return{level,levelExplanation,tier};
+  // Ratios make subscores comparable across their different maxes
+  const dr=directionScore/40,tr=tileStrengthScore/25,pr=passQualityScore/25,tmr=timingScore/10;
+  const best=[{k:"direction",r:dr},{k:"tiles",r:tr},{k:"passes",r:pr},{k:"timing",r:tmr}].sort((a,b)=>b.r-a.r)[0].k;
+  const worst=[{k:"direction",r:dr},{k:"tiles",r:tr},{k:"passes",r:pr},{k:"timing",r:tmr}].sort((a,b)=>a.r-b.r)[0].k;
+
+  let level,levelExplanation;
+
+  if(score>=90){
+    level="Mahjong Master";
+    if(best==="direction")levelExplanation="Your section read was locked in early and your passes protected it all the way through.";
+    else if(best==="passes")levelExplanation="Disciplined passing throughout — you gave away the right tiles and kept what mattered.";
+    else if(best==="tiles")levelExplanation="Your final rack had real structural strength — pungs, pairs, and key tiles all in the right place.";
+    else levelExplanation="Sharp decision-making at pace — you read the rack quickly and executed cleanly.";
+  } else if(score>=80){
+    level="Skilled Player";
+    if(worst==="passes")levelExplanation="Strong direction and tile read, but one or two passing decisions cost you tiles you needed.";
+    else if(worst==="direction")levelExplanation="Good passing and structure, but your rack still hedged across two sections rather than committing fully.";
+    else if(worst==="tiles")levelExplanation="Clear direction and clean passes — your final rack just needed a bit more structural punch.";
+    else levelExplanation="Almost there — your reads were good but your pace worked against you on a couple of passes.";
+  } else if(score>=70){
+    level="Game Ready";
+    if(worst==="passes")levelExplanation="Your direction was on point, but passing decisions gave away tiles that would have strengthened your rack.";
+    else if(worst==="direction")levelExplanation="Your passing was disciplined, but the rack didn't fully commit — pick your section before the first pass next time.";
+    else if(worst==="tiles")levelExplanation="Right idea, right section — but the tiles you kept didn't pull together into a strong structure.";
+    else levelExplanation="Good instincts overall, but rushing through passes meant you missed a couple of better options. Aim for around 15–20s per pass.";
+  } else if(score>=60){
+    level="Getting There";
+    if(worst==="direction")levelExplanation="Your rack pulled in too many directions. Try naming your target section before you touch a single tile.";
+    else if(worst==="passes")levelExplanation="You had the right tiles but passed too many of them away. Slow down and ask: does this tile connect to what I'm keeping?";
+    else if(worst==="tiles")levelExplanation="The section was right but the tiles you held didn't support each other. Look for pairs and runs, not just individual tiles.";
+    else levelExplanation="Moving too quickly through passes — real players take around 17s each round to properly read their rack.";
+  } else {
+    level="Keep Going, Rookie";
+    if(worst==="direction")levelExplanation="No clear section emerged. Before your next game, pick one group of tiles and build everything around it.";
+    else if(worst==="passes")levelExplanation="Several strong tiles left your hand that shouldn't have. Before passing, ask: is this tile useful to me or not?";
+    else if(worst==="tiles")levelExplanation="Your final rack lacked structure. Aim to hold pairs or runs rather than isolated individual tiles.";
+    else levelExplanation="Very fast passing left little time to read the rack. Slow down — each pass takes real players about 17 seconds on average.";
+  }
+
+  return{level,levelExplanation};
 }
 
 function iqDistanceToOptimal(finalRack,startingRack,passedTilesByRound,sectionId){
@@ -3094,8 +2933,7 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   }
 
   const totalScore=Math.max(0,Math.min(100,directionScore+tileStrengthScore+passQualityScore+timingScore));
-  const{level,levelExplanation,tier}=iqScoreLevel(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
-  const style=getIQStyle(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
+  const{level,levelExplanation}=iqScoreLevel(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
 
   const dist=iqDistanceToOptimal(finalRack,startingRack,passedTilesByRound,sectionId);
   const tileIns=iqTileInsights(finalRack,startingRack,passedTilesByRound,sectionId);
@@ -3108,14 +2946,8 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   const _club=_prof?.clubCode?CLUBS[_prof.clubCode]:null;
   const clubLine=_club?`${_club.name}\n`:"";
   const shareText=isDaily
-    ?`🀄 Daily Rackle #${dn} · ${totalScore} · ${level}${style?.name?` · ${style.name}`:""}
-${passEmoji?`Passes: ${passEmoji}
-`:""}Think you can beat it?
-playrackle.com`
-    :`🀄 Rackle Practice · ${totalScore} · ${level}${style?.name?` · ${style.name}`:""}
-${passEmoji?`Passes: ${passEmoji}
-`:""}Play the daily Charleston challenge!
-playrackle.com`;
+    ?`🀄 Daily Rackle #${dn} · IQ ${totalScore} · ${level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Think you can beat it?\nplayrackle.com`
+    :`🀄 Rackle Practice · IQ ${totalScore} · ${level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Play the daily Charleston challenge!\nplayrackle.com`;
 
   // When the hand was inferred, prefix the explanation so the player understands the basis.
   // The directionExplanation already includes "Scored against X: N of M tiles covered (P%)."
@@ -3125,7 +2957,7 @@ playrackle.com`;
   }
 
   return{
-    puzzleId,totalScore,level,levelExplanation,tier,style,styleName:style?.name,styleNote:style?.note,
+    puzzleId,totalScore,level,levelExplanation,
     directionScore,tileStrengthScore,passQualityScore,timingScore,
     directionExplanation,
     scoredHandLabel:chosenHandObj?.label||null,
@@ -3238,7 +3070,7 @@ const STREAK_BADGES=[
 ];
 function getStreakBadge(s){return [...STREAK_BADGES].reverse().find(b=>s>=b.days)||null;}
 
-const RATS=["Mahjong Master","Table Controller","Sharp Player","Table Ready","Reading the Rack","Feeling the Rack"];
+const RATS=["Mahjong Master","Sharp Player","Solid Hands","Getting There","Keep Going, Rookie","Tough Deal"];
 const REMO=["🌟","🏆","💪","👏","👍","🎲"];
 const RCOL=["#1B7D4E","#1B7D4E","#2460A8","#2460A8","#B08A35","#B83232"];
 function gri(s){return s>=0.4?0:s>=0.3?1:s>=0.2?2:s>=0.12?3:s>=0.05?4:5;}
@@ -4972,9 +4804,9 @@ function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections}){
   return(
     <div style={{borderRadius:20,overflow:"hidden",background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"28px 20px 24px",textAlign:"center",boxShadow:"0 12px 40px rgba(0,0,0,0.25)"}}>
       <div style={{fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:3,fontWeight:700,marginBottom:16}}>
-        {isDaily?`DAILY RACKLE · #${dayNum}`:"PRACTICE · RACKLE SCORE"}
+        {isDaily?`DAILY RACKLE · #${dayNum}`:"PRACTICE · CHARLESTON IQ"}
       </div>
-      <div style={{fontSize:9,color:C.gilt,letterSpacing:3,fontWeight:700,marginBottom:8}}>TODAY’S CHARLESTON</div>
+      <div style={{fontSize:9,color:C.gilt,letterSpacing:3,fontWeight:700,marginBottom:8}}>CHARLESTON IQ</div>
       <div style={{fontFamily:F.d,fontSize:64,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,
         textShadow:`0 2px 12px rgba(176,138,53,0.4)`,marginBottom:4}}>{displayScore}</div>
       {isPB&&<div className="rk-pop" style={{display:"inline-flex",alignItems:"center",gap:5,background:C.gilt+"22",border:`1px solid ${C.gilt}40`,borderRadius:20,padding:"4px 12px",marginBottom:8}}>
@@ -4982,8 +4814,7 @@ function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections}){
         <span style={{fontSize:10,fontWeight:800,color:C.gilt,letterSpacing:1}}>NEW PERSONAL BEST!</span>
       </div>}
       <div style={{width:48,height:1.5,background:`linear-gradient(90deg,transparent,${C.gilt},transparent)`,margin:`${isPB?8:12}px auto 14px`}}/>
-      <div style={{fontFamily:F.d,fontSize:21,fontWeight:900,color:"#fff",letterSpacing:-0.3,marginBottom:4}}>{iq.level}</div>
-      {iq.styleName&&<div style={{fontSize:12,color:C.gilt,fontWeight:800,marginBottom:8}}>{iq.styleName}</div>}
+      <div style={{fontFamily:F.d,fontSize:21,fontWeight:900,color:"#fff",letterSpacing:-0.3,marginBottom:6}}>{iq.level}</div>
       <div style={{fontSize:11,color:"rgba(255,255,255,0.55)",lineHeight:1.5,marginBottom:16,maxWidth:240,marginLeft:"auto",marginRight:"auto"}}>{iq.levelExplanation}</div>
       <div style={{width:"100%",height:0.5,background:"rgba(255,255,255,0.1)",marginBottom:14}}/>
       <div style={{display:"flex",justifyContent:"center",gap:24,flexWrap:"wrap"}}>
@@ -5390,7 +5221,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   if(!iq)return null;
 
   const passEmoji=(iq.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
-  const shareText=`🀄 Daily Rackle #${dayNum} · ${iq.totalScore} · ${iq.level}${iq.styleName?` · ${iq.styleName}`:""}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Think you can beat it?\nplayrackle.com`;
+  const shareText=`🀄 Daily Rackle #${dayNum} · IQ ${iq.totalScore} · ${iq.level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Think you can beat it?\nplayrackle.com`;
 
   useEffect(()=>{
     fetchDailyStats().then(s=>{if(s&&s.total>=1)setDailyStats(s);});
@@ -5420,16 +5251,6 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <IQHero iq={iq} isDaily dayNum={dayNum} section={section} totalTime={iq.totalTime||0} chosenSec={chosenSec} allSections={allSections}/>
       </div>
 
-      {/* ①b STYLE — light identity layer */}
-      {iq.styleName&&<div style={{...S.card,display:"flex",alignItems:"center",gap:10,marginBottom:10,background:C.sage,border:`1px solid ${C.jade}20`}}>
-        <div style={{width:32,height:32,borderRadius:10,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>✨</div>
-        <div style={{flex:1}}>
-          <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:800,marginBottom:2}}>YOUR STYLE</div>
-          <div style={{fontSize:13,fontWeight:900,color:C.ink,lineHeight:1.2}}>{iq.styleName}</div>
-          {iq.styleNote&&<div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:2}}>{iq.styleNote}</div>}
-        </div>
-      </div>}
-
       {/* ② SOCIAL — ranks + share, always visible, right after hero */}
       {(()=>{
         const myScore=iq.totalScore;
@@ -5443,7 +5264,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         // Enrich share text with rank context
         const rankLine=globalRank&&globalTotal?`#${globalRank} of ${globalTotal} players today${clubRank&&clubTotal?` · #${clubRank} in my club`:""}`:
           clubRank&&clubTotal?`#${clubRank} of ${clubTotal} in my club`:"";
-        const richShareText=`🀄 Daily Rackle #${dayNum} · ${iq.totalScore} · ${iq.level}${iq.styleName?` · ${iq.styleName}`:""}\n${passEmoji?`Passes: ${passEmoji}\n`:""}${rankLine?`${rankLine}\n`:""}Think you can beat it?\nplayrackle.com`;
+        const richShareText=`🀄 Daily Rackle #${dayNum} · IQ ${iq.totalScore} · ${iq.level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}${rankLine?`${rankLine}\n`:""}Think you can beat it?\nplayrackle.com`;
 
         const copyInvite=()=>{if(navigator.clipboard)navigator.clipboard.writeText("https://playrackle.com").catch(()=>{});};
 
@@ -8279,7 +8100,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   // Build share text fresh every render
   const passEmoji=(iq?.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
   const shareText=iq
-    ?`🀄 Daily Rackle #${dn} · ${iq.totalScore} · ${iq.level}${iq.styleName?` · ${iq.styleName}`:""}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Think you can beat it?\nplayrackle.com`
+    ?`🀄 Daily Rackle #${dn} · IQ ${iq.totalScore} · ${iq.level}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Think you can beat it?\nplayrackle.com`
     :dRes?`🀄 Rackle #${dn} · ${dRes.rating} ${dRes.emoji}\n${dRes.section||""}\nplayrackle.com`:"";
 
   const ydIQ=yd?.iq?.totalScore||null;
@@ -8623,11 +8444,10 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <div style={{background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"24px 20px 20px",textAlign:"center"}}>
               <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:14}}>TODAY'S DAILY · #{dn}</div>
               {iq&&<>
-                <div style={{fontSize:8,color:C.gilt,letterSpacing:3,fontWeight:700,marginBottom:8}}>TODAY’S CHARLESTON</div>
+                <div style={{fontSize:8,color:C.gilt,letterSpacing:3,fontWeight:700,marginBottom:8}}>CHARLESTON IQ</div>
                 <div style={{fontFamily:F.d,fontSize:52,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,textShadow:`0 2px 16px rgba(176,138,53,0.45)`,marginBottom:6}}>{iq.totalScore}</div>
                 <div style={{width:40,height:1.5,background:`linear-gradient(90deg,transparent,${C.gilt},transparent)`,margin:"12px auto 12px"}}/>
-                <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:"#fff",marginBottom:4,letterSpacing:-0.3}}>{iq.level}</div>
-                {iq.styleName&&<div style={{fontSize:12,color:C.gilt,fontWeight:800,marginBottom:8}}>{iq.styleName}</div>}
+                <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:"#fff",marginBottom:6,letterSpacing:-0.3}}>{iq.level}</div>
                 <div style={{fontSize:11,color:"rgba(255,255,255,0.6)",marginBottom:16,lineHeight:1.55,maxWidth:260,margin:"0 auto 16px"}}>{iq.levelExplanation}</div>
               </>}
               {!iq&&dRes&&<>
@@ -8663,8 +8483,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
                 <div style={{width:36,height:36,borderRadius:10,background:`linear-gradient(135deg,${C.jade},#115C38)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>🎓</div>
                 <div style={{flex:1}}>
                   <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:1}}>DEEP DIVE</div>
-                  <div style={{fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.2}}>Coach Mode</div>
-                  <div style={{fontSize:10,color:C.mut,marginTop:1}}>Rack read · pass analysis · next rep</div>
+                  <div style={{fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.2}}>Full Scorecard & Coach Mode</div>
+                  <div style={{fontSize:10,color:C.mut,marginTop:1}}>IQ breakdown · AI rack read · Pass analysis</div>
                 </div>
                 <span style={{fontSize:16,color:C.jade,fontWeight:700,flexShrink:0}}>›</span>
               </button>
@@ -8899,15 +8719,21 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           ))}
         </div>
 
-        {/* RACKLE LEVELS section */}
+        {/* IQ LEVELS section */}
         <div style={{padding:"14px 16px 16px"}}>
-          <div style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:6}}>RACKLE LEVELS</div>
+          <div style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:6}}>IQ LEVELS</div>
           <p style={{fontSize:11,color:C.mut,lineHeight:1.55,margin:"0 0 12px"}}>Each result includes a personalised coach note based on your strongest and weakest subscores.</p>
-          {IQ_TIERS.map((l,i)=>(
-            <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 10px",borderRadius:8,background:l.bg,marginBottom:i<IQ_TIERS.length-1?4:0}}>
+          {[
+             {range:"90–100",level:"Mahjong Master",color:C.jade,bg:C.jade+"10",note:"Elite read, clean passes, strong rack."},
+            {range:"80–89",level:"Skilled Player",color:C.jade,bg:C.jade+"08",note:"Solid all-round with one area to sharpen."},
+            {range:"70–79",level:"Game Ready",color:"#2460A8",bg:"#2460A810",note:"On the right track — execution needs tightening."},
+            {range:"60–69",level:"Getting There",color:C.gold,bg:C.gold+"10",note:"Right instincts but one dimension is dragging the score."},
+            {range:"<60",level:"Keep Going, Rookie",color:C.cinn,bg:C.cinn+"08",note:"Focus on picking a section before your first pass."},
+          ].map((l,i)=>(
+            <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 10px",borderRadius:8,background:l.bg,marginBottom:i<4?4:0}}>
               <div>
                 <div style={{fontSize:12,fontWeight:700,color:l.color,fontFamily:F.d}}>{l.level}</div>
-                <div style={{fontSize:10,color:l.color,opacity:0.75,marginTop:2}}>{l.notes?.[0]}</div>
+                <div style={{fontSize:10,color:l.color,opacity:0.75,marginTop:2}}>{l.note}</div>
               </div>
               <span style={{fontSize:10,color:l.color,fontWeight:700,opacity:0.8,flexShrink:0,marginLeft:8}}>{l.range}</span>
             </div>
@@ -9011,7 +8837,7 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen}){
           <div style={{width:34,height:34,borderRadius:9,background:C.sageB+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>📋</div>
           <div style={{textAlign:"left",flex:1}}>
             <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:"#1A3D28",lineHeight:1,marginBottom:2}}>View Full Scorecard</div>
-            <div style={{fontSize:11,color:C.sageB}}>Rack read · Coach Mode</div>
+            <div style={{fontSize:11,color:C.sageB}}>IQ breakdown · Coach Mode</div>
           </div>
           <span style={{fontSize:14,color:C.sageB,fontWeight:700,flexShrink:0}}>›</span>
         </button>
@@ -9827,10 +9653,16 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
   const weekInProgress=!isSunday;
 
   const {avgIQ,bestEntry,daysPlayed,topSec,delta,weekRounds,dailyH}=data;
-  const lvlTier=getIQTier(avgIQ);
-  const lvl={label:lvlTier.level,color:lvlTier.color};
+  const IQ_LEVELS=[
+    {min:90,label:"Mahjong Master",color:C.gilt},
+    {min:80,label:"Skilled Player",color:C.jade},
+    {min:70,label:"Game Ready",color:"#2460A8"},
+    {min:60,label:"Getting There",color:C.gold},
+    {min:0,label:"Keep Going",color:C.cinn},
+  ];
+  const lvl=IQ_LEVELS.find(l=>avgIQ>=l.min)||IQ_LEVELS[IQ_LEVELS.length-1];
 
-  const shareText=`🀄 My Rackle week:\n${avgIQ} avg score · ${daysPlayed}/7 days · ${weekRounds} hands\n${lvl.label}${topSec?` · Fave: ${topSec.icon} ${topSec.name}`:""}\nplayrackle.com`;
+  const shareText=`🀄 My Rackle week:\n${avgIQ} avg IQ · ${daysPlayed}/7 days · ${weekRounds} hands\n${lvl.label}${topSec?` · Fave: ${topSec.icon} ${topSec.name}`:""}\nplayrackle.com`;
 
   return(
     <div style={S.pg} className="rk-pg">
@@ -9841,7 +9673,7 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
         <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:10}}>YOUR WEEK IN RACKLE</div>
         {profile?.nickname&&<div style={{fontSize:12,color:"rgba(255,255,255,0.45)",marginBottom:8}}>{profile.nickname}</div>}
         <div style={{fontFamily:F.d,fontSize:56,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,marginBottom:4}}>{avgIQ}</div>
-        <div style={{fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginBottom:6}}>AVG RACKLE SCORE</div>
+        <div style={{fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginBottom:6}}>AVG CHARLESTON IQ</div>
         <div style={{fontFamily:F.d,fontSize:18,fontWeight:800,color:"#fff",marginBottom:16,lineHeight:1}}>{lvl.label}</div>
         <div style={{width:"100%",height:0.5,background:"rgba(255,255,255,0.08)",marginBottom:14}}/>
         <div style={{display:"flex",justifyContent:"center",gap:24,flexWrap:"wrap"}}>
