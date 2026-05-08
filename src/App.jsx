@@ -5083,8 +5083,8 @@ function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHom
         {isDaily?`DAILY RACKLE · #${dayNum}`:"PRACTICE · RACKLE SCORE"}
       </div>
       {!isHome&&<div style={{fontSize:9,color:C.gilt,letterSpacing:3,fontWeight:700,marginBottom:8}}>TODAY’S CHARLESTON</div>}
-      <div style={{fontFamily:F.d,fontSize:68,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,
-        textShadow:`0 2px 12px rgba(176,138,53,0.4)`,marginBottom:4}}>{displayScore}</div>
+      <div style={{fontFamily:F.d,fontSize:isHome?82:68,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,
+        textShadow:`0 2px 12px rgba(176,138,53,0.4)`,marginBottom:isHome?8:4}}>{displayScore}</div>
       {isPB&&<div className="rk-pop" style={{display:"inline-flex",alignItems:"center",gap:5,background:C.gilt+"22",border:`1px solid ${C.gilt}40`,borderRadius:20,padding:"4px 12px",marginBottom:8}}>
         <span style={{fontSize:13}}>🏆</span>
         <span style={{fontSize:10,fontWeight:800,color:C.gilt,letterSpacing:1}}>NEW PERSONAL BEST!</span>
@@ -8314,12 +8314,20 @@ function getTimeUntilMidnightLabel(){
   return `${hh}h ${mm.toString().padStart(2,"0")}m`;
 }
 
-function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelta}){
+function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelta,streak=0}){
   const [reset,setReset]=useState(getTimeUntilMidnightLabel());
   useEffect(()=>{const iv=setInterval(()=>setReset(getTimeUntilMidnightLabel()),30000);return()=>clearInterval(iv);},[]);
   const liveCount=ds?.total||0;
   const topScore=ds?.max||null;
-  const momentum=weekDelta!=null?(weekDelta>=0?`+${weekDelta} this week`:`${weekDelta} this week`):ydIQ?`yesterday ${ydIQ}`:"daily rep";
+  const currentStreak=Math.max(0,streak||0);
+  const nextBadge=STREAK_BADGES.find(b=>b.days>currentStreak);
+  const daysLeft=nextBadge?nextBadge.days-currentStreak:0;
+  const streakPct=nextBadge?Math.min(100,Math.round((currentStreak/nextBadge.days)*100)):100;
+  const streakTitle=currentStreak>0?`${currentStreak}-day streak`:"Start your streak";
+  const streakSub=currentStreak>0
+    ? nextBadge?`${daysLeft} day${daysLeft!==1?"s":""} to ${nextBadge.title}`:"Every badge unlocked"
+    : "Play today to start your run";
+  const trendLine=weekDelta!=null?(weekDelta>=0?`+${weekDelta} this week`:`${weekDelta} this week`):ydIQ?`Yesterday: ${ydIQ}`:"Daily rep";
   const chips=[
     liveCount?{label:"playing today",value:liveCount}:null,
     club&&clubPlayers?{label:"from your club",value:clubPlayers}:null,
@@ -8358,9 +8366,17 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
               <div style={{fontSize:8,color:"rgba(255,255,255,0.48)",letterSpacing:1.2,fontWeight:800,marginTop:4,textTransform:"uppercase"}}>{c.label}</div>
             </div>
           ))}
-          <div style={{flex:"1 1 42%",minWidth:110,background:"rgba(201,168,76,0.12)",border:"1px solid rgba(201,168,76,0.2)",borderRadius:12,padding:"8px 10px"}}>
-            <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:C.gilt,lineHeight:1}}>{momentum}</div>
-            <div style={{fontSize:8,color:"rgba(255,255,255,0.48)",letterSpacing:1.2,fontWeight:800,marginTop:4,textTransform:"uppercase"}}>momentum</div>
+          <div style={{flex:"1 1 100%",minWidth:220,background:"rgba(201,168,76,0.13)",border:"1px solid rgba(201,168,76,0.24)",borderRadius:14,padding:"10px 12px"}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:7}}>
+              <div>
+                <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.gilt,lineHeight:1.05}}>{streakTitle}</div>
+                <div style={{fontSize:9,color:"rgba(255,255,255,0.58)",fontWeight:700,marginTop:4}}>{streakSub}</div>
+              </div>
+              <div style={{fontSize:10,color:"rgba(255,255,255,0.62)",fontWeight:800,whiteSpace:"nowrap"}}>{trendLine}</div>
+            </div>
+            <div style={{height:5,borderRadius:99,background:"rgba(255,255,255,0.12)",overflow:"hidden"}}>
+              <div style={{height:"100%",width:`${Math.max(8,streakPct)}%`,borderRadius:99,background:`linear-gradient(90deg,${C.gilt},#F0D37A)`,transition:"width 0.4s ease"}}/>
+            </div>
           </div>
         </div>
       </div>
@@ -8608,7 +8624,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <span style={{color:C.jade,fontWeight:600}}> — today's a chance to go higher.</span>
           </div>
         </div>}
-        <TodayRackleHeroCard dn={dn} onPlay={()=>go("daily")} ds={ds} club={club} clubPlayers={clubPlayers} bestIQ={bestIQ} ydIQ={ydIQ} weekDelta={weekDelta}/>
+        <TodayRackleHeroCard dn={dn} onPlay={()=>go("daily")} ds={ds} club={club} clubPlayers={clubPlayers} bestIQ={bestIQ} ydIQ={ydIQ} weekDelta={weekDelta} streak={streak}/>
         </>
       ):(()=>{
         const ydComp=yd&&dRes&&iq&&yd.iq?(iq.totalScore>yd.iq.totalScore?{label:"Better than yesterday",icon:"⬆️"}:iq.totalScore===yd.iq.totalScore?{label:"Same as yesterday",icon:"➡️"}:{label:"Yesterday was stronger",icon:"⬇️"}):null;
