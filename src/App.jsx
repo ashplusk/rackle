@@ -5394,7 +5394,7 @@ function SortableRack({hand:initialHand}){
   return(
     <div style={{...S.card,marginBottom:8}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-        <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>FINAL RACK</div>
+        <div style={{fontSize:9,color:C.mut,letterSpacing:1.2,fontWeight:500}}>Final rack</div>
         <button onClick={toggle} style={{...S.sortBtn,color:sorted?C.jade:C.mut,borderColor:sorted?C.jade+"40":C.bdr,background:sorted?C.jade+"08":"none"}}>{sorted?"Sorted":"Sort"}</button>
       </div>
       <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>{rack.map((t,i)=><Ti key={i} t={t}/>)}</div>
@@ -5403,7 +5403,15 @@ function SortableRack({hand:initialHand}){
 }
 
 // ─── COLLAPSIBLE SECTION HEADER — tap to expand/collapse ──────────────────────
+function sectionSentenceCase(text){
+  if(!text)return text;
+  const lower=String(text).toLowerCase();
+  return lower.charAt(0).toUpperCase()+lower.slice(1);
+}
+
 function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
+  const headerLabel=sectionSentenceCase(label);
+  const headerDesc=sectionSentenceCase(desc);
   return(
     <div style={{marginTop:9,marginBottom:0}}>
       <button
@@ -5442,7 +5450,7 @@ function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
             <div style={{
               fontSize:15,fontWeight:900,fontFamily:F.d,
               color:C.ink,lineHeight:1.08,letterSpacing:-0.15,
-            }}>{label}</div>
+            }}>{headerLabel}</div>
             {badge&&(
               <span style={{
                 fontSize:9,fontWeight:900,fontFamily:F.b,flexShrink:0,
@@ -5455,9 +5463,9 @@ function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
           </div>
           {desc&&(
             <div style={{
-              fontSize:10.5,marginTop:1,lineHeight:1.28,
-              color:C.mut,fontWeight:700,letterSpacing:0.02,
-            }}>{desc}</div>
+              fontSize:10.5,marginTop:1,lineHeight:1.3,
+              color:C.mut,fontWeight:500,letterSpacing:0.01,
+            }}>{headerDesc}</div>
           )}
         </div>
 
