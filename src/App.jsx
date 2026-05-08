@@ -5083,8 +5083,8 @@ function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHom
         {isDaily?`DAILY RACKLE · #${dayNum}`:"PRACTICE · RACKLE SCORE"}
       </div>
       {!isHome&&<div style={{fontSize:9,color:C.gilt,letterSpacing:3,fontWeight:700,marginBottom:8}}>TODAY’S CHARLESTON</div>}
-      <div style={{fontFamily:F.d,fontSize:isHome?82:68,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,
-        textShadow:`0 2px 12px rgba(176,138,53,0.4)`,marginBottom:isHome?8:4}}>{displayScore}</div>
+      <div style={{fontFamily:F.d,fontSize:isHome?92:72,fontWeight:900,color:"#F3D46B",lineHeight:1,letterSpacing:-2.8,
+        textShadow:`0 0 30px rgba(243,212,107,0.44), 0 3px 0 rgba(0,0,0,0.14)`,marginBottom:isHome?10:5}}>{displayScore}</div>
       {isPB&&<div className="rk-pop" style={{display:"inline-flex",alignItems:"center",gap:5,background:C.gilt+"22",border:`1px solid ${C.gilt}40`,borderRadius:20,padding:"4px 12px",marginBottom:8}}>
         <span style={{fontSize:13}}>🏆</span>
         <span style={{fontSize:10,fontWeight:800,color:C.gilt,letterSpacing:1}}>NEW PERSONAL BEST!</span>
@@ -8500,7 +8500,7 @@ function TomorrowPreviewCard(){
         <div style={{width:38,height:38,borderRadius:13,background:urgency?C.cinn+"0D":C.jade+"0D",border:`1px solid ${urgency?C.cinn+"20":C.jade+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.d,fontSize:18,fontWeight:900,color:urgency?C.cinn:C.jade,flexShrink:0}}>✦</div>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:8,color:urgency?C.cinn:C.jade,letterSpacing:1.7,fontWeight:900,marginBottom:4}}>TOMORROW'S RACKLE</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.18,letterSpacing:-0.18,marginBottom:4}}>{headline}</div>
+          <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.ink,lineHeight:1.12,letterSpacing:-0.22,marginBottom:4,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{headline}</div>
           <div style={{fontSize:11,color:C.mut,lineHeight:1.4}}>Hint: {hint}</div>
         </div>
         <div style={{display:"flex",alignItems:"center",justifyContent:"center",width:28,height:28,borderRadius:999,background:open?C.jade+"12":"transparent",flexShrink:0}}>
@@ -8869,7 +8869,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <div style={{background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"24px 20px 20px",textAlign:"center"}}>
               <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:14}}>DAILY RACKLE · #{dn}</div>
               {iq&&<>
-                <div style={{fontFamily:F.d,fontSize:74,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2.5,textShadow:`0 2px 18px rgba(176,138,53,0.48)`,marginBottom:8}}>{iq.totalScore}</div>
+                <div style={{fontFamily:F.d,fontSize:88,fontWeight:900,color:"#F3D46B",lineHeight:1,letterSpacing:-3,textShadow:`0 0 34px rgba(243,212,107,0.48), 0 3px 0 rgba(0,0,0,0.14)`,marginBottom:10}}>{iq.totalScore}</div>
                 <div style={{width:40,height:1.5,background:`linear-gradient(90deg,transparent,${C.gilt},transparent)`,margin:"12px auto 12px"}}/>
                 <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:"#fff",marginBottom:12,letterSpacing:-0.3}}>{iq.level}</div>
                 {iq.styleName&&<div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"4px 11px",fontSize:11,color:C.gilt,fontWeight:900,marginBottom:10,letterSpacing:0.2}}>{iq.styleName}</div>}
