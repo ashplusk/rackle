@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/react';
 import { useState, useEffect, useRef, useCallback } from "react";
 // RACKLE, Daily Charleston + Practice. The Daily Mahjong Workout. 2026 NMJL. v93.1
+// vNext: App-wide premium club styling applied across homepage, game, scorecards, guides, settings, profile, and leaderboards
 // v2.0, Full Rackle Score Scoring Engine, IQScorecard, ScorecardScreen
 
 // DESIGN
@@ -70,21 +71,50 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .rk-live-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:rgba(23,107,66,.06);border:1px solid rgba(23,107,66,.08);font-size:11px;color:#4A5B50}
 .rk-mini-avatars{display:flex;align-items:center}
 .rk-mini-avatar{width:18px;height:18px;border-radius:50%;border:2px solid #F8F4EE;margin-left:-6px;background:#D9D2C5}
+
+
+
+.rk-mahjong-tile:hover{transform:translateY(-2px)!important;box-shadow:0 7px 14px rgba(26,20,16,.10),inset 0 1px 0 rgba(255,255,255,.9)!important}
+.rk-rack-surface:before{content:"";position:absolute}
+button{font-family:'Nunito','Segoe UI',sans-serif}
+
+/* ─── APP-WIDE PREMIUM CLUB SYSTEM ─────────────────────────────────────────── */
+.rk-pg{background:
+  radial-gradient(circle at 50% -80px,rgba(255,255,255,.62),transparent 245px),
+  linear-gradient(180deg,#F8F4EE 0%,#F6F0E6 100%);
+}
+.rk-screen-title{font-family:'Fraunces',Georgia,serif;font-size:23px;font-weight:900;letter-spacing:-.5px;color:#1A1410;line-height:1.05;margin:0 0 5px}
+.rk-screen-kicker{font-size:8px;letter-spacing:2.6px;font-weight:900;color:#176B42;text-transform:uppercase;margin-bottom:7px}
+.rk-screen-copy{font-size:12px;color:#6B6157;line-height:1.6;margin:0}
+.rk-lux-card{background:linear-gradient(145deg,#FFFDF8 0%,#F8F1E6 100%)!important;border:1px solid rgba(26,20,16,.085)!important;border-radius:18px!important;box-shadow:0 6px 22px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.72)!important}
+.rk-lux-card-dark{background:linear-gradient(155deg,#062B18 0%,#0D4A2E 52%,#051F11 100%)!important;border:1px solid rgba(201,168,76,.18)!important;border-radius:20px!important;box-shadow:0 16px 44px rgba(6,43,24,.22),inset 0 1px 0 rgba(255,255,255,.08)!important;color:#fff!important}
+.rk-row-card{background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;border:1px solid rgba(26,20,16,.075)!important;border-radius:16px!important;box-shadow:0 3px 13px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.75)!important;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease!important}
+.rk-row-card:hover{transform:translateY(-1px);border-color:rgba(23,107,66,.18)!important;box-shadow:0 8px 22px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.85)!important}
+.rk-tile-icon{background:linear-gradient(145deg,#FFFDF8,#EEE4D2)!important;border:1px solid rgba(26,20,16,.08)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 4px 12px rgba(26,20,16,.05)!important}
+.rk-primary-btn{background:linear-gradient(135deg,#176B42,#0F5432)!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:0 8px 18px rgba(23,107,66,.18),inset 0 1px 0 rgba(255,255,255,.18)!important}
+.rk-secondary-btn{background:linear-gradient(180deg,#F2EBDD,#E9E0CF)!important;border:1px solid rgba(23,107,66,.12)!important;box-shadow:0 3px 10px rgba(0,0,0,.035),inset 0 1px 0 rgba(255,255,255,.65)!important}
+.rk-soft-input{background:#FFFDF8!important;border:1px solid rgba(26,20,16,.10)!important;border-radius:14px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 2px 8px rgba(26,20,16,.025)!important}
+.rk-section-hairline{height:1px;background:linear-gradient(90deg,transparent,rgba(160,120,40,.38),transparent)}
+.rk-chip-premium{display:inline-flex;align-items:center;gap:5px;border-radius:999px;background:rgba(23,107,66,.07);border:1px solid rgba(23,107,66,.10);padding:5px 10px;color:#176B42;font-size:10px;font-weight:800;line-height:1}
+.rk-table-talk{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:10px 12px;color:rgba(255,255,255,.78);font-size:11px;line-height:1.45}
+.rk-menu-surface{background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;border:1px solid rgba(26,20,16,.10)!important;box-shadow:0 16px 44px rgba(26,20,16,.13),inset 0 1px 0 rgba(255,255,255,.76)!important}
+.rk-modal-surface{background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;border:1px solid rgba(26,20,16,.09)!important;box-shadow:0 22px 70px rgba(26,20,16,.14),inset 0 1px 0 rgba(255,255,255,.75)!important}
+
 @media (prefers-reduced-motion: reduce){.rk-hero-live,.rk-soft-glow,.rk-count-live,.rk-streak-copy,.rk-float,.rk-pulse,.rk-live-dot,.rk-sweep:after{animation:none!important}}
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
   app:{fontFamily:F.b,background:C.bg,minHeight:"100vh",color:C.ink,width:"100%",maxWidth:560,borderLeft:`1px solid ${C.bdr}`,borderRight:`1px solid ${C.bdr}`,overflowX:"hidden"},
   pg:{padding:"14px 18px",paddingBottom:52},
-  pill:{background:C.bg2,borderRadius:12,padding:"8px 6px",textAlign:"center",border:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"center",gap:6},
-  card:{background:"#FDFAF6",border:`1px solid ${C.bdr}`,borderRadius:16,padding:16,marginBottom:14},
-  dot:{width:20,height:20,borderRadius:10,background:C.jade+"12",border:`1.5px solid ${C.jade}25`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:C.jade,flexShrink:0},
-  passBtn:{width:"100%",padding:"13px 0",borderRadius:12,border:"none",cursor:"pointer",background:`linear-gradient(135deg,${C.cinn},#8A2020)`,color:"#fff",fontSize:14,fontFamily:F.d,fontWeight:700,letterSpacing:1,minHeight:48},
-  greenBtn:{padding:"12px 0",background:`linear-gradient(135deg,${C.jade},#115C38)`,color:"#fff",border:"none",borderRadius:12,fontSize:14,fontFamily:F.d,fontWeight:700,letterSpacing:1,cursor:"pointer",minHeight:48},
-  oBtn:{padding:"10px 0",background:"#F0EAE0",color:C.ink,border:`1px solid ${C.bdr}`,borderRadius:12,fontSize:13,cursor:"pointer",minHeight:44,fontWeight:600},
-  back:{background:"none",border:"none",color:C.jade,fontSize:12,cursor:"pointer",fontWeight:700,padding:0,minHeight:44,display:"flex",alignItems:"center"},
-  sortBtn:{background:"none",border:`1px solid ${C.bdr}`,borderRadius:6,padding:"4px 8px",fontSize:9,color:C.mut,cursor:"pointer",fontWeight:600,minHeight:32},
-  shareCard:{background:"linear-gradient(145deg,#FFFFF5,#F4EFE3)",border:`1.5px solid ${C.jade}20`,borderRadius:18,padding:"16px 20px",textAlign:"center",marginTop:8,boxShadow:"0 4px 18px rgba(0,0,0,0.04)"},
+  pill:{background:"linear-gradient(180deg,#F2EBDD,#E9E0CF)",borderRadius:14,padding:"8px 8px",textAlign:"center",border:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"center",gap:6,boxShadow:"inset 0 1px 0 rgba(255,255,255,.65),0 2px 8px rgba(26,20,16,.025)"},
+  card:{background:"linear-gradient(145deg,#FFFDF8,#F8F1E6)",border:`1px solid rgba(26,20,16,.085)`,borderRadius:18,padding:16,marginBottom:14,boxShadow:"0 6px 22px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.72)"},
+  dot:{width:22,height:22,borderRadius:11,background:C.jade+"10",border:`1.5px solid ${C.jade}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:800,color:C.jade,flexShrink:0,boxShadow:"inset 0 1px 0 rgba(255,255,255,.75)"},
+  passBtn:{width:"100%",padding:"14px 0",borderRadius:14,border:"1px solid rgba(255,255,255,.14)",cursor:"pointer",background:`linear-gradient(135deg,${C.cinn},#8A2020)`,color:"#fff",fontSize:14,fontFamily:F.d,fontWeight:800,letterSpacing:.6,minHeight:50,boxShadow:"0 8px 18px rgba(176,42,42,.16),inset 0 1px 0 rgba(255,255,255,.16)"},
+  greenBtn:{padding:"13px 0",background:`linear-gradient(135deg,${C.jade},#0F5432)`,color:"#fff",border:"1px solid rgba(255,255,255,.16)",borderRadius:14,fontSize:14,fontFamily:F.d,fontWeight:800,letterSpacing:.4,cursor:"pointer",minHeight:50,boxShadow:"0 8px 18px rgba(23,107,66,.18),inset 0 1px 0 rgba(255,255,255,.18)"},
+  oBtn:{padding:"11px 0",background:"linear-gradient(180deg,#F2EBDD,#E9E0CF)",color:C.ink,border:`1px solid rgba(23,107,66,.12)`,borderRadius:14,fontSize:13,cursor:"pointer",minHeight:46,fontWeight:700,boxShadow:"0 3px 10px rgba(0,0,0,.035),inset 0 1px 0 rgba(255,255,255,.65)"},
+  back:{background:"rgba(23,107,66,.06)",border:`1px solid rgba(23,107,66,.08)`,borderRadius:999,color:C.jade,fontSize:12,cursor:"pointer",fontWeight:800,padding:"7px 11px",minHeight:34,display:"flex",alignItems:"center",boxShadow:"inset 0 1px 0 rgba(255,255,255,.55)"},
+  sortBtn:{background:"linear-gradient(180deg,#FFFDF8,#F1E9DB)",border:`1px solid ${C.bdr}`,borderRadius:10,padding:"5px 10px",fontSize:9,color:C.mut,cursor:"pointer",fontWeight:800,minHeight:32,boxShadow:"inset 0 1px 0 rgba(255,255,255,.7),0 2px 6px rgba(26,20,16,.025)"},
+  shareCard:{background:"linear-gradient(145deg,#FFFFF8,#F4EFE3)",border:`1.5px solid ${C.jade}18`,borderRadius:18,padding:"16px 20px",textAlign:"center",marginTop:8,boxShadow:"0 6px 22px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.72)"},
 };
 
 // ─── HTML2CANVAS LOADER ───────────────────────────────────────────────────────
@@ -4135,7 +4165,7 @@ function Ti({t,sel,isNew,onClick,dim,large}){
       ?"0 4px 10px rgba(160,120,40,.12), 0 1px 0 rgba(255,255,255,.85) inset"
       :"0 2px 5px rgba(26,20,16,.07), 0 1px 0 rgba(255,255,255,.85) inset";
   return(
-  <div onClick={onClick} role={onClick?"checkbox":undefined} aria-checked={onClick?sel:undefined}
+  <div className="rk-mahjong-tile" onClick={onClick} role={onClick?"checkbox":undefined} aria-checked={onClick?sel:undefined}
     aria-label={onClick?`${sel?"Deselect":"Select"} ${tAria(t)}`:tAria(t)} tabIndex={onClick?0:undefined}
     onKeyDown={onClick?(e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();onClick();}})  :undefined}
     style={{width:sz.w,height:sz.h,borderRadius:10,cursor:onClick?"pointer":"default",userSelect:"none",
@@ -4154,7 +4184,7 @@ function Ti({t,sel,isNew,onClick,dim,large}){
 
 function RackSurface({children,style}){
   return(
-    <div style={{display:"flex",flexWrap:"wrap",gap:7,justifyContent:"center",maxWidth:"100%",overflowX:"hidden",background:"rgba(26,20,16,.025)",border:`1px solid ${C.bdr}88`,borderRadius:18,padding:10,...style}}>
+    <div className="rk-rack-surface" style={{display:"flex",flexWrap:"wrap",gap:7,justifyContent:"center",maxWidth:"100%",overflowX:"hidden",background:"linear-gradient(145deg,rgba(255,255,255,.50),rgba(237,231,218,.42))",border:`1px solid rgba(26,20,16,.075)`,borderRadius:20,padding:11,boxShadow:"inset 0 1px 0 rgba(255,255,255,.78),0 3px 13px rgba(26,20,16,.03)",...style}}>
       {children}
     </div>
   );
@@ -5182,13 +5212,13 @@ function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHom
     return()=>clearInterval(timer);
   },[iq.totalScore]);
   return(
-    <div style={{borderRadius:20,overflow:"hidden",background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"28px 20px 24px",textAlign:"center",boxShadow:"0 12px 40px rgba(0,0,0,0.25)"}}>
+    <div className="rk-lux-card-dark" style={{borderRadius:22,overflow:"hidden",background:`linear-gradient(155deg,${C.hero1} 0%,${C.hero2} 54%,${C.hero3} 100%)`,padding:isHome?"25px 20px 22px":"28px 20px 24px",textAlign:"center",boxShadow:"0 16px 44px rgba(6,43,24,.22),inset 0 1px 0 rgba(255,255,255,.08)",position:"relative"}}>
       <div style={{fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:3,fontWeight:700,marginBottom:16}}>
         {isDaily?`DAILY RACKLE · #${dayNum}`:"PRACTICE · RACKLE SCORE"}
       </div>
       {!isHome&&<div style={{fontSize:9,color:C.gilt,letterSpacing:3,fontWeight:700,marginBottom:8}}>TODAY’S CHARLESTON</div>}
       <div style={{fontFamily:F.d,fontSize:isHome?92:72,fontWeight:900,color:"#F3D46B",lineHeight:1,letterSpacing:-2.8,
-        textShadow:`0 0 30px rgba(243,212,107,0.44), 0 3px 0 rgba(0,0,0,0.14)`,marginBottom:isHome?10:5}}>{displayScore}</div>
+        textShadow:`0 2px 0 rgba(0,0,0,0.12)`,marginBottom:isHome?8:5}}>{displayScore}</div>
       {isPB&&<div className="rk-pop" style={{display:"inline-flex",alignItems:"center",gap:5,background:C.gilt+"22",border:`1px solid ${C.gilt}40`,borderRadius:20,padding:"4px 12px",marginBottom:8}}>
         <span style={{fontSize:13}}>🏆</span>
         <span style={{fontSize:10,fontWeight:800,color:C.gilt,letterSpacing:1}}>NEW PERSONAL BEST!</span>
@@ -5261,7 +5291,7 @@ function ShareButton({text,label,sublabel,variant="goldpill"}){
   const arrowColor=isLight?C.amberB:"rgba(255,255,255,0.6)";
   return(
     <div style={{position:"relative"}}>
-      <button onClick={share} style={{width:"100%",borderRadius:12,
+      <button onClick={share} className="rk-share-card" style={{width:"100%",borderRadius:14,
         background:v.bg,border:v.border||"none",
         cursor:"pointer",display:"flex",alignItems:"center",gap:10,padding:"11px 14px",
         textAlign:"left",boxShadow:`0 3px 12px ${v.shadow}`,transition:"opacity 0.15s"}}>
@@ -5496,7 +5526,7 @@ function SortableRack({hand:initialHand}){
     else{setRack(sortHand(initialHand));setSorted(true);}
   };
   return(
-    <div style={{...S.card,marginBottom:8}}>
+    <div className="rk-lux-card" style={{...S.card,marginBottom:8}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
         <div style={{fontSize:9,color:C.mut,letterSpacing:1.2,fontWeight:500}}>Final rack</div>
         <button onClick={toggle} className="rk-leaderboard-card" style={{...S.sortBtn,color:sorted?C.jade:C.mut,borderColor:sorted?C.jade+"40":C.bdr,background:sorted?C.jade+"08":"none"}}>{sorted?"Sorted":"Sort"}</button>
@@ -6858,7 +6888,7 @@ function RackleHeader({onBack,setScreen}){
   const profile=getProfile();
   const hasProfile=!!(profile&&profile.nickname);
   return(
-    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",position:"relative",marginBottom:22,paddingTop:12,paddingBottom:14,borderBottom:`1px solid ${C.bdr}`}}>
+    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",position:"relative",marginBottom:22,paddingTop:12,paddingBottom:14,borderBottom:`1px solid rgba(160,120,40,.16)`}}>
       <button onClick={onBack} style={S.back} aria-label="Back to home">← Back</button>
       <div style={{textAlign:"center",position:"absolute",left:"50%",transform:"translateX(-50%)"}}>
         <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div>
@@ -6866,13 +6896,13 @@ function RackleHeader({onBack,setScreen}){
       </div>
       <div style={{position:"relative"}}>
         <button onClick={()=>setMenuOpen(o=>!o)} aria-label="Menu"
-          style={{background:menuOpen?C.bg2:"none",border:`1px solid ${menuOpen?C.bdr:"transparent"}`,borderRadius:8,padding:"6px 10px",cursor:"pointer",display:"flex",flexDirection:"column",gap:4,alignItems:"center",justifyContent:"center",flexShrink:0}}>
+          style={{background:menuOpen?"linear-gradient(180deg,#F2EBDD,#E9E0CF)":"rgba(23,107,66,.05)",border:`1px solid ${menuOpen?C.bdr:"rgba(23,107,66,.08)"}`,borderRadius:11,padding:"7px 10px",cursor:"pointer",display:"flex",flexDirection:"column",gap:4,alignItems:"center",justifyContent:"center",flexShrink:0,boxShadow:"inset 0 1px 0 rgba(255,255,255,.65)"}}>
           <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
           <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
           <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
         </button>
         {menuOpen&&(
-          <div className="rk-in" style={{position:"absolute",top:"100%",right:0,zIndex:50,background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:16,boxShadow:"0 14px 42px rgba(0,0,0,0.13)",minWidth:140,maxWidth:160,marginTop:6,overflow:"hidden"}}>
+          <div className="rk-in rk-menu-surface" style={{position:"absolute",top:"100%",right:0,zIndex:50,background:"linear-gradient(145deg,#FFFDF8,#F6EFE4)",border:`1px solid rgba(26,20,16,.10)`,borderRadius:16,boxShadow:"0 16px 44px rgba(26,20,16,.13),inset 0 1px 0 rgba(255,255,255,.76)",minWidth:152,maxWidth:180,marginTop:8,overflow:"hidden"}}>
             {hasProfile?(
               <button onClick={()=>{setMenuOpen(false);setScreen&&setScreen("profile");}} style={{width:"100%",display:"flex",alignItems:"center",gap:10,padding:"12px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left",borderBottom:`1px solid ${C.bdr}`}}>
                 <div style={{width:28,height:28,borderRadius:14,background:C.jade+"18",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:C.jade,flexShrink:0}}>
@@ -6896,7 +6926,7 @@ function RackleHeader({onBack,setScreen}){
 
 function Footer(){
   return(
-    <div style={{textAlign:"center",padding:"32px 0 80px",marginTop:18,opacity:0.82}}>
+    <div style={{textAlign:"center",padding:"34px 0 84px",marginTop:20,opacity:0.88}}>
       <div aria-hidden="true" style={{width:40,height:1,background:C.bdr,margin:"0 auto 16px"}}/>
       <div style={{fontSize:12,color:C.jade,fontFamily:F.d,fontStyle:"italic"}}>The Daily Mahjong Workout 🀄</div>
       <div style={{fontSize:11,color:C.mut,marginTop:8,lineHeight:1.6}}>Made for the American Mahjong community</div>
@@ -7051,7 +7081,7 @@ function CardGuideScreen({home,setScreen}){
         <div style={{position:"relative",marginBottom:14}}>
           <input value={search} onChange={e=>{setSearch(e.target.value);if(e.target.value.trim())setView("search");}}
             placeholder="Search hands by tile pattern…"
-            style={{width:"100%",padding:"10px 14px 10px 36px",borderRadius:12,border:`1.5px solid ${C.bdr}`,fontSize:13,fontFamily:F.b,color:C.ink,outline:"none",background:"#fff"}}/>
+            style={{width:"100%",padding:"10px 14px 10px 36px",borderRadius:12,border:`1.5px solid ${C.bdr}`,fontSize:13,fontFamily:F.b,color:C.ink,outline:"none",background:"#FFFDF8",boxShadow:"inset 0 1px 0 rgba(255,255,255,.8),0 2px 8px rgba(26,20,16,.025)"}}/>
           <span style={{position:"absolute",left:12,top:"50%",transform:"translateY(-50%)",fontSize:14,pointerEvents:"none"}}>🔍</span>
         </div>
       </div>
@@ -7064,7 +7094,7 @@ function CardGuideScreen({home,setScreen}){
         const anchor=ANCHORS[s.id];
         return(
           <button key={s.id} onClick={()=>goSection(s.id)}
-            style={{display:"block",width:"100%",textAlign:"left",background:"#FDFAF6",border:`1px solid ${C.bdr}`,borderRadius:14,marginBottom:8,padding:"14px 16px",cursor:"pointer",transition:"border-color 0.15s"}}>
+            className="rk-row-card" style={{display:"block",width:"100%",textAlign:"left",background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid rgba(26,20,16,.075)`,borderRadius:16,marginBottom:10,padding:"14px 16px",cursor:"pointer",transition:"transform .16s ease,box-shadow .16s ease,border-color .16s ease"}}>
             <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:10}}>
               <div style={{width:44,height:44,borderRadius:12,background:s.color+"14",border:`1px solid ${s.color}25`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>{s.icon}</div>
               <div style={{flex:1}}>
@@ -9377,7 +9407,7 @@ function ReadyOverlay({mode,dayNum,onReady,onHome}){
   const isChallenge=mode==="daily"&&challengeIQ&&challengeDay===String(dayNum);
   return(
     <div style={{position:"fixed",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",zIndex:50,padding:"0 20px",background:"rgba(250,247,241,0.75)",backdropFilter:"blur(6px)"}}>
-      <div className="rk-in" style={{width:"100%",maxWidth:400,background:"#fff",borderRadius:24,border:`1.5px solid ${C.bdr}`,boxShadow:"0 20px 60px rgba(0,0,0,0.12)",overflow:"hidden"}}>
+      <div className="rk-in rk-modal-surface" style={{width:"100%",maxWidth:400,background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",borderRadius:24,border:`1px solid rgba(26,20,16,.09)`,boxShadow:"0 22px 70px rgba(26,20,16,.14),inset 0 1px 0 rgba(255,255,255,.75)",overflow:"hidden"}}>
         <div style={{background:"linear-gradient(135deg,#0F2016,#1B3A28)",padding:"24px 24px 20px",textAlign:"center"}}>
           <div style={{fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:3,fontWeight:700,marginBottom:10}}>{mode==="daily"?`DAILY RACKLE · #${dayNum}`:"PRACTICE MODE"}</div>
           <div style={{fontFamily:F.d,fontSize:30,fontWeight:900,color:"#fff",letterSpacing:-0.5,lineHeight:1,marginBottom:4}}>Ready to Rackle?</div>
@@ -9838,10 +9868,10 @@ function Ask({icon,title,desc,hand,timer,onNo,onYes,onSort,large}){
   return(<div style={S.pg} className="rk-pg"><RackleHeader onBack={onNo}/>{timer&&<div style={{textAlign:"center",marginBottom:4}}><span style={{fontSize:12,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {timer}</span></div>}<div style={{textAlign:"center",marginBottom:12}}><div aria-hidden="true" style={{fontSize:24,marginBottom:6}}>{icon}</div><h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 4px"}}>{title}</h2><p style={{fontSize:12,color:C.mut}}>{desc}</p></div><Rack hand={hand} label="YOUR RACK" showSort={!!onSort} onSort={onSort} large={large}/><div style={{display:"flex",gap:8,marginTop:12}}><button onClick={onNo} style={{...S.oBtn,flex:1}}>No, skip</button><button onClick={onYes} style={{...S.greenBtn,flex:2}}>Yes, continue →</button></div></div>);}
 function JW(){return(<div role="alert" className="rk-in" style={{padding:"6px 10px",background:C.cinn+"08",borderRadius:8,border:`1px solid ${C.cinn}15`,textAlign:"center",marginBottom:6}}><span style={{fontSize:11,color:C.cinn,fontWeight:600}}>🃏 Jokers cannot be passed, they're too valuable!</span></div>);}
 function RH({hand,onSort,showRef,onRef}){return(<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK ({hand.length} tiles)</span><div style={{display:"flex",gap:4}}><button onClick={onSort} style={S.sortBtn}>Sort</button>{onRef&&<button onClick={onRef} aria-expanded={showRef} style={{...S.sortBtn,background:showRef?C.jade+"10":"none",color:showRef?C.jade:C.mut,borderColor:showRef?C.jade+"30":C.bdr}}>📖 2026 Card</button>}</div></div>);}
-function Rack({hand,label,showSort,onSort,large}){return(<div style={S.card}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>{label}</span>{showSort&&<button onClick={onSort} style={S.sortBtn}>Sort</button>}</div><RackSurface>{hand.map((t,i)=><Ti key={i} t={t} large={large}/>)}</RackSurface></div>);}
+function Rack({hand,label,showSort,onSort,large}){return(<div className="rk-lux-card" style={S.card}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>{label}</span>{showSort&&<button onClick={onSort} style={S.sortBtn}>Sort</button>}</div><RackSurface>{hand.map((t,i)=><Ti key={i} t={t} large={large}/>)}</RackSurface></div>);}
 function CG({onClose}){
   const [exp,setExp]=useState(null);
-  return(<div style={{...S.card,background:"#FFFFF8",borderColor:C.gold+"30",maxHeight:380,overflowY:"auto"}} className="rk-in" role="region" aria-label="2026 Card Guide">
+  return(<div style={{...S.card,background:"linear-gradient(145deg,#FFFFF8,#F7F0E5)",borderColor:C.gold+"30",maxHeight:380,overflowY:"auto"}} className="rk-in rk-lux-card" role="region" aria-label="2026 Card Guide">
     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6,position:"sticky",top:0,background:"#FFFFF8",paddingBottom:3,zIndex:1}}><span style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:700}}>📖 2026 CARD GUIDE</span><button onClick={onClose} style={{background:"none",border:"none",color:C.mut,fontSize:14,cursor:"pointer"}}>✕</button></div>
     {SECS.map(s=>{const o=exp===s.id;return(
       <div key={s.id} style={{borderBottom:`1px solid ${C.bdr}`}}>
