@@ -8575,7 +8575,10 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const iq=withIQStyle(dRes?.iq);
   const bestIQ=getBestIQ();
   const profile=getProfile();
-  const club=profile?.clubCode?CLUBS[profile.clubCode]:null;
+  // Single source for club membership. Some returning users have clubCode in local storage,
+  // while older profiles only have it on the profile object. getClubCode() normalizes both.
+  const activeClubCode=getClubCode();
+  const club=activeClubCode?CLUBS[activeClubCode]:null;
   const nudge=shouldShowNudge(dDone);
   const [nudgeDismissed,setNudgeDismissed]=useState(ST.get("nudgeDismissed",null)===getDailySeed());
   const [leOpen,setLeOpen]=useState(false);
@@ -8587,7 +8590,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   useEffect(()=>{
     fetchDailyStats().then(s=>{if(s&&s.total>=1)setDs(s);});
-    const code=getClubCode();
+    const code=activeClubCode||getClubCode();
     if(code){
       fetchLBEntries(code).then(rows=>{
         if(rows){
@@ -8618,7 +8621,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const displayHomeClubEntries=(optimisticClubEntry?[...homeClubEntries,optimisticClubEntry]:homeClubEntries)
     .filter(e=>Number.isFinite(Number(e.iqScore)))
     .sort((a,b)=>(Number(b.iqScore)||0)-(Number(a.iqScore)||0)||((Number(a.time)||9999)-(Number(b.time)||9999)));
-  const homeClubRank=hasClubScore?displayHomeClubEntries.findIndex(e=>(e.name||"").trim().toLowerCase()===currentNameKey)+1:null;
+  const homeClubRank=hasClubScore?(()=>{
+    const idx=displayHomeClubEntries.findIndex(e=>(e.name||"").trim().toLowerCase()===currentNameKey);
+    return idx>=0?idx+1:null;
+  })():null;
+  const scoreBasedClubRank=hasClubScore&&!homeClubRank?displayHomeClubEntries.findIndex(e=>Number(e.iqScore)<=currentScore)+1:null;
+  const shownClubRank=homeClubRank||scoreBasedClubRank||null;
   const homeClubTotal=club?displayHomeClubEntries.length:null;
   const pb=Math.max(bestScore,currentScore,100);
   const firstName=profile?.nickname?profile.nickname.split(" ")[0]:"";
@@ -8758,7 +8766,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <MiniStat value={`#${Math.min(todayPlayers,Math.max(1,todayPlayers-1))}`} label="GLOBAL RANK" accent={brightScoreColor}/>
           </button>
           <button onClick={goClubRank} style={{border:"none",padding:0,background:"transparent",cursor:"pointer",textAlign:"left"}} aria-label={club?"View club leaderboard":"Browse club directory"}>
-            <MiniStat value={club?(homeClubRank?`#${homeClubRank}`:(hasClubScore?"posting":"join")):"join"} label="CLUB RANK" accent={homeClubRank===1?brightScoreColor:undefined}/>
+            <MiniStat value={club?(shownClubRank?`#${shownClubRank}`:(hasClubScore?"posting":"join")):"join"} label="CLUB RANK" accent={shownClubRank===1?brightScoreColor:undefined}/>
           </button>
         </div>
       </div>
@@ -8816,8 +8824,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <ClubCodeEntry onJoin={()=>setScreen("leaderboard")} setScreen={setScreen}/>
         <InlineCodeEntry setScreen={setScreen}/>
       </div>
-      <ClubPulseCard club={club} clubPlayers={clubPlayers} clubEntries={displayHomeClubEntries} currentScore={currentScore} currentRank={homeClubRank} setScreen={setScreen}/>
-      {!getClubCode()&&(
+      <ClubPulseCard club={club} clubPlayers={clubPlayers} clubEntries={displayHomeClubEntries} currentScore={currentScore} currentRank={shownClubRank} setScreen={setScreen}/>
+      {!activeClubCode&&(
         <div style={{margin:"18px 0 12px",background:"linear-gradient(135deg,#F2FAF6,#EAF5EF)",padding:"18px",border:`1.5px solid ${C.jade}22`,borderRadius:18,boxShadow:`0 4px 18px ${C.jade}08`}}>
           <div style={{fontSize:9,color:C.jade,letterSpacing:2.2,fontWeight:900,marginBottom:6}}>FOR CLUB ORGANIZERS</div>
           <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:C.ink,lineHeight:1.12,marginBottom:10,letterSpacing:-0.25}}>Your club should be on Rackle</div>
