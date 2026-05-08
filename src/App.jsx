@@ -4099,22 +4099,48 @@ const DEFAULT_SETTINGS={tileSize:"normal",haptic:true,showTimer:true,hideStreak:
 // ─── SMALL UI COMPONENTS ─────────────────────────────────────────────────────
 function Ti({t,sel,isNew,onClick,dim,large}){
   const c=tC(t);
-  const sz=large?{w:44,h:60,fs:18,fs2:8}:{w:37,h:50,fs:15,fs2:7};
+  const isJoker=t.t==="j";
+  const isFlower=t.t==="f";
+  const sz=large?{w:44,h:64,fs:19,fs2:8}:{w:37,h:54,fs:16,fs2:7};
+  const baseBg=isJoker
+    ?"linear-gradient(180deg,#FFF7E8,#EFE1C4)"
+    :isNew
+      ?"linear-gradient(180deg,#FFF9E8,#F4E8C9)"
+      :"linear-gradient(180deg,#FFFDF8,#F4EFE5)";
+  const selectedBg=isJoker
+    ?"linear-gradient(180deg,#FFF4D8,#E8D09A)"
+    :"linear-gradient(180deg,#FFFFFB,#F6F0E4)";
+  const borderCol=sel?"rgba(27,125,78,.42)":isNew?"rgba(160,120,40,.34)":"rgba(26,20,16,.10)";
+  const shadow=sel
+    ?"0 7px 14px rgba(0,0,0,.12), 0 1px 0 rgba(255,255,255,.85) inset"
+    :isNew
+      ?"0 4px 10px rgba(160,120,40,.12), 0 1px 0 rgba(255,255,255,.85) inset"
+      :"0 2px 5px rgba(26,20,16,.07), 0 1px 0 rgba(255,255,255,.85) inset";
   return(
   <div onClick={onClick} role={onClick?"checkbox":undefined} aria-checked={onClick?sel:undefined}
     aria-label={onClick?`${sel?"Deselect":"Select"} ${tAria(t)}`:tAria(t)} tabIndex={onClick?0:undefined}
     onKeyDown={onClick?(e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();onClick();}})  :undefined}
-    style={{width:sz.w,height:sz.h,borderRadius:7,cursor:onClick?"pointer":"default",userSelect:"none",
-      background:sel?c+"14":isNew?"#FFFBE7":"linear-gradient(145deg,#fff,#F7F4EE)",
-      border:`2px solid ${sel?c:isNew?"#B08A35":"#D5CFC5"}`,display:"flex",flexDirection:"column",
+    style={{width:sz.w,height:sz.h,borderRadius:10,cursor:onClick?"pointer":"default",userSelect:"none",
+      background:sel?selectedBg:baseBg,
+      border:`1px solid ${borderCol}`,display:"flex",flexDirection:"column",
       alignItems:"center",justifyContent:"center",padding:0,flexShrink:0,position:"relative",overflow:"hidden",
-      boxShadow:sel?`0 4px 12px ${c}28`:"0 1px 3px rgba(0,0,0,0.06)",
-      transform:sel?"translateY(-4px) scale(1.05)":"none",transition:"all 0.2s cubic-bezier(0.34,1.56,0.64,1)",
-      opacity:dim?0.35:1,outline:"none"}}>
-    <span aria-hidden="true" style={{fontSize:sz.fs,fontWeight:800,color:c,lineHeight:1,fontFamily:F.d}}>{tL(t)}</span>
-    <span aria-hidden="true" style={{fontSize:sz.fs2,color:c,opacity:0.5,fontWeight:700,marginTop:1}}>{tS(t)}</span>
-    {sel&&<div aria-hidden="true" style={{position:"absolute",top:0,left:0,right:0,height:2,background:c}}/>}
+      boxShadow:shadow,
+      transform:sel?"translateY(-2px)":"translateY(0)",transition:"transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease",
+      opacity:dim?0.38:1,outline:"none"}}>
+    <span aria-hidden="true" style={{fontSize:sz.fs,fontWeight:900,color:isJoker?C.gold:c,lineHeight:1,fontFamily:F.d,letterSpacing:isJoker?-0.7:-0.3}}>{tL(t)}</span>
+    <span aria-hidden="true" style={{fontSize:sz.fs2,color:isJoker?C.gold:c,opacity:isFlower?0.62:0.54,fontWeight:800,marginTop:2,letterSpacing:.4,textTransform:"uppercase"}}>{tS(t)}</span>
+    {isJoker&&<div aria-hidden="true" style={{position:"absolute",inset:3,borderRadius:8,border:`1px solid ${C.gold}18`,pointerEvents:"none"}}/>}
+    {isNew&&<div aria-hidden="true" style={{position:"absolute",top:4,right:4,width:6,height:6,borderRadius:3,background:C.gold,boxShadow:`0 0 0 2px ${C.gold}12`}}/>}
+    {sel&&<div aria-hidden="true" style={{position:"absolute",bottom:0,left:8,right:8,height:2,borderRadius:2,background:C.jade,opacity:.85}}/>}
   </div>);}
+
+function RackSurface({children,style}){
+  return(
+    <div style={{display:"flex",flexWrap:"wrap",gap:7,justifyContent:"center",maxWidth:"100%",overflowX:"hidden",background:"rgba(26,20,16,.025)",border:`1px solid ${C.bdr}88`,borderRadius:18,padding:10,...style}}>
+      {children}
+    </div>
+  );
+}
 
 // ═══════════════════════════════════════════════════════════════════════════
 // COACHING ENGINE, rack narrative, flexibility, expert read, identity
@@ -4670,7 +4696,7 @@ function PassesCard({passNarrative}){
               {p.tiles.length>0&&(
                 <div style={{padding:"8px 12px",borderBottom:p.insight?`1px solid ${p.qualColor}15`:"none"}}>
                   <div style={{fontSize:8,color:C.mut,fontWeight:600,marginBottom:5,letterSpacing:0.5}}>YOU PASSED</div>
-                  <div style={{display:"flex",flexWrap:"wrap",gap:3}}>{p.tiles.map((t,j)=><Ti key={j} t={t}/>)}</div>
+                  <div style={{display:"flex",flexWrap:"wrap",gap:5}}>{p.tiles.map((t,j)=><Ti key={j} t={t}/>)}</div>
                 </div>
               )}
               {p.insight&&<div style={{padding:"8px 12px"}}><p style={{fontSize:11,color:C.ink,margin:0,lineHeight:1.6}}>{p.insight}</p></div>}
@@ -5457,7 +5483,7 @@ function SortableRack({hand:initialHand}){
         <div style={{fontSize:9,color:C.mut,letterSpacing:1.2,fontWeight:500}}>Final rack</div>
         <button onClick={toggle} style={{...S.sortBtn,color:sorted?C.jade:C.mut,borderColor:sorted?C.jade+"40":C.bdr,background:sorted?C.jade+"08":"none"}}>{sorted?"Sorted":"Sort"}</button>
       </div>
-      <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>{rack.map((t,i)=><Ti key={i} t={t}/>)}</div>
+      <RackSurface>{rack.map((t,i)=><Ti key={i} t={t}/>)}</RackSurface>
     </div>
   );
 }
@@ -5846,7 +5872,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
                   </div>
                   {p.passedTiles&&p.passedTiles.length>0&&(
                     <div style={{padding:"7px 14px",borderBottom:`1px solid ${C.bdr}40`}}>
-                      <div style={{display:"flex",flexWrap:"wrap",gap:3}}>{p.passedTiles.map((t,j)=><Ti key={j} t={t}/>)}</div>
+                      <div style={{display:"flex",flexWrap:"wrap",gap:5}}>{p.passedTiles.map((t,j)=><Ti key={j} t={t}/>)}</div>
                     </div>
                   )}
                   <div style={{padding:"7px 14px"}}>
@@ -6945,7 +6971,7 @@ function Tutorial({onDone,onBack,setScreen}){
         <p style={{fontSize:14,color:C.ink,lineHeight:1.7,margin:"0 0 8px",fontWeight:500}}>{st.body}</p>
         <p style={{fontSize:12,color:C.mut,lineHeight:1.7,margin:0}}>{st.detail}</p>
       </div>
-      {st.showTiles&&(<div style={{...S.card,marginBottom:16}}><div style={{display:"flex",flexWrap:"wrap",gap:4,justifyContent:"center"}}>{sampleTiles.map((t,i)=>(<div key={i}><Ti t={t} onClick={()=>setTapTile(tapTile===i?null:i)} sel={tapTile===i}/>{tapTile===i&&<div className="rk-in" style={{textAlign:"center",fontSize:10,color:tC(t),fontWeight:700,marginTop:3}}>{tAria(t)}</div>}</div>))}</div></div>)}
+      {st.showTiles&&(<div style={{...S.card,marginBottom:16}}><RackSurface>{sampleTiles.map((t,i)=>(<div key={i}><Ti t={t} onClick={()=>setTapTile(tapTile===i?null:i)} sel={tapTile===i}/>{tapTile===i&&<div className="rk-in" style={{textAlign:"center",fontSize:10,color:tC(t),fontWeight:700,marginTop:3}}>{tAria(t)}</div>}</div>))}</RackSurface></div>)}
       {st.tip&&(<div style={{background:C.gold+"08",borderRadius:12,padding:"10px 14px",border:`1px solid ${C.gold}25`,marginBottom:16}}><span style={{fontSize:12,color:C.gold,fontWeight:600}}>💡 {st.tip}</span></div>)}
       <div style={{display:"flex",gap:8,marginTop:8}}>
         {step>0&&<button onClick={()=>setStep(s=>s-1)} style={{...S.oBtn,flex:1}}>← Back</button>}
@@ -7067,7 +7093,7 @@ function CardGuideScreen({home,setScreen}){
           {suit:"Dot",dragon:"Soap / White Dragon",suitCol:SC.dot,dragonCol:"#6B6560",tiles:[{t:"s",s:"dot",n:5},{t:"d",v:"Soap"}]},
         ].map(row=>(
           <div key={row.suit} style={{display:"flex",alignItems:"center",gap:10,padding:"6px 8px",background:"#fff",borderRadius:8,marginBottom:6}}>
-            <div style={{display:"flex",gap:3}}>{row.tiles.map((t,i)=><Ti key={i} t={t}/>)}</div>
+            <div style={{display:"flex",gap:5}}>{row.tiles.map((t,i)=><Ti key={i} t={t}/>)}</div>
             <div style={{flex:1}}>
               <span style={{fontSize:11,fontWeight:700,color:row.suitCol}}>{row.suit}</span>
               <span style={{fontSize:10,color:C.mut}}> → </span>
@@ -9520,9 +9546,9 @@ function Game({mode,home,onDone,settings,setScreen}){
               <span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK (13 tiles)</span>
               <div style={{display:"flex",gap:4}}><button disabled style={{...S.sortBtn,opacity:0.25}}>Sort</button><button disabled style={{...S.sortBtn,opacity:0.25}}>📖 2026 Card</button></div>
             </div>
-            <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>
-              {hand.map((t,i)=>{const isFlipped=flipped.includes(i);return isFlipped?<div key={i} className="rk-flip"><Ti t={t} large={large}/></div>:<div key={i} style={{width:large?44:37,height:large?60:50,borderRadius:7,background:`linear-gradient(160deg,${C.jade}DD,#145C35)`,border:`1.5px solid ${C.jade}50`,flexShrink:0,boxShadow:`0 3px 10px rgba(27,125,78,0.3)`,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:14,opacity:0.2}}>🀄</span></div>;})}
-            </div>
+            <RackSurface>
+              {hand.map((t,i)=>{const isFlipped=flipped.includes(i);return isFlipped?<div key={i} className="rk-flip"><Ti t={t} large={large}/></div>:<div key={i} style={{width:large?44:37,height:large?64:54,borderRadius:10,background:`linear-gradient(160deg,${C.jade}E6,#10492C)`,border:`1px solid ${C.jade}55`,flexShrink:0,boxShadow:`0 4px 10px rgba(27,125,78,0.18), 0 1px 0 rgba(255,255,255,.12) inset`,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:14,opacity:0.18}}>🀄</span></div>;})}
+            </RackSurface>
           </div>
           <div style={{textAlign:"center",fontSize:13,color:C.mut,fontWeight:700,margin:"5px 0",opacity:0.25}}>0 of 3 selected</div>
           <button disabled style={{...S.passBtn,opacity:0.2}}>🔄 Pass 0 Right</button>
@@ -9564,7 +9590,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           <p style={{fontSize:12,color:C.mut,textAlign:"center",marginBottom:10}}>Select 1-3 tiles to pass across</p>
           {jw&&<JW/>}
           <div style={S.card}><RH hand={hand} onSort={()=>setHand(sortHand(hand))}/>
-            <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} dim={t.t==="j"} onClick={()=>cTog(i)} large={large}/>)}</div></div>
+            <RackSurface>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} dim={t.t==="j"} onClick={()=>cTog(i)} large={large}/>)}</RackSurface></div>
           <div aria-live="polite" style={{textAlign:"center",fontSize:13,color:sel.length>0?C.jade:C.mut,fontWeight:700,margin:"4px 0"}}>{sel.length}/3 selected</div>
           <button onClick={()=>{haptic(40);if(sel.length<1){setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");return;}const pt=sel.map(i=>hand[i]);setPassed(p=>[...p,...pt]);const rem=hand.filter((_,i)=>!sel.includes(i));const {incoming:inc,newPool}=getIncomingTiles(sel.length);setPool(newPool);setHand([...rem,...inc]);const cpNowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);const cpPassEl=cpNowEl-lastPassElRef.current;lastPassElRef.current=cpNowEl;setPassLog(pl=>[...pl,{label:"Courtesy Pass",roundName:"Courtesy Pass",out:pt,in:inc,blind:false,secs:cpPassEl}]);setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");}} style={{...S.passBtn}}>{sel.length<1?"Skip →":`Pass ${sel.length} across →`}</button>
         </>
@@ -9640,7 +9666,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           {jw&&<JW/>}
           <div style={S.card}>
             <RH hand={hand} onSort={()=>setHand(sortHand(hand))} showRef={showRef} onRef={()=>setShowRef(!showRef)}/>
-            <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} isNew={newIdx.includes(i)} dim={t.t==="j"&&!hasNew} onClick={!hasNew?()=>toggle(i):undefined} large={large}/>)}</div>
+            <RackSurface>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} isNew={newIdx.includes(i)} dim={t.t==="j"&&!hasNew} onClick={!hasNew?()=>toggle(i):undefined} large={large}/>)}</RackSurface>
           </div>
           {showRef&&<CG onClose={()=>setShowRef(false)}/>}
           {!hasNew&&<>
@@ -9761,7 +9787,7 @@ function Ask({icon,title,desc,hand,timer,onNo,onYes,onSort,large}){
   return(<div style={S.pg} className="rk-pg"><RackleHeader onBack={onNo}/>{timer&&<div style={{textAlign:"center",marginBottom:4}}><span style={{fontSize:12,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {timer}</span></div>}<div style={{textAlign:"center",marginBottom:12}}><div aria-hidden="true" style={{fontSize:24,marginBottom:6}}>{icon}</div><h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 4px"}}>{title}</h2><p style={{fontSize:12,color:C.mut}}>{desc}</p></div><Rack hand={hand} label="YOUR RACK" showSort={!!onSort} onSort={onSort} large={large}/><div style={{display:"flex",gap:8,marginTop:12}}><button onClick={onNo} style={{...S.oBtn,flex:1}}>No, skip</button><button onClick={onYes} style={{...S.greenBtn,flex:2}}>Yes, continue →</button></div></div>);}
 function JW(){return(<div role="alert" className="rk-in" style={{padding:"6px 10px",background:C.cinn+"08",borderRadius:8,border:`1px solid ${C.cinn}15`,textAlign:"center",marginBottom:6}}><span style={{fontSize:11,color:C.cinn,fontWeight:600}}>🃏 Jokers cannot be passed, they're too valuable!</span></div>);}
 function RH({hand,onSort,showRef,onRef}){return(<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK ({hand.length} tiles)</span><div style={{display:"flex",gap:4}}><button onClick={onSort} style={S.sortBtn}>Sort</button>{onRef&&<button onClick={onRef} aria-expanded={showRef} style={{...S.sortBtn,background:showRef?C.jade+"10":"none",color:showRef?C.jade:C.mut,borderColor:showRef?C.jade+"30":C.bdr}}>📖 2026 Card</button>}</div></div>);}
-function Rack({hand,label,showSort,onSort,large}){return(<div style={S.card}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>{label}</span>{showSort&&<button onClick={onSort} style={S.sortBtn}>Sort</button>}</div><div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>{hand.map((t,i)=><Ti key={i} t={t} large={large}/>)}</div></div>);}
+function Rack({hand,label,showSort,onSort,large}){return(<div style={S.card}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>{label}</span>{showSort&&<button onClick={onSort} style={S.sortBtn}>Sort</button>}</div><RackSurface>{hand.map((t,i)=><Ti key={i} t={t} large={large}/>)}</RackSurface></div>);}
 function CG({onClose}){
   const [exp,setExp]=useState(null);
   return(<div style={{...S.card,background:"#FFFFF8",borderColor:C.gold+"30",maxHeight:380,overflowY:"auto"}} className="rk-in" role="region" aria-label="2026 Card Guide">
@@ -10575,7 +10601,7 @@ function SectionQuizScreen({home,setScreen}){
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
           <span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK (13 TILES)</span>
         </div>
-        <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>
+        <div style={{display:"flex",flexWrap:"wrap",gap:5,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>
           {sortHand(rack).map((t,i)=><Ti key={i} t={t} large={false}/>)}
         </div>
       </div>
