@@ -3393,20 +3393,36 @@ async function fetchPasswordHash(playerId){
   }catch{return null;}
 }
 
-// Fetch full profile row by email, used for cross-device login
+function mapRemoteProfileRow(r){
+  if(!r)return null;
+  return{
+    playerId:r.player_id,nickname:r.nickname,clubCode:r.club_code||"",
+    avatarUrl:r.avatar_url||"",email:r.email||"",
+    streak:r.streak||0,roundsPlayed:r.rounds_played||0,
+    bestIQ:r.best_iq||null,passwordHash:r.password_hash||null,
+  };
+}
+
+// Fetch full profile row by email, used for cross-device login.
+// Uses case-insensitive lookup so saved emails like Ash@Email.com still work.
 async function fetchProfileByEmail(email){
   try{
-    const res=await fetch(`${SB_URL}/rest/v1/profiles?email=eq.${encodeURIComponent(email)}&select=*&limit=1`,{headers:SB_HEADERS});
-    if(!res.ok)return null;
-    const rows=await res.json();
-    if(!rows.length)return null;
-    const r=rows[0];
-    return{
-      playerId:r.player_id,nickname:r.nickname,clubCode:r.club_code||"",
-      avatarUrl:r.avatar_url||"",email:r.email||"",
-      streak:r.streak||0,roundsPlayed:r.rounds_played||0,
-      bestIQ:r.best_iq||null,passwordHash:r.password_hash||null,
-    };
+    const clean=(email||"").trim();
+    if(!clean)return null;
+    const encoded=encodeURIComponent(clean);
+    const lower=encodeURIComponent(clean.toLowerCase());
+    const queries=[
+      `${SB_URL}/rest/v1/profiles?email=eq.${encoded}&select=*&limit=1`,
+      `${SB_URL}/rest/v1/profiles?email=eq.${lower}&select=*&limit=1`,
+      `${SB_URL}/rest/v1/profiles?email=ilike.${encoded}&select=*&limit=1`,
+    ];
+    for(const url of queries){
+      const res=await fetch(url,{headers:SB_HEADERS});
+      if(!res.ok)continue;
+      const rows=await res.json();
+      if(rows&&rows.length)return mapRemoteProfileRow(rows[0]);
+    }
+    return null;
   }catch{return null;}
 }
 
@@ -3487,7 +3503,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
     const pid=getOrCreatePlayerId();
     let pwHash=getStoredHash();
     if(pw){pwHash=await hashPassword(pw);setStoredHash(pwHash);}
-    const p={...profile,playerId:pid,nickname:composedName,streak,roundsPlayed:rounds,bestIQ:bestIQ?.score||null};
+    const p={...profile,playerId:pid,nickname:composedName,email:(profile.email||"").trim().toLowerCase(),streak,roundsPlayed:rounds,bestIQ:bestIQ?.score||null};
     setProfile(p);setProfileState(p);
     if(p.clubCode)setClubCode(p.clubCode);else setClubCode(null);
     if(p.nickname)setClubName(p.nickname);
@@ -3509,9 +3525,20 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
     setLoginErr("");
     if(!loginEmail.trim()||!loginPw){setLoginErr("Please enter your email and password.");return;}
     setLoginLoading(true);
-    const remote=await fetchProfileByEmail(loginEmail.trim().toLowerCase());
-    if(!remote){setLoginErr("No account found with that email.");setLoginLoading(false);return;}
+    const cleanEmail=loginEmail.trim().toLowerCase();
+    let remote=await fetchProfileByEmail(cleanEmail);
     const hash=await hashPassword(loginPw);
+
+    // Same-device fallback for profiles created before email syncing was added.
+    // If the local profile email matches and the password hash matches, let the player in.
+    const localProfile=getProfile();
+    const localHash=getStoredHash();
+    if(!remote&&localProfile?.email?.trim().toLowerCase()===cleanEmail&&localHash&&hash===localHash){
+      setUnlocked(true);setMode("view");setLoginEmail("");setLoginPw("");setLoginLoading(false);return;
+    }
+
+    if(!remote){setLoginErr("No account found with that email. Check the spelling or create a profile first.");setLoginLoading(false);return;}
+    if(!remote.passwordHash){setLoginErr("This profile needs a password reset before you can log in on this device.");setLoginLoading(false);return;}
     if(hash!==remote.passwordHash){setLoginErr("Incorrect password. Try again.");setLoginLoading(false);return;}
     // Restore profile locally
     const restored={
