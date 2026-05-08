@@ -8486,19 +8486,20 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
   const topScore=ds?.max||ds?.topScore||ds?.highest||null;
   const currentStreak=Math.max(0,streak||0);
   const tomorrowHints=[
-    "Tomorrow's rack rewards flexibility.",
-    "Tomorrow's Charleston gets tricky.",
-    "Big joker decisions tomorrow.",
-    "Tomorrow favors defensive reads.",
-    "Tomorrow's rack may split the room.",
+    "Tomorrow rewards cleaner reads.",
+    "Tomorrow may split the room.",
+    "Pairs could matter tomorrow.",
+    "Tomorrow favors flexible passes.",
+    "Dragons may be worth watching.",
   ];
   const tomorrowHint=tomorrowHints[dn%tomorrowHints.length];
-  const chips=[
-    {label:"scores live today",value:liveCount||"Live"},
-    bestIQ?.score?{label:"your best",value:bestIQ.score}:null,
-    topScore?{label:club?"club leader":"score to chase",value:topScore}:null,
-    {label:currentStreak>0?"streak alive":"streak starts",value:currentStreak>0?`${currentStreak}d`:"Day 1"},
-  ].filter(Boolean).slice(0,4);
+
+  const statCards=[
+    {label:"live today",value:liveCount||"Open",tone:"gold"},
+    topScore?{label:club?"club mark":"score to chase",value:topScore,tone:"white"}:null,
+    {label:currentStreak>0?"streak":"starts here",value:currentStreak>0?`${currentStreak}d`:"Day 1",tone:"white"},
+  ].filter(Boolean);
+
   return(
     <button onClick={onPlay} aria-label={`Play Daily Rackle challenge number ${dn}`} className="rk-in rk-hero-live rk-tap-card rk-sweep" style={{
       width:"100%",border:"none",cursor:"pointer",textAlign:"left",borderRadius:22,overflow:"hidden",padding:0,
@@ -8508,41 +8509,50 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
       <div aria-hidden style={{position:"absolute",inset:0,background:"radial-gradient(circle at 72% 18%,rgba(201,168,76,.14),transparent 28%),radial-gradient(circle at 18% 86%,rgba(255,255,255,.06),transparent 30%)",pointerEvents:"none"}}/>
       <div aria-hidden style={{position:"absolute",right:-24,top:-28,fontSize:140,opacity:0.055,lineHeight:1,transform:"rotate(12deg)",pointerEvents:"none"}}>🀄</div>
       <div aria-hidden style={{position:"absolute",left:-36,bottom:-30,fontSize:110,opacity:0.04,lineHeight:1,transform:"rotate(-10deg)",pointerEvents:"none"}}>🀄</div>
+
       <div style={{position:"relative",padding:"20px 18px 17px"}}>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,marginBottom:17}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,marginBottom:16}}>
           <div className="rk-soft-glow" style={{display:"inline-flex",alignItems:"center",gap:7,background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.15)",borderRadius:999,padding:"5px 11px"}}>
             <span className="rk-pulse" style={{width:7,height:7,borderRadius:99,background:C.gilt,display:"inline-block"}}/>
             <span style={{fontSize:9,letterSpacing:2,fontWeight:800,color:"rgba(255,255,255,0.78)"}}>DAILY RACKLE · #{dn}</span>
           </div>
           <div style={{fontSize:10,color:"rgba(255,255,255,0.58)",fontWeight:800}}>new rack in {reset}</div>
         </div>
+
         <div style={{display:"flex",alignItems:"center",gap:16}}>
           <div style={{flex:1,minWidth:0}}>
-            <div style={{fontFamily:F.d,fontSize:25,fontWeight:900,letterSpacing:-0.85,lineHeight:1.03,marginBottom:10}}>One rack.<br/>One read.<br/><span style={{color:C.gilt}}>One chance.</span></div>
-            <div style={{fontSize:12,color:"rgba(255,255,255,0.73)",lineHeight:1.56,maxWidth:290}}>Play the same Charleston as everyone today. Score it. Share it. Climb your club.</div>
-            <div style={{display:"inline-flex",alignItems:"center",gap:7,marginTop:10,background:"rgba(255,255,255,0.07)",border:"1px solid rgba(255,255,255,0.10)",borderRadius:999,padding:"5px 9px"}}>
-              <span className="rk-live-dot" style={{width:6,height:6,borderRadius:99,background:"#4CD987",display:"inline-block"}}/>
-              <span style={{fontSize:9,color:"rgba(255,255,255,0.62)",fontWeight:800,letterSpacing:.4}}>{liveCount?`${liveCount} players are reading today's rack`:"The club board is open"}</span>
+            <div style={{fontFamily:F.d,fontSize:26,fontWeight:900,letterSpacing:-0.85,lineHeight:1.02,marginBottom:11}}>
+              Read the rack.<br/><span style={{color:C.gilt}}>Claim the table.</span>
+            </div>
+            <div style={{fontSize:12,color:"rgba(255,255,255,0.70)",lineHeight:1.5,maxWidth:280}}>
+              Same daily Charleston. One score to beat.
             </div>
           </div>
-          <div style={{width:48,height:48,borderRadius:999,background:"rgba(255,253,248,0.91)",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 8px 24px rgba(0,0,0,0.2)",flexShrink:0,transform:"translateY(-16px)",border:"1px solid rgba(255,255,255,0.55)"}}>
+
+          {/* Keep play button styling close to the original */}
+          <div style={{width:48,height:48,borderRadius:999,background:"rgba(255,253,248,0.91)",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 8px 24px rgba(0,0,0,0.2)",flexShrink:0,transform:"translateY(-10px)",border:"1px solid rgba(255,255,255,0.55)"}}>
             <span style={{fontSize:18,color:C.jade,marginLeft:2}}>▶</span>
           </div>
         </div>
-        <div style={{display:"flex",gap:7,marginTop:18,flexWrap:"wrap"}}>
-          {chips.map((c,i)=>(
-            <div key={i} className="rk-count-live" style={{flex:"1 1 42%",minWidth:110,background:"rgba(255,255,255,0.08)",border:"1px solid rgba(255,255,255,0.12)",borderRadius:12,padding:"8px 10px"}}>
-              <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:i===0||i===3?C.gilt:"#fff",lineHeight:1}}>{c.value}</div>
-              <div style={{fontSize:8,color:"rgba(255,255,255,0.5)",letterSpacing:1.15,fontWeight:800,marginTop:4,textTransform:"uppercase"}}>{c.label}</div>
+
+        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:7,marginTop:18}}>
+          {statCards.map((c,i)=>(
+            <div key={i} className="rk-count-live" style={{background:"rgba(255,255,255,0.08)",border:"1px solid rgba(255,255,255,0.12)",borderRadius:12,padding:"9px 10px",minHeight:58}}>
+              <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:c.tone==="gold"?C.gilt:"#fff",lineHeight:1}}>{c.value}</div>
+              <div style={{fontSize:8,color:"rgba(255,255,255,0.48)",letterSpacing:1.1,fontWeight:800,marginTop:5,textTransform:"uppercase",whiteSpace:"nowrap"}}>{c.label}</div>
             </div>
           ))}
-          <div style={{flex:"1 1 100%",minWidth:220,background:"rgba(201,168,76,0.12)",border:"1px solid rgba(201,168,76,0.24)",borderRadius:14,padding:"10px 12px"}}>
-            <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}>
-              <span style={{width:7,height:7,borderRadius:99,background:C.gilt,display:"inline-block"}}/>
-              <div style={{fontSize:9,color:"rgba(255,255,255,0.58)",fontWeight:900,letterSpacing:1.6}}>TOMORROW'S READ</div>
+        </div>
+
+        <div style={{marginTop:9,background:"rgba(201,168,76,0.11)",border:"1px solid rgba(201,168,76,0.24)",borderRadius:14,padding:"10px 12px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:10}}>
+          <div style={{minWidth:0}}>
+            <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:3}}>
+              <span style={{width:7,height:7,borderRadius:99,background:C.gilt,display:"inline-block",flexShrink:0}}/>
+              <div style={{fontSize:8,color:"rgba(255,255,255,0.50)",fontWeight:900,letterSpacing:1.5}}>TOMORROW</div>
             </div>
-            <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:"#fff",lineHeight:1.15,letterSpacing:-0.1}}>{tomorrowHint}</div>
+            <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:"#fff",lineHeight:1.15,letterSpacing:-0.1,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{tomorrowHint}</div>
           </div>
+          <span style={{color:"rgba(255,255,255,.52)",fontSize:16,flexShrink:0}}>›</span>
         </div>
       </div>
     </button>
