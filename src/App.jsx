@@ -271,7 +271,7 @@ function sortHand(t){return[...t].sort((a,b)=>sortVal(a)-sortVal(b));}
 function tL(t){if(t.t==="j")return"🃏";if(t.t==="f")return"🌸";if(t.t==="w")return t.v;if(t.t==="d")return t.v==="Red"?"中":t.v==="Grn"?"發":"白";return`${t.n}`;}
 function tS(t){if(t.t==="j")return"Joker";if(t.t==="f")return"Flower";if(t.t==="w")return"Wind";if(t.t==="d")return t.v==="Soap"?"Soap":t.v==="Red"?"Red":"Green";return SN[t.s];}
 function tC(t){if(t.t==="j")return"#B08A35";if(t.t==="f")return"#B54E7A";if(t.t==="w")return"#5C5247";if(t.t==="d")return t.v==="Red"?"#B83232":t.v==="Grn"?"#1B7D4E":"#6B6560";return SC[t.s];}
-function fT(s){if(!s&&s!==0)return",";return`${Math.floor(s/60)}:${(s%60<10?"0":"")+(s%60)}`;}
+function fT(s){if(!s&&s!==0)return"";return`${Math.floor(s/60)}:${(s%60<10?"0":"")+(s%60)}`;}
 function tAria(t){if(t.t==="j")return"Joker tile";if(t.t==="f")return"Flower tile";if(t.t==="w")return`${t.v} Wind tile`;if(t.t==="d")return`${tS(t)} Dragon tile`;return`${t.n} ${SN[t.s]} tile`;}
 function tLabel(t){if(t.t==="j")return"Joker";if(t.t==="f")return"Flower";if(t.t==="w")return`${t.v} Wind`;if(t.t==="d")return`${tS(t)} Dragon`;return`${t.n} ${SN[t.s]}`;}
 
@@ -4646,8 +4646,8 @@ function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,
   }
 
   const lanes=[
-    ...altSectionHands.map(h=>({handObj:h,secId:chosenSec,secObj:chosenSecObj,kicker:"Same section",copy:"Another way this rack could have stayed in the same lane."})),
-    ...altSecHands.map(h=>({handObj:h,secId:h.sec,secObj:h.secObj,kicker:"Another path",copy:"A different section your rack was also hinting at."})),
+    ...altSectionHands.map(h=>({handObj:h,secId:chosenSec,secObj:chosenSecObj,kicker:"Same family",copy:"Your rack was still whispering this path."})),
+    ...altSecHands.map(h=>({handObj:h,secId:h.sec,secObj:h.secObj,kicker:"Different read",copy:"A sharp table might have noticed this too."})),
   ];
 
   if(!lanes.length)return null;
@@ -4655,8 +4655,8 @@ function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,
   return(
     <div style={{marginBottom:8,overflow:"hidden"}}>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 2px 7px"}}>
-        <div style={{fontSize:10,color:C.mut,fontWeight:800,letterSpacing:0.6}}>Swipe through the table reads</div>
-        {lanes.length>1&&<div style={{fontSize:10,color:C.jade,fontWeight:800}}>Swipe →</div>}
+        <div style={{fontSize:10,color:C.mut,fontWeight:800,letterSpacing:0.6}}>Other paths this rack was showing</div>
+        {lanes.length>1&&<div style={{fontSize:10,color:C.jade,fontWeight:800}}>Swipe</div>}
       </div>
       <div style={{
         display:"flex",gap:10,overflowX:"auto",overflowY:"hidden",
@@ -4696,10 +4696,10 @@ function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,
 }
 
 function coverageTone(pct){
-  if(pct>=65)return{label:"Strong lane",short:"Strong",color:C.jade,desc:"This line had real shape."};
-  if(pct>=40)return{label:"Playable lane",short:"Playable",color:C.gold,desc:"This was a reasonable path to keep alive."};
-  if(pct>=20)return{label:"Still alive",short:"Alive",color:C.gold,desc:"Not perfect, but there was something to work with."};
-  return{label:"Long-shot lane",short:"Long shot",color:C.cinn,desc:"Possible, but it needed help fast."};
+  if(pct>=65)return{label:"Clean path",short:"Clean",color:C.jade,desc:"This path had real shape."};
+  if(pct>=40)return{label:"Worth watching",short:"Live",color:C.gold,desc:"This path was worth keeping alive."};
+  if(pct>=20)return{label:"Needs help",short:"Maybe",color:C.gold,desc:"There was something here, but it needed help."};
+  return{label:"Long shot",short:"Reach",color:C.cinn,desc:"This was possible, but not something to force."};
 }
 
 function CoverageChip({pct}){
@@ -4888,7 +4888,7 @@ function HandTargetPreview({hand,scoredHandObj,chosenSec,chosenSecObj,iq,onCoach
           {onCoachMode&&<button onClick={onCoachMode} style={{width:"100%",background:C.jade+"08",border:`1px solid ${C.jade}20`,borderRadius:12,padding:"10px 12px",cursor:"pointer",display:"flex",alignItems:"center",gap:9,textAlign:"left"}}>
             <span style={{fontSize:15}}>🎓</span>
             <div style={{flex:1}}>
-              <div style={{fontSize:11,fontWeight:900,color:C.jade,lineHeight:1.3}}>See What Strong Players Notice</div>
+              <div style={{fontSize:11,fontWeight:900,color:C.jade,lineHeight:1.3}}>Improve This Rack</div>
               <div style={{fontSize:10,color:C.mut,lineHeight:1.35}}>Replay your Charleston →</div>
             </div>
           </button>}
@@ -5651,16 +5651,11 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       {hand&&hand.length>0&&chosenSec&&(()=>{
         const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
         return(
-          <CollapsibleSection label="Other Hands" desc="Other ways the table might read this" icon="🔀" open={openSec.alts} onToggle={()=>toggle("alts")}>
+          <CollapsibleSection label="Other Paths" desc="A few roads you could have taken" icon="🔀" open={openSec.alts} onToggle={()=>toggle("alts")}>
             <AltHandsCard hand={hand} resolvedHandLabel={scoredHandObj?.label||null} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecs} primaryCoveragePct={primPct}/>
           </CollapsibleSection>
         );
       })()}
-
-      {/* ⑤ SCORE BREAKDOWN, collapsible */}
-      <CollapsibleSection label="What strong players noticed" desc="Today's read" icon="💬" open={openSec.score} onToggle={()=>toggle("score")} badge={iq.level}>
-        <TableTalkRead iq={iq}/>
-      </CollapsibleSection>
 
       {/* ⑥ NEXT STEPS, collapsible */}
       <CollapsibleSection label="Next Steps" desc="Coach Mode · Recommendations" icon="🎯" open={openSec.next} onToggle={()=>toggle("next")}>
@@ -5766,16 +5761,11 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
       {hand&&hand.length>0&&chosenSec&&(()=>{
         const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
         return(
-          <CollapsibleSection label="Other Hands" desc="Other ways the table might read this" icon="🔀" open={openSec.alts} onToggle={()=>toggle("alts")}>
+          <CollapsibleSection label="Other Paths" desc="A few roads you could have taken" icon="🔀" open={openSec.alts} onToggle={()=>toggle("alts")}>
             <AltHandsCard hand={hand} resolvedHandLabel={scoredHandObj?.label||null} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecsP} primaryCoveragePct={primPct}/>
           </CollapsibleSection>
         );
       })()}
-
-      {/* YOUR SCORE, closed, with score badge */}
-      <CollapsibleSection label="What strong players noticed" desc="Today's read" icon="💬" open={openSec.score} onToggle={()=>toggle("score")} badge={iq.level}>
-        <TableTalkRead iq={iq}/>
-      </CollapsibleSection>
 
       {/* YOUR PASSES, closed, dots badge */}
       {iq.passInsights&&iq.passInsights.length>0&&(
@@ -5993,38 +5983,36 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
         </div>
       )}
 
-      {/* Progress bar */}
-      <div style={{padding:"12px 14px 0",borderBottom:`1px solid ${C.bdr}`}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:4}}>
-          <span style={{fontSize:9,color:C.mut,letterSpacing:1.5,fontWeight:700}}>RACK COVERAGE</span>
-          <span style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:barCol,lineHeight:1}}>{pct}%</span>
+      {/* Human path read */}
+      <div style={{padding:"12px 14px",borderBottom:`1px solid ${C.bdr}`,background:"#FFFCF7"}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:7}}>
+          <span style={{fontSize:9,color:C.mut,letterSpacing:1.5,fontWeight:900}}>PATH READ</span>
+          <span style={{fontSize:10,fontWeight:900,color:barCol,background:barCol+"12",border:`1px solid ${barCol}22`,borderRadius:999,padding:"4px 9px"}}>{coverageTone(pct).label}</span>
         </div>
-        <div style={{height:6,borderRadius:3,background:C.bdr,overflow:"hidden",marginBottom:8}}>
-          <div style={{height:"100%",borderRadius:3,background:`linear-gradient(90deg,${barCol},${barCol}CC)`,width:`${pct}%`,transition:"width 0.7s ease"}}/>
-        </div>
-        <div style={{display:"flex",gap:14,marginBottom:10,flexWrap:"wrap"}}>
+        <div style={{fontSize:12,color:C.ink,lineHeight:1.55,marginBottom:8}}>{coverageTone(pct).desc} You were holding {totalHeld} useful tile{totalHeld===1?"":"s"} for this shape and still needed {totalGap}.</div>
+        <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
           <div style={{display:"flex",alignItems:"center",gap:5}}>
             <div style={{width:8,height:8,borderRadius:4,background:C.jade}}/>
-            <span style={{fontSize:9,color:C.mut,fontWeight:600}}>{totalHeld} tiles held</span>
+            <span style={{fontSize:9,color:C.mut,fontWeight:600}}>held</span>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:5}}>
             <div style={{width:8,height:8,borderRadius:4,background:C.cinn}}/>
-            <span style={{fontSize:9,color:C.mut,fontWeight:600}}>{totalGap} tiles short</span>
+            <span style={{fontSize:9,color:C.mut,fontWeight:600}}>still needed</span>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:5}}>
             <div style={{width:8,height:8,borderRadius:4,border:`1.5px solid #C0BAB0`,background:"#F5F3F0"}}/>
-            <span style={{fontSize:9,color:C.mut,fontWeight:600}}>· = never had it</span>
+            <span style={{fontSize:9,color:C.mut,fontWeight:600}}>not seen</span>
           </div>
           {criticalPasses.length>0&&<div style={{display:"flex",alignItems:"center",gap:5}}>
             <div style={{width:8,height:8,borderRadius:4,background:C.cinn+"60",border:`1.5px solid ${C.cinn}50`}}/>
-            <span style={{fontSize:9,color:C.mut,fontWeight:600}}>P1/P2/P3 = passed</span>
+            <span style={{fontSize:9,color:C.mut,fontWeight:600}}>passed away</span>
           </div>}
         </div>
       </div>
 
       {/* Tile-by-tile overlay, each group with its slots */}
       <div style={{padding:"12px 14px",background:C.bg2,overflowX:"hidden"}}>
-        <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:8}}>HAND PATTERN vs YOUR RACK</div>
+        <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:8}}>HAND SHAPE</div>
         <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"flex-end",width:"100%",maxWidth:"100%"}}>
           {groupStatus.map((status,gi)=>(
             <div key={gi} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
@@ -6050,7 +6038,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
         {critPassSentence&&(
           <div style={{display:"flex",alignItems:"flex-start",gap:8,background:"#FEF0F0",borderRadius:8,padding:"8px 10px",marginTop:6,border:`1px solid ${C.cinn}20`}}>
             <span style={{fontSize:14,flexShrink:0}}>⚠️</span>
-            <p style={{fontSize:11,color:C.ink,margin:0,lineHeight:1.55}}><strong>Critical pass:</strong> {critPassSentence}</p>
+            <p style={{fontSize:11,color:C.ink,margin:0,lineHeight:1.55}}><strong>Passed away:</strong> {critPassSentence}</p>
           </div>
         )}
         {totalGap===0&&(
