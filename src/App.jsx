@@ -9752,17 +9752,53 @@ function CG({onClose}){
 
 // ─── FIRST PAYOFF ─────────────────────────────────────────────────────────────
 // ─── WEEKLY RECAP ─────────────────────────────────────────────────────────────
+function normalizeRecapEntry(e){
+  if(!e)return null;
+  const iqScore=e.iqScore??e.iq?.totalScore??null;
+  const ts=e.ts||e.played_at||e.created_at||Date.now();
+  const daySeed=e.daySeed||e.day_seed||null;
+  const mode=e.mode||(daySeed?"daily":null);
+  return{...e,iqScore,ts,daySeed,mode};
+}
+
+function getWeeklyHist(){
+  const hist=(getHist()||[]).map(normalizeRecapEntry).filter(Boolean);
+  const todaySeed=getDailySeed();
+  const dres=normalizeRecapEntry(ST.get("dres",null));
+  const todayDone=ST.get("dd",null)===todaySeed;
+  if(todayDone&&dres&&dres.iqScore!=null){
+    const dailyToday={...dres,mode:"daily",daySeed:todaySeed,day_seed:todaySeed,ts:dres.ts||Date.now()};
+    const already=hist.some(e=>
+      (e.mode==="daily"||e.daySeed===todaySeed||e.day_seed===todaySeed) &&
+      (e.daySeed===todaySeed||e.day_seed===todaySeed||sameLocalDay(e.ts,Date.now())) &&
+      Number(e.iqScore)===Number(dailyToday.iqScore)
+    );
+    if(!already)hist.push(dailyToday);
+  }
+  return hist;
+}
+
+function sameLocalDay(a,b){
+  const da=new Date(a),db=new Date(b);
+  return da.getFullYear()===db.getFullYear()&&da.getMonth()===db.getMonth()&&da.getDate()===db.getDate();
+}
+
+function isDailyEntry(e){
+  const todaySeed=getDailySeed();
+  return e?.mode==="daily"||e?.daySeed!=null||e?.day_seed!=null||(ST.get("dd",null)===todaySeed&&ST.get("dres",null)&&sameLocalDay(e?.ts||0,Date.now())&&Number(e?.iqScore)===Number((ST.get("dres",null)?.iqScore??ST.get("dres",null)?.iq?.totalScore)));
+}
+
 function getWeeklyRecapData(){
   const now=new Date();
   const dayOfWeek=now.getDay(); // 0=Sun
   const weekStart=new Date(now);
   weekStart.setDate(now.getDate()-dayOfWeek);
   weekStart.setHours(0,0,0,0);
-  const h=getHist().filter(e=>e.iqScore!=null&&e.ts>=weekStart.getTime());
+  const h=getWeeklyHist().filter(e=>e.iqScore!=null&&e.ts>=weekStart.getTime());
   if(!h.length)return null;
-  const dailyH=h.filter(e=>e.mode==="daily");
-  const avgIQ=Math.round(h.reduce((a,e)=>a+e.iqScore,0)/h.length);
-  const bestEntry=h.reduce((a,b)=>b.iqScore>a.iqScore?b:a,h[0]);
+  const dailyH=h.filter(isDailyEntry);
+  const avgIQ=Math.round(h.reduce((a,e)=>a+Number(e.iqScore||0),0)/h.length);
+  const bestEntry=h.reduce((a,b)=>Number(b.iqScore)>Number(a.iqScore)?b:a,h[0]);
   const daysPlayed=new Set(h.map(e=>{const d=new Date(e.ts);return`${d.getMonth()}-${d.getDate()}`;})).size;
   // Section most played this week
   const secCounts={};h.filter(e=>e.sid).forEach(e=>{secCounts[e.sid]=(secCounts[e.sid]||0)+1;});
@@ -9770,10 +9806,11 @@ function getWeeklyRecapData(){
   const topSec=topSecId?SECS.find(s=>s.id===topSecId):null;
   // Trend vs prior week
   const prevWeekStart=new Date(weekStart);prevWeekStart.setDate(weekStart.getDate()-7);
-  const prevH=getHist().filter(e=>e.iqScore!=null&&e.ts>=prevWeekStart.getTime()&&e.ts<weekStart.getTime());
-  const prevAvg=prevH.length?Math.round(prevH.reduce((a,e)=>a+e.iqScore,0)/prevH.length):null;
+  const prevH=getWeeklyHist().filter(e=>e.iqScore!=null&&e.ts>=prevWeekStart.getTime()&&e.ts<weekStart.getTime());
+  const prevAvg=prevH.length?Math.round(prevH.reduce((a,e)=>a+Number(e.iqScore||0),0)/prevH.length):null;
   const delta=prevAvg!=null?avgIQ-prevAvg:null;
-  return{h,dailyH,avgIQ,bestEntry,daysPlayed,topSec,delta,prevAvg,weekRounds:h.length};
+  const dailyDaysPlayed=new Set(dailyH.map(e=>{const d=new Date(e.ts);return`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;})).size;
+  return{h,dailyH,avgIQ,bestEntry,daysPlayed,topSec,delta,prevAvg,weekRounds:h.length,dailyDaysPlayed};
 }
 
 function shouldShowWeeklyRecap(){
@@ -9809,7 +9846,7 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
   // Week-in-progress banner, shown any day except Sunday
   const weekInProgress=!isSunday;
 
-  const {avgIQ,bestEntry,daysPlayed,topSec,delta,weekRounds,dailyH}=data;
+  const {avgIQ,bestEntry,daysPlayed,topSec,delta,weekRounds,dailyH,dailyDaysPlayed}=data;
   const lvlTier=getIQTier(avgIQ);
   const lvl={label:lvlTier.level,color:lvlTier.color};
 
@@ -9871,7 +9908,7 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
         </div>}
         <div style={{display:"flex",gap:6}}>
           <div style={{flex:1,background:C.jade+"08",borderRadius:10,padding:"10px",textAlign:"center",border:`1px solid ${C.jade}15`}}>
-            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.jade}}>{dailyH.length}</div>
+            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.jade}}>{dailyDaysPlayed||dailyH.length}</div>
             <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>DAILIES</div>
           </div>
           <div style={{flex:1,background:C.gold+"08",borderRadius:10,padding:"10px",textAlign:"center",border:`1px solid ${C.gold}15`}}>
@@ -10700,6 +10737,9 @@ export default function Rackle(){
   },[]);
 
   const onDone=(result)=>{
+    // Always stamp the current play mode on completed results.
+    // Older builds saved Daily results without `mode`, which made Weekly Recap show 0 dailies.
+    const completedResult={...result,mode,ts:Date.now()};
     setRounds(r=>{const n=r+1;ST.set("rnd",n);return n;});
     const today=getDailySeed();
     let newStreak=streak;
@@ -10712,23 +10752,27 @@ export default function Rackle(){
       if(badge&&(!prevBadge||badge.days>prevBadge.days))setBadgeToast(badge);
     }
     if(mode==="daily"){
-      setDDone(true);ST.set("dd",today);setDRes(result);ST.set("dres",result);
+      const dailyResult={...completedResult,mode:"daily",daySeed:today,day_seed:today};
+      setDDone(true);ST.set("dd",today);setDRes(dailyResult);ST.set("dres",dailyResult);
       if(isFirstDaily){ST.set("hadFirstDaily",true);}
       // Auto-post to club leaderboard if player has a club + name
       const autoCode=getClubCode();
       const autoName=getClubName()||(getProfile()?.nickname||null);
-      if(autoCode&&autoName&&result?.iq?.totalScore){
-        upsertLBEntry(autoCode,autoName,result.iq.totalScore,result.time||0,newStreak).then(ok=>{
-          if(ok)setClubPostToast({clubName:CLUBS[autoCode]?.name||"your club",iqScore:result.iq.totalScore});
+      if(autoCode&&autoName&&dailyResult?.iq?.totalScore){
+        upsertLBEntry(autoCode,autoName,dailyResult.iq.totalScore,dailyResult.time||0,newStreak).then(ok=>{
+          if(ok)setClubPostToast({clubName:CLUBS[autoCode]?.name||"your club",iqScore:dailyResult.iq.totalScore});
         });
       }
       // Auto-post to GLOBAL leaderboard, always, even without an account
-      if(result?.iq?.totalScore){
+      if(dailyResult?.iq?.totalScore){
         const globalName=autoName||getOrCreateAnonymousName();
-        upsertGlobalEntry(globalName,result.iq.totalScore,result.time||0,newStreak,autoCode||null);
+        upsertGlobalEntry(globalName,dailyResult.iq.totalScore,dailyResult.time||0,newStreak,autoCode||null);
       }
+      completedResult.mode="daily";
+      completedResult.daySeed=today;
+      completedResult.day_seed=today;
     }
-    addHist(result);
+    addHist(completedResult);
     // Auto-sync profile if it exists
     const prof=getProfile();
     if(prof&&prof.nickname){
