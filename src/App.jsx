@@ -104,7 +104,39 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-menu-surface{background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;border:1px solid rgba(26,20,16,.10)!important;box-shadow:0 16px 44px rgba(26,20,16,.13),inset 0 1px 0 rgba(255,255,255,.76)!important}
 .rk-modal-surface{background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;border:1px solid rgba(26,20,16,.09)!important;box-shadow:0 22px 70px rgba(26,20,16,.14),inset 0 1px 0 rgba(255,255,255,.75)!important}
 
-@media (prefers-reduced-motion: reduce){.rk-hero-live,.rk-soft-glow,.rk-count-live,.rk-streak-copy,.rk-float,.rk-pulse,.rk-live-dot,.rk-sweep:after{animation:none!important}}
+
+
+/* ─── FULL SCORECARD VISUAL REFRESH ───────────────────────────────────────── */
+.rk-score-shell{
+  background:radial-gradient(circle at top,rgba(255,255,255,.72),transparent 240px),linear-gradient(180deg,#F8F4EE 0%,#F5EEE2 100%);
+  min-height:100vh;
+}
+.rk-editorial-header{display:flex;flex-direction:column;gap:4px;margin-top:20px;margin-bottom:12px}
+.rk-editorial-kicker{font-size:10px;letter-spacing:2.1px;text-transform:uppercase;font-weight:800;color:rgba(23,107,66,.78)}
+.rk-editorial-title{font-family:'Fraunces',Georgia,serif;font-size:19px;line-height:1.08;font-weight:900;letter-spacing:-.4px;color:#1A1410}
+.rk-editorial-copy{font-size:12px;line-height:1.55;color:rgba(26,20,16,.58);font-weight:600}
+.rk-score-divider{height:1px;margin:18px 0 4px;background:linear-gradient(90deg,transparent,rgba(160,120,40,.32),transparent)}
+.rk-score-card{position:relative;overflow:hidden;background:linear-gradient(145deg,#FFFDF8 0%,#F7F0E5 100%);border:1px solid rgba(26,20,16,.07);border-radius:22px;padding:20px;margin-bottom:16px;box-shadow:0 6px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.rk-score-card:hover{transform:translateY(-1px);border-color:rgba(23,107,66,.12);box-shadow:0 12px 30px rgba(26,20,16,.06),inset 0 1px 0 rgba(255,255,255,.82)}
+.rk-score-card:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(255,255,255,.52),transparent 34%);pointer-events:none}
+.rk-iq-hero{position:relative;overflow:hidden;background:radial-gradient(circle at top,rgba(255,255,255,.08),transparent 40%),linear-gradient(155deg,#062B18 0%,#0D4A2E 52%,#051F11 100%);background-size:160% 160%;animation:rkHeroDrift 14s ease-in-out infinite;border-radius:28px;padding:30px 24px 24px;border:1px solid rgba(201,168,76,.14);box-shadow:0 18px 48px rgba(6,43,24,.24),inset 0 1px 0 rgba(255,255,255,.08);color:#fff}
+.rk-iq-glow{position:absolute;width:240px;height:240px;border-radius:999px;background:radial-gradient(circle,rgba(201,168,76,.16),transparent 72%);top:-90px;left:50%;transform:translateX(-50%);pointer-events:none}
+.rk-iq-score{position:relative;z-index:2;font-family:'Fraunces',Georgia,serif;font-size:78px;line-height:.92;letter-spacing:-3px;font-weight:900;text-align:center;margin-bottom:8px;color:#F4E7BE}
+.rk-iq-label{text-align:center;font-size:11px;color:rgba(255,255,255,.58);letter-spacing:1.8px;text-transform:uppercase;font-weight:800}
+.rk-iq-sub{text-align:center;font-family:'Fraunces',Georgia,serif;font-size:20px;font-weight:800;color:#F4E7BE;margin-top:6px}
+.rk-iq-summary{max-width:270px;margin:12px auto 0;text-align:center;font-size:13px;line-height:1.7;color:rgba(255,255,255,.68)}
+.rk-iq-meta{margin-top:18px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:11px;color:rgba(255,255,255,.56)}
+.rk-breakdown-list{display:flex;flex-direction:column;gap:12px}
+.rk-breakdown-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 15px;border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.84),rgba(247,240,229,.88));border:1px solid rgba(26,20,16,.05);box-shadow:0 4px 12px rgba(26,20,16,.03),inset 0 1px 0 rgba(255,255,255,.72)}
+.rk-breakdown-left{flex:1}.rk-breakdown-title{font-size:14px;font-weight:800;color:#1A1410;margin-bottom:2px}.rk-breakdown-sub{font-size:11px;line-height:1.45;color:rgba(26,20,16,.52)}
+.rk-breakdown-pill{flex-shrink:0;background:rgba(23,107,66,.08);border:1px solid rgba(23,107,66,.08);border-radius:999px;padding:6px 11px;font-size:12px;font-weight:800;color:#176B42}
+.rk-coach-card{display:flex;align-items:flex-start;gap:14px;padding:18px;border-radius:20px;background:linear-gradient(145deg,#FFFDF8,#F5EFE3);border:1px solid rgba(26,20,16,.06);box-shadow:0 6px 18px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.72)}
+.rk-coach-icon{width:38px;height:38px;flex-shrink:0;border-radius:999px;background:rgba(23,107,66,.08);border:1px solid rgba(23,107,66,.08);display:flex;align-items:center;justify-content:center;font-size:16px}.rk-coach-copy{font-size:15px;line-height:1.7;color:rgba(26,20,16,.78);font-weight:700}
+.rk-practice-card{background:linear-gradient(145deg,#FFFDF8,#F7F1E7);border:1px solid rgba(26,20,16,.06);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 4px 16px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.72)}
+.rk-practice-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.rk-practice-score{font-family:'Fraunces',Georgia,serif;font-size:38px;line-height:1;letter-spacing:-1.5px;color:#176B42}.rk-practice-meta{font-size:11px;color:rgba(26,20,16,.5);line-height:1.5}.rk-practice-coach{margin-top:12px;font-size:14px;line-height:1.7;color:rgba(26,20,16,.72);font-weight:700}
+.rk-soft-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:rgba(23,107,66,.06);border:1px solid rgba(23,107,66,.08);color:#176B42;font-size:11px;font-weight:800}.rk-soft-pill-muted{background:rgba(26,20,16,.045);border:1px solid rgba(26,20,16,.05);color:rgba(26,20,16,.58)}
+
+@media (prefers-reduced-motion: reduce){.rk-hero-live,.rk-iq-hero,.rk-soft-glow,.rk-count-live,.rk-streak-copy,.rk-float,.rk-pulse,.rk-live-dot,.rk-sweep:after{animation:none!important}}
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
@@ -5196,63 +5228,43 @@ function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHom
   const [displayScore,setDisplayScore]=useState(0);
   const [isPB,setIsPB]=useState(false);
   useEffect(()=>{
-    // Check personal best before animating
     const hist=getHist().filter(e=>e.iqScore!=null);
     const prevBest=hist.length>1?Math.max(...hist.slice(0,-1).map(e=>e.iqScore)):0;
     if(iq.totalScore>prevBest&&hist.length>0)setIsPB(true);
-    // Count-up animation
     const target=iq.totalScore;
-    const duration=800;
-    const steps=40;
+    const duration=760;
+    const steps=38;
     const interval=duration/steps;
     let step=0;
     const timer=setInterval(()=>{
       step++;
       const progress=step/steps;
-      const eased=1-Math.pow(1-progress,3); // ease-out cubic
+      const eased=1-Math.pow(1-progress,3);
       setDisplayScore(Math.round(eased*target));
       if(step>=steps){clearInterval(timer);setDisplayScore(target);}
     },interval);
     return()=>clearInterval(timer);
   },[iq.totalScore]);
+
+  const bestFitId=allSections?[...allSections].sort((a,b)=>b.score-a.score)[0]?.id:null;
+  const matched=chosenSec&&bestFitId&&chosenSec===bestFitId;
+  const coachLine=iq.levelExplanation||"A cleaner Charleston read, with one clear next move.";
+  const nextLabel=matched?"Best section read":"Section to review";
+
   return(
-    <div className="rk-lux-card-dark" style={{borderRadius:22,overflow:"hidden",background:`linear-gradient(155deg,${C.hero1} 0%,${C.hero2} 54%,${C.hero3} 100%)`,padding:isHome?"25px 20px 22px":"28px 20px 24px",textAlign:"center",boxShadow:"0 16px 44px rgba(6,43,24,.22),inset 0 1px 0 rgba(255,255,255,.08)",position:"relative"}}>
-      <div style={{fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:3,fontWeight:700,marginBottom:16}}>
-        {isDaily?`DAILY RACKLE · #${dayNum}`:"PRACTICE · RACKLE SCORE"}
-      </div>
-      {!isHome&&<div style={{fontSize:9,color:C.gilt,letterSpacing:3,fontWeight:700,marginBottom:8}}>TODAY’S CHARLESTON</div>}
-      <div style={{fontFamily:F.d,fontSize:isHome?92:72,fontWeight:900,color:"#F3D46B",lineHeight:1,letterSpacing:-2.8,
-        textShadow:`0 2px 0 rgba(0,0,0,0.12)`,marginBottom:isHome?8:5}}>{displayScore}</div>
-      {isPB&&<div className="rk-pop" style={{display:"inline-flex",alignItems:"center",gap:5,background:C.gilt+"22",border:`1px solid ${C.gilt}40`,borderRadius:20,padding:"4px 12px",marginBottom:8}}>
-        <span style={{fontSize:13}}>🏆</span>
-        <span style={{fontSize:10,fontWeight:800,color:C.gilt,letterSpacing:1}}>NEW PERSONAL BEST!</span>
-      </div>}
-      <div style={{width:48,height:1.5,background:`linear-gradient(90deg,transparent,${C.gilt},transparent)`,margin:`${isPB?8:12}px auto 14px`}}/>
-      <div style={{fontFamily:F.d,fontSize:21,fontWeight:900,color:"#fff",letterSpacing:-0.3,marginBottom:iq.styleName?14:12}}>{iq.level}</div>
-      {iq.styleName&&<div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"5px 12px",fontSize:11,color:C.gilt,fontWeight:900,marginBottom:14,letterSpacing:0.2}}>{iq.styleName}</div>}
-      <div style={{fontSize:11,color:"rgba(255,255,255,0.55)",lineHeight:1.55,marginBottom:18,maxWidth:250,marginLeft:"auto",marginRight:"auto"}}>{iq.levelExplanation}</div>
-      <div style={{width:"100%",height:0.5,background:"rgba(255,255,255,0.1)",marginBottom:14}}/>
-      <div style={{display:"flex",justifyContent:"center",gap:24,flexWrap:"wrap"}}>
-        {section&&<div style={{textAlign:"center"}}>
-          <div style={{fontSize:8,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginBottom:3}}>SECTION</div>
-          {(()=>{
-            // Determine if the player's chosen section was the best fit
-            const bestFitId=allSections?[...allSections].sort((a,b)=>b.score-a.score)[0]?.id:null;
-            const matched=chosenSec&&bestFitId&&chosenSec===bestFitId;
-            const hasChoice=!!chosenSec&&!!bestFitId;
-            return(
-              <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:5}}>
-                <div style={{fontSize:12,color:"rgba(255,255,255,0.9)",fontWeight:700}}>{section}</div>
-                {hasChoice&&<span style={{fontSize:11,fontWeight:800,color:matched?"#6EE7A0":"#F87171",lineHeight:1}}>{matched?"✓":"✗"}</span>}
-              </div>
-            );
-          })()}
-        </div>}
-        {totalTime>0&&<><div style={{width:1,background:"rgba(255,255,255,0.1)"}}/>
-        <div style={{textAlign:"center"}}>
-          <div style={{fontSize:8,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginBottom:3}}>TIME</div>
-          <div style={{fontSize:12,color:"rgba(255,255,255,0.9)",fontWeight:700}}>⏱ {fT(totalTime)}</div>
-        </div></>}
+    <div className="rk-iq-hero rk-sweep" style={isHome?{padding:"30px 22px 26px"}:undefined}>
+      <div className="rk-iq-glow" />
+      <div className="rk-iq-label">{isDaily?`Daily Rackle IQ · #${dayNum}`:"Practice Rackle IQ"}</div>
+      <div className="rk-iq-score" style={isHome?{fontSize:92}:undefined}>{displayScore}</div>
+      {isPB&&<div className="rk-pop rk-soft-pill" style={{background:"rgba(201,168,76,.16)",border:"1px solid rgba(201,168,76,.28)",color:"#F4E7BE",margin:"0 auto 10px",justifyContent:"center",width:"fit-content"}}>🏆 New personal best</div>}
+      <div className="rk-iq-sub">{iq.level}</div>
+      {iq.styleName&&<div className="rk-soft-pill" style={{margin:"10px auto 0",background:"rgba(201,168,76,.14)",border:"1px solid rgba(201,168,76,.26)",color:"#F4E7BE",justifyContent:"center",width:"fit-content"}}>{iq.styleName}</div>}
+      <div className="rk-iq-summary">{coachLine}</div>
+      <div className="rk-iq-meta">
+        {section&&<span>{section}{chosenSec&&bestFitId?matched?" ✓":" · review":null}</span>}
+        {section&&totalTime>0&&<span>•</span>}
+        {totalTime>0&&<span>{fT(totalTime)}</span>}
+        {!section&&<span>{nextLabel}</span>}
       </div>
     </div>
   );
@@ -5319,32 +5331,34 @@ function QualityPip({quality}){
 
 // SCORE BAR (all jade)
 function ScoreBar({label,score,max,note}){
+  const titleMap={
+    "Direction Quality":"Direction",
+    "Tile Strength":"Tile Read",
+    "Pass Quality":"Passing",
+    "Timing Score":"Flow",
+    "Direction":"Direction",
+    "Tile Read":"Tile Read",
+    "Passing":"Passing",
+    "Flow":"Flow",
+  };
+  const cleanLabel=titleMap[label]||label;
   const pct=Math.round(score/max*100);
+  const coach=pct>=80?"Strong control":pct>=55?"Good foundation":"Needs attention";
   return(
-    <div style={{marginBottom:14}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:4}}>
-        <span style={{fontSize:12,fontWeight:700,color:C.ink}}>{label}</span>
-        <span style={{fontSize:12,fontWeight:800,color:C.jade,fontFamily:F.d}}>{score}<span style={{fontSize:9,color:C.mut,fontWeight:400}}>/{max}</span></span>
+    <div className="rk-breakdown-row">
+      <div className="rk-breakdown-left">
+        <div className="rk-breakdown-title">{cleanLabel}</div>
+        <div className="rk-breakdown-sub">{note||coach}</div>
       </div>
-      <div style={{height:6,borderRadius:3,background:C.bdr,overflow:"hidden",marginBottom:note?3:0}}>
-        <div className="rk-bar" style={{height:"100%",borderRadius:3,background:`linear-gradient(90deg,${C.jade},#22A865)`,
-          "--w":`${pct}%`,width:`${pct}%`}}/>
-      </div>
-      {note&&<div style={{fontSize:10,color:C.mut,lineHeight:1.4}}>{note}</div>}
+      <div className="rk-breakdown-pill">{score}<span style={{opacity:.55,fontWeight:700}}>/{max}</span></div>
     </div>
   );
 }
 
 // CHIP
 function Chip({label,type}){
-  const map={
-    protect:{bg:C.sage,color:C.sageB,border:`1px solid ${C.sageB}20`},
-    weak:{bg:C.amber,color:C.amberB,border:`1px solid ${C.amberB}20`},
-    bad:{bg:"#F5EDE6",color:"#5C3010",border:"1px solid rgba(92,48,16,0.15)"},
-    neutral:{bg:C.bg2,color:C.mut,border:`1px solid ${C.bdr}`},
-  };
-  const m=map[type]||map.neutral;
-  return <span style={{fontSize:10,fontWeight:600,background:m.bg,color:m.color,border:m.border,borderRadius:20,padding:"3px 10px",display:"inline-block",margin:"2px 3px"}}>{label}</span>;
+  const muted=type==="neutral";
+  return <span className={`rk-soft-pill ${muted?"rk-soft-pill-muted":""}`} style={{margin:"2px 3px"}}>{label}</span>;
 }
 
 // ─── SPECIFIC HAND RECOMMENDER CARD ─────────────────────────────────────────
@@ -5673,14 +5687,20 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const scoreColor=(v,max)=>v/max>=0.8?C.jade:v/max>=0.55?C.gold:C.cinn;
 
   return(
-    <div>
+    <div className="rk-score-shell">
+      <div className="rk-editorial-header">
+        <div className="rk-editorial-kicker">Daily Rackle</div>
+        <div className="rk-editorial-title">Your Charleston Read</div>
+        <div className="rk-editorial-copy">Cleaner passing. Better table control.</div>
+      </div>
+      <div className="rk-score-divider" />
       {/* ① IQ HERO */}
       <div style={{marginBottom:10}}>
         <IQHero iq={iq} isDaily dayNum={dayNum} section={section} totalTime={iq.totalTime||0} chosenSec={chosenSec} allSections={allSections}/>
       </div>
 
       {/* ①b STYLE, light identity layer */}
-      {iq.styleName&&<div style={{...S.card,display:"flex",alignItems:"center",gap:10,marginBottom:10,background:C.sage,border:`1px solid ${C.jade}20`}}>
+      {iq.styleName&&<div className="rk-score-card" style={{display:"flex",alignItems:"center",gap:10,marginBottom:10,background:C.sage,border:`1px solid ${C.jade}20`}}>
         <div style={{width:32,height:32,borderRadius:10,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>✨</div>
         <div style={{flex:1}}>
           <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:800,marginBottom:2}}>YOUR STYLE</div>
@@ -5883,7 +5903,13 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
   const passDots=(iq.passInsights||[]).map(p=>({strong:"🟢",weak:"🔴",mixed:"🟡",neutral:"⚪"}[p.quality]||"⚪")).join("");
 
   return(
-    <div>
+    <div className="rk-score-shell">
+      <div className="rk-editorial-header">
+        <div className="rk-editorial-kicker">Practice</div>
+        <div className="rk-editorial-title">Practice Scorecard</div>
+        <div className="rk-editorial-copy">A fast read on your rack, confidence, and next best move.</div>
+      </div>
+      <div className="rk-score-divider" />
       {/* IQ Hero */}
       <div style={{marginBottom:10}}>
         <IQHero iq={iq} isDaily={false} section={section} totalTime={iq.totalTime||0} chosenSec={chosenSec} allSections={allSections}/>
@@ -5908,7 +5934,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
       {/* YOUR PASSES, closed, dots badge */}
       {iq.passInsights&&iq.passInsights.length>0&&(
         <CollapsibleSection label="Your Passes" desc="The passes that shaped the Charleston" icon="🔄" open={openSec.passes} onToggle={()=>toggle("passes")} badge={passDots||undefined}>
-          <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden"}}>
+          <div className="rk-score-card" style={{marginBottom:8,padding:0,overflow:"hidden"}}>
             {iq.passInsights.map((p,i)=>{
               const qBg={strong:"#EDF5F0",weak:"#FEF0F0",mixed:"#FBF3E2",neutral:"#fff"};
               const qColor={strong:C.jade,weak:C.cinn,mixed:C.amberB,neutral:C.mut};
@@ -6826,7 +6852,7 @@ function ScorecardScreen({res,home,dayNum,onPractice,setScreen}){
     />
   );
   return(
-    <div style={S.pg} className="rk-pg">
+    <div style={S.pg} className="rk-pg rk-score-shell">
       <RackleHeader onBack={home} setScreen={setScreen}/>
       <DailyIQScorecard iq={res.iq} hand={res.finalRack||[]} startingRack={res.startingRack||[]} passLog={res.passLog||[]} dayNum={dayNum} section={res.section} chosenSec={res.chosenSec} chosenHand={res.chosenHand} allSections={res.allSections||[]} onHome={home} onPractice={onPractice} onCoachMode={enterCoach} setScreen={setScreen}/>
       <Footer/>
