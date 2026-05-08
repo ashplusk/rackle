@@ -8758,7 +8758,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div role="button" tabIndex={0} onClick={showScorecard} onKeyDown={(e)=>{if(e.key==="Enter"||e.key===" ")showScorecard();}} style={{width:"100%",border:"none",background:`linear-gradient(150deg,${C.hero1},${C.hero2} 58%,${C.hero3})`,cursor:"pointer",padding:"30px 20px 24px",textAlign:"center",position:"relative",overflow:"hidden"}}>
         <div aria-hidden style={{position:"absolute",right:-12,bottom:-20,fontSize:116,opacity:0.04}}>🀄</div>
         <div style={{fontSize:10,color:"rgba(255,255,255,0.45)",letterSpacing:3.5,fontWeight:900,marginBottom:12}}>DAILY RACKLE · #{dn}</div>
-        <div className="rk-pop" style={{fontFamily:F.d,fontSize:88,fontWeight:900,color:brightScoreColor,letterSpacing:-5,lineHeight:0.92,textShadow:`0 0 34px rgba(243,212,107,0.46), 0 3px 0 rgba(0,0,0,0.14)`}}>{iq?.totalScore||dRes?.rating||"✓"}</div>
+        <div className="rk-pop" style={{fontFamily:F.d,fontSize:80,fontWeight:900,color:brightScoreColor,letterSpacing:-4,lineHeight:0.92}}>{iq?.totalScore||dRes?.rating||"✓"}</div>
         <div style={{width:56,height:2,background:`linear-gradient(90deg,transparent,${brightScoreColor},transparent)`,margin:"18px auto 16px",borderRadius:2}}/>
         <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:"#fff",lineHeight:1.08,marginBottom:iq?.styleName?14:12}}>{iq?.level||"Daily complete"}</div>
         {iq?.styleName&&<div style={{display:"inline-flex",alignItems:"center",gap:5,border:`1px solid ${brightScoreColor}55`,background:brightScoreColor+"18",borderRadius:999,padding:"7px 14px",fontSize:11,fontWeight:900,color:brightScoreColor,marginBottom:16}}>{iq.styleName}</div>}
@@ -8775,12 +8775,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div style={{padding:16,display:"grid",gap:12}}>
         <button onClick={copyShare} style={{width:"100%",border:`1px solid ${C.gold}25`,background:`linear-gradient(135deg,#FFF9ED,#F7EFE0)`,borderRadius:14,padding:"13px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left"}}>
           <div style={{width:39,height:39,borderRadius:12,background:C.gold+"14",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>📲</div>
-          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>Challenge Your Club</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Tap to copy · Drop it in your group chat</div></div>
+          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>Challenge Your Club</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Tap to copy · Drop it in your group chat</div></div>
           <span style={{fontSize:18,color:C.gold}}>›</span>
         </button>
         <button onClick={showScorecard} style={{width:"100%",border:`1px solid ${C.jade}20`,background:C.jade+"06",borderRadius:14,padding:"13px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left"}}>
           <div style={{width:39,height:39,borderRadius:12,background:C.jade+"13",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>🎓</div>
-          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>Improve Your Game</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Best path · Other reads · Next move</div></div>
+          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>Improve Your Game</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Best path · Other reads · Next move</div></div>
           <span style={{fontSize:18,color:C.jade}}>›</span>
         </button>
       </div>
