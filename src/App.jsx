@@ -158,7 +158,7 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
 
         {/* ── SCORE BADGE ── */}
         <div style={{textAlign:"center",margin:"4px 0 10px"}}>
-          <div style={{fontFamily:SERIF,fontSize:74,fontWeight:700,color:lvlCol,lineHeight:0.92,letterSpacing:-3}}>{iq.totalScore}</div>
+          <div style={{fontFamily:SERIF,fontSize:82,fontWeight:700,color:lvlCol,lineHeight:0.92,letterSpacing:-3}}>{iq.totalScore}</div>
           <div style={{fontFamily:SERIF,fontSize:21,fontWeight:700,color:"#fff",lineHeight:1.15,marginTop:8}}>{iq.level}</div>
           {iq.styleName&&<div style={{fontSize:11,color:"rgba(255,255,255,0.55)",fontFamily:SANS,marginTop:8,letterSpacing:0.3}}>{iq.styleName}</div>}
           {tableLine&&<div style={{fontSize:13,color:"rgba(255,255,255,0.78)",fontFamily:SANS,margin:"14px auto 0",lineHeight:1.35,maxWidth:250}}>{tableLine}</div>}
@@ -4970,7 +4970,7 @@ function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHom
         {isDaily?`DAILY RACKLE · #${dayNum}`:"PRACTICE · TODAY'S RACK"}
       </div>
       {!isHome&&<div style={{fontSize:9,color:C.gilt,letterSpacing:3,fontWeight:700,marginBottom:8}}>TODAY’S CHARLESTON</div>}
-      <div style={{fontFamily:F.d,fontSize:64,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,
+      <div style={{fontFamily:F.d,fontSize:72,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,
         textShadow:`0 2px 12px rgba(176,138,53,0.4)`,marginBottom:4}}>{displayScore}</div>
       {isPB&&<div className="rk-pop" style={{display:"inline-flex",alignItems:"center",gap:5,background:C.gilt+"22",border:`1px solid ${C.gilt}40`,borderRadius:20,padding:"4px 12px",marginBottom:8}}>
         <span style={{fontSize:13}}>🏆</span>
@@ -5050,8 +5050,8 @@ function ShareButton({text,label,sublabel,variant="goldpill"}){
         textAlign:"left",boxShadow:`0 3px 12px ${v.shadow}`,transition:"opacity 0.15s"}}>
         <div style={{width:32,height:32,borderRadius:8,background:iconBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,flexShrink:0}}>{copied?"✓":"📲"}</div>
         <div style={{flex:1,minWidth:0,display:"flex",flexDirection:"column",gap:2}}>
-          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:titleColor,lineHeight:1.2}}>{copied?"Copied to clipboard!":label||"Challenge Your Club"}</div>
-          <div style={{fontSize:11,color:subColor,lineHeight:1.3}}>{copied?"Paste it into your group chat":sublabel||"Tap to copy · drop it in your group chat"}</div>
+          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:titleColor,lineHeight:1.2}}>{copied?"Copied to clipboard!":label||"Challenge your club"}</div>
+          <div style={{fontSize:11,color:subColor,lineHeight:1.3}}>{copied?"Paste it into your group chat":sublabel||"Tap to copy · Drop it in your group chat"}</div>
         </div>
         <span style={{fontSize:14,color:arrowColor,fontWeight:700,flexShrink:0}}>{copied?"":"›"}</span>
       </button>
@@ -5655,7 +5655,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
             }}>
               {/* Subtle shimmer stripe */}
               <div style={{position:"absolute",top:0,left:0,right:0,height:"40%",background:"linear-gradient(180deg,rgba(255,255,255,0.06),transparent)",borderRadius:"14px 14px 0 0",pointerEvents:"none"}}/>
-              <div style={{width:44,height:44,borderRadius:12,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>🧠</div>
+              <div style={{width:44,height:44,borderRadius:12,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>🎯</div>
               <div style={{flex:1}}>
                 <div style={{fontSize:8,color:C.gilt,letterSpacing:2.5,fontWeight:700,marginBottom:6,opacity:0.85}}>TABLE TALK</div>
                 <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:"#fff",lineHeight:1.2,marginBottom:6}}>See The Better Play</div>
@@ -6431,7 +6431,7 @@ function CoachModeScreen({iq,dayNum,section,onBack,setScreen}){
       </div>
 
       <div style={{background:`linear-gradient(145deg,${C.hero2},${C.hero1})`,borderRadius:18,padding:"20px 18px 18px",color:"#fff",marginBottom:12,boxShadow:`0 8px 28px ${C.jade}24`,textAlign:"center"}}>
-        <div style={{fontFamily:F.d,fontSize:64,fontWeight:900,lineHeight:0.92,color:C.gilt,letterSpacing:-2,marginBottom:10}}>{score}</div>
+        <div style={{fontFamily:F.d,fontSize:72,fontWeight:900,lineHeight:0.92,color:C.gilt,letterSpacing:-2,marginBottom:10}}>{score}</div>
         <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,lineHeight:1.1,marginBottom:8}}>{level}</div>
         <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"5px 12px",fontSize:11,color:C.gilt,fontWeight:900,marginBottom:16,letterSpacing:0.2}}>{style}</div>
         <div style={{fontSize:14,lineHeight:1.55,fontWeight:800,maxWidth:310,margin:"0 auto 12px"}}>{tableLine}</div>
@@ -7129,7 +7129,7 @@ function ClubCodeEntry({setScreen}){
   const hasProfile=!!(profile&&profile.nickname);
   const savedCode=hasProfile?getClubCode():null;
   const savedClub=savedCode?CLUBS[savedCode]:null;
-  const myName=getClubName()||(profile?.nickname||null);
+  const myName=(profile?.nickname)||getClubName()||null;
 
   // Eager fetch club stats if in a club
   useEffect(()=>{
@@ -7233,7 +7233,7 @@ function GlobalLeaderboardPill({setScreen}){
   const [entries,setEntries]=useState([]);
   const [loading,setLoading]=useState(false);
   const [fetched,setFetched]=useState(false);
-  const myName=getClubName()||(getProfile()?.nickname||null);
+  const myName=(getProfile()?.nickname)||getClubName()||null;
   const dn=getDayNum();
 
   // Eager fetch on mount so header shows live stats
@@ -7621,13 +7621,13 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
   const [entries,setEntries]=useState([]);
   const [loading,setLoading]=useState(true);
   const [submitting,setSubmitting]=useState(false);
-  const [nameInput,setNameInput]=useState(getClubName()||"");
+  const [nameInput,setNameInput]=useState((getProfile()?.nickname)||getClubName()||"");
   const [submitted,setSubmitted]=useState(false);
   const [nameErr,setNameErr]=useState("");
   const [period,setPeriod]=useState("today");
 
   const iq=withIQStyle(dRes?.iq);
-  const myName=getClubName();
+  const myName=(getProfile()?.nickname)||getClubName();
 
   useEffect(()=>{
     if(!code)return;
@@ -7718,7 +7718,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
           {/* Score preview banner */}
           <div style={{background:`linear-gradient(135deg,#2C2420,#1A1612)`,padding:"14px 16px",display:"flex",alignItems:"center",gap:12}}>
             <div style={{width:44,height:44,borderRadius:12,background:"rgba(255,255,255,0.15)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-              <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:"#fff",lineHeight:1}}>{iq.totalScore}</div>
+              <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:"#fff",lineHeight:1}}>{iq.totalScore}</div>
               <div style={{fontSize:8,color:"rgba(255,255,255,0.7)",fontWeight:700,letterSpacing:0.5}}>IQ</div>
             </div>
             <div style={{flex:1}}>
@@ -8372,7 +8372,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
                     style={{width:"100%",display:"flex",alignItems:"center",gap:10,padding:"11px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left",minHeight:44}}>
                     <div style={{width:32,height:32,borderRadius:9,background:`linear-gradient(135deg,${C.gold}30,${C.gold}18)`,border:`1px solid ${C.gold}40`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>🔥</div>
                     <div style={{flex:1,minWidth:0}}>
-                      <div style={{fontSize:11,fontWeight:700,color:"#5C3D00",fontFamily:F.b,lineHeight:1.2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
+                      <div style={{fontSize:10.5,fontWeight:700,color:"#5C3D00",fontFamily:F.b,lineHeight:1.35,whiteSpace:"normal",overflow:"visible",textOverflow:"clip"}}>
                         {(()=>{
                           const n=firstName?` ${firstName}`:"";
                           if(streak===1){
@@ -8486,7 +8486,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <div style={{background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"24px 20px 20px",textAlign:"center"}}>
               <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:14}}>TODAY'S DAILY · #{dn}</div>
               {iq&&<>
-                <div style={{fontFamily:F.d,fontSize:52,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,textShadow:`0 2px 16px rgba(176,138,53,0.45)`,marginBottom:6}}>{iq.totalScore}</div>
+                <div style={{fontFamily:F.d,fontSize:60,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,textShadow:`0 2px 16px rgba(176,138,53,0.45)`,marginBottom:6}}>{iq.totalScore}</div>
                 <div style={{width:40,height:1.5,background:`linear-gradient(90deg,transparent,${C.gilt},transparent)`,margin:"12px auto 12px"}}/>
                 <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:"#fff",marginBottom:8,letterSpacing:-0.3}}>{iq.level}</div>
                 {iq.styleName&&<div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"5px 12px",fontSize:11,color:C.gilt,fontWeight:900,marginTop:4,marginBottom:14,letterSpacing:0.2}}>{iq.styleName}</div>}
@@ -8519,10 +8519,10 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             {/* ACTIONS */}
             <div style={{background:C.bg,padding:"14px 16px 16px",borderTop:`1px solid ${C.bdr}`}}>
               <div style={{marginBottom:10}}>
-                <ShareButton text={shareText} variant="jadepill" label="Share My Score" sublabel="Tap to copy · drop it in your group chat"/>
+                <ShareButton text={shareText} variant="jadepill" label="Share my score" sublabel="Tap to copy · Drop it in your group chat"/>
               </div>
               <button onClick={showScorecard} style={{width:"100%",borderRadius:12,background:"#fff",border:`1.5px solid ${C.jade}25`,cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"11px 14px",textAlign:"left",boxShadow:`0 2px 8px ${C.jade}10`}}>
-                <div style={{width:36,height:36,borderRadius:10,background:`linear-gradient(135deg,${C.jade},#115C38)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>🧠</div>
+                <div style={{width:36,height:36,borderRadius:10,background:`linear-gradient(135deg,${C.jade},#115C38)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>🎯</div>
                 <div style={{flex:1}}>
                   <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:5}}>TABLE TALK</div>
                   <div style={{fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.25,marginBottom:5}}>See The Better Play</div>
@@ -8638,7 +8638,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:1}}>Pung, kong, concealed…</div>
         </button>
         <button onClick={()=>setScreen("quiz")} style={{flex:1,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",textAlign:"center"}}>
-          <span style={{fontSize:22}}>🧠</span>
+          <span style={{fontSize:22}}>🎯</span>
           <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700}}>TRAINING</div>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2}}>Section Quiz</div>
           <div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:1}}>Read racks. Pick sections.</div>
@@ -9639,10 +9639,11 @@ function getWeeklyRecapData(){
   weekStart.setHours(0,0,0,0);
   const h=getHist().filter(e=>e.iqScore!=null&&e.ts>=weekStart.getTime());
   if(!h.length)return null;
-  const dailyH=h.filter(e=>e.mode==="daily");
+  const dailyH=h.filter(e=>e.mode==="daily"||e.mode==null||e.isDaily===true||e.daySeed!=null);
   const avgIQ=Math.round(h.reduce((a,e)=>a+e.iqScore,0)/h.length);
   const bestEntry=h.reduce((a,b)=>b.iqScore>a.iqScore?b:a,h[0]);
   const daysPlayed=new Set(h.map(e=>{const d=new Date(e.ts);return`${d.getMonth()}-${d.getDate()}`;})).size;
+  const dailyDaysPlayed=new Set(dailyH.map(e=>{const d=new Date(e.ts);return`${d.getMonth()}-${d.getDate()}`;})).size;
   // Section most played this week
   const secCounts={};h.filter(e=>e.sid).forEach(e=>{secCounts[e.sid]=(secCounts[e.sid]||0)+1;});
   const topSecId=Object.keys(secCounts).sort((a,b)=>secCounts[b]-secCounts[a])[0]||null;
@@ -9652,7 +9653,7 @@ function getWeeklyRecapData(){
   const prevH=getHist().filter(e=>e.iqScore!=null&&e.ts>=prevWeekStart.getTime()&&e.ts<weekStart.getTime());
   const prevAvg=prevH.length?Math.round(prevH.reduce((a,e)=>a+e.iqScore,0)/prevH.length):null;
   const delta=prevAvg!=null?avgIQ-prevAvg:null;
-  return{h,dailyH,avgIQ,bestEntry,daysPlayed,topSec,delta,prevAvg,weekRounds:h.length};
+  return{h,dailyH,avgIQ,bestEntry,daysPlayed,dailyDaysPlayed,topSec,delta,prevAvg,weekRounds:h.length};
 }
 
 function shouldShowWeeklyRecap(){
@@ -9688,11 +9689,11 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
   // Week-in-progress banner — shown any day except Sunday
   const weekInProgress=!isSunday;
 
-  const {avgIQ,bestEntry,daysPlayed,topSec,delta,weekRounds,dailyH}=data;
+  const {avgIQ,bestEntry,daysPlayed,dailyDaysPlayed,topSec,delta,weekRounds,dailyH}=data;
   const lvlTier=getIQTier(avgIQ);
   const lvl={label:lvlTier.level,color:lvlTier.color};
 
-  const shareText=`🀄 My Rackle week:\n${avgIQ} avg score · ${daysPlayed}/7 days · ${weekRounds} hands\n${lvl.label}${topSec?` · Fave: ${topSec.icon} ${topSec.name}`:""}\nplayrackle.com`;
+  const shareText=`🀄 My Rackle week:\n${avgIQ} avg score · ${dailyDaysPlayed||dailyH.length}/7 dailies · ${weekRounds} hands\n${lvl.label}${topSec?` · Fave: ${topSec.icon} ${topSec.name}`:""}\nplayrackle.com`;
 
   return(
     <div style={S.pg} className="rk-pg">
@@ -9702,14 +9703,14 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
       <div style={{borderRadius:20,background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"24px 20px 20px",textAlign:"center",boxShadow:"0 8px 32px rgba(0,0,0,0.2)",marginBottom:12}}>
         <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:10}}>YOUR WEEK IN RACKLE</div>
         {profile?.nickname&&<div style={{fontSize:12,color:"rgba(255,255,255,0.45)",marginBottom:8}}>{profile.nickname}</div>}
-        <div style={{fontFamily:F.d,fontSize:56,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,marginBottom:4}}>{avgIQ}</div>
+        <div style={{fontFamily:F.d,fontSize:64,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,marginBottom:4}}>{avgIQ}</div>
         <div style={{fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginBottom:6}}>AVG TODAY'S RACK</div>
         <div style={{fontFamily:F.d,fontSize:18,fontWeight:800,color:"#fff",marginBottom:16,lineHeight:1}}>{lvl.label}</div>
         <div style={{width:"100%",height:0.5,background:"rgba(255,255,255,0.08)",marginBottom:14}}/>
         <div style={{display:"flex",justifyContent:"center",gap:24,flexWrap:"wrap"}}>
           <div style={{textAlign:"center"}}>
-            <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.gilt}}>{daysPlayed}<span style={{fontSize:11,color:"rgba(255,255,255,0.3)",fontFamily:F.b}}>/7</span></div>
-            <div style={{fontSize:8,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginTop:2}}>DAYS</div>
+            <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.gilt}}>{dailyDaysPlayed||dailyH.length}<span style={{fontSize:11,color:"rgba(255,255,255,0.3)",fontFamily:F.b}}>/7</span></div>
+            <div style={{fontSize:8,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginTop:2}}>DAILIES</div>
           </div>
           <div style={{width:1,background:"rgba(255,255,255,0.08)"}}/>
           <div style={{textAlign:"center"}}>
@@ -9758,8 +9759,8 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
             <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>BEST IQ</div>
           </div>
           <div style={{flex:1,background:C.cinn+"06",borderRadius:10,padding:"10px",textAlign:"center",border:`1px solid ${C.cinn}15`}}>
-            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.cinn}}>{daysPlayed}</div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>DAYS PLAYED</div>
+            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.cinn}}>{dailyDaysPlayed||dailyH.length}</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>DAILIES</div>
           </div>
         </div>
       </div>
@@ -10607,7 +10608,7 @@ export default function Rackle(){
         upsertGlobalEntry(globalName,result.iq.totalScore,result.time||0,newStreak,autoCode||null);
       }
     }
-    addHist(result);
+    addHist({...result,mode});
     // Auto-sync profile if it exists
     const prof=getProfile();
     if(prof&&prof.nickname){
