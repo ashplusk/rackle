@@ -5090,9 +5090,9 @@ function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHom
         <span style={{fontSize:10,fontWeight:800,color:C.gilt,letterSpacing:1}}>NEW PERSONAL BEST!</span>
       </div>}
       <div style={{width:48,height:1.5,background:`linear-gradient(90deg,transparent,${C.gilt},transparent)`,margin:`${isPB?8:12}px auto 14px`}}/>
-      <div style={{fontFamily:F.d,fontSize:21,fontWeight:900,color:"#fff",letterSpacing:-0.3,marginBottom:12}}>{iq.level}</div>
-      {iq.styleName&&<div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"4px 11px",fontSize:11,color:C.gilt,fontWeight:900,marginBottom:10,letterSpacing:0.2}}>{iq.styleName}</div>}
-      <div style={{fontSize:11,color:"rgba(255,255,255,0.55)",lineHeight:1.5,marginBottom:16,maxWidth:240,marginLeft:"auto",marginRight:"auto"}}>{iq.levelExplanation}</div>
+      <div style={{fontFamily:F.d,fontSize:21,fontWeight:900,color:"#fff",letterSpacing:-0.3,marginBottom:iq.styleName?14:12}}>{iq.level}</div>
+      {iq.styleName&&<div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"5px 12px",fontSize:11,color:C.gilt,fontWeight:900,marginBottom:14,letterSpacing:0.2}}>{iq.styleName}</div>}
+      <div style={{fontSize:11,color:"rgba(255,255,255,0.55)",lineHeight:1.55,marginBottom:18,maxWidth:250,marginLeft:"auto",marginRight:"auto"}}>{iq.levelExplanation}</div>
       <div style={{width:"100%",height:0.5,background:"rgba(255,255,255,0.1)",marginBottom:14}}/>
       <div style={{display:"flex",justifyContent:"center",gap:24,flexWrap:"wrap"}}>
         {section&&<div style={{textAlign:"center"}}>
@@ -7466,7 +7466,7 @@ function GlobalLeaderboardPill({setScreen}){
   const hasData=entries.length>0;
 
   return(
-    <div style={{marginBottom:0}}>
+    <div id="global-leaderboard" style={{marginBottom:0}}>
       <button onClick={toggle} style={{width:"100%",display:"flex",alignItems:"flex-start",justifyContent:"space-between",padding:"16px 14px",borderRadius:open?"12px 12px 0 0":"12px 12px 0 0",background:"#2460A806",border:"none",borderBottom:open?"none":`1px solid #2460A815`,cursor:"pointer",textAlign:"left"}}>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:9,color:"#2460A8",letterSpacing:1.5,fontWeight:700,marginBottom:8}}>🌍 GLOBAL · DAY #{dn}</div>
@@ -8574,6 +8574,16 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const tomorrowHint=tomorrowHints[dn%tomorrowHints.length];
 
   const levelLine=iq?.totalScore>=90?"Elite read. Your club will notice.":iq?.totalScore>=80?"Strong read. Make them chase it.":iq?.totalScore>=70?"Solid read. One better pass moves you up.":iq?.totalScore>=60?"You're warming up. The next rack is where it clicks.":"Tough rack. Come back sharper tomorrow.";
+  const brightScoreColor="#F3D46B";
+  const goGlobalRank=(e)=>{
+    e?.stopPropagation?.();
+    setScreen("home");
+    setTimeout(()=>document.getElementById("global-leaderboard")?.scrollIntoView({behavior:"smooth",block:"center"}),60);
+  };
+  const goClubRank=(e)=>{
+    e?.stopPropagation?.();
+    setScreen(getClubCode()?"leaderboard":"clubs");
+  };
 
   const copyShare=async()=>{
     const passEmoji=(iq?.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
@@ -8661,19 +8671,23 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div style={{width:34,height:34,borderRadius:11,background:C.gold+"16",border:`1px solid ${C.gold}28`,display:"flex",alignItems:"center",justifyContent:"center"}}>🔥</div>
         <div style={{flex:1,fontSize:13,fontWeight:900,color:C.ink}}>{streakText}</div>
       </div>
-      <button onClick={showScorecard} style={{width:"100%",border:"none",background:`linear-gradient(150deg,${C.hero1},${C.hero2} 58%,${C.hero3})`,cursor:"pointer",padding:"30px 20px 24px",textAlign:"center",position:"relative",overflow:"hidden"}}>
+      <div role="button" tabIndex={0} onClick={showScorecard} onKeyDown={(e)=>{if(e.key==="Enter"||e.key===" ")showScorecard();}} style={{width:"100%",border:"none",background:`linear-gradient(150deg,${C.hero1},${C.hero2} 58%,${C.hero3})`,cursor:"pointer",padding:"30px 20px 24px",textAlign:"center",position:"relative",overflow:"hidden"}}>
         <div aria-hidden style={{position:"absolute",right:-12,bottom:-20,fontSize:116,opacity:0.04}}>🀄</div>
         <div style={{fontSize:10,color:"rgba(255,255,255,0.45)",letterSpacing:3.5,fontWeight:900,marginBottom:12}}>DAILY RACKLE · #{dn}</div>
-        <div className="rk-pop" style={{fontFamily:F.d,fontSize:88,fontWeight:900,color:C.gilt,letterSpacing:-5,lineHeight:0.92,textShadow:"0 3px 0 rgba(0,0,0,0.08)"}}>{iq?.totalScore||dRes?.rating||"✓"}</div>
-        <div style={{width:52,height:2,background:C.gilt,margin:"17px auto 14px",borderRadius:2}}/>
-        <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:"#fff",lineHeight:1.05,marginBottom:10}}>{iq?.level||"Daily complete"}</div>
-        {iq?.styleName&&<div style={{display:"inline-flex",alignItems:"center",gap:5,border:`1px solid ${C.gilt}55`,background:C.gilt+"18",borderRadius:999,padding:"6px 13px",fontSize:11,fontWeight:900,color:C.gilt,marginBottom:13}}>{iq.styleName}</div>}
+        <div className="rk-pop" style={{fontFamily:F.d,fontSize:88,fontWeight:900,color:brightScoreColor,letterSpacing:-5,lineHeight:0.92,textShadow:`0 0 34px rgba(243,212,107,0.46), 0 3px 0 rgba(0,0,0,0.14)`}}>{iq?.totalScore||dRes?.rating||"✓"}</div>
+        <div style={{width:56,height:2,background:`linear-gradient(90deg,transparent,${brightScoreColor},transparent)`,margin:"18px auto 16px",borderRadius:2}}/>
+        <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:"#fff",lineHeight:1.08,marginBottom:iq?.styleName?14:12}}>{iq?.level||"Daily complete"}</div>
+        {iq?.styleName&&<div style={{display:"inline-flex",alignItems:"center",gap:5,border:`1px solid ${brightScoreColor}55`,background:brightScoreColor+"18",borderRadius:999,padding:"7px 14px",fontSize:11,fontWeight:900,color:brightScoreColor,marginBottom:16}}>{iq.styleName}</div>}
         <div style={{fontSize:13,color:"rgba(255,255,255,0.76)",lineHeight:1.5,maxWidth:280,margin:"0 auto"}}>{levelLine}</div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:22,textAlign:"left"}}>
-          <MiniStat value={`#${Math.min(todayPlayers,Math.max(1,todayPlayers-1))}`} label="GLOBAL RANK" accent={C.gilt}/>
-          <MiniStat value={club?"club":"join"} label="CLUB RANK"/>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:24,textAlign:"left"}}>
+          <button onClick={goGlobalRank} style={{border:"none",padding:0,background:"transparent",cursor:"pointer",textAlign:"left"}} aria-label="View global leaderboard">
+            <MiniStat value={`#${Math.min(todayPlayers,Math.max(1,todayPlayers-1))}`} label="GLOBAL RANK" accent={brightScoreColor}/>
+          </button>
+          <button onClick={goClubRank} style={{border:"none",padding:0,background:"transparent",cursor:"pointer",textAlign:"left"}} aria-label={club?"View club leaderboard":"Browse club directory"}>
+            <MiniStat value={club?"club":"join"} label="CLUB RANK"/>
+          </button>
         </div>
-      </button>
+      </div>
       <div style={{padding:16,display:"grid",gap:12}}>
         <button onClick={copyShare} style={{width:"100%",border:`1px solid ${C.gold}25`,background:`linear-gradient(135deg,#FFF9ED,#F7EFE0)`,borderRadius:14,padding:"13px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left"}}>
           <div style={{width:39,height:39,borderRadius:12,background:C.gold+"14",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>📲</div>
