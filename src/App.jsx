@@ -4792,8 +4792,8 @@ function HandTargetPreview({hand,scoredHandObj,chosenSec,chosenSecObj,iq,onCoach
           {onCoachMode&&<button onClick={onCoachMode} style={{width:"100%",background:C.jade+"08",border:`1px solid ${C.jade}20`,borderRadius:10,padding:"9px 12px",cursor:"pointer",display:"flex",alignItems:"center",gap:8,textAlign:"left"}}>
             <span style={{fontSize:14}}>🎓</span>
             <div style={{flex:1}}>
-              <div style={{fontSize:11,fontWeight:700,color:C.jade,lineHeight:1.3}}>See the full tile-by-tile breakdown</div>
-              <div style={{fontSize:10,color:C.mut}}>Open Coach Mode →</div>
+              <div style={{fontSize:11,fontWeight:700,color:C.jade,lineHeight:1.3}}>See What Strong Players Notice</div>
+              <div style={{fontSize:10,color:C.mut}}>Replay your Charleston →</div>
             </div>
           </button>}
         </div>
@@ -4958,7 +4958,7 @@ function MahjongIdentityCard({iq, chosenSec, passLog, finalRack}){
 }
 
 // IQ HERO — shared dark jade gradient hero card used in scorecard + home
-function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections}){
+function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHome=false}){
   if(!iq)return null;
   iq=withIQStyle(iq);
   const [displayScore,setDisplayScore]=useState(0);
@@ -4988,7 +4988,7 @@ function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections}){
       <div style={{fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:3,fontWeight:700,marginBottom:16}}>
         {isDaily?`DAILY RACKLE · #${dayNum}`:"PRACTICE · RACKLE SCORE"}
       </div>
-      <div style={{fontSize:9,color:C.gilt,letterSpacing:3,fontWeight:700,marginBottom:8}}>TODAY’S CHARLESTON</div>
+      {!isHome&&<div style={{fontSize:9,color:C.gilt,letterSpacing:3,fontWeight:700,marginBottom:8}}>TODAY’S CHARLESTON</div>}
       <div style={{fontFamily:F.d,fontSize:64,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,
         textShadow:`0 2px 12px rgba(176,138,53,0.4)`,marginBottom:4}}>{displayScore}</div>
       {isPB&&<div className="rk-pop" style={{display:"inline-flex",alignItems:"center",gap:5,background:C.gilt+"22",border:`1px solid ${C.gilt}40`,borderRadius:20,padding:"4px 12px",marginBottom:8}}>
@@ -4997,7 +4997,7 @@ function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections}){
       </div>}
       <div style={{width:48,height:1.5,background:`linear-gradient(90deg,transparent,${C.gilt},transparent)`,margin:`${isPB?8:12}px auto 14px`}}/>
       <div style={{fontFamily:F.d,fontSize:21,fontWeight:900,color:"#fff",letterSpacing:-0.3,marginBottom:4}}>{iq.level}</div>
-      {iq.styleName&&<div style={{fontSize:12,color:C.gilt,fontWeight:800,marginBottom:8}}>{iq.styleName}</div>}
+      {iq.styleName&&<div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"4px 11px",fontSize:11,color:C.gilt,fontWeight:900,marginBottom:10,letterSpacing:0.2}}>{iq.styleName}</div>}
       <div style={{fontSize:11,color:"rgba(255,255,255,0.55)",lineHeight:1.5,marginBottom:16,maxWidth:240,marginLeft:"auto",marginRight:"auto"}}>{iq.levelExplanation}</div>
       <div style={{width:"100%",height:0.5,background:"rgba(255,255,255,0.1)",marginBottom:14}}/>
       <div style={{display:"flex",justifyContent:"center",gap:24,flexWrap:"wrap"}}>
@@ -5457,8 +5457,6 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           clubRank&&clubTotal?`#${clubRank} of ${clubTotal} in my club`:"";
         const richShareText=`🀄 Daily Rackle #${dayNum} · ${iq.totalScore} · ${iq.level}${iq.styleName?` · ${iq.styleName}`:""}\n${passEmoji?`Passes: ${passEmoji}\n`:""}${rankLine?`${rankLine}\n`:""}Think you can beat it?\nplayrackle.com`;
 
-        const copyInvite=()=>{if(navigator.clipboard)navigator.clipboard.writeText("https://playrackle.com").catch(()=>{});};
-
         return(
           <div style={{marginBottom:10}}>
             {/* Rank pills — only when data has loaded */}
@@ -5517,48 +5515,19 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
               <div style={{fontFamily:"monospace",fontSize:10,color:"#7A6040",background:"rgba(0,0,0,0.035)",borderRadius:8,padding:"9px 12px",marginBottom:10,textAlign:"center",lineHeight:1.85,letterSpacing:0.1}}>
                 {richShareText.split("\n").map((line,i)=>line===""?<div key={i} style={{height:5}}/>:<div key={i}>{line}</div>)}
               </div>
-              <div style={{display:"flex",gap:8}}>
-                <div style={{flex:1}}>
-                  <ShareButton text={richShareText}/>
-                </div>
-                <button onClick={copyInvite} title="Copy invite link" style={{
-                  width:44,height:44,borderRadius:10,flexShrink:0,
-                  background:"rgba(0,0,0,0.04)",border:`1px solid rgba(0,0,0,0.08)`,
-                  cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,
-                }}>🔗</button>
-              </div>
+              <ShareButton text={richShareText}/>
             </div>
           </div>
         );
       })()}
 
-      {/* ③ DAILY CONTEXT — avg/above-below, below share so it's secondary info */}
-      {dailyStats&&(()=>{
-        const isFirst=!ST.get("hadFirstDaily",false)||ST.get("rnd",0)<=1;
-        return(
-          <div className="rk-in" style={{display:"flex",alignItems:"center",gap:10,background:C.jade+"08",border:`1px solid ${C.jade}20`,borderRadius:12,padding:"10px 14px",marginBottom:4}}>
-            <span style={{fontSize:16,flexShrink:0}}>🀄</span>
-            <div style={{flex:1}}>
-              {isFirst
-                ?<div style={{fontSize:12,fontWeight:700,color:C.jade,fontFamily:F.d}}>Welcome to Rackle! You're player #{dailyStats.total} today.</div>
-                :<div style={{fontSize:12,fontWeight:700,color:C.jade,fontFamily:F.d}}>{dailyStats.total} players today · avg IQ {dailyStats.avg}</div>
-              }
-              <div style={{fontSize:11,color:C.mut,marginTop:1}}>
-                You scored <strong style={{color:iq.totalScore>=dailyStats.avg?C.jade:C.cinn}}>{iq.totalScore>=dailyStats.avg?"above":"below"} average</strong>
-                {!sectionMatch&&bestFitSec&&<span> · <span style={{color:C.amberB}}>better fit: {bestFitSec.icon} {bestFitSec.name}</span></span>}
-              </div>
-            </div>
-          </div>
-        );
-      })()}
-
-      {/* ③ YOUR HAND — collapsible, open by default (rack only) */}
-      <CollapsibleSection label="Your Hand" desc="Your final 13 tiles" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
+      {/* ③ YOUR HAND — collapsible, open by default */}
+      <CollapsibleSection label="Your Hand" desc="Final Rack · Hand Target" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
         <SortableRack hand={hand}/>
+        <div style={{marginTop:8}}>
+          <HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={onCoachMode}/>
+        </div>
       </CollapsibleSection>
-
-      {/* ④ HAND TARGET — always visible */}
-      <HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={onCoachMode}/>
 
       {/* ④b ALT HANDS — own collapsible section, closed by default */}
       {hand&&hand.length>0&&chosenSec&&(()=>{
@@ -5614,9 +5583,9 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
               <div style={{position:"absolute",top:0,left:0,right:0,height:"40%",background:"linear-gradient(180deg,rgba(255,255,255,0.06),transparent)",borderRadius:"14px 14px 0 0",pointerEvents:"none"}}/>
               <div style={{width:44,height:44,borderRadius:12,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>🎓</div>
               <div style={{flex:1}}>
-                <div style={{fontSize:8,color:C.gilt,letterSpacing:2.5,fontWeight:700,marginBottom:3,opacity:0.85}}>DEEP DIVE</div>
-                <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:"#fff",lineHeight:1.2,marginBottom:2}}>Coach Mode</div>
-                <div style={{fontSize:11,color:"rgba(255,255,255,0.55)",lineHeight:1.4}}>Rack vs hand · Pass breakdown · Coach advice</div>
+                <div style={{fontSize:8,color:C.gilt,letterSpacing:2.5,fontWeight:700,marginBottom:3,opacity:0.85}}>TABLE TALK</div>
+                <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:"#fff",lineHeight:1.2,marginBottom:2}}>See The Better Play</div>
+                <div style={{fontSize:11,color:"rgba(255,255,255,0.55)",lineHeight:1.4}}>What experienced players noticed in your rack</div>
               </div>
               <div style={{width:28,height:28,borderRadius:8,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
                 <span style={{fontSize:14,color:"rgba(255,255,255,0.7)",fontWeight:700}}>›</span>
@@ -8633,11 +8602,10 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <div style={{background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"24px 20px 20px",textAlign:"center"}}>
               <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:14}}>TODAY'S DAILY · #{dn}</div>
               {iq&&<>
-                <div style={{fontSize:8,color:C.gilt,letterSpacing:3,fontWeight:700,marginBottom:8}}>TODAY’S CHARLESTON</div>
                 <div style={{fontFamily:F.d,fontSize:52,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,textShadow:`0 2px 16px rgba(176,138,53,0.45)`,marginBottom:6}}>{iq.totalScore}</div>
                 <div style={{width:40,height:1.5,background:`linear-gradient(90deg,transparent,${C.gilt},transparent)`,margin:"12px auto 12px"}}/>
                 <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:"#fff",marginBottom:4,letterSpacing:-0.3}}>{iq.level}</div>
-                {iq.styleName&&<div style={{fontSize:12,color:C.gilt,fontWeight:800,marginBottom:8}}>{iq.styleName}</div>}
+                {iq.styleName&&<div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"4px 11px",fontSize:11,color:C.gilt,fontWeight:900,marginBottom:10,letterSpacing:0.2}}>{iq.styleName}</div>}
                 <div style={{fontSize:11,color:"rgba(255,255,255,0.6)",marginBottom:16,lineHeight:1.55,maxWidth:260,margin:"0 auto 16px"}}>{iq.levelExplanation}</div>
               </>}
               {!iq&&dRes&&<>
@@ -8672,9 +8640,9 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               <button onClick={showScorecard} style={{width:"100%",borderRadius:12,background:"#fff",border:`1.5px solid ${C.jade}25`,cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"11px 14px",textAlign:"left",boxShadow:`0 2px 8px ${C.jade}10`}}>
                 <div style={{width:36,height:36,borderRadius:10,background:`linear-gradient(135deg,${C.jade},#115C38)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>🎓</div>
                 <div style={{flex:1}}>
-                  <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:1}}>DEEP DIVE</div>
-                  <div style={{fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.2}}>Coach Mode</div>
-                  <div style={{fontSize:10,color:C.mut,marginTop:1}}>Rack read · pass analysis · next rep</div>
+                  <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:1}}>TABLE TALK</div>
+                  <div style={{fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.2}}>See The Better Play</div>
+                  <div style={{fontSize:10,color:C.mut,marginTop:1}}>What experienced players noticed in your rack</div>
                 </div>
                 <span style={{fontSize:16,color:C.jade,fontWeight:700,flexShrink:0}}>›</span>
               </button>
@@ -9016,12 +8984,12 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen}){
 
       {/* Today's daily hero — if played */}
       {iq&&<div style={{marginBottom:16}}>
-        <IQHero iq={iq} isDaily dayNum={dn} section={dRes.section} totalTime={iq.totalTime||0} chosenSec={dRes.chosenSec} allSections={dRes.allSections}/>
+        <IQHero iq={iq} isDaily dayNum={dn} section={dRes.section} totalTime={iq.totalTime||0} chosenSec={dRes.chosenSec} allSections={dRes.allSections} isHome/>
         <button onClick={onShowScorecard} style={{width:"100%",marginTop:8,padding:"11px 16px",borderRadius:12,background:C.sage,border:`1px solid ${C.sageB}25`,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"flex-start",gap:12}}>
           <div style={{width:34,height:34,borderRadius:9,background:C.sageB+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>📋</div>
           <div style={{textAlign:"left",flex:1}}>
             <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:"#1A3D28",lineHeight:1,marginBottom:2}}>View Full Scorecard</div>
-            <div style={{fontSize:11,color:C.sageB}}>Rack read · Coach Mode</div>
+            <div style={{fontSize:11,color:C.sageB}}>See what experienced players noticed</div>
           </div>
           <span style={{fontSize:14,color:C.sageB,fontWeight:700,flexShrink:0}}>›</span>
         </button>
