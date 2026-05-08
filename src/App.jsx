@@ -8843,7 +8843,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       "Start by picking a direction early.",
       "Let the rack guide your decisions.",
       "Try not to hold every option."
-    ];
+    ]
   }
           ].map((l,i)=>(
             <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 10px",borderRadius:8,background:l.bg,marginBottom:i<4?4:0}}>
