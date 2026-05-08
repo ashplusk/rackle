@@ -6380,132 +6380,72 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
 
 
 // ─── COACH MODE SCREEN — narrative-first deep analysis ───────────────────────
-function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onBack,setScreen}){
-  if(!iq){
-    return(
-      <div style={S.pg} className="rk-pg">
-        <RackleHeader onBack={onBack} setScreen={setScreen}/>
-        <div style={{...S.card,textAlign:"center",padding:"28px 18px"}}>
-          <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,marginBottom:8}}>Table Talk</div>
-          <div style={{fontSize:13,color:C.mut,lineHeight:1.55}}>No rack read available yet.</div>
-        </div>
-        <button onClick={onBack} style={{...S.oBtn,width:"100%"}}>← Back to Scorecard</button>
-      </div>
-    );
-  }
+function CoachModeScreen({iq,dayNum,section,onBack,setScreen}){
+  const score=iq?.totalScore ?? "—";
+  const level=iq?.level || "Table Read";
+  const style=iq?.styleName || "Stay flexible";
+  const passInsights=Array.isArray(iq?.passInsights)?iq.passInsights:[];
+  const passDots=passInsights.length
+    ? passInsights.map(p=>p?.quality==="strong"?"🟢":p?.quality==="weak"?"🔴":"🟡").join(" ")
+    : "🟡 🟢 🟡 🟢 🟢";
 
-  const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
-  const sortedSecs=Array.isArray(allSections)?[...allSections].sort((a,b)=>(b.score||0)-(a.score||0)):[];
-  const bestFitSec=sortedSecs[0]||null;
-  const sectionMatch=chosenSec&&bestFitSec?chosenSec===bestFitSec.id:true;
-  const passInsights=Array.isArray(iq.passInsights)?iq.passInsights:[];
-  const passDots=passInsights.map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join(" ");
-  const firstName=(getProfile()?.nickname||"").trim().split(" ")[0];
-  const tableLine=(typeof getTableReadLine==="function"?getTableReadLine(iq):null)||"You built a cleaner read today.";
-
-  const softVerdict=(()=>{
-    const score=iq.totalScore||0;
-    const read=(iq.directionScore||0)/40;
-    const pass=(iq.passQualityScore||0)/25;
-    if(score>=90)return "Elite rack. Clean read, clean passes, no wasted motion.";
-    if(score>=82&&read>=0.75)return "You found the lane early and stayed with it.";
-    if(score>=82)return "Strong rack. The table read was there.";
-    if(score>=70&&pass>=0.75)return "Your passes were disciplined. One earlier lane would lift this.";
-    if(score>=70)return "Good rack. A cleaner first read makes this dangerous.";
-    if(score>=58)return "Workable rack. You had pieces, but the lane came late.";
-    return "Messy rack. Next time, name the lane before the first pass.";
+  const tableLine=(()=>{
+    const n=Number(iq?.totalScore||0);
+    if(n>=90)return "Elite rack. You saw the lane and stayed clean.";
+    if(n>=82)return "Strong rack. You found the cleaner lane early.";
+    if(n>=72)return "Good rack. One cleaner pass makes this dangerous.";
+    if(n>=60)return "Workable rack. You had pieces, but the lane came late.";
+    return "Messy rack. Next time, pick the lane earlier.";
   })();
 
   const oneThing=(()=>{
-    const read=(iq.directionScore||0)/40;
-    const pass=(iq.passQualityScore||0)/25;
-    const live=(iq.tileStrengthScore||0)/25;
+    const read=Number(iq?.directionScore||0)/40;
+    const pass=Number(iq?.passQualityScore||0)/25;
+    const live=Number(iq?.tileStrengthScore||0)/25;
     if(read<0.55)return "Name your lane before the first pass.";
     if(pass<0.55)return "Keep what connects. Let the floaters go.";
     if(live<0.55)return "Protect pairs and useful groups first.";
     return "Trust the clean lane once you see it.";
   })();
 
-  const tableWisdom=(()=>{
-    const sec=chosenSecObj?.id;
-    if(sec==="2026")return "Strong players protect 2s, 6s, and Soap in 2026.";
-    if(sec==="2468")return "In evens, 6s are usually too useful to pass.";
-    if(sec==="369")return "For 369, the 6 is the anchor. Treat it like gold.";
-    if(sec==="13579")return "With odds, 3s and 5s often carry the rack.";
-    if(sec==="cr")return "Runs need groups, not scattered singles.";
-    if(sec==="wd")return "Honors first. Numbers need a reason to stay.";
-    if(sec==="sp")return "Singles & Pairs rewards patience, not jokers.";
-    if(sec==="q")return "Quints starts with jokers. Without two, stay flexible.";
+  const wisdom=(()=>{
+    const sec=(section||"").toLowerCase();
+    if(sec.includes("2026"))return "Strong players protect 2s, 6s, and Soap in 2026.";
+    if(sec.includes("2468"))return "In evens, 6s are usually too useful to pass.";
+    if(sec.includes("369"))return "For 369, the 6 is the anchor. Treat it like gold.";
+    if(sec.includes("13579"))return "With odds, 3s and 5s often carry the rack.";
+    if(sec.includes("run"))return "Runs need groups, not scattered singles.";
+    if(sec.includes("wind")||sec.includes("dragon"))return "Honors first. Numbers need a reason to stay.";
     return "Strong players spot the flexible tiles, then choose a lane.";
   })();
-
-  const passRows=passInsights.slice(0,7).map((p,i)=>{
-    const label=p.quality==="strong"?"Clean":p.quality==="weak"?"Risky":"Mixed";
-    const color=p.quality==="strong"?C.jade:p.quality==="weak"?C.cinn:C.gold;
-    const bg=p.quality==="strong"?"#EDF5F0":p.quality==="weak"?"#FEF0F0":"#FBF3E2";
-    const tiles=(p.passedTiles||[]).map(t=>tLabel(t)).slice(0,3).join(", ");
-    const line=p.quality==="strong"?"Good release. The rack stayed clean.":p.quality==="weak"?"That pass gave away some strength.":"Not fatal, but not your cleanest pass.";
-    return{round:i+1,label,color,bg,tiles,line};
-  });
 
   return(
     <div style={S.pg} className="rk-pg">
       <RackleHeader onBack={onBack} setScreen={setScreen}/>
 
       <div style={{textAlign:"center",marginTop:4,marginBottom:16}}>
-        <div style={{fontSize:8,color:C.jade,letterSpacing:2.6,fontWeight:800,marginBottom:7}}>TABLE TALK</div>
-        <div style={{fontFamily:F.d,fontSize:23,fontWeight:900,color:C.ink,letterSpacing:-0.6,lineHeight:1.05}}>See The Better Play</div>
-        <div style={{fontSize:12,color:C.mut,lineHeight:1.5,marginTop:9}}>What experienced players noticed in your rack</div>
+        <div style={{fontSize:8,color:C.jade,letterSpacing:2.6,fontWeight:800,marginBottom:8}}>TABLE TALK</div>
+        <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:C.ink,letterSpacing:-0.6,lineHeight:1.05}}>See The Better Play</div>
+        <div style={{fontSize:12,color:C.mut,lineHeight:1.5,marginTop:10}}>What experienced players noticed in your rack</div>
       </div>
 
-      <div style={{background:`linear-gradient(145deg,${C.hero2},${C.hero1})`,borderRadius:18,padding:"18px 18px 16px",color:"#fff",marginBottom:12,boxShadow:`0 8px 28px ${C.jade}24`}}>
-        <div style={{display:"flex",alignItems:"flex-end",gap:14,marginBottom:12}}>
-          <div style={{fontFamily:F.d,fontSize:54,fontWeight:900,lineHeight:0.9,color:C.gilt,letterSpacing:-2}}>{iq.totalScore}</div>
-          <div style={{paddingBottom:2}}>
-            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,lineHeight:1.1}}>{iq.level}</div>
-            {iq.styleName&&<div style={{fontSize:12,color:"rgba(255,255,255,0.62)",marginTop:8}}>{iq.styleName}</div>}
-          </div>
-        </div>
-        <div style={{fontSize:14,lineHeight:1.55,fontWeight:700,marginBottom:10}}>{tableLine}</div>
-        <div style={{fontSize:12,lineHeight:1.55,color:"rgba(255,255,255,0.68)"}}>{softVerdict}</div>
-        {passDots&&<div style={{fontSize:15,letterSpacing:2,marginTop:13}}>{passDots}</div>}
+      <div style={{background:`linear-gradient(145deg,${C.hero2},${C.hero1})`,borderRadius:18,padding:"20px 18px 18px",color:"#fff",marginBottom:12,boxShadow:`0 8px 28px ${C.jade}24`,textAlign:"center"}}>
+        <div style={{fontFamily:F.d,fontSize:64,fontWeight:900,lineHeight:0.92,color:C.gilt,letterSpacing:-2,marginBottom:10}}>{score}</div>
+        <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,lineHeight:1.1,marginBottom:8}}>{level}</div>
+        <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"5px 12px",fontSize:11,color:C.gilt,fontWeight:900,marginBottom:16,letterSpacing:0.2}}>{style}</div>
+        <div style={{fontSize:14,lineHeight:1.55,fontWeight:800,maxWidth:310,margin:"0 auto 12px"}}>{tableLine}</div>
+        <div style={{fontSize:15,letterSpacing:2,marginTop:8}}>{passDots}</div>
       </div>
 
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:12}}>
-        <div style={{...S.card,marginBottom:0,textAlign:"center"}}>
-          <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:800,marginBottom:5}}>YOUR LANE</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink}}>{chosenSecObj?.name||section||"Open"}</div>
-        </div>
-        <div style={{...S.card,marginBottom:0,textAlign:"center"}}>
-          <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:800,marginBottom:5}}>BEST FIT</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:sectionMatch?C.jade:C.gold}}>{bestFitSec?.name||"—"}</div>
-        </div>
+      <div style={{borderRadius:14,background:"#fff",border:`1px solid ${C.bdr}`,padding:"15px 16px",marginBottom:10}}>
+        <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:800,marginBottom:7}}>ONE THING</div>
+        <div style={{fontSize:13,color:C.ink,lineHeight:1.55,fontWeight:800}}>{oneThing}</div>
       </div>
 
-      <SectionDivider label="ONE THING"/>
-      <div style={{borderRadius:14,background:"#fff",border:`1px solid ${C.bdr}`,padding:"14px 16px",marginBottom:12}}>
-        <div style={{fontSize:13,color:C.ink,lineHeight:1.55,fontWeight:700}}>{oneThing}</div>
+      <div style={{borderRadius:14,background:C.sage,border:`1px solid ${C.jade}22`,padding:"15px 16px",marginBottom:14}}>
+        <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:800,marginBottom:7}}>TABLE WISDOM</div>
+        <div style={{fontSize:13,color:C.ink,lineHeight:1.55}}>{wisdom}</div>
       </div>
-
-      <SectionDivider label="TABLE WISDOM"/>
-      <div style={{borderRadius:14,background:C.sage,border:`1px solid ${C.jade}22`,padding:"14px 16px",marginBottom:12}}>
-        <div style={{fontSize:13,color:C.ink,lineHeight:1.55}}>{tableWisdom}</div>
-      </div>
-
-      {passRows.length>0&&<SectionDivider label="YOUR PASSES"/>}
-      {passRows.length>0&&<div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:12}}>
-        {passRows.map(row=>(
-          <div key={row.round} style={{borderRadius:13,background:row.bg,border:`1px solid ${row.color}22`,padding:"11px 12px"}}>
-            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:4}}>
-              <div style={{fontSize:12,fontWeight:900,color:row.color}}>Pass {row.round}: {row.label}</div>
-              {row.tiles&&<div style={{fontSize:10,color:C.mut,textAlign:"right",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:170}}>{row.tiles}</div>}
-            </div>
-            <div style={{fontSize:11,color:C.mut,lineHeight:1.45}}>{row.line}</div>
-          </div>
-        ))}
-      </div>}
-
-      {firstName&&<div style={{fontSize:11,color:C.mut,textAlign:"center",margin:"2px 0 10px"}}>Nice rack, {firstName}. Now beat it tomorrow.</div>}
 
       <button onClick={onBack} style={{...S.oBtn,width:"100%",marginTop:4}}>← Back to Scorecard</button>
       <Footer/>
