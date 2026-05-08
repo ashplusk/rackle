@@ -13,8 +13,7 @@ const C={bg:"#F8F4EE",bg2:"#EDE7DA",ink:"#1A1410",mut:"#6B6157",jade:"#176B42",g
 const F={d:"'Fraunces',Georgia,serif",b:"'Nunito','Segoe UI',sans-serif"};
 const CSS=`
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:#F8F4EE;overflow-x:hidden}
-#root{overflow-x:hidden}
+html,body{margin:0;padding:0;background:#F8F4EE}
 @keyframes rkIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 .rk-in{animation:rkIn .25s ease}
 @keyframes rkFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
@@ -39,7 +38,7 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
-  app:{fontFamily:F.b,background:C.bg,minHeight:"100vh",color:C.ink,width:"100%",maxWidth:560,borderLeft:`1px solid ${C.bdr}`,borderRight:`1px solid ${C.bdr}`,overflowX:"hidden"},
+  app:{fontFamily:F.b,background:C.bg,minHeight:"100vh",color:C.ink,width:"100%",maxWidth:560,borderLeft:`1px solid ${C.bdr}`,borderRight:`1px solid ${C.bdr}`},
   pg:{padding:"10px 16px",paddingBottom:36},
   pill:{background:C.bg2,borderRadius:12,padding:"8px 6px",textAlign:"center",border:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"center",gap:6},
   card:{background:"#FDFAF6",border:`1px solid ${C.bdr}`,borderRadius:12,padding:14,marginBottom:8},
@@ -95,7 +94,7 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
           await navigator.share({
             files:[new File([blob],`rackle-day${dayNum}.png`,{type:"image/png"})],
             title:`Daily Rackle #${dayNum} · ${iq.totalScore}`,
-            text:`${iq.level} · playrackle.com`,
+            text:`${iq.level}${iq.styleName?` · ${iq.styleName}`:""} · playrackle.com`,
           });
           setDone(true);setTimeout(()=>setDone(false),3000);
           setSaving(false);return;
@@ -3122,8 +3121,14 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   const _club=_prof?.clubCode?CLUBS[_prof.clubCode]:null;
   const clubLine=_club?`${_club.name}\n`:"";
   const shareText=isDaily
-    ?[`🀄 Daily Rackle #${dn}`,`${totalScore} · ${level}`,passEmoji?`Passes: ${passEmoji}`:"","Think you can beat it?","playrackle.com"].filter(Boolean).join("\n\n")
-    :[`🀄 Rackle Practice`,`${totalScore} · ${level}`,passEmoji?`Passes: ${passEmoji}`:"","Play the daily Charleston challenge!","playrackle.com"].filter(Boolean).join("\n\n");
+    ?`🀄 Daily Rackle #${dn} · ${totalScore} · ${level}${style?.name?` · ${style.name}`:""}
+${passEmoji?`Passes: ${passEmoji}
+`:""}Think you can beat it?
+playrackle.com`
+    :`🀄 Rackle Practice · ${totalScore} · ${level}${style?.name?` · ${style.name}`:""}
+${passEmoji?`Passes: ${passEmoji}
+`:""}Play the daily Charleston challenge!
+playrackle.com`;
 
   // When the hand was inferred, prefix the explanation so the player understands the basis.
   // The directionExplanation already includes "Scored against X: N of M tiles covered (P%)."
@@ -4643,52 +4648,35 @@ function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,
     if(best&&best.coveragePct>8)altSecHands.push(best);
   }
 
-  const lanes=[
-    ...altSectionHands.map(h=>({handObj:h,secId:chosenSec,secObj:chosenSecObj,kicker:"Same section",copy:"Another way this rack could have stayed in the same lane."})),
-    ...altSecHands.map(h=>({handObj:h,secId:h.sec,secObj:h.secObj,kicker:"Another path",copy:"A different section your rack was also hinting at."})),
-  ];
-
-  if(!lanes.length)return null;
+  const hasAnything=altSectionHands.length>0||altSecHands.length>0;
+  if(!hasAnything)return null;
 
   return(
-    <div style={{marginBottom:8,overflow:"hidden"}}>
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 2px 7px"}}>
-        <div style={{fontSize:10,color:C.mut,fontWeight:800,letterSpacing:0.6}}>Swipe through the table reads</div>
-        {lanes.length>1&&<div style={{fontSize:10,color:C.jade,fontWeight:800}}>Swipe →</div>}
-      </div>
-      <div style={{
-        display:"flex",gap:10,overflowX:"auto",overflowY:"hidden",
-        WebkitOverflowScrolling:"touch",scrollSnapType:"x mandatory",
-        padding:"0 2px 8px",margin:"0 -2px",
-        scrollbarWidth:"none",
-      }}>
-        {lanes.map((lane,i)=>(
-          <div key={`${lane.handObj.label}-${lane.secId}-${i}`} style={{
-            flex:"0 0 88%",maxWidth:360,scrollSnapAlign:"start",
-            background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:16,
-            boxShadow:"0 2px 10px rgba(0,0,0,0.045)",overflow:"hidden",
-          }}>
-            <div style={{padding:"12px 14px 10px",borderBottom:`1px solid ${C.bdr}`,background:"linear-gradient(145deg,#FFFFFF,#FFFCF7)"}}>
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:5}}>
-                <div style={{fontSize:8,color:lane.secObj?.color||C.mut,letterSpacing:1.7,fontWeight:900,textTransform:"uppercase"}}>
-                  {lane.secObj?.icon} {lane.kicker}
-                </div>
-                <CoverageChip pct={lane.handObj.coveragePct}/>
-              </div>
-              <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.15,letterSpacing:-0.2}}>{lane.handObj.label}</div>
-              <div style={{fontSize:10.5,color:C.mut,lineHeight:1.45,marginTop:4}}>{lane.copy}</div>
+    <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden"}}>
+      {/* Same-section alternates */}
+      {altSectionHands.map((h,i)=>(
+        <div key={h.label} style={{borderBottom:i<altSectionHands.length-1||altSecHands.length>0?`1px solid ${C.bdr}`:"none",padding:"10px 14px"}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}>
+            <div style={{fontSize:8,color:chosenSecObj?.color||C.mut,letterSpacing:1.5,fontWeight:700}}>
+              {chosenSecObj?.icon} {chosenSecObj?.name?.toUpperCase()} · SAME LANE
             </div>
-            <div style={{padding:10,overflow:"hidden"}}>
-              <RackVsHandOverlay hand={hand} handObj={lane.handObj} passLog={[]} sectionId={lane.secId} handWasInferred={false} secObj={lane.secObj}/>
-            </div>
+            <CoverageChip pct={h.coveragePct}/>
           </div>
-        ))}
-      </div>
-      {lanes.length>1&&(
-        <div style={{display:"flex",justifyContent:"center",gap:5,marginTop:1}}>
-          {lanes.map((_,i)=><span key={i} style={{width:5,height:5,borderRadius:3,background:i===0?C.jade:C.bdr,display:"block"}}/>) }
+          <RackVsHandOverlay hand={hand} handObj={h} passLog={[]} sectionId={chosenSec} handWasInferred={false} secObj={chosenSecObj}/>
         </div>
-      )}
+      ))}
+      {/* Cross-section alternates */}
+      {altSecHands.map((h,i)=>(
+        <div key={h.label} style={{borderBottom:i<altSecHands.length-1?`1px solid ${C.bdr}`:"none",padding:"10px 14px"}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}>
+            <div style={{fontSize:8,color:h.secObj?.color||C.mut,letterSpacing:1.5,fontWeight:700}}>
+              {h.secObj?.icon} {h.secObj?.name?.toUpperCase()} · ANOTHER LANE
+            </div>
+            <CoverageChip pct={h.coveragePct}/>
+          </div>
+          <RackVsHandOverlay hand={hand} handObj={h} passLog={[]} sectionId={h.sec} handWasInferred={false} secObj={h.secObj}/>
+        </div>
+      ))}
     </div>
   );
 }
@@ -4729,40 +4717,40 @@ function tableTalkCards(iq){
     icon:"👀",
     title:"The read",
     tone:readTone(dir,40),
-    text:dir>=32?"You found the lane early and mostly trusted it. That is the hard part."
-      :dir>=24?"There was a good read here. Next time, trust the first clean lane a little sooner."
-      :dir>=16?"This rack was chatty. Pick the clearest direction, then let the extra noise go."
-      :"This was one of those racks that asks you to slow down first. Find one lane before you start protecting tiles."
+    text:dir>=32?"You saw a clear lane and mostly backed it."
+      :dir>=24?"You had a lane. A cleaner first read would make the whole rack feel easier."
+      :dir>=16?"The rack stayed a little noisy. Pick the first real direction and let the rest go."
+      :"This one needed a faster read. Find the section, then start trimming."
   });
 
   cards.push({
     icon:"🤲",
     title:"The passes",
     tone:readTone(pass,25),
-    text:pass>=20?"Nice passing. You let go of the floaters and protected the good stuff."
-      :pass>=15?"Mostly clean. One or two tiles probably made the rack work harder than it needed to."
-      :pass>=10?"A couple of passes stung. Before the next pass, ask: would I be annoyed to draw this back?"
-      :"The Charleston got a little slippery here. Protect the tiles that are actually doing work."
+    text:pass>=20?"Clean passing. You protected the tiles that mattered."
+      :pass>=15?"Mostly steady. One or two passes probably made the rack harder than it needed to be."
+      :pass>=10?"A few passes hurt. Before passing, ask: does this tile still connect to my plan?"
+      :"The Charleston got away from you here. Slow down and protect your best tiles."
   });
 
   cards.push({
     icon:"🀄",
     title:"The rack",
     tone:readTone(tile,25),
-    text:tile>=20?"You had something to work with. The rack gave you real material."
-      :tile>=15?"The rack had a shape, but it needed one more useful connection."
-      :tile>=10?"There were pieces here, just not enough of them talking to each other yet."
-      :"Tough rack. This was less about finding perfect and more about making the least messy choice."
+    text:tile>=20?"Good tile strength. You had real material to build with."
+      :tile>=15?"The rack had shape, but it needed a little more punch."
+      :tile>=10?"Some useful pieces were there, but the rack needed more connection."
+      :"This was a tough rack. Look for the least messy path, not the perfect one."
   });
 
   cards.push({
     icon:"⏱",
     title:"The rhythm",
     tone:readTone(time,10),
-    text:time>=8?"Good rhythm. Quick enough to stay sharp, calm enough to see the rack."
-      :time>=6?"Your pace was fine. A little more trust in your first read would help."
-      :time>=4?"You paused in the spots most players pause. Once a tile is clearly outside the plan, let it go."
-      :"This round needed a breath. Read the rack, choose the lane, then pass."
+    text:time>=8?"Good pace. You played with confidence without rushing."
+      :time>=6?"Your pace was fine. Trust the first clean read a little more."
+      :time>=4?"You hesitated in spots. Once a tile is clearly outside the plan, let it go."
+      :"This round needed calmer decisions. Read the rack before each pass."
   });
 
   return cards;
@@ -4862,7 +4850,7 @@ function HandTargetPreview({hand,scoredHandObj,chosenSec,chosenSecObj,iq,onCoach
     <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden",background:"#fff"}}>
       <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"13px 14px",background:"linear-gradient(145deg,#FFFFFF,#FFFCF7)",border:"none",cursor:"pointer",textAlign:"left"}}>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:8,color:chosenSecObj?.color||C.jade,letterSpacing:2,fontWeight:900,marginBottom:4}}>YOUR BEST PATH</div>
+          <div style={{fontSize:8,color:chosenSecObj?.color||C.jade,letterSpacing:2,fontWeight:900,marginBottom:4}}>WHERE YOUR RACK LEANED{iq?.handWasInferred?" · RACKLE READ":""}</div>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.ink,letterSpacing:-0.2,marginBottom:3}}>{scoredHandObj.label}</div>
           <div style={{fontSize:11,color:C.mut,lineHeight:1.35}}>{tableLine}</div>
         </div>
@@ -5397,7 +5385,7 @@ function SortableRack({hand:initialHand}){
         <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>FINAL RACK</div>
         <button onClick={toggle} style={{...S.sortBtn,color:sorted?C.jade:C.mut,borderColor:sorted?C.jade+"40":C.bdr,background:sorted?C.jade+"08":"none"}}>{sorted?"Sorted":"Sort"}</button>
       </div>
-      <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>{rack.map((t,i)=><Ti key={i} t={t}/>)}</div>
+      <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>{rack.map((t,i)=><Ti key={i} t={t}/>)}</div>
     </div>
   );
 }
@@ -5405,80 +5393,87 @@ function SortableRack({hand:initialHand}){
 // ─── COLLAPSIBLE SECTION HEADER — tap to expand/collapse ──────────────────────
 function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
   return(
-    <div style={{marginTop:10,marginBottom:0}}>
+    <div style={{marginTop:9,marginBottom:0}}>
       <button
         onClick={onToggle}
         aria-expanded={open}
         style={{
           width:"100%",cursor:"pointer",textAlign:"left",
-          display:"flex",alignItems:"center",gap:13,
+          display:"flex",alignItems:"center",gap:12,
           padding:"14px 15px",
-          borderRadius:18,
-          background:open?"linear-gradient(145deg,#FFFFFF,#FFF9EF)":"linear-gradient(145deg,#FFFFFF,#FFFCF7)",
-          border:`1.25px solid ${open?C.jade+"38":"#E7DFD2"}`,
+          borderRadius:16,
+          background:open?"linear-gradient(145deg,#FFFFFF,#FBF7EF)":"#FFFFFF",
+          border:`1.5px solid ${open?C.jade+"30":C.bdr}`,
           boxShadow:open
-            ?"0 8px 24px rgba(23,107,66,0.10), 0 1px 0 rgba(255,255,255,0.9) inset"
-            :"0 3px 12px rgba(0,0,0,0.045), 0 1px 0 rgba(255,255,255,0.85) inset",
+            ?"0 5px 18px rgba(23,107,66,0.09), 0 1px 4px rgba(0,0,0,0.04)"
+            :"0 2px 8px rgba(0,0,0,0.035)",
           transition:"all 0.18s ease",
           position:"relative",
           overflow:"hidden",
         }}
       >
-        <div style={{position:"absolute",left:0,right:0,top:0,height:3,background:open?`linear-gradient(90deg,${C.jade},${C.gilt})`:`linear-gradient(90deg,${C.bdr},transparent)`,opacity:open?0.95:0.45}}/>
+        <div style={{position:"absolute",left:0,top:10,bottom:10,width:3,borderRadius:"0 6px 6px 0",background:open?C.jade:C.bdr,opacity:open?1:0.65}}/>
 
         {icon&&(
           <div style={{
-            width:42,height:42,borderRadius:14,flexShrink:0,
-            background:open?"linear-gradient(145deg,#FDF9F1,#F3EEE4)":"#F8F4EE",
+            width:38,height:38,borderRadius:12,flexShrink:0,
+            background:open?C.jade+"12":"#F8F4EE",
             border:`1px solid ${open?C.jade+"24":"#E8E0D2"}`,
             display:"flex",alignItems:"center",justifyContent:"center",
             fontSize:18,lineHeight:1,
-            boxShadow:"inset 0 1px 0 rgba(255,255,255,0.9), 0 2px 6px rgba(0,0,0,0.05)",
+            boxShadow:"inset 0 1px 0 rgba(255,255,255,0.75), 0 1px 3px rgba(0,0,0,0.04)",
           }}>{icon}</div>
         )}
 
         <div style={{flex:1,minWidth:0}}>
-          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:3,flexWrap:"wrap"}}>
+          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:2}}>
             <div style={{
-              fontSize:18,fontWeight:900,fontFamily:F.d,
-              color:C.ink,lineHeight:1.05,letterSpacing:-0.25,
+              fontSize:14,fontWeight:900,fontFamily:F.d,
+              color:C.ink,lineHeight:1.1,letterSpacing:-0.2,
             }}>{label}</div>
-            {badge&&(
-              <span style={{
-                fontSize:10,fontWeight:900,fontFamily:F.b,flexShrink:0,
-                color:open?C.jade:C.mut,
-                background:open?C.jade+"10":"#F3EEE6",
-                borderRadius:999,padding:"5px 9px",lineHeight:1,
-                border:`1px solid ${open?C.jade+"20":"#E5DED2"}`,
-              }}>{badge}</span>
-            )}
+            {open&&<span style={{fontSize:8,fontWeight:900,color:C.jade,letterSpacing:1.4,background:C.jade+"10",border:`1px solid ${C.jade}18`,borderRadius:999,padding:"2px 7px"}}>OPEN</span>}
           </div>
           {desc&&(
             <div style={{
-              fontSize:12,marginTop:2,lineHeight:1.35,
-              color:C.mut,fontWeight:700,letterSpacing:0.05,
+              fontSize:11,marginTop:3,lineHeight:1.35,
+              color:C.mut,fontWeight:600,
             }}>{desc}</div>
           )}
         </div>
 
+        {badge&&(
+          <span style={{
+            fontSize:11,fontWeight:900,fontFamily:F.b,flexShrink:0,
+            color:open?C.jade:C.mut,
+            background:open?C.jade+"10":"#F3EEE6",
+            borderRadius:999,padding:"5px 9px",lineHeight:1,
+            border:`1px solid ${open?C.jade+"20":"#E5DED2"}`,
+          }}>{badge}</span>
+        )}
+
         <div style={{
-          width:34,height:34,borderRadius:12,flexShrink:0,
+          width:26,height:26,borderRadius:9,flexShrink:0,
           background:open?C.jade+"12":"#F3EEE6",
           display:"flex",alignItems:"center",justifyContent:"center",
           transition:"background 0.2s, transform 0.25s ease",
           transform:open?"rotate(180deg)":"rotate(0deg)",
-          border:`1px solid ${open?C.jade+"18":"#E8E0D2"}`,
         }}>
-          <svg width="11" height="7" viewBox="0 0 10 6" fill="none">
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
             <path d="M1 1L5 5L9 1" stroke={open?C.jade:C.mut} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
       </button>
-      {open&&<div className="rk-in" style={{marginTop:8}}>{children}</div>}
+
+      {open&&(
+        <div className="rk-in" style={{marginTop:7}}>
+          {children}
+        </div>
+      )}
     </div>
   );
 }
 
+// ─── DAILY SCORECARD — simplified, no tabs, no coach note ─────────────────────
 function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onHome,onPractice,onCoachMode,setScreen}){
   const [dailyStats,setDailyStats]=useState(null);
   const [globalEntries,setGlobalEntries]=useState([]);
@@ -5488,13 +5483,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   if(!iq)return null;
 
   const passEmoji=(iq.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
-  const shareText=[
-    `🀄 Daily Rackle #${dayNum}`,
-    `${iq.totalScore} · ${iq.level}`,
-    passEmoji?`Passes: ${passEmoji}`:"",
-    "Think you can beat it?",
-    "playrackle.com"
-  ].filter(Boolean).join("\n\n");
+  const shareText=`🀄 Daily Rackle #${dayNum} · ${iq.totalScore} · ${iq.level}${iq.styleName?` · ${iq.styleName}`:""}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Think you can beat it?\nplayrackle.com`;
 
   useEffect(()=>{
     fetchDailyStats().then(s=>{if(s&&s.total>=1)setDailyStats(s);});
@@ -5547,14 +5536,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         // Enrich share text with rank context
         const rankLine=globalRank&&globalTotal?`#${globalRank} of ${globalTotal} players today${clubRank&&clubTotal?` · #${clubRank} in my club`:""}`:
           clubRank&&clubTotal?`#${clubRank} of ${clubTotal} in my club`:"";
-        const richShareText=[
-          `🀄 Daily Rackle #${dayNum}`,
-          `${iq.totalScore} · ${iq.level}`,
-          passEmoji?`Passes: ${passEmoji}`:"",
-          rankLine||"",
-          "Think you can beat it?",
-          "playrackle.com"
-        ].filter(Boolean).join("\n\n");
+        const richShareText=`🀄 Daily Rackle #${dayNum} · ${iq.totalScore} · ${iq.level}${iq.styleName?` · ${iq.styleName}`:""}\n${passEmoji?`Passes: ${passEmoji}\n`:""}${rankLine?`${rankLine}\n`:""}Think you can beat it?\nplayrackle.com`;
 
         return(
           <div style={{marginBottom:10}}>
@@ -5611,7 +5593,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
             {/* Share block */}
             <div style={{background:"linear-gradient(145deg,#FDFAF4,#F5EFE2)",border:`1px solid ${C.gold}25`,borderRadius:14,padding:"13px 14px 11px"}}>
               {/* Share text preview */}
-              <div style={{fontFamily:"monospace",fontSize:10,color:"#7A6040",background:"rgba(0,0,0,0.035)",borderRadius:10,padding:"13px 14px",marginBottom:11,textAlign:"center",lineHeight:2.15,letterSpacing:0.15}}>
+              <div style={{fontFamily:"monospace",fontSize:10,color:"#7A6040",background:"rgba(0,0,0,0.035)",borderRadius:8,padding:"9px 12px",marginBottom:10,textAlign:"center",lineHeight:1.85,letterSpacing:0.1}}>
                 {richShareText.split("\n").map((line,i)=>line===""?<div key={i} style={{height:5}}/>:<div key={i}>{line}</div>)}
               </div>
               <ShareButton text={richShareText}/>
@@ -5621,7 +5603,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       })()}
 
       {/* ③ YOUR HAND — collapsible, open by default */}
-      <CollapsibleSection label="Your Hand" desc="Final rack · best path" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
+      <CollapsibleSection label="Your Hand" desc="Final rack · where your tiles were leaning" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
         <SortableRack hand={hand}/>
         <div style={{marginTop:8}}>
           <HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={onCoachMode}/>
@@ -5632,14 +5614,14 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       {hand&&hand.length>0&&chosenSec&&(()=>{
         const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
         return(
-          <CollapsibleSection label="Other Hands" desc="Other ways the table might read this" icon="🔀" open={openSec.alts} onToggle={()=>toggle("alts")}>
+          <CollapsibleSection label="Other Hands" desc="Other ways this rack could have played" icon="🔀" open={openSec.alts} onToggle={()=>toggle("alts")}>
             <AltHandsCard hand={hand} resolvedHandLabel={scoredHandObj?.label||null} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecs} primaryCoveragePct={primPct}/>
           </CollapsibleSection>
         );
       })()}
 
       {/* ⑤ SCORE BREAKDOWN — collapsible */}
-      <CollapsibleSection label="Today's Read" desc="What the table would notice" icon="💬" open={openSec.score} onToggle={()=>toggle("score")} badge={iq.level}>
+      <CollapsibleSection label="Today's Read" desc="The table talk from this round" icon="💬" open={openSec.score} onToggle={()=>toggle("score")} badge={iq.level}>
         <TableTalkRead iq={iq}/>
       </CollapsibleSection>
 
@@ -5738,7 +5720,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
       </div>
 
       {/* YOUR HAND — rack only, closed */}
-      <CollapsibleSection label="Your Hand" desc="Final rack · best path" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
+      <CollapsibleSection label="Your Hand" desc="Final rack · where your tiles were leaning" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
         {hand&&hand.length>0&&<SortableRack hand={hand}/>}
         {scoredHandObj&&<HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={null}/>}
       </CollapsibleSection>
@@ -5747,14 +5729,14 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
       {hand&&hand.length>0&&chosenSec&&(()=>{
         const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
         return(
-          <CollapsibleSection label="Other Hands" desc="Other ways the table might read this" icon="🔀" open={openSec.alts} onToggle={()=>toggle("alts")}>
+          <CollapsibleSection label="Other Hands" desc="Other ways this rack could have played" icon="🔀" open={openSec.alts} onToggle={()=>toggle("alts")}>
             <AltHandsCard hand={hand} resolvedHandLabel={scoredHandObj?.label||null} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecsP} primaryCoveragePct={primPct}/>
           </CollapsibleSection>
         );
       })()}
 
       {/* YOUR SCORE — closed, with score badge */}
-      <CollapsibleSection label="Today's Read" desc="What the table would notice" icon="💬" open={openSec.score} onToggle={()=>toggle("score")} badge={iq.level}>
+      <CollapsibleSection label="Today's Read" desc="The table talk from this round" icon="💬" open={openSec.score} onToggle={()=>toggle("score")} badge={iq.level}>
         <TableTalkRead iq={iq}/>
       </CollapsibleSection>
 
@@ -6004,9 +5986,9 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
       </div>
 
       {/* Tile-by-tile overlay — each group with its slots */}
-      <div style={{padding:"12px 14px",background:C.bg2,overflowX:"hidden"}}>
+      <div style={{padding:"12px 14px",background:C.bg2,overflowX:"auto"}}>
         <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:8}}>HAND PATTERN vs YOUR RACK</div>
-        <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"flex-end",width:"100%",maxWidth:"100%"}}>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"flex-end",minWidth:"max-content"}}>
           {groupStatus.map((status,gi)=>(
             <div key={gi} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
               <div style={{display:"flex",gap:2}}>
@@ -6293,24 +6275,6 @@ function computeCoachAdvice(hand, passLog, chosenSec, allSections, iq, chosenHan
   return advice;
 }
 
-function humanCoachText(text){
-  if(!text)return text;
-  return String(text)
-    .replace(/Your tile distribution was pulling toward ([^(]+) \([^)]*\) — worth noting next time you see a similar deal\./g,"Your rack was quietly pointing toward $1. Next time, notice that pull a little earlier.")
-    .replace(/Pass tiles not in this hand\. Priority: keep ([^.]+)\./g,"Keep $1 and let the floaters go.")
-    .replace(/Pass tiles not in this hand\./g,"Let go of the tiles that are not helping your lane.")
-    .replace(/This section rewards extreme specificity/g,"This section rewards a very clear lane")
-    .replace(/that's the .* algorithm\./gi,"that is the simple table rule.")
-    .replace(/unreachable/gi,"a very long shot")
-    .replace(/entry requirement/gi,"starting point")
-    .replace(/liability/gi,"usually trouble")
-    .replace(/tile distribution/gi,"rack")
-    .replace(/pung/g,"group")
-    .replace(/kongs/g,"big groups")
-    .replace(/kong/g,"big group")
-    .replace(/—/g,".");
-}
-
 // ─── COACH ADVICE CARD — renders the computed advice ─────────────────────────
 function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
   const advice=computeCoachAdvice(hand,passLog,chosenSec,allSections,iq,chosenHandObj);
@@ -6321,7 +6285,7 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
       <div style={{width:28,height:28,borderRadius:8,background:(color||C.jade)+"12",border:`1px solid ${color||C.jade}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,flexShrink:0,marginTop:1}}>{icon}</div>
       <div style={{flex:1}}>
         <div style={{fontSize:8,color:color||C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>{label}</div>
-        <p style={{fontSize:12,color:C.ink,lineHeight:1.7,margin:0}}>{humanCoachText(text)}</p>
+        <p style={{fontSize:12,color:C.ink,lineHeight:1.65,margin:0}}>{text}</p>
       </div>
     </div>
   );
@@ -6329,19 +6293,19 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
   return(
     <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden"}}>
       <div style={{padding:"10px 14px 8px",borderBottom:`1px solid ${C.bdr}`}}>
-        <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:1}}>YOUR RACKLE COACH</div>
-        <div style={{fontSize:12,fontWeight:700,color:C.ink}}>A simple read for your next Charleston</div>
+        <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:1}}>COACH ADVICE</div>
+        <div style={{fontSize:12,fontWeight:700,color:C.ink}}>What this rack is telling you</div>
       </div>
       <div style={{padding:"12px 14px"}}>
 
         {/* Rack read */}
         <div style={{background:C.bg2,borderRadius:10,padding:"10px 12px",marginBottom:12,borderLeft:`3px solid ${C.jade}`}}>
-          <p style={{fontSize:12,color:C.ink,lineHeight:1.7,margin:0}}>{humanCoachText(advice.rackRead)}</p>
+          <p style={{fontSize:12,color:C.ink,lineHeight:1.7,margin:0}}>{advice.rackRead}</p>
         </div>
 
         {/* Primary & alt lanes */}
-        <Item icon="🎯" label="WHAT I’D TRY" text={advice.primaryLane}/>
-        {advice.altLane&&<Item icon="↗️" label="ANOTHER WAY TO SEE IT" text={advice.altLane} color={C.gold}/>}
+        <Item icon="🎯" label="PRIMARY DIRECTION" text={advice.primaryLane}/>
+        {advice.altLane&&<Item icon="↗️" label="SECONDARY PATH" text={advice.altLane} color={C.gold}/>}
 
         {/* Foundation & weakness */}
         {advice.foundation.length>0&&(
@@ -6360,15 +6324,15 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
         )}
 
         {/* Key tile */}
-        <Item icon="🔑" label="TILE TO WATCH" text={advice.keyTile} color={C.amberB}/>
+        <Item icon="🔑" label="THE TILE THAT CHANGES EVERYTHING" text={advice.keyTile} color={C.amberB}/>
 
         {/* Pass read */}
-        {advice.passRead&&<Item icon="🔄" label="PASS CHAT" text={advice.passRead} color={C.mut}/>}
+        {advice.passRead&&<Item icon="🔄" label="PASS QUALITY" text={advice.passRead} color={C.mut}/>}
 
         {/* Takeaway */}
         <div style={{marginTop:4,padding:"10px 12px",background:`linear-gradient(135deg,${C.jade}08,${C.jade}04)`,borderRadius:10,border:`1.5px solid ${C.jade}20`}}>
-          <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:4}}>NEXT TIME AT THE TABLE</div>
-          <p style={{fontSize:12,color:C.ink,lineHeight:1.65,margin:0,fontWeight:500}}>{humanCoachText(advice.takeaway)}</p>
+          <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:4}}>TAKE THIS INTO YOUR NEXT GAME</div>
+          <p style={{fontSize:12,color:C.ink,lineHeight:1.65,margin:0,fontWeight:500}}>{advice.takeaway}</p>
         </div>
 
       </div>
@@ -8253,7 +8217,7 @@ function TopBanner(){
     {label:"TIP",text:"Practice Mode is unlimited. Build instincts before the daily resets."},
     {label:"DID YOU KNOW",text:"Rackle scores every pass individually — not just your final rack."},
     {label:"DID YOU KNOW",text:"The daily deal is seeded — every player gets the exact same 13 tiles."},
-    {label:"DID YOU KNOW",text:"Your Rackle Coach gives simple tips for the next Charleston."},
+    {label:"DID YOU KNOW",text:"Coach Mode shows you the optimal pass for every round."},
   ];
   const [idx,setIdx]=useState(0);
   const [fade,setFade]=useState(true);
@@ -8314,12 +8278,19 @@ function getTimeUntilMidnightLabel(){
   return `${hh}h ${mm.toString().padStart(2,"0")}m`;
 }
 
-function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelta}){
+function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelta,streak=0}){
   const [reset,setReset]=useState(getTimeUntilMidnightLabel());
   useEffect(()=>{const iv=setInterval(()=>setReset(getTimeUntilMidnightLabel()),30000);return()=>clearInterval(iv);},[]);
   const liveCount=ds?.total||0;
   const topScore=ds?.max||null;
-  const momentum=weekDelta!=null?(weekDelta>=0?`+${weekDelta} this week`:`${weekDelta} this week`):ydIQ?`yesterday ${ydIQ}`:"daily rep";
+  const streakBadge=getStreakBadge(streak);
+  const nextBadge=STREAK_BADGES.find(b=>streak<b.days);
+  const daysLeft=nextBadge?Math.max(0,nextBadge.days-streak):0;
+  const streakProgress=nextBadge?Math.max(8,Math.min(100,Math.round((Math.max(0,streak)/nextBadge.days)*100))):100;
+  const streakValue=streak>0?`${streak}-day streak`:"Start your streak";
+  const streakLabel=streak>0
+    ?(nextBadge?`${daysLeft} day${daysLeft!==1?"s":""} to ${nextBadge.title}`:`${streakBadge?.title||"Keep it alive"}`)
+    :"Play today to begin";
   const chips=[
     liveCount?{label:"playing today",value:liveCount}:null,
     club&&clubPlayers?{label:"from your club",value:clubPlayers}:null,
@@ -8358,9 +8329,20 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
               <div style={{fontSize:8,color:"rgba(255,255,255,0.48)",letterSpacing:1.2,fontWeight:800,marginTop:4,textTransform:"uppercase"}}>{c.label}</div>
             </div>
           ))}
-          <div style={{flex:"1 1 42%",minWidth:110,background:"rgba(201,168,76,0.12)",border:"1px solid rgba(201,168,76,0.2)",borderRadius:12,padding:"8px 10px"}}>
-            <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:C.gilt,lineHeight:1}}>{momentum}</div>
-            <div style={{fontSize:8,color:"rgba(255,255,255,0.48)",letterSpacing:1.2,fontWeight:800,marginTop:4,textTransform:"uppercase"}}>momentum</div>
+          <div style={{flex:"1 1 100%",minWidth:220,background:"linear-gradient(135deg,rgba(201,168,76,0.18),rgba(255,255,255,0.08))",border:"1px solid rgba(201,168,76,0.26)",borderRadius:14,padding:"10px 12px",boxShadow:"inset 0 1px 0 rgba(255,255,255,0.08)"}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:7}}>
+              <div style={{display:"flex",alignItems:"center",gap:8,minWidth:0}}>
+                <span style={{width:26,height:26,borderRadius:10,background:"rgba(201,168,76,0.16)",border:"1px solid rgba(201,168,76,0.22)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,flexShrink:0}}>🔥</span>
+                <div style={{minWidth:0}}>
+                  <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.gilt,lineHeight:1.05,letterSpacing:-0.2}}>{streakValue}</div>
+                  <div style={{fontSize:8,color:"rgba(255,255,255,0.56)",letterSpacing:1.15,fontWeight:800,marginTop:3,textTransform:"uppercase"}}>{streakLabel}</div>
+                </div>
+              </div>
+              {weekDelta!=null&&<div style={{fontSize:10,fontWeight:900,color:weekDelta>=0?"#8EE6B2":"#F0B0A8",background:weekDelta>=0?"rgba(76,217,135,0.12)":"rgba(248,113,113,0.12)",border:`1px solid ${weekDelta>=0?"rgba(76,217,135,0.18)":"rgba(248,113,113,0.18)"}`,borderRadius:999,padding:"5px 8px",whiteSpace:"nowrap"}}>{weekDelta>=0?`+${weekDelta}`:weekDelta} wk</div>}
+            </div>
+            <div style={{height:4,borderRadius:999,background:"rgba(255,255,255,0.12)",overflow:"hidden"}}>
+              <div style={{height:"100%",borderRadius:999,background:`linear-gradient(90deg,${C.gilt},#F0D87A)`,width:`${streakProgress}%`,transition:"width 0.4s ease"}}/>
+            </div>
           </div>
         </div>
       </div>
@@ -8446,7 +8428,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   // Build share text fresh every render
   const passEmoji=(iq?.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
   const shareText=iq
-    ?[`🀄 Daily Rackle #${dn}`,`${iq.totalScore} · ${iq.level}`,passEmoji?`Passes: ${passEmoji}`:"","Think you can beat it?","playrackle.com"].filter(Boolean).join("\n\n")
+    ?`🀄 Daily Rackle #${dn} · ${iq.totalScore} · ${iq.level}${iq.styleName?` · ${iq.styleName}`:""}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Think you can beat it?\nplayrackle.com`
     :dRes?`🀄 Rackle #${dn} · ${dRes.rating} ${dRes.emoji}\n${dRes.section||""}\nplayrackle.com`:"";
 
   const ydIQ=yd?.iq?.totalScore||null;
@@ -8608,7 +8590,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <span style={{color:C.jade,fontWeight:600}}> — today's a chance to go higher.</span>
           </div>
         </div>}
-        <TodayRackleHeroCard dn={dn} onPlay={()=>go("daily")} ds={ds} club={club} clubPlayers={clubPlayers} bestIQ={bestIQ} ydIQ={ydIQ} weekDelta={weekDelta}/>
+        <TodayRackleHeroCard dn={dn} onPlay={()=>go("daily")} ds={ds} club={club} clubPlayers={clubPlayers} bestIQ={bestIQ} ydIQ={ydIQ} weekDelta={weekDelta} streak={streak}/>
         </>
       ):(()=>{
         const ydComp=yd&&dRes&&iq&&yd.iq?(iq.totalScore>yd.iq.totalScore?{label:"Better than yesterday",icon:"⬆️"}:iq.totalScore===yd.iq.totalScore?{label:"Same as yesterday",icon:"➡️"}:{label:"Yesterday was stronger",icon:"⬇️"}):null;
@@ -9635,7 +9617,7 @@ function Game({mode,home,onDone,settings,setScreen}){
               <span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK (13 tiles)</span>
               <div style={{display:"flex",gap:4}}><button disabled style={{...S.sortBtn,opacity:0.25}}>Sort</button><button disabled style={{...S.sortBtn,opacity:0.25}}>📖 2026 Card</button></div>
             </div>
-            <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>
+            <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>
               {hand.map((t,i)=>{const isFlipped=flipped.includes(i);return isFlipped?<div key={i} className="rk-flip"><Ti t={t} large={large}/></div>:<div key={i} style={{width:large?44:37,height:large?60:50,borderRadius:7,background:`linear-gradient(160deg,${C.jade}DD,#145C35)`,border:`1.5px solid ${C.jade}50`,flexShrink:0,boxShadow:`0 3px 10px rgba(27,125,78,0.3)`,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:14,opacity:0.2}}>🀄</span></div>;})}
             </div>
           </div>
@@ -9679,7 +9661,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           <p style={{fontSize:12,color:C.mut,textAlign:"center",marginBottom:10}}>Select 1–3 tiles to pass across</p>
           {jw&&<JW/>}
           <div style={S.card}><RH hand={hand} onSort={()=>setHand(sortHand(hand))}/>
-            <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} dim={t.t==="j"} onClick={()=>cTog(i)} large={large}/>)}</div></div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} dim={t.t==="j"} onClick={()=>cTog(i)} large={large}/>)}</div></div>
           <div aria-live="polite" style={{textAlign:"center",fontSize:13,color:sel.length>0?C.jade:C.mut,fontWeight:700,margin:"4px 0"}}>{sel.length}/3 selected</div>
           <button onClick={()=>{haptic(40);if(sel.length<1){setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");return;}const pt=sel.map(i=>hand[i]);setPassed(p=>[...p,...pt]);const rem=hand.filter((_,i)=>!sel.includes(i));const safe=pool.filter(t=>t.t!=="j");const scored2=safe.map((t,idx)=>({t,idx,score:oppDiscardScore(t,oppSectionRef.current)}));scored2.sort((a,b)=>b.score-a.score);const inc=scored2.slice(0,sel.length).map(x=>x.t);const inSet=new Set(scored2.slice(0,sel.length).map(x=>x.idx));setPool(safe.filter((_,i)=>!inSet.has(i)));setHand([...rem,...inc]);const cpNowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);const cpPassEl=cpNowEl-lastPassElRef.current;lastPassElRef.current=cpNowEl;setPassLog(pl=>[...pl,{label:"Courtesy Pass",roundName:"Courtesy Pass",out:pt,in:inc,blind:false,secs:cpPassEl}]);setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");}} style={{...S.passBtn}}>{sel.length<1?"Skip →":`Pass ${sel.length} across →`}</button>
         </>
@@ -9755,7 +9737,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           {jw&&<JW/>}
           <div style={S.card}>
             <RH hand={hand} onSort={()=>setHand(sortHand(hand))} showRef={showRef} onRef={()=>setShowRef(!showRef)}/>
-            <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} isNew={newIdx.includes(i)} dim={t.t==="j"&&!hasNew} onClick={!hasNew?()=>toggle(i):undefined} large={large}/>)}</div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} isNew={newIdx.includes(i)} dim={t.t==="j"&&!hasNew} onClick={!hasNew?()=>toggle(i):undefined} large={large}/>)}</div>
           </div>
           {showRef&&<CG onClose={()=>setShowRef(false)}/>}
           {!hasNew&&<>
@@ -9876,7 +9858,7 @@ function Ask({icon,title,desc,hand,timer,onNo,onYes,onSort,large}){
   return(<div style={S.pg} className="rk-pg"><RackleHeader onBack={onNo}/>{timer&&<div style={{textAlign:"center",marginBottom:4}}><span style={{fontSize:12,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {timer}</span></div>}<div style={{textAlign:"center",marginBottom:12}}><div aria-hidden="true" style={{fontSize:24,marginBottom:6}}>{icon}</div><h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 4px"}}>{title}</h2><p style={{fontSize:12,color:C.mut}}>{desc}</p></div><Rack hand={hand} label="YOUR RACK" showSort={!!onSort} onSort={onSort} large={large}/><div style={{display:"flex",gap:8,marginTop:12}}><button onClick={onNo} style={{...S.oBtn,flex:1}}>No, skip</button><button onClick={onYes} style={{...S.greenBtn,flex:2}}>Yes, continue →</button></div></div>);}
 function JW(){return(<div role="alert" className="rk-in" style={{padding:"6px 10px",background:C.cinn+"08",borderRadius:8,border:`1px solid ${C.cinn}15`,textAlign:"center",marginBottom:6}}><span style={{fontSize:11,color:C.cinn,fontWeight:600}}>🃏 Jokers cannot be passed — they're too valuable!</span></div>);}
 function RH({hand,onSort,showRef,onRef}){return(<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK ({hand.length} tiles)</span><div style={{display:"flex",gap:4}}><button onClick={onSort} style={S.sortBtn}>Sort</button>{onRef&&<button onClick={onRef} aria-expanded={showRef} style={{...S.sortBtn,background:showRef?C.jade+"10":"none",color:showRef?C.jade:C.mut,borderColor:showRef?C.jade+"30":C.bdr}}>📖 2026 Card</button>}</div></div>);}
-function Rack({hand,label,showSort,onSort,large}){return(<div style={S.card}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>{label}</span>{showSort&&<button onClick={onSort} style={S.sortBtn}>Sort</button>}</div><div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>{hand.map((t,i)=><Ti key={i} t={t} large={large}/>)}</div></div>);}
+function Rack({hand,label,showSort,onSort,large}){return(<div style={S.card}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>{label}</span>{showSort&&<button onClick={onSort} style={S.sortBtn}>Sort</button>}</div><div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>{hand.map((t,i)=><Ti key={i} t={t} large={large}/>)}</div></div>);}
 function CG({onClose}){
   const [exp,setExp]=useState(null);
   return(<div style={{...S.card,background:"#FFFFF8",borderColor:C.gold+"30",maxHeight:380,overflowY:"auto"}} className="rk-in" role="region" aria-label="2026 Card Guide">
@@ -10420,7 +10402,7 @@ function HandRenderer({hand, defaultOpen=false}){
         )}
 
         {/* Visual tile display */}
-        <div style={{padding:"12px 14px",background:C.bg2,overflowX:"hidden"}}>
+        <div style={{padding:"12px 14px",background:C.bg2,overflowX:"auto"}}>
           <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>COMPLETED HAND</div>
           <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"flex-end"}}>
             {groups.map((g,i)=>(
@@ -10653,7 +10635,7 @@ function SectionQuizScreen({home,setScreen}){
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
           <span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK (13 TILES)</span>
         </div>
-        <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>
+        <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>
           {sortHand(rack).map((t,i)=><Ti key={i} t={t} large={false}/>)}
         </div>
       </div>
