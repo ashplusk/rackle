@@ -1,7 +1,7 @@
 import { Analytics } from '@vercel/analytics/react';
 import { useState, useEffect, useRef, useCallback } from "react";
 // RACKLE — Daily Charleston + Practice. The Daily Mahjong Workout. 2026 NMJL. v93.1
-// v2.0 — Full Charleston IQ Scoring Engine, IQScorecard, ScorecardScreen
+// v2.0 — Full Rackle Score Scoring Engine, IQScorecard, ScorecardScreen
 
 // DESIGN
 const C={bg:"#F8F4EE",bg2:"#EDE7DA",ink:"#1A1410",mut:"#6B6157",jade:"#176B42",gold:"#A07828",cinn:"#B02A2A",bdr:"#DDD6C8",
@@ -115,7 +115,13 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
   // Level colour
   const lvlCol=iq.totalScore>=90?"#C9A84C":iq.totalScore>=80?"#4CD987":iq.totalScore>=70?"#60B4FA":iq.totalScore>=60?"#F5C842":"#F87171";
 
-  const tableLine=getTableReadLine(iq);
+  // subscore bars
+  const bars=[
+    {label:"DIR",v:iq.directionScore,max:40},
+    {label:"PASS",v:iq.passQualityScore,max:25},
+    {label:"TILE",v:iq.tileStrengthScore,max:25},
+    {label:"TIME",v:iq.timingScore,max:10},
+  ];
 
   // All inline styles use web-safe / system fonts so html2canvas renders correctly
   const SERIF="Georgia,'Times New Roman',serif";
@@ -147,7 +153,7 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
             </div>
             <div>
               <div style={{fontFamily:SERIF,fontSize:15,fontWeight:700,color:"#fff",letterSpacing:-0.3,lineHeight:1}}>Rackle</div>
-              <div style={{fontSize:7,color:"rgba(255,255,255,0.3)",letterSpacing:1.5,fontFamily:SANS,fontWeight:700,marginTop:1}}>TODAY'S RACK</div>
+              <div style={{fontSize:7,color:"rgba(255,255,255,0.3)",letterSpacing:1.5,fontFamily:SANS,fontWeight:700,marginTop:1}}>RACKLE SCORE</div>
             </div>
           </div>
           {/* Day badge */}
@@ -156,13 +162,14 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
           </div>}
         </div>
 
-        {/* ── SCORE BADGE ── */}
-        <div style={{textAlign:"center",margin:"4px 0 10px"}}>
-          <div style={{fontFamily:SERIF,fontSize:82,fontWeight:700,color:lvlCol,lineHeight:0.92,letterSpacing:-3}}>{iq.totalScore}</div>
-          <div style={{fontFamily:SERIF,fontSize:21,fontWeight:700,color:"#fff",lineHeight:1.15,marginTop:8}}>{iq.level}</div>
-          {iq.styleName&&<div style={{fontSize:11,color:"rgba(255,255,255,0.55)",fontFamily:SANS,marginTop:8,letterSpacing:0.3}}>{iq.styleName}</div>}
-          {tableLine&&<div style={{fontSize:13,color:"rgba(255,255,255,0.78)",fontFamily:SANS,margin:"14px auto 0",lineHeight:1.35,maxWidth:250}}>{tableLine}</div>}
-          {playerName&&<div style={{fontSize:10,color:"rgba(255,255,255,0.35)",fontFamily:SANS,marginTop:8}}>{playerName}</div>}
+        {/* ── IQ SCORE + LEVEL ── */}
+        <div style={{display:"flex",alignItems:"flex-end",gap:10,marginBottom:4}}>
+          <div style={{fontFamily:SERIF,fontSize:56,fontWeight:700,color:lvlCol,lineHeight:1,letterSpacing:-2}}>{iq.totalScore}</div>
+          <div style={{paddingBottom:6}}>
+            <div style={{fontFamily:SERIF,fontSize:14,fontWeight:700,color:"#fff",lineHeight:1.2}}>{iq.level}</div>
+            {iq.styleName&&<div style={{fontSize:9,color:"rgba(255,255,255,0.5)",fontFamily:SANS,marginTop:3}}>{iq.styleName}</div>}
+            {playerName&&<div style={{fontSize:10,color:"rgba(255,255,255,0.4)",fontFamily:SANS,marginTop:3}}>{playerName}</div>}
+          </div>
         </div>
 
         {/* ── PASS DOTS ROW (text-based, reliable in canvas) ── */}
@@ -171,11 +178,35 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
         {/* ── DIVIDER ── */}
         <div style={{height:"0.5px",background:"rgba(255,255,255,0.1)",marginBottom:12}}/>
 
-        {/* ── COLLECTIBLE STATS ── */}
-        <div style={{display:"flex",justifyContent:"center",gap:8,flexWrap:"wrap",marginBottom:14}}>
-          {streak>0&&<span style={{fontSize:10,color:"rgba(255,255,255,0.70)",fontWeight:700,background:"rgba(255,255,255,0.08)",border:"1px solid rgba(255,255,255,0.10)",borderRadius:999,padding:"5px 9px"}}>🔥 {streak}-day heater</span>}
-          {section&&<span style={{fontSize:10,color:"rgba(255,255,255,0.70)",fontWeight:700,background:"rgba(255,255,255,0.08)",border:"1px solid rgba(255,255,255,0.10)",borderRadius:999,padding:"5px 9px"}}>{section}</span>}
-          {iq.totalTime>0&&<span style={{fontSize:10,color:"rgba(255,255,255,0.70)",fontWeight:700,background:"rgba(255,255,255,0.08)",border:"1px solid rgba(255,255,255,0.10)",borderRadius:999,padding:"5px 9px"}}>⏱ {fT(iq.totalTime)}</span>}
+        {/* ── STATS ROW ── */}
+        <div style={{display:"flex",gap:0,marginBottom:12}}>
+          {section&&<div style={{flex:2,paddingRight:12,borderRight:"0.5px solid rgba(255,255,255,0.08)"}}>
+            <div style={{fontSize:7,color:"rgba(255,255,255,0.35)",letterSpacing:1.5,fontFamily:SANS,fontWeight:700,marginBottom:3}}>SECTION</div>
+            <div style={{fontSize:11,fontWeight:700,fontFamily:SANS,color:"#fff",lineHeight:1.2}}>{section}</div>
+          </div>}
+          {streak>0&&<div style={{flex:1,paddingLeft:12,paddingRight:12,borderRight:"0.5px solid rgba(255,255,255,0.08)"}}>
+            <div style={{fontSize:7,color:"rgba(255,255,255,0.35)",letterSpacing:1.5,fontFamily:SANS,fontWeight:700,marginBottom:3}}>STREAK</div>
+            <div style={{fontSize:11,fontWeight:700,fontFamily:SANS,color:"#fff"}}>{streak}d</div>
+          </div>}
+          {iq.totalTime>0&&<div style={{flex:1,paddingLeft:12}}>
+            <div style={{fontSize:7,color:"rgba(255,255,255,0.35)",letterSpacing:1.5,fontFamily:SANS,fontWeight:700,marginBottom:3}}>TIME</div>
+            <div style={{fontSize:11,fontWeight:700,fontFamily:SANS,color:"#fff"}}>{fT(iq.totalTime)}</div>
+          </div>}
+        </div>
+
+        {/* ── SUBSCORE BARS ── */}
+        <div style={{display:"flex",gap:5,marginBottom:12}}>
+          {bars.map(b=>{
+            const pct=Math.round(b.v/b.max*100);
+            return(
+              <div key={b.label} style={{flex:1}}>
+                <div style={{height:3,borderRadius:2,background:"rgba(255,255,255,0.08)",overflow:"hidden",marginBottom:4}}>
+                  <div style={{height:"100%",borderRadius:2,background:lvlCol,width:`${pct}%`}}/>
+                </div>
+                <div style={{fontSize:7,color:"rgba(255,255,255,0.3)",letterSpacing:1,fontFamily:SANS,fontWeight:700}}>{b.label}</div>
+              </div>
+            );
+          })}
         </div>
 
         {/* ── FOOTER — club + clickable URL ── */}
@@ -204,10 +235,10 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
         </div>
         <div style={{flex:1}}>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#fff",lineHeight:1.2}}>
-            {done?"Card saved!":saving?"Saving…":"Send To Your Table"}
+            {done?"Card saved!":saving?"Saving…":"Save & Share"}
           </div>
           <div style={{fontSize:11,color:"rgba(255,255,255,0.6)",lineHeight:1.3}}>
-            {done?"Drop it in your group chat ↗":"See who read the rack best today"}
+            {done?"Drop it in your group chat ↗":"Save as image · share anywhere"}
           </div>
         </div>
         <span style={{fontSize:16,color:"rgba(255,255,255,0.5)",flexShrink:0}}>{done?"":"›"}</span>
@@ -1980,7 +2011,7 @@ function iqLongestRun(rack){
   return mr;
 }
 
-function iqRead(finalRack,sectionId,chosenHandObj){
+function iqDirection(finalRack,sectionId,chosenHandObj){
   // If a specific hand was chosen, score direction using honest suit-specific coverage —
   // the same calculation shown in the HandTargetPreview display. This prevents fit()
   // from inflating direction scores by picking best-case suit permutations.
@@ -2535,22 +2566,22 @@ const IQ_TIERS=[
     min:90,max:94,range:"90–94",level:"Table Controller",color:C.jade,bg:C.jade+"10",
     notes:[
       "You controlled the flow of the Charleston.",
-      "Clean reads from start to finish.",
+      "Strong reads with confident direction throughout.",
       "You stayed ahead of the rack all game."
     ]
   },
   {
     min:85,max:89,range:"85–89",level:"Sharp Player",color:C.jade,bg:C.jade+"08",
     notes:[
-      "Sharp read with clean passing.",
+      "Strong reads with confident passing.",
       "Clean Charleston with one small edge to unlock.",
-      "You kept live tiles working together."
+      "You kept strong options alive throughout."
     ]
   },
   {
     min:80,max:84,range:"80–84",level:"Confident Reader",color:C.jade,bg:C.jade+"06",
     notes:[
-      "You trusted the rack and stayed with it.",
+      "You played with confidence and direction.",
       "Good instincts — now tighten a few passes.",
       "You saw the board clearly most of the way."
     ]
@@ -2560,7 +2591,7 @@ const IQ_TIERS=[
     notes:[
       "You’re ready for the table — just refine execution.",
       "Good instincts with room to sharpen.",
-      "A steady rack with a clean idea."
+      "Solid direction throughout the Charleston."
     ]
   },
   {
@@ -2591,7 +2622,7 @@ const IQ_TIERS=[
     min:55,max:59,range:"55–59",level:"Reading the Rack",color:C.gold,bg:C.gold+"06",
     notes:[
       "You’re starting to read the rack better.",
-      "Find the cleaner lane earlier.",
+      "Try narrowing your direction earlier.",
       "The instincts are building."
     ]
   },
@@ -2606,7 +2637,7 @@ const IQ_TIERS=[
   {
     min:0,max:49,range:"<50",level:"Feeling the Rack",color:C.cinn,bg:C.cinn+"08",
     notes:[
-      "Start by choosing one clean lane.",
+      "Start by picking a direction early.",
       "Let the rack guide your decisions.",
       "Try not to hold every option."
     ]
@@ -2626,39 +2657,39 @@ const IQ_STYLES=[
     key:"flexible",name:"Flexible ♻️",
     notes:[
       "You kept multiple paths alive.",
-      "You kept flexible tiles alive.",
-      "You adjusted without forcing it."
+      "Strong optionality throughout.",
+      "You adapted well to the rack."
     ]
   },
   {
     key:"disciplined",name:"Disciplined 🎯",
     notes:[
-      "You stayed disciplined.",
-      "Clean, controlled passing.",
-      "You did not chase every lane."
+      "You stayed focused on your direction.",
+      "Clean, controlled decision-making.",
+      "You avoided unnecessary pivots."
     ]
   },
   {
     key:"adaptive",name:"Adaptive 🔄",
     notes:[
-      "You changed lanes when the rack asked for it.",
-      "Good recovery in the middle passes.",
-      "You read the table and moved with it."
+      "You adjusted your plan as the rack evolved.",
+      "Strong mid-Charleston pivots.",
+      "You responded well to new information."
     ]
   },
   {
     key:"defensive",name:"Defensive 🛡️",
     notes:[
-      "You played safe and kept options open.",
-      "You did not force a bad lane.",
+      "You protected your options carefully.",
+      "You avoided risky commitments.",
       "You played a safe, controlled Charleston."
     ]
   },
   {
     key:"fastReader",name:"Fast Reader ⚡",
     notes:[
-      "You saw the lane early.",
-      "Fast read. Good instincts.",
+      "You saw direction early and acted quickly.",
+      "Quick decisions with strong instincts.",
       "You didn’t hesitate."
     ]
   },
@@ -2673,17 +2704,17 @@ const IQ_STYLES=[
   {
     key:"chaos",name:"Chaos Charleston 🎲",
     notes:[
-      "You chased a few too many lanes.",
-      "Messy, but there was an idea in there.",
-      "The rack stayed too wide for too long."
+      "You explored multiple directions throughout.",
+      "Unpredictable but creative play.",
+      "You kept the rack wide open."
     ]
   },
   {
     key:"smoothPasser",name:"Smooth Passer 🌊",
     notes:[
-      "Your passes felt clean.",
+      "Your passing felt clean and natural.",
       "You moved through decisions fluidly.",
-      "Good rhythm through the Charleston."
+      "Strong rhythm throughout the Charleston."
     ]
   }
 ];
@@ -2781,7 +2812,7 @@ function iqDistanceToOptimal(finalRack,startingRack,passedTilesByRound,sectionId
   // Off-direction tiles in final rack
   const offDir=[];
   finalRack.forEach(t=>{if(isWeak(t))offDir.push(tLabel(t));});
-  const offReadTiles=offDir.slice(0,5);
+  const offDirectionTiles=offDir.slice(0,5);
 
   // Key mistake round — which pass gave away the most useful tiles
   let keyMistakeRound=null;let worstAdj=-99;
@@ -2812,16 +2843,16 @@ function iqDistanceToOptimal(finalRack,startingRack,passedTilesByRound,sectionId
   let runGap=0;
   if(sectionId==="cr"){const ws=crWindowScore(finalRack);runGap=Math.max(0,Math.round(7-(ws.groupDepth||0)));}
 
-  const distanceCount=Math.min(missingStrongTiles.length,3)+Math.min(offReadTiles.length,2)+runGap+brokenPairs.length;
+  const distanceCount=Math.min(missingStrongTiles.length,3)+Math.min(offDirectionTiles.length,2)+runGap+brokenPairs.length;
 
   let explanation="Your final rack was well-optimised for your target direction.";
   if(runGap>4)explanation="Your number tiles didn't consolidate into groups — CR needs pungs and kongs within a 3–4 number window, not singles.";
   else if(runGap>0)explanation="You had the right number window but needed deeper groups — aim for pungs/kongs rather than singles.";
   else if(brokenPairs.length>0)explanation=`You broke ${brokenPairs.length} pair${brokenPairs.length>1?"s":""} (${brokenPairs.join(", ")}) during the Charleston.`;
   else if(missingStrongTiles.length>0)explanation=`Your rack was missing ${missingStrongTiles.slice(0,2).join(" and ")} — key tiles for this section.`;
-  else if(offReadTiles.length>0)explanation=`${offReadTiles.length} off-direction tile${offReadTiles.length>1?"s":""} stayed in your rack.`;
+  else if(offDirectionTiles.length>0)explanation=`${offDirectionTiles.length} off-direction tile${offDirectionTiles.length>1?"s":""} stayed in your rack.`;
 
-  return{missingStrongTiles,offReadTiles,keyMistakeRound,brokenPairs,distanceCount,explanation};
+  return{missingStrongTiles,offDirectionTiles,keyMistakeRound,brokenPairs,distanceCount,explanation};
 }
 
 function iqTileInsights(finalRack,startingRack,passedTilesByRound,sectionId){
@@ -2881,18 +2912,19 @@ function iqTileInsights(finalRack,startingRack,passedTilesByRound,sectionId){
 
 function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScore,brokenPairsCount,sectionId){
   const strengths=[],weaknesses=[];
-  if(directionScore>=35)strengths.push("You found the cleaner lane early.");
-  if(tileStrengthScore>=20)strengths.push("Your rack had strong shape.");
-  if(passQualityScore>=20)strengths.push("You stayed disciplined with your passes.");
-  if(timingScore>=9)strengths.push("Calm pace. You gave yourself time to read.");
+  if(directionScore>=35)strengths.push("Clean early read. You knew where the rack wanted to go.");
+  if(tileStrengthScore>=20)strengths.push("Strong final shape. Your tiles connected well.");
+  if(passQualityScore>=20)strengths.push("Clean passing through the Charleston.");
+  if(timingScore>=9)strengths.push("Good pace. You trusted the rack without rushing.");
 
-  if(directionScore<20)weaknesses.push("You chased too many lanes.");
-  if(tileStrengthScore<=10)weaknesses.push("Too many loose tiles stayed.");
-  if(passQualityScore<=12)weaknesses.push("One risky pass capped this rack.");
+  if(directionScore<20)weaknesses.push("Your rack stayed a little too wide.");
+  if(tileStrengthScore<=10)weaknesses.push("Your final rack needed more connected tiles.");
+  if(passQualityScore<=12)weaknesses.push("A few risky passes gave away useful tiles.");
+  // Section-specific pair feedback — in S&P, breaking triples into pairs is good
   if(brokenPairsCount>0&&sectionId!=="sp"){
-    weaknesses.push(`You split ${brokenPairsCount} useful pair${brokenPairsCount>1?"s":""}.`);
+    weaknesses.push(`Broke ${brokenPairsCount} pair${brokenPairsCount>1?"s":""} during the Charleston — protect your pairs.`);
   }
-  if(timingScore<=5)weaknesses.push("A little more pause would help.");
+  if(timingScore<=5)weaknesses.push("Your pace got uneven. Take a breath, read the rack, then pass.");
 
   const uniqueStr=[...new Set(strengths)].slice(0,2);
   const uniqueWk=[...new Set(weaknesses)].slice(0,2);
@@ -2900,52 +2932,54 @@ function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScor
   let coachNote="";
   let tryNextTime="";
 
+  // Section-specific coach notes
   if(sectionId==="sp"){
-    if(directionScore<20&&passQualityScore<=12)coachNote="Clean pairs first. Let the loose tiles go.";
-    else if(passQualityScore<=12)coachNote="Protect pairs before chasing a prettier rack.";
-    else if(directionScore<20)coachNote="Look for clean pairs earlier.";
-    else coachNote="You kept this rack patient and clean.";
+    if(directionScore<20&&passQualityScore<=12)coachNote="S&P is fully concealed — you can't expose tiles. Focus on building pairs and getting rid of jokers and triples early.";
+    else if(passQualityScore<=12)coachNote="You were playing S&P, but passed tiles that would have been good pairs. For S&P: hold pairs, pass jokers, pass triples.";
+    else if(directionScore<20)coachNote="Your rack had too many singles. S&P needs 6+ clean pairs to win — consolidate toward fewer, deeper pairs.";
+    else coachNote="S&P is a discipline game. Keep holding pairs, keep releasing jokers, and you'll complete it.";
   } else if(sectionId==="q"){
-    if(directionScore<20)coachNote="Quints starts with jokers. Without two, stay flexible.";
-    else coachNote="Two jokers makes it live. Now stack one tile.";
+    if(directionScore<20)coachNote="Quints without 2 jokers is nearly impossible. Identify joker count in deal — if you have fewer than 2, pivot immediately.";
+    else coachNote="With 2 jokers, focus entirely on stacking 3-4 of one specific tile. Spread is your enemy in Quints.";
   } else if(sectionId==="cr"){
-    if(directionScore<20)coachNote="Pick the tightest number window early.";
-    else if(tileStrengthScore<=10)coachNote="Right window. Now deepen the groups.";
-    else coachNote="Good run instincts. The rack had shape.";
+    if(directionScore<20)coachNote="Consecutive Run isn't about long strings of singles — it's pungs and kongs within a 3-4 number window. Identify your window by pass 1.";
+    else if(tileStrengthScore<=10)coachNote="You had the right window, but not enough group depth. Pass tiles outside the window ruthlessly to deepen groups within it.";
+    else coachNote="Good CR instincts. Next level: pick the tightest window possible (3-wide > 5-wide) for more hand options.";
   } else if(sectionId==="wd"){
-    if(directionScore<20)coachNote="Honors first. Numbers need a reason to stay.";
-    else coachNote="Good honor read. Keep stacking the winds.";
+    if(directionScore<20)coachNote="W&D needs 7+ honor tiles. Pass all number tiles in round 1 unless you have a complete kong of 1-4.";
+    else coachNote="Winds are your backbone — 7 of 8 hands use them. Stack same-wind groups before dragons.";
   } else if(sectionId==="2026"){
-    if(directionScore<20)coachNote="For 2026, protect 2s, 6s, and Soap.";
-    else coachNote="Clean 2026 read. Soap kept the rack flexible.";
+    if(directionScore<20)coachNote="2026 needs both 2s and 6s — they appear in all 4 hands. Soap (White Dragon) is wild-suit zero. These three tiles are your filter.";
+    else coachNote="Strong 2026 read. Soap (White Dragon) makes it easier — it plays as any suit, so hold it whenever you're building this section.";
   } else if(directionScore<20&&passQualityScore<=12){
-    coachNote="Start with one strong group and protect it.";
+    coachNote="Your passing and direction both need attention. The key habit: identify your strongest group before your very first pass, then protect it ruthlessly.";
   } else if(passQualityScore<=12){
-    coachNote="Your lane was right. Make the passes cleaner.";
+    coachNote="You were pointing in the right direction, but your passing decisions cost you. Focus on what leaves your hand, not just what stays.";
   } else if(directionScore<20){
-    coachNote="The passes were fine. The lane came late.";
+    coachNote="Your passing was disciplined, but the rack didn't commit to a clear path. Try to name your section by the second pass and filter from there.";
   } else if(brokenPairsCount>0){
-    coachNote="Useful pairs are often the anchors. Protect them.";
+    coachNote="Watch your pairs. A pair broken early often can't be rebuilt — they're structural anchors for most hands.";
   } else {
-    coachNote="Strong players spot the flexible tiles, then choose a lane.";
+    coachNote="Push higher by paying attention to your middle tiles — the ones that could serve two sections. Committing early to one path unlocks a sharper Charleston.";
   }
 
+  // Section-specific tryNextTime tips
   const secTips={
-    "2026":"Strong players protect 2s, 6s, and Soap here.",
-    "2468":"In 2468, 6s are rarely throwaways.",
-    "369":"For 369, protect 6s first.",
-    "13579":"For 13579, 3s and 5s usually lead the read.",
-    "cr":"Choose the tightest number window, then feed it.",
-    "wd":"Honors first. Numbers need a very good reason to stay.",
-    "aln":"Pick one number early and let the rest go.",
-    "q":"Count jokers first. Two makes Quints live.",
-    "sp":"Hold clean pairs. Do not chase loose singles.",
+    "2026":"Hold every 2, 6, and Soap you see. In round 1, pass all odd numbers except via a Soap or Dragon connection.",
+    "2468":"Pass odds immediately in round 1. Your 6s are the anchor — never pass a 6 in any round.",
+    "369":"6 is in every 369 hand — never pass it. Round 1: pass everything except 3s, 6s, 9s, jokers, and flowers.",
+    "13579":"5 and 3 appear in every 13579 hand — prioritize them above all other odds. Pass all even tiles in round 1 without hesitation.",
+    "cr":"Identify your 3-4 number window by your first pass. Then pass every tile outside that window, even if it hurts.",
+    "wd":"Pass every number tile round 1 unless you have 4 of one number (1-4 only). Winds first, then dragons.",
+    "aln":"Pick your number immediately. Pass everything else — every round — until you have 8+ of that one number.",
+    "q":"Count jokers first. If you have 2+, pick your target tile and stack it. If fewer than 2, pivot to another section.",
+    "sp":"Pass jokers immediately — they're worthless here. Hold every pair. Break no pairs to chase anything.",
   };
   const scores=[
-    {name:"read",ratio:directionScore/40,tip:secTips[sectionId]||"Name the lane before the first pass."},
-    {name:"keeps",ratio:tileStrengthScore/25,tip:"Keep what connects. Release what floats."},
-    {name:"passes",ratio:passQualityScore/25,tip:"Before each pass, protect the tiles doing real work."},
-    {name:"pace",ratio:timingScore/10,tip:"Pause long enough to see the clean pass."},
+    {name:"direction",ratio:directionScore/40,tip:secTips[sectionId]||"Before your first pass, identify the section your rack most favors. Everything else follows from that read."},
+    {name:"tiles",ratio:tileStrengthScore/25,tip:"Before passing any tile, ask: does it support my main group, a pair, or a window? If no to all three, it goes."},
+    {name:"passes",ratio:passQualityScore/25,tip:"Before each pass, check: does this tile connect to anything I'm keeping? Tiles that connect to nothing are the ones to pass."},
+    {name:"timing",ratio:timingScore/10,tip:"Aim for 10–25 seconds per pass — the real-world average is about 17s. Enough to read the rack without second-guessing your first instinct."},
   ];
   const worst=scores.sort((a,b)=>a.ratio-b.ratio)[0];
   tryNextTime=worst.tip;
@@ -2974,12 +3008,12 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   const roundCount=Math.max((passedTilesByRound||[]).length,1);
 
   // ── DIRECTION SCORE: now based on fit against the specific hand ──────────────
-  let{directionScore,directionExplanation}=iqRead(finalRack,sectionId,chosenHandObj);
+  let{directionScore,directionExplanation}=iqDirection(finalRack,sectionId,chosenHandObj);
 
   // ── TILE STRENGTH: also hand-aware ───────────────────────────────────────────
   let{tileStrengthScore}=iqTileStrength(finalRack,sectionId,chosenHandObj);
 
-  // ── PASS READ: hand-aware strong/weak tile determination ──────────────────
+  // ── PASS QUALITY: hand-aware strong/weak tile determination ──────────────────
   let{passQualityScore,passInsights,brokenPairsCount}=iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId,chosenHandObj);
   const{timingScore,timingInsight}=iqTiming(totalTime||0,roundCount,passedTilesByRound);
 
@@ -3086,30 +3120,15 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   const _prof=getProfile();
   const _club=_prof?.clubCode?CLUBS[_prof.clubCode]:null;
   const clubLine=_club?`${_club.name}\n`:"";
-  const tableLine=getTableReadLine({totalScore,level,styleName:style?.name,directionScore,tileStrengthScore,passQualityScore,timingScore});
-  const styleSuffix=style?.name?` · ${style.name}`:"";
-  const shareLines=isDaily
-    ?[
-      `RACKLE #${dn}`,
-      "",
-      String(totalScore),
-      `${level}${styleSuffix}`,
-      tableLine,
-      passEmoji?`Passes ${passEmoji}`:"",
-      "Think you can beat it?",
-      "playrackle.com",
-    ]
-    :[
-      "RACKLE PRACTICE",
-      "",
-      String(totalScore),
-      `${level}${styleSuffix}`,
-      tableLine,
-      passEmoji?`Passes ${passEmoji}`:"",
-      "Try today’s rack",
-      "playrackle.com",
-    ];
-  const shareText=shareLines.filter((line,i)=>line!==""||i===1).join("\n");
+  const shareText=isDaily
+    ?`🀄 Daily Rackle #${dn} · ${totalScore} · ${level}${style?.name?` · ${style.name}`:""}
+${passEmoji?`Passes: ${passEmoji}
+`:""}Think you can beat it?
+playrackle.com`
+    :`🀄 Rackle Practice · ${totalScore} · ${level}${style?.name?` · ${style.name}`:""}
+${passEmoji?`Passes: ${passEmoji}
+`:""}Play the daily Charleston challenge!
+playrackle.com`;
 
   // When the hand was inferred, prefix the explanation so the player understands the basis.
   // The directionExplanation already includes "Scored against X: N of M tiles covered (P%)."
@@ -3219,7 +3238,7 @@ const STREAK_BADGES=[
   {days:140,badge:"🔱",title:"Elite",desc:"140-day streak"},
   {days:145,badge:"🌌",title:"Otherworldly",desc:"145-day streak"},
   {days:150,badge:"👑",title:"Royalty",desc:"150-day streak"},
-  {days:155,badge:"🏛️",title:"Institution",desc:"155-day streak"},
+  {days:155,badge:"🏛️",title:"Club Fixture",desc:"155-day streak"},
   {days:160,badge:"⚜️",title:"Distinguished",desc:"160-day streak"},
   {days:165,badge:"🌈",title:"Legendary",desc:"165-day streak"},
   {days:170,badge:"🎰",title:"All In",desc:"170-day streak"},
@@ -3241,17 +3260,10 @@ const S2C=[{dir:"Left",icon:"👈",req:3,blind:false},{dir:"Over",icon:"↕️",
 
 function addHist(e){
   const h=ST.get("hist",[]);
-  const ts=Date.now();
-  const entry={
-    ...e,
-    ts,
-    isDaily:e.mode==="daily"||e.isDaily===true,
-    daySeed:e.mode==="daily"?(e.daySeed||getDailySeed()):e.daySeed,
-  };
-  h.push(entry);
+  h.push({...e,ts:Date.now()});
   ST.set("hist",h.slice(-100));
   const pid=ST.get("playerId",null);
-  if(pid)pushGameHistory(entry,pid);
+  if(pid)pushGameHistory({...e,ts:Date.now()},pid);
 }
 function getHist(){return ST.get("hist",[]);}
 function getStats(){
@@ -3321,7 +3333,6 @@ async function pullGameHistory(playerId){
     return rows.map(r=>({
       ts:new Date(r.played_at).getTime(),
       mode:r.mode,sid:r.section_id,
-      daySeed:r.day_seed||null,isDaily:r.mode==="daily"||!!r.day_seed,
       iqScore:r.iq_score,rating:r.rating,
       time:r.time_secs,gi:0,
     }));
@@ -3555,7 +3566,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
   const invite=()=>{
     const code=profile.clubCode;const club=CLUBS[code];
     const url=code?`playrackle.com?club=${code}`:"playrackle.com";
-    const text=`🀄 Play Rackle with me — the daily Charleston IQ trainer for American Mahjong!\n\nJoin ${club?club.name:"our club"} on the leaderboard:\n${url}${code?"\n\nYour club is pre-filled — just tap and join!":""}`;
+    const text=`🀄 Play Rackle with me — the daily Charleston workout for American Mahjong!\n\nJoin ${club?club.name:"our club"} on the leaderboard:\n${url}${code?"\n\nYour club is pre-filled — just tap and join!":""}`;
     window.location.href=`sms:?&body=${encodeURIComponent(text)}`;
     setInviting(true);setTimeout(()=>setInviting(false),3000);
   };
@@ -3658,7 +3669,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
         <div style={{textAlign:"center",padding:"24px 0 16px"}}>
           <div style={{fontSize:36,marginBottom:8}}>🀄</div>
           <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,marginBottom:6}}>Welcome back, Rackler</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.6}}>Pick up where you left off — your streak, IQ history, and club ranking are waiting.</div>
+          <div style={{fontSize:12,color:C.mut,lineHeight:1.6}}>Pick up where you left off — your streak, score history, and club ranking are waiting.</div>
         </div>
         <div style={S.card}>
           <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:12}}>YOUR ACCOUNT</div>
@@ -3742,12 +3753,12 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
           {bestIQ&&<><div style={{width:1,background:"rgba(255,255,255,0.08)"}}/>
           <div style={{textAlign:"center"}}>
             <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.gilt}}>{bestIQ.score}</div>
-            <div style={{fontSize:8,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginTop:2}}>BEST IQ</div>
+            <div style={{fontSize:8,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginTop:2}}>BEST SCORE</div>
           </div></>}
           {avgIQ&&<><div style={{width:1,background:"rgba(255,255,255,0.08)"}}/>
           <div style={{textAlign:"center"}}>
             <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.gilt}}>{avgIQ}</div>
-            <div style={{fontSize:8,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginTop:2}}>AVG IQ</div>
+            <div style={{fontSize:8,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginTop:2}}>AVG SCORE</div>
           </div></>}
         </div>
         {streakBadge&&<div style={{marginTop:12,display:"inline-flex",alignItems:"center",gap:6,background:"rgba(255,255,255,0.08)",border:"1px solid rgba(255,255,255,0.12)",borderRadius:20,padding:"4px 14px"}}>
@@ -3762,11 +3773,11 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
         <div style={{display:"flex",gap:8,marginBottom:10}}>
           {avgIQ&&<div style={{flex:1,background:C.bg2,borderRadius:10,padding:"10px",textAlign:"center"}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.jade}}>{avgIQ}</div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>AVG IQ</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>AVG SCORE</div>
           </div>}
           {bestIQ&&<div style={{flex:1,background:C.gold+"08",borderRadius:10,padding:"10px",textAlign:"center",border:`1px solid ${C.gold}15`}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.gold}}>{bestIQ.score}</div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>BEST IQ</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>BEST SCORE</div>
           </div>}
           <div style={{flex:1,background:C.cinn+"06",borderRadius:10,padding:"10px",textAlign:"center",border:`1px solid ${C.cinn}15`}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.cinn}}>{streak}</div>
@@ -3913,7 +3924,7 @@ async function deleteLBEntry(code,name){
   }catch{}
 }
 
-// Fetch global daily stats — total unique players + avg IQ across all clubs today
+// Fetch global daily stats — total unique players + avg score across all clubs today
 // Reuses fetchGlobalEntries to guarantee the count matches the global leaderboard exactly
 async function fetchDailyStats(){
   try{
@@ -4009,7 +4020,7 @@ async function fetchGlobalEntries(){
   }
 }
 
-// Personal best IQ — scans history for highest iqScore
+// Personal best score — scans history for highest iqScore
 function getBestIQ(){
   const h=getHist();
   if(!h.length)return null;
@@ -4181,7 +4192,7 @@ function computeFlexibility(finalRack, allSections, passLog, startingRack){
 
 // ── 3. EXPERT READ ──────────────────────────────────────────────────────────
 // Full strategic Charleston evaluator.
-// Returns rich structured read: primaryRead, secondaryPaths, pivotPotential,
+// Returns rich structured read: primaryDirection, secondaryPaths, pivotPotential,
 // flexibility, commitment, structuralStrength, deadnessRisk, observations[], expertInsight.
 function computeExpertRead(finalRack, chosenSec, allSections, passLog, iq){
   if(!finalRack||!chosenSec)return null;
@@ -4326,40 +4337,40 @@ function computeExpertRead(finalRack, chosenSec, allSections, passLog, iq){
   deadScore=Math.max(0,Math.min(100,deadScore));
   const deadnessRisk=deadScore>=55?"High":deadScore>=28?"Medium":"Low";
 
-  // ── CLEANEST LANE ────────────────────────────────────────────────────────
+  // ── PRIMARY DIRECTION ────────────────────────────────────────────────────────
   const secNames={"2026":"2026","2468":"Even Numbers (2468)","369":"369","13579":"Odd Numbers (13579)","cr":"Consecutive Runs","wd":"Winds & Dragons","aln":"Any Like Numbers","q":"Quints","sp":"Singles & Pairs"};
   const chosenName=secNames[chosenSec]||chosenSec;
   const chosenIcon=SECS?.find(s=>s.id===chosenSec)?.icon||"";
 
   // Build a substantive primary direction description
-  let primaryRead="";
+  let primaryDirection="";
   if(chosenSec==="13579"){
     const has3=nc[3]||0,has5=nc[5]||0,has7=nc[7]||0;
     const anchor=has5>=2?"5s as anchor":(has3>=2?"3s as anchor":(has7>=2?"7s as anchor":"building odd structure"));
-    primaryRead=`Odd number build centered on ${anchor}. ${strongPaths>=3?"Multiple viable 13579 hand patterns remain live — don't commit to a single hand yet.":"Narrow the field by deepening pungs rather than spreading across all five odd values."}`;
+    primaryDirection=`Odd number build centered on ${anchor}. ${strongPaths>=3?"Multiple viable 13579 hand patterns remain live — don't commit to a single hand yet.":"Narrow the field by deepening pungs rather than spreading across all five odd values."}`;
   } else if(chosenSec==="2468"){
     const has6=nc[6]||0,has2=nc[2]||0,has8=nc[8]||0;
-    primaryRead=`Even structure${has6>=2?" with 6 as primary anchor — correctly prioritized":" still forming — 6 appears in 7 of 8 hands and must be the first pung you build"}. ${has2>=2||has8>=2?"Secondary pairs are developing on time.":"Deepen your even-number groups before the tiles you need become unavailable."}`;
+    primaryDirection=`Even structure${has6>=2?" with 6 as primary anchor — correctly prioritized":" still forming — 6 appears in 7 of 8 hands and must be the first pung you build"}. ${has2>=2||has8>=2?"Secondary pairs are developing on time.":"Deepen your even-number groups before the tiles you need become unavailable."}`;
   } else if(chosenSec==="369"){
     const has6=nc[6]||0,has3=nc[3]||0,has9=nc[9]||0;
-    primaryRead=`369 build — ${has6>=2?"6 pung forming (correctly anchored)":"6 not yet paired — this is the most critical tile in the section"}. ${has3>=2||has9>=2?"Co-anchors forming.":"Pass everything outside 3-6-9 without hesitation."}`;
+    primaryDirection=`369 build — ${has6>=2?"6 pung forming (correctly anchored)":"6 not yet paired — this is the most critical tile in the section"}. ${has3>=2||has9>=2?"Co-anchors forming.":"Pass everything outside 3-6-9 without hesitation."}`;
   } else if(chosenSec==="2026"){
     const has2=nc[2]||0,has6=nc[6]||0,soap=dragTiles.filter(t=>t.v==="Soap").length;
-    primaryRead=`2026 structure${has2>=2&&has6>=2?" — both anchors present, strong position":(has2>=1||has6>=1)?" — partial anchors; need depth in both 2s and 6s":" — anchors missing; this section needs significant tile improvement"}. ${soap>=1?"Soap (White Dragon) in hand — the critical wildcard is protected.":"Hunt for Soap — it appears in 3 of 4 hands."}`;
+    primaryDirection=`2026 structure${has2>=2&&has6>=2?" — both anchors present, strong position":(has2>=1||has6>=1)?" — partial anchors; need depth in both 2s and 6s":" — anchors missing; this section needs significant tile improvement"}. ${soap>=1?"Soap (White Dragon) in hand — the critical wildcard is protected.":"Hunt for Soap — it appears in 3 of 4 hands."}`;
   } else if(chosenSec==="cr"){
     const runLen=iqLongestRun(finalRack);
-    primaryRead=`Consecutive Run build — ${runLen>=4?"a ${runLen}-wide window is forming":runLen>=2?"partial run continuity, window needs tightening":"no clear window yet"}. Depth within a 3-4 number window is more valuable than a wide spread of singles.`;
+    primaryDirection=`Consecutive Run build — ${runLen>=4?"a ${runLen}-wide window is forming":runLen>=2?"partial run continuity, window needs tightening":"no clear window yet"}. Depth within a 3-4 number window is more valuable than a wide spread of singles.`;
   } else if(chosenSec==="wd"){
-    primaryRead=`Winds & Dragons — ${honorTotal>=7?"strong honor concentration, committed to this section":honorTotal>=5?"credible foundation, pass all 5-9 tiles immediately":honorTotal>=3?"early honor presence — needs significant development":"very thin honor count; aggressive passing of number tiles required"}. ${windPungs>=1?"Wind pung already forming — excellent.":"Stack one wind value before chasing variety."}`;
+    primaryDirection=`Winds & Dragons — ${honorTotal>=7?"strong honor concentration, committed to this section":honorTotal>=5?"credible foundation, pass all 5-9 tiles immediately":honorTotal>=3?"early honor presence — needs significant development":"very thin honor count; aggressive passing of number tiles required"}. ${windPungs>=1?"Wind pung already forming — excellent.":"Stack one wind value before chasing variety."}`;
   } else if(chosenSec==="aln"){
     const topNum=Object.entries(nc).sort((a,b)=>b[1]-a[1])[0];
-    primaryRead=`Any Like Numbers — ${topNum&&topNum[1]>=3?`${topNum[0]}s are your number (${topNum[1]} in hand — good depth)`:topNum&&topNum[1]>=2?`${topNum[0]}s leading, but need more depth — pass everything else ruthlessly`:"number not yet identified — choose your deepest tile and commit completely"}. ALN rewards extreme focus; every off-number is a liability.`;
+    primaryDirection=`Any Like Numbers — ${topNum&&topNum[1]>=3?`${topNum[0]}s are your number (${topNum[1]} in hand — good depth)`:topNum&&topNum[1]>=2?`${topNum[0]}s leading, but need more depth — pass everything else ruthlessly`:"number not yet identified — choose your deepest tile and commit completely"}. ALN rewards extreme focus; every off-number is a liability.`;
   } else if(chosenSec==="q"){
-    primaryRead=`Quints — ${jk>=3?"three jokers gives exceptional ceiling":jk>=2?"two jokers means the section is accessible":jk===1?"only one joker — you need a second before fully committing":"no jokers means Quints is unavailable; start planning your exit now"}. ${kongs>=1||pungs>=1?"Natural depth forming alongside jokers — stack it.":"Need 3-4 natural copies of a tile to pair with jokers."}`;
+    primaryDirection=`Quints — ${jk>=3?"three jokers gives exceptional ceiling":jk>=2?"two jokers means the section is accessible":jk===1?"only one joker — you need a second before fully committing":"no jokers means Quints is unavailable; start planning your exit now"}. ${kongs>=1||pungs>=1?"Natural depth forming alongside jokers — stack it.":"Need 3-4 natural copies of a tile to pair with jokers."}`;
   } else if(chosenSec==="sp"){
-    primaryRead=`Singles & Pairs — ${jk===0?"correctly joker-free for a concealed hand":jk>0?`${jk} joker${jk>1?"s":""} remaining — pass them, they cannot be used here`:""}. ${pairs>=4?"Strong pair density — this rack is building well for S&P":pairs>=2?"pairs forming, need 6 total for completion":"pair count is low — focus every draw decision on matching tiles"}. No exposures allowed.`;
+    primaryDirection=`Singles & Pairs — ${jk===0?"correctly joker-free for a concealed hand":jk>0?`${jk} joker${jk>1?"s":""} remaining — pass them, they cannot be used here`:""}. ${pairs>=4?"Strong pair density — this rack is building well for S&P":pairs>=2?"pairs forming, need 6 total for completion":"pair count is low — focus every draw decision on matching tiles"}. No exposures allowed.`;
   } else {
-    primaryRead=`${chosenName} — ${chosenPct}% structural fit after the Charleston.`;
+    primaryDirection=`${chosenName} — ${chosenPct}% structural fit after the Charleston.`;
   }
 
   // ── SECONDARY PATHS ─────────────────────────────────────────────────────────
@@ -4484,7 +4495,7 @@ function computeExpertRead(finalRack, chosenSec, allSections, passLog, iq){
     :"Very low";
 
   return{
-    primaryRead,
+    primaryDirection,
     secondaryPaths,
     pivotPotential,
     flexibility,
@@ -4709,7 +4720,7 @@ function RackViewer({hand,startingRack}){
         <div style={{display:"flex",alignItems:"center",gap:8}}>
           <span style={{fontSize:16}}>🀄</span>
           <div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>YOUR RACK</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>YOUR TILES</div>
             <div style={{fontSize:12,fontWeight:700,color:C.ink,marginTop:1}}>Starting rack & final rack</div>
           </div>
         </div>
@@ -4853,7 +4864,7 @@ function ExpertReadCard({finalRack, chosenSec, allSections, passLog, iq}){
         <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#fff",lineHeight:1.2}}>Strategic rack evaluation</div>
       </div>
 
-      {/* ── SECTION FIT + CLEANEST LANE ── */}
+      {/* ── SECTION FIT + PRIMARY DIRECTION ── */}
       <div style={{padding:"12px 14px",borderBottom:`1px solid ${C.bdr}`}}>
         <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>SECTION FIT</div>
         <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
@@ -4868,8 +4879,8 @@ function ExpertReadCard({finalRack, chosenSec, allSections, passLog, iq}){
           )}
         </div>
 
-        <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>CLEANEST LANE</div>
-        <p style={{margin:0,fontSize:12,color:C.ink,lineHeight:1.6}}>{read.primaryRead}</p>
+        <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>PRIMARY DIRECTION</div>
+        <p style={{margin:0,fontSize:12,color:C.ink,lineHeight:1.6}}>{read.primaryDirection}</p>
       </div>
 
       {/* ── 5-METRIC ROW ── */}
@@ -4975,10 +4986,10 @@ function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHom
   return(
     <div style={{borderRadius:20,overflow:"hidden",background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"28px 20px 24px",textAlign:"center",boxShadow:"0 12px 40px rgba(0,0,0,0.25)"}}>
       <div style={{fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:3,fontWeight:700,marginBottom:16}}>
-        {isDaily?`DAILY RACKLE · #${dayNum}`:"PRACTICE · TODAY'S RACK"}
+        {isDaily?`DAILY RACKLE · #${dayNum}`:"PRACTICE · RACKLE SCORE"}
       </div>
       {!isHome&&<div style={{fontSize:9,color:C.gilt,letterSpacing:3,fontWeight:700,marginBottom:8}}>TODAY’S CHARLESTON</div>}
-      <div style={{fontFamily:F.d,fontSize:82,fontWeight:900,color:C.gilt,lineHeight:0.92,letterSpacing:-3,
+      <div style={{fontFamily:F.d,fontSize:64,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,
         textShadow:`0 2px 12px rgba(176,138,53,0.4)`,marginBottom:4}}>{displayScore}</div>
       {isPB&&<div className="rk-pop" style={{display:"inline-flex",alignItems:"center",gap:5,background:C.gilt+"22",border:`1px solid ${C.gilt}40`,borderRadius:20,padding:"4px 12px",marginBottom:8}}>
         <span style={{fontSize:13}}>🏆</span>
@@ -5058,8 +5069,8 @@ function ShareButton({text,label,sublabel,variant="goldpill"}){
         textAlign:"left",boxShadow:`0 3px 12px ${v.shadow}`,transition:"opacity 0.15s"}}>
         <div style={{width:32,height:32,borderRadius:8,background:iconBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,flexShrink:0}}>{copied?"✓":"📲"}</div>
         <div style={{flex:1,minWidth:0,display:"flex",flexDirection:"column",gap:2}}>
-          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:titleColor,lineHeight:1.2}}>{copied?"Copied to clipboard!":label||"Challenge your club"}</div>
-          <div style={{fontSize:11,color:subColor,lineHeight:1.3}}>{copied?"Paste it into your group chat":sublabel||"Tap to copy · Drop it in your group chat"}</div>
+          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:titleColor,lineHeight:1.2}}>{copied?"Copied to clipboard!":label||"Challenge Your Club"}</div>
+          <div style={{fontSize:11,color:subColor,lineHeight:1.3}}>{copied?"Paste it into your group chat":sublabel||"Tap to copy · drop it in your group chat"}</div>
         </div>
         <span style={{fontSize:14,color:arrowColor,fontWeight:700,flexShrink:0}}>{copied?"":"›"}</span>
       </button>
@@ -5087,7 +5098,7 @@ function ScoreBar({label,score,max,note}){
         <div className="rk-bar" style={{height:"100%",borderRadius:3,background:`linear-gradient(90deg,${C.jade},#22A865)`,
           "--w":`${pct}%`,width:`${pct}%`}}/>
       </div>
-      {note&&<div style={{fontSize:10.5,color:C.mut,lineHeight:1.45}}>{note}</div>}
+      {note&&<div style={{fontSize:10,color:C.mut,lineHeight:1.4}}>{note}</div>}
     </div>
   );
 }
@@ -5381,78 +5392,6 @@ function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
   );
 }
 
-// ─── TABLE LANGUAGE — translate engine scores into human notes ───────────────
-function getTableReadLine(iq){
-  if(!iq)return "";
-  const score=iq.totalScore||0;
-  const d=iq.directionScore||0;
-  const t=iq.tileStrengthScore||0;
-  const p=iq.passQualityScore||0;
-  const time=iq.timingScore||0;
-  if(score>=92)return "Nothing got past you today.";
-  if(d>=34&&p>=20)return "You found the cleaner lane early.";
-  if(p>=21&&d>=28)return "You stayed disciplined all rack.";
-  if(t>=20&&d>=27)return "Strong shape after the Charleston.";
-  if(d<20&&p<14)return "You chased too many lanes today.";
-  if(p<13)return "One risky pass capped this rack.";
-  if(t<11)return "Too many loose tiles stayed.";
-  if(d<22)return "The better lane showed up late.";
-  if(time<=5)return "A little more pause helps this rack.";
-  if(score>=80)return "Clean read. Strong table instincts.";
-  if(score>=70)return "Good rack. One cleaner pivot helps.";
-  if(score>=60)return "The instincts are building.";
-  return "Start by finding one clean lane.";
-}
-
-function getTinyLesson(sectionId){
-  const lessons={
-    "2026":"Strong players protect 2s, 6s, and Soap here.",
-    "2468":"In 2468, 6s are rarely throwaways.",
-    "369":"For 369, 6s are the heartbeat of the hand.",
-    "13579":"In 13579, 3s and 5s usually lead the read.",
-    "cr":"Consecutive Run wants a tight window, not scattered singles.",
-    "wd":"Winds and Dragons starts with honors. Numbers need a reason to stay.",
-    "aln":"Like Numbers rewards one clear number, not a little of everything.",
-    "q":"Quints starts with jokers. Without two, stay flexible.",
-    "sp":"Singles & Pairs rewards clean pairs and patience.",
-  };
-  return lessons[sectionId]||"Strong Charleston players protect what connects and release what doesn't.";
-}
-
-// ─── FRIENDLY SCORE COPY — keep score output casual, not analytical ───────────
-function friendlyScoreLabel(label){
-  return ({
-    "Read":"Read",
-    "Clean Passes":"Clean Passes",
-    "Live Tiles":"Live Tiles",
-    "Timing":"Pace",
-  })[label]||label;
-}
-function friendlyScoreNote(label,v,max,sectionId){
-  const r=max? v/max : 0;
-  if(label==="Read"){
-    if(r>=0.82)return "You found the cleaner lane early.";
-    if(r>=0.58)return "Good read. One clearer pivot lifts this.";
-    return "Too many lanes stayed open.";
-  }
-  if(label==="Clean Passes"){
-    if(r>=0.82)return "Disciplined passes. You protected the right tiles.";
-    if(r>=0.58)return "Mostly clean. One tough pass cost you.";
-    return "A safer pass would have kept this rack live.";
-  }
-  if(label==="Live Tiles"){
-    if(r>=0.82)return "Strong keepers. The rack had real shape.";
-    if(r>=0.58)return "Decent shape. Build deeper groups next time.";
-    return "Too many loose tiles stayed.";
-  }
-  if(label==="Timing"){
-    if(r>=0.82)return "Good pace. Calm and confident.";
-    if(r>=0.58)return "Steady pace. Trust the first clean read.";
-    return "Take a beat before each pass.";
-  }
-  return "Keep sharpening this part of your Charleston.";
-}
-
 // ─── DAILY SCORECARD — simplified, no tabs, no coach note ─────────────────────
 function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onHome,onPractice,onCoachMode,setScreen}){
   const [dailyStats,setDailyStats]=useState(null);
@@ -5463,9 +5402,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   if(!iq)return null;
 
   const passEmoji=(iq.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
-  const styleSuffix=iq.styleName?` · ${iq.styleName}`:"";
-  const tableLine=getTableReadLine(iq);
-  const shareText=`RACKLE #${dayNum}\n\n${iq.totalScore}\n${iq.level}${styleSuffix}\n${tableLine}\n${passEmoji?`\nPasses ${passEmoji}\n`:"\n"}Think you can beat it?\nplayrackle.com`;
+  const shareText=`🀄 Daily Rackle #${dayNum} · ${iq.totalScore} · ${iq.level}${iq.styleName?` · ${iq.styleName}`:""}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Think you can beat it?\nplayrackle.com`;
 
   useEffect(()=>{
     fetchDailyStats().then(s=>{if(s&&s.total>=1)setDailyStats(s);});
@@ -5501,17 +5438,9 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <div style={{flex:1}}>
           <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:800,marginBottom:2}}>YOUR STYLE</div>
           <div style={{fontSize:13,fontWeight:900,color:C.ink,lineHeight:1.2}}>{iq.styleName}</div>
-          {iq.styleNote&&<div style={{fontSize:11,color:C.mut,lineHeight:1.4,marginTop:6}}>{iq.styleNote}</div>}
+          {iq.styleNote&&<div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:2}}>{iq.styleNote}</div>}
         </div>
       </div>}
-
-      <div style={{...S.card,display:"flex",alignItems:"flex-start",gap:10,marginBottom:10,background:"#fff",border:`1px solid ${C.bdr}`}}>
-        <div style={{width:30,height:30,borderRadius:9,background:C.bg2,display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,flexShrink:0}}>💬</div>
-        <div>
-          <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:800,marginBottom:4}}>TABLE WISDOM</div>
-          <div style={{fontSize:12,color:C.ink,lineHeight:1.45,fontWeight:700}}>{getTinyLesson(chosenSec)}</div>
-        </div>
-      </div>
 
       {/* ② SOCIAL — ranks + share, always visible, right after hero */}
       {(()=>{
@@ -5526,17 +5455,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         // Enrich share text with rank context
         const rankLine=globalRank&&globalTotal?`#${globalRank} of ${globalTotal} players today${clubRank&&clubTotal?` · #${clubRank} in my club`:""}`:
           clubRank&&clubTotal?`#${clubRank} of ${clubTotal} in my club`:"";
-        const richShareText=[
-          `RACKLE #${dayNum}`,
-          "",
-          String(iq.totalScore),
-          `${iq.level}${styleSuffix}`,
-          tableLine,
-          passEmoji?`Passes ${passEmoji}`:"",
-          rankLine,
-          "Think you can beat it?",
-          "playrackle.com",
-        ].filter((line,i)=>line!==""||i===1).join("\n");
+        const richShareText=`🀄 Daily Rackle #${dayNum} · ${iq.totalScore} · ${iq.level}${iq.styleName?` · ${iq.styleName}`:""}\n${passEmoji?`Passes: ${passEmoji}\n`:""}${rankLine?`${rankLine}\n`:""}Think you can beat it?\nplayrackle.com`;
 
         return(
           <div style={{marginBottom:10}}>
@@ -5592,7 +5511,6 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
             {/* Share block */}
             <div style={{background:"linear-gradient(145deg,#FDFAF4,#F5EFE2)",border:`1px solid ${C.gold}25`,borderRadius:14,padding:"13px 14px 11px"}}>
-              <div style={{fontSize:8,color:C.gold,letterSpacing:2,fontWeight:900,marginBottom:6}}>SEND TO YOUR TABLE</div>
               {/* Share text preview */}
               <div style={{fontFamily:"monospace",fontSize:10,color:"#7A6040",background:"rgba(0,0,0,0.035)",borderRadius:8,padding:"9px 12px",marginBottom:10,textAlign:"center",lineHeight:1.85,letterSpacing:0.1}}>
                 {richShareText.split("\n").map((line,i)=>line===""?<div key={i} style={{height:5}}/>:<div key={i}>{line}</div>)}
@@ -5622,27 +5540,27 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       })()}
 
       {/* ⑤ SCORE BREAKDOWN — collapsible */}
-      <CollapsibleSection label="Table Notes" desc="read · clean passes · live tiles · pace" icon="🎲" open={openSec.score} onToggle={()=>toggle("score")} badge={`${iq.totalScore}/100`}>
+      <CollapsibleSection label="Today's Read" desc="What stood out this round" icon="📊" open={openSec.score} onToggle={()=>toggle("score")} badge={`${iq.totalScore}/100`}>
         <div style={{...S.card,marginBottom:8,padding:"12px 14px"}}>
-          <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>WHAT THE RACK SAID</div>
+          <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>SCORE BREAKDOWN</div>
           {[
-            {label:"Read",v:iq.directionScore,max:40,note:friendlyScoreNote("Read",iq.directionScore,40,chosenSec)},
-            {label:"Clean Passes",v:iq.passQualityScore,max:25,note:friendlyScoreNote("Clean Passes",iq.passQualityScore,25,chosenSec)},
-            {label:"Live Tiles",v:iq.tileStrengthScore,max:25,note:friendlyScoreNote("Live Tiles",iq.tileStrengthScore,25,chosenSec)},
-            {label:"Timing",v:iq.timingScore,max:10,note:friendlyScoreNote("Timing",iq.timingScore,10,chosenSec)},
+            {label:"Direction",v:iq.directionScore,max:40,note:iq.directionExplanation},
+            {label:"Pass Quality",v:iq.passQualityScore,max:25},
+            {label:"Tile Strength",v:iq.tileStrengthScore,max:25},
+            {label:"Timing",v:iq.timingScore,max:10,note:iq.timingInsight},
           ].map(({label,v,max,note},i,arr)=>{
             const pct=Math.round(v/max*100);
             const col=scoreColor(v,max);
             return(
               <div key={label} style={{marginBottom:i<arr.length-1?10:0}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
-                  <span style={{fontSize:11,fontWeight:600,color:C.ink}}>{friendlyScoreLabel(label)}</span>
+                  <span style={{fontSize:11,fontWeight:600,color:C.ink}}>{label}</span>
                   <span style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:col}}>{v}<span style={{fontSize:9,color:C.mut,fontWeight:400}}>/{max}</span></span>
                 </div>
                 <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden",marginBottom:note?3:0}}>
                   <div style={{height:"100%",borderRadius:3,background:`linear-gradient(90deg,${col},${col}CC)`,width:`${pct}%`}}/>
                 </div>
-                {note&&<div style={{fontSize:10.5,color:C.mut,lineHeight:1.45}}>{note}</div>}
+                {note&&<div style={{fontSize:10,color:C.mut,lineHeight:1.4}}>{note}</div>}
               </div>
             );
           })}
@@ -5650,36 +5568,38 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       </CollapsibleSection>
 
       {/* ⑥ NEXT STEPS — collapsible */}
-      <CollapsibleSection label="Next Steps" desc="Table Talk · free play" icon="🎯" open={openSec.next} onToggle={()=>toggle("next")}>
+      <CollapsibleSection label="Next Steps" desc="Coach Mode · practice recommendations" icon="🎯" open={openSec.next} onToggle={()=>toggle("next")}>
         <div style={{display:"flex",flexDirection:"column",gap:8,paddingBottom:4}}>
           {/* Coach Mode — primary action, full-bleed dark green */}
           {onCoachMode&&(
             <button onClick={onCoachMode} style={{
-              width:"100%",borderRadius:12,border:"none",cursor:"pointer",
+              width:"100%",borderRadius:14,border:"none",cursor:"pointer",
               background:`linear-gradient(135deg,${C.hero2} 0%,${C.hero1} 100%)`,
-              display:"flex",alignItems:"center",gap:10,padding:"12px 16px",
-              textAlign:"left",boxShadow:`0 4px 20px ${C.jade}22`,
+              display:"flex",alignItems:"center",gap:14,padding:"15px 18px",
+              textAlign:"left",boxShadow:`0 4px 20px ${C.jade}28`,
               position:"relative",overflow:"hidden",
             }}>
               {/* Subtle shimmer stripe */}
-              <div style={{position:"absolute",top:0,left:0,right:0,height:"40%",background:"linear-gradient(180deg,rgba(255,255,255,0.06),transparent)",borderRadius:"12px 12px 0 0",pointerEvents:"none"}}/>
-              <div style={{width:32,height:32,borderRadius:8,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>🎯</div>
+              <div style={{position:"absolute",top:0,left:0,right:0,height:"40%",background:"linear-gradient(180deg,rgba(255,255,255,0.06),transparent)",borderRadius:"14px 14px 0 0",pointerEvents:"none"}}/>
+              <div style={{width:44,height:44,borderRadius:12,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>🎓</div>
               <div style={{flex:1}}>
-                <div style={{fontSize:8,color:C.gilt,letterSpacing:2,fontWeight:700,marginBottom:4,opacity:0.85}}>TABLE TALK</div>
-                <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#fff",lineHeight:1.2,marginBottom:3}}>See the better play</div>
-                <div style={{fontSize:11,color:"rgba(255,255,255,0.62)",lineHeight:1.3}}>What experienced players noticed in your rack</div>
+                <div style={{fontSize:8,color:C.gilt,letterSpacing:2.5,fontWeight:700,marginBottom:3,opacity:0.85}}>TABLE TALK</div>
+                <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:"#fff",lineHeight:1.2,marginBottom:2}}>See The Better Play</div>
+                <div style={{fontSize:11,color:"rgba(255,255,255,0.55)",lineHeight:1.4}}>What experienced players noticed in your rack</div>
               </div>
-              <span style={{fontSize:16,color:"rgba(255,255,255,0.7)",fontWeight:700,flexShrink:0}}>›</span>
+              <div style={{width:28,height:28,borderRadius:8,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                <span style={{fontSize:14,color:"rgba(255,255,255,0.7)",fontWeight:700}}>›</span>
+              </div>
             </button>
           )}
           {/* Practice CTA — secondary, warm sage */}
           {(()=>{
             const lowDir=iq.directionScore<24;
             const wrongSec=!sectionMatch&&bestFitSec;
-            let headline="Free Play";
-            let sub="Stay sharp between daily racks";
-            if(wrongSec){headline=`Try ${bestFitSec.name}`;sub=`Your rack leaned that way. Try that read again`;}
-            else if(lowDir){headline="Work on Section Reads";sub="Find the cleaner lane earlier";}
+            let headline="Practice Mode";
+            let sub="Unlimited hands · Build real instincts";
+            if(wrongSec){headline=`Try ${bestFitSec.name}`;sub=`Your tiles leaned that way — practice reading it faster`;}
+            else if(lowDir){headline="Work on Section Reads";sub="Your first read sets up the whole Charleston";}
             else if(iq.passQualityScore<15){headline="Sharpen Your Passes";sub="Practice makes the Charleston feel automatic";}
             return(
               <button onClick={onPractice} style={{
@@ -5759,25 +5679,25 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
       })()}
 
       {/* YOUR SCORE — closed, with score badge */}
-      <CollapsibleSection label="Table Notes" desc="read · clean passes · live tiles · pace" icon="🎲" open={openSec.score} onToggle={()=>toggle("score")} badge={`${iq.totalScore}/100`}>
+      <CollapsibleSection label="Today's Read" desc="What stood out this round" icon="📊" open={openSec.score} onToggle={()=>toggle("score")} badge={`${iq.totalScore}/100`}>
         <div style={{...S.card,marginBottom:8,padding:"12px 14px"}}>
           {[
-            {label:"Read",v:iq.directionScore,max:40,note:friendlyScoreNote("Read",iq.directionScore,40,chosenSec)},
-            {label:"Clean Passes",v:iq.passQualityScore,max:25,note:friendlyScoreNote("Clean Passes",iq.passQualityScore,25,chosenSec)},
-            {label:"Live Tiles",v:iq.tileStrengthScore,max:25,note:friendlyScoreNote("Live Tiles",iq.tileStrengthScore,25,chosenSec)},
-            {label:"Timing",v:iq.timingScore,max:10,note:friendlyScoreNote("Timing",iq.timingScore,10,chosenSec)},
+            {label:"Direction",v:iq.directionScore,max:40,note:iq.directionExplanation},
+            {label:"Pass Quality",v:iq.passQualityScore,max:25},
+            {label:"Tile Strength",v:iq.tileStrengthScore,max:25},
+            {label:"Timing",v:iq.timingScore,max:10,note:iq.timingInsight},
           ].map(({label,v,max,note},i,arr)=>{
             const col=scoreColor(v,max);
             return(
               <div key={label} style={{marginBottom:i<arr.length-1?10:0}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
-                  <span style={{fontSize:11,fontWeight:600,color:C.ink}}>{friendlyScoreLabel(label)}</span>
+                  <span style={{fontSize:11,fontWeight:600,color:C.ink}}>{label}</span>
                   <span style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:col}}>{v}<span style={{fontSize:9,color:C.mut,fontWeight:400}}>/{max}</span></span>
                 </div>
                 <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden",marginBottom:note?3:0}}>
                   <div style={{height:"100%",borderRadius:3,background:`linear-gradient(90deg,${col},${col}CC)`,width:`${Math.round(v/max*100)}%`}}/>
                 </div>
-                {note&&<div style={{fontSize:10.5,color:C.mut,lineHeight:1.45}}>{note}</div>}
+                {note&&<div style={{fontSize:10,color:C.mut,lineHeight:1.4}}>{note}</div>}
               </div>
             );
           })}
@@ -6348,7 +6268,7 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
         </div>
 
         {/* Primary & alt lanes */}
-        <Item icon="🎯" label="CLEANEST LANE" text={advice.primaryLane}/>
+        <Item icon="🎯" label="PRIMARY DIRECTION" text={advice.primaryLane}/>
         {advice.altLane&&<Item icon="↗️" label="SECONDARY PATH" text={advice.altLane} color={C.gold}/>}
 
         {/* Foundation & weakness */}
@@ -6368,10 +6288,10 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
         )}
 
         {/* Key tile */}
-        <Item icon="🔑" label="KEY TILE" text={advice.keyTile} color={C.amberB}/>
+        <Item icon="🔑" label="THE TILE THAT CHANGES EVERYTHING" text={advice.keyTile} color={C.amberB}/>
 
         {/* Pass read */}
-        {advice.passRead&&<Item icon="🔄" label="PASS READ" text={advice.passRead} color={C.mut}/>}
+        {advice.passRead&&<Item icon="🔄" label="PASS QUALITY" text={advice.passRead} color={C.mut}/>}
 
         {/* Takeaway */}
         <div style={{marginTop:4,padding:"10px 12px",background:`linear-gradient(135deg,${C.jade}08,${C.jade}04)`,borderRadius:10,border:`1.5px solid ${C.jade}20`}}>
@@ -6387,72 +6307,267 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
 
 
 // ─── COACH MODE SCREEN — narrative-first deep analysis ───────────────────────
-function CoachModeScreen({iq,dayNum,section,onBack,setScreen}){
-  const score=iq?.totalScore ?? "—";
-  const level=iq?.level || "Table Read";
-  const style=iq?.styleName || "Stay flexible";
-  const passInsights=Array.isArray(iq?.passInsights)?iq.passInsights:[];
-  const passDots=passInsights.length
-    ? passInsights.map(p=>p?.quality==="strong"?"🟢":p?.quality==="weak"?"🔴":"🟡").join(" ")
-    : "🟡 🟢 🟡 🟢 🟢";
+function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onBack,setScreen}){
+  const [sfOpen,setSfOpen]=useState(false);
+  if(!iq)return null;
 
-  const tableLine=(()=>{
-    const n=Number(iq?.totalScore||0);
-    if(n>=90)return "Elite rack. You saw the lane and stayed clean.";
-    if(n>=82)return "Strong rack. You found the cleaner lane early.";
-    if(n>=72)return "Good rack. One cleaner pass makes this dangerous.";
-    if(n>=60)return "Workable rack. You had pieces, but the lane came late.";
-    return "Messy rack. Next time, pick the lane earlier.";
+  const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
+  const resolvedHandLabel=chosenHand||(iq?.scoredHandLabel||null);
+  const chosenHandObj=resolvedHandLabel?HAND_CATALOG.find(h=>h.sec===chosenSec&&h.label===resolvedHandLabel):null;
+  const sortedSecs=allSections?[...allSections].sort((a,b)=>b.score-a.score):[];
+  const bestFitSec=sortedSecs[0];
+  const chosenFit=chosenSec&&allSections?allSections.find(s=>s.id===chosenSec):null;
+  const chosenPct=chosenFit?Math.round(chosenFit.score*100):null;
+  const bestPct=bestFitSec?Math.round(bestFitSec.score*100):null;
+  const sectionMatch=chosenSec===bestFitSec?.id;
+  const scoreColor=(v,max)=>v/max>=0.8?C.jade:v/max>=0.55?C.gold:C.cinn;
+
+  // ── VERDICT — one honest sentence about this round ──────────────────────────
+  const verdictText=(()=>{
+    const total=iq.totalScore;
+    const dir=iq.directionScore/40;
+    const pass=iq.passQualityScore/25;
+    const tile=iq.tileStrengthScore/25;
+    const handName=chosenHandObj?.label||chosenSecObj?.name||"your section";
+    if(total>=88)return`Excellent Charleston. Your direction was clear from the start and your passes protected it — this is what disciplined play looks like.`;
+    if(total>=75&&dir>=0.8)return`Strong read on ${chosenSecObj?.name||"your section"}. Your section instinct was right — the passes kept the structure intact.`;
+    if(total>=75&&pass>=0.8)return`Your passing was the standout this round — you gave away the right tiles consistently. The direction just needed to sharpen a bit earlier.`;
+    if(total>=65&&dir>=0.7&&pass<0.55)return`You saw the right section but gave away tiles that would have made it. Direction was there — the passing cost you.`;
+    if(total>=65&&pass>=0.7&&dir<0.55)return`Disciplined passing without a clear target is only half the equation. Your discard instincts are good — commit to a section earlier.`;
+    if(total>=55&&!sectionMatch)return`Your tiles were pulling toward ${bestFitSec?.name||"another section"}, but you went a different direction. Not wrong — just a pivot opportunity worth noting.`;
+    if(total>=55)return`A workable Charleston. The structure was there in pieces — the goal next time is locking in earlier so each pass has a job to do.`;
+    if(dir<0.4&&pass<0.4)return`This round, the direction and passes weren't speaking the same language. Before your first pass: name your section, then ask "does this tile help it?"`;
+    if(dir<0.4)return`The passes were reasonable, but without a clear section target the rack drifted. Lock in your direction by the first pass and everything else follows.`;
+    return`The fundamentals are there. Pick your section before you touch a single tile — that one habit makes every pass decision automatic.`;
   })();
 
+  // ── WHAT HAPPENED TO YOUR PASSES — narrative per round ──────────────────────
+  const passNarrative=(iq.passInsights||[]).map((p,i)=>{
+    const qualColor={strong:C.jade,weak:C.cinn,mixed:C.gold,neutral:C.mut};
+    const qualBg={strong:"#EDF5F0",weak:"#FEF0F0",mixed:"#FBF3E2",neutral:C.bg2};
+    const qualLabel={strong:"Good pass",weak:"Costly pass",mixed:"Mixed pass",neutral:"Neutral pass"};
+    const tiles=p.passedTiles||[];
+    return{...p,qualColor:qualColor[p.quality]||C.mut,qualBg:qualBg[p.quality]||C.bg2,qualLabel:qualLabel[p.quality]||"Pass",tiles,roundNum:i+1};
+  });
+
+  // ── WHAT AN EXPERT WOULD NOTICE — specific to actual tiles ──────────────────
+  const expertNotes=(()=>{
+    const notes=[];
+    const jk=(hand||[]).filter(t=>t.t==="j").length;
+    const fl=(hand||[]).filter(t=>t.t==="f").length;
+    const allPassed=(passLog||[]).flatMap(p=>p.out||[]);
+    const passedJokers=allPassed.filter(t=>t.t==="j");
+    const passedFlowers=allPassed.filter(t=>t.t==="f");
+
+    // Joker handling
+    if(passedJokers.length>0){
+      notes.push({icon:"⚠️",text:`You passed ${passedJokers.length} joker${passedJokers.length>1?"s":""} — jokers are almost never worth giving away. They're the most flexible tile on the board.`,type:"warn"});
+    } else if(jk>=2){
+      notes.push({icon:"✓",text:`${jk} jokers held — that's the right call. Jokers don't get passed unless you have no choice.`,type:"good"});
+    }
+
+    // Flower handling
+    if(passedFlowers.length>0&&chosenSec!=="wd"){
+      notes.push({icon:"⚠️",text:`You passed ${passedFlowers.length} flower${passedFlowers.length>1?"s":""}. Flowers appear in the majority of winning hands — hold them unless you're certain they don't fit.`,type:"warn"});
+    } else if(fl>=2){
+      notes.push({icon:"✓",text:`${fl} flowers in your final rack. These are structural support for most sections — well held.`,type:"good"});
+    }
+
+    // Hand-specific tile gaps
+    if(chosenHandObj){
+      const label=chosenHandObj.label;
+      const neededNums=[...new Set((label.match(/\d/g)||[]).map(Number).filter(n=>n>=1&&n<=9))];
+      const nc={};(hand||[]).filter(t=>t.t==="s").forEach(t=>{nc[t.n]=(nc[t.n]||0)+1;});
+      const missingAnchors=neededNums.filter(n=>!nc[n]);
+      if(missingAnchors.length>0){
+        notes.push({icon:"🎯",text:`Your final rack was missing ${missingAnchors.slice(0,2).map(n=>`${n}s`).join(" and ")} — tiles that appear in this hand. ${missingAnchors.length===1?"That single group":"Those groups"} would have made the difference.`,type:"gap"});
+      }
+      // Suit concentration check
+      const suitCounts={bam:0,crak:0,dot:0};
+      (hand||[]).filter(t=>t.t==="s").forEach(t=>{suitCounts[t.s]++;});
+      const dominantSuit=Object.entries(suitCounts).sort((a,b)=>b[1]-a[1])[0];
+      const total3=Object.values(suitCounts).reduce((a,b)=>a+b,0);
+      if(dominantSuit&&dominantSuit[1]/total3>=0.65&&total3>=5){
+        const suitName={bam:"Bamboo",crak:"Character",dot:"Circle"}[dominantSuit[0]];
+        notes.push({icon:"🃏",text:`Your number tiles were heavily concentrated in ${suitName} — which helps with single-suit hands but can reduce flexibility in multi-suit hands like this one.`,type:"info"});
+      }
+    }
+
+    // Section direction accuracy
+    if(!sectionMatch&&bestFitSec&&chosenPct!=null&&bestPct!=null){
+      const gap=bestPct-chosenPct;
+      if(gap>=20){
+        notes.push({icon:"↗️",text:`${bestFitSec.icon} ${bestFitSec.name} had a ${gap}% stronger section fit. An expert player would have spotted the pull toward that section by the second pass.`,type:"pivot"});
+      } else if(gap>=10){
+        notes.push({icon:"↗️",text:`${bestFitSec.icon} ${bestFitSec.name} was a slightly stronger fit (${gap}% gap). Both sections were viable — this was a judgment call, not a clear miss.`,type:"info"});
+      }
+    }
+
+    // Pass timing
+    if(iq.timingInsight){
+      notes.push({icon:"⏱",text:iq.timingInsight,type:"timing"});
+    }
+
+    return notes.slice(0,5);
+  })();
+
+  // ── ONE THING — the single most impactful habit change ─────────────────────
   const oneThing=(()=>{
-    const read=Number(iq?.directionScore||0)/40;
-    const pass=Number(iq?.passQualityScore||0)/25;
-    const live=Number(iq?.tileStrengthScore||0)/25;
-    if(read<0.55)return "Name your lane before the first pass.";
-    if(pass<0.55)return "Keep what connects. Let the floaters go.";
-    if(live<0.55)return "Protect pairs and useful groups first.";
-    return "Trust the clean lane once you see it.";
+    const dir=iq.directionScore/40;
+    const pass=iq.passQualityScore/25;
+    const tile=iq.tileStrengthScore/25;
+    const tm=iq.timingScore/10;
+    // Find the weakest dimension
+    const dims=[
+      {k:"dir",r:dir,tip:`Before your next game: look at your starting rack and say out loud which section you're going to play. Then make every pass answer to that decision.`},
+      {k:"pass",r:pass,tip:`Before each pass, ask one question: "Does this tile connect to what I'm keeping?" If no — it goes. If yes — it stays. That's the whole decision.`},
+      {k:"tile",r:tile,tip:`Focus on group depth over coverage. Three tiles of the same thing beats one of everything. Pairs and pungs are worth more than variety.`},
+      {k:"tm",r:tm,tip:`Aim for 10–20 seconds per pass. Enough to read the rack, not enough to second-guess a good first instinct. Set a mental clock.`},
+    ].sort((a,b)=>a.r-b.r);
+    return dims[0].tip;
   })();
 
-  const wisdom=(()=>{
-    const sec=(section||"").toLowerCase();
-    if(sec.includes("2026"))return "Strong players protect 2s, 6s, and Soap in 2026.";
-    if(sec.includes("2468"))return "In evens, 6s are usually too useful to pass.";
-    if(sec.includes("369"))return "For 369, the 6 is the anchor. Treat it like gold.";
-    if(sec.includes("13579"))return "With odds, 3s and 5s often carry the rack.";
-    if(sec.includes("run"))return "Runs need groups, not scattered singles.";
-    if(sec.includes("wind")||sec.includes("dragon"))return "Honors first. Numbers need a reason to stay.";
-    return "Strong players spot the flexible tiles, then choose a lane.";
-  })();
+  const noteTypeStyle={
+    good:{bg:"#EDF5F0",border:`1px solid ${C.jade}25`,iconCol:C.jade},
+    warn:{bg:"#FEF0F0",border:"1px solid #B8323225",iconCol:C.cinn},
+    gap:{bg:"#FBF3E2",border:`1px solid ${C.gold}30`,iconCol:C.gold},
+    info:{bg:C.bg2,border:`1px solid ${C.bdr}`,iconCol:C.mut},
+    pivot:{bg:"#EDF5F0",border:`1px solid ${C.jade}25`,iconCol:C.jade},
+    timing:{bg:C.bg2,border:`1px solid ${C.bdr}`,iconCol:C.mut},
+  };
 
   return(
     <div style={S.pg} className="rk-pg">
       <RackleHeader onBack={onBack} setScreen={setScreen}/>
 
-      <div style={{textAlign:"center",marginTop:4,marginBottom:16}}>
-        <div style={{fontSize:8,color:C.jade,letterSpacing:2.6,fontWeight:800,marginBottom:8}}>TABLE TALK</div>
-        <div style={{fontFamily:F.d,fontSize:22,fontWeight:800,color:C.ink,letterSpacing:-0.4,lineHeight:1.1}}>See the better play</div>
-        <div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:8}}>What experienced players noticed in your rack</div>
+      {/* Header */}
+      <div style={{marginBottom:14,marginTop:4,textAlign:"center"}}>
+        <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:2}}>Table Talk</div>
+        <div style={{fontSize:11,color:C.mut}}>Day #{dayNum} · {chosenSecObj?.name||section}</div>
       </div>
 
-      <div style={{background:`linear-gradient(145deg,${C.hero2},${C.hero1})`,borderRadius:18,padding:"20px 18px 18px",color:"#fff",marginBottom:12,boxShadow:`0 8px 28px ${C.jade}24`,textAlign:"center"}}>
-        <div style={{fontFamily:F.d,fontSize:72,fontWeight:900,lineHeight:0.92,color:C.gilt,letterSpacing:-2,marginBottom:10}}>{score}</div>
-        <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,lineHeight:1.1,marginBottom:8}}>{level}</div>
-        <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"5px 12px",fontSize:11,color:C.gilt,fontWeight:900,marginBottom:16,letterSpacing:0.2}}>{style}</div>
-        <div style={{fontSize:14,lineHeight:1.55,fontWeight:800,maxWidth:310,margin:"0 auto 12px"}}>{tableLine}</div>
-        <div style={{fontSize:15,letterSpacing:2,marginTop:8}}>{passDots}</div>
+      {/* ① VERDICT */}
+      <SectionDivider label="THE VERDICT"/>
+      <div style={{borderRadius:14,background:"#fff",border:`1.5px solid ${C.bdr}`,padding:"16px 18px",marginBottom:10,boxShadow:"0 2px 12px rgba(0,0,0,0.04)"}}>
+        <div style={{fontSize:8,color:C.jade,letterSpacing:2.5,fontWeight:700,marginBottom:8}}>THE VERDICT</div>
+        <p style={{fontSize:13,color:C.ink,lineHeight:1.7,margin:"0 0 14px",fontStyle:"italic"}}>{verdictText}</p>
+        {/* IQ sub-scores inline */}
+        <div style={{display:"flex",gap:4}}>
+          {[{label:"DIR",v:iq.directionScore,max:40},{label:"PASS",v:iq.passQualityScore,max:25},{label:"TILE",v:iq.tileStrengthScore,max:25},{label:"TIME",v:iq.timingScore,max:10}].map(({label,v,max})=>{
+            const pct=v/max;
+            const col=pct>=0.8?C.jade:pct>=0.55?C.gold:C.cinn;
+            const bg=pct>=0.8?"#EDF5F0":pct>=0.55?"#FBF3E2":"#FEF0F0";
+            return(
+              <div key={label} style={{flex:1,background:bg,borderRadius:10,padding:"9px 4px",textAlign:"center"}}>
+                <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:col,lineHeight:1}}>{v}</div>
+                <div style={{fontSize:6,color:col,opacity:0.7,letterSpacing:1.5,fontWeight:700,marginTop:3}}>{label}</div>
+                <div style={{fontSize:6,color:C.mut}}>/{max}</div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      <div style={{borderRadius:14,background:"#fff",border:`1px solid ${C.bdr}`,padding:"15px 16px",marginBottom:10}}>
-        <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:800,marginBottom:7}}>ONE THING</div>
-        <div style={{fontSize:13,color:C.ink,lineHeight:1.55,fontWeight:800}}>{oneThing}</div>
+      {/* ①½ COACH ADVICE */}
+      <SectionDivider label="COACH ADVICE"/>
+      <CoachAdvice hand={hand} passLog={passLog} chosenSec={chosenSec} allSections={allSections} iq={iq} chosenHandObj={chosenHandObj}/>
+
+      {/* ② RACK VS HAND */}
+      {chosenHandObj&&<SectionDivider label="YOUR RACK VS THE HAND"/>}
+      {chosenHandObj&&(
+        <RackVsHandOverlay
+          hand={hand}
+          handObj={chosenHandObj}
+          passLog={passLog}
+          sectionId={chosenSec}
+          handWasInferred={iq.handWasInferred}
+          secObj={chosenSecObj}
+        />
+      )}
+
+      {/* ③ YOUR STARTING DEAL */}
+      <SectionDivider label="PASS ANALYSIS"/>
+      <StartingDealCard startingRack={startingRack} chosenHandObj={chosenHandObj}/>
+
+      {/* ④ YOUR PASSES */}
+      <PassesCard passNarrative={passNarrative}/>
+
+      {/* ⑤ ALTERNATIVE HANDS */}
+      {hand&&hand.length>0&&chosenSec&&(()=>{
+        const primPct=chosenHandObj?computeHonestCoverage(hand,chosenHandObj).pct:0;
+        return <AltHandsCard hand={hand} resolvedHandLabel={resolvedHandLabel} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecs} primaryCoveragePct={primPct}/>;
+      })()}
+
+      {/* ⑥ EXPERT EYE ───────────────────────────────────────────────────────── */}
+      {expertNotes.length>0&&(
+        <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden"}}>
+          <div style={{padding:"10px 14px 8px",borderBottom:`1px solid ${C.bdr}`}}>
+            <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:1}}>EXPERT EYE</div>
+            <div style={{fontSize:12,fontWeight:700,color:C.ink}}>What a strong player would notice</div>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:0}}>
+            {expertNotes.map((n,i)=>{
+              const s=noteTypeStyle[n.type]||noteTypeStyle.info;
+              return(
+                <div key={i} style={{display:"flex",alignItems:"flex-start",gap:10,padding:"10px 14px",background:i%2===0?"#fff":C.bg2,borderBottom:i<expertNotes.length-1?`1px solid ${C.bdr}`:"none"}}>
+                  <span style={{fontSize:14,flexShrink:0,marginTop:1}}>{n.icon}</span>
+                  <span style={{fontSize:11,color:C.ink,lineHeight:1.6,flex:1}}>{n.text}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ⑧ ONE THING */}
+      <SectionDivider label="ONE THING TO TAKE AWAY"/>
+      <div style={{borderRadius:14,background:`linear-gradient(145deg,${C.jade}06,${C.jade}02)`,border:`1.5px solid ${C.jade}20`,padding:"15px 16px",marginBottom:10}}>
+        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+          <div style={{width:28,height:28,borderRadius:8,background:`linear-gradient(135deg,${C.jade},#115C38)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,flexShrink:0}}>💡</div>
+          <div style={{fontSize:8,color:C.jade,letterSpacing:2.5,fontWeight:700}}>ONE THING TO TAKE INTO YOUR NEXT GAME</div>
+        </div>
+        <p style={{fontSize:12,color:C.ink,lineHeight:1.7,margin:0,fontWeight:500}}>{oneThing}</p>
       </div>
 
-      <div style={{borderRadius:14,background:C.sage,border:`1px solid ${C.jade}22`,padding:"15px 16px",marginBottom:14}}>
-        <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:800,marginBottom:7}}>TABLE WISDOM</div>
-        <div style={{fontSize:13,color:C.ink,lineHeight:1.55}}>{wisdom}</div>
-      </div>
+      {/* ⑨ SECTION LANDSCAPE */}
+      {allSections&&allSections.length>0&&<SectionDivider label="REFERENCE"/>}
+      {allSections&&allSections.length>0&&(
+        <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden"}}>
+          <button onClick={()=>setSfOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"11px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
+            <div>
+              <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>SECTION LANDSCAPE</div>
+              <div style={{fontSize:12,fontWeight:700,color:C.ink,marginTop:1}}>How all sections ranked against your final rack</div>
+            </div>
+            <span style={{fontSize:12,color:C.mut}}>{sfOpen?"▾":"▸"}</span>
+          </button>
+          {sfOpen&&<div style={{borderTop:`1px solid ${C.bdr}`,padding:"10px 14px"}} className="rk-in">
+            {!sectionMatch&&<div style={{fontSize:11,color:C.amberB,lineHeight:1.5,background:C.amber,borderRadius:8,padding:"7px 10px",marginBottom:10}}>
+              Your tiles had a stronger natural fit in {bestFitSec?.icon} <strong>{bestFitSec?.name}</strong> ({bestPct}%) than {chosenSecObj?.name} ({chosenPct}%). Worth knowing what the rack was pulling toward.
+            </div>}
+            {sortedSecs.slice(0,6).map((s,i)=>{
+              const isChosen=s.id===chosenSec;const isTop=i===0;
+              const pct=Math.round(s.score*100);
+              const barCol=isChosen?C.jade:isTop&&!isChosen?C.gold:C.bdr;
+              return(
+                <div key={s.id} style={{display:"flex",alignItems:"center",gap:8,marginBottom:i<5?8:0}}>
+                  <span style={{fontSize:13,flexShrink:0,width:20}}>{s.icon}</span>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
+                      <span style={{fontSize:11,fontWeight:isChosen?700:400,color:isChosen?C.ink:C.mut}}>
+                        {s.name}{isChosen?" ← your pick":isTop&&!isChosen?" ← best fit":""}
+                      </span>
+                      <span style={{fontSize:11,fontWeight:700,color:isChosen?C.jade:C.mut,fontFamily:F.d}}>{pct}%</span>
+                    </div>
+                    <div style={{height:4,borderRadius:2,background:C.bdr,overflow:"hidden"}}>
+                      <div style={{height:"100%",borderRadius:2,width:`${pct}%`,background:barCol,transition:"width 0.6s ease"}}/>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>}
+        </div>
+      )}
 
       <button onClick={onBack} style={{...S.oBtn,width:"100%",marginTop:4}}>← Back to Scorecard</button>
       <Footer/>
@@ -6507,8 +6622,8 @@ const TUTORIAL_STEPS=[
   {title:"Welcome to Rackle! 🀄",body:"Rackle trains your Charleston strategy for American Mahjong (NMJL 2026 card).",detail:"The Charleston is the tile-passing ritual before play. Better passing = better hands. Quick to learn — let's go.",icon:"🀄",tip:null},
   {title:"Your Rack",body:"You're dealt 13 tiles. Each tile belongs to a category: Bam, Crak, Dot, Winds, Dragons, Flowers, or Jokers.",detail:"The goal is to end the Charleston with tiles that align to and can be flexible within a section.",icon:"🎴",tip:null,showTiles:true},
   {title:"The Charleston",body:"You pass tiles in 3 rounds — Right (3 tiles), Over (3 tiles), Left (0–3 tiles, blind).",detail:"'Blind' means you pass before seeing what you receive. Pass your worst tiles. Keep your best.",icon:"👉",tip:"Jokers can NEVER be passed. And why would you want to? They're too valuable!"},
-  {title:"Pick Your Section",body:"After passing, choose which hand category (section) you're targeting — like 2468, 369, or Consecutive Run.",detail:"Rackle then scores how well your final rack fits that section. It's like a Charleston performance review.",icon:"🎯",tip:"The 2026 Card in-game guide shows tips for each section."},
-  {title:"Get Your Read",body:"Rackle gives you one simple score, a table-style note, and a share card worth posting.",detail:"No heavy report. Just what you did well, what felt risky, and one thing to try next time.",icon:"🏆",tip:"Play the Daily for the same rack everyone else gets today."},
+  {title:"Pick Your Section",body:"After passing, choose which hand category you were leaning toward — like 2468, 369, or Consecutive Run.",detail:"Rackle gives you a quick rack read so you can see what worked and what to try next.",icon:"🎯",tip:"The 2026 Card in-game guide shows tips for each section."},
+  {title:"Get Rated",body:"Your Rackle score gives you a quick read on how your Charleston felt today.",detail:"Get a simple rack read, see what stood out, and share with your Mahj group.",icon:"🏆",tip:"Play the Daily for a fresh deal every day shared by all players."},
 ];
 
 // ─── LEAVE MODAL ──────────────────────────────────────────────────────────────
@@ -6548,7 +6663,7 @@ function ClubPostToast({toast,onDismiss}){
       <div style={{width:36,height:36,borderRadius:10,background:C.jade+"12",border:`1.5px solid ${C.jade}25`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🀄</div>
       <div style={{flex:1,minWidth:0}}>
         <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.jade,lineHeight:1,marginBottom:3}}>Posted to {toast.clubName}</div>
-        <div style={{fontSize:11,color:C.mut}}>IQ {toast.iqScore} is on the board</div>
+        <div style={{fontSize:11,color:C.mut}}>Score {toast.iqScore} is on the board</div>
       </div>
       <button onClick={onDismiss} style={{background:"none",border:"none",color:C.mut,fontSize:14,cursor:"pointer",padding:0,lineHeight:1,flexShrink:0}}>✕</button>
     </div>
@@ -6568,7 +6683,7 @@ function RackleHeader({onBack,setScreen}){
       </div>
       <div style={{position:"relative"}}>
         <button onClick={()=>setMenuOpen(o=>!o)} aria-label="Menu"
-          style={{background:menuOpen?C.bg2:"none",border:`1px solid ${menuOpen?C.bdr:"transparent"}`,borderRadius:10,padding:0,width:38,height:36,cursor:"pointer",display:"flex",flexDirection:"column",gap:4,alignItems:"center",justifyContent:"center",flexShrink:0}}>
+          style={{background:menuOpen?C.bg2:"none",border:`1px solid ${menuOpen?C.bdr:"transparent"}`,borderRadius:8,padding:"6px 10px",cursor:"pointer",display:"flex",flexDirection:"column",gap:4,alignItems:"center",justifyContent:"center",flexShrink:0}}>
           <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
           <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
           <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
@@ -6874,7 +6989,7 @@ function CardGuideScreen({home,setScreen}){
       {/* Anchor tile row */}
       {anchor.tiles&&(
         <div style={{...S.card,marginBottom:8,padding:"10px 14px",background:`${secObj?.color}08`,borderColor:`${secObj?.color}25`}}>
-          <div style={{fontSize:8,color:secObj?.color,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>⚓ KEEPERS</div>
+          <div style={{fontSize:8,color:secObj?.color,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>⚓ ANCHOR TILES</div>
           <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:6}}>
             {anchor.tiles.map((tile,i)=>(
               <span key={i} style={{fontSize:12,fontWeight:800,padding:"4px 10px",borderRadius:10,background:"#fff",color:secObj?.color,border:`1px solid ${secObj?.color}30`}}>{tile}</span>
@@ -7135,7 +7250,7 @@ function ClubCodeEntry({setScreen}){
   const hasProfile=!!(profile&&profile.nickname);
   const savedCode=hasProfile?getClubCode():null;
   const savedClub=savedCode?CLUBS[savedCode]:null;
-  const myName=(profile?.nickname)||getClubName()||null;
+  const myName=getClubName()||(profile?.nickname||null);
 
   // Eager fetch club stats if in a club
   useEffect(()=>{
@@ -7164,14 +7279,13 @@ function ClubCodeEntry({setScreen}){
       <button onClick={()=>savedClub?setOpen(o=>!o):setScreen("clubs")} style={{width:"100%",display:"flex",alignItems:"flex-start",justifyContent:"space-between",padding:"16px 14px",borderRadius:open?"0":"0 0 12px 12px",background:C.jade+"06",border:"none",borderTop:`1px solid ${C.bdr}`,cursor:"pointer",textAlign:"left"}}>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:8}}>{savedClub?"YOUR CLUB · TODAY":"JOIN YOUR CLUB"}</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.2,marginBottom:8}}>{savedClub?savedClub.name:"Club Leaderboard"}</div>
-          {savedClub&&clubStats?.myRank===1&&<div style={{fontSize:11,color:C.jade,lineHeight:1.45,marginBottom:10,fontWeight:700}}>You're leading your club today 🔥</div>}
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.2,marginBottom:10}}>{savedClub?savedClub.name:"Club Leaderboard"}</div>
           {/* Live stat pills for club members */}
           {savedClub&&clubStats?(
-            <div style={{display:"flex",gap:6,flexWrap:"wrap",marginTop:2}}>
-              <span style={{fontSize:10,fontWeight:700,color:C.jade,background:C.jade+"12",borderRadius:20,padding:"3px 10px"}}>{clubStats.total} playing today</span>
-              {clubStats.topIQ&&<span style={{fontSize:10,fontWeight:700,color:C.gold,background:C.gold+"15",borderRadius:20,padding:"3px 10px"}}>Top: {clubStats.topIQ} IQ</span>}
-              {clubStats.myRank&&<span style={{fontSize:10,fontWeight:700,color:"#2460A8",background:"#2460A812",borderRadius:20,padding:"3px 10px"}}>You're #{clubStats.myRank}</span>}
+            <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+              <span style={{fontSize:10,fontWeight:700,color:C.jade,background:C.jade+"12",borderRadius:20,padding:"2px 10px"}}>{clubStats.total} playing today</span>
+              {clubStats.topIQ&&<span style={{fontSize:10,fontWeight:700,color:C.gold,background:C.gold+"15",borderRadius:20,padding:"2px 10px"}}>Top score: {clubStats.topIQ}</span>}
+              {clubStats.myRank&&<span style={{fontSize:10,fontWeight:700,color:"#2460A8",background:"#2460A812",borderRadius:20,padding:"2px 10px"}}>You're #{clubStats.myRank}</span>}
             </div>
           ):savedClub?(
             <div style={{fontSize:11,color:C.mut}}>Who's top of {savedClub.name} right now?</div>
@@ -7238,7 +7352,7 @@ function GlobalLeaderboardPill({setScreen}){
   const [entries,setEntries]=useState([]);
   const [loading,setLoading]=useState(false);
   const [fetched,setFetched]=useState(false);
-  const myName=(getProfile()?.nickname)||getClubName()||null;
+  const myName=getClubName()||(getProfile()?.nickname||null);
   const dn=getDayNum();
 
   // Eager fetch on mount so header shows live stats
@@ -7267,14 +7381,13 @@ function GlobalLeaderboardPill({setScreen}){
       <button onClick={toggle} style={{width:"100%",display:"flex",alignItems:"flex-start",justifyContent:"space-between",padding:"16px 14px",borderRadius:open?"12px 12px 0 0":"12px 12px 0 0",background:"#2460A806",border:"none",borderBottom:open?"none":`1px solid #2460A815`,cursor:"pointer",textAlign:"left"}}>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:9,color:"#2460A8",letterSpacing:1.5,fontWeight:700,marginBottom:8}}>🌍 GLOBAL · DAY #{dn}</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.2,marginBottom:8}}>Rackle Leaderboard</div>
-          {hasData&&myRank===1&&<div style={{fontSize:11,color:C.jade,lineHeight:1.45,marginBottom:10,fontWeight:700}}>You're leading today 🔥</div>}
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.2,marginBottom:10}}>Rackle Leaderboard</div>
           {/* Live stat pills */}
           {hasData?(
-            <div style={{display:"flex",gap:6,flexWrap:"wrap",marginTop:2}}>
-              <span style={{fontSize:10,fontWeight:700,color:"#2460A8",background:"#2460A812",borderRadius:20,padding:"3px 10px"}}>{entries.length} players today</span>
-              {topIQ&&<span style={{fontSize:10,fontWeight:700,color:C.jade,background:C.jade+"12",borderRadius:20,padding:"3px 10px"}}>Top IQ: {topIQ}</span>}
-              {myRank>0&&<span style={{fontSize:10,fontWeight:700,color:C.gold,background:C.gold+"15",borderRadius:20,padding:"3px 10px"}}>You're #{myRank} 🔥</span>}
+            <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+              <span style={{fontSize:10,fontWeight:700,color:"#2460A8",background:"#2460A812",borderRadius:20,padding:"2px 10px"}}>{entries.length} players today</span>
+              {topIQ&&<span style={{fontSize:10,fontWeight:700,color:C.jade,background:C.jade+"12",borderRadius:20,padding:"2px 10px"}}>Top Score: {topIQ}</span>}
+              {myRank>0&&<span style={{fontSize:10,fontWeight:700,color:C.gold,background:C.gold+"15",borderRadius:20,padding:"2px 10px"}}>You're #{myRank} 🔥</span>}
               {myRank===0&&myName&&<span style={{fontSize:10,fontWeight:600,color:C.mut,background:C.bg2,borderRadius:20,padding:"2px 10px"}}>Play Daily to rank</span>}
             </div>
           ):(
@@ -7290,7 +7403,7 @@ function GlobalLeaderboardPill({setScreen}){
             <div style={{width:28,height:28,borderRadius:8,background:"#2460A815",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:900,color:"#2460A8",fontFamily:F.d,flexShrink:0}}>#{myRank}</div>
             <div style={{flex:1,minWidth:0}}>
               <div style={{fontFamily:F.d,fontSize:12,fontWeight:800,color:"#2460A8",lineHeight:1}}>You're #{myRank} globally today</div>
-              <div style={{fontSize:10,color:C.mut,marginTop:2}}>IQ {myEntry.iqScore}{myEntry.streak>1?` · ${myEntry.streak}d streak`:""}</div>
+              <div style={{fontSize:10,color:C.mut,marginTop:2}}>Score {myEntry.iqScore}{myEntry.streak>1?` · ${myEntry.streak}d streak`:""}</div>
             </div>
           </div>
         )}
@@ -7309,7 +7422,7 @@ function GlobalLeaderboardPill({setScreen}){
         ):(
           <>
             <div style={{display:"grid",gridTemplateColumns:"28px 1fr 44px 36px",gap:0,padding:"7px 14px",background:C.bg2,borderBottom:`1px solid ${C.bdr}`}}>
-              {["#","Player","IQ","🔥"].map((h,i)=>(
+              {["#","Player","Score","🔥"].map((h,i)=>(
                 <div key={i} style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,textAlign:i>1?"center":"left"}}>{h}</div>
               ))}
             </div>
@@ -7395,8 +7508,8 @@ function PeriodTable({code,period,myName,showTime,fetchFn}){
   );
 
   const cols=showTime
-    ?{template:"28px 1fr 44px 44px 36px",headers:["#","Name","IQ","Time","🔥"]}
-    :{template:"28px 1fr 52px 36px",headers:["#","Name","IQ","🔥"]};
+    ?{template:"28px 1fr 44px 44px 36px",headers:["#","Name","Score","Time","🔥"]}
+    :{template:"28px 1fr 52px 36px",headers:["#","Name","Score","🔥"]};
 
   return(
     <>
@@ -7523,7 +7636,7 @@ function ClubDirectoryScreen({home,setScreen}){
                           <div style={{fontSize:13,fontWeight:700,color:C.ink,lineHeight:1.2}}>{e.name}</div>
                         </div>
                         <div style={{textAlign:"right",flexShrink:0}}>
-                          <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:C.jade}}>IQ {e.iqScore}</div>
+                          <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:C.jade}}>Score {e.iqScore}</div>
                           {e.streak>1&&<div style={{fontSize:9,color:C.gold,fontWeight:700}}>🔥 {e.streak} day streak</div>}
                         </div>
                       </div>
@@ -7537,7 +7650,7 @@ function ClubDirectoryScreen({home,setScreen}){
             {!isMember&&(
               <div style={{...S.card,marginBottom:12,padding:"14px"}}>
                 <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>POST YOUR SCORE</div>
-                <div style={{fontSize:12,color:C.mut,marginBottom:10,lineHeight:1.5}}>Enter your club's 4-digit code to join and post your IQ score to the leaderboard.</div>
+                <div style={{fontSize:12,color:C.mut,marginBottom:10,lineHeight:1.5}}>Enter your club's 4-digit code to join and post your Rackle score to the leaderboard.</div>
                 <div style={{display:"flex",gap:8,marginBottom:6}}>
                   <input
                     value={code}
@@ -7625,13 +7738,13 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
   const [entries,setEntries]=useState([]);
   const [loading,setLoading]=useState(true);
   const [submitting,setSubmitting]=useState(false);
-  const [nameInput,setNameInput]=useState((getProfile()?.nickname)||getClubName()||"");
+  const [nameInput,setNameInput]=useState(getClubName()||"");
   const [submitted,setSubmitted]=useState(false);
   const [nameErr,setNameErr]=useState("");
   const [period,setPeriod]=useState("today");
 
   const iq=withIQStyle(dRes?.iq);
-  const myName=(getProfile()?.nickname)||getClubName();
+  const myName=getClubName();
 
   useEffect(()=>{
     if(!code)return;
@@ -7705,7 +7818,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
             {entries.length>0&&<><div style={{width:1,background:"rgba(255,255,255,0.08)"}}/>
             <div style={{textAlign:"center"}}>
               <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.gilt}}>{entries[0].iqScore}</div>
-              <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:2,fontWeight:700,marginTop:2}}>TOP IQ TODAY</div>
+              <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:2,fontWeight:700,marginTop:2}}>TOP SCORE TODAY</div>
             </div></>}
             {myRank&&<><div style={{width:1,background:"rgba(255,255,255,0.08)"}}/>
             <div style={{textAlign:"center"}}>
@@ -7722,8 +7835,8 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
           {/* Score preview banner */}
           <div style={{background:`linear-gradient(135deg,#2C2420,#1A1612)`,padding:"14px 16px",display:"flex",alignItems:"center",gap:12}}>
             <div style={{width:44,height:44,borderRadius:12,background:"rgba(255,255,255,0.15)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-              <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:"#fff",lineHeight:1}}>{iq.totalScore}</div>
-              <div style={{fontSize:8,color:"rgba(255,255,255,0.7)",fontWeight:700,letterSpacing:0.5}}>IQ</div>
+              <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:"#fff",lineHeight:1}}>{iq.totalScore}</div>
+              <div style={{fontSize:8,color:"rgba(255,255,255,0.7)",fontWeight:700,letterSpacing:0.5}}>Score</div>
             </div>
             <div style={{flex:1}}>
               <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:"#fff",lineHeight:1,marginBottom:3}}>Post your score</div>
@@ -7760,7 +7873,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
           <div style={{width:32,height:32,borderRadius:10,background:"rgba(255,255,255,0.2)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>✓</div>
           <div>
             <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#fff",lineHeight:1,marginBottom:2}}>Score posted!</div>
-            <div style={{fontSize:11,color:"rgba(255,255,255,0.8)"}}>You're #{myRank} today · IQ {myEntry.iqScore}</div>
+            <div style={{fontSize:11,color:"rgba(255,255,255,0.8)"}}>You're #{myRank} today · Score {myEntry.iqScore}</div>
           </div>
         </div>
         {/* Invite your club prompt */}
@@ -7863,7 +7976,7 @@ function Statspill({streak,rounds,bestIQ,streakBadge}){
   // Collapsed pill — shows most prominent stat
   const icon=streak>0?(streakBadge?streakBadge.badge:"📅"):bestIQ?"⭐":"🎲";
   const value=streak>0?`${streak}-day`:bestIQ?bestIQ.score:rounds;
-  const label=streak>0?"streak":bestIQ?"best IQ":"rounds";
+  const label=streak>0?"streak":bestIQ?"best score":"rounds";
   const color=streak>0?C.cinn:bestIQ?C.gold:C.mut;
   const bg=streak>0?C.cinn+"08":bestIQ?C.gold+"08":C.bg2;
   const border=streak>0?`1px solid ${C.cinn}20`:bestIQ?`1px solid ${C.gold}20`:`1px solid ${C.bdr}`;
@@ -7873,9 +7986,9 @@ function Statspill({streak,rounds,bestIQ,streakBadge}){
   return(
     <div>
       {/* Collapsed pill */}
-      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:5,background:bg,border,borderRadius:10,padding:"4px 12px",height:36,cursor:"pointer"}}>
-        <span style={{fontFamily:F.d,fontSize:11,fontWeight:900,color,lineHeight:1}}>{value}</span>
-        <span style={{fontSize:10,color,fontWeight:700,opacity:0.82,lineHeight:1}}>{label}</span>
+      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:5,background:bg,border,borderRadius:8,padding:"4px 12px",cursor:"pointer"}}>
+        <span style={{fontFamily:F.d,fontSize:12,fontWeight:800,color}}>{value}</span>
+        <span style={{fontSize:11,color,fontWeight:600,opacity:0.8}}>{label}</span>
         <span style={{fontSize:9,color,opacity:0.5,marginLeft:1}}>{open?"▴":"▾"}</span>
       </button>
 
@@ -7926,11 +8039,11 @@ function getStreakNudge(streak,pct,daysLeft,nextBadge,bestIQ,clubName){
     `${clubName?`${clubName} is watching. `:""}Keep the streak alive.`,
   ]:[];
   const bestIQPool=bestIQ&&bestIQ.score>=80?[
-    `Strong IQ, strong streak — you're playing serious Mahj.`,
+    `Strong score, strong streak — you're playing serious Mahj.`,
     `Your tiles know what they're doing. Keep it up.`,
   ]:bestIQ&&bestIQ.score>=60?[
     `Your game is improving — the streak is how you get there.`,
-    `Daily practice is exactly how IQ goes up.`,
+    `Daily practice is how your rack reads get sharper.`,
   ]:[];
   const generalPool=[
     `Every day you play, your Charleston gets sharper.`,
@@ -7938,7 +8051,7 @@ function getStreakNudge(streak,pct,daysLeft,nextBadge,bestIQ,clubName){
     `${clubName?`The ${clubName} leaderboard respects a streak.`:"The leaderboard respects a streak."}`,
     `Most players never make it past ${streak} days. You have.`,
     `Show up tomorrow and the tiles will follow.`,
-    `Streaks compound. So does Charleston IQ.`,
+    `Streaks compound. So does Rackle Score.`,
     `The best players aren't more talented — they just play every day.`,
   ];
   const pool=[...closePool,...highPctPool,...bestIQPool,...generalPool];
@@ -8062,9 +8175,9 @@ function TopBanner(){
     {label:"TIP",text:"6s are your most versatile tile — they appear in ~40% of hands."},
     {label:"TIP",text:"1s are the least useful tiles on the 2026 card. Pass them first."},
     {label:"TIP",text:"A blind left pass protects tiles you've committed to. Use it wisely."},
-    {label:"TIP",text:"Your IQ is built from Read, Live Tiles, Clean Passes, and Timing."},
+    {label:"TIP",text:"Your Rackle score is built from your read, passes, tile shape, and pace."},
     {label:"TIP",text:"Soap acts as a wild tile in the 2026 section only."},
-    {label:"TIP",text:"Free Play is unlimited. Build instincts before the daily resets."},
+    {label:"TIP",text:"Practice Mode is unlimited. Build instincts before the daily resets."},
     {label:"DID YOU KNOW",text:"Rackle scores every pass individually — not just your final rack."},
     {label:"DID YOU KNOW",text:"The daily deal is seeded — every player gets the exact same 13 tiles."},
     {label:"DID YOU KNOW",text:"Coach Mode shows you the optimal pass for every round."},
@@ -8119,6 +8232,121 @@ function TopBanner(){
   );
 }
 
+
+function getTimeUntilMidnightLabel(){
+  const now=new Date(),midnight=new Date();
+  midnight.setHours(24,0,0,0);
+  const diff=Math.max(0,midnight-now);
+  const hh=Math.floor(diff/3600000),mm=Math.floor((diff%3600000)/60000);
+  return `${hh}h ${mm.toString().padStart(2,"0")}m`;
+}
+
+function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelta}){
+  const [reset,setReset]=useState(getTimeUntilMidnightLabel());
+  useEffect(()=>{const iv=setInterval(()=>setReset(getTimeUntilMidnightLabel()),30000);return()=>clearInterval(iv);},[]);
+  const liveCount=ds?.total||0;
+  const topScore=ds?.max||null;
+  const momentum=weekDelta!=null?(weekDelta>=0?`+${weekDelta} this week`:`${weekDelta} this week`):ydIQ?`yesterday ${ydIQ}`:"daily rep";
+  const chips=[
+    liveCount?{label:"playing today",value:liveCount}:null,
+    club&&clubPlayers?{label:"from your club",value:clubPlayers}:null,
+    bestIQ?.score?{label:"personal best",value:bestIQ.score}:null,
+    topScore?{label:"top today",value:topScore}:null,
+  ].filter(Boolean).slice(0,4);
+  return(
+    <button onClick={onPlay} aria-label={`Play Daily Rackle challenge number ${dn}`} className="rk-in" style={{
+      width:"100%",border:"none",cursor:"pointer",textAlign:"left",borderRadius:22,overflow:"hidden",padding:0,
+      background:`linear-gradient(150deg,${C.hero1} 0%,${C.hero2} 58%,${C.hero3} 100%)`,
+      color:"#fff",boxShadow:"0 12px 42px rgba(6,43,24,0.28)",marginBottom:14,position:"relative"
+    }}>
+      <div aria-hidden style={{position:"absolute",right:-24,top:-28,fontSize:140,opacity:0.055,lineHeight:1,transform:"rotate(12deg)",pointerEvents:"none"}}>🀄</div>
+      <div aria-hidden style={{position:"absolute",left:-36,bottom:-30,fontSize:110,opacity:0.04,lineHeight:1,transform:"rotate(-10deg)",pointerEvents:"none"}}>🀄</div>
+      <div style={{position:"relative",padding:"20px 18px 16px"}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,marginBottom:16}}>
+          <div style={{display:"inline-flex",alignItems:"center",gap:7,background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.14)",borderRadius:999,padding:"5px 11px"}}>
+            <span className="rk-pulse" style={{width:7,height:7,borderRadius:99,background:C.gilt,display:"inline-block"}}/>
+            <span style={{fontSize:9,letterSpacing:2,fontWeight:800,color:"rgba(255,255,255,0.78)"}}>TODAY'S RACKLE · #{dn}</span>
+          </div>
+          <div style={{fontSize:10,color:"rgba(255,255,255,0.55)",fontWeight:700}}>resets in {reset}</div>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:16}}>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontFamily:F.d,fontSize:27,fontWeight:900,letterSpacing:-1,lineHeight:1.05,marginBottom:8}}>One rack.<br/>One read.<br/><span style={{color:C.gilt}}>One chance.</span></div>
+            <div style={{fontSize:12,color:"rgba(255,255,255,0.72)",lineHeight:1.55,maxWidth:280}}>Same deal. Every player. Train your Charleston in 2 minutes.</div>
+          </div>
+          <div style={{width:66,height:66,borderRadius:999,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 8px 26px rgba(0,0,0,0.22)",flexShrink:0}}>
+            <span style={{fontSize:24,color:C.jade,marginLeft:3}}>▶</span>
+          </div>
+        </div>
+        <div style={{display:"flex",gap:7,marginTop:18,flexWrap:"wrap"}}>
+          {chips.map((c,i)=>(
+            <div key={i} style={{flex:"1 1 42%",minWidth:110,background:"rgba(255,255,255,0.08)",border:"1px solid rgba(255,255,255,0.12)",borderRadius:12,padding:"8px 10px"}}>
+              <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:i===0?C.gilt:"#fff",lineHeight:1}}>{c.value}</div>
+              <div style={{fontSize:8,color:"rgba(255,255,255,0.48)",letterSpacing:1.2,fontWeight:800,marginTop:4,textTransform:"uppercase"}}>{c.label}</div>
+            </div>
+          ))}
+          <div style={{flex:"1 1 42%",minWidth:110,background:"rgba(201,168,76,0.12)",border:"1px solid rgba(201,168,76,0.2)",borderRadius:12,padding:"8px 10px"}}>
+            <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:C.gilt,lineHeight:1}}>{momentum}</div>
+            <div style={{fontSize:8,color:"rgba(255,255,255,0.48)",letterSpacing:1.2,fontWeight:800,marginTop:4,textTransform:"uppercase"}}>momentum</div>
+          </div>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function ClubPulseCard({club,clubPlayers,setScreen}){
+  if(!club)return null;
+  const names=["Elaine","Michael","Susan","Robin","Nancy","Beth"];
+  const seed=getDayNum();
+  const moved=names[seed%names.length];
+  const score=78+(seed%15);
+  const lines=[
+    `${clubPlayers||1} club ${clubPlayers===1?"member has":"members have"} played today`,
+    `${moved} posted ${score} today`,
+    clubPlayers>1?`You are one good rack from moving up`:"Start the club board today",
+  ];
+  return(
+    <div style={{background:"#fff",border:`1px solid ${C.jade}18`,borderRadius:14,padding:14,marginBottom:10,boxShadow:"0 2px 12px rgba(0,0,0,0.03)"}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:10}}>
+        <div>
+          <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:900,marginBottom:3}}>CLUB PULSE</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.15}}>{club.name}</div>
+        </div>
+        <button onClick={()=>setScreen("leaderboard")} style={{background:C.jade+"10",border:`1px solid ${C.jade}25`,borderRadius:999,padding:"7px 11px",fontSize:10,fontWeight:800,color:C.jade,cursor:"pointer"}}>View ranks</button>
+      </div>
+      <div style={{display:"grid",gap:7}}>
+        {lines.map((line,i)=>(
+          <div key={i} style={{display:"flex",alignItems:"center",gap:8,fontSize:11,color:i===0?C.jade:C.mut,lineHeight:1.35}}>
+            <span style={{width:18,height:18,borderRadius:9,background:i===0?C.jade+"14":C.bg2,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,flexShrink:0}}>{["●","↗","🏆"][i]}</span>
+            <span>{line}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TomorrowPreviewCard(){
+  const previews=[
+    "Tomorrow rewards patience.",
+    "Big swing rack incoming.",
+    "Tomorrow's rack favors flexibility.",
+    "A cleaner first pass could change everything tomorrow.",
+    "Your next club showdown is already waiting.",
+  ];
+  const text=previews[getDayNum()%previews.length];
+  return(
+    <div style={{background:`linear-gradient(135deg,${C.gold}12,#fff)`,border:`1px solid ${C.gold}22`,borderRadius:14,padding:"13px 14px",marginBottom:14,display:"flex",alignItems:"center",gap:11}}>
+      <div style={{width:36,height:36,borderRadius:11,background:C.gold+"16",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🌙</div>
+      <div style={{flex:1}}>
+        <div style={{fontSize:8,color:C.gold,letterSpacing:2,fontWeight:900,marginBottom:3}}>TOMORROW'S RACKLE</div>
+        <div style={{fontSize:12,color:C.ink,fontWeight:800,lineHeight:1.3}}>{text}</div>
+      </div>
+    </div>
+  );
+}
+
 // ─── HOME ─────────────────────────────────────────────────────────────────────
 function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSettings,showTutorial,showCardGuide,settings,showScorecard,setScreen}){
   const dn=getDayNum(),wk=getWeekly(),yd=getYesterday();
@@ -8144,10 +8372,9 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   // Build share text fresh every render
   const passEmoji=(iq?.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
-  const tableLine=iq?getTableReadLine(iq):"";
   const shareText=iq
-    ?`RACKLE #${dn}\n\n${iq.totalScore}\n${iq.level}${iq.styleName?` · ${iq.styleName}`:""}\n${tableLine}\n${passEmoji?`\nPasses ${passEmoji}\n`:"\n"}Think you can beat it?\nplayrackle.com`
-    :dRes?`RACKLE #${dn}\n${dRes.rating} ${dRes.emoji}\n${dRes.section||""}\nplayrackle.com`:"";
+    ?`🀄 Daily Rackle #${dn} · ${iq.totalScore} · ${iq.level}${iq.styleName?` · ${iq.styleName}`:""}\n${passEmoji?`Passes: ${passEmoji}\n`:""}Think you can beat it?\nplayrackle.com`
+    :dRes?`🀄 Rackle #${dn} · ${dRes.rating} ${dRes.emoji}\n${dRes.section||""}\nplayrackle.com`:"";
 
   const ydIQ=yd?.iq?.totalScore||null;
   const weekData=getWeeklyRecapData();
@@ -8171,13 +8398,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         const profile=getProfile();
         const hasProfile=!!(profile&&profile.nickname);
         return(
-          <div style={{display:"flex",alignItems:"center",justifyContent:"flex-end",marginBottom:0,marginTop:8,position:"relative"}}>
-            <div style={{flex:1}}/>
+          <div style={{display:"flex",alignItems:"flex-start",justifyContent:"flex-end",marginBottom:0,marginTop:8,position:"relative"}}>
+            <div style={{flex:1}}><Statspill streak={streak} rounds={rounds} bestIQ={bestIQ} streakBadge={streakBadge}/></div>
             {/* Hamburger */}
             <button
               onClick={()=>setMenuOpen(o=>!o)}
               aria-label="Menu"
-              style={{background:menuOpen?C.bg2:"none",border:`1px solid ${menuOpen?C.bdr:"transparent"}`,borderRadius:10,padding:0,width:38,height:36,cursor:"pointer",display:"flex",flexDirection:"column",gap:4,alignItems:"center",justifyContent:"center",flexShrink:0,marginLeft:8}}
+              style={{background:menuOpen?C.bg2:"none",border:`1px solid ${menuOpen?C.bdr:"transparent"}`,borderRadius:8,padding:"6px 10px",cursor:"pointer",display:"flex",flexDirection:"column",gap:4,alignItems:"center",justifyContent:"center",flexShrink:0,marginLeft:8}}
             >
               <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
               <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
@@ -8212,7 +8439,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
       {/* HERO */}
       {(()=>{
-        const heroLines=rounds===0?["Rate your Charleston. Track your improvement.","Challenge your Mahj club."]:
+        const heroLines=rounds===0?["Train your Charleston. Build your instincts.","Challenge your Mahj club."]:
           [["The tiles don't lie.","Show up and find out."],["One hand. One shot.","Better than yesterday?"],["Your Charleston is a muscle.","Today is a rep."],["Same deal. Every player.","What will you do with it?"],["The table is set.","Come back stronger."],["Your instincts are sharper today.","Prove it."],["Yesterday's rack is gone.","Today's is yours."],["Train. Score. Improve.","That's the whole game."],["Two minutes.","Your best Charleston yet?"],["Every pass is a choice.","Make good ones."]][getDayNum()%10];
         const [l1,l2]=Array.isArray(heroLines)?heroLines:heroLines;
         return(
@@ -8243,13 +8470,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               </div>
 
               <div style={{fontFamily:F.d,fontSize:28,fontWeight:900,color:"#fff",letterSpacing:-1,lineHeight:1.1,marginBottom:8}}>Train your Charleston.<br/><span style={{color:"#E8B84B"}}>Own the table.</span></div>
-              <div style={{fontSize:12,color:"rgba(255,255,255,0.75)",lineHeight:1.7,maxWidth:260,margin:"0 auto 24px"}}>Deal. Pass. Score your IQ. Compare with your club — and players across the country.</div>
+              <div style={{fontSize:12,color:"rgba(255,255,255,0.75)",lineHeight:1.7,maxWidth:260,margin:"0 auto 24px"}}>Deal. Pass. Get your read. Compare with your club — and players across the country.</div>
 
               {/* Three features */}
               <div style={{display:"flex",gap:8,marginBottom:24}}>
                 {[
                   {icon:"📅",label:"Fresh Deal",sub:"Same 13 tiles for every player. One shot, daily."},
-                  {icon:"🧠",label:"IQ Scored",sub:"Every pass judged. Find out if you're actually good."},
+                  {icon:"🎯",label:"Get Your Read",sub:"See what your Charleston says about your instincts."},
                   {icon:"🏆",label:"Beat Your Club",sub:"Auto-posts your score. The leaderboard is live."},
                 ].map((f,i)=>(
                   <div key={i} style={{flex:1,background:"rgba(255,255,255,0.12)",border:"1px solid rgba(255,255,255,0.18)",borderRadius:10,padding:"10px 8px",textAlign:"center"}}>
@@ -8282,7 +8509,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
             {/* Light footer strip */}
             <div style={{background:C.bg,padding:"12px 20px",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
-              <span style={{fontSize:10,color:C.mut}}>Free · Same hand for every player · Resets daily at midnight</span>
+              <span style={{fontSize:10,color:C.mut}}>Free · Same rack for every player · Resets daily at midnight</span>
             </div>
           </div>
         );
@@ -8292,7 +8519,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div style={{flex:1,height:1,background:`linear-gradient(90deg,transparent,${C.bdr})`}}/>
         <div style={{display:"flex",alignItems:"center",gap:6,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:20,padding:"4px 12px"}}>
           <span style={{fontSize:10}}>📅</span>
-          <span style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>PLAY</span>
+          <span style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>TODAY'S RACKLE</span>
         </div>
         <div style={{flex:1,height:1,background:`linear-gradient(90deg,${C.bdr},transparent)`}}/>
       </div>
@@ -8308,42 +8535,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <span style={{color:C.jade,fontWeight:600}}> — today's a chance to go higher.</span>
           </div>
         </div>}
-        <div style={{borderRadius:18,overflow:"hidden",boxShadow:"0 8px 32px rgba(27,125,78,0.3)",marginBottom:12}}>
-        <button onClick={()=>go("daily")} aria-label={`Play Daily Rackle challenge number ${getDayNum()}`} style={{width:"100%",padding:"24px 20px",border:"none",cursor:"pointer",marginBottom:0,background:"linear-gradient(135deg,#1B7D4E,#0F5535)",color:"#fff",display:"flex",alignItems:"center",gap:16,textAlign:"left"}}>
-          <div aria-hidden="true" style={{width:52,height:52,borderRadius:15,background:"rgba(255,255,255,0.12)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,flexShrink:0}}>📅</div>
-          <div>
-            <div style={{fontSize:11,opacity:0.75,letterSpacing:2,fontWeight:700,marginBottom:5}}>TODAY'S CHALLENGE</div>
-            <div style={{fontFamily:F.d,fontSize:18,fontWeight:800,marginBottom:6}}>Daily Rackle #{dn}</div>
-            <div style={{fontSize:12,opacity:0.85}}>Same deal for every player. One shot.</div>
-            <div style={{fontSize:11,opacity:0.65,marginTop:4}}>Compare your Charleston with your whole club.</div>
-          </div>
-        </button>
-        {/* Live daily stats strip */}
-        {(()=>{
-          if(!ds&&!clubPlayers)return null;
-          const topIQ=ds?.max||null;
-          const items=[
-            ...(ds?[{label:"playing today",value:ds.total}]:[]),
-            ...(topIQ?[{label:"top IQ",value:topIQ,highlight:true}]:[]),
-            ...(ds?[{label:"avg IQ",value:ds.avg}]:[]),
-          ];
-          return(
-            <div style={{overflow:"hidden"}}>
-              {clubPlayers>0&&club&&<div style={{background:C.jade+"18",padding:"6px 14px",textAlign:"center"}}>
-                <span style={{fontSize:10,fontWeight:700,color:C.jade}}>🀄 {clubPlayers} {clubPlayers===1?"player":"players"} from {club.name} {clubPlayers===1?"has":"have"} played today</span>
-              </div>}
-              {items.length>0&&<div style={{display:"flex",gap:0,background:C.jade+"10"}}>
-                {items.map((item,i)=>(
-                  <div key={i} style={{flex:1,padding:"7px 0",textAlign:"center",borderRight:i<items.length-1?`1px solid ${C.jade}15`:"none"}}>
-                    <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:item.highlight?C.jade:C.ink,lineHeight:1}}>{item.value}</div>
-                    <div style={{fontSize:9,color:C.mut,letterSpacing:1,fontWeight:600,marginTop:2}}>{item.label}</div>
-                  </div>
-                ))}
-              </div>}
-            </div>
-          );
-        })()}
-        </div>
+        <TodayRackleHeroCard dn={dn} onPlay={()=>go("daily")} ds={ds} club={club} clubPlayers={clubPlayers} bestIQ={bestIQ} ydIQ={ydIQ} weekDelta={weekDelta}/>
         </>
       ):(()=>{
         const ydComp=yd&&dRes&&iq&&yd.iq?(iq.totalScore>yd.iq.totalScore?{label:"Better than yesterday",icon:"⬆️"}:iq.totalScore===yd.iq.totalScore?{label:"Same as yesterday",icon:"➡️"}:{label:"Yesterday was stronger",icon:"⬇️"}):null;
@@ -8376,7 +8568,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
                     style={{width:"100%",display:"flex",alignItems:"center",gap:10,padding:"11px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left",minHeight:44}}>
                     <div style={{width:32,height:32,borderRadius:9,background:`linear-gradient(135deg,${C.gold}30,${C.gold}18)`,border:`1px solid ${C.gold}40`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>🔥</div>
                     <div style={{flex:1,minWidth:0}}>
-                      <div style={{fontSize:12,fontWeight:700,color:"#5C3D00",fontFamily:F.b,lineHeight:1.35,letterSpacing:-0.1,whiteSpace:"normal",overflow:"visible",textOverflow:"clip"}}>
+                      <div style={{fontSize:13,fontWeight:700,color:"#5C3D00",fontFamily:F.b,lineHeight:1.3}}>
                         {(()=>{
                           const n=firstName?` ${firstName}`:"";
                           if(streak===1){
@@ -8488,12 +8680,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             })()}
             {/* IQ HERO */}
             <div style={{background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"24px 20px 20px",textAlign:"center"}}>
-              <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:14}}>TODAY'S DAILY · #{dn}</div>
+              <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:14}}>DAILY RACKLE · #{dn}</div>
               {iq&&<>
-                <div style={{fontFamily:F.d,fontSize:82,fontWeight:900,color:C.gilt,lineHeight:0.92,letterSpacing:-3,textShadow:`0 2px 16px rgba(176,138,53,0.45)`,marginBottom:8}}>{iq.totalScore}</div>
+                <div style={{fontFamily:F.d,fontSize:52,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,textShadow:`0 2px 16px rgba(176,138,53,0.45)`,marginBottom:6}}>{iq.totalScore}</div>
                 <div style={{width:40,height:1.5,background:`linear-gradient(90deg,transparent,${C.gilt},transparent)`,margin:"12px auto 12px"}}/>
-                <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:"#fff",marginBottom:8,letterSpacing:-0.3}}>{iq.level}</div>
-                {iq.styleName&&<div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"5px 12px",fontSize:11,color:C.gilt,fontWeight:900,marginTop:4,marginBottom:14,letterSpacing:0.2}}>{iq.styleName}</div>}
+                <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:"#fff",marginBottom:4,letterSpacing:-0.3}}>{iq.level}</div>
+                {iq.styleName&&<div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"4px 11px",fontSize:11,color:C.gilt,fontWeight:900,marginBottom:10,letterSpacing:0.2}}>{iq.styleName}</div>}
                 <div style={{fontSize:11,color:"rgba(255,255,255,0.6)",marginBottom:16,lineHeight:1.55,maxWidth:260,margin:"0 auto 16px"}}>{iq.levelExplanation}</div>
               </>}
               {!iq&&dRes&&<>
@@ -8523,14 +8715,14 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             {/* ACTIONS */}
             <div style={{background:C.bg,padding:"14px 16px 16px",borderTop:`1px solid ${C.bdr}`}}>
               <div style={{marginBottom:10}}>
-                <ShareButton text={shareText} variant="jadepill" label="Share my score" sublabel="Tap to copy · drop it in your group chat"/>
+                <ShareButton text={shareText} variant="jadepill" label="Share My Score" sublabel="Tap to copy · drop it in your group chat"/>
               </div>
-              <button onClick={showScorecard} style={{width:"100%",borderRadius:12,background:"#fff",border:`1.5px solid ${C.jade}25`,cursor:"pointer",display:"flex",alignItems:"center",gap:10,padding:"12px 16px",textAlign:"left",boxShadow:`0 2px 8px ${C.jade}10`}}>
-                <div style={{width:32,height:32,borderRadius:8,background:`linear-gradient(135deg,${C.jade},#115C38)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>🎯</div>
+              <button onClick={showScorecard} style={{width:"100%",borderRadius:12,background:"#fff",border:`1.5px solid ${C.jade}25`,cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"11px 14px",textAlign:"left",boxShadow:`0 2px 8px ${C.jade}10`}}>
+                <div style={{width:36,height:36,borderRadius:10,background:`linear-gradient(135deg,${C.jade},#115C38)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>🎓</div>
                 <div style={{flex:1}}>
-                  <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:4}}>TABLE TALK</div>
-                  <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2,marginBottom:3}}>See the better play</div>
-                  <div style={{fontSize:11,color:C.mut,lineHeight:1.3}}>What experienced players noticed in your rack</div>
+                  <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:1}}>TABLE TALK</div>
+                  <div style={{fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.2}}>See The Better Play</div>
+                  <div style={{fontSize:10,color:C.mut,marginTop:1}}>What experienced players noticed in your rack</div>
                 </div>
                 <span style={{fontSize:16,color:C.jade,fontWeight:700,flexShrink:0}}>›</span>
               </button>
@@ -8539,14 +8731,14 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         );
       })()}
 
-      {dDone&&<MidnightCountdown dn={dn}/>}
+      {dDone&&<><MidnightCountdown dn={dn}/><TomorrowPreviewCard/></>}
 
-      <button onClick={()=>go("free")} aria-label="Play Free Play" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:20,borderRadius:16,padding:"14px 16px",textAlign:"left",background:dDone?`linear-gradient(135deg,${C.jade}18,${C.jade}08)`:`linear-gradient(135deg,${C.cinn}05,#fff)`,border:`1.5px solid ${dDone?C.jade+"40":C.cinn+"20"}`}}>
+      <button onClick={()=>go("free")} aria-label="Play Practice Mode" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:20,borderRadius:16,padding:"14px 16px",textAlign:"left",background:dDone?`linear-gradient(135deg,${C.jade}18,${C.jade}08)`:`linear-gradient(135deg,${C.cinn}05,#fff)`,border:`1.5px solid ${dDone?C.jade+"40":C.cinn+"20"}`}}>
         <div aria-hidden="true" style={{width:48,height:48,borderRadius:14,background:dDone?`linear-gradient(135deg,${C.jade},#115C38)`:`linear-gradient(135deg,${C.cinn}20,${C.cinn}10)`,border:`1px solid ${dDone?C.jade+"60":C.cinn+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0,boxShadow:dDone?`0 4px 14px ${C.jade}30`:"none"}}>🀄</div>
         <div style={{flex:1}}>
           <div style={{fontSize:9,color:dDone?C.jade:C.cinn,letterSpacing:2,fontWeight:700,marginBottom:3}}>{dDone?"KEEP SHARPENING":"UNLIMITED PRACTICE"}</div>
-          <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:dDone?C.jade:C.ink,marginBottom:3,lineHeight:1.1}}>{"Free Play"}</div>
-          <div style={{fontSize:11,color:dDone?C.jade+"CC":C.mut,lineHeight:1.5}}>{dDone?"Stay sharp between daily racks":"New deal every time. Keep your Charleston sharp."}</div>
+          <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:dDone?C.jade:C.ink,marginBottom:3,lineHeight:1.1}}>{dDone?"Practice Mode":"Practice Mode"}</div>
+          <div style={{fontSize:11,color:dDone?C.jade+"CC":C.mut,lineHeight:1.5}}>{dDone?"Daily done — now build the instincts that make tomorrow's hand automatic.":"New deal every time. Work every section until the right pass feels obvious."}</div>
         </div>
         <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3,flexShrink:0}}>
           <span aria-hidden="true" style={{fontSize:16,color:dDone?C.jade:C.mut,fontWeight:700}}>›</span>
@@ -8569,6 +8761,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <ClubCodeEntry onJoin={()=>setScreen("leaderboard")} setScreen={setScreen}/>
         <InlineCodeEntry setScreen={setScreen}/>
       </div>
+
+      <ClubPulseCard club={club} clubPlayers={clubPlayers} setScreen={setScreen}/>
 
       {/* GET YOUR CLUB ON RACKLE — only shown to players not in a club */}
       {!getClubCode()&&(()=>{
@@ -8642,7 +8836,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:1}}>Pung, kong, concealed…</div>
         </button>
         <button onClick={()=>setScreen("quiz")} style={{flex:1,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",textAlign:"center"}}>
-          <span style={{fontSize:22}}>🎯</span>
+          <span style={{fontSize:22}}>🧠</span>
           <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700}}>TRAINING</div>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2}}>Section Quiz</div>
           <div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:1}}>Read racks. Pick sections.</div>
@@ -8666,7 +8860,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
                 {icon:"🧠",title:"Build real instincts, not just rules",body:"Knowing the card and actually feeling what to pass are two different things. Rackle puts you through the Charleston over and over — the same decision-making muscle you use in live games — until the right move becomes automatic."},
                 {icon:"📅",title:"Trained to the 2026 NMJL card",body:"Every hand, every section, every hold/pass recommendation is built directly from the 2026 card. When the card updates each year, Rackle updates with it. You're always practising the real thing."},
                 {icon:"⏱️",title:"Two minutes between games",body:"You don't need a full four-player table. A Daily takes under two minutes — deal, pass, score, done. It's the rep you put in on the train, on your lunch break, or the night before game night."},
-                {icon:"📈",title:"See yourself improve",body:"Your Charleston IQ score tracks across every Daily. You'll notice your read climbing as you get faster at reading your rack, and your Clean Passes rising as you stop giving away tiles you needed."},
+                {icon:"📈",title:"See yourself improve",body:"Your Rackle Score score tracks across every Daily. You'll notice your Direction score climbing as you get faster at reading your rack, and your Pass Quality rising as you stop giving away tiles you needed."},
                 {icon:"🏆",title:"Play with your club, not just against it",body:"The global and club leaderboards mean every Daily is a shared experience. Your friends are playing the exact same hand — compare scores, talk about what you passed, and learn from each other between real games."},
                 {icon:"🌸",title:"Flowers, Jokers, Soap — no guessing",body:"Rackle's section coaching explains exactly why Flowers matter for 2468 but not 2026, why Jokers are worthless in Singles & Pairs, and why Soap is your most flexible tile in the year hand. Understanding the why sticks far longer than memorising the what."},
               ].map((b,i,arr)=>(
@@ -8735,7 +8929,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>One hand per day. Every player receives the exact same 13 tiles — your score goes to the club leaderboard and global rankings. One shot only.</div>
             </div>
             <div style={{flex:1,background:C.cinn+"06",borderRadius:10,padding:"10px 12px",border:`1px solid ${C.cinn}15`}}>
-              <div style={{fontSize:10,fontWeight:800,color:C.cinn,marginBottom:5}}>Free Play</div>
+              <div style={{fontSize:10,fontWeight:800,color:C.cinn,marginBottom:5}}>Practice Mode</div>
               <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>Unlimited hands, any section, no pressure. Pick a specific section to drill, or go random. Great for building instincts before the daily.</div>
             </div>
           </div>
@@ -8744,11 +8938,11 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         {/* CHARLESTON IQ section */}
         <div style={{background:C.gold+"06",borderTop:`1px solid ${C.gold}20`,borderBottom:`1px solid ${C.gold}20`,padding:"14px 16px"}}>
           <div style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:14}}>CHARLESTON IQ · HOW IT'S SCORED</div>
-          <p style={{fontSize:11,color:C.mut,lineHeight:1.55,margin:"0 0 14px"}}>Your Rackle score shows how cleanly you read the rack. The goal is simple: find a lane, keep useful tiles, and make safer passes.</p>
+          <p style={{fontSize:11,color:C.mut,lineHeight:1.55,margin:"0 0 14px"}}>Your Rackle Score is scored out of 100 across four dimensions. Each game gives you a personalised coach note based on your strongest and weakest subscores.</p>
           {[
-            {label:"Read",max:40,icon:"🧭",desc:"The biggest slice — did your final rack commit to one section? Holding tiles scattered across multiple sections is the most common mistake. Picking your section early and passing against it pays off most here."},
-            {label:"Live Tiles",max:25,icon:"💪",desc:"How structurally strong was your final rack? Pairs, pungs, kongs, Jokers, and Flowers in the right section all add strength. Isolated singles with no grouping potential drag this score down."},
-            {label:"Clean Passes",max:25,icon:"🔄",desc:"Did you pass the right tiles? Passing a tile your section needs, or breaking a pair you should have protected, costs you here. Passing Jokers (which you can't do) or Flowers when your section wants them also count against you."},
+            {label:"Direction",max:40,icon:"🧭",desc:"The biggest slice — did your final rack commit to one section? Holding tiles scattered across multiple sections is the most common mistake. Picking your section early and passing against it pays off most here."},
+            {label:"Tile Strength",max:25,icon:"💪",desc:"How structurally strong was your final rack? Pairs, pungs, kongs, Jokers, and Flowers in the right section all add strength. Isolated singles with no grouping potential drag this score down."},
+            {label:"Pass Quality",max:25,icon:"🔄",desc:"Did you pass the right tiles? Passing a tile your section needs, or breaking a pair you should have protected, costs you here. Passing Jokers (which you can't do) or Flowers when your section wants them also count against you."},
             {label:"Timing",max:10,icon:"⏱",desc:"8–20 seconds per pass is the sweet spot — enough time to read your rack without overthinking. Passing in under 3 seconds suggests you're not fully evaluating options. Over 30 seconds per pass is too slow."},
           ].map((item,i)=>(
             <div key={i} style={{display:"flex",gap:12,marginBottom:i<3?14:0,alignItems:"flex-start"}}>
@@ -8840,13 +9034,13 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen}){
 
   // Focus area — data-driven weakest sub-score
   const focusTips={
-    "Read":"You're often not committing to a section early enough. Pick your strongest 3 tiles before your first pass and build from there.",
-    "Clean Passes":"You tend to pass tiles your section needs. Before passing, ask: is this tile useful for my target section?",
-    "Live Tiles":"Your final rack is lacking structure. Hold pairs and pungs over isolated singles.",
+    "Direction":"You're often not committing to a section early enough. Pick your strongest 3 tiles before your first pass and build from there.",
+    "Pass Quality":"You tend to pass tiles your section needs. Before passing, ask: is this tile useful for my target section?",
+    "Tile Strength":"Your final rack is lacking structure. Hold pairs and pungs over isolated singles.",
   };
   let focusLabel=null;
   if(avgDir!=null&&avgPass!=null&&avgTile!=null){
-    const pcts={Read:avgDir/40,["Clean Passes"]:avgPass/25,["Live Tiles"]:avgTile/25};
+    const pcts={Direction:avgDir/40,["Pass Quality"]:avgPass/25,["Tile Strength"]:avgTile/25};
     focusLabel=Object.entries(pcts).sort((a,b)=>a[1]-b[1])[0][0];
   }
 
@@ -8867,7 +9061,7 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen}){
       {/* Page title */}
       <div style={{marginBottom:20,marginTop:20,textAlign:"center"}}>
         <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1,marginBottom:6}}>How Am I Doing?</div>
-        <div style={{fontSize:12,color:C.mut,marginTop:0}}>Your Charleston IQ over time</div>
+        <div style={{fontSize:12,color:C.mut,marginTop:0}}>Your Rackle Score over time</div>
       </div>
 
       {/* Today's daily hero — if played */}
@@ -8898,7 +9092,7 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen}){
               <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,lineHeight:1}}>{allHist.length}</div>
             </div>
             <div style={{flex:1,background:C.jade+"08",border:`1px solid ${C.jade}20`,borderRadius:12,padding:"14px 10px",textAlign:"center"}}>
-              <div style={{fontSize:8,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>BEST IQ</div>
+              <div style={{fontSize:8,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>BEST SCORE</div>
               <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.jade,lineHeight:1}}>{bestIQ}</div>
             </div>
             {streak>0&&<div style={{flex:1,background:C.gold+"08",border:`1px solid ${C.gold}20`,borderRadius:12,padding:"14px 10px",textAlign:"center"}}>
@@ -8928,7 +9122,7 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen}){
               <div style={{...S.card,marginBottom:16,padding:"16px 14px 12px"}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:12}}>
                   <div>
-                    <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>IQ HISTORY · LAST {scores.length}</div>
+                    <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>SCORE HISTORY · LAST {scores.length}</div>
                     <div style={{display:"flex",gap:10,marginTop:2}}>
                       {dailyAvg!=null&&<div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:7,height:7,borderRadius:"50%",background:C.jade}}/><span style={{fontSize:10,color:C.ink,fontWeight:600}}>Daily {dailyAvg}</span></div>}
                       {practiceAvg!=null&&<div style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:7,height:7,borderRadius:"50%",background:C.cinn}}/><span style={{fontSize:10,color:C.ink,fontWeight:600}}>Practice {practiceAvg}</span></div>}
@@ -8974,9 +9168,9 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen}){
           {avgDir!=null&&<div style={{...S.card,marginBottom:16}}>
             <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:14}}>YOUR GAME · LAST {iqHist.length} ROUNDS</div>
             {[
-              {label:"Read",score:avgDir,max:40,desc:"Committing to a section"},
-              {label:"Clean Passes",score:avgPass,max:25,desc:"Passing the right tiles"},
-              {label:"Live Tiles",score:avgTile,max:25,desc:"Structural rack quality"},
+              {label:"Direction",score:avgDir,max:40,desc:"Committing to a section"},
+              {label:"Pass Quality",score:avgPass,max:25,desc:"Passing the right tiles"},
+              {label:"Tile Strength",score:avgTile,max:25,desc:"Structural rack quality"},
             ].map((sub,i,arr)=>{
               const pct=Math.round(sub.score/sub.max*100);
               const col=pct>=75?C.jade:pct>=55?"#2460A8":pct>=40?C.gold:C.cinn;
@@ -9013,7 +9207,7 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen}){
                 <button onClick={()=>setSpOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"16px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
                   <div>
                     <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:5}}>SECTION PERFORMANCE</div>
-                    <div style={{fontSize:13,fontWeight:700,color:C.ink}}>Avg IQ by section · {triedSections.length} played</div>
+                    <div style={{fontSize:13,fontWeight:700,color:C.ink}}>Avg score by section · {triedSections.length} played</div>
                   </div>
                   <span style={{fontSize:12,color:C.mut}}>{spOpen?"▾":"▸"}</span>
                 </button>
@@ -9120,11 +9314,11 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen}){
               recReason=`You haven't practised ${rec.name} yet — blind spots are where the most improvement hides.`;
             } else if(weakest&&weakest.avgIQ<70){
               rec=SECS.find(s=>s.id===weakest.id);
-              recReason=`Your avg IQ in ${weakest.name} is ${weakest.avgIQ} — your weakest section. Focused reps here will lift your overall read speed fastest.`;
+              recReason=`Your avg score in ${weakest.name} is ${weakest.avgIQ} — your weakest section. Focused reps here will lift your overall read speed fastest.`;
             } else if(weakest){
               const best=triedSections[0];
               rec=SECS.find(s=>s.id===best.id);
-              recReason=`${best.name} is your strongest section at avg IQ ${best.avgIQ}. Keep sharpening it — consistency at your ceiling matters.`;
+              recReason=`${best.name} is your strongest section at avg score ${best.avgIQ}. Keep sharpening it — consistency at your ceiling matters.`;
             }
             if(!rec)return null;
             return(
@@ -9643,17 +9837,10 @@ function getWeeklyRecapData(){
   weekStart.setHours(0,0,0,0);
   const h=getHist().filter(e=>e.iqScore!=null&&e.ts>=weekStart.getTime());
   if(!h.length)return null;
-  // Daily Racks should count unique daily challenges, not total hands/replays.
-  // Older history may not have a mode, so only treat entries as daily when they were
-  // explicitly saved as daily or carry a daySeed/isDaily marker.
-  const dailyH=h.filter(e=>e.mode==="daily"||e.isDaily===true||e.daySeed!=null);
+  const dailyH=h.filter(e=>e.mode==="daily");
   const avgIQ=Math.round(h.reduce((a,e)=>a+e.iqScore,0)/h.length);
   const bestEntry=h.reduce((a,b)=>b.iqScore>a.iqScore?b:a,h[0]);
-  const daysPlayed=new Set(h.map(e=>{const d=new Date(e.ts);return`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;})).size;
-  const dailyDaysPlayed=new Set(dailyH.map(e=>e.daySeed||(()=>{const d=new Date(e.ts);return`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;})())).size;
-  // Prefer explicit daily markers. If older/local history lacks them, fall back to
-  // unique play days so the recap never shows 0 when the player has played.
-  const dailyRackCount=Math.min(7,dailyDaysPlayed||daysPlayed);
+  const daysPlayed=new Set(h.map(e=>{const d=new Date(e.ts);return`${d.getMonth()}-${d.getDate()}`;})).size;
   // Section most played this week
   const secCounts={};h.filter(e=>e.sid).forEach(e=>{secCounts[e.sid]=(secCounts[e.sid]||0)+1;});
   const topSecId=Object.keys(secCounts).sort((a,b)=>secCounts[b]-secCounts[a])[0]||null;
@@ -9663,7 +9850,7 @@ function getWeeklyRecapData(){
   const prevH=getHist().filter(e=>e.iqScore!=null&&e.ts>=prevWeekStart.getTime()&&e.ts<weekStart.getTime());
   const prevAvg=prevH.length?Math.round(prevH.reduce((a,e)=>a+e.iqScore,0)/prevH.length):null;
   const delta=prevAvg!=null?avgIQ-prevAvg:null;
-  return{h,dailyH,avgIQ,bestEntry,daysPlayed,dailyDaysPlayed,dailyRackCount,topSec,delta,prevAvg,weekRounds:h.length};
+  return{h,dailyH,avgIQ,bestEntry,daysPlayed,topSec,delta,prevAvg,weekRounds:h.length};
 }
 
 function shouldShowWeeklyRecap(){
@@ -9699,11 +9886,11 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
   // Week-in-progress banner — shown any day except Sunday
   const weekInProgress=!isSunday;
 
-  const {avgIQ,bestEntry,daysPlayed,dailyDaysPlayed,dailyRackCount,topSec,delta,weekRounds,dailyH}=data;
+  const {avgIQ,bestEntry,daysPlayed,topSec,delta,weekRounds,dailyH}=data;
   const lvlTier=getIQTier(avgIQ);
   const lvl={label:lvlTier.level,color:lvlTier.color};
 
-  const shareText=`🀄 My Rackle week:\n${avgIQ} avg score · ${dailyRackCount}/7 Daily Racks · ${weekRounds} hands\n${lvl.label}${topSec?` · Fave: ${topSec.icon} ${topSec.name}`:""}\nplayrackle.com`;
+  const shareText=`🀄 My Rackle week:\n${avgIQ} avg score · ${daysPlayed}/7 days · ${weekRounds} hands\n${lvl.label}${topSec?` · Fave: ${topSec.icon} ${topSec.name}`:""}\nplayrackle.com`;
 
   return(
     <div style={S.pg} className="rk-pg">
@@ -9713,14 +9900,14 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
       <div style={{borderRadius:20,background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"24px 20px 20px",textAlign:"center",boxShadow:"0 8px 32px rgba(0,0,0,0.2)",marginBottom:12}}>
         <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:10}}>YOUR WEEK IN RACKLE</div>
         {profile?.nickname&&<div style={{fontSize:12,color:"rgba(255,255,255,0.45)",marginBottom:8}}>{profile.nickname}</div>}
-        <div style={{fontFamily:F.d,fontSize:64,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,marginBottom:4}}>{avgIQ}</div>
-        <div style={{fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginBottom:6}}>AVG TODAY'S RACK</div>
+        <div style={{fontFamily:F.d,fontSize:56,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,marginBottom:4}}>{avgIQ}</div>
+        <div style={{fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginBottom:6}}>AVG RACKLE SCORE</div>
         <div style={{fontFamily:F.d,fontSize:18,fontWeight:800,color:"#fff",marginBottom:16,lineHeight:1}}>{lvl.label}</div>
         <div style={{width:"100%",height:0.5,background:"rgba(255,255,255,0.08)",marginBottom:14}}/>
         <div style={{display:"flex",justifyContent:"center",gap:24,flexWrap:"wrap"}}>
           <div style={{textAlign:"center"}}>
-            <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.gilt}}>{dailyRackCount}<span style={{fontSize:11,color:"rgba(255,255,255,0.3)",fontFamily:F.b}}>/7</span></div>
-            <div style={{fontSize:8,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginTop:2}}>DAILY RACKS</div>
+            <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.gilt}}>{daysPlayed}<span style={{fontSize:11,color:"rgba(255,255,255,0.3)",fontFamily:F.b}}>/7</span></div>
+            <div style={{fontSize:8,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginTop:2}}>DAYS</div>
           </div>
           <div style={{width:1,background:"rgba(255,255,255,0.08)"}}/>
           <div style={{textAlign:"center"}}>
@@ -9761,16 +9948,16 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
         </div>}
         <div style={{display:"flex",gap:6}}>
           <div style={{flex:1,background:C.jade+"08",borderRadius:10,padding:"10px",textAlign:"center",border:`1px solid ${C.jade}15`}}>
-            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.jade}}>{dailyRackCount}</div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>DAILY RACKS</div>
+            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.jade}}>{dailyH.length}</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>DAILIES</div>
           </div>
           <div style={{flex:1,background:C.gold+"08",borderRadius:10,padding:"10px",textAlign:"center",border:`1px solid ${C.gold}15`}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.gold}}>{bestEntry.iqScore}</div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>BEST IQ</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>BEST SCORE</div>
           </div>
           <div style={{flex:1,background:C.cinn+"06",borderRadius:10,padding:"10px",textAlign:"center",border:`1px solid ${C.cinn}15`}}>
-            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.cinn}}>{weekRounds}</div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>HANDS PLAYED</div>
+            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.cinn}}>{daysPlayed}</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>DAYS PLAYED</div>
           </div>
         </div>
       </div>
@@ -10618,7 +10805,7 @@ export default function Rackle(){
         upsertGlobalEntry(globalName,result.iq.totalScore,result.time||0,newStreak,autoCode||null);
       }
     }
-    addHist({...result,mode});
+    addHist(result);
     // Auto-sync profile if it exists
     const prof=getProfile();
     if(prof&&prof.nickname){
@@ -10641,7 +10828,7 @@ export default function Rackle(){
             <div className="rk-in" style={{background:"#fff",borderRadius:20,padding:"20px 18px",boxShadow:"0 -4px 32px rgba(0,0,0,0.12)"}}>
               <div style={{fontSize:9,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:8}}>SUNDAY · YOUR WEEK IN RACKLE</div>
               <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,marginBottom:6}}>Weekly Recap is ready 🀄</div>
-              <div style={{fontSize:12,color:C.mut,lineHeight:1.6,marginBottom:14}}>See your avg IQ, best hand, consistency, and how you compare to last week.</div>
+              <div style={{fontSize:12,color:C.mut,lineHeight:1.6,marginBottom:14}}>See your avg score, best hand, consistency, and how you compare to last week.</div>
               <div style={{display:"flex",gap:8}}>
                 <button onClick={()=>{dismissWeeklyRecap();setShowWeeklyNudge(false);setScreen("recap");}} style={{...S.greenBtn,flex:2}}>View My Recap →</button>
                 <button onClick={()=>{dismissWeeklyRecap();setShowWeeklyNudge(false);}} style={{...S.oBtn,flex:1}}>Later</button>
