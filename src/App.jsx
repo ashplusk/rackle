@@ -3241,10 +3241,17 @@ const S2C=[{dir:"Left",icon:"👈",req:3,blind:false},{dir:"Over",icon:"↕️",
 
 function addHist(e){
   const h=ST.get("hist",[]);
-  h.push({...e,ts:Date.now()});
+  const ts=Date.now();
+  const entry={
+    ...e,
+    ts,
+    isDaily:e.mode==="daily"||e.isDaily===true,
+    daySeed:e.mode==="daily"?(e.daySeed||getDailySeed()):e.daySeed,
+  };
+  h.push(entry);
   ST.set("hist",h.slice(-100));
   const pid=ST.get("playerId",null);
-  if(pid)pushGameHistory({...e,ts:Date.now()},pid);
+  if(pid)pushGameHistory(entry,pid);
 }
 function getHist(){return ST.get("hist",[]);}
 function getStats(){
@@ -3314,6 +3321,7 @@ async function pullGameHistory(playerId){
     return rows.map(r=>({
       ts:new Date(r.played_at).getTime(),
       mode:r.mode,sid:r.section_id,
+      daySeed:r.day_seed||null,isDaily:r.mode==="daily"||!!r.day_seed,
       iqScore:r.iq_score,rating:r.rating,
       time:r.time_secs,gi:0,
     }));
@@ -7869,9 +7877,9 @@ function Statspill({streak,rounds,bestIQ,streakBadge}){
   return(
     <div>
       {/* Collapsed pill */}
-      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:5,background:bg,border,borderRadius:10,padding:"4px 12px",height:36,cursor:"pointer"}}>
-        <span style={{fontFamily:F.d,fontSize:12,fontWeight:800,color}}>{value}</span>
-        <span style={{fontSize:11,color,fontWeight:600,opacity:0.8}}>{label}</span>
+      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:5,background:bg,border,borderRadius:10,padding:"4px 13px",height:36,cursor:"pointer"}}>
+        <span style={{fontFamily:F.d,fontSize:14,fontWeight:900,color,lineHeight:1}}>{value}</span>
+        <span style={{fontSize:12,color,fontWeight:700,opacity:0.82,lineHeight:1}}>{label}</span>
         <span style={{fontSize:9,color,opacity:0.5,marginLeft:1}}>{open?"▴":"▾"}</span>
       </button>
 
@@ -8486,7 +8494,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <div style={{background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"24px 20px 20px",textAlign:"center"}}>
               <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:14}}>TODAY'S DAILY · #{dn}</div>
               {iq&&<>
-                <div style={{fontFamily:F.d,fontSize:60,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,textShadow:`0 2px 16px rgba(176,138,53,0.45)`,marginBottom:6}}>{iq.totalScore}</div>
+                <div style={{fontFamily:F.d,fontSize:82,fontWeight:900,color:C.gilt,lineHeight:0.92,letterSpacing:-3,textShadow:`0 2px 16px rgba(176,138,53,0.45)`,marginBottom:8}}>{iq.totalScore}</div>
                 <div style={{width:40,height:1.5,background:`linear-gradient(90deg,transparent,${C.gilt},transparent)`,margin:"12px auto 12px"}}/>
                 <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:"#fff",marginBottom:8,letterSpacing:-0.3}}>{iq.level}</div>
                 {iq.styleName&&<div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"5px 12px",fontSize:11,color:C.gilt,fontWeight:900,marginTop:4,marginBottom:14,letterSpacing:0.2}}>{iq.styleName}</div>}
@@ -8519,7 +8527,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             {/* ACTIONS */}
             <div style={{background:C.bg,padding:"14px 16px 16px",borderTop:`1px solid ${C.bdr}`}}>
               <div style={{marginBottom:10}}>
-                <ShareButton text={shareText} variant="jadepill" label="Share my score" sublabel="Tap to copy · Drop it in your group chat"/>
+                <ShareButton text={shareText} variant="jadepill" label="Share my score" sublabel="Tap to copy · drop it in your group chat"/>
               </div>
               <button onClick={showScorecard} style={{width:"100%",borderRadius:12,background:"#fff",border:`1.5px solid ${C.jade}25`,cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"11px 14px",textAlign:"left",boxShadow:`0 2px 8px ${C.jade}10`}}>
                 <div style={{width:36,height:36,borderRadius:10,background:`linear-gradient(135deg,${C.jade},#115C38)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>🎯</div>
@@ -9645,9 +9653,11 @@ function getWeeklyRecapData(){
   const dailyH=h.filter(e=>e.mode==="daily"||e.isDaily===true||e.daySeed!=null);
   const avgIQ=Math.round(h.reduce((a,e)=>a+e.iqScore,0)/h.length);
   const bestEntry=h.reduce((a,b)=>b.iqScore>a.iqScore?b:a,h[0]);
-  const daysPlayed=new Set(h.map(e=>{const d=new Date(e.ts);return`${d.getMonth()}-${d.getDate()}`;})).size;
+  const daysPlayed=new Set(h.map(e=>{const d=new Date(e.ts);return`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;})).size;
   const dailyDaysPlayed=new Set(dailyH.map(e=>e.daySeed||(()=>{const d=new Date(e.ts);return`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;})())).size;
-  const dailyRackCount=Math.min(7,dailyDaysPlayed);
+  // Prefer explicit daily markers. If older/local history lacks them, fall back to
+  // unique play days so the recap never shows 0 when the player has played.
+  const dailyRackCount=Math.min(7,dailyDaysPlayed||daysPlayed);
   // Section most played this week
   const secCounts={};h.filter(e=>e.sid).forEach(e=>{secCounts[e.sid]=(secCounts[e.sid]||0)+1;});
   const topSecId=Object.keys(secCounts).sort((a,b)=>secCounts[b]-secCounts[a])[0]||null;
