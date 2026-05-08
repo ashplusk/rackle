@@ -5655,23 +5655,21 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           {/* Coach Mode — primary action, full-bleed dark green */}
           {onCoachMode&&(
             <button onClick={onCoachMode} style={{
-              width:"100%",borderRadius:14,border:"none",cursor:"pointer",
+              width:"100%",borderRadius:12,border:"none",cursor:"pointer",
               background:`linear-gradient(135deg,${C.hero2} 0%,${C.hero1} 100%)`,
-              display:"flex",alignItems:"center",gap:14,padding:"15px 18px",
-              textAlign:"left",boxShadow:`0 4px 20px ${C.jade}28`,
+              display:"flex",alignItems:"center",gap:10,padding:"12px 16px",
+              textAlign:"left",boxShadow:`0 4px 20px ${C.jade}22`,
               position:"relative",overflow:"hidden",
             }}>
               {/* Subtle shimmer stripe */}
-              <div style={{position:"absolute",top:0,left:0,right:0,height:"40%",background:"linear-gradient(180deg,rgba(255,255,255,0.06),transparent)",borderRadius:"14px 14px 0 0",pointerEvents:"none"}}/>
-              <div style={{width:44,height:44,borderRadius:12,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>🎯</div>
+              <div style={{position:"absolute",top:0,left:0,right:0,height:"40%",background:"linear-gradient(180deg,rgba(255,255,255,0.06),transparent)",borderRadius:"12px 12px 0 0",pointerEvents:"none"}}/>
+              <div style={{width:32,height:32,borderRadius:8,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>🎯</div>
               <div style={{flex:1}}>
-                <div style={{fontSize:8,color:C.gilt,letterSpacing:2.5,fontWeight:700,marginBottom:6,opacity:0.85}}>TABLE TALK</div>
-                <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:"#fff",lineHeight:1.2,marginBottom:6}}>See The Better Play</div>
-                <div style={{fontSize:11,color:"rgba(255,255,255,0.55)",lineHeight:1.5}}>What experienced players noticed in your rack</div>
+                <div style={{fontSize:8,color:C.gilt,letterSpacing:2,fontWeight:700,marginBottom:4,opacity:0.85}}>TABLE TALK</div>
+                <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#fff",lineHeight:1.2,marginBottom:3}}>See the better play</div>
+                <div style={{fontSize:11,color:"rgba(255,255,255,0.62)",lineHeight:1.3}}>What experienced players noticed in your rack</div>
               </div>
-              <div style={{width:28,height:28,borderRadius:8,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                <span style={{fontSize:14,color:"rgba(255,255,255,0.7)",fontWeight:700}}>›</span>
-              </div>
+              <span style={{fontSize:16,color:"rgba(255,255,255,0.7)",fontWeight:700,flexShrink:0}}>›</span>
             </button>
           )}
           {/* Practice CTA — secondary, warm sage */}
@@ -6434,8 +6432,8 @@ function CoachModeScreen({iq,dayNum,section,onBack,setScreen}){
 
       <div style={{textAlign:"center",marginTop:4,marginBottom:16}}>
         <div style={{fontSize:8,color:C.jade,letterSpacing:2.6,fontWeight:800,marginBottom:8}}>TABLE TALK</div>
-        <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:C.ink,letterSpacing:-0.6,lineHeight:1.05}}>See The Better Play</div>
-        <div style={{fontSize:12,color:C.mut,lineHeight:1.5,marginTop:10}}>What experienced players noticed in your rack</div>
+        <div style={{fontFamily:F.d,fontSize:22,fontWeight:800,color:C.ink,letterSpacing:-0.4,lineHeight:1.1}}>See the better play</div>
+        <div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:8}}>What experienced players noticed in your rack</div>
       </div>
 
       <div style={{background:`linear-gradient(145deg,${C.hero2},${C.hero1})`,borderRadius:18,padding:"20px 18px 18px",color:"#fff",marginBottom:12,boxShadow:`0 8px 28px ${C.jade}24`,textAlign:"center"}}>
@@ -8527,12 +8525,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               <div style={{marginBottom:10}}>
                 <ShareButton text={shareText} variant="jadepill" label="Share my score" sublabel="Tap to copy · drop it in your group chat"/>
               </div>
-              <button onClick={showScorecard} style={{width:"100%",borderRadius:12,background:"#fff",border:`1.5px solid ${C.jade}25`,cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"11px 14px",textAlign:"left",boxShadow:`0 2px 8px ${C.jade}10`}}>
-                <div style={{width:36,height:36,borderRadius:10,background:`linear-gradient(135deg,${C.jade},#115C38)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>🎯</div>
+              <button onClick={showScorecard} style={{width:"100%",borderRadius:12,background:"#fff",border:`1.5px solid ${C.jade}25`,cursor:"pointer",display:"flex",alignItems:"center",gap:10,padding:"12px 16px",textAlign:"left",boxShadow:`0 2px 8px ${C.jade}10`}}>
+                <div style={{width:32,height:32,borderRadius:8,background:`linear-gradient(135deg,${C.jade},#115C38)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>🎯</div>
                 <div style={{flex:1}}>
-                  <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:5}}>TABLE TALK</div>
-                  <div style={{fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.25,marginBottom:5}}>See The Better Play</div>
-                  <div style={{fontSize:10,color:C.mut,lineHeight:1.45}}>What experienced players noticed in your rack</div>
+                  <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:4}}>TABLE TALK</div>
+                  <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2,marginBottom:3}}>See the better play</div>
+                  <div style={{fontSize:11,color:C.mut,lineHeight:1.3}}>What experienced players noticed in your rack</div>
                 </div>
                 <span style={{fontSize:16,color:C.jade,fontWeight:700,flexShrink:0}}>›</span>
               </button>
