@@ -8434,29 +8434,93 @@ function ClubPulseCard({club,clubPlayers,setScreen}){
 }
 
 function TomorrowPreviewCard(){
-  const previews=[
-    {line:"A fresh rack drops at midnight.",hint:"Your streak gets another chance."},
-    {line:"New hand. Same club chase.",hint:"See who shows up tomorrow."},
-    {line:"Tomorrow is another read.",hint:"One cleaner pass can change the whole rack."},
-    {line:"The next Charleston is waiting.",hint:"Come back sharp."},
-    {line:"Your club resets at midnight.",hint:"Be first on the board."},
-  ];
-  const pick=previews[getDayNum()%previews.length];
+  const [timeLeft,setTimeLeft]=useState({hh:"00",mm:"00",ss:"00",urgent:false});
+
+  useEffect(()=>{
+    const tick=()=>{
+      const now=new Date();
+      const midnight=new Date();
+      midnight.setHours(24,0,0,0);
+      const diff=Math.max(0,midnight-now);
+      const hh=Math.floor(diff/3600000);
+      const mm=Math.floor((diff%3600000)/60000);
+      const ss=Math.floor((diff%60000)/1000);
+      const pad=n=>n.toString().padStart(2,"0");
+      setTimeLeft({hh:pad(hh),mm:pad(mm),ss:pad(ss),urgent:hh<2});
+    };
+    tick();
+    const iv=setInterval(tick,1000);
+    return()=>clearInterval(iv);
+  },[]);
+
+  const tomorrowSeed=()=>{
+    const d=new Date();
+    d.setDate(d.getDate()+1);
+    return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();
+  };
+
+  const getTomorrowHint=()=>{
+    const rack=seededShuffle(buildDeck(),tomorrowSeed()).slice(0,14);
+    const jokers=rack.filter(t=>t.t==="j").length;
+    const flowers=rack.filter(t=>t.t==="f").length;
+    const honors=rack.filter(t=>t.t==="w"||t.t==="d").length;
+    const evens=rack.filter(t=>t.t==="s"&&t.n%2===0).length;
+    const odds=rack.filter(t=>t.t==="s"&&t.n%2===1).length;
+    const sixes=rack.filter(t=>t.t==="s"&&t.n===6).length;
+    const counts={};
+    rack.forEach(t=>{
+      const key=t.t==="s"?`${t.s}-${t.n}`:t.t==="w"?`w-${t.v}`:t.t==="d"?`d-${t.v}`:t.t;
+      counts[key]=(counts[key]||0)+1;
+    });
+    const pairs=Object.values(counts).filter(v=>v>=2).length;
+
+    if(jokers>=2)return "Small hint: jokers may make tomorrow interesting.";
+    if(flowers>=3)return "Small hint: flowers may be worth watching tomorrow.";
+    if(sixes>=2)return "Small hint: sixes may matter more than usual.";
+    if(honors>=5)return "Small hint: honors may pull the rack tomorrow.";
+    if(pairs>=3)return "Small hint: pairs may tell the story tomorrow.";
+    if(evens>=6)return "Small hint: even tiles may get the first look.";
+    if(odds>=6)return "Small hint: odd tiles may get the first look.";
+    return "Small hint: tomorrow may reward a flexible first pass.";
+  };
+
+  const urgency=timeLeft.urgent;
+  const headline=urgency?"Last call before the next rack.":"Your next rack is almost here.";
+  const subline=urgency
+    ?"One more look before the board resets."
+    :"Come back tomorrow and see where your club lands.";
+  const hint=getTomorrowHint();
+
   return(
-    <div style={{background:`linear-gradient(135deg,#fff,${C.gold}10)`,border:`1px solid ${C.gold}24`,borderRadius:16,padding:"14px 15px",marginBottom:14,boxShadow:"0 4px 18px rgba(0,0,0,0.035)",position:"relative",overflow:"hidden"}}>
-      <div aria-hidden style={{position:"absolute",right:-10,bottom:-18,fontSize:70,opacity:0.045,lineHeight:1}}>🀄</div>
-      <div style={{display:"flex",alignItems:"center",gap:12,position:"relative"}}>
-        <div style={{width:38,height:38,borderRadius:13,background:C.gold+"16",border:`1px solid ${C.gold}22`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🌙</div>
+    <div style={{background:`linear-gradient(145deg,#fff,${C.jade}07 58%,${C.gold}10)`,border:`1px solid ${urgency?C.cinn+"28":C.jade+"20"}`,borderRadius:18,padding:"15px 15px 14px",marginBottom:14,boxShadow:"0 5px 22px rgba(0,0,0,0.04)",position:"relative",overflow:"hidden"}}>
+      <div aria-hidden style={{position:"absolute",right:-12,bottom:-20,fontSize:76,opacity:0.045,lineHeight:1}}>🀄</div>
+      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,position:"relative",marginBottom:12}}>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:8,color:C.gold,letterSpacing:1.8,fontWeight:900,marginBottom:4}}>TOMORROW'S RACKLE</div>
-          <div style={{fontFamily:F.d,fontSize:15,color:C.ink,fontWeight:850,lineHeight:1.2,marginBottom:3}}>{pick.line}</div>
-          <div style={{fontSize:11,color:C.mut,lineHeight:1.45}}>{pick.hint}</div>
+          <div style={{fontSize:8,color:urgency?C.cinn:C.jade,letterSpacing:1.8,fontWeight:900,marginBottom:5}}>TOMORROW'S RACKLE</div>
+          <div style={{fontFamily:F.d,fontSize:17,color:C.ink,fontWeight:900,lineHeight:1.15,letterSpacing:-0.2,marginBottom:4}}>{headline}</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.45}}>{subline}</div>
+        </div>
+        <div style={{width:42,height:42,borderRadius:14,background:urgency?C.cinn+"10":C.jade+"10",border:`1px solid ${urgency?C.cinn+"22":C.jade+"22"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:19,flexShrink:0}}>🌙</div>
+      </div>
+
+      <div style={{position:"relative",background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:14,padding:"10px 12px",marginBottom:10}}>
+        <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:900,marginBottom:7}}>NEW RACK IN</div>
+        <div style={{display:"flex",alignItems:"center",gap:7}}>
+          {[{v:timeLeft.hh,l:"hrs"},{v:timeLeft.mm,l:"min"},{v:timeLeft.ss,l:"sec"}].map((part,i)=>(
+            <div key={part.l} style={{display:"flex",alignItems:"center",gap:7}}>
+              <div style={{minWidth:42,textAlign:"center"}}>
+                <div style={{fontFamily:F.d,fontSize:25,fontWeight:900,color:urgency?C.cinn:C.jade,lineHeight:1,letterSpacing:-1}}>{part.v}</div>
+                <div style={{fontSize:7,color:C.mut,letterSpacing:1.3,fontWeight:800,marginTop:3,textTransform:"uppercase"}}>{part.l}</div>
+              </div>
+              {i<2&&<div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.bdr,paddingBottom:11}}>:</div>}
+            </div>
+          ))}
         </div>
       </div>
-      <div style={{display:"flex",gap:6,marginTop:12,position:"relative",flexWrap:"wrap"}}>
-        {["New rack","Club reset","Streak lives"].map(label=>(
-          <span key={label} style={{fontSize:9,fontWeight:800,color:C.gold,background:C.gold+"10",border:`1px solid ${C.gold}18`,borderRadius:999,padding:"5px 8px",lineHeight:1}}>{label}</span>
-        ))}
+
+      <div style={{position:"relative",display:"flex",alignItems:"center",gap:8,background:C.gold+"0E",border:`1px solid ${C.gold}18`,borderRadius:13,padding:"9px 10px"}}>
+        <span style={{fontSize:14,flexShrink:0}}>👀</span>
+        <span style={{fontSize:11,color:C.ink,lineHeight:1.45,fontWeight:650}}>{hint}</span>
       </div>
     </div>
   );
@@ -8845,7 +8909,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         );
       })()}
 
-      {dDone&&<><MidnightCountdown dn={dn}/><TomorrowPreviewCard/></>}
+      {dDone&&<TomorrowPreviewCard/>}
 
       <button onClick={()=>go("free")} aria-label="Play Practice Mode" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:20,borderRadius:16,padding:"14px 16px",textAlign:"left",background:dDone?`linear-gradient(135deg,${C.jade}18,${C.jade}08)`:`linear-gradient(135deg,${C.cinn}05,#fff)`,border:`1.5px solid ${dDone?C.jade+"40":C.cinn+"20"}`}}>
         <div aria-hidden="true" style={{width:48,height:48,borderRadius:14,background:dDone?`linear-gradient(135deg,${C.jade},#115C38)`:`linear-gradient(135deg,${C.cinn}20,${C.cinn}10)`,border:`1px solid ${dDone?C.jade+"60":C.cinn+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0,boxShadow:dDone?`0 4px 14px ${C.jade}30`:"none"}}>🀄</div>
