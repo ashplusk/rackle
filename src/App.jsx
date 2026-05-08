@@ -5164,7 +5164,7 @@ function ShareButton({text,label,sublabel,variant="goldpill"}){
         <div style={{width:32,height:32,borderRadius:8,background:iconBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,flexShrink:0}}>{copied?"✓":"📲"}</div>
         <div style={{flex:1,minWidth:0,display:"flex",flexDirection:"column",gap:2}}>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:titleColor,lineHeight:1.2}}>{copied?"Copied to clipboard!":label||"Challenge Your Club"}</div>
-          <div style={{fontSize:11,color:subColor,lineHeight:1.3}}>{copied?"Paste it into your group chat":sublabel||"Tap to copy · drop it in your group chat"}</div>
+          <div style={{fontSize:11,color:subColor,lineHeight:1.3}}>{copied?"Paste it into your group chat":sublabel||"Tap to copy · Drop it in your group chat"}</div>
         </div>
         <span style={{fontSize:14,color:arrowColor,fontWeight:700,flexShrink:0}}>{copied?"":"›"}</span>
       </button>
@@ -8060,26 +8060,27 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
 // ─── STATS PILL — collapsed by default, tap to expand ────────────────────────
 function Statspill({streak,rounds,bestIQ,streakBadge}){
   const [open,setOpen]=useState(false);
-  const visibleStreak=streak>1?streak:0;
+  const visibleStreak=streak>0?streak:0;
   const hasAny=visibleStreak>0||rounds>0||bestIQ;
 
-  // Collapsed pill — shows most prominent stat. Day 1 stays out of the top bar to keep the home screen clean.
-  const icon=visibleStreak>0?(streakBadge?streakBadge.badge:"📅"):bestIQ?"⭐":"🎲";
-  const value=visibleStreak>0?`${visibleStreak}-day`:bestIQ?bestIQ.score:rounds;
-  const label=visibleStreak>0?"streak":bestIQ?"best score":"rounds";
+  // Compact status pill — day 1 should feel earned, not oversized.
+  const icon=visibleStreak>0?(streakBadge?streakBadge.badge:"🔥"):bestIQ?"⭐":"🎲";
+  const value=visibleStreak>0?`${visibleStreak}d`:bestIQ?bestIQ.score:rounds;
+  const label=visibleStreak>0?"streak":bestIQ?"best":"rounds";
   const color=visibleStreak>0?C.cinn:bestIQ?C.gold:C.mut;
-  const bg=visibleStreak>0?C.cinn+"08":bestIQ?C.gold+"08":C.bg2;
-  const border=visibleStreak>0?`1px solid ${C.cinn}20`:bestIQ?`1px solid ${C.gold}20`:`1px solid ${C.bdr}`;
+  const bg=visibleStreak>0?`linear-gradient(135deg,${C.cinn}10,#FFF8F0)`:bestIQ?`linear-gradient(135deg,${C.gold}12,#FFF9ED)`:C.bg2;
+  const border=visibleStreak>0?`1px solid ${C.cinn}26`:bestIQ?`1px solid ${C.gold}24`:`1px solid ${C.bdr}`;
 
   if(!hasAny)return null;
 
   return(
     <div>
       {/* Collapsed pill */}
-      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:5,background:bg,border,borderRadius:8,padding:"4px 12px",cursor:"pointer"}}>
-        <span style={{fontFamily:F.d,fontSize:12,fontWeight:800,color}}>{value}</span>
-        <span style={{fontSize:11,color,fontWeight:600,opacity:0.8}}>{label}</span>
-        <span style={{fontSize:9,color,opacity:0.5,marginLeft:1}}>{open?"▴":"▾"}</span>
+      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:6,background:bg,border,borderRadius:999,padding:"3px 9px 3px 7px",cursor:"pointer",boxShadow:visibleStreak>0?`0 3px 10px ${C.cinn}10`:"none",minHeight:28}}>
+        <span style={{width:18,height:18,borderRadius:99,background:visibleStreak>0?C.cinn+"12":bestIQ?C.gold+"12":"rgba(0,0,0,0.04)",display:"inline-flex",alignItems:"center",justifyContent:"center",fontSize:10,flexShrink:0}}>{icon}</span>
+        <span style={{fontFamily:F.d,fontSize:11,fontWeight:900,color,lineHeight:1}}>{value}</span>
+        <span style={{fontSize:10,color,fontWeight:800,opacity:0.75,lineHeight:1}}>{label}</span>
+        <span style={{fontSize:8,color,opacity:0.55,marginLeft:0}}>{open?"▴":"▾"}</span>
       </button>
 
       {/* Expanded panel */}
@@ -8372,7 +8373,7 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
             <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,letterSpacing:-0.8,lineHeight:1.03,marginBottom:10}}>One rack.<br/>One read.<br/><span style={{color:C.gilt}}>One chance.</span></div>
             <div style={{fontSize:12,color:"rgba(255,255,255,0.72)",lineHeight:1.55,maxWidth:280}}>Same deal. Every player. Train your Charleston in 2 minutes.</div>
           </div>
-          <div style={{width:66,height:66,borderRadius:999,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 8px 26px rgba(0,0,0,0.22)",flexShrink:0}}>
+          <div style={{width:66,height:66,borderRadius:999,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 8px 26px rgba(0,0,0,0.22)",flexShrink:0,transform:"translateY(-8px)"}}>
             <span style={{fontSize:24,color:C.jade,marginLeft:3}}>▶</span>
           </div>
         </div>
@@ -8663,7 +8664,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <MiniStat value={topToday} label="TOP TODAY"/>
           <MiniStat value={streak>0?`${streak}d`:"start"} label="STREAK" accent={C.gilt}/>
         </div>
-        <div style={{position:"absolute",right:26,top:122,width:88,height:88,borderRadius:88,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 12px 34px rgba(0,0,0,0.18)"}}>
+        <div style={{position:"absolute",right:26,top:104,width:88,height:88,borderRadius:88,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 12px 34px rgba(0,0,0,0.18)"}}>
           <span style={{width:0,height:0,borderTop:"13px solid transparent",borderBottom:"13px solid transparent",borderLeft:`22px solid ${C.jade}`,marginLeft:6}}/>
         </div>
       </div>
@@ -8696,12 +8697,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div style={{padding:16,display:"grid",gap:12}}>
         <button onClick={copyShare} style={{width:"100%",border:`1px solid ${C.gold}25`,background:`linear-gradient(135deg,#FFF9ED,#F7EFE0)`,borderRadius:14,padding:"13px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left"}}>
           <div style={{width:39,height:39,borderRadius:12,background:C.gold+"14",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>📲</div>
-          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>Challenge Your Club</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Tap to copy · drop it in your group chat</div></div>
+          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>Challenge Your Club</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Tap to copy · Drop it in your group chat</div></div>
           <span style={{fontSize:18,color:C.gold}}>›</span>
         </button>
         <button onClick={showScorecard} style={{width:"100%",border:`1px solid ${C.jade}20`,background:C.jade+"06",borderRadius:14,padding:"13px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left"}}>
           <div style={{width:39,height:39,borderRadius:12,background:C.jade+"13",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>🎓</div>
-          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>See the Better Play</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Best path · other hands · next move</div></div>
+          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>Improve Your Game</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Best path · Other hands · Next move</div></div>
           <span style={{fontSize:18,color:C.jade}}>›</span>
         </button>
       </div>
