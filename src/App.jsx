@@ -6046,69 +6046,18 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
 function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, secObj}){
   if(!handObj||!hand)return null;
 
-  const allPassed=(passLog||[]).flatMap(p=>(p.out||[]).map(t=>({...t,roundName:p.label||p.roundName||"Pass",roundIdx:(passLog||[]).indexOf(p)})));
-  const cardColors=HAND_CARD_COLORS[handObj.label]||[];
-  const groups=decodeHandLabel(handObj.label,sectionId);
+  const plan=buildCoveragePlan(hand,handObj,passLog||[]);
+  const groups=plan.groups;
+  const cardColors=plan.cardColors;
+  const groupStatus=plan.groupStatus;
 
-  // For each group, work out how many of the needed tiles the player held,
-  // how many were passed, and how many they never had.
-  // We use a tile-pool approach: consume tiles from the final rack greedily.
-  const rackPool=[...hand]; // mutable copy we consume as we assign slots
-
-  // Helper: try to pull `need` tiles matching predicate from rackPool
-  const pull=(pred,need)=>{
-    let found=0;
-    const remaining=[];
-    for(const t of rackPool){
-      if(found<need&&pred(t)){found++;}
-      else{remaining.push(t);}
-    }
-    rackPool.length=0;rackPool.push(...remaining);
-    return found;
-  };
-
-  // For each group, figure out status
-  const groupStatus=groups.map((g,gi)=>{
-    const cc=cardColors[gi];
-    // Build the predicate for this group's tile type
-    const pred=(t)=>{
-      if(g.isFlower)return t.t==="f";
-      if(g.isSoap)return t.t==="d"&&t.v==="Soap";
-      if(g.isDragon)return t.t==="d";
-      if(g.isWind)return t.t==="w";
-      if(g.isNum){
-        // Match number; suit hint from card color
-        const numMatch=t.t==="s"&&t.n===Number(g.tile);
-        if(cc==="G")return numMatch&&t.s==="bam";
-        if(cc==="R")return numMatch&&t.s==="crak";
-        if(cc==="K")return numMatch; // any suit
-        return numMatch;
-      }
-      return false;
-    };
-    // Joker pred, only if group allows jokers
-    const jokerPred=(t)=>t.t==="j"&&!handObj.concealed&&g.type!=="single"&&g.type!=="pair";
-
-    const need=g.count;
-    const naturalHeld=pull(pred,need);
-    // For remaining slots, try jokers (only for open hands, pungs/kongs)
-    const jokerHeld=(!handObj.concealed&&g.type!=="single"&&g.type!=="pair")
-      ?pull(jokerPred,need-naturalHeld):0;
-    const totalHeld=naturalHeld+jokerHeld;
-    const gap=need-totalHeld;
-
-    // Were any of the missing tiles passed away?
-    const passedMatching=allPassed.filter(t=>pred(t));
-    const passedRounds=[...new Set(passedMatching.map(t=>t.roundName))];
-
-    return{g,gi,cc,need,totalHeld,naturalHeld,jokerHeld,gap,passedMatching,passedRounds};
-  });
-
-  // Compute summary numbers
-  const totalSlots=groups.reduce((a,g)=>a+g.count,0);
-  const totalHeld=groupStatus.reduce((a,s)=>a+s.totalHeld,0);
-  const totalGap=totalSlots-totalHeld;
-  const pct=Math.round(totalHeld/totalSlots*100);
+  // Compute summary numbers from the best abstract-suit mapping.
+  // This prevents alternate paths from looking like they only match one tile
+  // when the hand can legally be played in another suit.
+  const totalSlots=plan.total;
+  const totalHeld=plan.held;
+  const totalGap=Math.max(0,totalSlots-totalHeld);
+  const pct=plan.pct;
   const criticalPasses=groupStatus.filter(s=>s.gap>0&&s.passedMatching.length>0);
 
   // Gap sentence
@@ -6116,8 +6065,8 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
   groupStatus.forEach(s=>{
     if(s.gap<=0)return;
     const tileName=s.g.isFlower?"Flower":s.g.isSoap?"Soap":s.g.isWind?`${s.g.tile} Wind`:s.g.isDragon?"Dragon":`${s.g.tile}`;
-    const suitHint=s.cc==="G"?" (Bam)":s.cc==="R"?" (Crak)":s.cc==="K"?" (any suit)":"";
-    gapParts.push(`${s.gap} more ${tileName}${suitHint}`);
+    const resolved=s.resolvedSuit?` (${RACKLE_SUIT_LABELS[s.resolvedSuit]})`:(s.cc==="K"?" (any suit)":"");
+    gapParts.push(`${s.gap} more ${tileName}${resolved}`);
   });
   const gapSentence=gapParts.length===0
     ?"Your rack covered every group in this hand, exceptional."
@@ -6135,7 +6084,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
 
   // Render an individual tile slot
   const SlotTile=({status,slotIdx})=>{
-    const{g,cc,totalHeld,need,gap,passedMatching,passedRounds}=status;
+    const{g,cc,totalHeld,need,gap,passedMatching,passedRounds,resolvedSuit}=status;
     // Which slots in this group are filled vs empty?
     const isFilled=slotIdx<totalHeld;
     const isJoker=slotIdx>=status.naturalHeld&&slotIdx<totalHeld; // joker-filled slot
@@ -6157,7 +6106,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
       g.tile;
 
     const sub=isFilled
-      ?(isJoker?"Joker":cc==="G"?"Bam":cc==="R"?"Crak":cc==="K"?"✓":g.isFlower?"✓":g.isWind?"✓":g.isDragon?"✓":"✓")
+      ?(isJoker?"Joker":resolvedSuit?RACKLE_SUIT_LABELS[resolvedSuit]:cc==="G"?"Bam":cc==="R"?"Crak":cc==="K"?"Any":g.isFlower?"✓":g.isWind?"✓":g.isDragon?"✓":"✓")
       :wasPassed?`P${(passedRounds[0]||"").charAt(0)||"?"}`:",";
 
     return(
@@ -10229,7 +10178,7 @@ const GROUP_TYPES={
 
 // Decode a hand label string into structured groups for visual display
 // e.g. "FF 2222 44 66 8888" → [{type:"pair",tile:"F"},{type:"kong",tile:"2"},...]
-function decodeHandLabel(label, sectionId){
+function decodeHandLabelLegacy(label, sectionId){
   const groups=[];
   // Tokenize by whitespace
   const tokens=label.trim().split(/\s+/);
@@ -10388,44 +10337,298 @@ const HAND_CARD_COLORS={
 // Returns {held, total, pct} using the literal decoded label + card colors.
 // This is the ground-truth "how many of the 14 hand tiles does this rack actually hold?"
 // Unlike fit() which picks best-case suit permutations, this is suit-specific and strict.
-function computeHonestCoverage(rack, handObj){
-  if(!rack||!handObj)return{held:0,total:0,pct:0};
+const RACKLE_REAL_SUITS=["bam","crak","dot"];
+const RACKLE_SUIT_LABELS={bam:"Bam",crak:"Crak",dot:"Dot"};
+const RACKLE_CODE_TO_DEFAULT_SUIT={G:"bam",R:"crak",B:"dot"};
+function shouldMapBlackAsSuit(handObj,groups,cardColors){
+  const numericK=groups.some((g,i)=>g.isNum&&cardColors[i]==="K");
+  if(!numericK)return false;
+  const constraint=String(handObj?.constraint||HAND_CONSTRAINTS?.[handObj?.label]||"");
+  const numericCodes=[...new Set(groups.map((g,i)=>g.isNum?cardColors[i]:null).filter(Boolean))];
+  return constraint.includes("Any 3 Suits")||numericCodes.filter(c=>["G","R","K"].includes(c)).length>=3;
+}
+function suitMappingOptions(codes){
+  if(!codes.length)return[{}];
+  const out=[];
+  const walk=(idx,used,map)=>{
+    if(idx>=codes.length){out.push({...map});return;}
+    const code=codes[idx];
+    for(const suit of RACKLE_REAL_SUITS){
+      if(used.has(suit))continue;
+      map[code]=suit;
+      used.add(suit);
+      walk(idx+1,used,map);
+      used.delete(suit);
+      delete map[code];
+    }
+  };
+  walk(0,new Set(),{});
+  return out.length?out:[{}];
+}
+function makeGroupPredicateLegacy(g,cc,suitMap){
+  return (t)=>{
+    if(g.isFlower)return t.t==="f";
+    if(g.isSoap)return t.t==="d"&&t.v==="Soap";
+    if(g.isDragon)return t.t==="d";
+    if(g.isWind)return t.t==="w"&&(g.tile?t.v===g.tile:true);
+    if(g.isNum){
+      const nm=t.t==="s"&&t.n===Number(g.tile);
+      if(!nm)return false;
+      const mapped=suitMap?.[cc];
+      if(mapped)return t.s===mapped;
+      if(cc==="G"||cc==="R"||cc==="B")return t.s===RACKLE_CODE_TO_DEFAULT_SUIT[cc];
+      return true;
+    }
+    return false;
+  };
+}
+function buildCoveragePlanLegacy(rack,handObj,passLog=[]){
+  if(!rack||!handObj)return{held:0,total:0,pct:0,groups:[],groupStatus:[],suitMap:{},cardColors:[]};
   const groups=decodeHandLabel(handObj.label,handObj.sec);
   const cardColors=HAND_CARD_COLORS[handObj.label]||[];
-  const rackPool=[...rack];
-  const pull=(pred,need)=>{
-    let f=0;const r=[];
-    for(const t of rackPool){if(f<need&&pred(t))f++;else r.push(t);}
-    rackPool.length=0;rackPool.push(...r);
-    return f;
-  };
-  let held=0,total=0;
-  groups.forEach((g,gi)=>{
-    total+=g.count;
-    const cc=cardColors[gi];
-    const pred=(t)=>{
-      if(g.isFlower)return t.t==="f";
-      if(g.isSoap)return t.t==="d"&&t.v==="Soap";
-      if(g.isDragon)return t.t==="d";
-      if(g.isWind)return t.t==="w"&&(g.tile?t.v===g.tile:true);
-      if(g.isNum){
-        const nm=t.t==="s"&&t.n===Number(g.tile);
-        // "K" (any suit) = any suit, otherwise suit-specific
-        return cc==="K"||!cc?nm:(cc==="G"?nm&&t.s==="bam":cc==="R"?nm&&t.s==="crak":cc==="B"?nm&&t.s==="dot":nm);
-      }
-      return false;
+  const mapK=shouldMapBlackAsSuit(handObj,groups,cardColors);
+  const codes=[...new Set(groups.map((g,i)=>{
+    const cc=cardColors[i];
+    if(!g.isNum)return null;
+    if(cc==="G"||cc==="R"||cc==="B")return cc;
+    if(cc==="K"&&mapK)return cc;
+    return null;
+  }).filter(Boolean))];
+  const allPassed=(passLog||[]).flatMap((p,idx)=>(p.out||p.passedTiles||[]).map(t=>({...t,roundName:p.label||p.roundName||`Pass ${idx+1}`,roundIdx:idx})));
+  let best=null;
+  for(const suitMap of suitMappingOptions(codes)){
+    const rackPool=[...rack];
+    const pull=(pred,need)=>{
+      let f=0;const r=[];
+      for(const t of rackPool){if(f<need&&pred(t))f++;else r.push(t);}
+      rackPool.length=0;rackPool.push(...r);
+      return f;
     };
-    const nat=pull(pred,g.count);
-    held+=nat;
-    // Jokers fill pungs/kongs in open hands
-    if(!handObj.concealed&&g.type!=="single"&&g.type!=="pair"){
-      held+=pull(t=>t.t==="j",g.count-nat);
-    }
-  });
-  const pct=total>0?Math.round(held/total*100):0;
-  return{held,total,pct};
+    const groupStatus=[];
+    let held=0,total=0;
+    groups.forEach((g,gi)=>{
+      const cc=cardColors[gi];
+      const pred=makeGroupPredicate(g,cc,suitMap);
+      const need=g.count;
+      total+=need;
+      const naturalHeld=pull(pred,need);
+      const jokerHeld=(!handObj.concealed&&g.type!=="single"&&g.type!=="pair")
+        ?pull(t=>t.t==="j",need-naturalHeld):0;
+      const totalHeld=naturalHeld+jokerHeld;
+      held+=totalHeld;
+      const gap=need-totalHeld;
+      const passedMatching=allPassed.filter(t=>pred(t));
+      const passedRounds=[...new Set(passedMatching.map(t=>t.roundName))];
+      groupStatus.push({g,gi,cc,need,totalHeld,naturalHeld,jokerHeld,gap,passedMatching,passedRounds,resolvedSuit:suitMap?.[cc]||null});
+    });
+    const pct=total>0?Math.round(held/total*100):0;
+    const score=held*1000+pct;
+    if(!best||score>best.score)best={score,held,total,pct,groups,groupStatus,suitMap:{...suitMap},cardColors};
+  }
+  return best||{held:0,total:0,pct:0,groups,groupStatus:[],suitMap:{},cardColors};
+}
+function computeHonestCoverage(rack, handObj){
+  const plan=buildCoveragePlan(rack,handObj,[]);
+  return{held:plan.held,total:plan.total,pct:plan.pct,suitMap:plan.suitMap};
 }
 
+
+
+
+// ─── 2026 CHARLESTON RESOLVER UPGRADE ───────────────────────────────────────
+// This resolver makes the engine evaluate the whole rack against every NMJL hand
+// variant using the parenthetical rules on the card: Any 1/2/3 suits, matching
+// dragon, opposite dragon, Soap-as-zero, concealed/no-joker, and natural-only
+// pairs/singles. It is intentionally used by both Daily and Practice scorecards.
+function rkGroupTypeForCount(cnt){return cnt===1?"single":cnt===2?"pair":cnt===3?"pung":cnt===4?"kong":cnt===5?"quint":"sextet";}
+function rkPushDecoded(groups, props, tokenIndex){groups.push({...props,tokenIndex});}
+function decodeHandLabel(label, sectionId){
+  const groups=[];
+  const tokens=String(label||"").trim().split(/\s+/).filter(Boolean);
+  tokens.forEach((tok,tokenIndex)=>{
+    if(tok==="NEWS"){
+      ["N","E","W","S"].forEach(w=>rkPushDecoded(groups,{type:"single",tile:w,count:1,isWind:true},tokenIndex));
+      return;
+    }
+    // Mixed tokens like 1D, 2026, 113579, 3369 need to preserve grouped repeats.
+    // 0 is always Soap/White Dragon in card strings, not a numbered suit tile.
+    const parts=String(tok).match(/(\d)\1*|D+|F+|[NEWS]+/g)||[];
+    parts.forEach(part=>{
+      if(/^[NEWS]+$/.test(part)){
+        const w=part[0],cnt=part.length;
+        rkPushDecoded(groups,{type:rkGroupTypeForCount(cnt),tile:w,count:cnt,isWind:true},tokenIndex);
+        return;
+      }
+      if(/^D+$/.test(part)){
+        const cnt=part.length;
+        rkPushDecoded(groups,{type:rkGroupTypeForCount(cnt),tile:"D",count:cnt,isDragon:true},tokenIndex);
+        return;
+      }
+      if(/^F+$/.test(part)){
+        const cnt=part.length;
+        rkPushDecoded(groups,{type:rkGroupTypeForCount(cnt),tile:"F",count:cnt,isFlower:true},tokenIndex);
+        return;
+      }
+      if(/^0+$/.test(part)){
+        const cnt=part.length;
+        rkPushDecoded(groups,{type:rkGroupTypeForCount(cnt),tile:"0",count:cnt,isSoap:true},tokenIndex);
+        return;
+      }
+      if(/^\d+$/.test(part)){
+        const d=part[0],cnt=part.length;
+        if(d==="0")rkPushDecoded(groups,{type:rkGroupTypeForCount(cnt),tile:"0",count:cnt,isSoap:true},tokenIndex);
+        else rkPushDecoded(groups,{type:rkGroupTypeForCount(cnt),tile:d,count:cnt,isNum:true},tokenIndex);
+      }
+    });
+  });
+  return groups;
+}
+function rkCardColorsForGroups(handObj,groups){
+  const base=HAND_CARD_COLORS[handObj?.label]||[];
+  return groups.map((g,i)=>base[g.tokenIndex]||base[i]||"K");
+}
+function rkConstraintText(handObj){return String(handObj?.constraint||HAND_CONSTRAINTS?.[handObj?.label]||"");}
+function rkNumericCodes(groups,colors){
+  return [...new Set(groups.map((g,i)=>g.isNum&&["G","R","K","B"].includes(colors[i])?colors[i]:null).filter(Boolean))];
+}
+function rkMaxSuitCountFromConstraint(txt){
+  if(/Any\s+1\s+Suit/i.test(txt)&&!/or\s+2|or\s+3/i.test(txt))return 1;
+  if(/Any\s+2\s+Suits/i.test(txt)&&!/or\s+3/i.test(txt))return 2;
+  if(/Any\s+3\s+Suits/i.test(txt))return 3;
+  if(/Any\s+1\s+or\s+2\s+Suits/i.test(txt))return 2;
+  if(/Any\s+2\s+or\s+3\s+Suits/i.test(txt))return 3;
+  if(/Any\s+1\s+or\s+3\s+Suits/i.test(txt))return 3;
+  return 3;
+}
+function rkSuitMappingOptions(codes,handObj){
+  if(!codes.length)return[{}];
+  const txt=rkConstraintText(handObj);
+  const maxSuits=rkMaxSuitCountFromConstraint(txt);
+  const out=[];
+  const walk=(idx,map)=>{
+    if(idx>=codes.length){
+      const used=new Set(Object.values(map));
+      if(used.size<=maxSuits)out.push({...map});
+      return;
+    }
+    const code=codes[idx];
+    for(const suit of RACKLE_REAL_SUITS){
+      map[code]=suit;
+      walk(idx+1,map);
+      delete map[code];
+    }
+  };
+  walk(0,{});
+  return out.length?out:[{}];
+}
+function rkDragonForSuit(suit){return suit==="bam"?"Grn":suit==="crak"?"Red":"Soap";}
+function rkDragonMatchesTile(t,suit){return t.t==="d"&&t.v===rkDragonForSuit(suit);}
+function rkDragonOpposesTile(t,suit){return t.t==="d"&&t.v!==rkDragonForSuit(suit);}
+function rkResolvedSuitForGroupIndex(groups,colors,idx,suitMap){
+  const scan=(dir)=>{
+    for(let i=idx+dir;i>=0&&i<groups.length;i+=dir){
+      if(!groups[i].isNum)continue;
+      const cc=colors[i];
+      if(suitMap?.[cc])return suitMap[cc];
+      if(cc==="G"||cc==="R"||cc==="B")return RACKLE_CODE_TO_DEFAULT_SUIT[cc];
+      if(cc==="K")return null;
+    }
+    return null;
+  };
+  return scan(-1)||scan(1)||null;
+}
+function rkDragonMode(handObj){
+  const txt=rkConstraintText(handObj);
+  if(/Opp\.?\s*Dragon|Opposite Dragon/i.test(txt))return"opp";
+  if(/Matching\s+or\s+Opp/i.test(txt))return"any";
+  if(/Any\s+Dragon|Any\s+2\s+Dragons|Any\s+3\s+Dragons/i.test(txt))return"any";
+  if(/Matching\s+Dragon/i.test(txt))return"match";
+  return"any";
+}
+function makeGroupPredicate(g,cc,suitMap,groups=[],idx=0,colors=[],handObj=null){
+  return (t)=>{
+    if(g.isFlower)return t.t==="f";
+    if(g.isSoap)return t.t==="d"&&t.v==="Soap";
+    if(g.isWind)return t.t==="w"&&(g.tile?t.v===g.tile:true);
+    if(g.isDragon){
+      const mode=rkDragonMode(handObj);
+      const refSuit=rkResolvedSuitForGroupIndex(groups,colors,idx,suitMap);
+      if(!refSuit||mode==="any")return t.t==="d";
+      if(mode==="opp")return rkDragonOpposesTile(t,refSuit);
+      return rkDragonMatchesTile(t,refSuit);
+    }
+    if(g.isNum){
+      if(!(t.t==="s"&&t.n===Number(g.tile)))return false;
+      const mapped=suitMap?.[cc];
+      if(mapped)return t.s===mapped;
+      if(cc==="G"||cc==="R"||cc==="B")return t.s===RACKLE_CODE_TO_DEFAULT_SUIT[cc];
+      return true;
+    }
+    return false;
+  };
+}
+function rkSamePhysicalTile(a,b){
+  return a===b;
+}
+function buildCoveragePlan(rack,handObj,passLog=[]){
+  if(!rack||!handObj)return{held:0,total:0,pct:0,groups:[],groupStatus:[],suitMap:{},cardColors:[]};
+  const groups=decodeHandLabel(handObj.label,handObj.sec);
+  const cardColors=rkCardColorsForGroups(handObj,groups);
+  const codes=rkNumericCodes(groups,cardColors);
+  const allPassed=(passLog||[]).flatMap((p,idx)=>(p.out||p.passedTiles||[]).map(t=>({...t,roundName:p.label||p.roundName||`Pass ${idx+1}`,roundIdx:idx})));
+  let best=null;
+  for(const suitMap of rkSuitMappingOptions(codes,handObj)){
+    const rackPool=[...(rack||[])];
+    const pull=(pred,need)=>{
+      let f=0;const r=[];
+      for(const t of rackPool){if(f<need&&pred(t)){f++;}else r.push(t);}
+      rackPool.length=0;rackPool.push(...r);
+      return f;
+    };
+    const groupStatus=[];
+    let held=0,total=0,naturalOnlyGaps=0,completedGroups=0;
+    groups.forEach((g,gi)=>{
+      const cc=cardColors[gi]||"K";
+      const pred=makeGroupPredicate(g,cc,suitMap,groups,gi,cardColors,handObj);
+      const need=g.count;
+      total+=need;
+      const naturalHeld=pull(pred,need);
+      const jokerAllowed=!handObj.concealed&&g.type!=="single"&&g.type!=="pair";
+      const jokerHeld=jokerAllowed?pull(t=>t.t==="j",need-naturalHeld):0;
+      const totalHeld=naturalHeld+jokerHeld;
+      held+=totalHeld;
+      const gap=need-totalHeld;
+      if(gap<=0)completedGroups++;
+      if(!jokerAllowed)naturalOnlyGaps+=gap;
+      const passedMatching=allPassed.filter(t=>pred(t));
+      const passedRounds=[...new Set(passedMatching.map(t=>t.roundName))];
+      groupStatus.push({g,gi,cc,need,totalHeld,naturalHeld,jokerHeld,gap,passedMatching,passedRounds,resolvedSuit:suitMap?.[cc]||null,jokerAllowed});
+    });
+    const pct=total>0?Math.round(held/total*100):0;
+    // Ranking favors: more covered slots, more completed groups, fewer natural-only gaps.
+    const distinctSuits=new Set(Object.values(suitMap)).size;
+    const score=held*10000+completedGroups*500-naturalOnlyGaps*45+distinctSuits;
+    if(!best||score>best.score)best={score,held,total,pct,groups,groupStatus,suitMap:{...suitMap},cardColors};
+  }
+  return best||{held:0,total:0,pct:0,groups,groupStatus:[],suitMap:{},cardColors};
+}
+function rkEnhancedHandFit(rack,handObj){
+  const plan=buildCoveragePlan(rack,handObj,[]);
+  if(!plan.total)return 0;
+  // Coverage is the main signal. Completed groups add expert preference without
+  // hiding the fact that a hand still needs natural singles/pairs.
+  const completed=plan.groupStatus.filter(s=>s.gap<=0).length;
+  const groupBonus=Math.min(completed*0.012,0.08);
+  return Math.min(1,(plan.held/plan.total)+groupBonus);
+}
+if(typeof HAND_CATALOG!=="undefined"&&!HAND_CATALOG.__rackle2026ResolverInstalled){
+  HAND_CATALOG.forEach(h=>{
+    const legacy=h.fit;
+    h.legacyFit=legacy;
+    h.fit=(rack)=>Math.max(typeof legacy==="function"?legacy(rack):0,rkEnhancedHandFit(rack,h));
+  });
+  HAND_CATALOG.__rackle2026ResolverInstalled=true;
+}
 
 function HandGroupChips({group, cardColor}){
   // Map color code to actual color
