@@ -8500,19 +8500,19 @@ function TomorrowPreviewCard(){
           <div style={{fontFamily:F.d,fontSize:17,color:C.ink,fontWeight:900,lineHeight:1.15,letterSpacing:-0.2,marginBottom:4}}>{headline}</div>
           <div style={{fontSize:11,color:C.mut,lineHeight:1.45}}>{subline}</div>
         </div>
-        <div style={{width:42,height:42,borderRadius:14,background:urgency?C.cinn+"10":C.jade+"10",border:`1px solid ${urgency?C.cinn+"22":C.jade+"22"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:19,flexShrink:0}}>🌙</div>
+        <div style={{width:42,height:42,borderRadius:14,background:urgency?C.cinn+"10":C.jade+"10",border:`1px solid ${urgency?C.cinn+"22":C.jade+"22"}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.d,fontSize:20,fontWeight:900,color:urgency?C.cinn:C.jade,flexShrink:0}}>✦</div>
       </div>
 
-      <div style={{position:"relative",background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:14,padding:"10px 12px",marginBottom:10}}>
-        <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:900,marginBottom:7}}>NEW RACK IN</div>
-        <div style={{display:"flex",alignItems:"center",gap:7}}>
-          {[{v:timeLeft.hh,l:"hrs"},{v:timeLeft.mm,l:"min"},{v:timeLeft.ss,l:"sec"}].map((part,i)=>(
-            <div key={part.l} style={{display:"flex",alignItems:"center",gap:7}}>
-              <div style={{minWidth:42,textAlign:"center"}}>
-                <div style={{fontFamily:F.d,fontSize:25,fontWeight:900,color:urgency?C.cinn:C.jade,lineHeight:1,letterSpacing:-1}}>{part.v}</div>
-                <div style={{fontSize:7,color:C.mut,letterSpacing:1.3,fontWeight:800,marginTop:3,textTransform:"uppercase"}}>{part.l}</div>
-              </div>
-              {i<2&&<div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.bdr,paddingBottom:11}}>:</div>}
+      <div style={{position:"relative",background:`linear-gradient(145deg,${C.jade}0C,#fff)`,border:`1px solid ${urgency?C.cinn+"20":C.jade+"18"}`,borderRadius:15,padding:"10px",marginBottom:10,boxShadow:"inset 0 1px 0 rgba(255,255,255,0.8)"}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,marginBottom:8}}>
+          <div style={{fontSize:8,color:urgency?C.cinn:C.jade,letterSpacing:1.5,fontWeight:900}}>NEW RACK IN</div>
+          <div style={{fontSize:9,color:C.mut,fontWeight:750}}>Midnight reset</div>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:7,width:"100%"}}>
+          {[{v:timeLeft.hh,l:"hrs"},{v:timeLeft.mm,l:"min"},{v:timeLeft.ss,l:"sec"}].map((part)=>(
+            <div key={part.l} style={{textAlign:"center",background:"rgba(255,255,255,0.72)",border:`1px solid ${urgency?C.cinn+"16":C.jade+"14"}`,borderRadius:12,padding:"8px 4px 7px",minWidth:0}}>
+              <div style={{fontFamily:F.d,fontSize:25,fontWeight:900,color:urgency?C.cinn:C.jade,lineHeight:1,letterSpacing:-0.8}}>{part.v}</div>
+              <div style={{fontSize:7,color:C.mut,letterSpacing:1.1,fontWeight:800,marginTop:4,textTransform:"uppercase"}}>{part.l}</div>
             </div>
           ))}
         </div>
