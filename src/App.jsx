@@ -136,6 +136,27 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-practice-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.rk-practice-score{font-family:'Fraunces',Georgia,serif;font-size:38px;line-height:1;letter-spacing:-1.5px;color:#176B42}.rk-practice-meta{font-size:11px;color:rgba(26,20,16,.5);line-height:1.5}.rk-practice-coach{margin-top:12px;font-size:14px;line-height:1.7;color:rgba(26,20,16,.72);font-weight:700}
 .rk-soft-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:rgba(23,107,66,.06);border:1px solid rgba(23,107,66,.08);color:#176B42;font-size:11px;font-weight:800}.rk-soft-pill-muted{background:rgba(26,20,16,.045);border:1px solid rgba(26,20,16,.05);color:rgba(26,20,16,.58)}
 
+
+
+/* ─── SCORECARD HOMEPAGE MATCH OVERRIDES ───────────────────────────────── */
+.rk-score-shell{padding:0 18px 52px;text-align:center}
+.rk-score-shell .rk-editorial-header{align-items:center;text-align:center;margin-top:24px;margin-bottom:18px}
+.rk-score-shell .rk-editorial-copy{max-width:320px;margin:0 auto}
+.rk-score-shell .rk-score-divider{margin:20px 0 28px}
+.rk-score-shell .rk-iq-hero{width:100%;border-radius:24px;padding:30px 20px 24px;text-align:center;background:linear-gradient(150deg,#062B18,#0D4A2E 58%,#051F11)!important;box-shadow:0 14px 38px rgba(6,43,24,.22),inset 0 1px 0 rgba(255,255,255,.08)!important}
+.rk-score-shell .rk-iq-label{font-size:10px;letter-spacing:3.5px;font-weight:900;color:rgba(255,255,255,.45);margin-bottom:12px;text-transform:uppercase}
+.rk-score-shell .rk-iq-score{font-size:76px;line-height:.92;letter-spacing:-3.6px;color:#F4E7BE;margin:0 auto}
+.rk-iq-rule{width:56px;height:2px;background:linear-gradient(90deg,transparent,#F4E7BE,transparent);margin:18px auto 16px;border-radius:2px}
+.rk-score-shell .rk-iq-sub{font-size:24px;line-height:1.08;margin:0 0 14px;color:#fff}
+.rk-iq-style-pill{display:inline-flex;align-items:center;justify-content:center;gap:5px;border:1px solid rgba(244,231,190,.45);background:rgba(255,255,255,.08);border-radius:999px;padding:7px 14px;font-size:11px;font-weight:900;color:#EED89B;backdrop-filter:blur(10px);margin:0 auto 16px;width:fit-content}
+.rk-score-shell .rk-iq-summary{font-size:13px;color:rgba(255,255,255,.76);line-height:1.5;max-width:280px;margin:0 auto;text-align:center}
+.rk-score-shell .rk-iq-meta{margin-top:22px;justify-content:center;text-align:center;color:rgba(255,255,255,.62);font-size:13px}
+.rk-score-shell .rk-score-card{text-align:center}
+.rk-style-card{display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:10px!important}
+.rk-style-card .rk-style-icon{width:44px!important;height:44px!important;border-radius:14px!important}
+.rk-rank-grid-card{text-align:center!important}
+.rk-rank-grid-card div{justify-content:center}
+
 @media (prefers-reduced-motion: reduce){.rk-hero-live,.rk-iq-hero,.rk-soft-glow,.rk-count-live,.rk-streak-copy,.rk-float,.rk-pulse,.rk-live-dot,.rk-sweep:after{animation:none!important}}
 `;
 const S={
@@ -5254,11 +5275,12 @@ function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHom
   return(
     <div className="rk-iq-hero rk-sweep" style={isHome?{padding:"30px 22px 26px"}:undefined}>
       <div className="rk-iq-glow" />
-      <div className="rk-iq-label">{isDaily?`Daily Rackle IQ · #${dayNum}`:"Practice Rackle IQ"}</div>
+      <div className="rk-iq-label">{isDaily?`Daily Rackle · #${dayNum}`:"Practice Rackle"}</div>
       <div className="rk-iq-score" style={isHome?{fontSize:92}:undefined}>{displayScore}</div>
-      {isPB&&<div className="rk-pop rk-soft-pill" style={{background:"rgba(201,168,76,.16)",border:"1px solid rgba(201,168,76,.28)",color:"#F4E7BE",margin:"0 auto 10px",justifyContent:"center",width:"fit-content"}}>🏆 New personal best</div>}
+      <div className="rk-iq-rule" />
+      {isPB&&<div className="rk-pop rk-iq-style-pill" style={{marginBottom:12}}>🏆 New personal best</div>}
       <div className="rk-iq-sub">{iq.level}</div>
-      {iq.styleName&&<div className="rk-soft-pill" style={{margin:"10px auto 0",background:"rgba(201,168,76,.14)",border:"1px solid rgba(201,168,76,.26)",color:"#F4E7BE",justifyContent:"center",width:"fit-content"}}>{iq.styleName}</div>}
+      {iq.styleName&&<div className="rk-iq-style-pill">{iq.styleName}</div>}
       <div className="rk-iq-summary">{coachLine}</div>
       <div className="rk-iq-meta">
         {section&&<span>{section}{chosenSec&&bestFitId?matched?" ✓":" · review":null}</span>}
@@ -5700,12 +5722,12 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       </div>
 
       {/* ①b STYLE, light identity layer */}
-      {iq.styleName&&<div className="rk-score-card" style={{display:"flex",alignItems:"center",gap:10,marginBottom:10,background:C.sage,border:`1px solid ${C.jade}20`}}>
-        <div style={{width:32,height:32,borderRadius:10,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>✨</div>
-        <div style={{flex:1}}>
-          <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:800,marginBottom:2}}>YOUR STYLE</div>
-          <div style={{fontSize:13,fontWeight:900,color:C.ink,lineHeight:1.2}}>{iq.styleName}</div>
-          {iq.styleNote&&<div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:2}}>{iq.styleNote}</div>}
+      {iq.styleName&&<div className="rk-score-card rk-style-card" style={{marginBottom:16,background:C.sage,border:`1px solid ${C.jade}20`}}>
+        <div className="rk-style-icon" style={{width:44,height:44,borderRadius:14,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>✨</div>
+        <div style={{width:"100%"}}>
+          <div style={{fontSize:10,color:C.jade,letterSpacing:2.4,fontWeight:900,marginBottom:6}}>YOUR STYLE</div>
+          <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,lineHeight:1.15}}>{iq.styleName}</div>
+          {iq.styleNote&&<div style={{fontSize:13,color:C.mut,lineHeight:1.45,marginTop:6,maxWidth:280,marginLeft:"auto",marginRight:"auto"}}>{iq.styleNote}</div>}
         </div>
       </div>}
 
@@ -5740,13 +5762,13 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
               <div style={{display:"flex",gap:8,marginBottom:8}}>
                 {/* Global rank */}
                 {globalRank&&globalTotal&&(
-                  <div style={{
-                    flex:1,borderRadius:12,padding:"11px 14px",
+                  <div className="rk-rank-grid-card" style={{
+                    flex:1,borderRadius:16,padding:"14px 14px",
                     background:globalRank<=3?`linear-gradient(135deg,${C.gilt}20,${C.gilt}08)`:"#FDFAF5",
                     border:`1px solid ${globalRank<=3?C.gilt+"60":C.bdr}`,
                   }}>
                     <div style={{fontSize:9,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>GLOBAL</div>
-                    <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                    <div style={{display:"flex",alignItems:"baseline",justifyContent:"center",gap:4}}>
                       <span style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:globalRank<=3?C.gold:C.ink,lineHeight:1}}>#{globalRank}</span>
                       <span style={{fontSize:11,color:C.mut,lineHeight:1}}>of {globalTotal}</span>
                     </div>
@@ -5757,13 +5779,13 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
                 )}
                 {/* Club rank, tappable */}
                 {clubRank&&clubTotal&&clubName?(
-                  <button onClick={()=>setScreen&&setScreen("leaderboard")} style={{
-                    flex:1,borderRadius:12,padding:"11px 14px",cursor:"pointer",textAlign:"left",
+                  <button onClick={()=>setScreen&&setScreen("leaderboard")} className="rk-rank-grid-card" style={{
+                    flex:1,borderRadius:16,padding:"14px 14px",cursor:"pointer",textAlign:"center",
                     background:clubRank===1?`linear-gradient(135deg,${C.jade}16,${C.jade}06)`:"#FDFAF5",
                     border:`1px solid ${clubRank<=3?C.jade+"50":C.bdr}`,
                   }}>
                     <div style={{fontSize:9,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>CLUB</div>
-                    <div style={{display:"flex",alignItems:"baseline",gap:4}}>
+                    <div style={{display:"flex",alignItems:"baseline",justifyContent:"center",gap:4}}>
                       <span style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:clubRank<=3?C.jade:C.ink,lineHeight:1}}>#{clubRank}</span>
                       <span style={{fontSize:11,color:C.mut,lineHeight:1}}>of {clubTotal}</span>
                     </div>
@@ -5773,8 +5795,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
                   </button>
                 ):(
                   /* No club, nudge to join */
-                  <button onClick={()=>setScreen&&setScreen("clubs")} style={{
-                    flex:1,borderRadius:12,padding:"11px 14px",cursor:"pointer",textAlign:"left",
+                  <button onClick={()=>setScreen&&setScreen("clubs")} className="rk-rank-grid-card" style={{
+                    flex:1,borderRadius:16,padding:"14px 14px",cursor:"pointer",textAlign:"center",
                     background:C.bg2,border:`1px dashed ${C.bdr}`,
                   }}>
                     <div style={{fontSize:9,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>CLUB RANK</div>
