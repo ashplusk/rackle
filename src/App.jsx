@@ -8501,7 +8501,7 @@ function TomorrowPreviewCard(){
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:8,color:urgency?C.cinn:C.jade,letterSpacing:1.7,fontWeight:900,marginBottom:4}}>TOMORROW'S RACKLE</div>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.ink,lineHeight:1.12,letterSpacing:-0.22,marginBottom:4,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{headline}</div>
-          <div style={{fontSize:11,color:C.mut,lineHeight:1.4}}>Hint: {hint}</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.4}}>Hint: {String(hint).replace(/^Hint:\s*/i,"")}</div>
         </div>
         <div style={{display:"flex",alignItems:"center",justifyContent:"center",width:28,height:28,borderRadius:999,background:open?C.jade+"12":"transparent",flexShrink:0}}>
           <div style={{fontSize:16,color:C.jade,fontWeight:900,lineHeight:1,transform:open?"rotate(90deg)":"rotate(0deg)",transition:"transform 0.18s ease"}}>›</div>
@@ -8558,18 +8558,20 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const ydIQ=yd?.iq?.totalScore||null;
   const todayPlayers=Math.max(ds?.total||0,clubPlayers||0,3);
   const topToday=Math.max(ds?.topScore||0,iq?.totalScore||0,86);
-  const pb=Math.max(bestIQ||0,iq?.totalScore||0,100);
+  const bestScore=Number.isFinite(Number(bestIQ?.score ?? bestIQ))?Number(bestIQ?.score ?? bestIQ):0;
+  const currentScore=Number.isFinite(Number(iq?.totalScore))?Number(iq.totalScore):0;
+  const pb=Math.max(bestScore,currentScore,100);
   const firstName=profile?.nickname?profile.nickname.split(" ")[0]:"";
   const streakText=streak>1?`${streak}-day streak${firstName?` ${firstName}`:""}. Your Charleston is becoming a habit.`:streak===1?"You showed up today. That's how it starts.":"Start your streak with today's Rackle.";
 
   const tomorrowHints=[
-    "Hint: pairs may matter more than they look.",
-    "Hint: sixes may be more powerful than usual.",
-    "Hint: flexible passes should beat early commitment.",
-    "Hint: winds could change the read.",
-    "Hint: flowers may be worth a second look.",
-    "Hint: one safe pass may protect two sections.",
-    "Hint: odd tiles may not be as weak as they seem.",
+    "Pairs may matter more than they look.",
+    "Sixes may be more powerful than usual.",
+    "Flexible passes should beat early commitment.",
+    "Winds could change the read.",
+    "Flowers may be worth a second look.",
+    "One safe pass may protect two sections.",
+    "Odd tiles may not be as weak as they seem.",
   ];
   const tomorrowHint=tomorrowHints[dn%tomorrowHints.length];
 
@@ -8595,12 +8597,15 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     }catch(e){try{await navigator.clipboard.writeText(text);alert("Copied. Drop it in your group chat.");}catch{}}
   };
 
-  const MiniStat=({value,label,accent})=>(
-    <div style={{flex:1,minWidth:0,border:`1px solid rgba(255,255,255,0.16)`,background:"rgba(255,255,255,0.08)",borderRadius:13,padding:"11px 12px"}}>
-      <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:accent||"#fff",lineHeight:1,letterSpacing:-0.8}}>{value}</div>
-      <div style={{fontSize:8,color:"rgba(255,255,255,0.62)",letterSpacing:2,fontWeight:800,marginTop:6}}> {label}</div>
-    </div>
-  );
+  const MiniStat=({value,label,accent})=>{
+    const safeValue=(typeof value==="number"&&!Number.isFinite(value))?"—":(value==="NaN"||value==null?"—":value);
+    return(
+      <div style={{flex:1,minWidth:0,border:`1px solid rgba(255,255,255,0.16)`,background:"rgba(255,255,255,0.08)",borderRadius:13,padding:"11px 12px"}}>
+        <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:accent||"#fff",lineHeight:1,letterSpacing:-0.8}}>{safeValue}</div>
+        <div style={{fontSize:8,color:"rgba(255,255,255,0.62)",letterSpacing:2,fontWeight:800,marginTop:6}}> {label}</div>
+      </div>
+    );
+  };
 
   const Menu=()=>{
     const hasProfile=!!(profile&&profile.nickname);
@@ -8651,7 +8656,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <div style={{fontSize:11,color:"rgba(255,255,255,0.62)",fontWeight:800}}>resets tonight</div>
         </div>
         <div style={{fontFamily:F.d,fontSize:34,fontWeight:900,color:"#fff",letterSpacing:-1.35,lineHeight:0.98,marginBottom:16}}>One rack.<br/>One read.<br/><span style={{color:C.gilt}}>One chance.</span></div>
-        <div style={{fontSize:14,color:"rgba(255,255,255,0.78)",lineHeight:1.5,maxWidth:260,marginBottom:26}}>Play the same Charleston as everyone today. Score it. Share it. Climb your club.</div>
+        <div style={{fontSize:12.5,color:"rgba(255,255,255,0.76)",lineHeight:1.45,maxWidth:248,marginBottom:24}}>Play the same Charleston as everyone today. Score it. Share it. Climb your club.</div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginRight:0}}>
           <MiniStat value={todayPlayers} label="PLAYING TODAY" accent={C.gilt}/>
           <MiniStat value={pb} label="PERSONAL BEST"/>
@@ -8706,13 +8711,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const TomorrowTease=()=> {
     const resetLabel=getTimeUntilMidnightLabel();
     return(
-      <div aria-label="Tomorrow's Rackle preview" style={{width:"100%",margin:"0 0 20px",border:`1px solid ${C.jade}18`,background:"linear-gradient(135deg,#FFFDF9,#F5FAF7)",borderRadius:18,padding:"17px 18px",display:"flex",alignItems:"center",gap:14,cursor:"default",textAlign:"left",boxShadow:"0 4px 16px rgba(0,0,0,0.026)",position:"relative",overflow:"hidden"}}>
+      <div aria-label="Tomorrow's Rackle preview" style={{width:"100%",margin:"0 0 20px",border:`1px solid ${C.bdr}`,background:"linear-gradient(135deg,#FBF7EF,#F7F2EA)",borderRadius:18,padding:"17px 18px",display:"flex",alignItems:"center",gap:14,cursor:"default",textAlign:"left",boxShadow:"0 4px 16px rgba(0,0,0,0.026)",position:"relative",overflow:"hidden"}}>
         <div aria-hidden style={{position:"absolute",right:-10,bottom:-18,fontSize:72,opacity:0.035,lineHeight:1}}>🀄</div>
         <div style={{width:42,height:42,borderRadius:14,background:C.jade+"10",border:`1px solid ${C.jade}18`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>✦</div>
         <div style={{flex:1,minWidth:0,position:"relative"}}>
           <div style={{fontSize:9,color:C.jade,letterSpacing:2.1,fontWeight:900,marginBottom:5}}>TOMORROW'S RACKLE</div>
           <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2,marginBottom:5}}>A new rack drops in {resetLabel}</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.45}}>Hint: {tomorrowHint}</div>
+          <div style={{fontSize:12,color:C.mut,lineHeight:1.45}}>Hint: {String(tomorrowHint).replace(/^Hint:\s*/i,"")}</div>
         </div>
       </div>
     );
