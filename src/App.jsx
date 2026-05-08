@@ -5071,7 +5071,7 @@ function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHom
         {isDaily?`DAILY RACKLE · #${dayNum}`:"PRACTICE · RACKLE SCORE"}
       </div>
       {!isHome&&<div style={{fontSize:9,color:C.gilt,letterSpacing:3,fontWeight:700,marginBottom:8}}>TODAY’S CHARLESTON</div>}
-      <div style={{fontFamily:F.d,fontSize:64,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,
+      <div style={{fontFamily:F.d,fontSize:68,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,
         textShadow:`0 2px 12px rgba(176,138,53,0.4)`,marginBottom:4}}>{displayScore}</div>
       {isPB&&<div className="rk-pop" style={{display:"inline-flex",alignItems:"center",gap:5,background:C.gilt+"22",border:`1px solid ${C.gilt}40`,borderRadius:20,padding:"4px 12px",marginBottom:8}}>
         <span style={{fontSize:13}}>🏆</span>
@@ -5641,8 +5641,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
               <div style={{position:"absolute",top:0,left:0,right:0,height:"40%",background:"linear-gradient(180deg,rgba(255,255,255,0.06),transparent)",borderRadius:"14px 14px 0 0",pointerEvents:"none"}}/>
               <div style={{width:44,height:44,borderRadius:12,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>🎓</div>
               <div style={{flex:1}}>
-                <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:"#fff",lineHeight:1.2,marginBottom:2}}>Your Rackle Coach</div>
-                <div style={{fontSize:11,color:"rgba(255,255,255,0.62)",lineHeight:1.4}}>A friendly nudge for your next Charleston</div>
+                <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#fff",lineHeight:1.2,marginBottom:2}}>Your Rackle Coach</div>
+                <div style={{fontSize:11,color:"rgba(255,255,255,0.62)",lineHeight:1.4}}>Tips and guidance for your next Charleston</div>
               </div>
               <div style={{width:28,height:28,borderRadius:8,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
                 <span style={{fontSize:14,color:"rgba(255,255,255,0.7)",fontWeight:700}}>›</span>
@@ -8436,7 +8436,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         const hasProfile=!!(profile&&profile.nickname);
         return(
           <div style={{display:"flex",alignItems:"flex-start",justifyContent:"flex-end",marginBottom:0,marginTop:8,position:"relative"}}>
-            <div style={{flex:1}}><Statspill streak={streak} rounds={rounds} bestIQ={bestIQ} streakBadge={streakBadge}/></div>
+            <div style={{flex:1}}/>
             {/* Hamburger */}
             <button
               onClick={()=>setMenuOpen(o=>!o)}
@@ -8719,7 +8719,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <div style={{background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"24px 20px 20px",textAlign:"center"}}>
               <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:14}}>DAILY RACKLE · #{dn}</div>
               {iq&&<>
-                <div style={{fontFamily:F.d,fontSize:52,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,textShadow:`0 2px 16px rgba(176,138,53,0.45)`,marginBottom:6}}>{iq.totalScore}</div>
+                <div style={{fontFamily:F.d,fontSize:58,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,textShadow:`0 2px 16px rgba(176,138,53,0.45)`,marginBottom:6}}>{iq.totalScore}</div>
                 <div style={{width:40,height:1.5,background:`linear-gradient(90deg,transparent,${C.gilt},transparent)`,margin:"12px auto 12px"}}/>
                 <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:"#fff",marginBottom:12,letterSpacing:-0.3}}>{iq.level}</div>
                 {iq.styleName&&<div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"4px 11px",fontSize:11,color:C.gilt,fontWeight:900,marginBottom:10,letterSpacing:0.2}}>{iq.styleName}</div>}
@@ -8757,8 +8757,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               <button onClick={showScorecard} style={{width:"100%",borderRadius:12,background:"#fff",border:`1.5px solid ${C.jade}25`,cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"11px 14px",textAlign:"left",boxShadow:`0 2px 8px ${C.jade}10`}}>
                 <div style={{width:36,height:36,borderRadius:10,background:`linear-gradient(135deg,${C.jade},#115C38)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,flexShrink:0}}>🎓</div>
                 <div style={{flex:1}}>
-                  <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.2}}>Your Rackle Coach</div>
-                  <div style={{fontSize:11,color:C.mut,marginTop:2}}>A friendly nudge for your next Charleston</div>
+                  <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2}}>Your Rackle Coach</div>
+                  <div style={{fontSize:11,color:C.mut,marginTop:2}}>Tips and guidance for your next Charleston</div>
                 </div>
                 <span style={{fontSize:16,color:C.jade,fontWeight:700,flexShrink:0}}>›</span>
               </button>
@@ -8804,7 +8804,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       {!getClubCode()&&(()=>{
         const addClubEmail="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20";
         return(
-          <div style={{margin:"24px -32px 8px",background:"linear-gradient(135deg,#F2FAF6,#EAF5EF)",padding:"20px 32px 18px",borderTop:`1px solid ${C.jade}20`,borderBottom:`1px solid ${C.jade}20`}}>
+          <div style={{margin:"20px 0 8px",background:"linear-gradient(135deg,#F2FAF6,#EAF5EF)",padding:"16px 16px 15px",border:`1.5px solid ${C.jade}22`,borderRadius:16,boxShadow:`0 4px 18px ${C.jade}08`}}>
             <div style={{fontSize:9,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:6}}>FOR CLUB ORGANISERS</div>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,lineHeight:1.2,marginBottom:8}}>Your club should be on Rackle</div>
             <div style={{fontSize:12,color:C.mut,lineHeight:1.65,marginBottom:14}}>Your group is probably already playing. Get your club its own leaderboard — free, takes 2 minutes. Every member's score posts automatically after each Daily.</div>
