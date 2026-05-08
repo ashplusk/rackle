@@ -52,6 +52,24 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 @keyframes rkGoldSweep{0%{transform:translateX(-120%);opacity:0}35%{opacity:.45}100%{transform:translateX(120%);opacity:0}}
 .rk-sweep{position:relative;overflow:hidden}
 .rk-sweep:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 0%,rgba(255,255,255,.14) 45%,transparent 60%);animation:rkGoldSweep 5.8s ease-in-out infinite;pointer-events:none}
+
+@keyframes rkCopied{0%{transform:scale(.92);opacity:0}50%{transform:scale(1.04);opacity:1}100%{transform:scale(1);opacity:1}}
+.rk-copied-state{animation:rkCopied .24s ease both}
+.rk-hero-stack{padding-top:10px!important;padding-bottom:18px!important}
+.rk-hero-tile{margin-bottom:6px!important}
+.rk-hero-subtitle{margin-top:8px!important;margin-bottom:10px!important;line-height:1.35!important}
+.rk-hero-status{margin-top:10px!important;color:#6B6157!important;font-size:13px!important;line-height:1.45!important}
+.rk-daily-cta{background:linear-gradient(180deg,#F2EBDD 0%,#E9E0CF 100%)!important;border:1px solid rgba(23,107,66,.18)!important;box-shadow:0 3px 10px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.65)!important;border-radius:16px!important;min-height:52px!important;transition:transform .18s ease,box-shadow .18s ease,background .18s ease!important}
+.rk-daily-cta:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(0,0,0,.07),inset 0 1px 0 rgba(255,255,255,.75)!important}
+.rk-daily-cta:active{transform:scale(.985)}
+.rk-share-card{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease!important;cursor:pointer}
+.rk-share-card:hover{transform:translateY(-1px);border-color:rgba(23,107,66,.18)!important;box-shadow:0 8px 20px rgba(0,0,0,.05)!important}
+.rk-share-card:active{transform:scale(.99)}
+.rk-leaderboard-card{transition:transform .18s ease,border-color .18s ease!important}
+.rk-leaderboard-card:hover{transform:translateY(-1px);border-color:rgba(23,107,66,.14)!important}
+.rk-live-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:rgba(23,107,66,.06);border:1px solid rgba(23,107,66,.08);font-size:11px;color:#4A5B50}
+.rk-mini-avatars{display:flex;align-items:center}
+.rk-mini-avatar{width:18px;height:18px;border-radius:50%;border:2px solid #F8F4EE;margin-left:-6px;background:#D9D2C5}
 @media (prefers-reduced-motion: reduce){.rk-hero-live,.rk-soft-glow,.rk-count-live,.rk-streak-copy,.rk-float,.rk-pulse,.rk-live-dot,.rk-sweep:after{animation:none!important}}
 `;
 const S={
@@ -5481,7 +5499,7 @@ function SortableRack({hand:initialHand}){
     <div style={{...S.card,marginBottom:8}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
         <div style={{fontSize:9,color:C.mut,letterSpacing:1.2,fontWeight:500}}>Final rack</div>
-        <button onClick={toggle} style={{...S.sortBtn,color:sorted?C.jade:C.mut,borderColor:sorted?C.jade+"40":C.bdr,background:sorted?C.jade+"08":"none"}}>{sorted?"Sorted":"Sort"}</button>
+        <button onClick={toggle} className="rk-leaderboard-card" style={{...S.sortBtn,color:sorted?C.jade:C.mut,borderColor:sorted?C.jade+"40":C.bdr,background:sorted?C.jade+"08":"none"}}>{sorted?"Sorted":"Sort"}</button>
       </div>
       <RackSurface>{rack.map((t,i)=><Ti key={i} t={t}/>)}</RackSurface>
     </div>
@@ -7445,21 +7463,21 @@ function ClubCodeEntry({setScreen,clubEntries=[],currentScore=0,currentRank=null
   const liveClubTop=topClubEntry?.iqScore||clubStats?.topIQ||null;
   const clubSnapshotLines=savedClub?[
     `${liveClubCount||1} ${(liveClubCount||1)===1?"club player has":"club players have"} posted today`,
-    liveClubTop?`Score to chase: ${liveClubTop}`:(currentScore?`Your ${currentScore} is on the club board.`:"Your club board is waiting for the first score."),
+    liveClubTop?`${liveClubTop} leads the table`:(currentScore?`Your ${currentScore} is on the club board.`:"Your club board is waiting for the first score."),
     liveClubRank===1?"You're the score your club is chasing.":liveClubRank?`You're #${liveClubRank} in your club today.`:"Post your Daily to enter the club race.",
   ]:[];
 
   return(
     <div style={{marginBottom:0}}>
-      <button onClick={()=>savedClub?setOpen(o=>!o):setScreen("clubs")} style={{width:"100%",display:"flex",alignItems:"flex-start",justifyContent:"space-between",padding:"16px 14px",borderRadius:open?"0":"0 0 12px 12px",background:C.jade+"06",border:"none",borderTop:`1px solid ${C.bdr}`,cursor:"pointer",textAlign:"left"}}>
+      <button onClick={()=>savedClub?setOpen(o=>!o):setScreen("clubs")} className="rk-leaderboard-card" style={{width:"100%",display:"flex",alignItems:"flex-start",justifyContent:"space-between",padding:"16px 14px",borderRadius:open?"0":"0 0 12px 12px",background:C.jade+"06",border:"none",borderTop:`1px solid ${C.bdr}`,cursor:"pointer",textAlign:"left"}}>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:8}}>{savedClub?"YOUR CLUB · TODAY":"JOIN YOUR CLUB"}</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.14,letterSpacing:-0.2,marginBottom:10}}>{savedClub?savedClub.name:"Club Leaderboard"}</div>
+          <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:C.ink,lineHeight:1.14,letterSpacing:-0.2,marginBottom:10}}>{savedClub?savedClub.name:"Club Leaderboard"}</div>
           {/* Live stat pills for club members */}
           {savedClub&&clubStats?(
             <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
               <span style={{fontSize:10,fontWeight:700,color:C.jade,background:C.jade+"12",borderRadius:20,padding:"2px 10px"}}>{clubStats.total} club scores live</span>
-              {clubStats.topIQ&&<span style={{fontSize:10,fontWeight:700,color:C.gold,background:C.gold+"15",borderRadius:20,padding:"2px 10px"}}>Score to chase: {clubStats.topIQ}</span>}
+              {clubStats.topIQ&&<span style={{fontSize:10,fontWeight:700,color:C.gold,background:C.gold+"15",borderRadius:20,padding:"2px 10px"}}>{clubStats.topIQ} leads the table</span>}
               {clubStats.myRank&&<span style={{fontSize:10,fontWeight:700,color:"#2460A8",background:"#2460A812",borderRadius:20,padding:"2px 10px"}}>You're #{clubStats.myRank}</span>}
             </div>
           ):savedClub?(
@@ -7566,15 +7584,15 @@ function GlobalLeaderboardPill({setScreen}){
 
   return(
     <div id="global-leaderboard" style={{marginBottom:0}}>
-      <button onClick={toggle} style={{width:"100%",display:"flex",alignItems:"flex-start",justifyContent:"space-between",padding:"16px 14px",borderRadius:open?"12px 12px 0 0":"12px 12px 0 0",background:"#2460A806",border:"none",borderBottom:open?"none":`1px solid #2460A815`,cursor:"pointer",textAlign:"left"}}>
+      <button onClick={toggle} className="rk-leaderboard-card" style={{width:"100%",display:"flex",alignItems:"flex-start",justifyContent:"space-between",padding:"16px 14px",borderRadius:open?"12px 12px 0 0":"12px 12px 0 0",background:"#2460A806",border:"none",borderBottom:open?"none":`1px solid #2460A815`,cursor:"pointer",textAlign:"left"}}>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:9,color:"#2460A8",letterSpacing:1.5,fontWeight:700,marginBottom:8}}>🌍 GLOBAL · DAY #{dn}</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.14,letterSpacing:-0.2,marginBottom:10}}>Rackle Leaderboard</div>
+          <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:C.ink,lineHeight:1.14,letterSpacing:-0.2,marginBottom:10}}>Rackle Leaderboard</div>
           {/* Live stat pills */}
           {hasData?(
             <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
               <span style={{fontSize:10,fontWeight:700,color:"#2460A8",background:"#2460A812",borderRadius:20,padding:"2px 10px"}}>{entries.length} players read today’s rack</span>
-              {topIQ&&<span style={{fontSize:10,fontWeight:700,color:C.jade,background:C.jade+"12",borderRadius:20,padding:"2px 10px"}}>Score to chase: {topIQ}</span>}
+              {topIQ&&<span style={{fontSize:10,fontWeight:700,color:C.jade,background:C.jade+"12",borderRadius:20,padding:"2px 10px"}}>{topIQ} leads the table</span>}
               {myRank>0&&<span style={{fontSize:10,fontWeight:700,color:C.gold,background:C.gold+"15",borderRadius:20,padding:"2px 10px"}}>You're #{myRank} 🔥</span>}
               {myRank===0&&myName&&<span style={{fontSize:10,fontWeight:600,color:C.mut,background:C.bg2,borderRadius:20,padding:"2px 10px"}}>Play Daily to rank</span>}
             </div>
@@ -8516,7 +8534,7 @@ function ClubPulseCard({club,clubPlayers,clubEntries=[],currentScore=0,currentRa
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:10}}>
         <div>
           <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:900,marginBottom:3}}>TODAY AT YOUR CLUB</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.15}}>{club.name}</div>
+          <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:C.ink,lineHeight:1.15}}>{club.name}</div>
         </div>
         <button onClick={()=>setScreen("leaderboard")} style={{background:C.jade+"10",border:`1px solid ${C.jade}25`,borderRadius:999,padding:"7px 11px",fontSize:10,fontWeight:800,color:C.jade,cursor:"pointer"}}>View ranks</button>
       </div>
@@ -8647,6 +8665,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const [nudgeDismissed,setNudgeDismissed]=useState(ST.get("nudgeDismissed",null)===getDailySeed());
   const [leOpen,setLeOpen]=useState(false);
   const [menuOpen,setMenuOpen]=useState(false);
+  const [shareCopied,setShareCopied]=useState(false);
   const [clubPlayers,setClubPlayers]=useState(null);
   const [homeClubEntries,setHomeClubEntries]=useState([]);
   const [ds,setDs]=useState(null);
@@ -8694,19 +8713,40 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const homeClubTotal=club?displayHomeClubEntries.length:null;
   const pb=Math.max(bestScore,currentScore,100);
   const firstName=profile?.nickname?profile.nickname.split(" ")[0]:"";
-  const streakTitle=streak>1?`${streak}-day streak${firstName?`, ${firstName}`:""}. Keep the heat on.`:streak===1?"Tomorrow’s rack is already waiting.":"Start your streak with today's Rackle.";
-  const streakSub=streak>1?"Come back and keep your club chasing.":streak===1?"Come back and climb your club board.":"One daily read. One score to chase.";
+  const streakMessages=[
+    "Your club is chasing.",
+    "The table is watching.",
+    club?`${club.name} is coming for your rank.`:"Apex is coming for your rank.",
+    "Don't lose the room tomorrow.",
+    "Your streak is becoming dangerous.",
+    "Keep climbing before someone catches you.",
+    "The leaderboard is tightening.",
+    "You're becoming hard to beat.",
+  ];
+  const streakMood=streakMessages[(dn+Math.max(streak,0))%streakMessages.length];
+  const streakTitle=streak>1?`${streak}-day streak${firstName?`, ${firstName}`:""}. ${streakMood}`:streak===1?"Tomorrow’s rack is already waiting.":"Start your streak with today's Rackle.";
+  const streakSub=streak>1?"Come back before the table catches you.":streak===1?"Come back and climb your club board.":"One daily read. One score to chase.";
 
   const tomorrowHints=[
+    "Tomorrow favors disciplined passes.",
+    "Concealed players may thrive tomorrow.",
+    "Tomorrow rewards patient Charleston play.",
+    "Dragons could matter more than expected.",
+    "Greedy passes may get punished tomorrow.",
     "Pairs may matter more than they look.",
-    "Sixes may be more powerful than usual.",
-    "Flexible passes should beat early commitment.",
-    "Winds could change the read.",
-    "Flowers may be worth a second look.",
-    "One safe pass may protect two sections.",
-    "Odd tiles may not be as weak as they seem.",
+    "Tomorrow rewards cleaner reads.",
+    "Fast commits may struggle tomorrow.",
   ];
   const tomorrowHint=tomorrowHints[dn%tomorrowHints.length];
+  const socialPresenceFeed=[
+    `${todayPlayers} players finished today`,
+    club&&shownClubRank&&shownClubRank>1?`${shownClubRank-1} ${club.name} players are ahead of you`:null,
+    topToday?`${topToday} leads the table`:null,
+    "Someone just posted a strong read",
+    "Most players missed one pivot today",
+    club?`${club.name} is active today`:"The club board is active today",
+  ].filter(Boolean);
+  const socialPresenceLine=socialPresenceFeed[dn%socialPresenceFeed.length];
 
   const levelLine=iq?.totalScore>=90?"Elite read. Your club will notice.":iq?.totalScore>=80?"Strong read. Make them chase it.":iq?.totalScore>=70?"Solid read. One better pass moves you up.":iq?.totalScore>=60?"You're warming up. The next rack is where it clicks.":"Tough rack. Come back sharper tomorrow.";
   const brightScoreColor="#F3D46B";
@@ -8724,16 +8764,16 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const passEmoji=(iq?.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
     const text=[`🀄 Daily Rackle #${dn}`,iq?`${iq.totalScore} · ${iq.level}`:dRes?`${dRes.rating} ${dRes.emoji}`:"I played today's Rackle",passEmoji?`Passes: ${passEmoji}`:"",club?`${club.name}`:"Think you can beat it?","playrackle.com"].filter(Boolean).join("\n\n");
     try{
-      if(navigator.share){await navigator.share({title:`Daily Rackle #${dn}`,text});return;}
+      if(navigator.share){await navigator.share({title:`Daily Rackle #${dn}`,text});setShareCopied(true);setTimeout(()=>setShareCopied(false),1600);return;}
       await navigator.clipboard.writeText(text);
-      alert("Copied. Drop it in your group chat.");
-    }catch(e){try{await navigator.clipboard.writeText(text);alert("Copied. Drop it in your group chat.");}catch{}}
+      setShareCopied(true);setTimeout(()=>setShareCopied(false),1600);
+    }catch(e){try{await navigator.clipboard.writeText(text);setShareCopied(true);setTimeout(()=>setShareCopied(false),1600);}catch{}}
   };
 
   const MiniStat=({value,label,accent})=>{
     const safeValue=(typeof value==="number"&&!Number.isFinite(value))?",":(value==="NaN"||value==null?",":value);
     return(
-      <div style={{flex:1,minWidth:0,border:`1px solid rgba(255,255,255,0.16)`,background:"rgba(255,255,255,0.08)",borderRadius:13,padding:"11px 12px"}}>
+      <div style={{flex:1,minWidth:0,border:`1px solid rgba(255,255,255,0.18)`,background:"rgba(255,255,255,0.105)",borderRadius:13,padding:"11px 12px",backdropFilter:"blur(8px)"}}>
         <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:accent||"#fff",lineHeight:1,letterSpacing:-0.8}}>{safeValue}</div>
         <div style={{fontSize:8,color:"rgba(255,255,255,0.62)",letterSpacing:2,fontWeight:800,marginTop:6}}> {label}</div>
       </div>
@@ -8772,12 +8812,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const lines=dDone?["You showed up today.","Now make your club chase the score."]:
       rounds===0?["Train your Charleston in 2 minutes.","Same rack. Every player. One daily read."]:["The table is set.","Come back stronger."];
     return(
-      <div style={{textAlign:"center",padding:"22px 0 20px"}}>
-        <div className="rk-float" style={{fontSize:37,marginBottom:9,lineHeight:1}}>🀄</div>
+      <div className="rk-hero-stack" style={{textAlign:"center",padding:"26px 0 24px"}}>
+        <div className="rk-float rk-hero-tile" style={{fontSize:37,marginBottom:6,lineHeight:1}}>🀄</div>
         <h1 style={{fontFamily:F.d,fontSize:52,color:C.ink,margin:"0 0 5px",fontWeight:900,letterSpacing:-2.8,lineHeight:0.95}}>Rackle</h1>
-        <p style={{fontFamily:F.d,fontSize:16,color:C.jade,margin:"0 0 12px",fontWeight:700,fontStyle:"italic",letterSpacing:0.2}}>The Daily Mahjong Workout</p>
-        <p style={{fontSize:12,color:C.mut,margin:"0 0 2px",lineHeight:1.55}}>{lines[0]}</p>
-        <p style={{fontSize:12,color:C.mut,margin:0,lineHeight:1.55,fontWeight:700}}>{lines[1]}</p>
+        <p className="rk-hero-subtitle" style={{fontFamily:F.d,fontSize:16,color:C.jade,margin:"8px 0 10px",fontWeight:700,fontStyle:"italic",letterSpacing:0.2}}>The Daily Mahjong Workout</p>
+        <div className="rk-hero-status" style={{marginTop:10}}><p style={{fontSize:13,color:C.mut,margin:"0 0 2px",lineHeight:1.45}}>{lines[0]}</p>
+        <p style={{fontSize:13,color:C.mut,margin:0,lineHeight:1.45,fontWeight:700}}>{lines[1]}</p></div>
       </div>
     );
   };
@@ -8796,8 +8836,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   );
 
   const CompletedDaily=()=> (
-    <div style={{borderRadius:24,overflow:"hidden",marginBottom:20,background:"#fff",boxShadow:"0 10px 32px rgba(0,0,0,0.08)",border:`1px solid ${C.bdr}`}}>
-      <div style={{padding:"9px 14px",display:"flex",alignItems:"center",gap:9,background:"linear-gradient(135deg,#FFFDF8,#F5EFE4)"}}>
+    <div className="rk-home-section-lg" style={{borderRadius:24,overflow:"hidden",marginBottom:24,background:"#fff",boxShadow:"0 10px 32px rgba(0,0,0,0.08)",border:`1px solid ${C.bdr}`}}>
+      <div className="rk-streak-card" style={{padding:"10px 14px",display:"flex",alignItems:"center",gap:10,background:"linear-gradient(180deg,#FFFDF8 0%,#F7F1E7 100%)",borderBottom:`1px solid ${C.jade}10`}}>
         <div style={{width:31,height:31,borderRadius:11,background:C.gold+"16",border:`1px solid ${C.gold}28`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>🔥</div>
         <div className="rk-streak-copy" style={{flex:1,minWidth:0}}>
           <div style={{fontSize:12,fontWeight:900,color:C.ink,lineHeight:1.25,letterSpacing:-0.1}}>{streakTitle}</div>
@@ -8807,10 +8847,10 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div role="button" tabIndex={0} onClick={showScorecard} onKeyDown={(e)=>{if(e.key==="Enter"||e.key===" ")showScorecard();}} style={{width:"100%",border:"none",background:`linear-gradient(150deg,${C.hero1},${C.hero2} 58%,${C.hero3})`,cursor:"pointer",padding:"30px 20px 24px",textAlign:"center",position:"relative",overflow:"hidden"}}>
         <div aria-hidden style={{position:"absolute",right:-12,bottom:-20,fontSize:116,opacity:0.04}}>🀄</div>
         <div style={{fontSize:10,color:"rgba(255,255,255,0.45)",letterSpacing:3.5,fontWeight:900,marginBottom:12}}>DAILY RACKLE · #{dn}</div>
-        <div className="rk-pop" style={{fontFamily:F.d,fontSize:80,fontWeight:900,color:brightScoreColor,letterSpacing:-4,lineHeight:0.92}}>{iq?.totalScore||dRes?.rating||"✓"}</div>
+        <div className="rk-pop" style={{fontFamily:F.d,fontSize:76,fontWeight:900,color:brightScoreColor,letterSpacing:-3.6,lineHeight:0.92}}>{iq?.totalScore||dRes?.rating||"✓"}</div>
         <div style={{width:56,height:2,background:`linear-gradient(90deg,transparent,${brightScoreColor},transparent)`,margin:"18px auto 16px",borderRadius:2}}/>
         <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:"#fff",lineHeight:1.08,marginBottom:iq?.styleName?14:12}}>{iq?.level||"Daily complete"}</div>
-        {iq?.styleName&&<div style={{display:"inline-flex",alignItems:"center",gap:5,border:`1px solid ${brightScoreColor}55`,background:brightScoreColor+"18",borderRadius:999,padding:"7px 14px",fontSize:11,fontWeight:900,color:brightScoreColor,marginBottom:16}}>{iq.styleName}</div>}
+        {iq?.styleName&&<div style={{display:"inline-flex",alignItems:"center",gap:5,border:`1px solid ${brightScoreColor}66`,background:"rgba(255,255,255,.08)",borderRadius:999,padding:"7px 14px",fontSize:11,fontWeight:900,color:"#EED89B",backdropFilter:"blur(10px)",marginBottom:16}}>{iq.styleName}</div>}
         <div style={{fontSize:13,color:"rgba(255,255,255,0.76)",lineHeight:1.5,maxWidth:280,margin:"0 auto"}}>{levelLine}</div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:24,textAlign:"left"}}>
           <button onClick={goGlobalRank} style={{border:"none",padding:0,background:"transparent",cursor:"pointer",textAlign:"left"}} aria-label="View global leaderboard">
@@ -8822,9 +8862,9 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </div>
       </div>
       <div style={{padding:16,display:"grid",gap:12}}>
-        <button onClick={copyShare} style={{width:"100%",border:`1px solid ${C.gold}25`,background:`linear-gradient(135deg,#FFF9ED,#F7EFE0)`,borderRadius:14,padding:"13px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left"}}>
-          <div style={{width:39,height:39,borderRadius:12,background:C.gold+"14",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>📲</div>
-          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>Challenge Your Club</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Tap to copy · Drop it in your group chat</div></div>
+        <button onClick={copyShare} className={`rk-share-card ${shareCopied?"rk-copied-state":""}`} style={{width:"100%",border:`1px solid ${C.gold}25`,background:`linear-gradient(135deg,#FFF9ED,#F7EFE0)`,borderRadius:14,padding:"14px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left",boxShadow:"0 4px 14px rgba(0,0,0,.025)"}}>
+          <div className="rk-share-icon" style={{width:48,height:48,borderRadius:14,background:C.gold+"14",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20}}>📲</div>
+          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>{shareCopied?"Copied for your club":"Challenge Your Club"}</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>{shareCopied?"Drop it in your group chat":"Tap to copy · Drop it in your group chat"}</div><div style={{display:"flex",alignItems:"center",gap:8,marginTop:6}}><span className="rk-mini-avatars"><span className="rk-mini-avatar"/><span className="rk-mini-avatar" style={{background:C.jade+"44"}}/><span className="rk-mini-avatar" style={{background:C.gold+"55"}}/></span><span style={{fontSize:10.5,color:C.mut,fontWeight:700}}>3 club members shared today</span></div></div>
           <span style={{fontSize:18,color:C.gold}}>›</span>
         </button>
         <button onClick={showScorecard} style={{width:"100%",border:`1px solid ${C.jade}20`,background:C.jade+"06",borderRadius:14,padding:"13px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left"}}>
@@ -8839,20 +8879,30 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const TomorrowTease=()=> {
     const resetLabel=getTimeUntilMidnightLabel();
     return(
-      <div aria-label="Tomorrow's Rackle preview" style={{width:"100%",margin:"0 0 20px",border:`1px solid ${C.bdr}`,background:"linear-gradient(135deg,#FBF7EF,#F7F2EA)",borderRadius:18,padding:"17px 18px",display:"flex",alignItems:"center",gap:14,cursor:"default",textAlign:"left",boxShadow:"0 4px 16px rgba(0,0,0,0.026)",position:"relative",overflow:"hidden"}}>
+      <div aria-label="Tomorrow's Rackle preview" className="rk-home-section" style={{width:"100%",margin:"0 0 18px",border:`1px solid rgba(0,0,0,.06)`,background:"linear-gradient(180deg,#FFFDF8 0%,#F6F1E7 100%)",borderRadius:18,padding:"17px 18px",display:"flex",alignItems:"center",gap:14,cursor:"default",textAlign:"left",boxShadow:"0 4px 16px rgba(0,0,0,0.026)",position:"relative",overflow:"hidden"}}>
         <div aria-hidden style={{position:"absolute",right:-10,bottom:-18,fontSize:72,opacity:0.035,lineHeight:1}}>🀄</div>
         <div style={{width:42,height:42,borderRadius:14,background:C.jade+"10",border:`1px solid ${C.jade}18`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>✦</div>
         <div style={{flex:1,minWidth:0,position:"relative"}}>
           <div style={{fontSize:9,color:C.jade,letterSpacing:2.1,fontWeight:900,marginBottom:5}}>TOMORROW'S RACKLE</div>
-          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2,marginBottom:5}}>New rack in {resetLabel}</div>
+          <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2,marginBottom:5}}>New rack in {resetLabel}</div>
           <div style={{fontSize:12,color:C.mut,lineHeight:1.45}}>{String(tomorrowHint).replace(/^Hint:\s*/i,"")}</div>
         </div>
       </div>
     );
   };
 
+
+  const SocialPresence=()=> (
+    <div style={{display:"flex",justifyContent:"center",margin:"-6px 0 16px"}}>
+      <div className="rk-live-pill">
+        <span className="rk-live-dot" style={{width:6,height:6,borderRadius:99,background:C.jade,display:"inline-block"}}/>
+        <span>{socialPresenceLine}</span>
+      </div>
+    </div>
+  );
+
   const PracticeCard=()=> (
-    <button onClick={()=>go("free")} aria-label="Play Free Play" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:13,marginBottom:22,borderRadius:18,padding:"16px 18px",textAlign:"left",background:dDone?"linear-gradient(135deg,#fff,#F4FAF6)":"linear-gradient(135deg,#FFF9F6,#fff)",border:`1.5px solid ${dDone?C.jade+"22":C.cinn+"18"}`,boxShadow:"0 5px 18px rgba(0,0,0,0.032)"}}>
+    <button onClick={()=>go("free")} aria-label="Play Free Play" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:13,marginBottom:24,borderRadius:18,padding:"16px 18px",textAlign:"left",background:dDone?"linear-gradient(135deg,#fff,#F4FAF6)":"linear-gradient(135deg,#FFF9F6,#fff)",border:`1.5px solid ${dDone?C.jade+"22":C.cinn+"18"}`,boxShadow:"0 5px 18px rgba(0,0,0,0.032)"}}>
       <div style={{width:44,height:44,borderRadius:14,background:dDone?C.jade+"10":C.cinn+"10",border:`1px solid ${dDone?C.jade+"20":C.cinn+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🀄</div>
       <div style={{flex:1,minWidth:0}}>
         <div style={{fontSize:9,color:dDone?C.jade:C.cinn,letterSpacing:2.15,fontWeight:900,marginBottom:5}}>FREE PLAY</div>
@@ -8932,7 +8982,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <Hero/>
         <div style={{display:"flex",alignItems:"center",gap:12,margin:"4px 0 22px"}}>
           <div style={{flex:1,height:1,background:`linear-gradient(90deg,transparent,${C.bdr})`}}/>
-          <div style={{display:"inline-flex",alignItems:"center",gap:7,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:999,padding:"6px 16px"}}><span style={{fontSize:12}}>🗓️</span><span style={{fontSize:10,color:C.mut,letterSpacing:2.4,fontWeight:900}}>TODAY'S RACKLE</span></div>
+          <div className="rk-daily-cta" style={{display:"inline-flex",alignItems:"center",gap:7,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:999,padding:"8px 18px",minHeight:52}}><span style={{fontSize:12}}>🗓️</span><span style={{fontSize:10,color:C.mut,letterSpacing:2.4,fontWeight:900}}>TODAY'S RACKLE</span></div>
           <div style={{flex:1,height:1,background:`linear-gradient(90deg,${C.bdr},transparent)`}}/>
         </div>
 
@@ -8943,6 +8993,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           </div>
         )}
 
+        {dDone&&<SocialPresence/>}
         {dDone?<CompletedDaily/>:<StartDaily/>}
         {dDone&&<TomorrowTease/>}
         <PracticeCard/>
