@@ -812,14 +812,17 @@ function dragons(rack,v){return v?countTile(rack,t=>t.t==="d"&&t.v===v):countTil
 // For scoring: matchingDragon(r,suit) = count of dragons that legally match
 //              oppDragon(r,suit)      = count of dragons that are legally opposite
 function matchingDragon(rack,suit){
-  if(suit==="bam") return dragons(rack,"Grn")+dragons(rack,"Soap");
-  if(suit==="crak")return dragons(rack,"Red")+dragons(rack,"Soap");
-  return dragons(rack,"Soap")+dragons(rack,"Grn")+dragons(rack,"Red"); // dot, Soap matches, others ok
+  // American Mahjong dragon matching: Bam→Green, Crak→Red, Dot→Soap.
+  // Soap is also the printed zero for 2026, but it should not act as a
+  // matching dragon for Bam/Crak lines.
+  if(suit==="bam") return dragons(rack,"Grn");
+  if(suit==="crak")return dragons(rack,"Red");
+  return dragons(rack,"Soap");
 }
 function oppDragon(rack,suit){
   if(suit==="bam") return dragons(rack,"Red")+dragons(rack,"Soap");
   if(suit==="crak")return dragons(rack,"Grn")+dragons(rack,"Soap");
-  return dragons(rack,"Red")+dragons(rack,"Grn"); // dot opp = Red or Grn
+  return dragons(rack,"Red")+dragons(rack,"Grn");
 }
 
 // Score how many "slots" of a group a rack can fill (with joker assist for pungs/kongs)
@@ -1963,13 +1966,11 @@ HAND_CATALOG.forEach(h=>{if(HAND_CONSTRAINTS[h.label])h.constraint=HAND_CONSTRAI
 function recommendSpecificHands(rack,sectionId){
   if(!rack||!sectionId)return[];
   const hands=HAND_CATALOG.filter(h=>h.sec===sectionId);
-  // Use honest coverage (same as display), not fit() which picks best-case suit permutations.
-  // This ensures the inferred hand actually reflects what tiles the player is holding.
   const scored=hands.map(h=>{
-    const{pct}=computeHonestCoverage(rack,h);
-    return{...h,fitScore:pct/100,coveragePct:pct};
-  }).sort((a,b)=>b.coveragePct-a.coveragePct);
-  return scored.slice(0,3).filter(h=>h.coveragePct>5);
+    const cov=computeHonestCoverage(rack,h);
+    return{...h,fitScore:cov.pct/100,coveragePct:cov.pct,credibility:cov.credibility,isCredible:cov.isCredible,variantLabel:cov.variantLabel,labelForDisplay:cov.labelForDisplay,coveragePlan:cov.plan};
+  }).sort((a,b)=>(b.credibility-a.credibility)||(b.coveragePct-a.coveragePct));
+  return scored.filter(h=>h.isCredible).slice(0,3);
 }
 
 // ─── HAND FAMILIES ───────────────────────────────────────────────────────────
@@ -4843,11 +4844,13 @@ function PassesCard({passNarrative}){
 function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,primaryCoveragePct}){
   // Score all hands in the chosen section by honest coverage
   const sectionHands=HAND_CATALOG.filter(h=>h.sec===chosenSec)
-    .map(h=>{const{pct}=computeHonestCoverage(hand,h);return{...h,coveragePct:pct};})
+    .map(h=>{const cov=computeHonestCoverage(hand,h);return{...h,coveragePct:cov.pct,credibility:cov.credibility,isCredible:cov.isCredible,variantLabel:cov.variantLabel,labelForDisplay:cov.labelForDisplay};})
     .sort((a,b)=>b.coveragePct-a.coveragePct);
 
   // Top 3 alternates in the same section (excluding the primary scored hand)
-  const altSectionHands=sectionHands.filter(h=>h.label!==resolvedHandLabel&&h.coveragePct>3).slice(0,3);
+  const altSectionHands=sectionHands
+    .filter(h=>(h.labelForDisplay||h.variantLabel||h.label)!==resolvedHandLabel&&h.label!==resolvedHandLabel&&h.isCredible!==false&&h.coveragePct>=45)
+    .slice(0,2);
 
   // Best hand from other sections to reach 4 total alts
   const remaining=Math.max(0,4-altSectionHands.length);
@@ -4856,17 +4859,25 @@ function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,
     if(sec.id===chosenSec)continue;
     if(altSecHands.length>=remaining)break;
     const best=HAND_CATALOG.filter(h=>h.sec===sec.id)
-      .map(h=>{const{pct}=computeHonestCoverage(hand,h);return{...h,coveragePct:pct,secObj:sec};})
+      .map(h=>{const cov=computeHonestCoverage(hand,h);return{...h,coveragePct:cov.pct,credibility:cov.credibility,isCredible:cov.isCredible,variantLabel:cov.variantLabel,labelForDisplay:cov.labelForDisplay,secObj:sec};})
       .sort((a,b)=>b.coveragePct-a.coveragePct)[0];
-    if(best&&best.coveragePct>8)altSecHands.push(best);
+    if(best&&best.isCredible!==false&&best.coveragePct>=48)altSecHands.push(best);
   }
 
   const lanes=[
-    ...altSectionHands.map(h=>({handObj:h,secId:chosenSec,secObj:chosenSecObj,kicker:"Same family",copy:"Your rack was still whispering this path."})),
-    ...altSecHands.map(h=>({handObj:h,secId:h.sec,secObj:h.secObj,kicker:"Different read",copy:"A sharp table might have noticed this too."})),
+    ...altSectionHands.map(h=>({handObj:h,secId:chosenSec,secObj:chosenSecObj,kicker:"Same family",copy:"A real alternate, not the main lane."})),
+    ...altSecHands.map(h=>({handObj:h,secId:h.sec,secObj:h.secObj,kicker:"Different read",copy:"Another credible direction this rack showed."})),
   ];
 
-  if(!lanes.length)return null;
+  if(!lanes.length){
+    return(
+      <div style={{...S.card,marginBottom:8,padding:"14px 16px",textAlign:"center",background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)"}}>
+        <div style={{fontSize:9,color:C.jade,letterSpacing:2,fontWeight:900,textTransform:"uppercase",marginBottom:5}}>Other Paths</div>
+        <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,marginBottom:4}}>No stronger alternate.</div>
+        <div style={{fontSize:12,color:C.mut,lineHeight:1.55,maxWidth:300,margin:"0 auto"}}>Good read. This rack did not show another credible 2026-card path, so the best lesson is to keep protecting the lane you found.</div>
+      </div>
+    );
+  }
 
   return(
     <div style={{marginBottom:8,overflow:"hidden"}}>
@@ -4881,7 +4892,7 @@ function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,
         scrollbarWidth:"none",
       }}>
         {lanes.map((lane,i)=>(
-          <div key={`${lane.handObj.label}-${lane.secId}-${i}`} style={{
+          <div key={`${lane.handObj.labelForDisplay||lane.handObj.variantLabel||lane.handObj.label}-${lane.secId}-${i}`} style={{
             flex:"0 0 88%",maxWidth:360,scrollSnapAlign:"start",
             background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:16,
             boxShadow:"0 2px 10px rgba(0,0,0,0.045)",overflow:"hidden",
@@ -4893,7 +4904,7 @@ function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,
                 </div>
                 <CoverageChip pct={lane.handObj.coveragePct}/>
               </div>
-              <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.15,letterSpacing:-0.2}}>{lane.handObj.label}</div>
+              <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.15,letterSpacing:-0.2}}>{lane.handObj.labelForDisplay||lane.handObj.variantLabel||lane.handObj.label}</div>
               <div style={{fontSize:10.5,color:C.mut,lineHeight:1.45,marginTop:4}}>{lane.copy}</div>
             </div>
             <div style={{padding:10,overflow:"hidden"}}>
@@ -4912,10 +4923,10 @@ function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,
 }
 
 function coverageTone(pct){
-  if(pct>=65)return{label:"Clean path",short:"Clean",color:C.jade,desc:"This path had real shape."};
-  if(pct>=40)return{label:"Worth watching",short:"Live",color:C.gold,desc:"This path was worth keeping alive."};
-  if(pct>=20)return{label:"Needs help",short:"Maybe",color:C.gold,desc:"There was something here, but it needed help."};
-  return{label:"Long shot",short:"Reach",color:C.cinn,desc:"This was possible, but not something to force."};
+  if(pct>=72)return{label:"Clean path",short:"Live",color:C.jade,desc:"This path had real shape."};
+  if(pct>=55)return{label:"Worth watching",short:"Live",color:C.gold,desc:"Worth keeping alive."};
+  if(pct>=43)return{label:"Soft maybe",short:"Maybe",color:C.gold,desc:"A useful clue, but not one to force."};
+  return{label:"Table lesson",short:"Learn",color:C.mut,desc:"Useful to notice, but too far away to chase."};
 }
 
 function CoverageChip({pct}){
@@ -5068,9 +5079,11 @@ function RackViewer({hand,startingRack}){
 function HandTargetPreview({hand,scoredHandObj,chosenSec,chosenSecObj,iq,onCoachMode}){
   const [open,setOpen]=useState(true);
   if(!scoredHandObj||!hand||!hand.length)return null;
-  const groups=decodeHandLabel(scoredHandObj.label,chosenSec);
-  const cardColors=HAND_CARD_COLORS[scoredHandObj.label]||[];
-  const{held,total,pct}=computeHonestCoverage(hand,scoredHandObj);
+  const previewPlan=buildCoveragePlan(hand,scoredHandObj,[]);
+  const groups=previewPlan.groups;
+  const cardColors=previewPlan.cardColors||[];
+  const{held,total,pct}=previewPlan;
+  const displayHandLabel=previewPlan.labelForDisplay||previewPlan.variantLabel||scoredHandObj.label;
   const tone=coverageTone(pct);
   const tableLine=pct>=65?"This was one of the cleanest lanes your rack was showing."
     :pct>=40?"This line stayed alive. A few more connected tiles would make it much stronger."
@@ -5081,7 +5094,7 @@ function HandTargetPreview({hand,scoredHandObj,chosenSec,chosenSecObj,iq,onCoach
       <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"13px 14px",background:"linear-gradient(145deg,#FFFFFF,#FFFCF7)",border:"none",cursor:"pointer",textAlign:"left"}}>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:8,color:chosenSecObj?.color||C.jade,letterSpacing:2,fontWeight:900,marginBottom:4}}>YOUR BEST PATH</div>
-          <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.ink,letterSpacing:-0.2,marginBottom:3}}>{scoredHandObj.label}</div>
+          <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.ink,letterSpacing:-0.2,marginBottom:3}}>{displayHandLabel}</div>
           <div style={{fontSize:11,color:C.mut,lineHeight:1.35}}>{tableLine}</div>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:9,flexShrink:0,marginLeft:10}}>
@@ -5417,16 +5430,16 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
   if(!finalRack||!sectionId)return null;
   // Get all scored hands for section, sorted by fit
   const allHands=HAND_CATALOG.filter(h=>h.sec===sectionId)
-    .map(h=>({...h,fitScore:h.fit(finalRack)}))
-    .sort((a,b)=>b.fitScore-a.fitScore);
+    .map(h=>{const cov=computeHonestCoverage(finalRack,h);return{...h,fitScore:cov.pct/100,coveragePct:cov.pct,credibility:cov.credibility,isCredible:cov.isCredible,variantLabel:cov.variantLabel,labelForDisplay:cov.labelForDisplay};})
+    .sort((a,b)=>(b.credibility-a.credibility)||(b.coveragePct-a.coveragePct));
   // If a pinned hand is specified, put it first
   let hands=allHands;
   if(pinnedHandLabel){
     const pinned=allHands.find(h=>h.label===pinnedHandLabel);
-    const rest=allHands.filter(h=>h.label!==pinnedHandLabel).filter(h=>h.fitScore>0.05).slice(0,2);
-    hands=pinned?[pinned,...rest]:allHands.slice(0,3).filter(h=>h.fitScore>0.05);
+    const rest=allHands.filter(h=>h.label!==pinnedHandLabel).filter(h=>h.isCredible).slice(0,2);
+    hands=pinned?[pinned,...rest]:allHands.filter(h=>h.isCredible).slice(0,3);
   } else {
-    hands=allHands.slice(0,3).filter(h=>h.fitScore>0.05);
+    hands=allHands.filter(h=>h.isCredible).slice(0,3);
   }
   if(!hands||hands.length===0)return null;
   const sec=SECS.find(s=>s.id===sectionId);
@@ -5463,10 +5476,10 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
           </div>
         )}
         {hands.map((hand,i)=>{
-          const pct=Math.round(hand.fitScore*100);
-          const barColor=pct>=70?C.jade:pct>=45?C.gold:C.cinn;
-          const verdict=pct>=80?"Very close, you could win this hand":pct>=60?"Good foundation, a few key tiles away":pct>=40?"Partial fit, possible with better passing":"Low fit, this hand needed different tiles";
-          const verdictColor=pct>=80?C.jade:pct>=60?C.gold:pct>=40?C.amberB:C.cinn;
+          const pct=Math.round((hand.coveragePct??hand.fitScore*100));
+          const barColor=pct>=70?C.jade:pct>=50?C.gold:C.cinn;
+          const verdict=pct>=80?"Strong option. This rack had real shape.":pct>=62?"Live option. Keep learning what connects it.":pct>=45?"Soft maybe. Useful to notice, not force.":"Not a chase. Treat this as a table lesson.";
+          const verdictColor=pct>=70?C.jade:pct>=45?C.gold:C.mut;
 
           // Tile analysis
           const jk=jokers(finalRack);
@@ -5475,7 +5488,7 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
           finalRack.filter(t=>t.t==="s").forEach(t=>{numCounts[t.n]=(numCounts[t.n]||0)+1;});
           const wCounts={};finalRack.filter(t=>t.t==="w").forEach(t=>{wCounts[t.v]=(wCounts[t.v]||0)+1;});
           const dCounts={};finalRack.filter(t=>t.t==="d").forEach(t=>{dCounts[t.v]=(dCounts[t.v]||0)+1;});
-          const label=hand.label;
+          const label=hand.labelForDisplay||hand.variantLabel||hand.label;
           const numRefs=[...new Set((label.match(/\d+/g)||[]).map(Number).filter(n=>n>=1&&n<=9))];
           const strengths=[];const gaps=[];
 
@@ -6049,6 +6062,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
   const plan=buildCoveragePlan(hand,handObj,passLog||[]);
   const groups=plan.groups;
   const cardColors=plan.cardColors;
+  const displayHandLabel=plan.labelForDisplay||plan.variantLabel||handObj.label;
   const groupStatus=plan.groupStatus;
 
   // Compute summary numbers from the best abstract-suit mapping.
@@ -6058,6 +6072,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
   const totalHeld=plan.held;
   const totalGap=Math.max(0,totalSlots-totalHeld);
   const pct=plan.pct;
+  const pathTone=rkCoachPathTone(plan);
   const criticalPasses=groupStatus.filter(s=>s.gap>0&&s.passedMatching.length>0);
 
   // Gap sentence
@@ -6133,7 +6148,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
           {handWasInferred?"BEST-FIT HAND, INFERRED":"YOUR TARGET HAND"}
         </div>
         <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,letterSpacing:-0.3,marginBottom:2}}>
-          {handObj.label}
+          {displayHandLabel}
         </div>
         <div style={{fontSize:10,color:C.mut}}>{handObj.constraint||secObj?.name} · {handObj.concealed?"Concealed":"Open"} · {handObj.value} pts</div>
       </div>
@@ -10429,7 +10444,7 @@ function buildCoveragePlanLegacy(rack,handObj,passLog=[]){
 }
 function computeHonestCoverage(rack, handObj){
   const plan=buildCoveragePlan(rack,handObj,[]);
-  return{held:plan.held,total:plan.total,pct:plan.pct,suitMap:plan.suitMap};
+  return{held:plan.held,total:plan.total,pct:plan.pct,credibility:rkPlanCredibility(plan),isCredible:rkIsCrediblePath(plan),suitMap:plan.suitMap,variantLabel:plan.variantLabel,labelForDisplay:plan.labelForDisplay,plan};
 }
 
 
@@ -10491,24 +10506,30 @@ function rkConstraintText(handObj){return String(handObj?.constraint||HAND_CONST
 function rkNumericCodes(groups,colors){
   return [...new Set(groups.map((g,i)=>g.isNum&&["G","R","K","B"].includes(colors[i])?colors[i]:null).filter(Boolean))];
 }
-function rkMaxSuitCountFromConstraint(txt){
-  if(/Any\s+1\s+Suit/i.test(txt)&&!/or\s+2|or\s+3/i.test(txt))return 1;
-  if(/Any\s+2\s+Suits/i.test(txt)&&!/or\s+3/i.test(txt))return 2;
-  if(/Any\s+3\s+Suits/i.test(txt))return 3;
-  if(/Any\s+1\s+or\s+2\s+Suits/i.test(txt))return 2;
-  if(/Any\s+2\s+or\s+3\s+Suits/i.test(txt))return 3;
-  if(/Any\s+1\s+or\s+3\s+Suits/i.test(txt))return 3;
-  return 3;
+function rkAllowedSuitCountsFromConstraint(txt){
+  const t=String(txt||"");
+  if(/Any\s+1\s+or\s+2\s+Suits/i.test(t))return new Set([1,2]);
+  if(/Any\s+2\s+or\s+3\s+Suits/i.test(t))return new Set([2,3]);
+  if(/Any\s+1\s+or\s+3\s+Suits/i.test(t))return new Set([1,3]);
+  if(/Any\s+1\s+Suit/i.test(t))return new Set([1]);
+  if(/Any\s+2\s+Suits/i.test(t))return new Set([2]);
+  if(/Any\s+3\s+Suits/i.test(t))return new Set([3]);
+  if(/1\s+or\s+2\s+Suits/i.test(t))return new Set([1,2]);
+  if(/2\s+or\s+3\s+Suits/i.test(t))return new Set([2,3]);
+  return new Set([1,2,3]);
 }
 function rkSuitMappingOptions(codes,handObj){
   if(!codes.length)return[{}];
   const txt=rkConstraintText(handObj);
-  const maxSuits=rkMaxSuitCountFromConstraint(txt);
+  const allowed=rkAllowedSuitCountsFromConstraint(txt);
   const out=[];
   const walk=(idx,map)=>{
     if(idx>=codes.length){
       const used=new Set(Object.values(map));
-      if(used.size<=maxSuits)out.push({...map});
+      // The NMJL parentheses matter. If a line says Any 3 Suits, do not let a
+      // 1-suit rack masquerade as that line. If it says Any 1 or 2, allow only
+      // those counts. This is the credibility guardrail for Rackle.
+      if(allowed.has(used.size))out.push({...map});
       return;
     }
     const code=codes[idx];
@@ -10570,47 +10591,192 @@ function makeGroupPredicate(g,cc,suitMap,groups=[],idx=0,colors=[],handObj=null)
 function rkSamePhysicalTile(a,b){
   return a===b;
 }
+
+// ─── VARIANT EXPANSION: turn each printed NMJL line into all playable number variants ───
+// The printed card uses placeholder numbers in many lines (Any 3 Consecutive Nos.,
+// Any Like Nos., Pair 3/6/9, Kong 2/4/6/8). The old resolver read those
+// labels too literally. This expansion lets the engine evaluate the whole rack
+// against the actual playable variants before choosing a path.
+function rkDigitsInLabel(label){return [...new Set(String(label||"").match(/[1-9]/g)||[])].map(Number).sort((a,b)=>a-b);}
+function rkReplaceDigits(label,map){return String(label||"").replace(/[1-9]/g,d=>String(map[Number(d)]??d));}
+function rkRepeatDigit(n,count){return String(n).repeat(count);}
+function rkUniqueVariants(labels){
+  const seen=new Set();
+  return labels.filter(l=>{const k=String(l).replace(/\s+/g," ").trim();if(seen.has(k))return false;seen.add(k);return true;});
+}
+function rkConsecutiveVariantLabels(base,len){
+  const digits=rkDigitsInLabel(base);
+  if(!digits.length||!len)return[];
+  // Map the distinct printed digits in order onto a moving consecutive window.
+  // Example: 111 222 3333 4444 + Any 4 Consec => 111/222/3333/4444 through 666/777/8888/9999.
+  const out=[];
+  for(let start=1;start<=10-len;start++){
+    const map={};
+    digits.forEach((d,i)=>{map[d]=start+Math.min(i,len-1);});
+    out.push(rkReplaceDigits(base,map));
+  }
+  return out;
+}
+function rkLikeNumberVariantLabels(base,nums){
+  const digits=rkDigitsInLabel(base);
+  if(!digits.length)return[];
+  const out=[];
+  nums.forEach(n=>{
+    const map={};
+    digits.forEach(d=>{map[d]=n;});
+    out.push(rkReplaceDigits(base,map));
+  });
+  return out;
+}
+function rkExpandHandVariants(handObj){
+  if(!handObj)return[];
+  const base=String(handObj.baseLabel||handObj.label||"").trim();
+  const txt=rkConstraintText(handObj);
+  const out=[base];
+
+  // Consecutive-number hands. Do not move fixed "These Nos. Only" lines.
+  const consec=txt.match(/Any\s+(\d+)\s+Consec/i);
+  if(consec && !/These\s+Nos\.\s+Only/i.test(txt)){
+    out.push(...rkConsecutiveVariantLabels(base,parseInt(consec[1],10)));
+  }
+
+  // Any Like Numbers families.
+  if(/Any\s+Like\s+Odd\s+Nos/i.test(txt))out.push(...rkLikeNumberVariantLabels(base,[1,3,5,7,9]));
+  else if(/Any\s+Like\s+Even\s+Nos/i.test(txt))out.push(...rkLikeNumberVariantLabels(base,[2,4,6,8]));
+  else if(/Any\s+Like\s+Nos|Any\s+Like\s+No\b/i.test(txt))out.push(...rkLikeNumberVariantLabels(base,[1,2,3,4,5,6,7,8,9]));
+
+  // Exact card bracket variants that are not captured by the generic text.
+  if(base==="2468 2222 D 2222 D"){
+    [2,4,6,8].forEach(n=>out.push(`2468 ${rkRepeatDigit(n,4)} D ${rkRepeatDigit(n,4)} D`));
+  }
+  if(base==="FFF 2468 FFF 2222"){
+    [2,4,6,8].forEach(n=>out.push(`FFF 2468 FFF ${rkRepeatDigit(n,4)}`));
+  }
+  if(base==="FF 3369 3333 3333"){
+    [3,6,9].forEach(n=>{
+      const others=[3,6,9].filter(x=>x!==n);
+      out.push(`FF ${n}${n}${others.join("")} ${rkRepeatDigit(n,4)} ${rkRepeatDigit(n,4)}`);
+    });
+  }
+  if(base==="113579 1111 1111"){
+    [1,3,5,7,9].forEach(n=>{
+      const others=[1,3,5,7,9].filter(x=>x!==n);
+      out.push(`${n}${n}${others.join("")} ${rkRepeatDigit(n,4)} ${rkRepeatDigit(n,4)}`);
+    });
+  }
+  if(base==="11111 44444 DDDD"){
+    for(let a=1;a<=9;a++)for(let b=1;b<=9;b++)if(a!==b)out.push(`${rkRepeatDigit(a,5)} ${rkRepeatDigit(b,5)} DDDD`);
+  }
+  if(base==="NN EE WW SS 1D 1D 1D"){
+    for(let n=1;n<=9;n++)out.push(`NN EE WW SS ${n}D ${n}D ${n}D`);
+  }
+
+  // Attach metadata without mutating the catalog object.
+  return rkUniqueVariants(out).map(label=>({
+    ...handObj,
+    baseLabel:base,
+    variantLabel:label,
+    labelForDisplay:label,
+  }));
+}
+function rkCoverageScore(plan){
+  if(!plan||!plan.total)return 0;
+  const statuses=plan.groupStatus||[];
+  const completed=statuses.filter(s=>s.gap<=0).length;
+  const naturalOnlyGaps=statuses.filter(s=>!s.jokerAllowed).reduce((a,s)=>a+Math.max(0,s.gap||0),0);
+  const deadGroups=statuses.filter(s=>s.totalHeld<=0).length;
+  const completedHard=statuses.filter(s=>s.gap<=0&&(s.g.type==="single"||s.g.type==="pair"||!s.jokerAllowed)).length;
+  const suitSpread=new Set(statuses.filter(s=>s.g.isNum&&s.totalHeld>0).map(s=>s.resolvedSuit).filter(Boolean)).size;
+
+  // Credibility score, not just raw tile count.
+  // A 5/14 hand with five loose singles should not beat an 8/14 hand with
+  // completed pairs/pungs. This is what makes Rackle feel like a real helper.
+  return (plan.pct||0)*1000 + completed*900 + completedHard*450 + suitSpread*120 - naturalOnlyGaps*260 - deadGroups*180;
+}
+function rkPlanCredibility(plan){
+  if(!plan||!plan.total)return 0;
+  const statuses=plan.groupStatus||[];
+  const pct=plan.pct||0;
+  const completed=statuses.filter(s=>s.gap<=0).length;
+  const hardCompleted=statuses.filter(s=>s.gap<=0&&(s.g.type==="single"||s.g.type==="pair"||!s.jokerAllowed)).length;
+  const liveGroups=statuses.filter(s=>s.totalHeld>0).length;
+  const deadGroups=statuses.length-liveGroups;
+  const naturalOnlyGap=statuses.filter(s=>!s.jokerAllowed).reduce((a,s)=>a+Math.max(0,s.gap||0),0);
+  let score=pct + completed*4 + hardCompleted*3 - deadGroups*2 - naturalOnlyGap*1.5;
+  return Math.max(0,Math.min(100,Math.round(score)));
+}
+function rkIsCrediblePath(plan,{primary=false}={}){
+  if(!plan||!plan.total)return false;
+  const statuses=plan.groupStatus||[];
+  const pct=plan.pct||0;
+  const completed=statuses.filter(s=>s.gap<=0).length;
+  const held=plan.held||0;
+  const naturalOnlyGap=statuses.filter(s=>!s.jokerAllowed).reduce((a,s)=>a+Math.max(0,s.gap||0),0);
+  const minPct=primary?34:45;
+  if(pct<minPct)return false;
+  if(held<6&&!primary)return false;
+  if(completed<1&&pct<55)return false;
+  if(naturalOnlyGap>=7&&pct<62)return false;
+  return true;
+}
+function rkCoachPathTone(plan,primary=false){
+  const cred=rkPlanCredibility(plan);
+  if(cred>=74)return{label:"Clean path",short:"Live",color:C.jade,desc:"This was a real lane. You gave yourself something to build on."};
+  if(cred>=58)return{label:"Worth keeping",short:"Live",color:C.gold,desc:"This path had pieces. A couple of cleaner connects would make it dangerous."};
+  if(cred>=42)return{label:primary?"Learning read":"Soft maybe",short:"Maybe",color:C.gold,desc:"There was a hint here, but it needed more help before forcing it."};
+  return{label:"Table lesson",short:"Learn",color:C.mut,desc:"Useful lesson, but not a path to chase hard from this rack."};
+}
+
 function buildCoveragePlan(rack,handObj,passLog=[]){
-  if(!rack||!handObj)return{held:0,total:0,pct:0,groups:[],groupStatus:[],suitMap:{},cardColors:[]};
-  const groups=decodeHandLabel(handObj.label,handObj.sec);
-  const cardColors=rkCardColorsForGroups(handObj,groups);
-  const codes=rkNumericCodes(groups,cardColors);
+  if(!rack||!handObj)return{held:0,total:0,pct:0,groups:[],groupStatus:[],suitMap:{},cardColors:[],variantLabel:handObj?.label};
   const allPassed=(passLog||[]).flatMap((p,idx)=>(p.out||p.passedTiles||[]).map(t=>({...t,roundName:p.label||p.roundName||`Pass ${idx+1}`,roundIdx:idx})));
   let best=null;
-  for(const suitMap of rkSuitMappingOptions(codes,handObj)){
-    const rackPool=[...(rack||[])];
-    const pull=(pred,need)=>{
-      let f=0;const r=[];
-      for(const t of rackPool){if(f<need&&pred(t)){f++;}else r.push(t);}
-      rackPool.length=0;rackPool.push(...r);
-      return f;
-    };
-    const groupStatus=[];
-    let held=0,total=0,naturalOnlyGaps=0,completedGroups=0;
-    groups.forEach((g,gi)=>{
-      const cc=cardColors[gi]||"K";
-      const pred=makeGroupPredicate(g,cc,suitMap,groups,gi,cardColors,handObj);
-      const need=g.count;
-      total+=need;
-      const naturalHeld=pull(pred,need);
-      const jokerAllowed=!handObj.concealed&&g.type!=="single"&&g.type!=="pair";
-      const jokerHeld=jokerAllowed?pull(t=>t.t==="j",need-naturalHeld):0;
-      const totalHeld=naturalHeld+jokerHeld;
-      held+=totalHeld;
-      const gap=need-totalHeld;
-      if(gap<=0)completedGroups++;
-      if(!jokerAllowed)naturalOnlyGaps+=gap;
-      const passedMatching=allPassed.filter(t=>pred(t));
-      const passedRounds=[...new Set(passedMatching.map(t=>t.roundName))];
-      groupStatus.push({g,gi,cc,need,totalHeld,naturalHeld,jokerHeld,gap,passedMatching,passedRounds,resolvedSuit:suitMap?.[cc]||null,jokerAllowed});
-    });
-    const pct=total>0?Math.round(held/total*100):0;
-    // Ranking favors: more covered slots, more completed groups, fewer natural-only gaps.
-    const distinctSuits=new Set(Object.values(suitMap)).size;
-    const score=held*10000+completedGroups*500-naturalOnlyGaps*45+distinctSuits;
-    if(!best||score>best.score)best={score,held,total,pct,groups,groupStatus,suitMap:{...suitMap},cardColors};
+
+  for(const variantObj of rkExpandHandVariants(handObj)){
+    const groups=decodeHandLabel(variantObj.variantLabel||variantObj.label,variantObj.sec);
+    const cardColors=rkCardColorsForGroups(variantObj,groups);
+    const codes=rkNumericCodes(groups,cardColors);
+
+    for(const suitMap of rkSuitMappingOptions(codes,variantObj)){
+      const rackPool=[...(rack||[])];
+      const pull=(pred,need)=>{
+        let f=0;const r=[];
+        for(const t of rackPool){if(f<need&&pred(t)){f++;}else r.push(t);}
+        rackPool.length=0;rackPool.push(...r);
+        return f;
+      };
+      const groupStatus=[];
+      let held=0,total=0,completedGroups=0;
+      groups.forEach((g,gi)=>{
+        const cc=cardColors[gi]||"K";
+        const pred=makeGroupPredicate(g,cc,suitMap,groups,gi,cardColors,variantObj);
+        const need=g.count;
+        total+=need;
+        const naturalHeld=pull(pred,need);
+        const jokerAllowed=!variantObj.concealed&&g.type!=="single"&&g.type!=="pair";
+        const jokerHeld=jokerAllowed?pull(t=>t.t==="j",need-naturalHeld):0;
+        const totalHeld=naturalHeld+jokerHeld;
+        held+=totalHeld;
+        const gap=need-totalHeld;
+        if(gap<=0)completedGroups++;
+        const passedMatching=allPassed.filter(t=>pred(t));
+        const passedRounds=[...new Set(passedMatching.map(t=>t.roundName))];
+        groupStatus.push({g,gi,cc,need,totalHeld,naturalHeld,jokerHeld,gap,passedMatching,passedRounds,resolvedSuit:suitMap?.[cc]||null,jokerAllowed});
+      });
+      const pct=total>0?Math.round(held/total*100):0;
+      const candidate={
+        held,total,pct,groups,groupStatus,
+        suitMap:{...suitMap},cardColors,
+        variantLabel:variantObj.variantLabel||variantObj.label,
+        baseLabel:variantObj.baseLabel||handObj.label,
+        labelForDisplay:variantObj.variantLabel||variantObj.label,
+        completedGroups,
+      };
+      candidate.score=rkCoverageScore(candidate);
+      if(!best||candidate.score>best.score)best=candidate;
+    }
   }
-  return best||{held:0,total:0,pct:0,groups,groupStatus:[],suitMap:{},cardColors};
+  return best||{held:0,total:0,pct:0,groups:[],groupStatus:[],suitMap:{},cardColors:[],variantLabel:handObj.label,labelForDisplay:handObj.label};
 }
 function rkEnhancedHandFit(rack,handObj){
   const plan=buildCoveragePlan(rack,handObj,[]);
@@ -10625,7 +10791,10 @@ if(typeof HAND_CATALOG!=="undefined"&&!HAND_CATALOG.__rackle2026ResolverInstalle
   HAND_CATALOG.forEach(h=>{
     const legacy=h.fit;
     h.legacyFit=legacy;
-    h.fit=(rack)=>Math.max(typeof legacy==="function"?legacy(rack):0,rkEnhancedHandFit(rack,h));
+    h.fitDetail=(rack)=>buildCoveragePlan(rack,h,[]);
+    // Use the card-variant resolver as the source of truth. Legacy fit can be
+    // useful for debugging, but it was too broad for suit variants and dragons.
+    h.fit=(rack)=>rkEnhancedHandFit(rack,h);
   });
   HAND_CATALOG.__rackle2026ResolverInstalled=true;
 }
