@@ -6977,7 +6977,7 @@ function MidnightCountdown({dn}){
           <span className="rk-pulse" style={{width:5,height:5,borderRadius:"50%",background:C.jade,display:"inline-block",flexShrink:0}}/>
         )}
         <span style={{fontSize:9,color:mutCol,letterSpacing:2.5,fontWeight:700,fontFamily:F.b}}>
-          {urgent?"⚠ LAST CHANCE":"NEXT DAILY RACKLE"}
+          {urgent?"⚠ LAST CHANCE":"TOMORROW'S RACKLE"}
         </span>
       </div>
 
@@ -8724,11 +8724,127 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <div style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:6}}>IQ LEVELS</div>
           <p style={{fontSize:11,color:C.mut,lineHeight:1.55,margin:"0 0 12px"}}>Each result includes a personalised coach note based on your strongest and weakest subscores.</p>
           {[
-            {range:"90–100",level:"Mahjong Master",color:C.jade,bg:C.jade+"10",note:"Elite read, clean passes, strong rack."},
-            {range:"80–89",level:"Skilled Player",color:C.jade,bg:C.jade+"08",note:"Solid all-round with one area to sharpen."},
-            {range:"70–79",level:"Game Ready",color:"#2460A8",bg:"#2460A810",note:"On the right track — execution needs tightening."},
-            {range:"60–69",level:"Getting There",color:C.gold,bg:C.gold+"10",note:"Right instincts but one dimension is dragging the score."},
-            {range:"<60",level:"Keep Going, Rookie",color:C.cinn,bg:C.cinn+"08",note:"Focus on picking a section before your first pass."},
+             {
+    range: "95–100",
+    level: "Mahjong Master",
+    color: C.jade,
+    bg: C.jade + "12",
+    notes: [
+      "You saw everything. Clean reads and total control.",
+      "Elite Charleston. You dictated the rack from start to finish.",
+      "Nothing got past you — perfect instincts today."
+    ]
+  },
+  {
+    range: "90–94",
+    level: "Table Controller",
+    color: C.jade,
+    bg: C.jade + "10",
+    notes: [
+      "You controlled the flow of the Charleston.",
+      "Strong reads with confident direction throughout.",
+      "You stayed ahead of the rack all game."
+    ]
+  },
+  {
+    range: "85–89",
+    level: "Sharp Player",
+    color: C.jade,
+    bg: C.jade + "08",
+    notes: [
+      "Strong reads with confident passing.",
+      "Clean Charleston with one small edge to unlock.",
+      "You kept strong options alive throughout."
+    ]
+  },
+  {
+    range: "80–84",
+    level: "Confident Reader",
+    color: C.jade,
+    bg: C.jade + "06",
+    notes: [
+      "You played with confidence and direction.",
+      "Good instincts — now tighten a few passes.",
+      "You saw the board clearly most of the way."
+    ]
+  },
+  {
+    range: "75–79",
+    level: "Table Ready",
+    color: "#2460A8",
+    bg: "#2460A810",
+    notes: [
+      "You’re ready for the table — just refine execution.",
+      "Good instincts with room to sharpen.",
+      "Solid direction throughout the Charleston."
+    ]
+  },
+  {
+    range: "70–74",
+    level: "Steady Player",
+    color: "#2460A8",
+    bg: "#2460A808",
+    notes: [
+      "You stayed steady with improving reads.",
+      "A few cleaner decisions unlock more.",
+      "You’re building strong habits."
+    ]
+  },
+  {
+    range: "65–69",
+    level: "Finding Your Flow",
+    color: C.gold,
+    bg: C.gold + "10",
+    notes: [
+      "Your instincts are forming — trust them earlier.",
+      "You had strong ideas — commit with more confidence.",
+      "You’re starting to see the shape."
+    ]
+  },
+  {
+    range: "60–64",
+    level: "Building Rhythm",
+    color: C.gold,
+    bg: C.gold + "08",
+    notes: [
+      "You’re finding rhythm — stay flexible a bit longer.",
+      "The reads are coming together.",
+      "You’re close to cleaner passing."
+    ]
+  },
+  {
+    range: "55–59",
+    level: "Reading the Rack",
+    color: C.gold,
+    bg: C.gold + "06",
+    notes: [
+      "You’re starting to read the rack better.",
+      "Try narrowing your direction earlier.",
+      "The instincts are building."
+    ]
+  },
+  {
+    range: "50–54",
+    level: "Warming Up",
+    color: C.cinn,
+    bg: C.cinn + "10",
+    notes: [
+      "You’re getting into the flow of the Charleston.",
+      "Focus on simplifying early decisions.",
+      "You’re building your base."
+    ]
+  },
+  {
+    range: "<50",
+    level: "Feeling the Rack",
+    color: C.cinn,
+    bg: C.cinn + "08",
+    notes: [
+      "Start by picking a direction early.",
+      "Let the rack guide your decisions.",
+      "Try not to hold every option."
+    ];
+  }
           ].map((l,i)=>(
             <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 10px",borderRadius:8,background:l.bg,marginBottom:i<4?4:0}}>
               <div>
