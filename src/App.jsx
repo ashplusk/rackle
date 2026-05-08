@@ -8666,7 +8666,11 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
       {dDone&&(
         <div style={{fontSize:11,color:C.mut,textAlign:"center",margin:"8px 0 4px",lineHeight:1.4}}>
-          {globalEntries?.length?`${globalEntries.length} players played today${globalEntries[0]?.iqScore?` · Top score ${globalEntries[0].iqScore}`:""}`:"Same hand. Every player. Who read it best?"}
+          {ds?.total
+            ? `${ds.total} players played today${ds.max?` · Top score ${ds.max}`:""}`
+            : clubPlayers
+              ? `${clubPlayers} from your club already played`
+              : "Same hand. Every player. Who read it best?"}
         </div>
       )}
 
