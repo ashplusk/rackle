@@ -7167,7 +7167,6 @@ function ClubCodeEntry({setScreen}){
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:8}}>{savedClub?"YOUR CLUB · TODAY":"JOIN YOUR CLUB"}</div>
           <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.2,marginBottom:8}}>{savedClub?savedClub.name:"Club Leaderboard"}</div>
-          {savedClub&&clubStats?.myRank>1&&clubStats.topName&&<div style={{fontSize:11,color:C.mut,lineHeight:1.45,marginBottom:10}}>1 player ahead of you today, {clubStats.topName?.split(" ")[0]}</div>}
           {savedClub&&clubStats?.myRank===1&&<div style={{fontSize:11,color:C.jade,lineHeight:1.45,marginBottom:10,fontWeight:700}}>You're leading your club today 🔥</div>}
           {/* Live stat pills for club members */}
           {savedClub&&clubStats?(
@@ -7271,7 +7270,6 @@ function GlobalLeaderboardPill({setScreen}){
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:9,color:"#2460A8",letterSpacing:1.5,fontWeight:700,marginBottom:8}}>🌍 GLOBAL · DAY #{dn}</div>
           <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.2,marginBottom:8}}>Rackle Leaderboard</div>
-          {hasData&&myRank>1&&entries[0]?.name&&<div style={{fontSize:11,color:C.mut,lineHeight:1.45,marginBottom:10}}>1 player ahead of you today, {entries[0].name?.split(" ")[0]}</div>}
           {hasData&&myRank===1&&<div style={{fontSize:11,color:C.jade,lineHeight:1.45,marginBottom:10,fontWeight:700}}>You're leading today 🔥</div>}
           {/* Live stat pills */}
           {hasData?(
@@ -8176,7 +8174,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         const hasProfile=!!(profile&&profile.nickname);
         return(
           <div style={{display:"flex",alignItems:"center",justifyContent:"flex-end",marginBottom:0,marginTop:8,position:"relative"}}>
-            <div style={{flex:1}}><Statspill streak={streak} rounds={rounds} bestIQ={bestIQ} streakBadge={streakBadge}/></div>
+            <div style={{flex:1}}/>
             {/* Hamburger */}
             <button
               onClick={()=>setMenuOpen(o=>!o)}
@@ -8380,7 +8378,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
                     style={{width:"100%",display:"flex",alignItems:"center",gap:10,padding:"11px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left",minHeight:44}}>
                     <div style={{width:32,height:32,borderRadius:9,background:`linear-gradient(135deg,${C.gold}30,${C.gold}18)`,border:`1px solid ${C.gold}40`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>🔥</div>
                     <div style={{flex:1,minWidth:0}}>
-                      <div style={{fontSize:13,fontWeight:700,color:"#5C3D00",fontFamily:F.b,lineHeight:1.35,letterSpacing:-0.1,whiteSpace:"normal",overflow:"visible",textOverflow:"clip"}}>
+                      <div style={{fontSize:12,fontWeight:700,color:"#5C3D00",fontFamily:F.b,lineHeight:1.35,letterSpacing:-0.1,whiteSpace:"normal",overflow:"visible",textOverflow:"clip"}}>
                         {(()=>{
                           const n=firstName?` ${firstName}`:"";
                           if(streak===1){
