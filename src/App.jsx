@@ -48,6 +48,10 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 
 @keyframes rkLiveDot{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.32);opacity:1}}
 .rk-live-dot{animation:rkLiveDot 2.6s ease-in-out infinite}
+@keyframes rkLiveHalo{0%,100%{box-shadow:0 0 0 0 rgba(76,217,135,.24);transform:scale(1)}50%{box-shadow:0 0 0 7px rgba(76,217,135,0);transform:scale(1.08)}}
+.rk-live-orb{animation:rkLiveHalo 2.4s ease-in-out infinite}
+@keyframes rkHeroLift{0%,100%{filter:brightness(1)}50%{filter:brightness(1.08)}}
+.rk-hero-bright{animation:rkHeroLift 8s ease-in-out infinite}
 .rk-tap-card{transition:transform .18s ease, box-shadow .18s ease}
 .rk-tap-card:active{transform:scale(.992)}
 @keyframes rkGoldSweep{0%{transform:translateX(-120%);opacity:0}35%{opacity:.45}100%{transform:translateX(120%);opacity:0}}
@@ -8501,30 +8505,31 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
   ].filter(Boolean);
 
   return(
-    <button onClick={onPlay} aria-label={`Play Daily Rackle challenge number ${dn}`} className="rk-in rk-hero-live rk-tap-card rk-sweep" style={{
+    <button onClick={onPlay} aria-label={`Play Daily Rackle challenge number ${dn}`} className="rk-in rk-hero-live rk-hero-bright rk-tap-card rk-sweep" style={{
       width:"100%",border:"none",cursor:"pointer",textAlign:"left",borderRadius:22,overflow:"hidden",padding:0,
-      background:`linear-gradient(150deg,${C.hero1} 0%,${C.hero2} 46%,#0F5C39 65%,${C.hero3} 100%)`,
-      color:"#fff",boxShadow:"0 12px 42px rgba(6,43,24,0.26)",marginBottom:20,position:"relative"
+      background:`linear-gradient(150deg,#07351F 0%,#0F5F3A 43%,#177549 68%,#07301B 100%)`,
+      color:"#fff",boxShadow:"0 16px 46px rgba(6,43,24,0.30),0 0 0 1px rgba(201,168,76,.10)",marginBottom:20,position:"relative"
     }}>
-      <div aria-hidden style={{position:"absolute",inset:0,background:"radial-gradient(circle at 72% 18%,rgba(201,168,76,.14),transparent 28%),radial-gradient(circle at 18% 86%,rgba(255,255,255,.06),transparent 30%)",pointerEvents:"none"}}/>
-      <div aria-hidden style={{position:"absolute",right:-24,top:-28,fontSize:140,opacity:0.055,lineHeight:1,transform:"rotate(12deg)",pointerEvents:"none"}}>🀄</div>
-      <div aria-hidden style={{position:"absolute",left:-36,bottom:-30,fontSize:110,opacity:0.04,lineHeight:1,transform:"rotate(-10deg)",pointerEvents:"none"}}>🀄</div>
+      <div aria-hidden style={{position:"absolute",inset:0,background:"radial-gradient(circle at 76% 18%,rgba(229,204,123,.20),transparent 30%),radial-gradient(circle at 18% 86%,rgba(76,217,135,.12),transparent 32%),linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,0))",pointerEvents:"none"}}/>
+      <div aria-hidden style={{position:"absolute",right:-24,top:-28,fontSize:140,opacity:0.042,lineHeight:1,transform:"rotate(12deg)",pointerEvents:"none"}}>🀄</div>
+      <div aria-hidden style={{position:"absolute",left:-36,bottom:-30,fontSize:110,opacity:0.032,lineHeight:1,transform:"rotate(-10deg)",pointerEvents:"none"}}>🀄</div>
 
       <div style={{position:"relative",padding:"20px 18px 17px"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,marginBottom:16}}>
-          <div className="rk-soft-glow" style={{display:"inline-flex",alignItems:"center",gap:7,background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.15)",borderRadius:999,padding:"5px 11px"}}>
-            <span className="rk-pulse" style={{width:7,height:7,borderRadius:99,background:C.gilt,display:"inline-block"}}/>
-            <span style={{fontSize:9,letterSpacing:2,fontWeight:800,color:"rgba(255,255,255,0.78)"}}>DAILY RACKLE · #{dn}</span>
+          <div className="rk-soft-glow" style={{display:"inline-flex",alignItems:"center",gap:8,background:"rgba(255,255,255,0.13)",border:"1px solid rgba(255,255,255,0.20)",borderRadius:999,padding:"6px 12px",boxShadow:"inset 0 1px 0 rgba(255,255,255,.12)"}}>
+            <span className="rk-live-orb" style={{width:9,height:9,borderRadius:99,background:"#4CD987",display:"inline-block",boxShadow:"0 0 10px rgba(76,217,135,.55)"}}/>
+            <span style={{fontSize:9,letterSpacing:2,fontWeight:900,color:"rgba(255,255,255,0.84)"}}>DAILY RACKLE · #{dn}</span>
+            <span style={{fontSize:7,letterSpacing:1.5,fontWeight:900,color:"#082D1A",background:"#4CD987",borderRadius:999,padding:"3px 6px",lineHeight:1}}>LIVE</span>
           </div>
-          <div style={{fontSize:10,color:"rgba(255,255,255,0.58)",fontWeight:800}}>new rack in {reset}</div>
+          <div style={{fontSize:10,color:"rgba(255,255,255,0.72)",fontWeight:900}}>new rack in {reset}</div>
         </div>
 
         <div style={{display:"flex",alignItems:"center",gap:16}}>
           <div style={{flex:1,minWidth:0}}>
-            <div style={{fontFamily:F.d,fontSize:26,fontWeight:900,letterSpacing:-0.85,lineHeight:1.02,marginBottom:11}}>
-              Read the rack.<br/><span style={{color:C.gilt}}>Claim the table.</span>
+            <div style={{fontFamily:F.d,fontSize:26,fontWeight:900,letterSpacing:-0.85,lineHeight:1.02,marginBottom:11,textShadow:"0 1px 0 rgba(0,0,0,.08)"}}>
+              Read the rack.<br/><span style={{color:"#E0C263"}}>Claim the table.</span>
             </div>
-            <div style={{fontSize:12,color:"rgba(255,255,255,0.70)",lineHeight:1.5,maxWidth:280}}>
+            <div style={{fontSize:12,color:"rgba(255,255,255,0.78)",lineHeight:1.5,maxWidth:280}}>
               Same daily Charleston. One score to beat.
             </div>
           </div>
@@ -8539,7 +8544,7 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
               display:"flex",
               alignItems:"center",
               justifyContent:"center",
-              boxShadow:"0 10px 24px rgba(0,0,0,0.18)",
+              boxShadow:"0 12px 28px rgba(0,0,0,0.20), inset 0 1px 0 rgba(255,255,255,.7)",
               border:"1px solid rgba(255,255,255,0.55)",
               cursor:"pointer",
               zIndex:3,
@@ -8563,18 +8568,18 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
 
         <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:7,marginTop:18}}>
           {statCards.map((c,i)=>(
-            <div key={i} className="rk-count-live" style={{background:"rgba(255,255,255,0.08)",border:"1px solid rgba(255,255,255,0.12)",borderRadius:12,padding:"9px 10px",minHeight:58}}>
-              <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:c.tone==="gold"?C.gilt:"#fff",lineHeight:1}}>{c.value}</div>
-              <div style={{fontSize:8,color:"rgba(255,255,255,0.48)",letterSpacing:1.1,fontWeight:800,marginTop:5,textTransform:"uppercase",whiteSpace:"nowrap"}}>{c.label}</div>
+            <div key={i} className="rk-count-live" style={{background:"rgba(255,255,255,0.105)",border:"1px solid rgba(255,255,255,0.16)",borderRadius:12,padding:"10px 10px",minHeight:60,boxShadow:"inset 0 1px 0 rgba(255,255,255,.08)"}}>
+              <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:c.tone==="gold"?"#E0C263":"#fff",lineHeight:1}}>{c.value}</div>
+              <div style={{fontSize:8,color:"rgba(255,255,255,0.58)",letterSpacing:1.1,fontWeight:800,marginTop:5,textTransform:"uppercase",whiteSpace:"nowrap"}}>{c.label}</div>
             </div>
           ))}
         </div>
 
-        <div style={{marginTop:9,background:"rgba(201,168,76,0.11)",border:"1px solid rgba(201,168,76,0.24)",borderRadius:14,padding:"10px 12px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:10}}>
+        <div style={{marginTop:9,background:"linear-gradient(135deg,rgba(201,168,76,0.16),rgba(76,217,135,0.08))",border:"1px solid rgba(224,194,99,0.34)",borderRadius:14,padding:"10px 12px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:10}}>
           <div style={{minWidth:0}}>
             <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:3}}>
-              <span style={{width:7,height:7,borderRadius:99,background:C.gilt,display:"inline-block",flexShrink:0}}/>
-              <div style={{fontSize:8,color:"rgba(255,255,255,0.50)",fontWeight:900,letterSpacing:1.5}}>TOMORROW</div>
+              <span style={{width:7,height:7,borderRadius:99,background:"#E0C263",display:"inline-block",flexShrink:0,boxShadow:"0 0 10px rgba(224,194,99,.35)"}}/>
+              <div style={{fontSize:8,color:"rgba(255,255,255,0.62)",fontWeight:900,letterSpacing:1.5}}>TOMORROW</div>
             </div>
             <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:"#fff",lineHeight:1.15,letterSpacing:-0.1,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{tomorrowHint}</div>
           </div>
