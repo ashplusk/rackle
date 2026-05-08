@@ -167,7 +167,7 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
           <div style={{fontFamily:SERIF,fontSize:56,fontWeight:700,color:lvlCol,lineHeight:1,letterSpacing:-2}}>{iq.totalScore}</div>
           <div style={{paddingBottom:6}}>
             <div style={{fontFamily:SERIF,fontSize:14,fontWeight:700,color:"#fff",lineHeight:1.2}}>{iq.level}</div>
-            {iq.styleName&&<div style={{fontSize:9,color:"rgba(255,255,255,0.5)",fontFamily:SANS,marginTop:6}}>{iq.styleName}</div>}
+            {iq.styleName&&<div style={{fontSize:9,color:"rgba(255,255,255,0.5)",fontFamily:SANS,marginTop:8,letterSpacing:0.2}}>{iq.styleName}</div>}
             {playerName&&<div style={{fontSize:10,color:"rgba(255,255,255,0.4)",fontFamily:SANS,marginTop:3}}>{playerName}</div>}
           </div>
         </div>
@@ -2912,19 +2912,19 @@ function iqTileInsights(finalRack,startingRack,passedTilesByRound,sectionId){
 
 function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScore,brokenPairsCount,sectionId){
   const strengths=[],weaknesses=[];
-  if(directionScore>=35)strengths.push("Committed to your section early and built around it.");
-  if(tileStrengthScore>=20)strengths.push("Your final rack had strong structural tiles.");
-  if(passQualityScore>=20)strengths.push("Clean passing decisions throughout the Charleston.");
-  if(timingScore>=9)strengths.push("Good decision-making pace — not too fast, not too slow.");
+  if(directionScore>=35)strengths.push("You found a clear lane early.");
+  if(tileStrengthScore>=20)strengths.push("Your final rack had good shape.");
+  if(passQualityScore>=20)strengths.push("Your passes were clean.");
+  if(timingScore>=9)strengths.push("Good pace. You gave yourself time to read.");
 
-  if(directionScore<20)weaknesses.push("Your rack stayed scattered without committing to one section.");
-  if(tileStrengthScore<=10)weaknesses.push("Weak structure in the final rack — tiles didn't support each other well.");
-  if(passQualityScore<=12)weaknesses.push("Some risky passing decisions gave away tiles your section needed.");
+  if(directionScore<20)weaknesses.push("Your rack stayed a little too open.");
+  if(tileStrengthScore<=10)weaknesses.push("Your final rack needed more pairs or groups.");
+  if(passQualityScore<=12)weaknesses.push("A few passes gave away useful tiles.");
   // Section-specific pair feedback — in S&P, breaking triples into pairs is good
   if(brokenPairsCount>0&&sectionId!=="sp"){
-    weaknesses.push(`Broke ${brokenPairsCount} pair${brokenPairsCount>1?"s":""} during the Charleston — protect your pairs.`);
+    weaknesses.push(`You broke ${brokenPairsCount} pair${brokenPairsCount>1?"s":""}. Protect pairs when they support your lane.`);
   }
-  if(timingScore<=5)weaknesses.push("Pace was off — aim for 10–25 seconds per pass. Either too fast (not enough analysis) or too slow (second-guessing a good first read).");
+  if(timingScore<=5)weaknesses.push("Your pace was a little off. Take a beat, then trust the read.");
 
   const uniqueStr=[...new Set(strengths)].slice(0,2);
   const uniqueWk=[...new Set(weaknesses)].slice(0,2);
@@ -2934,52 +2934,52 @@ function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScor
 
   // Section-specific coach notes
   if(sectionId==="sp"){
-    if(directionScore<20&&passQualityScore<=12)coachNote="S&P is fully concealed — you can't expose tiles. Focus on building pairs and getting rid of jokers and triples early.";
-    else if(passQualityScore<=12)coachNote="You were playing S&P, but passed tiles that would have been good pairs. For S&P: hold pairs, pass jokers, pass triples.";
-    else if(directionScore<20)coachNote="Your rack had too many singles. S&P needs 6+ clean pairs to win — consolidate toward fewer, deeper pairs.";
-    else coachNote="S&P is a discipline game. Keep holding pairs, keep releasing jokers, and you'll complete it.";
+    if(directionScore<20&&passQualityScore<=12)coachNote="S&P is all about clean pairs. Keep pairs together and move off jokers early.";
+    else if(passQualityScore<=12)coachNote="For S&P, protect pairs first. Jokers and triples usually get in the way.";
+    else if(directionScore<20)coachNote="You had too many singles. Look for clean pairs earlier.";
+    else coachNote="S&P rewards patience. Hold pairs and keep the rack clean.";
   } else if(sectionId==="q"){
-    if(directionScore<20)coachNote="Quints without 2 jokers is nearly impossible. Identify joker count in deal — if you have fewer than 2, pivot immediately.";
-    else coachNote="With 2 jokers, focus entirely on stacking 3-4 of one specific tile. Spread is your enemy in Quints.";
+    if(directionScore<20)coachNote="Quints needs jokers. Without two, look for a cleaner lane.";
+    else coachNote="With two jokers, pick one tile and stack it hard.";
   } else if(sectionId==="cr"){
-    if(directionScore<20)coachNote="Consecutive Run isn't about long strings of singles — it's pungs and kongs within a 3-4 number window. Identify your window by pass 1.";
-    else if(tileStrengthScore<=10)coachNote="You had the right window, but not enough group depth. Pass tiles outside the window ruthlessly to deepen groups within it.";
-    else coachNote="Good CR instincts. Next level: pick the tightest window possible (3-wide > 5-wide) for more hand options.";
+    if(directionScore<20)coachNote="Consecutive Run wants a tight number window. Pick it early.";
+    else if(tileStrengthScore<=10)coachNote="You had the right window. Now deepen the groups inside it.";
+    else coachNote="Good CR instincts. A tighter window makes the rack stronger.";
   } else if(sectionId==="wd"){
-    if(directionScore<20)coachNote="W&D needs 7+ honor tiles. Pass all number tiles in round 1 unless you have a complete kong of 1-4.";
-    else coachNote="Winds are your backbone — 7 of 8 hands use them. Stack same-wind groups before dragons.";
+    if(directionScore<20)coachNote="Winds and Dragons needs honors. Keep winds and dragons front and center.";
+    else coachNote="Winds are the backbone. Stack matching winds before chasing extras.";
   } else if(sectionId==="2026"){
-    if(directionScore<20)coachNote="2026 needs both 2s and 6s — they appear in all 4 hands. Soap (White Dragon) is wild-suit zero. These three tiles are your filter.";
-    else coachNote="Strong 2026 read. Soap (White Dragon) makes it easier — it plays as any suit, so hold it whenever you're building this section.";
+    if(directionScore<20)coachNote="For 2026, 2s, 6s, and Soap are the core. Filter around those.";
+    else coachNote="Strong 2026 read. Soap gives you flexibility, so protect it.";
   } else if(directionScore<20&&passQualityScore<=12){
-    coachNote="Your passing and direction both need attention. The key habit: identify your strongest group before your very first pass, then protect it ruthlessly.";
+    coachNote="Start with your strongest group. Then protect it through every pass.";
   } else if(passQualityScore<=12){
-    coachNote="You were pointing in the right direction, but your passing decisions cost you. Focus on what leaves your hand, not just what stays.";
+    coachNote="Your lane was right. The next jump is cleaner passing.";
   } else if(directionScore<20){
-    coachNote="Your passing was disciplined, but the rack didn't commit to a clear path. Try to name your section by the second pass and filter from there.";
+    coachNote="Your passes were disciplined. Now name the section earlier.";
   } else if(brokenPairsCount>0){
-    coachNote="Watch your pairs. A pair broken early often can't be rebuilt — they're structural anchors for most hands.";
+    coachNote="Watch your pairs. They are often the rack’s anchors.";
   } else {
-    coachNote="Push higher by paying attention to your middle tiles — the ones that could serve two sections. Committing early to one path unlocks a sharper Charleston.";
+    coachNote="Push higher by spotting flexible tiles earlier, then choosing a lane.";
   }
 
   // Section-specific tryNextTime tips
   const secTips={
-    "2026":"Hold every 2, 6, and Soap you see. In round 1, pass all odd numbers except via a Soap or Dragon connection.",
-    "2468":"Pass odds immediately in round 1. Your 6s are the anchor — never pass a 6 in any round.",
-    "369":"6 is in every 369 hand — never pass it. Round 1: pass everything except 3s, 6s, 9s, jokers, and flowers.",
-    "13579":"5 and 3 appear in every 13579 hand — prioritize them above all other odds. Pass all even tiles in round 1 without hesitation.",
-    "cr":"Identify your 3-4 number window by your first pass. Then pass every tile outside that window, even if it hurts.",
-    "wd":"Pass every number tile round 1 unless you have 4 of one number (1-4 only). Winds first, then dragons.",
-    "aln":"Pick your number immediately. Pass everything else — every round — until you have 8+ of that one number.",
-    "q":"Count jokers first. If you have 2+, pick your target tile and stack it. If fewer than 2, pivot to another section.",
-    "sp":"Pass jokers immediately — they're worthless here. Hold every pair. Break no pairs to chase anything.",
+    "2026":"Keep 2s, 6s, and Soap. Pass odd tiles unless they clearly connect.",
+    "2468":"Keep the even core. Protect 6s whenever you see them.",
+    "369":"For 369, protect 6s first. Then build around 3s and 9s.",
+    "13579":"For 13579, 5s and 3s are your best anchors. Move off evens early.",
+    "cr":"Pick your number window early. Then keep feeding that shape.",
+    "wd":"Winds first, dragons second. Numbers need a very good reason to stay.",
+    "aln":"Pick one number early. Keep stacking it and let the rest go.",
+    "q":"Count jokers first. Two or more means Quints is live.",
+    "sp":"Hold pairs. Avoid chasing loose singles.",
   };
   const scores=[
-    {name:"direction",ratio:directionScore/40,tip:secTips[sectionId]||"Before your first pass, identify the section your rack most favors. Everything else follows from that read."},
-    {name:"tiles",ratio:tileStrengthScore/25,tip:"Before passing any tile, ask: does it support my main group, a pair, or a window? If no to all three, it goes."},
-    {name:"passes",ratio:passQualityScore/25,tip:"Before each pass, check: does this tile connect to anything I'm keeping? Tiles that connect to nothing are the ones to pass."},
-    {name:"timing",ratio:timingScore/10,tip:"Aim for 10–25 seconds per pass — the real-world average is about 17s. Enough to read the rack without second-guessing your first instinct."},
+    {name:"direction",ratio:directionScore/40,tip:secTips[sectionId]||"Before the first pass, name the lane your rack likes best."},
+    {name:"tiles",ratio:tileStrengthScore/25,tip:"Before passing, ask if the tile connects to your lane. If not, let it go."},
+    {name:"passes",ratio:passQualityScore/25,tip:"Before each pass, keep connected tiles and release loose ones."},
+    {name:"timing",ratio:timingScore/10,tip:"Take enough time to read the rack, then trust your first clean instinct."},
   ];
   const worst=scores.sort((a,b)=>a.ratio-b.ratio)[0];
   tryNextTime=worst.tip;
@@ -5098,7 +5098,7 @@ function ScoreBar({label,score,max,note}){
         <div className="rk-bar" style={{height:"100%",borderRadius:3,background:`linear-gradient(90deg,${C.jade},#22A865)`,
           "--w":`${pct}%`,width:`${pct}%`}}/>
       </div>
-      {note&&<div style={{fontSize:10,color:C.mut,lineHeight:1.4}}>{note}</div>}
+      {note&&<div style={{fontSize:10.5,color:C.mut,lineHeight:1.45}}>{note}</div>}
     </div>
   );
 }
@@ -5392,6 +5392,40 @@ function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
   );
 }
 
+// ─── FRIENDLY SCORE COPY — keep score output casual, not analytical ───────────
+function friendlyScoreLabel(label){
+  return ({
+    "Direction":"Rack Read",
+    "Pass Quality":"Passes",
+    "Tile Strength":"Hand Shape",
+    "Timing":"Pace",
+  })[label]||label;
+}
+function friendlyScoreNote(label,v,max,sectionId){
+  const r=max? v/max : 0;
+  if(label==="Direction"){
+    if(r>=0.82)return "Strong read. Your rack had a clear lane.";
+    if(r>=0.58)return "Good read. A little more focus lifts this.";
+    return "Pick the lane earlier. Your tiles were still spread out.";
+  }
+  if(label==="Pass Quality"){
+    if(r>=0.82)return "Clean passes. You protected the right tiles.";
+    if(r>=0.58)return "Mostly solid. One or two passes cost you.";
+    return "Slow down before each pass. Keep what connects.";
+  }
+  if(label==="Tile Strength"){
+    if(r>=0.82)return "Strong shape. Your tiles worked together.";
+    if(r>=0.58)return "Decent shape. Build deeper groups next time.";
+    return "Too many loose tiles. Look for pairs and groups.";
+  }
+  if(label==="Timing"){
+    if(r>=0.82)return "Good pace. Quick, but still thoughtful.";
+    if(r>=0.58)return "Steady pace. Trust the first clean read.";
+    return "Take a beat. Better reads come with a little pause.";
+  }
+  return "Keep sharpening this part of your Charleston.";
+}
+
 // ─── DAILY SCORECARD — simplified, no tabs, no coach note ─────────────────────
 function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onHome,onPractice,onCoachMode,setScreen}){
   const [dailyStats,setDailyStats]=useState(null);
@@ -5438,7 +5472,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <div style={{flex:1}}>
           <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:800,marginBottom:2}}>YOUR STYLE</div>
           <div style={{fontSize:13,fontWeight:900,color:C.ink,lineHeight:1.2}}>{iq.styleName}</div>
-          {iq.styleNote&&<div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:2}}>{iq.styleNote}</div>}
+          {iq.styleNote&&<div style={{fontSize:11,color:C.mut,lineHeight:1.4,marginTop:6}}>{iq.styleNote}</div>}
         </div>
       </div>}
 
@@ -5540,27 +5574,27 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       })()}
 
       {/* ⑤ SCORE BREAKDOWN — collapsible */}
-      <CollapsibleSection label="Your Score" desc="Direction · Pass Quality · Tile Strength · Timing" icon="📊" open={openSec.score} onToggle={()=>toggle("score")} badge={`${iq.totalScore}/100`}>
+      <CollapsibleSection label="Your Score" desc="Rack read · passes · hand shape · pace" icon="🎲" open={openSec.score} onToggle={()=>toggle("score")} badge={`${iq.totalScore}/100`}>
         <div style={{...S.card,marginBottom:8,padding:"12px 14px"}}>
-          <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>SCORE BREAKDOWN</div>
+          <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>HOW YOU PLAYED</div>
           {[
-            {label:"Direction",v:iq.directionScore,max:40,note:iq.directionExplanation},
-            {label:"Pass Quality",v:iq.passQualityScore,max:25},
-            {label:"Tile Strength",v:iq.tileStrengthScore,max:25},
-            {label:"Timing",v:iq.timingScore,max:10,note:iq.timingInsight},
+            {label:"Direction",v:iq.directionScore,max:40,note:friendlyScoreNote("Direction",iq.directionScore,40,chosenSec)},
+            {label:"Pass Quality",v:iq.passQualityScore,max:25,note:friendlyScoreNote("Pass Quality",iq.passQualityScore,25,chosenSec)},
+            {label:"Tile Strength",v:iq.tileStrengthScore,max:25,note:friendlyScoreNote("Tile Strength",iq.tileStrengthScore,25,chosenSec)},
+            {label:"Timing",v:iq.timingScore,max:10,note:friendlyScoreNote("Timing",iq.timingScore,10,chosenSec)},
           ].map(({label,v,max,note},i,arr)=>{
             const pct=Math.round(v/max*100);
             const col=scoreColor(v,max);
             return(
               <div key={label} style={{marginBottom:i<arr.length-1?10:0}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
-                  <span style={{fontSize:11,fontWeight:600,color:C.ink}}>{label}</span>
+                  <span style={{fontSize:11,fontWeight:600,color:C.ink}}>{friendlyScoreLabel(label)}</span>
                   <span style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:col}}>{v}<span style={{fontSize:9,color:C.mut,fontWeight:400}}>/{max}</span></span>
                 </div>
                 <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden",marginBottom:note?3:0}}>
                   <div style={{height:"100%",borderRadius:3,background:`linear-gradient(90deg,${col},${col}CC)`,width:`${pct}%`}}/>
                 </div>
-                {note&&<div style={{fontSize:10,color:C.mut,lineHeight:1.4}}>{note}</div>}
+                {note&&<div style={{fontSize:10.5,color:C.mut,lineHeight:1.45}}>{note}</div>}
               </div>
             );
           })}
@@ -5679,25 +5713,25 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
       })()}
 
       {/* YOUR SCORE — closed, with score badge */}
-      <CollapsibleSection label="Your Score" desc="Direction · Pass Quality · Tile Strength · Timing" icon="📊" open={openSec.score} onToggle={()=>toggle("score")} badge={`${iq.totalScore}/100`}>
+      <CollapsibleSection label="Your Score" desc="Rack read · passes · hand shape · pace" icon="🎲" open={openSec.score} onToggle={()=>toggle("score")} badge={`${iq.totalScore}/100`}>
         <div style={{...S.card,marginBottom:8,padding:"12px 14px"}}>
           {[
-            {label:"Direction",v:iq.directionScore,max:40,note:iq.directionExplanation},
-            {label:"Pass Quality",v:iq.passQualityScore,max:25},
-            {label:"Tile Strength",v:iq.tileStrengthScore,max:25},
-            {label:"Timing",v:iq.timingScore,max:10,note:iq.timingInsight},
+            {label:"Direction",v:iq.directionScore,max:40,note:friendlyScoreNote("Direction",iq.directionScore,40,chosenSec)},
+            {label:"Pass Quality",v:iq.passQualityScore,max:25,note:friendlyScoreNote("Pass Quality",iq.passQualityScore,25,chosenSec)},
+            {label:"Tile Strength",v:iq.tileStrengthScore,max:25,note:friendlyScoreNote("Tile Strength",iq.tileStrengthScore,25,chosenSec)},
+            {label:"Timing",v:iq.timingScore,max:10,note:friendlyScoreNote("Timing",iq.timingScore,10,chosenSec)},
           ].map(({label,v,max,note},i,arr)=>{
             const col=scoreColor(v,max);
             return(
               <div key={label} style={{marginBottom:i<arr.length-1?10:0}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
-                  <span style={{fontSize:11,fontWeight:600,color:C.ink}}>{label}</span>
+                  <span style={{fontSize:11,fontWeight:600,color:C.ink}}>{friendlyScoreLabel(label)}</span>
                   <span style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:col}}>{v}<span style={{fontSize:9,color:C.mut,fontWeight:400}}>/{max}</span></span>
                 </div>
                 <div style={{height:5,borderRadius:3,background:C.bdr,overflow:"hidden",marginBottom:note?3:0}}>
                   <div style={{height:"100%",borderRadius:3,background:`linear-gradient(90deg,${col},${col}CC)`,width:`${Math.round(v/max*100)}%`}}/>
                 </div>
-                {note&&<div style={{fontSize:10,color:C.mut,lineHeight:1.4}}>{note}</div>}
+                {note&&<div style={{fontSize:10.5,color:C.mut,lineHeight:1.45}}>{note}</div>}
               </div>
             );
           })}
@@ -8609,7 +8643,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
                 <div style={{fontFamily:F.d,fontSize:52,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,textShadow:`0 2px 16px rgba(176,138,53,0.45)`,marginBottom:6}}>{iq.totalScore}</div>
                 <div style={{width:40,height:1.5,background:`linear-gradient(90deg,transparent,${C.gilt},transparent)`,margin:"12px auto 12px"}}/>
                 <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:"#fff",marginBottom:8,letterSpacing:-0.3}}>{iq.level}</div>
-                {iq.styleName&&<div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"5px 12px",fontSize:11,color:C.gilt,fontWeight:900,marginBottom:14,letterSpacing:0.2}}>{iq.styleName}</div>}
+                {iq.styleName&&<div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"5px 12px",fontSize:11,color:C.gilt,fontWeight:900,marginTop:4,marginBottom:14,letterSpacing:0.2}}>{iq.styleName}</div>}
                 <div style={{fontSize:11,color:"rgba(255,255,255,0.6)",marginBottom:16,lineHeight:1.55,maxWidth:260,margin:"0 auto 16px"}}>{iq.levelExplanation}</div>
               </>}
               {!iq&&dRes&&<>
