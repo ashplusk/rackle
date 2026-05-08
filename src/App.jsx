@@ -13,7 +13,8 @@ const C={bg:"#F8F4EE",bg2:"#EDE7DA",ink:"#1A1410",mut:"#6B6157",jade:"#176B42",g
 const F={d:"'Fraunces',Georgia,serif",b:"'Nunito','Segoe UI',sans-serif"};
 const CSS=`
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:#F8F4EE}
+html,body{margin:0;padding:0;background:#F8F4EE;overflow-x:hidden}
+#root{overflow-x:hidden}
 @keyframes rkIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 .rk-in{animation:rkIn .25s ease}
 @keyframes rkFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
@@ -38,7 +39,7 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
-  app:{fontFamily:F.b,background:C.bg,minHeight:"100vh",color:C.ink,width:"100%",maxWidth:560,borderLeft:`1px solid ${C.bdr}`,borderRight:`1px solid ${C.bdr}`},
+  app:{fontFamily:F.b,background:C.bg,minHeight:"100vh",color:C.ink,width:"100%",maxWidth:560,borderLeft:`1px solid ${C.bdr}`,borderRight:`1px solid ${C.bdr}`,overflowX:"hidden"},
   pg:{padding:"10px 16px",paddingBottom:36},
   pill:{background:C.bg2,borderRadius:12,padding:"8px 6px",textAlign:"center",border:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"center",gap:6},
   card:{background:"#FDFAF6",border:`1px solid ${C.bdr}`,borderRadius:12,padding:14,marginBottom:8},
@@ -4642,35 +4643,52 @@ function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,
     if(best&&best.coveragePct>8)altSecHands.push(best);
   }
 
-  const hasAnything=altSectionHands.length>0||altSecHands.length>0;
-  if(!hasAnything)return null;
+  const lanes=[
+    ...altSectionHands.map(h=>({handObj:h,secId:chosenSec,secObj:chosenSecObj,kicker:"Same section",copy:"Another way this rack could have stayed in the same lane."})),
+    ...altSecHands.map(h=>({handObj:h,secId:h.sec,secObj:h.secObj,kicker:"Another path",copy:"A different section your rack was also hinting at."})),
+  ];
+
+  if(!lanes.length)return null;
 
   return(
-    <div style={{...S.card,marginBottom:8,padding:0,overflow:"hidden"}}>
-      {/* Same-section alternates */}
-      {altSectionHands.map((h,i)=>(
-        <div key={h.label} style={{borderBottom:i<altSectionHands.length-1||altSecHands.length>0?`1px solid ${C.bdr}`:"none",padding:"10px 14px"}}>
-          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}>
-            <div style={{fontSize:8,color:chosenSecObj?.color||C.mut,letterSpacing:1.5,fontWeight:700}}>
-              {chosenSecObj?.icon} {chosenSecObj?.name?.toUpperCase()} · SAME LANE
+    <div style={{marginBottom:8,overflow:"hidden"}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 2px 7px"}}>
+        <div style={{fontSize:10,color:C.mut,fontWeight:800,letterSpacing:0.6}}>Swipe through the table reads</div>
+        {lanes.length>1&&<div style={{fontSize:10,color:C.jade,fontWeight:800}}>Swipe →</div>}
+      </div>
+      <div style={{
+        display:"flex",gap:10,overflowX:"auto",overflowY:"hidden",
+        WebkitOverflowScrolling:"touch",scrollSnapType:"x mandatory",
+        padding:"0 2px 8px",margin:"0 -2px",
+        scrollbarWidth:"none",
+      }}>
+        {lanes.map((lane,i)=>(
+          <div key={`${lane.handObj.label}-${lane.secId}-${i}`} style={{
+            flex:"0 0 88%",maxWidth:360,scrollSnapAlign:"start",
+            background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:16,
+            boxShadow:"0 2px 10px rgba(0,0,0,0.045)",overflow:"hidden",
+          }}>
+            <div style={{padding:"12px 14px 10px",borderBottom:`1px solid ${C.bdr}`,background:"linear-gradient(145deg,#FFFFFF,#FFFCF7)"}}>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:5}}>
+                <div style={{fontSize:8,color:lane.secObj?.color||C.mut,letterSpacing:1.7,fontWeight:900,textTransform:"uppercase"}}>
+                  {lane.secObj?.icon} {lane.kicker}
+                </div>
+                <CoverageChip pct={lane.handObj.coveragePct}/>
+              </div>
+              <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.15,letterSpacing:-0.2}}>{lane.handObj.label}</div>
+              <div style={{fontSize:10.5,color:C.mut,lineHeight:1.45,marginTop:4}}>{lane.copy}</div>
             </div>
-            <CoverageChip pct={h.coveragePct}/>
-          </div>
-          <RackVsHandOverlay hand={hand} handObj={h} passLog={[]} sectionId={chosenSec} handWasInferred={false} secObj={chosenSecObj}/>
-        </div>
-      ))}
-      {/* Cross-section alternates */}
-      {altSecHands.map((h,i)=>(
-        <div key={h.label} style={{borderBottom:i<altSecHands.length-1?`1px solid ${C.bdr}`:"none",padding:"10px 14px"}}>
-          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}>
-            <div style={{fontSize:8,color:h.secObj?.color||C.mut,letterSpacing:1.5,fontWeight:700}}>
-              {h.secObj?.icon} {h.secObj?.name?.toUpperCase()} · ANOTHER LANE
+            <div style={{padding:10,overflow:"hidden"}}>
+              <RackVsHandOverlay hand={hand} handObj={lane.handObj} passLog={[]} sectionId={lane.secId} handWasInferred={false} secObj={lane.secObj}/>
             </div>
-            <CoverageChip pct={h.coveragePct}/>
           </div>
-          <RackVsHandOverlay hand={hand} handObj={h} passLog={[]} sectionId={h.sec} handWasInferred={false} secObj={h.secObj}/>
+        ))}
+      </div>
+      {lanes.length>1&&(
+        <div style={{display:"flex",justifyContent:"center",gap:5,marginTop:1}}>
+          {lanes.map((_,i)=><span key={i} style={{width:5,height:5,borderRadius:3,background:i===0?C.jade:C.bdr,display:"block"}}/>) }
         </div>
-      ))}
+      )}
     </div>
   );
 }
@@ -5379,7 +5397,7 @@ function SortableRack({hand:initialHand}){
         <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700}}>FINAL RACK</div>
         <button onClick={toggle} style={{...S.sortBtn,color:sorted?C.jade:C.mut,borderColor:sorted?C.jade+"40":C.bdr,background:sorted?C.jade+"08":"none"}}>{sorted?"Sorted":"Sort"}</button>
       </div>
-      <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>{rack.map((t,i)=><Ti key={i} t={t}/>)}</div>
+      <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>{rack.map((t,i)=><Ti key={i} t={t}/>)}</div>
     </div>
   );
 }
@@ -5986,9 +6004,9 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
       </div>
 
       {/* Tile-by-tile overlay — each group with its slots */}
-      <div style={{padding:"12px 14px",background:C.bg2,overflowX:"auto"}}>
+      <div style={{padding:"12px 14px",background:C.bg2,overflowX:"hidden"}}>
         <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:8}}>HAND PATTERN vs YOUR RACK</div>
-        <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"flex-end",minWidth:"max-content"}}>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"flex-end",width:"100%",maxWidth:"100%"}}>
           {groupStatus.map((status,gi)=>(
             <div key={gi} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
               <div style={{display:"flex",gap:2}}>
@@ -9617,7 +9635,7 @@ function Game({mode,home,onDone,settings,setScreen}){
               <span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK (13 tiles)</span>
               <div style={{display:"flex",gap:4}}><button disabled style={{...S.sortBtn,opacity:0.25}}>Sort</button><button disabled style={{...S.sortBtn,opacity:0.25}}>📖 2026 Card</button></div>
             </div>
-            <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>
+            <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>
               {hand.map((t,i)=>{const isFlipped=flipped.includes(i);return isFlipped?<div key={i} className="rk-flip"><Ti t={t} large={large}/></div>:<div key={i} style={{width:large?44:37,height:large?60:50,borderRadius:7,background:`linear-gradient(160deg,${C.jade}DD,#145C35)`,border:`1.5px solid ${C.jade}50`,flexShrink:0,boxShadow:`0 3px 10px rgba(27,125,78,0.3)`,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:14,opacity:0.2}}>🀄</span></div>;})}
             </div>
           </div>
@@ -9661,7 +9679,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           <p style={{fontSize:12,color:C.mut,textAlign:"center",marginBottom:10}}>Select 1–3 tiles to pass across</p>
           {jw&&<JW/>}
           <div style={S.card}><RH hand={hand} onSort={()=>setHand(sortHand(hand))}/>
-            <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} dim={t.t==="j"} onClick={()=>cTog(i)} large={large}/>)}</div></div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} dim={t.t==="j"} onClick={()=>cTog(i)} large={large}/>)}</div></div>
           <div aria-live="polite" style={{textAlign:"center",fontSize:13,color:sel.length>0?C.jade:C.mut,fontWeight:700,margin:"4px 0"}}>{sel.length}/3 selected</div>
           <button onClick={()=>{haptic(40);if(sel.length<1){setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");return;}const pt=sel.map(i=>hand[i]);setPassed(p=>[...p,...pt]);const rem=hand.filter((_,i)=>!sel.includes(i));const safe=pool.filter(t=>t.t!=="j");const scored2=safe.map((t,idx)=>({t,idx,score:oppDiscardScore(t,oppSectionRef.current)}));scored2.sort((a,b)=>b.score-a.score);const inc=scored2.slice(0,sel.length).map(x=>x.t);const inSet=new Set(scored2.slice(0,sel.length).map(x=>x.idx));setPool(safe.filter((_,i)=>!inSet.has(i)));setHand([...rem,...inc]);const cpNowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);const cpPassEl=cpNowEl-lastPassElRef.current;lastPassElRef.current=cpNowEl;setPassLog(pl=>[...pl,{label:"Courtesy Pass",roundName:"Courtesy Pass",out:pt,in:inc,blind:false,secs:cpPassEl}]);setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");}} style={{...S.passBtn}}>{sel.length<1?"Skip →":`Pass ${sel.length} across →`}</button>
         </>
@@ -9737,7 +9755,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           {jw&&<JW/>}
           <div style={S.card}>
             <RH hand={hand} onSort={()=>setHand(sortHand(hand))} showRef={showRef} onRef={()=>setShowRef(!showRef)}/>
-            <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} isNew={newIdx.includes(i)} dim={t.t==="j"&&!hasNew} onClick={!hasNew?()=>toggle(i):undefined} large={large}/>)}</div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} isNew={newIdx.includes(i)} dim={t.t==="j"&&!hasNew} onClick={!hasNew?()=>toggle(i):undefined} large={large}/>)}</div>
           </div>
           {showRef&&<CG onClose={()=>setShowRef(false)}/>}
           {!hasNew&&<>
@@ -9858,7 +9876,7 @@ function Ask({icon,title,desc,hand,timer,onNo,onYes,onSort,large}){
   return(<div style={S.pg} className="rk-pg"><RackleHeader onBack={onNo}/>{timer&&<div style={{textAlign:"center",marginBottom:4}}><span style={{fontSize:12,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {timer}</span></div>}<div style={{textAlign:"center",marginBottom:12}}><div aria-hidden="true" style={{fontSize:24,marginBottom:6}}>{icon}</div><h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 4px"}}>{title}</h2><p style={{fontSize:12,color:C.mut}}>{desc}</p></div><Rack hand={hand} label="YOUR RACK" showSort={!!onSort} onSort={onSort} large={large}/><div style={{display:"flex",gap:8,marginTop:12}}><button onClick={onNo} style={{...S.oBtn,flex:1}}>No, skip</button><button onClick={onYes} style={{...S.greenBtn,flex:2}}>Yes, continue →</button></div></div>);}
 function JW(){return(<div role="alert" className="rk-in" style={{padding:"6px 10px",background:C.cinn+"08",borderRadius:8,border:`1px solid ${C.cinn}15`,textAlign:"center",marginBottom:6}}><span style={{fontSize:11,color:C.cinn,fontWeight:600}}>🃏 Jokers cannot be passed — they're too valuable!</span></div>);}
 function RH({hand,onSort,showRef,onRef}){return(<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK ({hand.length} tiles)</span><div style={{display:"flex",gap:4}}><button onClick={onSort} style={S.sortBtn}>Sort</button>{onRef&&<button onClick={onRef} aria-expanded={showRef} style={{...S.sortBtn,background:showRef?C.jade+"10":"none",color:showRef?C.jade:C.mut,borderColor:showRef?C.jade+"30":C.bdr}}>📖 2026 Card</button>}</div></div>);}
-function Rack({hand,label,showSort,onSort,large}){return(<div style={S.card}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>{label}</span>{showSort&&<button onClick={onSort} style={S.sortBtn}>Sort</button>}</div><div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>{hand.map((t,i)=><Ti key={i} t={t} large={large}/>)}</div></div>);}
+function Rack({hand,label,showSort,onSort,large}){return(<div style={S.card}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>{label}</span>{showSort&&<button onClick={onSort} style={S.sortBtn}>Sort</button>}</div><div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>{hand.map((t,i)=><Ti key={i} t={t} large={large}/>)}</div></div>);}
 function CG({onClose}){
   const [exp,setExp]=useState(null);
   return(<div style={{...S.card,background:"#FFFFF8",borderColor:C.gold+"30",maxHeight:380,overflowY:"auto"}} className="rk-in" role="region" aria-label="2026 Card Guide">
@@ -10402,7 +10420,7 @@ function HandRenderer({hand, defaultOpen=false}){
         )}
 
         {/* Visual tile display */}
-        <div style={{padding:"12px 14px",background:C.bg2,overflowX:"auto"}}>
+        <div style={{padding:"12px 14px",background:C.bg2,overflowX:"hidden"}}>
           <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>COMPLETED HAND</div>
           <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"flex-end"}}>
             {groups.map((g,i)=>(
@@ -10635,7 +10653,7 @@ function SectionQuizScreen({home,setScreen}){
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
           <span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK (13 TILES)</span>
         </div>
-        <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center"}}>
+        <div style={{display:"flex",flexWrap:"wrap",gap:3,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>
           {sortHand(rack).map((t,i)=><Ti key={i} t={t} large={false}/>)}
         </div>
       </div>
