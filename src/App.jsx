@@ -5455,8 +5455,9 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   if(!iq)return null;
 
   const passEmoji=(iq.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
+  const styleSuffix=iq.styleName?` · ${iq.styleName}`:"";
   const tableLine=getTableReadLine(iq);
-  const shareText=`RACKLE #${dayNum}\n\n${iq.totalScore}\n${iq.level}${iq.styleName?` · ${iq.styleName}`:""}\n${tableLine}\n${passEmoji?`\nPasses ${passEmoji}\n`:"\n"}Think you can beat it?\nplayrackle.com`;
+  const shareText=`RACKLE #${dayNum}\n\n${iq.totalScore}\n${iq.level}${styleSuffix}\n${tableLine}\n${passEmoji?`\nPasses ${passEmoji}\n`:"\n"}Think you can beat it?\nplayrackle.com`;
 
   useEffect(()=>{
     fetchDailyStats().then(s=>{if(s&&s.total>=1)setDailyStats(s);});
@@ -5641,7 +5642,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       </CollapsibleSection>
 
       {/* ⑥ NEXT STEPS — collapsible */}
-      <CollapsibleSection label="Next Steps" desc="Coach Mode · practice recommendations" icon="🎯" open={openSec.next} onToggle={()=>toggle("next")}>
+      <CollapsibleSection label="Next Steps" desc="Table Talk · free play" icon="🎯" open={openSec.next} onToggle={()=>toggle("next")}>
         <div style={{display:"flex",flexDirection:"column",gap:8,paddingBottom:4}}>
           {/* Coach Mode — primary action, full-bleed dark green */}
           {onCoachMode&&(
