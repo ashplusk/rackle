@@ -7877,9 +7877,9 @@ function Statspill({streak,rounds,bestIQ,streakBadge}){
   return(
     <div>
       {/* Collapsed pill */}
-      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:5,background:bg,border,borderRadius:10,padding:"4px 13px",height:36,cursor:"pointer"}}>
-        <span style={{fontFamily:F.d,fontSize:14,fontWeight:900,color,lineHeight:1}}>{value}</span>
-        <span style={{fontSize:12,color,fontWeight:700,opacity:0.82,lineHeight:1}}>{label}</span>
+      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:5,background:bg,border,borderRadius:10,padding:"4px 12px",height:36,cursor:"pointer"}}>
+        <span style={{fontFamily:F.d,fontSize:13,fontWeight:900,color,lineHeight:1}}>{value}</span>
+        <span style={{fontSize:10,color,fontWeight:700,opacity:0.82,lineHeight:1}}>{label}</span>
         <span style={{fontSize:9,color,opacity:0.5,marginLeft:1}}>{open?"▴":"▾"}</span>
       </button>
 
@@ -8380,7 +8380,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
                     style={{width:"100%",display:"flex",alignItems:"center",gap:10,padding:"11px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left",minHeight:44}}>
                     <div style={{width:32,height:32,borderRadius:9,background:`linear-gradient(135deg,${C.gold}30,${C.gold}18)`,border:`1px solid ${C.gold}40`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>🔥</div>
                     <div style={{flex:1,minWidth:0}}>
-                      <div style={{fontSize:10.5,fontWeight:700,color:"#5C3D00",fontFamily:F.b,lineHeight:1.35,whiteSpace:"normal",overflow:"visible",textOverflow:"clip"}}>
+                      <div style={{fontSize:15,fontWeight:700,color:"#5C3D00",fontFamily:F.b,lineHeight:1.35,letterSpacing:-0.1,whiteSpace:"normal",overflow:"visible",textOverflow:"clip"}}>
                         {(()=>{
                           const n=firstName?` ${firstName}`:"";
                           if(streak===1){
