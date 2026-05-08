@@ -36,6 +36,8 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 @keyframes rkPulse{0%,100%{transform:scale(1);opacity:0.4}50%{transform:scale(2.2);opacity:0}}
 @keyframes rkTickIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 .rk-tick{animation:rkTickIn 0.15s ease}
+@keyframes rkStreakBreathe{0%,100%{transform:translateY(0);opacity:1}50%{transform:translateY(-1px);opacity:.94}}
+.rk-streak-copy{animation:rkStreakBreathe 4s ease-in-out infinite}
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
@@ -8563,7 +8565,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const currentScore=Number.isFinite(Number(iq?.totalScore))?Number(iq.totalScore):0;
   const pb=Math.max(bestScore,currentScore,100);
   const firstName=profile?.nickname?profile.nickname.split(" ")[0]:"";
-  const streakText=streak>1?`${streak}-day streak${firstName?`, ${firstName}`:""}. Keep the heat on.`:streak===1?"First streak locked. Come back tomorrow and make it real.":"Start your streak with today's Rackle.";
+  const streakTitle=streak>1?`${streak}-day streak${firstName?`, ${firstName}`:""}. Keep the heat on.`:streak===1?"Tomorrow’s rack is already waiting.":"Start your streak with today's Rackle.";
+  const streakSub=streak>1?"Come back and keep your club chasing.":streak===1?"Come back and climb your club board.":"One daily read. One score to chase.";
 
   const tomorrowHints=[
     "Pairs may matter more than they look.",
@@ -8678,9 +8681,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   const CompletedDaily=()=> (
     <div style={{borderRadius:24,overflow:"hidden",marginBottom:20,background:"#fff",boxShadow:"0 10px 32px rgba(0,0,0,0.08)",border:`1px solid ${C.bdr}`}}>
-      <div style={{padding:"10px 14px",display:"flex",alignItems:"center",gap:9,background:"linear-gradient(135deg,#FFFDF8,#F5EFE4)"}}>
-        <div style={{width:34,height:34,borderRadius:11,background:C.gold+"16",border:`1px solid ${C.gold}28`,display:"flex",alignItems:"center",justifyContent:"center"}}>🔥</div>
-        <div style={{flex:1,fontSize:13,fontWeight:900,color:C.ink}}>{streakText}</div>
+      <div style={{padding:"9px 14px",display:"flex",alignItems:"center",gap:9,background:"linear-gradient(135deg,#FFFDF8,#F5EFE4)"}}>
+        <div style={{width:31,height:31,borderRadius:11,background:C.gold+"16",border:`1px solid ${C.gold}28`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>🔥</div>
+        <div className="rk-streak-copy" style={{flex:1,minWidth:0}}>
+          <div style={{fontSize:12,fontWeight:900,color:C.ink,lineHeight:1.25,letterSpacing:-0.1}}>{streakTitle}</div>
+          <div style={{fontSize:10.5,color:C.jade,marginTop:2,lineHeight:1.3,fontStyle:"italic",fontWeight:750}}>{streakSub}</div>
+        </div>
       </div>
       <div role="button" tabIndex={0} onClick={showScorecard} onKeyDown={(e)=>{if(e.key==="Enter"||e.key===" ")showScorecard();}} style={{width:"100%",border:"none",background:`linear-gradient(150deg,${C.hero1},${C.hero2} 58%,${C.hero3})`,cursor:"pointer",padding:"30px 20px 24px",textAlign:"center",position:"relative",overflow:"hidden"}}>
         <div aria-hidden style={{position:"absolute",right:-12,bottom:-20,fontSize:116,opacity:0.04}}>🀄</div>
