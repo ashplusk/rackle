@@ -4032,7 +4032,7 @@ function Ti({t,sel,isNew,onClick,dim,large}){
     onKeyDown={onClick?(e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();onClick();}})  :undefined}
     style={{width:sz.w,height:sz.h,borderRadius:7,cursor:onClick?"pointer":"default",userSelect:"none",
       background:sel?c+"14":isNew?"#FFFBE7":"linear-gradient(145deg,#fff,#F7F4EE)",
-      border:`2px solid ${sel?c:isNew?"#B08A35":"#D5CFC5"}`,display:"flex",flexRead:"column",
+      border:`2px solid ${sel?c:isNew?"#B08A35":"#D5CFC5"}`,display:"flex",flexDirection:"column",
       alignItems:"center",justifyContent:"center",padding:0,flexShrink:0,position:"relative",overflow:"hidden",
       boxShadow:sel?`0 4px 12px ${c}28`:"0 1px 3px rgba(0,0,0,0.06)",
       transform:sel?"translateY(-4px) scale(1.05)":"none",transition:"all 0.2s cubic-bezier(0.34,1.56,0.64,1)",
@@ -4574,7 +4574,7 @@ function PassesCard({passNarrative}){
         </div>
         <div style={{display:"flex",alignItems:"center",gap:8}}>
           <div style={{display:"flex",gap:4}}>{passNarrative.map((p,i)=>(
-            <div key={i} style={{display:"flex",flexRead:"column",alignItems:"center",gap:2}}>
+            <div key={i} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
               <div style={{width:10,height:10,borderRadius:5,background:p.qualColor}}/>
             </div>
           ))}</div>
@@ -4582,7 +4582,7 @@ function PassesCard({passNarrative}){
         </div>
       </button>
       {open&&<div style={{borderTop:`1px solid ${C.bdr}`}} className="rk-in">
-        <div style={{display:"flex",flexRead:"column",gap:6,padding:"10px 14px"}}>
+        <div style={{display:"flex",flexDirection:"column",gap:6,padding:"10px 14px"}}>
           {passNarrative.map((p,i)=>(
             <div key={i} style={{borderRadius:12,background:p.qualBg,border:`1px solid ${p.qualColor}25`,overflow:"hidden"}}>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"9px 12px",borderBottom:p.tiles.length>0||p.insight?`1px solid ${p.qualColor}15`:"none"}}>
@@ -4678,7 +4678,7 @@ function RackBecomingCard({finalRack, startingRack, chosenSec, passLog}){
   return(
     <div style={{...S.card,marginBottom:8,background:"linear-gradient(145deg,#F9F6F0,#F5F0E8)",borderColor:C.gold+"30"}}>
       <div style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:10}}>WHAT YOUR RACK WAS BECOMING</div>
-      <div style={{display:"flex",flexRead:"column",gap:7}}>
+      <div style={{display:"flex",flexDirection:"column",gap:7}}>
         {bullets.map((b,i)=>(
           <div key={i} style={{display:"flex",alignItems:"flex-start",gap:8}}>
             <div style={{width:5,height:5,borderRadius:3,background:C.gold,flexShrink:0,marginTop:5}}/>
@@ -5049,7 +5049,7 @@ function ShareButton({text,label,sublabel,variant="goldpill"}){
         cursor:"pointer",display:"flex",alignItems:"center",gap:10,padding:"11px 14px",
         textAlign:"left",boxShadow:`0 3px 12px ${v.shadow}`,transition:"opacity 0.15s"}}>
         <div style={{width:32,height:32,borderRadius:8,background:iconBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,flexShrink:0}}>{copied?"✓":"📲"}</div>
-        <div style={{flex:1,minWidth:0,display:"flex",flexRead:"column",gap:2}}>
+        <div style={{flex:1,minWidth:0,display:"flex",flexDirection:"column",gap:2}}>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:titleColor,lineHeight:1.2}}>{copied?"Copied to clipboard!":label||"Challenge Your Club"}</div>
           <div style={{fontSize:11,color:subColor,lineHeight:1.3}}>{copied?"Paste it into your group chat":sublabel||"Tap to copy · drop it in your group chat"}</div>
         </div>
@@ -5642,7 +5642,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
       {/* ⑥ NEXT STEPS — collapsible */}
       <CollapsibleSection label="Next Steps" desc="Coach Mode · practice recommendations" icon="🎯" open={openSec.next} onToggle={()=>toggle("next")}>
-        <div style={{display:"flex",flexRead:"column",gap:8,paddingBottom:4}}>
+        <div style={{display:"flex",flexDirection:"column",gap:8,paddingBottom:4}}>
           {/* Coach Mode — primary action, full-bleed dark green */}
           {onCoachMode&&(
             <button onClick={onCoachMode} style={{
@@ -5962,7 +5962,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
         width:26,height:36,borderRadius:5,flexShrink:0,
         background:bg,
         border:`1.5px solid ${isFilled?col+"50":wasPassed?C.cinn+"40":"#D8D2CC"}`,
-        display:"flex",flexRead:"column",alignItems:"center",justifyContent:"center",
+        display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
         opacity:isFilled?1:0.75,
         boxShadow:isFilled?`0 1px 4px ${col}18`:"none",
       }}>
@@ -6027,7 +6027,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
         <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:8}}>HAND PATTERN vs YOUR RACK</div>
         <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"flex-end",minWidth:"max-content"}}>
           {groupStatus.map((status,gi)=>(
-            <div key={gi} style={{display:"flex",flexRead:"column",alignItems:"center",gap:3}}>
+            <div key={gi} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
               <div style={{display:"flex",gap:2}}>
                 {Array.from({length:status.need}).map((_,slotIdx)=>(
                   <SlotTile key={slotIdx} status={status} slotIdx={slotIdx}/>
@@ -6381,266 +6381,124 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
 
 // ─── COACH MODE SCREEN — narrative-first deep analysis ───────────────────────
 function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onBack,setScreen}){
-  const [sfOpen,setSfOpen]=useState(false);
   if(!iq)return null;
 
   const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
-  const resolvedHandLabel=chosenHand||(iq?.scoredHandLabel||null);
-  const chosenHandObj=resolvedHandLabel?HAND_CATALOG.find(h=>h.sec===chosenSec&&h.label===resolvedHandLabel):null;
-  const sortedSecs=allSections?[...allSections].sort((a,b)=>b.score-a.score):[];
-  const bestFitSec=sortedSecs[0];
-  const chosenFit=chosenSec&&allSections?allSections.find(s=>s.id===chosenSec):null;
-  const chosenPct=chosenFit?Math.round(chosenFit.score*100):null;
-  const bestPct=bestFitSec?Math.round(bestFitSec.score*100):null;
-  const sectionMatch=chosenSec===bestFitSec?.id;
-  const scoreColor=(v,max)=>v/max>=0.8?C.jade:v/max>=0.55?C.gold:C.cinn;
+  const sortedSecs=Array.isArray(allSections)?[...allSections].sort((a,b)=>(b.score||0)-(a.score||0)):[];
+  const bestFitSec=sortedSecs[0]||null;
+  const sectionMatch=chosenSec&&bestFitSec?chosenSec===bestFitSec.id:true;
+  const passInsights=Array.isArray(iq.passInsights)?iq.passInsights:[];
+  const tableLine=getTableReadLine(iq)||"You built a cleaner read today.";
+  const passDots=passInsights.map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join(" ");
+  const firstName=(getProfile()?.nickname||"").trim().split(" ")[0];
 
-  // ── VERDICT — one honest sentence about this round ──────────────────────────
-  const verdictText=(()=>{
-    const total=iq.totalScore;
-    const dir=iq.directionScore/40;
-    const pass=iq.passQualityScore/25;
-    const tile=iq.tileStrengthScore/25;
-    const handName=chosenHandObj?.label||chosenSecObj?.name||"your section";
-    if(total>=88)return`Excellent Charleston. Your direction was clear from the start and your passes protected it — this is what disciplined play looks like.`;
-    if(total>=75&&dir>=0.8)return`Strong read on ${chosenSecObj?.name||"your section"}. Your section instinct was right — the passes kept the structure intact.`;
-    if(total>=75&&pass>=0.8)return`Your passing was the standout this round — you gave away the right tiles consistently. The direction just needed to sharpen a bit earlier.`;
-    if(total>=65&&dir>=0.7&&pass<0.55)return`You saw the right section but gave away tiles that would have made it. Read was there — the passing cost you.`;
-    if(total>=65&&pass>=0.7&&dir<0.55)return`Disciplined passing without a clear target is only half the equation. Your discard instincts are good — commit to a section earlier.`;
-    if(total>=55&&!sectionMatch)return`Your tiles were pulling toward ${bestFitSec?.name||"another section"}, but you went a different direction. Not wrong — just a pivot opportunity worth noting.`;
-    if(total>=55)return`A workable Charleston. The structure was there in pieces — the goal next time is locking in earlier so each pass has a job to do.`;
-    if(dir<0.4&&pass<0.4)return`This round, the direction and passes weren't speaking the same language. Before your first pass: name your section, then ask "does this tile help it?"`;
-    if(dir<0.4)return`The passes were reasonable, but without a clear section target the rack drifted. Lock in your direction by the first pass and everything else follows.`;
-    return`The fundamentals are there. Pick your section before you touch a single tile — that one habit makes every pass decision automatic.`;
+  const softVerdict=(()=>{
+    const score=iq.totalScore||0;
+    const read=(iq.directionScore||0)/40;
+    const pass=(iq.passQualityScore||0)/25;
+    if(score>=90)return "Elite rack. Clean read, clean passes, no wasted motion.";
+    if(score>=82&&read>=0.75)return "You found the lane early and stayed with it.";
+    if(score>=82)return "Strong rack. The table read was there.";
+    if(score>=70&&pass>=0.75)return "Your passes were disciplined. One earlier lane would lift this.";
+    if(score>=70)return "Good rack. A cleaner first read makes this dangerous.";
+    if(score>=58)return "Workable rack. You had pieces, but the lane came late.";
+    return "Messy rack. Next time, name the lane before the first pass.";
   })();
 
-  // ── WHAT HAPPENED TO YOUR PASSES — narrative per round ──────────────────────
-  const passNarrative=(iq.passInsights||[]).map((p,i)=>{
-    const qualColor={strong:C.jade,weak:C.cinn,mixed:C.gold,neutral:C.mut};
-    const qualBg={strong:"#EDF5F0",weak:"#FEF0F0",mixed:"#FBF3E2",neutral:C.bg2};
-    const qualLabel={strong:"Good pass",weak:"Costly pass",mixed:"Mixed pass",neutral:"Neutral pass"};
-    const tiles=p.passedTiles||[];
-    return{...p,qualColor:qualColor[p.quality]||C.mut,qualBg:qualBg[p.quality]||C.bg2,qualLabel:qualLabel[p.quality]||"Pass",tiles,roundNum:i+1};
-  });
-
-  // ── WHAT AN EXPERT WOULD NOTICE — specific to actual tiles ──────────────────
-  const expertNotes=(()=>{
-    const notes=[];
-    const jk=(hand||[]).filter(t=>t.t==="j").length;
-    const fl=(hand||[]).filter(t=>t.t==="f").length;
-    const allPassed=(passLog||[]).flatMap(p=>p.out||[]);
-    const passedJokers=allPassed.filter(t=>t.t==="j");
-    const passedFlowers=allPassed.filter(t=>t.t==="f");
-
-    // Joker handling
-    if(passedJokers.length>0){
-      notes.push({icon:"⚠️",text:`You passed ${passedJokers.length} joker${passedJokers.length>1?"s":""} — jokers are almost never worth giving away. They're the most flexible tile on the board.`,type:"warn"});
-    } else if(jk>=2){
-      notes.push({icon:"✓",text:`${jk} jokers held — that's the right call. Jokers don't get passed unless you have no choice.`,type:"good"});
-    }
-
-    // Flower handling
-    if(passedFlowers.length>0&&chosenSec!=="wd"){
-      notes.push({icon:"⚠️",text:`You passed ${passedFlowers.length} flower${passedFlowers.length>1?"s":""}. Flowers appear in the majority of winning hands — hold them unless you're certain they don't fit.`,type:"warn"});
-    } else if(fl>=2){
-      notes.push({icon:"✓",text:`${fl} flowers in your final rack. These are structural support for most sections — well held.`,type:"good"});
-    }
-
-    // Hand-specific tile gaps
-    if(chosenHandObj){
-      const label=chosenHandObj.label;
-      const neededNums=[...new Set((label.match(/\d/g)||[]).map(Number).filter(n=>n>=1&&n<=9))];
-      const nc={};(hand||[]).filter(t=>t.t==="s").forEach(t=>{nc[t.n]=(nc[t.n]||0)+1;});
-      const missingAnchors=neededNums.filter(n=>!nc[n]);
-      if(missingAnchors.length>0){
-        notes.push({icon:"🎯",text:`Your final rack was missing ${missingAnchors.slice(0,2).map(n=>`${n}s`).join(" and ")} — tiles that appear in this hand. ${missingAnchors.length===1?"That single group":"Those groups"} would have made the difference.`,type:"gap"});
-      }
-      // Suit concentration check
-      const suitCounts={bam:0,crak:0,dot:0};
-      (hand||[]).filter(t=>t.t==="s").forEach(t=>{suitCounts[t.s]++;});
-      const dominantSuit=Object.entries(suitCounts).sort((a,b)=>b[1]-a[1])[0];
-      const total3=Object.values(suitCounts).reduce((a,b)=>a+b,0);
-      if(dominantSuit&&dominantSuit[1]/total3>=0.65&&total3>=5){
-        const suitName={bam:"Bamboo",crak:"Character",dot:"Circle"}[dominantSuit[0]];
-        notes.push({icon:"🃏",text:`Your number tiles were heavily concentrated in ${suitName} — which helps with single-suit hands but can reduce flexibility in multi-suit hands like this one.`,type:"info"});
-      }
-    }
-
-    // Section direction accuracy
-    if(!sectionMatch&&bestFitSec&&chosenPct!=null&&bestPct!=null){
-      const gap=bestPct-chosenPct;
-      if(gap>=20){
-        notes.push({icon:"↗️",text:`${bestFitSec.icon} ${bestFitSec.name} had a ${gap}% stronger section fit. An expert player would have spotted the pull toward that section by the second pass.`,type:"pivot"});
-      } else if(gap>=10){
-        notes.push({icon:"↗️",text:`${bestFitSec.icon} ${bestFitSec.name} was a slightly stronger fit (${gap}% gap). Both sections were viable — this was a judgment call, not a clear miss.`,type:"info"});
-      }
-    }
-
-    // Pass timing
-    if(iq.timingInsight){
-      notes.push({icon:"⏱",text:iq.timingInsight,type:"timing"});
-    }
-
-    return notes.slice(0,5);
-  })();
-
-  // ── ONE THING — the single most impactful habit change ─────────────────────
   const oneThing=(()=>{
-    const dir=iq.directionScore/40;
-    const pass=iq.passQualityScore/25;
-    const tile=iq.tileStrengthScore/25;
-    const tm=iq.timingScore/10;
-    // Find the weakest dimension
-    const dims=[
-      {k:"dir",r:dir,tip:`Before your next game: look at your starting rack and say out loud which section you're going to play. Then make every pass answer to that decision.`},
-      {k:"pass",r:pass,tip:`Before each pass, ask one question: "Does this tile connect to what I'm keeping?" If no — it goes. If yes — it stays. That's the whole decision.`},
-      {k:"tile",r:tile,tip:`Focus on group depth over coverage. Three tiles of the same thing beats one of everything. Pairs and pungs are worth more than variety.`},
-      {k:"tm",r:tm,tip:`Aim for 10–20 seconds per pass. Enough to read the rack, not enough to second-guess a good first instinct. Set a mental clock.`},
-    ].sort((a,b)=>a.r-b.r);
-    return dims[0].tip;
+    const read=(iq.directionScore||0)/40;
+    const pass=(iq.passQualityScore||0)/25;
+    const live=(iq.tileStrengthScore||0)/25;
+    if(read<0.55)return "Name your lane before the first pass.";
+    if(pass<0.55)return "Keep what connects. Let the floaters go.";
+    if(live<0.55)return "Protect pairs and useful groups first.";
+    return "Trust the clean lane once you see it.";
   })();
 
-  const noteTypeStyle={
-    good:{bg:"#EDF5F0",border:`1px solid ${C.jade}25`,iconCol:C.jade},
-    warn:{bg:"#FEF0F0",border:"1px solid #B8323225",iconCol:C.cinn},
-    gap:{bg:"#FBF3E2",border:`1px solid ${C.gold}30`,iconCol:C.gold},
-    info:{bg:C.bg2,border:`1px solid ${C.bdr}`,iconCol:C.mut},
-    pivot:{bg:"#EDF5F0",border:`1px solid ${C.jade}25`,iconCol:C.jade},
-    timing:{bg:C.bg2,border:`1px solid ${C.bdr}`,iconCol:C.mut},
-  };
+  const tableWisdom=(()=>{
+    const sec=chosenSecObj?.id;
+    if(sec==="2026")return "Strong players protect 2s, 6s, and Soap in 2026.";
+    if(sec==="2468")return "In evens, 6s are usually too useful to pass.";
+    if(sec==="369")return "For 369, the 6 is the anchor. Treat it like gold.";
+    if(sec==="13579")return "With odds, 3s and 5s often carry the rack.";
+    if(sec==="cr")return "Runs need groups, not scattered singles.";
+    if(sec==="wd")return "Honors first. Numbers need a reason to stay.";
+    if(sec==="sp")return "Singles & Pairs rewards patience, not jokers.";
+    if(sec==="q")return "Quints starts with jokers. Without two, stay flexible.";
+    return "Strong players spot the flexible tiles, then choose a lane.";
+  })();
+
+  const passRows=passInsights.slice(0,7).map((p,i)=>{
+    const label=p.quality==="strong"?"Clean":p.quality==="weak"?"Risky":"Mixed";
+    const color=p.quality==="strong"?C.jade:p.quality==="weak"?C.cinn:C.gold;
+    const bg=p.quality==="strong"?"#EDF5F0":p.quality==="weak"?"#FEF0F0":"#FBF3E2";
+    const tiles=(p.passedTiles||[]).map(t=>tLabel(t)).slice(0,3).join(", ");
+    const line=p.quality==="strong"?"Good release. The rack stayed clean.":p.quality==="weak"?"That pass gave away some strength.":"Not fatal, but not your cleanest pass.";
+    return{round:i+1,label,color,bg,tiles,line};
+  });
 
   return(
     <div style={S.pg} className="rk-pg">
       <RackleHeader onBack={onBack} setScreen={setScreen}/>
 
-      {/* Header */}
-      <div style={{marginBottom:14,marginTop:4,textAlign:"center"}}>
-        <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:2}}>Coach Mode</div>
-        <div style={{fontSize:11,color:C.mut}}>Day #{dayNum} · {chosenSecObj?.name||section}</div>
+      <div style={{textAlign:"center",marginTop:4,marginBottom:16}}>
+        <div style={{fontSize:8,color:C.jade,letterSpacing:2.6,fontWeight:800,marginBottom:7}}>TABLE TALK</div>
+        <div style={{fontFamily:F.d,fontSize:23,fontWeight:900,color:C.ink,letterSpacing:-0.6,lineHeight:1.05}}>See The Better Play</div>
+        <div style={{fontSize:12,color:C.mut,lineHeight:1.5,marginTop:9}}>What experienced players noticed in your rack</div>
       </div>
 
-      {/* ① VERDICT */}
-      <SectionDivider label="THE VERDICT"/>
-      <div style={{borderRadius:14,background:"#fff",border:`1.5px solid ${C.bdr}`,padding:"16px 18px",marginBottom:10,boxShadow:"0 2px 12px rgba(0,0,0,0.04)"}}>
-        <div style={{fontSize:8,color:C.jade,letterSpacing:2.5,fontWeight:700,marginBottom:8}}>THE VERDICT</div>
-        <p style={{fontSize:13,color:C.ink,lineHeight:1.7,margin:"0 0 14px",fontStyle:"italic"}}>{verdictText}</p>
-        {/* IQ sub-scores inline */}
-        <div style={{display:"flex",gap:4}}>
-          {[{label:"READ",v:iq.directionScore,max:40},{label:"PASS",v:iq.passQualityScore,max:25},{label:"LIVE",v:iq.tileStrengthScore,max:25},{label:"PACE",v:iq.timingScore,max:10}].map(({label,v,max})=>{
-            const pct=v/max;
-            const col=pct>=0.8?C.jade:pct>=0.55?C.gold:C.cinn;
-            const bg=pct>=0.8?"#EDF5F0":pct>=0.55?"#FBF3E2":"#FEF0F0";
-            return(
-              <div key={label} style={{flex:1,background:bg,borderRadius:10,padding:"9px 4px",textAlign:"center"}}>
-                <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:col,lineHeight:1}}>{v}</div>
-                <div style={{fontSize:6,color:col,opacity:0.7,letterSpacing:1.5,fontWeight:700,marginTop:3}}>{label}</div>
-                <div style={{fontSize:6,color:C.mut}}>/{max}</div>
-              </div>
-            );
-          })}
+      <div style={{background:`linear-gradient(145deg,${C.hero2},${C.hero1})`,borderRadius:18,padding:"18px 18px 16px",color:"#fff",marginBottom:12,boxShadow:`0 8px 28px ${C.jade}24`}}>
+        <div style={{display:"flex",alignItems:"flex-end",gap:14,marginBottom:12}}>
+          <div style={{fontFamily:F.d,fontSize:54,fontWeight:900,lineHeight:0.9,color:C.gilt,letterSpacing:-2}}>{iq.totalScore}</div>
+          <div style={{paddingBottom:2}}>
+            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,lineHeight:1.1}}>{iq.level}</div>
+            {iq.styleName&&<div style={{fontSize:12,color:"rgba(255,255,255,0.62)",marginTop:8}}>{iq.styleName}</div>}
+          </div>
+        </div>
+        <div style={{fontSize:14,lineHeight:1.55,fontWeight:700,marginBottom:10}}>{tableLine}</div>
+        <div style={{fontSize:12,lineHeight:1.55,color:"rgba(255,255,255,0.68)"}}>{softVerdict}</div>
+        {passDots&&<div style={{fontSize:15,letterSpacing:2,marginTop:13}}>{passDots}</div>}
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:12}}>
+        <div style={{...S.card,marginBottom:0,textAlign:"center"}}>
+          <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:800,marginBottom:5}}>YOUR LANE</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink}}>{chosenSecObj?.name||section||"Open"}</div>
+        </div>
+        <div style={{...S.card,marginBottom:0,textAlign:"center"}}>
+          <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:800,marginBottom:5}}>BEST FIT</div>
+          <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:sectionMatch?C.jade:C.gold}}>{bestFitSec?.name||"—"}</div>
         </div>
       </div>
 
-      {/* ①½ COACH ADVICE */}
-      <SectionDivider label="COACH ADVICE"/>
-      <CoachAdvice hand={hand} passLog={passLog} chosenSec={chosenSec} allSections={allSections} iq={iq} chosenHandObj={chosenHandObj}/>
+      <SectionDivider label="ONE THING"/>
+      <div style={{borderRadius:14,background:"#fff",border:`1px solid ${C.bdr}`,padding:"14px 16px",marginBottom:12}}>
+        <div style={{fontSize:8,color:C.jade,letterSpacing:2.4,fontWeight:800,marginBottom:7}}>TAKE THIS TO THE NEXT RACK</div>
+        <div style={{fontSize:14,color:C.ink,lineHeight:1.55,fontWeight:800}}>{oneThing}</div>
+      </div>
 
-      {/* ② RACK VS HAND */}
-      {chosenHandObj&&<SectionDivider label="YOUR RACK VS THE HAND"/>}
-      {chosenHandObj&&(
-        <RackVsHandOverlay
-          hand={hand}
-          handObj={chosenHandObj}
-          passLog={passLog}
-          sectionId={chosenSec}
-          handWasInferred={iq.handWasInferred}
-          secObj={chosenSecObj}
-        />
-      )}
-
-      {/* ③ YOUR STARTING DEAL */}
       <SectionDivider label="PASS READ"/>
-      <StartingDealCard startingRack={startingRack} chosenHandObj={chosenHandObj}/>
-
-      {/* ④ YOUR PASSES */}
-      <PassesCard passNarrative={passNarrative}/>
-
-      {/* ⑤ ALTERNATIVE HANDS */}
-      {hand&&hand.length>0&&chosenSec&&(()=>{
-        const primPct=chosenHandObj?computeHonestCoverage(hand,chosenHandObj).pct:0;
-        return <AltHandsCard hand={hand} resolvedHandLabel={resolvedHandLabel} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecs} primaryCoveragePct={primPct}/>;
-      })()}
-
-      {/* ⑥ EXPERT EYE ───────────────────────────────────────────────────────── */}
-      {expertNotes.length>0&&(
-        <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden"}}>
-          <div style={{padding:"10px 14px 8px",borderBottom:`1px solid ${C.bdr}`}}>
-            <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:1}}>EXPERT EYE</div>
-            <div style={{fontSize:12,fontWeight:700,color:C.ink}}>What a strong player would notice</div>
+      <div style={{...S.card,padding:0,overflow:"hidden",marginBottom:12}}>
+        {passRows.length?passRows.map((p,i)=>(
+          <div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",padding:"12px 14px",borderBottom:i<passRows.length-1?`1px solid ${C.bdr}`:"none",background:i%2?C.bg2:"#fff"}}>
+            <div style={{width:28,height:28,borderRadius:9,background:p.bg,color:p.color,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:900,flexShrink:0}}>{p.round}</div>
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",gap:8,marginBottom:3}}>
+                <div style={{fontSize:12,fontWeight:900,color:p.color}}>{p.label} pass</div>
+                {p.tiles&&<div style={{fontSize:10,color:C.mut,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:170}}>{p.tiles}</div>}
+              </div>
+              <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{p.line}</div>
+            </div>
           </div>
-          <div style={{display:"flex",flexRead:"column",gap:0}}>
-            {expertNotes.map((n,i)=>{
-              const s=noteTypeStyle[n.type]||noteTypeStyle.info;
-              return(
-                <div key={i} style={{display:"flex",alignItems:"flex-start",gap:10,padding:"10px 14px",background:i%2===0?"#fff":C.bg2,borderBottom:i<expertNotes.length-1?`1px solid ${C.bdr}`:"none"}}>
-                  <span style={{fontSize:14,flexShrink:0,marginTop:1}}>{n.icon}</span>
-                  <span style={{fontSize:11,color:C.ink,lineHeight:1.6,flex:1}}>{n.text}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* ⑧ ONE THING */}
-      <SectionDivider label="ONE THING TO TAKE AWAY"/>
-      <div style={{borderRadius:14,background:`linear-gradient(145deg,${C.jade}06,${C.jade}02)`,border:`1.5px solid ${C.jade}20`,padding:"15px 16px",marginBottom:10}}>
-        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-          <div style={{width:28,height:28,borderRadius:8,background:`linear-gradient(135deg,${C.jade},#115C38)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,flexShrink:0}}>💡</div>
-          <div style={{fontSize:8,color:C.jade,letterSpacing:2.5,fontWeight:700}}>ONE THING TO TAKE INTO YOUR NEXT GAME</div>
-        </div>
-        <p style={{fontSize:12,color:C.ink,lineHeight:1.7,margin:0,fontWeight:500}}>{oneThing}</p>
+        )):<div style={{padding:14,fontSize:12,color:C.mut}}>No pass details available for this rack.</div>}
       </div>
 
-      {/* ⑨ SECTION LANDSCAPE */}
-      {allSections&&allSections.length>0&&<SectionDivider label="REFERENCE"/>}
-      {allSections&&allSections.length>0&&(
-        <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden"}}>
-          <button onClick={()=>setSfOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"11px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
-            <div>
-              <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>SECTION LANDSCAPE</div>
-              <div style={{fontSize:12,fontWeight:700,color:C.ink,marginTop:1}}>How all sections ranked against your final rack</div>
-            </div>
-            <span style={{fontSize:12,color:C.mut}}>{sfOpen?"▾":"▸"}</span>
-          </button>
-          {sfOpen&&<div style={{borderTop:`1px solid ${C.bdr}`,padding:"10px 14px"}} className="rk-in">
-            {!sectionMatch&&<div style={{fontSize:11,color:C.amberB,lineHeight:1.5,background:C.amber,borderRadius:8,padding:"7px 10px",marginBottom:10}}>
-              Your tiles had a stronger natural fit in {bestFitSec?.icon} <strong>{bestFitSec?.name}</strong> ({bestPct}%) than {chosenSecObj?.name} ({chosenPct}%). Worth knowing what the rack was pulling toward.
-            </div>}
-            {sortedSecs.slice(0,6).map((s,i)=>{
-              const isChosen=s.id===chosenSec;const isTop=i===0;
-              const pct=Math.round(s.score*100);
-              const barCol=isChosen?C.jade:isTop&&!isChosen?C.gold:C.bdr;
-              return(
-                <div key={s.id} style={{display:"flex",alignItems:"center",gap:8,marginBottom:i<5?8:0}}>
-                  <span style={{fontSize:13,flexShrink:0,width:20}}>{s.icon}</span>
-                  <div style={{flex:1,minWidth:0}}>
-                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
-                      <span style={{fontSize:11,fontWeight:isChosen?700:400,color:isChosen?C.ink:C.mut}}>
-                        {s.name}{isChosen?" ← your pick":isTop&&!isChosen?" ← best fit":""}
-                      </span>
-                      <span style={{fontSize:11,fontWeight:700,color:isChosen?C.jade:C.mut,fontFamily:F.d}}>{pct}%</span>
-                    </div>
-                    <div style={{height:4,borderRadius:2,background:C.bdr,overflow:"hidden"}}>
-                      <div style={{height:"100%",borderRadius:2,width:`${pct}%`,background:barCol,transition:"width 0.6s ease"}}/>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>}
-        </div>
-      )}
+      <SectionDivider label="TABLE WISDOM"/>
+      <div style={{borderRadius:14,background:C.sage,border:`1px solid ${C.jade}22`,padding:"13px 15px",marginBottom:12}}>
+        <div style={{fontSize:12,color:C.ink,lineHeight:1.55,fontWeight:700}}>{tableWisdom}</div>
+      </div>
+
+      {firstName&&<div style={{fontSize:11,color:C.mut,textAlign:"center",margin:"2px 0 10px"}}>Nice rack, {firstName}. Now beat it tomorrow.</div>}
 
       <button onClick={onBack} style={{...S.oBtn,width:"100%",marginTop:4}}>← Back to Scorecard</button>
       <Footer/>
@@ -6756,7 +6614,7 @@ function RackleHeader({onBack,setScreen}){
       </div>
       <div style={{position:"relative"}}>
         <button onClick={()=>setMenuOpen(o=>!o)} aria-label="Menu"
-          style={{background:menuOpen?C.bg2:"none",border:`1px solid ${menuOpen?C.bdr:"transparent"}`,borderRadius:8,padding:"6px 10px",cursor:"pointer",display:"flex",flexRead:"column",gap:4,alignItems:"center",justifyContent:"center",flexShrink:0}}>
+          style={{background:menuOpen?C.bg2:"none",border:`1px solid ${menuOpen?C.bdr:"transparent"}`,borderRadius:10,padding:0,width:38,height:36,cursor:"pointer",display:"flex",flexDirection:"column",gap:4,alignItems:"center",justifyContent:"center",flexShrink:0}}>
           <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
           <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
           <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
@@ -6961,7 +6819,7 @@ function CardGuideScreen({home,setScreen}){
                 <div style={{fontSize:15,fontWeight:800,color:C.ink,marginBottom:2}}>{s.name}</div>
                 <div style={{fontSize:11,color:C.mut,lineHeight:1.3}}>{s.desc}</div>
               </div>
-              <div style={{display:"flex",flexRead:"column",alignItems:"flex-end",gap:3}}>
+              <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:3}}>
                 <span style={{fontSize:10,fontWeight:700,color:C.mut}}>{hands.length} hands</span>
                 {hasConcealed&&<span style={{fontSize:8,fontWeight:700,background:"#2460A815",color:"#2460A8",borderRadius:6,padding:"2px 5px"}}>has concealed</span>}
               </div>
@@ -7221,7 +7079,7 @@ function MidnightCountdown({dn}){
               <div style={{fontSize:7,color:mutCol,letterSpacing:2.5,fontWeight:700,marginTop:5,fontFamily:F.b}}>{l}</div>
             </div>
             {i<2&&(
-              <div style={{display:"flex",flexRead:"column",gap:6,alignSelf:"center",margin:"0 6px",paddingBottom:18}}>
+              <div style={{display:"flex",flexDirection:"column",gap:6,alignSelf:"center",margin:"0 6px",paddingBottom:18}}>
                 <div style={{width:4,height:4,borderRadius:"50%",background:C.bdr}}/>
                 <div style={{width:4,height:4,borderRadius:"50%",background:C.bdr}}/>
               </div>
@@ -7778,7 +7636,7 @@ function ClubDirectoryScreen({home,setScreen}){
               </div>
             </div>
           ):(
-            <div style={{display:"flex",flexRead:"column",gap:8,marginBottom:16}}>
+            <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:16}}>
               {filtered.map(([clubCode,club])=>(
                 <button key={clubCode}
                   onClick={()=>setSelected(clubCode)}
@@ -7911,7 +7769,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
         <div style={{borderRadius:16,overflow:"hidden",marginBottom:10,border:`1px solid ${C.bdr}`,background:"#fff",boxShadow:"0 2px 8px rgba(0,0,0,0.04)"}}>
           {/* Score preview banner */}
           <div style={{background:`linear-gradient(135deg,#2C2420,#1A1612)`,padding:"14px 16px",display:"flex",alignItems:"center",gap:12}}>
-            <div style={{width:44,height:44,borderRadius:12,background:"rgba(255,255,255,0.15)",display:"flex",flexRead:"column",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+            <div style={{width:44,height:44,borderRadius:12,background:"rgba(255,255,255,0.15)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",flexShrink:0}}>
               <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:"#fff",lineHeight:1}}>{iq.totalScore}</div>
               <div style={{fontSize:8,color:"rgba(255,255,255,0.7)",fontWeight:700,letterSpacing:0.5}}>IQ</div>
             </div>
@@ -8367,7 +8225,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <button
               onClick={()=>setMenuOpen(o=>!o)}
               aria-label="Menu"
-              style={{background:menuOpen?C.bg2:"none",border:`1px solid ${menuOpen?C.bdr:"transparent"}`,borderRadius:8,padding:"6px 10px",cursor:"pointer",display:"flex",flexRead:"column",gap:4,alignItems:"center",justifyContent:"center",flexShrink:0,marginLeft:8}}
+              style={{background:menuOpen?C.bg2:"none",border:`1px solid ${menuOpen?C.bdr:"transparent"}`,borderRadius:10,padding:0,width:38,height:36,cursor:"pointer",display:"flex",flexDirection:"column",gap:4,alignItems:"center",justifyContent:"center",flexShrink:0,marginLeft:8}}
             >
               <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
               <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
@@ -8738,7 +8596,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:dDone?C.jade:C.ink,marginBottom:3,lineHeight:1.1}}>{"Free Play"}</div>
           <div style={{fontSize:11,color:dDone?C.jade+"CC":C.mut,lineHeight:1.5}}>{dDone?"Stay sharp between daily racks":"New deal every time. Keep your Charleston sharp."}</div>
         </div>
-        <div style={{display:"flex",flexRead:"column",alignItems:"center",gap:3,flexShrink:0}}>
+        <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3,flexShrink:0}}>
           <span aria-hidden="true" style={{fontSize:16,color:dDone?C.jade:C.mut,fontWeight:700}}>›</span>
         </div>
       </button>
@@ -8811,13 +8669,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       </button>
 
       <div style={{display:"flex",gap:8,marginBottom:8}}>
-        <button onClick={()=>setScreen("handbrowser")} style={{flex:1,cursor:"pointer",display:"flex",flexRead:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${C.gold}25`,background:C.gold+"06",textAlign:"center"}}>
+        <button onClick={()=>setScreen("handbrowser")} style={{flex:1,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${C.gold}25`,background:C.gold+"06",textAlign:"center"}}>
           <span style={{fontSize:22}}>📋</span>
           <div style={{fontSize:9,color:C.gold,letterSpacing:1.5,fontWeight:700}}>2026 NMJL</div>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2}}>Hand Browser</div>
           <div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:1}}>Visual hand breakdowns</div>
         </button>
-        <button onClick={()=>setShowHelp(!showHelp)} aria-expanded={showHelp} style={{flex:1,cursor:"pointer",display:"flex",flexRead:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${showHelp?C.gold+"40":C.gold+"25"}`,background:C.gold+"06",textAlign:"center"}}>
+        <button onClick={()=>setShowHelp(!showHelp)} aria-expanded={showHelp} style={{flex:1,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${showHelp?C.gold+"40":C.gold+"25"}`,background:C.gold+"06",textAlign:"center"}}>
           <span style={{fontSize:22}}>📖</span>
           <div style={{fontSize:9,color:C.gold,letterSpacing:1.5,fontWeight:700}}>LEARN</div>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2}}>How to Play</div>
@@ -8825,13 +8683,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </button>
       </div>
       <div style={{display:"flex",gap:8,marginBottom:8}}>
-        <button onClick={()=>setScreen("glossary")} style={{flex:1,cursor:"pointer",display:"flex",flexRead:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",textAlign:"center"}}>
+        <button onClick={()=>setScreen("glossary")} style={{flex:1,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",textAlign:"center"}}>
           <span style={{fontSize:22}}>🔤</span>
           <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700}}>BEGINNER</div>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2}}>Glossary</div>
           <div style={{fontSize:11,color:C.mut,lineHeight:1.35,marginTop:1}}>Pung, kong, concealed…</div>
         </button>
-        <button onClick={()=>setScreen("quiz")} style={{flex:1,cursor:"pointer",display:"flex",flexRead:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",textAlign:"center"}}>
+        <button onClick={()=>setScreen("quiz")} style={{flex:1,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,padding:"14px 10px",borderRadius:16,border:`1px solid ${C.jade}25`,background:C.jade+"06",textAlign:"center"}}>
           <span style={{fontSize:22}}>🧠</span>
           <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700}}>TRAINING</div>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2}}>Section Quiz</div>
@@ -9350,7 +9208,7 @@ function ReadyOverlay({mode,dayNum,onReady,onHome}){
   const challengeDay=getUrlParam("day");
   const isChallenge=mode==="daily"&&challengeIQ&&challengeDay===String(dayNum);
   return(
-    <div style={{position:"fixed",inset:0,display:"flex",flexRead:"column",alignItems:"center",justifyContent:"center",zIndex:50,padding:"0 20px",background:"rgba(250,247,241,0.75)",backdropFilter:"blur(6px)"}}>
+    <div style={{position:"fixed",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",zIndex:50,padding:"0 20px",background:"rgba(250,247,241,0.75)",backdropFilter:"blur(6px)"}}>
       <div className="rk-in" style={{width:"100%",maxWidth:400,background:"#fff",borderRadius:24,border:`1.5px solid ${C.bdr}`,boxShadow:"0 20px 60px rgba(0,0,0,0.12)",overflow:"hidden"}}>
         <div style={{background:"linear-gradient(135deg,#0F2016,#1B3A28)",padding:"24px 24px 20px",textAlign:"center"}}>
           <div style={{fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:3,fontWeight:700,marginBottom:10}}>{mode==="daily"?`DAILY RACKLE · #${dayNum}`:"PRACTICE MODE"}</div>
@@ -9621,7 +9479,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           </button>
           {showRef&&<CG onClose={()=>setShowRef(false)}/>}
           <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>TAP TO SCORE YOUR ROUND</div>
-          <div style={{display:"flex",flexRead:"column",gap:5,marginBottom:10}}>
+          <div style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
             {SECS.map((s)=>(
               <button key={s.id} onClick={()=>{
                 haptic(20);
@@ -9664,7 +9522,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
             <button onClick={()=>setShowLeave(true)} style={S.back}>← Back</button>
             <div style={{textAlign:"center"}}><div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div><div style={{fontFamily:F.d,fontSize:9,color:C.jade,fontWeight:600,fontStyle:"italic",letterSpacing:0.5,marginTop:1}}>The Daily Mahjong Workout.</div></div>
-            <div style={{display:"flex",flexRead:"column",alignItems:"flex-end",gap:1}}>
+            <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:1}}>
               <span style={{fontSize:10,color:C.mut,fontWeight:700}}>{mode==="daily"?`Daily #${dn}`:"Practice"}</span>
               {getDisplayTime()&&<span style={{fontSize:11,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {getDisplayTime()}</span>}
             </div>
@@ -10244,7 +10102,7 @@ function HandGroupChips({group, cardColor}){
   const jokerNote=GROUP_TYPES[group.type]?.jokerOk&&group.count>=3?" ✓":""
 
   return(
-    <div style={{display:"flex",flexRead:"column",alignItems:"center",gap:3}}>
+    <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
       <div style={{display:"flex",gap:2}}>
         {tiles.map((_,i)=>(
           <div key={i} style={{
@@ -10252,7 +10110,7 @@ function HandGroupChips({group, cardColor}){
             background:`linear-gradient(160deg,#fff,${bgTint})`,
             border:`1.5px solid ${col}35`,
             boxShadow:`0 1px 3px ${col}15`,
-            display:"flex",flexRead:"column",alignItems:"center",justifyContent:"center",flexShrink:0,
+            display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",flexShrink:0,
           }}>
             <span style={{fontSize:group.isFlower?14:12,fontWeight:800,color:col,lineHeight:1}}>{label}</span>
             {sub&&<span style={{fontSize:5.5,color:col,opacity:0.6,fontWeight:700,marginTop:1,letterSpacing:0.2}}>{sub}</span>}
@@ -10356,7 +10214,7 @@ function HandRenderer({hand, defaultOpen=false}){
         {/* Plain-English breakdown */}
         <div style={{padding:"10px 14px"}}>
           <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>WHAT YOU NEED</div>
-          <div style={{display:"flex",flexRead:"column",gap:5}}>
+          <div style={{display:"flex",flexDirection:"column",gap:5}}>
             {breakdown.map((g,i)=>{
               const cc=g.cardColor;
               const dotCol=cc?CARD_COL[cc]||C.jade:g.isFlower?CARD_COL.F:g.isDragon?CARD_COL.D:g.isWind?CARD_COL.W:C.jade;
@@ -10619,7 +10477,7 @@ function SectionQuizScreen({home,setScreen}){
                 </div>
               </div>
               {/* All section scores */}
-              <div style={{display:"flex",flexRead:"column",gap:4}}>
+              <div style={{display:"flex",flexDirection:"column",gap:4}}>
                 {lastResult.allScores.slice(0,5).map((s,i)=>{
                   const pct=Math.round(s.score*100);
                   const isChosen=s.id===lastResult.chosen;
@@ -10697,7 +10555,7 @@ function HandBrowserScreen({home,setScreen}){
       {!search&&!activeSec&&(
         <div style={{...S.card,marginTop:8,background:"linear-gradient(145deg,#FFFFF8,#F4EFE3)",borderColor:C.gold+"30"}}>
           <div style={{fontSize:8,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:8}}>🐉 DRAGON MATCHING GUIDE</div>
-          <div style={{display:"flex",flexRead:"column",gap:8}}>
+          <div style={{display:"flex",flexDirection:"column",gap:8}}>
             {[
               {suit:"Bam",dragon:"Green Dragon",suitCol:SC.bam,dragonCol:"#1B7D4E",tiles:[{t:"s",s:"bam",n:5},{t:"d",v:"Grn"}]},
               {suit:"Crak",dragon:"Red Dragon",suitCol:SC.crak,dragonCol:"#B83232",tiles:[{t:"s",s:"crak",n:5},{t:"d",v:"Red"}]},
