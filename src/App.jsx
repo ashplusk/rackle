@@ -157,6 +157,33 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-rank-grid-card{text-align:center!important}
 .rk-rank-grid-card div{justify-content:center}
 
+
+
+/* ─── SCORECARD NESTING + HOMEPAGE SCORE COLOR FIX ───────────────────────── */
+.rk-score-shell{
+  background:transparent!important;
+  min-height:auto!important;
+  padding:0 0 52px!important;
+}
+.rk-pg > .rk-score-shell,
+.rk-pg > .rk-in > .rk-score-shell{
+  margin:0!important;
+}
+.rk-score-shell .rk-iq-hero{
+  margin-left:0!important;
+  margin-right:0!important;
+}
+.rk-score-shell .rk-iq-score{
+  color:#F3D46B!important;
+}
+.rk-score-shell .rk-iq-rule{
+  background:linear-gradient(90deg,transparent,#F3D46B,transparent)!important;
+}
+.rk-score-shell .rk-iq-style-pill{
+  color:#F3D46B!important;
+  border-color:rgba(243,212,107,.42)!important;
+}
+
 @media (prefers-reduced-motion: reduce){.rk-hero-live,.rk-iq-hero,.rk-soft-glow,.rk-count-live,.rk-streak-copy,.rk-float,.rk-pulse,.rk-live-dot,.rk-sweep:after{animation:none!important}}
 `;
 const S={
@@ -6874,7 +6901,7 @@ function ScorecardScreen({res,home,dayNum,onPractice,setScreen}){
     />
   );
   return(
-    <div style={S.pg} className="rk-pg rk-score-shell">
+    <div style={S.pg} className="rk-pg">
       <RackleHeader onBack={home} setScreen={setScreen}/>
       <DailyIQScorecard iq={res.iq} hand={res.finalRack||[]} startingRack={res.startingRack||[]} passLog={res.passLog||[]} dayNum={dayNum} section={res.section} chosenSec={res.chosenSec} chosenHand={res.chosenHand} allSections={res.allSections||[]} onHome={home} onPractice={onPractice} onCoachMode={enterCoach} setScreen={setScreen}/>
       <Footer/>
