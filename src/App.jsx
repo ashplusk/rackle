@@ -8529,9 +8529,35 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
             </div>
           </div>
 
-          {/* Keep play button styling close to the original */}
-          <div style={{width:48,height:48,borderRadius:999,background:"rgba(255,253,248,0.91)",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 8px 24px rgba(0,0,0,0.2)",flexShrink:0,transform:"translateY(-10px)",border:"1px solid rgba(255,255,255,0.55)"}}>
-            <span style={{fontSize:18,color:C.jade,marginLeft:2}}>▶</span>
+          {/* Play Button - reverted to original premium circle */}
+          <div
+            style={{
+              width:78,
+              height:78,
+              borderRadius:"50%",
+              background:"#F8F4EE",
+              display:"flex",
+              alignItems:"center",
+              justifyContent:"center",
+              boxShadow:"0 10px 24px rgba(0,0,0,0.18)",
+              border:"1px solid rgba(255,255,255,0.55)",
+              cursor:"pointer",
+              zIndex:3,
+              flexShrink:0,
+              transform:"translateY(-8px)",
+              transition:"transform .18s ease, box-shadow .18s ease",
+            }}
+          >
+            <div
+              style={{
+                width:0,
+                height:0,
+                borderTop:"12px solid transparent",
+                borderBottom:"12px solid transparent",
+                borderLeft:"18px solid #6F92C9",
+                marginLeft:4,
+              }}
+            />
           </div>
         </div>
 
