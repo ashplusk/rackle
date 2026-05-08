@@ -2749,6 +2749,19 @@ function getIQStyle(score,directionScore,tileStrengthScore,passQualityScore,timi
   return{...style,note:pickNote(style.notes,score+directionScore+passQualityScore)};
 }
 
+function withIQStyle(iq){
+  if(!iq)return iq;
+  if(iq.styleName&&iq.styleNote)return iq;
+  const style=getIQStyle(
+    iq.totalScore||0,
+    iq.directionScore||0,
+    iq.tileStrengthScore||0,
+    iq.passQualityScore||0,
+    iq.timingScore||0
+  );
+  return{...iq,style,styleName:style?.name,styleNote:style?.note};
+}
+
 function iqScoreLevel(score,directionScore,tileStrengthScore,passQualityScore,timingScore){
   const tier=getIQTier(score);
   const level=tier.level;
@@ -4947,6 +4960,7 @@ function MahjongIdentityCard({iq, chosenSec, passLog, finalRack}){
 // IQ HERO — shared dark jade gradient hero card used in scorecard + home
 function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections}){
   if(!iq)return null;
+  iq=withIQStyle(iq);
   const [displayScore,setDisplayScore]=useState(0);
   const [isPB,setIsPB]=useState(false);
   useEffect(()=>{
@@ -5306,9 +5320,7 @@ function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
           display:"flex",alignItems:"center",gap:12,
           padding:"13px 16px",
           borderRadius:14,
-          background:open
-            ?"linear-gradient(135deg,#FDFAF5 0%,#F5F0E6 100%)"
-            :"linear-gradient(135deg,#EDE7DA 0%,#E6DFD0 100%)",
+          background:"#fff",
           border:`1.5px solid ${open?"#C8DDD2":"#D6CFC2"}`,
           boxShadow:open
             ?"0 2px 12px rgba(23,107,66,0.08), 0 1px 3px rgba(0,0,0,0.04)"
@@ -5755,8 +5767,6 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
         </CollapsibleSection>
       )}
 
-      {/* Mahjong Identity */}
-      <MahjongIdentityCard iq={iq} chosenSec={chosenSec} passLog={passLog} finalRack={hand}/>
 
       {/* Actions */}
       <div style={{display:"flex",gap:8,marginTop:16}}>
@@ -7764,7 +7774,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
   const [nameErr,setNameErr]=useState("");
   const [period,setPeriod]=useState("today");
 
-  const iq=dRes?.iq;
+  const iq=withIQStyle(dRes?.iq);
   const myName=getClubName();
 
   useEffect(()=>{
@@ -8257,7 +8267,7 @@ function TopBanner(){
 function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSettings,showTutorial,showCardGuide,settings,showScorecard,setScreen}){
   const dn=getDayNum(),wk=getWeekly(),yd=getYesterday();
   const streakBadge=getStreakBadge(streak);
-  const iq=dRes?.iq;
+  const iq=withIQStyle(dRes?.iq);
   const bestIQ=getBestIQ();
   const profile=getProfile();
   const club=profile?.clubCode?CLUBS[profile.clubCode]:null;
@@ -8930,7 +8940,7 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen}){
   const [spOpen,setSpOpen]=useState(false);
   const [ckOpen,setCkOpen]=useState(false);
   const dn=getDayNum();
-  const iq=dRes?.iq;
+  const iq=withIQStyle(dRes?.iq);
   const allHist=getHist().filter(e=>e.iqScore!=null);
   const hasData=allHist.length>0;
 
