@@ -8435,19 +8435,28 @@ function ClubPulseCard({club,clubPlayers,setScreen}){
 
 function TomorrowPreviewCard(){
   const previews=[
-    "Tomorrow rewards patience.",
-    "Big swing rack incoming.",
-    "Tomorrow's rack favors flexibility.",
-    "A cleaner first pass could change everything tomorrow.",
-    "Your next club showdown is already waiting.",
+    {line:"A fresh rack drops at midnight.",hint:"Your streak gets another chance."},
+    {line:"New hand. Same club chase.",hint:"See who shows up tomorrow."},
+    {line:"Tomorrow is another read.",hint:"One cleaner pass can change the whole rack."},
+    {line:"The next Charleston is waiting.",hint:"Come back sharp."},
+    {line:"Your club resets at midnight.",hint:"Be first on the board."},
   ];
-  const text=previews[getDayNum()%previews.length];
+  const pick=previews[getDayNum()%previews.length];
   return(
-    <div style={{background:`linear-gradient(135deg,${C.gold}12,#fff)`,border:`1px solid ${C.gold}22`,borderRadius:14,padding:"13px 14px",marginBottom:14,display:"flex",alignItems:"center",gap:11}}>
-      <div style={{width:36,height:36,borderRadius:11,background:C.gold+"16",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🌙</div>
-      <div style={{flex:1}}>
-        <div style={{fontSize:8,color:C.gold,letterSpacing:2,fontWeight:900,marginBottom:3}}>TOMORROW'S RACKLE</div>
-        <div style={{fontSize:12,color:C.ink,fontWeight:800,lineHeight:1.3}}>{text}</div>
+    <div style={{background:`linear-gradient(135deg,#fff,${C.gold}10)`,border:`1px solid ${C.gold}24`,borderRadius:16,padding:"14px 15px",marginBottom:14,boxShadow:"0 4px 18px rgba(0,0,0,0.035)",position:"relative",overflow:"hidden"}}>
+      <div aria-hidden style={{position:"absolute",right:-10,bottom:-18,fontSize:70,opacity:0.045,lineHeight:1}}>🀄</div>
+      <div style={{display:"flex",alignItems:"center",gap:12,position:"relative"}}>
+        <div style={{width:38,height:38,borderRadius:13,background:C.gold+"16",border:`1px solid ${C.gold}22`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🌙</div>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{fontSize:8,color:C.gold,letterSpacing:1.8,fontWeight:900,marginBottom:4}}>TOMORROW'S RACKLE</div>
+          <div style={{fontFamily:F.d,fontSize:15,color:C.ink,fontWeight:850,lineHeight:1.2,marginBottom:3}}>{pick.line}</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.45}}>{pick.hint}</div>
+        </div>
+      </div>
+      <div style={{display:"flex",gap:6,marginTop:12,position:"relative",flexWrap:"wrap"}}>
+        {["New rack","Club reset","Streak lives"].map(label=>(
+          <span key={label} style={{fontSize:9,fontWeight:800,color:C.gold,background:C.gold+"10",border:`1px solid ${C.gold}18`,borderRadius:999,padding:"5px 8px",lineHeight:1}}>{label}</span>
+        ))}
       </div>
     </div>
   );
@@ -8788,7 +8797,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <div style={{background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"24px 20px 20px",textAlign:"center"}}>
               <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:14}}>DAILY RACKLE · #{dn}</div>
               {iq&&<>
-                <div style={{fontFamily:F.d,fontSize:58,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,textShadow:`0 2px 16px rgba(176,138,53,0.45)`,marginBottom:6}}>{iq.totalScore}</div>
+                <div style={{fontFamily:F.d,fontSize:74,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2.5,textShadow:`0 2px 18px rgba(176,138,53,0.48)`,marginBottom:8}}>{iq.totalScore}</div>
                 <div style={{width:40,height:1.5,background:`linear-gradient(90deg,transparent,${C.gilt},transparent)`,margin:"12px auto 12px"}}/>
                 <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:"#fff",marginBottom:12,letterSpacing:-0.3}}>{iq.level}</div>
                 {iq.styleName&&<div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",border:`1px solid ${C.gilt}45`,background:C.gilt+"18",borderRadius:999,padding:"4px 11px",fontSize:11,color:C.gilt,fontWeight:900,marginBottom:10,letterSpacing:0.2}}>{iq.styleName}</div>}
