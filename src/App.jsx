@@ -4970,7 +4970,7 @@ function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHom
         {isDaily?`DAILY RACKLE · #${dayNum}`:"PRACTICE · TODAY'S RACK"}
       </div>
       {!isHome&&<div style={{fontSize:9,color:C.gilt,letterSpacing:3,fontWeight:700,marginBottom:8}}>TODAY’S CHARLESTON</div>}
-      <div style={{fontFamily:F.d,fontSize:72,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,
+      <div style={{fontFamily:F.d,fontSize:82,fontWeight:900,color:C.gilt,lineHeight:0.92,letterSpacing:-3,
         textShadow:`0 2px 12px rgba(176,138,53,0.4)`,marginBottom:4}}>{displayScore}</div>
       {isPB&&<div className="rk-pop" style={{display:"inline-flex",alignItems:"center",gap:5,background:C.gilt+"22",border:`1px solid ${C.gilt}40`,borderRadius:20,padding:"4px 12px",marginBottom:8}}>
         <span style={{fontSize:13}}>🏆</span>
@@ -7869,7 +7869,7 @@ function Statspill({streak,rounds,bestIQ,streakBadge}){
   return(
     <div>
       {/* Collapsed pill */}
-      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:5,background:bg,border,borderRadius:8,padding:"4px 12px",cursor:"pointer"}}>
+      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:5,background:bg,border,borderRadius:10,padding:"4px 12px",height:36,cursor:"pointer"}}>
         <span style={{fontFamily:F.d,fontSize:12,fontWeight:800,color}}>{value}</span>
         <span style={{fontSize:11,color,fontWeight:600,opacity:0.8}}>{label}</span>
         <span style={{fontSize:9,color,opacity:0.5,marginLeft:1}}>{open?"▴":"▾"}</span>
@@ -8167,7 +8167,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         const profile=getProfile();
         const hasProfile=!!(profile&&profile.nickname);
         return(
-          <div style={{display:"flex",alignItems:"flex-start",justifyContent:"flex-end",marginBottom:0,marginTop:8,position:"relative"}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"flex-end",marginBottom:0,marginTop:8,position:"relative"}}>
             <div style={{flex:1}}><Statspill streak={streak} rounds={rounds} bestIQ={bestIQ} streakBadge={streakBadge}/></div>
             {/* Hamburger */}
             <button
@@ -9639,11 +9639,15 @@ function getWeeklyRecapData(){
   weekStart.setHours(0,0,0,0);
   const h=getHist().filter(e=>e.iqScore!=null&&e.ts>=weekStart.getTime());
   if(!h.length)return null;
-  const dailyH=h.filter(e=>e.mode==="daily"||e.mode==null||e.isDaily===true||e.daySeed!=null);
+  // Daily Racks should count unique daily challenges, not total hands/replays.
+  // Older history may not have a mode, so only treat entries as daily when they were
+  // explicitly saved as daily or carry a daySeed/isDaily marker.
+  const dailyH=h.filter(e=>e.mode==="daily"||e.isDaily===true||e.daySeed!=null);
   const avgIQ=Math.round(h.reduce((a,e)=>a+e.iqScore,0)/h.length);
   const bestEntry=h.reduce((a,b)=>b.iqScore>a.iqScore?b:a,h[0]);
   const daysPlayed=new Set(h.map(e=>{const d=new Date(e.ts);return`${d.getMonth()}-${d.getDate()}`;})).size;
-  const dailyDaysPlayed=new Set(dailyH.map(e=>{const d=new Date(e.ts);return`${d.getMonth()}-${d.getDate()}`;})).size;
+  const dailyDaysPlayed=new Set(dailyH.map(e=>e.daySeed||(()=>{const d=new Date(e.ts);return`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;})())).size;
+  const dailyRackCount=Math.min(7,dailyDaysPlayed);
   // Section most played this week
   const secCounts={};h.filter(e=>e.sid).forEach(e=>{secCounts[e.sid]=(secCounts[e.sid]||0)+1;});
   const topSecId=Object.keys(secCounts).sort((a,b)=>secCounts[b]-secCounts[a])[0]||null;
@@ -9653,7 +9657,7 @@ function getWeeklyRecapData(){
   const prevH=getHist().filter(e=>e.iqScore!=null&&e.ts>=prevWeekStart.getTime()&&e.ts<weekStart.getTime());
   const prevAvg=prevH.length?Math.round(prevH.reduce((a,e)=>a+e.iqScore,0)/prevH.length):null;
   const delta=prevAvg!=null?avgIQ-prevAvg:null;
-  return{h,dailyH,avgIQ,bestEntry,daysPlayed,dailyDaysPlayed,topSec,delta,prevAvg,weekRounds:h.length};
+  return{h,dailyH,avgIQ,bestEntry,daysPlayed,dailyDaysPlayed,dailyRackCount,topSec,delta,prevAvg,weekRounds:h.length};
 }
 
 function shouldShowWeeklyRecap(){
@@ -9689,11 +9693,11 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
   // Week-in-progress banner — shown any day except Sunday
   const weekInProgress=!isSunday;
 
-  const {avgIQ,bestEntry,daysPlayed,dailyDaysPlayed,topSec,delta,weekRounds,dailyH}=data;
+  const {avgIQ,bestEntry,daysPlayed,dailyDaysPlayed,dailyRackCount,topSec,delta,weekRounds,dailyH}=data;
   const lvlTier=getIQTier(avgIQ);
   const lvl={label:lvlTier.level,color:lvlTier.color};
 
-  const shareText=`🀄 My Rackle week:\n${avgIQ} avg score · ${dailyDaysPlayed||dailyH.length}/7 dailies · ${weekRounds} hands\n${lvl.label}${topSec?` · Fave: ${topSec.icon} ${topSec.name}`:""}\nplayrackle.com`;
+  const shareText=`🀄 My Rackle week:\n${avgIQ} avg score · ${dailyRackCount}/7 Daily Racks · ${weekRounds} hands\n${lvl.label}${topSec?` · Fave: ${topSec.icon} ${topSec.name}`:""}\nplayrackle.com`;
 
   return(
     <div style={S.pg} className="rk-pg">
@@ -9709,8 +9713,8 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
         <div style={{width:"100%",height:0.5,background:"rgba(255,255,255,0.08)",marginBottom:14}}/>
         <div style={{display:"flex",justifyContent:"center",gap:24,flexWrap:"wrap"}}>
           <div style={{textAlign:"center"}}>
-            <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.gilt}}>{dailyDaysPlayed||dailyH.length}<span style={{fontSize:11,color:"rgba(255,255,255,0.3)",fontFamily:F.b}}>/7</span></div>
-            <div style={{fontSize:8,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginTop:2}}>DAILIES</div>
+            <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.gilt}}>{dailyRackCount}<span style={{fontSize:11,color:"rgba(255,255,255,0.3)",fontFamily:F.b}}>/7</span></div>
+            <div style={{fontSize:8,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginTop:2}}>DAILY RACKS</div>
           </div>
           <div style={{width:1,background:"rgba(255,255,255,0.08)"}}/>
           <div style={{textAlign:"center"}}>
@@ -9751,16 +9755,16 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
         </div>}
         <div style={{display:"flex",gap:6}}>
           <div style={{flex:1,background:C.jade+"08",borderRadius:10,padding:"10px",textAlign:"center",border:`1px solid ${C.jade}15`}}>
-            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.jade}}>{dailyH.length}</div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>DAILIES</div>
+            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.jade}}>{dailyRackCount}</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>DAILY RACKS</div>
           </div>
           <div style={{flex:1,background:C.gold+"08",borderRadius:10,padding:"10px",textAlign:"center",border:`1px solid ${C.gold}15`}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.gold}}>{bestEntry.iqScore}</div>
             <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>BEST IQ</div>
           </div>
           <div style={{flex:1,background:C.cinn+"06",borderRadius:10,padding:"10px",textAlign:"center",border:`1px solid ${C.cinn}15`}}>
-            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.cinn}}>{dailyDaysPlayed||dailyH.length}</div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>DAILIES</div>
+            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.cinn}}>{weekRounds}</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>HANDS PLAYED</div>
           </div>
         </div>
       </div>
