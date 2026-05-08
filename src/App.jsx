@@ -44,7 +44,15 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .rk-soft-glow{animation:rkSoftGlow 4s ease-in-out infinite}
 @keyframes rkCountLift{from{opacity:.45;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
 .rk-count-live{animation:rkCountLift .35s ease-out both}
-@media (prefers-reduced-motion: reduce){.rk-hero-live,.rk-soft-glow,.rk-count-live,.rk-streak-copy,.rk-float,.rk-pulse{animation:none!important}}
+
+@keyframes rkLiveDot{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.32);opacity:1}}
+.rk-live-dot{animation:rkLiveDot 2.6s ease-in-out infinite}
+.rk-tap-card{transition:transform .18s ease, box-shadow .18s ease}
+.rk-tap-card:active{transform:scale(.992)}
+@keyframes rkGoldSweep{0%{transform:translateX(-120%);opacity:0}35%{opacity:.45}100%{transform:translateX(120%);opacity:0}}
+.rk-sweep{position:relative;overflow:hidden}
+.rk-sweep:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 0%,rgba(255,255,255,.14) 45%,transparent 60%);animation:rkGoldSweep 5.8s ease-in-out infinite;pointer-events:none}
+@media (prefers-reduced-motion: reduce){.rk-hero-live,.rk-soft-glow,.rk-count-live,.rk-streak-copy,.rk-float,.rk-pulse,.rk-live-dot,.rk-sweep:after{animation:none!important}}
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
@@ -7414,16 +7422,16 @@ function ClubCodeEntry({setScreen}){
           {/* Live stat pills for club members */}
           {savedClub&&clubStats?(
             <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-              <span style={{fontSize:10,fontWeight:700,color:C.jade,background:C.jade+"12",borderRadius:20,padding:"2px 10px"}}>{clubStats.total} club scores today</span>
-              {clubStats.topIQ&&<span style={{fontSize:10,fontWeight:700,color:C.gold,background:C.gold+"15",borderRadius:20,padding:"2px 10px"}}>Top score: {clubStats.topIQ}</span>}
+              <span style={{fontSize:10,fontWeight:700,color:C.jade,background:C.jade+"12",borderRadius:20,padding:"2px 10px"}}>{clubStats.total} club scores live</span>
+              {clubStats.topIQ&&<span style={{fontSize:10,fontWeight:700,color:C.gold,background:C.gold+"15",borderRadius:20,padding:"2px 10px"}}>Score to chase: {clubStats.topIQ}</span>}
               {clubStats.myRank&&<span style={{fontSize:10,fontWeight:700,color:"#2460A8",background:"#2460A812",borderRadius:20,padding:"2px 10px"}}>You're #{clubStats.myRank}</span>}
             </div>
           ):savedClub?(
-            <div style={{fontSize:11,color:C.mut}}>Who's top of {savedClub.name} right now?</div>
+            <div style={{fontSize:11,color:C.mut}}>Your club board is moving today.</div>
           ):(
             <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
               <span style={{fontSize:10,fontWeight:700,color:C.jade,background:C.jade+"12",borderRadius:20,padding:"2px 10px"}}>{totalClubs} clubs active</span>
-              <span style={{fontSize:10,fontWeight:600,color:C.mut,background:C.bg2,borderRadius:20,padding:"2px 10px"}}>Play with your Mahj club</span>
+              <span style={{fontSize:10,fontWeight:600,color:C.mut,background:C.bg2,borderRadius:20,padding:"2px 10px"}}>Bring your table online</span>
             </div>
           )}
         </div>
@@ -7442,8 +7450,8 @@ function ClubCodeEntry({setScreen}){
         ):(
           <>
             <div style={{background:C.jade+"08",borderRadius:10,padding:"10px 12px",marginBottom:12,border:`1px solid ${C.jade}20`}}>
-              <div style={{fontSize:11,fontWeight:700,color:C.jade,marginBottom:3}}>Why join a club?</div>
-              <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>Your score posts automatically after every Daily. See how you rank against your Mahj group, and give them something to beat.</div>
+              <div style={{fontSize:11,fontWeight:700,color:C.jade,marginBottom:3}}>Why join your club?</div>
+              <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>Your club gets one shared rack each day. Post your score, see who showed up, and give your table something to talk about before game night.</div>
             </div>
             <button onClick={()=>setScreen("clubs")} style={{width:"100%",padding:"11px 0",borderRadius:10,border:"none",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:F.d,letterSpacing:-0.1,marginBottom:8}}>Browse Club Directory →</button>
             <button onClick={()=>{setCodeOpen(o=>!o);setErr("");setCode("");}} style={{width:"100%",padding:"9px 0",borderRadius:10,border:`1px solid ${C.bdr}`,background:codeOpen?C.bg2:"transparent",color:C.mut,fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:F.b,marginBottom:codeOpen?8:0}}>
@@ -7469,7 +7477,7 @@ function ClubCodeEntry({setScreen}){
         )}
         <div style={{textAlign:"center",paddingTop:savedClub?0:4,borderTop:savedClub?`1px solid ${C.bdr}`:"none",marginTop:savedClub?10:0}}>
           <a href={addClubEmail} style={{fontSize:11,color:C.jade,textDecoration:"none",fontWeight:600}}>
-            + Get your club on Rackle →
+            + Bring your club onto Rackle →
           </a>
         </div>
       </div>}
@@ -7516,13 +7524,13 @@ function GlobalLeaderboardPill({setScreen}){
           {/* Live stat pills */}
           {hasData?(
             <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-              <span style={{fontSize:10,fontWeight:700,color:"#2460A8",background:"#2460A812",borderRadius:20,padding:"2px 10px"}}>{entries.length} scores posted today</span>
-              {topIQ&&<span style={{fontSize:10,fontWeight:700,color:C.jade,background:C.jade+"12",borderRadius:20,padding:"2px 10px"}}>Top Score: {topIQ}</span>}
+              <span style={{fontSize:10,fontWeight:700,color:"#2460A8",background:"#2460A812",borderRadius:20,padding:"2px 10px"}}>{entries.length} players read today’s rack</span>
+              {topIQ&&<span style={{fontSize:10,fontWeight:700,color:C.jade,background:C.jade+"12",borderRadius:20,padding:"2px 10px"}}>Score to chase: {topIQ}</span>}
               {myRank>0&&<span style={{fontSize:10,fontWeight:700,color:C.gold,background:C.gold+"15",borderRadius:20,padding:"2px 10px"}}>You're #{myRank} 🔥</span>}
               {myRank===0&&myName&&<span style={{fontSize:10,fontWeight:600,color:C.mut,background:C.bg2,borderRadius:20,padding:"2px 10px"}}>Play Daily to rank</span>}
             </div>
           ):(
-            <div style={{fontSize:11,color:C.mut,lineHeight:1.5}}>{loading?"Loading scores…":"The same hand. Every player. Who played it best?"}</div>
+            <div style={{fontSize:11,color:C.mut,lineHeight:1.5}}>{loading?"Loading scores…":"Scores are landing. Same rack, every player."}</div>
           )}
         </div>
         <span style={{fontSize:11,color:"#2460A8",opacity:0.7,marginLeft:8,marginTop:2}}>{open?"▴":"▾"}</span>
@@ -7547,7 +7555,7 @@ function GlobalLeaderboardPill({setScreen}){
           <div style={{textAlign:"center",padding:"24px 14px"}}>
             <div style={{fontSize:26,marginBottom:8}}>🀄</div>
             <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.ink,marginBottom:4}}>Board's empty, be first</div>
-            <div style={{fontSize:11,color:C.mut,lineHeight:1.6,marginBottom:12}}>Play today's Daily and put your name at the top.</div>
+            <div style={{fontSize:11,color:C.mut,lineHeight:1.6,marginBottom:12}}>Play today’s Daily and put your name on the board.</div>
             <button onClick={refresh} style={{fontSize:11,color:"#2460A8",fontWeight:700,background:"#2460A808",border:`1px solid #2460A825`,borderRadius:8,padding:"6px 14px",cursor:"pointer"}}>↻ Refresh</button>
           </div>
         ):(
@@ -7585,7 +7593,7 @@ function GlobalLeaderboardPill({setScreen}){
               </span>
             </button>
           )}
-          <div style={{fontSize:10,color:C.mut,lineHeight:1.5,opacity:0.7,textAlign:"center"}}>Play the Daily to appear · Resets midnight</div>
+          <div style={{fontSize:10,color:C.mut,lineHeight:1.5,opacity:0.7,textAlign:"center"}}>Play the Daily to appear · Board resets tonight</div>
         </div>
       </div>}
     </div>
@@ -7853,7 +7861,7 @@ function ClubDirectoryScreen({home,setScreen}){
           {/* Get listed CTA */}
           <div style={{textAlign:"center",padding:"16px 0",borderTop:`1px solid ${C.bdr}`,marginTop:4}}>
             <div style={{fontSize:12,color:C.mut,marginBottom:6}}>Don't see your club?</div>
-            <a href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20" style={{fontSize:13,color:C.jade,fontWeight:700,textDecoration:"none"}}>+ Get your club on Rackle →</a>
+            <a href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20" style={{fontSize:13,color:C.jade,fontWeight:700,textDecoration:"none"}}>+ Bring your club onto Rackle →</a>
           </div>
         </>
       )}
@@ -8302,7 +8310,7 @@ function StreakCard({streak,streakBadge,bestIQ,clubName,onStats,firstName}){
 function TopBanner(){
   const messages=[
     {label:"WELCOME",text:"The Daily Mahjong Workout. Same hand. Every player. Every day."},
-    {label:"TIP",text:"Pick your section before your first pass, direction is worth 40 points."},
+    {label:"LIVE",text:"Same rack today. Every player gets one read."},
     {label:"TIP",text:"Jokers can never be passed. Hold them and build around them."},
     {label:"TIP",text:"Flowers appear in most winning hands. Don't throw them away early."},
     {label:"TIP",text:"6s are your most versatile tile, they appear in ~40% of hands."},
@@ -8312,7 +8320,7 @@ function TopBanner(){
     {label:"TIP",text:"Soap acts as a wild tile in the 2026 section only."},
     {label:"TIP",text:"Free Play is unlimited. Build instincts before the daily resets."},
     {label:"DID YOU KNOW",text:"Rackle scores every pass individually, not just your final rack."},
-    {label:"DID YOU KNOW",text:"The daily deal is seeded, every player gets the exact same 13 tiles."},
+    {label:"CLUBHOUSE",text:"Your club board resets tonight. Give them a score to chase."},
     {label:"DID YOU KNOW",text:"Your Rackle Coach gives simple tips for the next Charleston."},
   ];
   const [idx,setIdx]=useState(0);
@@ -8378,7 +8386,7 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
   const [reset,setReset]=useState(getTimeUntilMidnightLabel());
   useEffect(()=>{const iv=setInterval(()=>setReset(getTimeUntilMidnightLabel()),30000);return()=>clearInterval(iv);},[]);
   const liveCount=ds?.total||0;
-  const topScore=ds?.max||null;
+  const topScore=ds?.max||ds?.topScore||ds?.highest||null;
   const currentStreak=Math.max(0,streak||0);
   const tomorrowHints=[
     "Tomorrow's rack rewards flexibility.",
@@ -8389,13 +8397,13 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
   ];
   const tomorrowHint=tomorrowHints[dn%tomorrowHints.length];
   const chips=[
-    {label:"players in today",value:liveCount||"Live"},
+    {label:"scores live today",value:liveCount||"Live"},
     bestIQ?.score?{label:"your best",value:bestIQ.score}:null,
-    topScore?{label:club?"club leader":"top today",value:topScore}:null,
-    {label:currentStreak>0?"streak alive":"starts today",value:currentStreak>0?`${currentStreak}d`:"Day 1"},
+    topScore?{label:club?"club leader":"score to chase",value:topScore}:null,
+    {label:currentStreak>0?"streak alive":"streak starts",value:currentStreak>0?`${currentStreak}d`:"Day 1"},
   ].filter(Boolean).slice(0,4);
   return(
-    <button onClick={onPlay} aria-label={`Play Daily Rackle challenge number ${dn}`} className="rk-in rk-hero-live" style={{
+    <button onClick={onPlay} aria-label={`Play Daily Rackle challenge number ${dn}`} className="rk-in rk-hero-live rk-tap-card rk-sweep" style={{
       width:"100%",border:"none",cursor:"pointer",textAlign:"left",borderRadius:22,overflow:"hidden",padding:0,
       background:`linear-gradient(150deg,${C.hero1} 0%,${C.hero2} 46%,#0F5C39 65%,${C.hero3} 100%)`,
       color:"#fff",boxShadow:"0 12px 42px rgba(6,43,24,0.26)",marginBottom:20,position:"relative"
@@ -8415,9 +8423,13 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontFamily:F.d,fontSize:25,fontWeight:900,letterSpacing:-0.85,lineHeight:1.03,marginBottom:10}}>One rack.<br/>One read.<br/><span style={{color:C.gilt}}>One chance.</span></div>
             <div style={{fontSize:12,color:"rgba(255,255,255,0.73)",lineHeight:1.56,maxWidth:290}}>Play the same Charleston as everyone today. Score it. Share it. Climb your club.</div>
+            <div style={{display:"inline-flex",alignItems:"center",gap:7,marginTop:10,background:"rgba(255,255,255,0.07)",border:"1px solid rgba(255,255,255,0.10)",borderRadius:999,padding:"5px 9px"}}>
+              <span className="rk-live-dot" style={{width:6,height:6,borderRadius:99,background:"#4CD987",display:"inline-block"}}/>
+              <span style={{fontSize:9,color:"rgba(255,255,255,0.62)",fontWeight:800,letterSpacing:.4}}>{liveCount?`${liveCount} players are reading today's rack`:"The club board is open"}</span>
+            </div>
           </div>
-          <div style={{width:56,height:56,borderRadius:999,background:"rgba(255,255,255,0.94)",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 8px 24px rgba(0,0,0,0.2)",flexShrink:0,transform:"translateY(-12px)",border:"1px solid rgba(255,255,255,0.55)"}}>
-            <span style={{fontSize:21,color:C.jade,marginLeft:3}}>▶</span>
+          <div style={{width:48,height:48,borderRadius:999,background:"rgba(255,253,248,0.91)",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 8px 24px rgba(0,0,0,0.2)",flexShrink:0,transform:"translateY(-16px)",border:"1px solid rgba(255,255,255,0.55)"}}>
+            <span style={{fontSize:18,color:C.jade,marginLeft:2}}>▶</span>
           </div>
         </div>
         <div style={{display:"flex",gap:7,marginTop:18,flexWrap:"wrap"}}>
@@ -8446,8 +8458,8 @@ function ClubPulseCard({club,clubPlayers,clubEntries=[],currentScore=0,currentRa
   const topEntry=realEntries[0]||null;
   const actualCount=Math.max(realEntries.length,clubPlayers||0,currentScore?1:0);
   const lines=[
-    `${actualCount||1} club ${(actualCount||1)===1?"score is":"scores are"} live today`,
-    topEntry?`${topEntry.name||"Club leader"} set the score to chase: ${topEntry.iqScore}`:(currentScore?`Your ${currentScore} is on the club board.`:"Your club board is waiting for today's scores."),
+    `${actualCount||1} ${(actualCount||1)===1?"club player has":"club players have"} posted today`,
+    topEntry?`${topEntry.name||"Club leader"} is setting the pace with ${topEntry.iqScore}`:(currentScore?`Your ${currentScore} is on the club board.`:"Your club board is waiting for the first score."),
     currentRank===1?"You're the score your club is chasing.":currentRank?`You're #${currentRank} in your club today.`:"Post your Daily to enter the club race.",
   ];
   return(
@@ -8526,10 +8538,10 @@ function TomorrowPreviewCard(){
   const urgency=timeLeft.urgent;
   const compactTime=`${timeLeft.hh}:${timeLeft.mm}:${timeLeft.ss}`;
   const hint=getTomorrowHint();
-  const headline=urgency?"Last call before the next rack.":"A new rack drops soon.";
+  const headline=urgency?"Last call before the next rack.":"Tomorrow’s rack is already waiting.";
   const subline=urgency
     ?"One more look before the club board resets."
-    :"Come back tomorrow and climb the club board.";
+    :"Come back tomorrow and see where your club lands.";
 
   return(
     <div className="rk-in" style={{background:`linear-gradient(145deg,#fff,${C.jade}06 62%,${C.gold}08)`,border:`1px solid ${urgency?C.cinn+"24":C.jade+"1E"}`,borderRadius:17,marginBottom:18,boxShadow:"0 4px 18px rgba(0,0,0,0.035)",position:"relative",overflow:"hidden"}}>
@@ -8539,7 +8551,7 @@ function TomorrowPreviewCard(){
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:8,color:urgency?C.cinn:C.jade,letterSpacing:1.7,fontWeight:900,marginBottom:4}}>TOMORROW'S RACKLE</div>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.ink,lineHeight:1.12,letterSpacing:-0.22,marginBottom:4,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{headline}</div>
-          <div style={{fontSize:11,color:C.mut,lineHeight:1.4}}>Hint: {String(hint).replace(/^Hint:\s*/i,"")}</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.4}}>{String(hint).replace(/^Hint:\s*/i,"")}</div>
         </div>
         <div style={{display:"flex",alignItems:"center",justifyContent:"center",width:28,height:28,borderRadius:999,background:open?C.jade+"12":"transparent",flexShrink:0}}>
           <div style={{fontSize:16,color:C.jade,fontWeight:900,lineHeight:1,transform:open?"rotate(90deg)":"rotate(0deg)",transition:"transform 0.18s ease"}}>›</div>
@@ -8565,7 +8577,7 @@ function TomorrowPreviewCard(){
         </div>
         <div style={{display:"flex",alignItems:"center",gap:8,background:C.gold+"0D",border:`1px solid ${C.gold}18`,borderRadius:13,padding:"9px 10px"}}>
           <span style={{fontSize:13,flexShrink:0}}>👀</span>
-          <span style={{fontSize:11,color:C.ink,lineHeight:1.45,fontWeight:650}}>Small hint: {hint}</span>
+          <span style={{fontSize:11,color:C.ink,lineHeight:1.45,fontWeight:650}}>Tomorrow watch: {hint}</span>
         </div>
       </div>}
     </div>
@@ -8722,29 +8734,16 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   };
 
   const StartDaily=()=> (
-    <button onClick={()=>go("daily")} aria-label="Start Today's Rackle" style={{width:"100%",cursor:"pointer",border:"none",borderRadius:24,padding:0,overflow:"hidden",marginBottom:18,textAlign:"left",boxShadow:"0 18px 42px rgba(6,43,24,0.18)",background:`linear-gradient(150deg,${C.hero1},${C.hero2} 56%,${C.hero3})`}}>
-      <div style={{padding:"24px 24px 20px",position:"relative",minHeight:326}}>
-        <div aria-hidden style={{position:"absolute",right:-18,top:28,fontSize:132,opacity:0.045,transform:"rotate(-12deg)"}}>🀄</div>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:30}}>
-          <div style={{display:"inline-flex",alignItems:"center",gap:8,border:"1px solid rgba(255,255,255,0.18)",background:"rgba(255,255,255,0.08)",borderRadius:999,padding:"8px 14px"}}>
-            <span style={{width:7,height:7,borderRadius:7,background:C.gilt,display:"inline-block"}}/>
-            <span style={{fontSize:10,color:"rgba(255,255,255,0.78)",letterSpacing:2.4,fontWeight:900}}>DAILY RACKLE · #{dn}</span>
-          </div>
-          <div style={{fontSize:11,color:"rgba(255,255,255,0.62)",fontWeight:800}}>resets tonight</div>
-        </div>
-        <div style={{fontFamily:F.d,fontSize:34,fontWeight:900,color:"#fff",letterSpacing:-1.35,lineHeight:0.98,marginBottom:16}}>One rack.<br/>One read.<br/><span style={{color:C.gilt}}>One chance.</span></div>
-        <div style={{fontSize:12.5,color:"rgba(255,255,255,0.76)",lineHeight:1.45,maxWidth:248,marginBottom:24}}>Play the same Charleston as everyone today. Score it. Share it. Climb your club.</div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginRight:0}}>
-          <MiniStat value={todayPlayers} label="PLAYING TODAY" accent={C.gilt}/>
-          <MiniStat value={pb} label="PERSONAL BEST"/>
-          <MiniStat value={topToday} label="TOP TODAY"/>
-          <MiniStat value={streak>0?`${streak}d`:"start"} label="STREAK" accent={C.gilt}/>
-        </div>
-        <div style={{position:"absolute",right:26,top:86,width:88,height:88,borderRadius:88,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 12px 34px rgba(0,0,0,0.18)"}}>
-          <span style={{width:0,height:0,borderTop:"13px solid transparent",borderBottom:"13px solid transparent",borderLeft:`22px solid ${C.jade}`,marginLeft:6}}/>
-        </div>
-      </div>
-    </button>
+    <TodayRackleHeroCard
+      dn={dn}
+      onPlay={()=>go("daily")}
+      ds={ds}
+      club={club}
+      clubPlayers={clubPlayers}
+      bestIQ={bestIQ}
+      ydIQ={ydIQ}
+      streak={streak}
+    />
   );
 
   const CompletedDaily=()=> (
@@ -8769,7 +8768,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <MiniStat value={`#${Math.min(todayPlayers,Math.max(1,todayPlayers-1))}`} label="GLOBAL RANK" accent={brightScoreColor}/>
           </button>
           <button onClick={goClubRank} style={{border:"none",padding:0,background:"transparent",cursor:"pointer",textAlign:"left"}} aria-label={club?"View club leaderboard":"Browse club directory"}>
-            <MiniStat value={club?(shownClubRank?`#${shownClubRank}`:(hasClubScore?"posting":"join")):"join"} label="CLUB RANK" accent={shownClubRank===1?brightScoreColor:undefined}/>
+            <MiniStat value={club?(shownClubRank?`#${shownClubRank}`:(hasClubScore?"live":"club")):"join"} label="CLUB RANK" accent={shownClubRank===1?brightScoreColor:undefined}/>
           </button>
         </div>
       </div>
@@ -8781,7 +8780,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </button>
         <button onClick={showScorecard} style={{width:"100%",border:`1px solid ${C.jade}20`,background:C.jade+"06",borderRadius:14,padding:"13px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left"}}>
           <div style={{width:39,height:39,borderRadius:12,background:C.jade+"13",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>🎓</div>
-          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>Improve Your Game</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Best path · Other hands · Next move</div></div>
+          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>Improve Your Game</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Best path · Other reads · Next move</div></div>
           <span style={{fontSize:18,color:C.jade}}>›</span>
         </button>
       </div>
@@ -8819,7 +8818,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     <>
       <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,marginTop:8}}>
         <div style={{flex:1,height:1,background:`linear-gradient(90deg,transparent,${C.bdr})`}}/>
-        <div style={{display:"flex",alignItems:"center",gap:6,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:999,padding:"5px 14px"}}><span style={{fontSize:10}}>🀄</span><span style={{fontSize:9,color:C.mut,letterSpacing:2.3,fontWeight:900}}>COMMUNITY</span></div>
+        <div style={{display:"flex",alignItems:"center",gap:6,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:999,padding:"5px 14px"}}><span style={{fontSize:10}}>🀄</span><span style={{fontSize:9,color:C.mut,letterSpacing:2.3,fontWeight:900}}>THE CLUBHOUSE</span></div>
         <div style={{flex:1,height:1,background:`linear-gradient(90deg,${C.bdr},transparent)`}}/>
       </div>
       <div style={{marginBottom:18,borderRadius:16,overflow:"hidden",border:`1px solid ${C.bdr}`,boxShadow:"0 4px 16px rgba(0,0,0,0.025)"}}>
