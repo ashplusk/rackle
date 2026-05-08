@@ -8355,7 +8355,7 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
     <button onClick={onPlay} aria-label={`Play Daily Rackle challenge number ${dn}`} className="rk-in" style={{
       width:"100%",border:"none",cursor:"pointer",textAlign:"left",borderRadius:22,overflow:"hidden",padding:0,
       background:`linear-gradient(150deg,${C.hero1} 0%,${C.hero2} 58%,${C.hero3} 100%)`,
-      color:"#fff",boxShadow:"0 12px 42px rgba(6,43,24,0.28)",marginBottom:14,position:"relative"
+      color:"#fff",boxShadow:"0 12px 42px rgba(6,43,24,0.28)",marginBottom:18,position:"relative"
     }}>
       <div aria-hidden style={{position:"absolute",right:-24,top:-28,fontSize:140,opacity:0.055,lineHeight:1,transform:"rotate(12deg)",pointerEvents:"none"}}>🀄</div>
       <div aria-hidden style={{position:"absolute",left:-36,bottom:-30,fontSize:110,opacity:0.04,lineHeight:1,transform:"rotate(-10deg)",pointerEvents:"none"}}>🀄</div>
@@ -8435,6 +8435,7 @@ function ClubPulseCard({club,clubPlayers,setScreen}){
 
 function TomorrowPreviewCard(){
   const [timeLeft,setTimeLeft]=useState({hh:"00",mm:"00",ss:"00",urgent:false});
+  const [open,setOpen]=useState(false);
 
   useEffect(()=>{
     const tick=()=>{
@@ -8474,54 +8475,63 @@ function TomorrowPreviewCard(){
     });
     const pairs=Object.values(counts).filter(v=>v>=2).length;
 
-    if(jokers>=2)return "Small hint: jokers may make tomorrow interesting.";
-    if(flowers>=3)return "Small hint: flowers may be worth watching tomorrow.";
-    if(sixes>=2)return "Small hint: sixes may matter more than usual.";
-    if(honors>=5)return "Small hint: honors may pull the rack tomorrow.";
-    if(pairs>=3)return "Small hint: pairs may tell the story tomorrow.";
-    if(evens>=6)return "Small hint: even tiles may get the first look.";
-    if(odds>=6)return "Small hint: odd tiles may get the first look.";
-    return "Small hint: tomorrow may reward a flexible first pass.";
+    if(jokers>=2)return "Jokers may make tomorrow interesting.";
+    if(flowers>=3)return "Flowers may be worth watching tomorrow.";
+    if(sixes>=2)return "Sixes may matter more than usual.";
+    if(honors>=5)return "Honors may pull the rack tomorrow.";
+    if(pairs>=3)return "Pairs may tell the story tomorrow.";
+    if(evens>=6)return "Even tiles may get the first look.";
+    if(odds>=6)return "Odd tiles may get the first look.";
+    return "Tomorrow may reward a flexible first pass.";
   };
 
   const urgency=timeLeft.urgent;
-  const headline=urgency?"Last call before the next rack.":"Your next rack is almost here.";
-  const subline=urgency
-    ?"One more look before the board resets."
-    :"Come back tomorrow and see where your club lands.";
+  const compactTime=`${timeLeft.hh}:${timeLeft.mm}:${timeLeft.ss}`;
   const hint=getTomorrowHint();
+  const headline=urgency?"Last call before the next rack.":"A new rack drops at midnight.";
+  const subline=urgency
+    ?"One more look before the club board resets."
+    :"Come back tomorrow and climb the club board.";
 
   return(
-    <div style={{background:`linear-gradient(145deg,#fff,${C.jade}07 58%,${C.gold}10)`,border:`1px solid ${urgency?C.cinn+"28":C.jade+"20"}`,borderRadius:18,padding:"15px 15px 14px",marginBottom:14,boxShadow:"0 5px 22px rgba(0,0,0,0.04)",position:"relative",overflow:"hidden"}}>
-      <div aria-hidden style={{position:"absolute",right:-12,bottom:-20,fontSize:76,opacity:0.045,lineHeight:1}}>🀄</div>
-      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,position:"relative",marginBottom:12}}>
+    <div className="rk-in" style={{background:`linear-gradient(145deg,#fff,${C.jade}06 62%,${C.gold}08)`,border:`1px solid ${urgency?C.cinn+"24":C.jade+"1E"}`,borderRadius:17,marginBottom:18,boxShadow:"0 4px 18px rgba(0,0,0,0.035)",position:"relative",overflow:"hidden"}}>
+      <div aria-hidden style={{position:"absolute",right:-14,bottom:-18,fontSize:70,opacity:0.04,lineHeight:1}}>🀄</div>
+      <button onClick={()=>setOpen(o=>!o)} aria-expanded={open} style={{width:"100%",background:"none",border:"none",cursor:"pointer",textAlign:"left",padding:"14px 14px 13px",display:"flex",alignItems:"center",gap:12,position:"relative"}}>
+        <div style={{width:38,height:38,borderRadius:13,background:urgency?C.cinn+"0D":C.jade+"0D",border:`1px solid ${urgency?C.cinn+"20":C.jade+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.d,fontSize:18,fontWeight:900,color:urgency?C.cinn:C.jade,flexShrink:0}}>✦</div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:8,color:urgency?C.cinn:C.jade,letterSpacing:1.8,fontWeight:900,marginBottom:5}}>TOMORROW'S RACKLE</div>
-          <div style={{fontFamily:F.d,fontSize:17,color:C.ink,fontWeight:900,lineHeight:1.15,letterSpacing:-0.2,marginBottom:4}}>{headline}</div>
-          <div style={{fontSize:11,color:C.mut,lineHeight:1.45}}>{subline}</div>
+          <div style={{fontSize:8,color:urgency?C.cinn:C.jade,letterSpacing:1.7,fontWeight:900,marginBottom:4}}>TOMORROW'S RACKLE</div>
+          <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.15,letterSpacing:-0.15,marginBottom:4}}>{headline}</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.4}}>Hint: {hint}</div>
         </div>
-        <div style={{width:42,height:42,borderRadius:14,background:urgency?C.cinn+"10":C.jade+"10",border:`1px solid ${urgency?C.cinn+"22":C.jade+"22"}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.d,fontSize:20,fontWeight:900,color:urgency?C.cinn:C.jade,flexShrink:0}}>✦</div>
-      </div>
+        <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:5,flexShrink:0}}>
+          <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:urgency?C.cinn:C.jade,lineHeight:1,letterSpacing:-0.4}}>{compactTime}</div>
+          <div style={{fontSize:8,color:C.mut,fontWeight:800,letterSpacing:1.1,textTransform:"uppercase"}}>New rack</div>
+          <div style={{fontSize:14,color:C.jade,fontWeight:900,lineHeight:1,transform:open?"rotate(90deg)":"rotate(0deg)",transition:"transform 0.18s ease"}}>›</div>
+        </div>
+      </button>
 
-      <div style={{position:"relative",background:`linear-gradient(145deg,${C.jade}0C,#fff)`,border:`1px solid ${urgency?C.cinn+"20":C.jade+"18"}`,borderRadius:15,padding:"10px",marginBottom:10,boxShadow:"inset 0 1px 0 rgba(255,255,255,0.8)"}}>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,marginBottom:8}}>
-          <div style={{fontSize:8,color:urgency?C.cinn:C.jade,letterSpacing:1.5,fontWeight:900}}>NEW RACK IN</div>
-          <div style={{fontSize:9,color:C.mut,fontWeight:750}}>Midnight reset</div>
+      {open&&<div className="rk-in" style={{position:"relative",padding:"0 14px 14px"}}>
+        <div style={{height:1,background:`linear-gradient(90deg,transparent,${C.bdr},transparent)`,marginBottom:12}}/>
+        <div style={{fontSize:12,color:C.ink,lineHeight:1.45,fontWeight:700,marginBottom:10}}>{subline}</div>
+        <div style={{background:`linear-gradient(145deg,${C.jade}0B,#fff)`,border:`1px solid ${urgency?C.cinn+"1A":C.jade+"16"}`,borderRadius:14,padding:"10px",boxShadow:"inset 0 1px 0 rgba(255,255,255,0.8)",marginBottom:10}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,marginBottom:8}}>
+            <div style={{fontSize:8,color:urgency?C.cinn:C.jade,letterSpacing:1.4,fontWeight:900}}>NEW RACK IN</div>
+            <div style={{fontSize:9,color:C.mut,fontWeight:750}}>Midnight reset</div>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:7,width:"100%"}}>
+            {[{v:timeLeft.hh,l:"hrs"},{v:timeLeft.mm,l:"min"},{v:timeLeft.ss,l:"sec"}].map((part)=>(
+              <div key={part.l} style={{textAlign:"center",background:"rgba(255,255,255,0.72)",border:`1px solid ${urgency?C.cinn+"16":C.jade+"14"}`,borderRadius:12,padding:"8px 4px 7px",minWidth:0}}>
+                <div style={{fontFamily:F.d,fontSize:25,fontWeight:900,color:urgency?C.cinn:C.jade,lineHeight:1,letterSpacing:-0.8}}>{part.v}</div>
+                <div style={{fontSize:7,color:C.mut,letterSpacing:1.1,fontWeight:800,marginTop:4,textTransform:"uppercase"}}>{part.l}</div>
+              </div>
+            ))}
+          </div>
         </div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:7,width:"100%"}}>
-          {[{v:timeLeft.hh,l:"hrs"},{v:timeLeft.mm,l:"min"},{v:timeLeft.ss,l:"sec"}].map((part)=>(
-            <div key={part.l} style={{textAlign:"center",background:"rgba(255,255,255,0.72)",border:`1px solid ${urgency?C.cinn+"16":C.jade+"14"}`,borderRadius:12,padding:"8px 4px 7px",minWidth:0}}>
-              <div style={{fontFamily:F.d,fontSize:25,fontWeight:900,color:urgency?C.cinn:C.jade,lineHeight:1,letterSpacing:-0.8}}>{part.v}</div>
-              <div style={{fontSize:7,color:C.mut,letterSpacing:1.1,fontWeight:800,marginTop:4,textTransform:"uppercase"}}>{part.l}</div>
-            </div>
-          ))}
+        <div style={{display:"flex",alignItems:"center",gap:8,background:C.gold+"0D",border:`1px solid ${C.gold}18`,borderRadius:13,padding:"9px 10px"}}>
+          <span style={{fontSize:13,flexShrink:0}}>👀</span>
+          <span style={{fontSize:11,color:C.ink,lineHeight:1.45,fontWeight:650}}>Small hint: {hint}</span>
         </div>
-      </div>
-
-      <div style={{position:"relative",display:"flex",alignItems:"center",gap:8,background:C.gold+"0E",border:`1px solid ${C.gold}18`,borderRadius:13,padding:"9px 10px"}}>
-        <span style={{fontSize:14,flexShrink:0}}>👀</span>
-        <span style={{fontSize:11,color:C.ink,lineHeight:1.45,fontWeight:650}}>{hint}</span>
-      </div>
+      </div>}
     </div>
   );
 }
@@ -8561,7 +8571,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   return(
     <>
-    <div style={{...S.pg,paddingTop:0}} className="rk-pg">
+    <div style={{...S.pg,padding:"0 18px 44px"}} className="rk-pg">
       {/* NUDGE BANNER — shown after noon if daily not done */}
       {nudge&&!nudgeDismissed&&<div className="rk-in" style={{display:"flex",alignItems:"center",gap:10,background:`linear-gradient(135deg,${C.jade}12,${C.jade}06)`,border:`1px solid ${C.jade}25`,borderRadius:14,padding:"10px 14px",marginBottom:10,marginTop:8}}>
         <span style={{fontSize:20,flexShrink:0}}>⏰</span>
@@ -8622,7 +8632,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           [["The tiles don't lie.","Show up and find out."],["One hand. One shot.","Better than yesterday?"],["Your Charleston is a muscle.","Today is a rep."],["Same deal. Every player.","What will you do with it?"],["The table is set.","Come back stronger."],["Your instincts are sharper today.","Prove it."],["Yesterday's rack is gone.","Today's is yours."],["Train. Score. Improve.","That's the whole game."],["Two minutes.","Your best Charleston yet?"],["Every pass is a choice.","Make good ones."]][getDayNum()%10];
         const [l1,l2]=Array.isArray(heroLines)?heroLines:heroLines;
         return(
-          <div style={{textAlign:"center",padding:"30px 0 10px"}}>
+          <div style={{textAlign:"center",padding:"32px 0 18px"}}>
             <div className="rk-float" style={{fontSize:40,marginBottom:10,lineHeight:1}}>🀄</div>
             <h1 style={{fontFamily:F.d,fontSize:48,color:C.ink,margin:"0 0 6px",fontWeight:900,letterSpacing:-2.5,lineHeight:1}}>Rackle</h1>
             <p style={{fontFamily:F.d,fontSize:16,color:C.jade,margin:"0 0 10px",fontWeight:600,fontStyle:"italic",letterSpacing:0.3}}>The Daily Mahjong Workout</p>
@@ -8694,7 +8704,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         );
       })()}
 
-      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16,marginTop:16}}>
+      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:18,marginTop:22}}>
         <div style={{flex:1,height:1,background:`linear-gradient(90deg,transparent,${C.bdr})`}}/>
         <div style={{display:"flex",alignItems:"center",gap:6,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:20,padding:"4px 12px"}}>
           <span style={{fontSize:10}}>📅</span>
@@ -8719,7 +8729,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       ):(()=>{
         const ydComp=yd&&dRes&&iq&&yd.iq?(iq.totalScore>yd.iq.totalScore?{label:"Better than yesterday",icon:"⬆️"}:iq.totalScore===yd.iq.totalScore?{label:"Same as yesterday",icon:"➡️"}:{label:"Yesterday was stronger",icon:"⬇️"}):null;
         return(
-          <div style={{borderRadius:20,overflow:"hidden",marginBottom:8,boxShadow:"0 8px 32px rgba(0,0,0,0.15)"}}>
+          <div style={{borderRadius:20,overflow:"hidden",marginBottom:18,boxShadow:"0 8px 32px rgba(0,0,0,0.15)"}}>
             {/* STREAK HEADER — collapsible strip, light bg sits above dark hero */}
             {streak>0&&!settings?.hideStreak&&(()=>{
               const firstName=profile?.nickname?profile.nickname.split(" ")[0]:null;
@@ -8911,7 +8921,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
       {dDone&&<TomorrowPreviewCard/>}
 
-      <button onClick={()=>go("free")} aria-label="Play Practice Mode" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:20,borderRadius:16,padding:"14px 16px",textAlign:"left",background:dDone?`linear-gradient(135deg,${C.jade}18,${C.jade}08)`:`linear-gradient(135deg,${C.cinn}05,#fff)`,border:`1.5px solid ${dDone?C.jade+"40":C.cinn+"20"}`}}>
+      <button onClick={()=>go("free")} aria-label="Play Practice Mode" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:14,marginBottom:24,borderRadius:16,padding:"14px 16px",textAlign:"left",background:dDone?`linear-gradient(135deg,${C.jade}18,${C.jade}08)`:`linear-gradient(135deg,${C.cinn}05,#fff)`,border:`1.5px solid ${dDone?C.jade+"40":C.cinn+"20"}`}}>
         <div aria-hidden="true" style={{width:48,height:48,borderRadius:14,background:dDone?`linear-gradient(135deg,${C.jade},#115C38)`:`linear-gradient(135deg,${C.cinn}20,${C.cinn}10)`,border:`1px solid ${dDone?C.jade+"60":C.cinn+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0,boxShadow:dDone?`0 4px 14px ${C.jade}30`:"none"}}>🀄</div>
         <div style={{flex:1}}>
           <div style={{fontSize:9,color:dDone?C.jade:C.cinn,letterSpacing:2,fontWeight:700,marginBottom:3}}>{dDone?"KEEP SHARPENING":"UNLIMITED PRACTICE"}</div>
@@ -8923,7 +8933,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </div>
       </button>
 
-      <div style={{marginBottom:20}}/>
+      <div style={{marginBottom:24}}/>
 
       <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12,marginTop:8}}>
         <div style={{flex:1,height:1,background:`linear-gradient(90deg,transparent,${C.bdr})`}}/>
