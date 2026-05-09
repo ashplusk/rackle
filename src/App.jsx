@@ -5500,14 +5500,39 @@ function getClubCode(){
   return null;
 }
 function setClubCode(c){ST.set("clubCode",c);}
-function getClubName(){
-  const stored=ST.get("clubName",null);
-  if(stored)return stored;
-  const code=getClubCode();
-  const profile=ST.get("profile",null);
-  return profile?.clubName||profile?.club||CLUBS[code]?.name||null;
+function isClubDisplayName(name){
+  const clean=String(name||"").trim().toLowerCase();
+  if(!clean)return false;
+  return Object.values(CLUBS||{}).some(c=>String(c?.name||"").trim().toLowerCase()===clean);
 }
-function setClubName(n){ST.set("clubName",n);}
+function getPlayerDisplayName(){
+  const stored=ST.get("clubName",null);
+  if(stored&&!isClubDisplayName(stored))return stored;
+  const profile=ST.get("profile",null);
+  if(profile?.nickname&&!isClubDisplayName(profile.nickname))return profile.nickname;
+  return null;
+}
+function getClubName(){
+  // Historical note: this key stores the player's leaderboard display name.
+  // Do not fall back to the club name here. That caused rows like
+  // "Apex Mahjong Club" to appear as players on the leaderboard.
+  return getPlayerDisplayName();
+}
+function setClubName(n){
+  if(n&&isClubDisplayName(n))return;
+  ST.set("clubName",n);
+}
+function cleanLeaderboardRows(rows=[]){
+  const seen=new Set();
+  return (rows||[])
+    .filter(r=>r&&r.name&&!isClubDisplayName(r.name))
+    .filter(r=>{
+      const key=String(r.name||"").trim().toLowerCase();
+      if(!key||seen.has(key))return false;
+      seen.add(key);
+      return true;
+    });
+}
 
 // ─── PROFILE SYSTEM ───────────────────────────────────────────────────────────
 function getProfile(){return ST.get("profile",null);}
@@ -6060,7 +6085,8 @@ async function fetchLBEntries(code){
     );
     if(!res.ok)return[];
     const rows=await res.json();
-    return rows.map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,ts:new Date(r.updated_at).getTime()}));
+    return cleanLeaderboardRows(rows)
+      .map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,ts:new Date(r.updated_at).getTime()}));
   }catch{return[];}
 }
 
@@ -6074,7 +6100,8 @@ async function fetchPeriodEntries(code,period){
     );
     if(!res.ok)return[];
     const rows=await res.json();
-    return rows.map(r=>({name:r.name,iqScore:r.iq_score,streak:r.streak,ts:new Date(r.updated_at).getTime()}));
+    return cleanLeaderboardRows(rows)
+      .map(r=>({name:r.name,iqScore:r.iq_score,streak:r.streak,ts:new Date(r.updated_at).getTime()}));
   }catch{return[];}
 }
 
@@ -6088,7 +6115,8 @@ async function fetchYesterdayEntries(code){
     );
     if(!res.ok)return[];
     const rows=await res.json();
-    return rows.map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,ts:new Date(r.updated_at).getTime()}));
+    return cleanLeaderboardRows(rows)
+      .map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,ts:new Date(r.updated_at).getTime()}));
   }catch{return[];}
 }
 
@@ -6248,22 +6276,17 @@ async function fetchGlobalEntries(){
       console.warn("[GlobalLB] fetch failed:",res.status,errText);
       return[];
     }
-    const rows=await res.json();
-    // Deduplicate by name, keep highest score
-    const seen={};
-    const deduped=[];
+    const rows=cleanLeaderboardRows(await res.json());
+    // Deduplicate by player name, keep highest score. Filter out club names so
+    // the global room always shows players, not clubs.
+    const bestByName=new Map();
     rows.forEach(r=>{
-      const key=r.name.toLowerCase();
-      if(!seen[key]||r.iq_score>seen[key]){
-        seen[key]=r.iq_score;
-        // Remove previous entry for this name and add new one
-        const idx=deduped.findIndex(e=>e.name.toLowerCase()===key);
-        if(idx>=0)deduped.splice(idx,1);
-        deduped.push(r);
-      }
+      const key=String(r.name||"").trim().toLowerCase();
+      if(!key)return;
+      const prev=bestByName.get(key);
+      if(!prev||Number(r.iq_score||0)>Number(prev.iq_score||0))bestByName.set(key,r);
     });
-    // Re-sort after dedup
-    deduped.sort((a,b)=>b.iq_score-a.iq_score);
+    const deduped=[...bestByName.values()].sort((a,b)=>Number(b.iq_score||0)-Number(a.iq_score||0));
     return deduped.map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,clubCode:r.club_code==="__global__"?null:r.club_code}));
   }catch(err){
     console.warn("[GlobalLB] fetch error:",err);
@@ -9122,12 +9145,11 @@ function Footer(){
 function Settings({home,settings,setSettings,showTutorial,setScreen}){
   const [confirmClear,setConfirmClear]=useState(false);
   const clearHistory=()=>{
+    const code=getClubCode();const name=getClubName();
+    if(code&&name)deleteLBEntry(code,name);
     ST.set("hist",[]);ST.set("str",0);ST.set("rnd",0);ST.set("ld",null);ST.set("dd",null);ST.set("dres",null);
     ST.set("tutorialDismissed",false);ST.set("hadFirstDaily",false);ST.set("tutDone",false);
     ST.set("clubCode",null);ST.set("clubName",null);ST.set("profile",null);
-    const code=getClubCode();const name=getClubName();
-    if(code&&name)deleteLBEntry(code,name);
-    ST.set("clubName",null);
     setConfirmClear(false);window.location.reload();
   };
   const Row=({label,sub,children})=>(<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 0",borderBottom:`1px solid ${C.bdr}`}}><div><div style={{fontSize:13,fontWeight:600,color:C.ink}}>{label}</div>{sub&&<div style={{fontSize:11,color:C.mut,marginTop:2}}>{sub}</div>}</div>{children}</div>);
@@ -13556,7 +13578,8 @@ export default function Rackle(){
       if(isFirstDaily){ST.set("hadFirstDaily",true);}
       // Auto-post to club leaderboard if player has a club + name
       const autoCode=getClubCode();
-      const autoName=getClubName()||(getProfile()?.nickname||null);
+      const profileName=getProfile()?.nickname||null;
+      const autoName=getClubName()||profileName||getOrCreateAnonymousName();
       if(autoCode&&autoName&&dailyResult?.iq?.totalScore){
         upsertLBEntry(autoCode,autoName,dailyResult.iq.totalScore,dailyResult.time||0,newStreak).then(ok=>{
           if(ok)setClubPostToast({clubName:CLUBS[autoCode]?.name||"your club",iqScore:dailyResult.iq.totalScore});
@@ -13564,8 +13587,7 @@ export default function Rackle(){
       }
       // Auto-post to GLOBAL leaderboard, always, even without an account
       if(dailyResult?.iq?.totalScore){
-        const globalName=autoName||getOrCreateAnonymousName();
-        upsertGlobalEntry(globalName,dailyResult.iq.totalScore,dailyResult.time||0,newStreak,autoCode||null);
+        upsertGlobalEntry(autoName,dailyResult.iq.totalScore,dailyResult.time||0,newStreak,autoCode||null);
       }
       completedResult.mode="daily";
       completedResult.daySeed=today;
