@@ -184,6 +184,31 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   border-color:rgba(243,212,107,.42)!important;
 }
 
+
+
+/* ─── LEARN + HAND BROWSER POLISH ───────────────────────────────────────── */
+.rk-learn-shell{margin-top:24px;margin-bottom:10px}
+.rk-learn-head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(145deg,#FFFDF8,#F3EFE6)!important;border:1px solid rgba(23,107,66,.13)!important;border-radius:18px!important;cursor:pointer;padding:14px 15px;text-align:left;box-shadow:0 7px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.8)!important}
+.rk-learn-panel{border:1px solid rgba(23,107,66,.13);border-top:none;border-radius:0 0 18px 18px;overflow:hidden;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);padding:12px;box-shadow:0 10px 28px rgba(26,20,16,.04)}
+.rk-learn-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.rk-learn-item{width:100%;display:flex;align-items:center;gap:12px;padding:13px 12px;border:1px solid rgba(26,20,16,.07);border-radius:16px;background:linear-gradient(145deg,#FFFDF8,#F8F1E6);cursor:pointer;text-align:left;box-shadow:inset 0 1px 0 rgba(255,255,255,.75);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.rk-learn-item:active{transform:scale(.992)}
+.rk-learn-item:hover{border-color:rgba(23,107,66,.16);box-shadow:0 7px 18px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)}
+.rk-browser-hero{background:linear-gradient(150deg,#062B18,#0D4A2E 58%,#051F11);border:1px solid rgba(201,168,76,.18);border-radius:24px;padding:22px 18px;color:#fff;box-shadow:0 15px 38px rgba(6,43,24,.20),inset 0 1px 0 rgba(255,255,255,.08);margin-bottom:14px;position:relative;overflow:hidden}
+.rk-browser-hero:after{content:"🀄";position:absolute;right:14px;bottom:-12px;font-size:86px;opacity:.045;transform:rotate(-8deg)}
+.rk-browser-search{width:100%;padding:13px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.18);font-size:14px;font-family:'Nunito','Segoe UI',sans-serif;color:#fff;outline:none;background:rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.09);margin-top:14px}
+.rk-browser-search::placeholder{color:rgba(255,255,255,.58)}
+.rk-section-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 14px}
+.rk-section-card{border-radius:17px;border:1px solid rgba(26,20,16,.075);background:linear-gradient(145deg,#FFFDF8,#F7F0E5);padding:12px 11px;text-align:left;cursor:pointer;box-shadow:0 4px 14px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.75);transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease}
+.rk-section-card:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.8)}
+.rk-section-card-active{border-color:rgba(23,107,66,.30)!important;background:linear-gradient(145deg,#F3FBF6,#F8F1E6)!important}
+.rk-hand-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0 12px}
+.rk-small-toggle{border:1px solid rgba(26,20,16,.08);background:linear-gradient(180deg,#FFFDF8,#F1E9DB);border-radius:999px;padding:7px 10px;font-size:11px;font-weight:900;color:#6B6157;cursor:pointer}
+.rk-hand-card{background:linear-gradient(145deg,#FFFDF8,#F8F1E6);border:1px solid rgba(26,20,16,.075);border-radius:18px;box-shadow:0 5px 18px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.75);overflow:hidden;margin-bottom:10px}
+.rk-hand-card-open{border-color:rgba(23,107,66,.18);box-shadow:0 9px 26px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.8)}
+.rk-howto-step{display:flex;gap:13px;padding:15px;border-radius:18px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.07);box-shadow:0 4px 16px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.76)}
+.rk-howto-num{width:34px;height:34px;border-radius:14px;background:rgba(23,107,66,.08);border:1px solid rgba(23,107,66,.10);display:flex;align-items:center;justify-content:center;color:#176B42;font-weight:900;flex-shrink:0}
+
 @media (prefers-reduced-motion: reduce){.rk-hero-live,.rk-iq-hero,.rk-soft-glow,.rk-count-live,.rk-streak-copy,.rk-float,.rk-pulse,.rk-live-dot,.rk-sweep:after{animation:none!important}}
 `;
 const S={
@@ -1968,7 +1993,7 @@ function recommendSpecificHands(rack,sectionId){
   const hands=HAND_CATALOG.filter(h=>h.sec===sectionId);
   const scored=hands.map(h=>{
     const cov=computeHonestCoverage(rack,h);
-    return{...h,fitScore:cov.pct/100,coveragePct:cov.pct,credibility:cov.credibility,isCredible:cov.isCredible,variantLabel:cov.variantLabel,labelForDisplay:cov.labelForDisplay,coveragePlan:cov.plan};
+    return{...h,fitScore:cov.pct/100,coveragePct:cov.pct,credibility:cov.credibility,isCredible:cov.isCredible,variantLabel:cov.variantLabel,labelForDisplay:cov.labelForDisplay,coveragePlan:cov.plan,groupNuance:cov.groupNuance,tone:cov.tone,coachLine:cov.coachLine};
   }).sort((a,b)=>(b.credibility-a.credibility)||(b.coveragePct-a.coveragePct));
   return scored.filter(h=>h.isCredible).slice(0,3);
 }
@@ -4844,8 +4869,8 @@ function PassesCard({passNarrative}){
 function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,primaryCoveragePct}){
   // Score all hands in the chosen section by honest coverage
   const sectionHands=HAND_CATALOG.filter(h=>h.sec===chosenSec)
-    .map(h=>{const cov=computeHonestCoverage(hand,h);return{...h,coveragePct:cov.pct,credibility:cov.credibility,isCredible:cov.isCredible,variantLabel:cov.variantLabel,labelForDisplay:cov.labelForDisplay};})
-    .sort((a,b)=>b.coveragePct-a.coveragePct);
+    .map(h=>{const cov=computeHonestCoverage(hand,h);return{...h,coveragePct:cov.pct,credibility:cov.credibility,isCredible:cov.isCredible,variantLabel:cov.variantLabel,labelForDisplay:cov.labelForDisplay,coveragePlan:cov.plan,groupNuance:cov.groupNuance,tone:cov.tone,coachLine:cov.coachLine};})
+    .sort((a,b)=>(b.credibility-a.credibility)||(b.coveragePct-a.coveragePct));
 
   // Top 3 alternates in the same section (excluding the primary scored hand)
   const altSectionHands=sectionHands
@@ -4859,8 +4884,8 @@ function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,
     if(sec.id===chosenSec)continue;
     if(altSecHands.length>=remaining)break;
     const best=HAND_CATALOG.filter(h=>h.sec===sec.id)
-      .map(h=>{const cov=computeHonestCoverage(hand,h);return{...h,coveragePct:cov.pct,credibility:cov.credibility,isCredible:cov.isCredible,variantLabel:cov.variantLabel,labelForDisplay:cov.labelForDisplay,secObj:sec};})
-      .sort((a,b)=>b.coveragePct-a.coveragePct)[0];
+      .map(h=>{const cov=computeHonestCoverage(hand,h);return{...h,coveragePct:cov.pct,credibility:cov.credibility,isCredible:cov.isCredible,variantLabel:cov.variantLabel,labelForDisplay:cov.labelForDisplay,coveragePlan:cov.plan,groupNuance:cov.groupNuance,tone:cov.tone,coachLine:cov.coachLine,secObj:sec};})
+      .sort((a,b)=>(b.credibility-a.credibility)||(b.coveragePct-a.coveragePct))[0];
     if(best&&best.isCredible!==false&&best.coveragePct>=48)altSecHands.push(best);
   }
 
@@ -4902,7 +4927,7 @@ function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,
                 <div style={{fontSize:8,color:lane.secObj?.color||C.mut,letterSpacing:1.7,fontWeight:900,textTransform:"uppercase"}}>
                   {lane.secObj?.icon} {lane.kicker}
                 </div>
-                <CoverageChip pct={lane.handObj.coveragePct}/>
+                <CoverageChip pct={lane.handObj.coveragePct} plan={lane.handObj.coveragePlan} credibility={lane.handObj.credibility}/>
               </div>
               <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.15,letterSpacing:-0.2}}>{lane.handObj.labelForDisplay||lane.handObj.variantLabel||lane.handObj.label}</div>
               <div style={{fontSize:10.5,color:C.mut,lineHeight:1.45,marginTop:4}}>{lane.copy}</div>
@@ -4923,14 +4948,14 @@ function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,
 }
 
 function coverageTone(pct){
-  if(pct>=72)return{label:"Clean path",short:"Live",color:C.jade,desc:"This path had real shape."};
-  if(pct>=55)return{label:"Worth watching",short:"Live",color:C.gold,desc:"Worth keeping alive."};
-  if(pct>=43)return{label:"Soft maybe",short:"Maybe",color:C.gold,desc:"A useful clue, but not one to force."};
+  if(pct>=78)return{label:"Clean path",short:"Live",color:C.jade,desc:"This path had real shape."};
+  if(pct>=64)return{label:"Worth keeping",short:"Live",color:C.gold,desc:"Worth keeping alive, with a little more group strength."};
+  if(pct>=43)return{label:"Shape starting",short:"Maybe",color:C.gold,desc:"Good clue, but not one to force yet."};
   return{label:"Table lesson",short:"Learn",color:C.mut,desc:"Useful to notice, but too far away to chase."};
 }
 
-function CoverageChip({pct}){
-  const tone=coverageTone(pct);
+function CoverageChip({pct,plan,credibility}){
+  const tone=plan?rkCoachPathTone(plan):coverageTone(pct);
   return(
     <div style={{display:"inline-flex",alignItems:"center",gap:5,background:tone.color+"10",border:`1px solid ${tone.color}26`,borderRadius:999,padding:"4px 9px"}}>
       <div style={{width:6,height:6,borderRadius:3,background:tone.color}}/>
@@ -5430,7 +5455,7 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
   if(!finalRack||!sectionId)return null;
   // Get all scored hands for section, sorted by fit
   const allHands=HAND_CATALOG.filter(h=>h.sec===sectionId)
-    .map(h=>{const cov=computeHonestCoverage(finalRack,h);return{...h,fitScore:cov.pct/100,coveragePct:cov.pct,credibility:cov.credibility,isCredible:cov.isCredible,variantLabel:cov.variantLabel,labelForDisplay:cov.labelForDisplay};})
+    .map(h=>{const cov=computeHonestCoverage(finalRack,h);return{...h,fitScore:cov.pct/100,coveragePct:cov.pct,credibility:cov.credibility,isCredible:cov.isCredible,variantLabel:cov.variantLabel,labelForDisplay:cov.labelForDisplay,coveragePlan:cov.plan,groupNuance:cov.groupNuance,tone:cov.tone,coachLine:cov.coachLine};})
     .sort((a,b)=>(b.credibility-a.credibility)||(b.coveragePct-a.coveragePct));
   // If a pinned hand is specified, put it first
   let hands=allHands;
@@ -5477,9 +5502,10 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
         )}
         {hands.map((hand,i)=>{
           const pct=Math.round((hand.coveragePct??hand.fitScore*100));
-          const barColor=pct>=70?C.jade:pct>=50?C.gold:C.cinn;
-          const verdict=pct>=80?"Strong option. This rack had real shape.":pct>=62?"Live option. Keep learning what connects it.":pct>=45?"Soft maybe. Useful to notice, not force.":"Not a chase. Treat this as a table lesson.";
-          const verdictColor=pct>=70?C.jade:pct>=45?C.gold:C.mut;
+          const tone=hand.coveragePlan?rkCoachPathTone(hand.coveragePlan):coverageTone(pct);
+          const barColor=tone.color;
+          const verdict=`${tone.label}. ${hand.coachLine||tone.desc}`;
+          const verdictColor=tone.color;
 
           // Tile analysis
           const jk=jokers(finalRack);
@@ -6164,9 +6190,10 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
       <div style={{padding:"12px 14px",borderBottom:`1px solid ${C.bdr}`,background:"#FFFCF7"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:7}}>
           <span style={{fontSize:9,color:C.mut,letterSpacing:1.5,fontWeight:900}}>PATH READ</span>
-          <span style={{fontSize:10,fontWeight:900,color:barCol,background:barCol+"12",border:`1px solid ${barCol}22`,borderRadius:999,padding:"4px 9px"}}>{coverageTone(pct).label}</span>
+          <span style={{fontSize:10,fontWeight:900,color:pathTone.color,background:pathTone.color+"12",border:`1px solid ${pathTone.color}22`,borderRadius:999,padding:"4px 9px"}}>{pathTone.label}</span>
         </div>
-        <div style={{fontSize:12,color:C.ink,lineHeight:1.55,marginBottom:8}}>{coverageTone(pct).desc} You were holding {totalHeld} useful tile{totalHeld===1?"":"s"} for this shape and still needed {totalGap}.</div>
+        <div style={{fontSize:12,color:C.ink,lineHeight:1.55,marginBottom:8}}>{pathTone.desc} You were holding {totalHeld} useful tile{totalHeld===1?"":"s"} for this shape and still needed {totalGap}.</div>
+        <div style={{fontSize:12,color:C.mut,lineHeight:1.55,marginBottom:8,fontWeight:700}}>{rkShortCoachLine(plan)}</div>
         <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
           <div style={{display:"flex",alignItems:"center",gap:5}}>
             <div style={{width:8,height:8,borderRadius:4,background:C.jade}}/>
@@ -9050,8 +9077,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   );
 
   const Learn=()=> (
-    <div style={{marginTop:24,marginBottom:8,opacity:0.88}}>
-      <button onClick={()=>setLeOpen(o=>!o)} aria-expanded={leOpen} style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,background:leOpen?`linear-gradient(135deg,${C.jade}14,${C.jade}08)`:`linear-gradient(135deg,${C.jade}10,${C.jade}05)`,border:`1.5px solid ${C.jade}25`,borderRadius:leOpen?"16px 16px 0 0":16,cursor:"pointer",padding:"13px 15px",textAlign:"left"}}>
+    <div className="rk-learn-shell">
+      <button className="rk-learn-head" onClick={()=>setLeOpen(o=>!o)} aria-expanded={leOpen} style={{borderRadius:leOpen?"18px 18px 0 0":"18px"}}>
         <div style={{display:"flex",alignItems:"center",gap:11}}>
           <div style={{width:38,height:38,borderRadius:12,background:C.jade+"18",border:`1px solid ${C.jade}24`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>📚</div>
           <div><div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.jade,letterSpacing:-0.1}}>Learn & Explore</div><div style={{fontSize:11,color:C.jade,opacity:0.72,marginTop:1}}>Tutorial · Card guide · Stats · How to play</div></div>
@@ -9059,20 +9086,22 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <span style={{fontSize:13,color:C.jade,transform:leOpen?"rotate(180deg)":"rotate(0deg)",display:"inline-block"}}>▾</span>
       </button>
       {leOpen&&(
-        <div className="rk-in" style={{border:`1.5px solid ${C.jade}25`,borderTop:"none",borderRadius:"0 0 16px 16px",overflow:"hidden",background:"#fff",padding:12}}>
+        <div className="rk-in rk-learn-panel">
+          <div className="rk-learn-grid">
           {[
             ["📊","Your Stats","Last 5 scores · tendencies",showStats],
             ["🎓","Interactive Tutorial","Learn Rackle step by step",showTutorial],
             ["📋","2026 NMJL Hand Browser","Visual hand breakdowns",()=>setScreen("handbrowser")],
-            ["📖","How to Play","Rules & scoring",()=>setShowHelp(!showHelp)],
+            ["📖","How to Play","Quick rules · Charleston basics",()=>setScreen("howto")],
             ["🔤","Mahjong Glossary","Terms for new players",()=>setScreen("glossary")],
           ].map(([icon,title,sub,fn])=>(
-            <button key={title} onClick={fn} style={{width:"100%",display:"flex",alignItems:"center",gap:12,padding:"12px 10px",border:"none",borderBottom:title==="Mahjong Glossary"?"none":`1px solid ${C.bdr}`,background:"#fff",cursor:"pointer",textAlign:"left"}}>
-              <span style={{width:34,height:34,borderRadius:11,background:C.bg2,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17}}>{icon}</span>
+            <button key={title} className="rk-learn-item" onClick={fn}>
+              <span style={{width:38,height:38,borderRadius:13,background:C.bg2,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{icon}</span>
               <span style={{flex:1}}><span style={{display:"block",fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.1}}>{title}</span><span style={{display:"block",fontSize:11,color:C.mut,marginTop:3}}>{sub}</span></span>
               <span style={{fontSize:16,color:C.mut}}>›</span>
             </button>
           ))}
+          </div>
         </div>
       )}
     </div>
@@ -10444,7 +10473,8 @@ function buildCoveragePlanLegacy(rack,handObj,passLog=[]){
 }
 function computeHonestCoverage(rack, handObj){
   const plan=buildCoveragePlan(rack,handObj,[]);
-  return{held:plan.held,total:plan.total,pct:plan.pct,credibility:rkPlanCredibility(plan),isCredible:rkIsCrediblePath(plan),suitMap:plan.suitMap,variantLabel:plan.variantLabel,labelForDisplay:plan.labelForDisplay,plan};
+  const tone=rkCoachPathTone(plan);
+  return{held:plan.held,total:plan.total,pct:plan.pct,credibility:rkPlanCredibility(plan),isCredible:rkIsCrediblePath(plan),suitMap:plan.suitMap,variantLabel:plan.variantLabel,labelForDisplay:plan.labelForDisplay,groupNuance:rkGroupNuance(plan),tone,coachLine:rkShortCoachLine(plan),plan};
 }
 
 
@@ -10679,54 +10709,101 @@ function rkExpandHandVariants(handObj){
     labelForDisplay:label,
   }));
 }
+
+function rkGroupNuance(plan){
+  const statuses=plan?.groupStatus||[];
+  const nonSingles=statuses.filter(s=>s.g?.type!=="single");
+  const completedGroups=statuses.filter(s=>s.gap<=0).length;
+  const completedNonSingles=nonSingles.filter(s=>s.gap<=0).length;
+  const completedPairs=nonSingles.filter(s=>s.gap<=0&&s.g?.type==="pair").length;
+  const completedBigGroups=nonSingles.filter(s=>s.gap<=0&&["pung","kong","quint","sextet"].includes(s.g?.type)).length;
+  const partialGroups=nonSingles.filter(s=>s.gap>0&&s.totalHeld>0).length;
+  const promisingGroups=nonSingles.filter(s=>s.totalHeld>=2).length;
+  const singleSlots=statuses.filter(s=>s.g?.type==="single");
+  const heldSingles=singleSlots.filter(s=>s.totalHeld>0).length;
+  const deadGroups=statuses.filter(s=>s.totalHeld<=0).length;
+  const naturalOnlyGap=statuses.filter(s=>!s.jokerAllowed).reduce((a,s)=>a+Math.max(0,s.gap||0),0);
+  const hardGap=statuses.filter(s=>s.g?.type==="single"||s.g?.type==="pair"||!s.jokerAllowed).reduce((a,s)=>a+Math.max(0,s.gap||0),0);
+  const held=plan?.held||0;
+  const total=plan?.total||0;
+  const pct=plan?.pct||0;
+  const groupedHeld=nonSingles.reduce((a,s)=>a+(s.totalHeld||0),0);
+  const singleHeld=singleSlots.reduce((a,s)=>a+(s.totalHeld||0),0);
+  const groupedRatio=held?groupedHeld/held:0;
+  const suitSpread=new Set(statuses.filter(s=>s.g?.isNum&&s.totalHeld>0).map(s=>s.resolvedSuit).filter(Boolean)).size;
+  const isCR=plan?.sectionId==="cr"||/Consec/i.test(plan?.constraint||"");
+  const lacksGroupStrength=(pct>=45&&completedBigGroups===0&&completedPairs<2)||(pct>=50&&completedNonSingles<2&&promisingGroups<2);
+  const earlyShape=(pct>=42&&held>=5&&!lacksGroupStrength);
+  const strongShape=(pct>=62&&completedNonSingles>=2&&(completedBigGroups>=1||promisingGroups>=3));
+  const liveShape=(pct>=70&&completedNonSingles>=2&&completedBigGroups>=1);
+  return {completedGroups,completedNonSingles,completedPairs,completedBigGroups,partialGroups,promisingGroups,heldSingles,deadGroups,naturalOnlyGap,hardGap,groupedHeld,singleHeld,groupedRatio,suitSpread,isCR,lacksGroupStrength,earlyShape,strongShape,liveShape,held,total,pct};
+}
 function rkCoverageScore(plan){
   if(!plan||!plan.total)return 0;
+  const n=rkGroupNuance(plan);
   const statuses=plan.groupStatus||[];
-  const completed=statuses.filter(s=>s.gap<=0).length;
-  const naturalOnlyGaps=statuses.filter(s=>!s.jokerAllowed).reduce((a,s)=>a+Math.max(0,s.gap||0),0);
-  const deadGroups=statuses.filter(s=>s.totalHeld<=0).length;
+  // Prefer racks with real pair/pung/kong shape over racks that merely touch many singles.
+  // This prevents a loose 1-2-3-4 spread from being called a live Consecutive Run hand.
   const completedHard=statuses.filter(s=>s.gap<=0&&(s.g.type==="single"||s.g.type==="pair"||!s.jokerAllowed)).length;
-  const suitSpread=new Set(statuses.filter(s=>s.g.isNum&&s.totalHeld>0).map(s=>s.resolvedSuit).filter(Boolean)).size;
-
-  // Credibility score, not just raw tile count.
-  // A 5/14 hand with five loose singles should not beat an 8/14 hand with
-  // completed pairs/pungs. This is what makes Rackle feel like a real helper.
-  return (plan.pct||0)*1000 + completed*900 + completedHard*450 + suitSpread*120 - naturalOnlyGaps*260 - deadGroups*180;
+  let score=(plan.pct||0)*1000;
+  score+=n.completedNonSingles*1150;
+  score+=n.completedBigGroups*1550;
+  score+=n.promisingGroups*420;
+  score+=completedHard*250;
+  score+=n.groupedHeld*85;
+  score+=n.suitSpread*90;
+  score-=n.naturalOnlyGap*320;
+  score-=n.deadGroups*240;
+  score-=n.singleHeld*35;
+  if(n.lacksGroupStrength)score-=1800;
+  if(n.isCR&&n.completedNonSingles<2)score-=1200;
+  return score;
 }
 function rkPlanCredibility(plan){
   if(!plan||!plan.total)return 0;
-  const statuses=plan.groupStatus||[];
-  const pct=plan.pct||0;
-  const completed=statuses.filter(s=>s.gap<=0).length;
-  const hardCompleted=statuses.filter(s=>s.gap<=0&&(s.g.type==="single"||s.g.type==="pair"||!s.jokerAllowed)).length;
-  const liveGroups=statuses.filter(s=>s.totalHeld>0).length;
-  const deadGroups=statuses.length-liveGroups;
-  const naturalOnlyGap=statuses.filter(s=>!s.jokerAllowed).reduce((a,s)=>a+Math.max(0,s.gap||0),0);
-  let score=pct + completed*4 + hardCompleted*3 - deadGroups*2 - naturalOnlyGap*1.5;
+  const n=rkGroupNuance(plan);
+  let score=plan.pct||0;
+  score+=n.completedNonSingles*8;
+  score+=n.completedBigGroups*10;
+  score+=n.promisingGroups*4;
+  score+=Math.min(n.groupedHeld*1.4,14);
+  score-=n.deadGroups*3;
+  score-=n.naturalOnlyGap*2.5;
+  score-=n.singleHeld>n.groupedHeld?8:0;
+  if(n.lacksGroupStrength)score-=18;
+  if(n.isCR&&n.completedNonSingles<2)score-=14;
   return Math.max(0,Math.min(100,Math.round(score)));
 }
 function rkIsCrediblePath(plan,{primary=false}={}){
   if(!plan||!plan.total)return false;
-  const statuses=plan.groupStatus||[];
-  const pct=plan.pct||0;
-  const completed=statuses.filter(s=>s.gap<=0).length;
-  const held=plan.held||0;
-  const naturalOnlyGap=statuses.filter(s=>!s.jokerAllowed).reduce((a,s)=>a+Math.max(0,s.gap||0),0);
-  const minPct=primary?34:45;
-  if(pct<minPct)return false;
-  if(held<6&&!primary)return false;
-  if(completed<1&&pct<55)return false;
-  if(naturalOnlyGap>=7&&pct<62)return false;
+  const n=rkGroupNuance(plan);
+  const minPct=primary?34:48;
+  if(n.pct<minPct)return false;
+  if(n.held<6&&!primary)return false;
+  // For learning, a starting shape can be shown, but not as a strong alternate.
+  if(!primary&&n.lacksGroupStrength&&n.pct<64)return false;
+  if(!primary&&n.completedNonSingles<2&&n.pct<68)return false;
+  if(n.completedGroups<1&&n.pct<58)return false;
+  if(n.naturalOnlyGap>=7&&n.pct<66)return false;
   return true;
 }
 function rkCoachPathTone(plan,primary=false){
   const cred=rkPlanCredibility(plan);
-  if(cred>=74)return{label:"Clean path",short:"Live",color:C.jade,desc:"This was a real lane. You gave yourself something to build on."};
-  if(cred>=58)return{label:"Worth keeping",short:"Live",color:C.gold,desc:"This path had pieces. A couple of cleaner connects would make it dangerous."};
-  if(cred>=42)return{label:primary?"Learning read":"Soft maybe",short:"Maybe",color:C.gold,desc:"There was a hint here, but it needed more help before forcing it."};
-  return{label:"Table lesson",short:"Learn",color:C.mut,desc:"Useful lesson, but not a path to chase hard from this rack."};
+  const n=rkGroupNuance(plan);
+  if(n.liveShape&&cred>=74)return{label:"Clean path",short:"Live",color:C.jade,desc:"This was a real lane. You had useful tiles and enough group strength to keep building."};
+  if(n.strongShape&&cred>=60)return{label:"Worth keeping",short:"Live",color:C.gold,desc:"This line stayed alive. A few more connected tiles would make it much stronger."};
+  if(n.earlyShape||n.lacksGroupStrength)return{label:primary?"Shape starting":"Soft maybe",short:"Maybe",color:C.gold,desc:"Good instincts. The shape was starting, but it needed more pair, pung, or kong strength before forcing it."};
+  if(cred>=42)return{label:primary?"Learning read":"Soft maybe",short:"Maybe",color:C.gold,desc:"There was a useful clue here, but it needed more help before chasing it."};
+  return{label:"Table lesson",short:"Learn",color:C.mut,desc:"Useful to notice, but too far away to chase hard from this rack."};
 }
-
+function rkShortCoachLine(plan){
+  const n=rkGroupNuance(plan);
+  if(n.liveShape)return"Nice read. You had real group strength, not just connected tiles.";
+  if(n.strongShape)return"Worth keeping alive. Your groups were starting to do real work.";
+  if(n.lacksGroupStrength)return"You saw the right neighborhood. Next time, wait for pairs to become pungs before committing.";
+  if(n.completedNonSingles>=1)return"A real clue was there. Keep watching for the next matching tile.";
+  return"Good table lesson. The rack hinted at this line, but it was not ready yet.";
+}
 function buildCoveragePlan(rack,handObj,passLog=[]){
   if(!rack||!handObj)return{held:0,total:0,pct:0,groups:[],groupStatus:[],suitMap:{},cardColors:[],variantLabel:handObj?.label};
   const allPassed=(passLog||[]).flatMap((p,idx)=>(p.out||p.passedTiles||[]).map(t=>({...t,roundName:p.label||p.roundName||`Pass ${idx+1}`,roundIdx:idx})));
@@ -10767,11 +10844,15 @@ function buildCoveragePlan(rack,handObj,passLog=[]){
       const candidate={
         held,total,pct,groups,groupStatus,
         suitMap:{...suitMap},cardColors,
+        sectionId:variantObj.sec||handObj.sec,
+        constraint:rkConstraintText(variantObj)||rkConstraintText(handObj),
+        concealed:!!variantObj.concealed,
         variantLabel:variantObj.variantLabel||variantObj.label,
         baseLabel:variantObj.baseLabel||handObj.label,
         labelForDisplay:variantObj.variantLabel||variantObj.label,
         completedGroups,
       };
+      candidate.groupNuance=rkGroupNuance(candidate);
       candidate.score=rkCoverageScore(candidate);
       if(!best||candidate.score>best.score)best=candidate;
     }
@@ -10899,8 +10980,8 @@ function HandRenderer({hand, defaultOpen=false}){
   });
 
   return(
-    <div style={{...S.card,marginBottom:6,padding:0,overflow:"hidden"}}>
-      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"10px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
+    <div className={open?"rk-hand-card rk-hand-card-open":"rk-hand-card"}>
+      <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"13px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
         <div style={{flex:1,minWidth:0}}>
           {/* Colored label matching card color scheme */}
           <div style={{display:"flex",alignItems:"center",gap:4,flexWrap:"wrap",marginBottom:2}}>
@@ -10912,7 +10993,7 @@ function HandRenderer({hand, defaultOpen=false}){
             {hand.concealed&&<span style={{fontSize:8,fontWeight:700,background:"#2460A815",color:"#2460A8",borderRadius:8,padding:"2px 6px",flexShrink:0}}>CONCEALED</span>}
             <span style={{fontSize:8,fontWeight:700,background:C.bg2,color:C.mut,borderRadius:8,padding:"2px 6px",flexShrink:0}}>{hand.concealed?"C":"×"}{hand.value}</span>
           </div>
-          <div style={{fontSize:10,color:C.mut}}>{totalTiles} tiles · {sec?.name}{hand.constraint?` · ${hand.constraint.split(" · ")[0]}`:""}</div>
+          <div style={{fontSize:10,color:C.mut,lineHeight:1.45}}>{sec?.name} · {hand.constraint?hand.constraint.split(" · ")[0]:`${totalTiles} tiles`}</div>
         </div>
         <span style={{fontSize:11,color:C.mut,flexShrink:0,marginLeft:8}}>{open?"▾":"▸"}</span>
       </button>
@@ -11244,69 +11325,153 @@ function SectionQuizScreen({home,setScreen}){
 }
 
 // ════════════════════════════════════════════════════════════════════════════
+
+// ════════════════════════════════════════════════════════════════════════════
+// HOW TO PLAY SCREEN, quick friendly rules + Rackle ritual
+// ════════════════════════════════════════════════════════════════════════════
+function HowToPlayScreen({home,setScreen}){
+  const steps=[
+    {t:"Read your rack",d:"Look for groups first: pairs, pungs, kongs, Flowers, Dragons, and connected numbers. A run of singles can be interesting, but groups make a hand real."},
+    {t:"Pass with purpose",d:"During the Charleston, pass tiles that do not support your strongest lane. Never pass Jokers. Be careful with 6s, Flowers, and strong pairs."},
+    {t:"Score the final rack",d:"Rackle reviews your last rack against the 2026 card and shows your best path, soft maybes, and what you could watch for next time."},
+    {t:"Learn one thing",d:"The goal is not perfection. The goal is one better read every day, so your table instincts keep improving."},
+  ];
+  const ruleCards=[
+    ["🃏","Jokers","Can help pungs, kongs, quints, and sextets. Never pairs or singles."],
+    ["🔒","Concealed","You must draw every tile yourself. No calling discards."],
+    ["🐉","Dragons","Bam matches Green. Crak matches Red. Dot matches Soap."],
+    ["🧠","Rackle read","Live means real group strength. Soft maybe means the shape is starting."],
+  ];
+  return(
+    <div style={S.pg} className="rk-pg">
+      <RackleHeader onBack={home} setScreen={setScreen}/>
+      <div className="rk-browser-hero">
+        <div style={{fontSize:9,letterSpacing:2.6,fontWeight:900,color:"rgba(243,212,107,.86)",marginBottom:8}}>HOW TO PLAY</div>
+        <div style={{fontFamily:F.d,fontSize:28,fontWeight:900,lineHeight:1.02,letterSpacing:-.7,marginBottom:10}}>Your daily Charleston workout</div>
+        <div style={{fontSize:13,lineHeight:1.65,color:"rgba(255,255,255,.72)",maxWidth:360}}>Train the part of American Mahjong that shapes the whole game: what to keep, what to pass, and when a hand is really forming.</div>
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:16}}>
+        {steps.map((x,i)=>(
+          <div key={x.t} className="rk-howto-step">
+            <div className="rk-howto-num">{i+1}</div>
+            <div style={{flex:1}}>
+              <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,letterSpacing:-.25,marginBottom:4}}>{x.t}</div>
+              <div style={{fontSize:13,lineHeight:1.65,color:C.mut}}>{x.d}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+        {ruleCards.map(([icon,title,copy])=>(
+          <div key={title} className="rk-lux-card" style={{padding:14,borderRadius:18}}>
+            <div style={{fontSize:22,marginBottom:7}}>{icon}</div>
+            <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,marginBottom:4}}>{title}</div>
+            <div style={{fontSize:11,lineHeight:1.55,color:C.mut}}>{copy}</div>
+          </div>
+        ))}
+      </div>
+      <div className="rk-lux-card" style={{padding:16,borderRadius:20,marginBottom:16}}>
+        <div style={{fontSize:9,letterSpacing:2,fontWeight:900,color:C.jade,marginBottom:7}}>BEST WAY TO USE RACKLE</div>
+        <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.ink,marginBottom:7}}>Play once. Notice one thing.</div>
+        <div style={{fontSize:13,lineHeight:1.65,color:C.mut}}>After each rack, focus on one coaching note. Did you protect a pair? Did you chase singles too early? Did you pass away your best section? That small feedback loop is the game.</div>
+      </div>
+      <div style={{display:"flex",gap:10}}>
+        <button onClick={()=>setScreen("tutorial")} style={{...S.greenBtn,flex:1}}>Start Tutorial</button>
+        <button onClick={()=>setScreen("handbrowser")} style={{...S.oBtn,flex:1}}>Browse Hands</button>
+      </div>
+      <Footer/>
+    </div>
+  );
+}
+
 // HAND BROWSER, visual catalog of every hand on the 2026 card
 // (replaces/extends CardGuideScreen with per-hand visual rendering)
 // ════════════════════════════════════════════════════════════════════════════
 function HandBrowserScreen({home,setScreen}){
   const [activeSec,setActiveSec]=useState(null);
   const [search,setSearch]=useState("");
+  const [onlyConcealed,setOnlyConcealed]=useState(false);
+  const [compact,setCompact]=useState(true);
 
-  const allHands=search.trim()
-    ?HAND_CATALOG.filter(h=>h.label.toLowerCase().includes(search.toLowerCase())||SECS.find(s=>s.id===h.sec)?.name.toLowerCase().includes(search.toLowerCase()))
-    :activeSec?HAND_CATALOG.filter(h=>h.sec===activeSec):HAND_CATALOG;
-
+  const q=search.trim().toLowerCase();
+  const allHands=HAND_CATALOG.filter(h=>{
+    const sec=SECS.find(s=>s.id===h.sec);
+    const matches=!q||h.label.toLowerCase().includes(q)||sec?.name.toLowerCase().includes(q)||(h.constraint||"").toLowerCase().includes(q);
+    const secOk=!activeSec||h.sec===activeSec;
+    const concealedOk=!onlyConcealed||h.concealed;
+    return matches&&secOk&&concealedOk;
+  });
   const sec=activeSec?SECS.find(s=>s.id===activeSec):null;
+  const sectionCounts=SECS.map(s=>({sec:s,count:HAND_CATALOG.filter(h=>h.sec===s.id).length,concealed:HAND_CATALOG.filter(h=>h.sec===s.id&&h.concealed).length}));
 
   return(
     <div style={S.pg} className="rk-pg">
-      <RackleHeader onBack={activeSec?()=>setActiveSec(null):home} setScreen={setScreen}/>
-      <div style={{marginBottom:14,marginTop:4}}>
-        <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>
-          {sec?`${sec.icon} ${sec.name}`:search?"Search Results":"2026 Hand Browser"}
+      <RackleHeader onBack={home} setScreen={setScreen}/>
+
+      <div className="rk-browser-hero">
+        <div style={{fontSize:9,letterSpacing:2.6,fontWeight:900,color:"rgba(243,212,107,.86)",marginBottom:8}}>2026 NMJL CARD</div>
+        <div style={{fontFamily:F.d,fontSize:28,fontWeight:900,lineHeight:1.02,letterSpacing:-.7,marginBottom:8}}>{sec?sec.name:"Hand Browser"}</div>
+        <div style={{fontSize:13,lineHeight:1.6,color:"rgba(255,255,255,.72)",maxWidth:370}}>
+          {sec?`${allHands.length} hands in this section. Scan the shapes, suits, jokers, and concealed rules.`:"A faster way to study the card. Search a number, section, suit rule, or hand shape."}
         </div>
-        <p style={{fontSize:12,color:C.mut,margin:"0 0 10px",lineHeight:1.6}}>
-          {sec?`${allHands.length} hands · tap any to see tile breakdown`:search?`${allHands.length} matches`:"Every hand on the 2026 NMJL card. Tap to see how it's built."}
-        </p>
-        <input value={search} onChange={e=>{setSearch(e.target.value);setActiveSec(null);}} placeholder="Search hands…" style={{width:"100%",padding:"10px 12px",borderRadius:10,border:`1.5px solid ${C.bdr}`,fontSize:13,fontFamily:F.b,color:C.ink,outline:"none",background:"#fff",marginBottom:10}}/>
-        {/* Section filter pills */}
-        {!search&&<div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
-          <button onClick={()=>setActiveSec(null)} style={{padding:"5px 10px",borderRadius:20,border:`1px solid ${!activeSec?C.jade:C.bdr}`,background:!activeSec?C.jade+"10":"#fff",fontSize:10,fontWeight:!activeSec?700:400,color:!activeSec?C.jade:C.mut,cursor:"pointer"}}>All</button>
-          {SECS.map(s=>(
-            <button key={s.id} onClick={()=>setActiveSec(activeSec===s.id?null:s.id)}
-              style={{padding:"5px 10px",borderRadius:20,border:`1px solid ${activeSec===s.id?s.color:C.bdr}`,background:activeSec===s.id?s.color+"10":"#fff",fontSize:10,fontWeight:activeSec===s.id?700:400,color:activeSec===s.id?s.color:C.mut,cursor:"pointer"}}>
-              {s.icon} {s.name}
-            </button>
-          ))}
-        </div>}
+        <input className="rk-browser-search" value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search 2468, concealed, dragons, any 2 suits…" />
       </div>
 
-      {/* Hand cards */}
-      {allHands.length===0&&<div style={{textAlign:"center",padding:"32px 0",color:C.mut}}>No hands found.</div>}
+      {!search&&(
+        <div className="rk-section-grid">
+          <button className={!activeSec?"rk-section-card rk-section-card-active":"rk-section-card"} onClick={()=>setActiveSec(null)}>
+            <div style={{fontSize:19,marginBottom:5}}>🀄</div>
+            <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink}}>All Hands</div>
+            <div style={{fontSize:11,color:C.mut,marginTop:3}}>{HAND_CATALOG.length} card lines</div>
+          </button>
+          {sectionCounts.map(({sec:s,count,concealed})=>(
+            <button key={s.id} className={activeSec===s.id?"rk-section-card rk-section-card-active":"rk-section-card"} onClick={()=>setActiveSec(activeSec===s.id?null:s.id)}>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,marginBottom:5}}>
+                <span style={{fontSize:19}}>{s.icon}</span>
+                <span style={{fontSize:10,fontWeight:900,color:s.color,background:s.color+"10",border:`1px solid ${s.color}18`,borderRadius:999,padding:"4px 8px"}}>{count}</span>
+              </div>
+              <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.05}}>{s.name}</div>
+              <div style={{fontSize:11,color:C.mut,marginTop:4}}>{concealed?`${concealed} concealed · `:""}{s.hands||count} options</div>
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="rk-hand-toolbar">
+        <div>
+          <div style={{fontSize:9,letterSpacing:2,fontWeight:900,color:C.jade}}>BROWSING</div>
+          <div style={{fontSize:12,color:C.mut,marginTop:2}}>{allHands.length} matching hands</div>
+        </div>
+        <div style={{display:"flex",gap:7,alignItems:"center"}}>
+          <button className="rk-small-toggle" onClick={()=>setOnlyConcealed(v=>!v)} style={{color:onlyConcealed?C.jade:C.mut,borderColor:onlyConcealed?C.jade+"40":"rgba(26,20,16,.08)"}}>🔒 Concealed</button>
+          <button className="rk-small-toggle" onClick={()=>setCompact(v=>!v)}>{compact?"Expand":"Compact"}</button>
+        </div>
+      </div>
+
+      {allHands.length===0&&(
+        <div className="rk-lux-card" style={{padding:22,textAlign:"center",borderRadius:20,color:C.mut}}>
+          No hands found. Try “dragon”, “consecutive”, “any 2 suits”, or a number like “2468”.
+        </div>
+      )}
       {allHands.map((hand,i)=>(
-        <HandRenderer key={i} hand={hand}/>
+        <HandRenderer key={`${hand.sec}-${hand.label}-${i}`} hand={hand} defaultOpen={!compact&&i<8}/>
       ))}
 
-      {/* Dragon matching explainer */}
       {!search&&!activeSec&&(
-        <div style={{...S.card,marginTop:8,background:"linear-gradient(145deg,#FFFFF8,#F4EFE3)",borderColor:C.gold+"30"}}>
-          <div style={{fontSize:8,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:8}}>🐉 DRAGON MATCHING GUIDE</div>
-          <div style={{display:"flex",flexDirection:"column",gap:8}}>
+        <div className="rk-lux-card" style={{marginTop:10,padding:16,borderRadius:20,background:"linear-gradient(145deg,#FFFFF8,#F4EFE3)",borderColor:C.gold+"30"}}>
+          <div style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:900,marginBottom:10}}>🐉 DRAGON MATCHING GUIDE</div>
+          <div style={{display:"flex",flexDirection:"column",gap:9}}>
             {[
               {suit:"Bam",dragon:"Green Dragon",suitCol:SC.bam,dragonCol:"#1B7D4E",tiles:[{t:"s",s:"bam",n:5},{t:"d",v:"Grn"}]},
               {suit:"Crak",dragon:"Red Dragon",suitCol:SC.crak,dragonCol:"#B83232",tiles:[{t:"s",s:"crak",n:5},{t:"d",v:"Red"}]},
-              {suit:"Dot",dragon:"Soap (White Dragon)",suitCol:SC.dot,dragonCol:"#6B6560",tiles:[{t:"s",s:"dot",n:5},{t:"d",v:"Soap"}]},
+              {suit:"Dot",dragon:"Soap / White",suitCol:SC.dot,dragonCol:"#6B6560",tiles:[{t:"s",s:"dot",n:5},{t:"d",v:"Soap"}]},
             ].map(row=>(
-              <div key={row.suit} style={{display:"flex",alignItems:"center",gap:12,padding:"6px 8px",background:"#fff",borderRadius:8}}>
+              <div key={row.suit} style={{display:"flex",alignItems:"center",gap:12,padding:"9px 10px",background:"#fff",borderRadius:13,border:`1px solid ${C.bdr}`}}>
                 <div style={{display:"flex",gap:4}}>{row.tiles.map((t,i)=><Ti key={i} t={t} large={false}/>)}</div>
-                <div style={{flex:1}}>
-                  <span style={{fontSize:12,fontWeight:700,color:row.suitCol}}>{row.suit}</span>
-                  <span style={{fontSize:11,color:C.mut}}> → </span>
-                  <span style={{fontSize:12,fontWeight:700,color:row.dragonCol}}>{row.dragon}</span>
-                </div>
+                <div style={{flex:1}}><span style={{fontSize:12,fontWeight:900,color:row.suitCol}}>{row.suit}</span><span style={{fontSize:11,color:C.mut}}> matches </span><span style={{fontSize:12,fontWeight:900,color:row.dragonCol}}>{row.dragon}</span></div>
               </div>
             ))}
           </div>
-          <div style={{fontSize:11,color:C.mut,lineHeight:1.6,marginTop:8}}>When a hand says "Matching Dragon," use the dragon that matches your number tile suit. "Opposite Dragon" means use the non-matching one.</div>
         </div>
       )}
       <Footer/>
@@ -11319,7 +11484,7 @@ function HandBrowserScreen({home,setScreen}){
 // (rendered inside AppShell so it overlays every screen)
 // ════════════════════════════════════════════════════════════════════════════
 function QuickCardButton({setScreen,screen,goBack}){
-  const showOn=["home","play","stats","scorecard","lookup","handbrowser","glossary","quiz"];
+  const showOn=["home","play","stats","scorecard","lookup","handbrowser","howto","glossary","quiz"];
   if(!showOn.includes(screen))return null;
   return(
     <div style={{position:"fixed",bottom:20,right:16,zIndex:80}}>
@@ -11438,6 +11603,7 @@ export default function Rackle(){
         {screen==="home"&&<Home {...{streak,rounds,dDone,dRes,showHelp,setShowHelp,go,settings,setScreen}} showStats={()=>setScreen("stats")} showSettings={()=>setScreen("settings")} showTutorial={()=>setScreen("tutorial")} showCardGuide={()=>setScreen("cardguide")} showScorecard={()=>setScreen("scorecard")}/>}
         {screen==="tutorial"&&<Tutorial onDone={()=>{ST.set("tutDone",true);setScreen("home");}} onBack={()=>setScreen("home")} setScreen={setScreen}/>}
         {screen==="cardguide"&&<CardGuideScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
+        {screen==="howto"&&<HowToPlayScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
         {screen==="play"&&<Game mode={mode} home={()=>setScreen("home")} onDone={onDone} settings={settings} setScreen={setScreen}/>}
         {screen==="stats"&&<Stats home={()=>setScreen("home")} onShowScorecard={()=>setScreen("scorecard")} onRecap={()=>setScreen("recap")} dRes={dRes} setScreen={setScreen}/>}
         {screen==="settings"&&<Settings home={()=>setScreen("home")} settings={settings} setSettings={setSettings} showTutorial={()=>setScreen("tutorial")} setScreen={setScreen}/>}
