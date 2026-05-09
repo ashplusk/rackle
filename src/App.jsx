@@ -1221,6 +1221,77 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 }
 
 
+/* ─── vNext WEB HERO RENDER FIX + LEADERBOARD SPACING ───────────────────── */
+@media(min-width:900px){
+  .rk-daily-hero-card{
+    min-height:auto!important;
+    border-radius:36px!important;
+    overflow:hidden!important;
+    max-width:100%!important;
+    box-shadow:0 26px 86px rgba(3,23,13,.25),0 0 0 1px rgba(201,168,76,.16),inset 0 1px 0 rgba(255,255,255,.08)!important;
+  }
+  .rk-daily-hero-inner{
+    min-height:auto!important;
+    padding:50px 62px 48px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1.28fr) minmax(240px,.72fr)!important;
+    grid-template-areas:
+      "top top"
+      "copy play"
+      "stats stats"
+      "tomorrow tomorrow"!important;
+    column-gap:64px!important;
+    row-gap:30px!important;
+    align-items:center!important;
+  }
+  .rk-daily-hero-top{grid-area:top!important;margin:0!important;align-items:center!important;}
+  .rk-daily-hero-main{grid-area:copy / copy / play / play!important;display:contents!important;}
+  .rk-daily-hero-copy{grid-area:copy!important;max-width:760px!important;min-width:0!important;}
+  .rk-daily-hero-title{font-size:clamp(52px,5.1vw,76px)!important;line-height:.94!important;letter-spacing:-2px!important;max-width:none!important;margin:0 0 24px!important;text-wrap:balance!important;}
+  .rk-daily-hero-title br{display:none!important;}
+  .rk-daily-hero-title span{display:block!important;}
+  .rk-daily-hero-subcopy{font-size:19px!important;line-height:1.52!important;max-width:46ch!important;color:rgba(255,255,255,.84)!important;}
+  .rk-daily-hero-card .rk-play-button-premium{grid-area:play!important;justify-self:center!important;align-self:center!important;position:relative!important;right:auto!important;top:auto!important;width:146px!important;height:146px!important;transform:none!important;margin:0!important;}
+  .rk-daily-hero-card .rk-play-button-premium:after{bottom:20px!important;}
+  .rk-daily-hero-card .rk-play-triangle{border-top-width:21px!important;border-bottom-width:21px!important;border-left-width:34px!important;margin-left:9px!important;margin-top:-9px!important;}
+  .rk-daily-hero-stats{grid-area:stats!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important;margin:2px 0 0!important;}
+  .rk-daily-hero-stat{min-height:96px!important;border-radius:20px!important;padding:20px 22px!important;background:rgba(255,255,255,.11)!important;border:1px solid rgba(255,255,255,.18)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 10px 24px rgba(0,0,0,.07)!important;}
+  .rk-daily-hero-stat > div:first-child{font-size:31px!important;line-height:1!important;}
+  .rk-daily-hero-stat > div:last-child{font-size:9px!important;line-height:1.25!important;margin-top:12px!important;letter-spacing:1.8px!important;}
+  .rk-daily-hero-tomorrow{grid-area:tomorrow!important;margin:0!important;padding:20px 24px!important;border-radius:22px!important;}
+  .rk-daily-hero-tomorrow > div:first-child > div:last-child{font-size:19px!important;line-height:1.22!important;white-space:normal!important;}
+}
+@media(min-width:900px) and (max-width:1120px){
+  .rk-daily-hero-inner{padding:42px 44px 42px!important;grid-template-columns:minmax(0,1fr) minmax(190px,.55fr)!important;column-gap:38px!important;row-gap:26px!important;}
+  .rk-daily-hero-title{font-size:clamp(44px,5.2vw,58px)!important;letter-spacing:-1.5px!important;}
+  .rk-daily-hero-subcopy{font-size:17px!important;max-width:38ch!important;}
+  .rk-daily-hero-card .rk-play-button-premium{width:124px!important;height:124px!important;}
+  .rk-daily-hero-card .rk-play-triangle{border-top-width:18px!important;border-bottom-width:18px!important;border-left-width:29px!important;}
+  .rk-daily-hero-stat{min-height:86px!important;padding:17px 18px!important;}
+}
+@media(min-width:1280px){
+  .rk-daily-hero-inner{padding:58px 74px 54px!important;column-gap:78px!important;}
+  .rk-daily-hero-title{font-size:80px!important;}
+  .rk-daily-hero-card .rk-play-button-premium{width:156px!important;height:156px!important;}
+}
+
+/* Leaderboard rhythm: easier scan, less cramped */
+.rk-quiet-board-head{padding:26px 22px!important;}
+.rk-quiet-topline{margin-bottom:13px!important;gap:10px!important;}
+.rk-quiet-kicker{line-height:1.35!important;}
+.rk-quiet-title{line-height:1.16!important;margin-bottom:12px!important;}
+.rk-quiet-preview-line{gap:10px!important;row-gap:10px!important;margin-top:12px!important;}
+.rk-quiet-preview-pill{line-height:1.1!important;padding:8px 12px!important;}
+.rk-quiet-board-panel{padding:22px 20px 24px!important;}
+.rk-quiet-leader{margin-bottom:16px!important;padding:18px!important;}
+.rk-quiet-row-list{gap:12px!important;}
+.rk-quiet-row{padding:15px 16px!important;gap:14px!important;}
+.rk-quiet-name{line-height:1.18!important;}
+.rk-quiet-sub{line-height:1.4!important;margin-top:6px!important;}
+.rk-quiet-chevron{font-size:0!important;}
+.rk-quiet-chevron > .rk-chevron-mark{margin:auto!important;}
+
+
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
@@ -6041,7 +6112,7 @@ function TableTalkRead({iq}){
         <div key={c.title} style={{background:"#fff",border:`1px solid ${c.tone.color}20`,borderRadius:14,padding:"12px 14px",boxShadow:"0 1px 5px rgba(0,0,0,0.035)"}}>
           <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
             <div style={{width:30,height:30,borderRadius:10,background:c.tone.color+"10",display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,flexShrink:0}}>{c.icon}</div>
-            <div style={{flex:1,minWidth:0}}>
+            <div className="rk-daily-hero-copy" style={{flex:1,minWidth:0}}>
               <div style={{fontSize:8,color:C.mut,letterSpacing:1.7,fontWeight:900,textTransform:"uppercase"}}>{c.title}</div>
               <div style={{fontSize:12,fontWeight:900,color:C.ink,lineHeight:1.25,marginTop:1}}>{c.tone.label}</div>
             </div>
@@ -9632,8 +9703,8 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
       <div aria-hidden style={{position:"absolute",right:-24,top:-28,fontSize:140,opacity:0.042,lineHeight:1,transform:"rotate(12deg)",pointerEvents:"none"}}>🀄</div>
       <div aria-hidden style={{position:"absolute",left:-36,bottom:-30,fontSize:110,opacity:0.032,lineHeight:1,transform:"rotate(-10deg)",pointerEvents:"none"}}>🀄</div>
 
-      <div style={{position:"relative",padding:"20px 18px 17px"}}>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,marginBottom:16}}>
+      <div className="rk-daily-hero-inner" style={{position:"relative",padding:"20px 18px 17px"}}>
+        <div className="rk-daily-hero-top" style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,marginBottom:16}}>
           <div className="rk-soft-glow" style={{display:"inline-flex",alignItems:"center",gap:8,background:"rgba(255,255,255,0.13)",border:"1px solid rgba(255,255,255,0.20)",borderRadius:999,padding:"6px 12px",boxShadow:"inset 0 1px 0 rgba(255,255,255,.12)"}}>
             <span className="rk-live-orb" style={{width:9,height:9,borderRadius:99,background:"#4CD987",display:"inline-block",boxShadow:"0 0 10px rgba(76,217,135,.55)"}}/>
             <span style={{fontSize:9,letterSpacing:2,fontWeight:900,color:"rgba(255,255,255,0.84)"}}>DAILY RACKLE · #{dn}</span>
@@ -9642,12 +9713,12 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
           <div style={{fontSize:9.5,color:"rgba(255,255,255,0.72)",fontWeight:900}}>new rack in {reset}</div>
         </div>
 
-        <div style={{display:"flex",alignItems:"center",gap:16}}>
+        <div className="rk-daily-hero-main" style={{display:"flex",alignItems:"center",gap:16}}>
           <div style={{flex:1,minWidth:0}}>
-            <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,letterSpacing:-0.75,lineHeight:1.02,marginBottom:11,textShadow:"0 1px 0 rgba(0,0,0,.08)"}}>
+            <div className="rk-daily-hero-title" style={{fontFamily:F.d,fontSize:24,fontWeight:900,letterSpacing:-0.75,lineHeight:1.02,marginBottom:11,textShadow:"0 1px 0 rgba(0,0,0,.08)"}}>
               Read the rack.<br/><span style={{color:"#E0C263"}}>Claim the table.</span>
             </div>
-            <div style={{fontSize:11.5,color:"rgba(255,255,255,0.78)",lineHeight:1.55,maxWidth:250}}>
+            <div className="rk-daily-hero-subcopy" style={{fontSize:11.5,color:"rgba(255,255,255,0.78)",lineHeight:1.55,maxWidth:250}}>
               Same daily Charleston. One score to beat.
             </div>
           </div>
@@ -9701,16 +9772,16 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
           </div>
         </div>
 
-        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:7,marginTop:18}}>
+        <div className="rk-daily-hero-stats" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:7,marginTop:18}}>
           {statCards.map((c,i)=>(
-            <div key={i} className="rk-count-live" style={{background:"rgba(255,255,255,0.105)",border:"1px solid rgba(255,255,255,0.16)",borderRadius:12,padding:"10px 10px",minHeight:60,boxShadow:"inset 0 1px 0 rgba(255,255,255,.08)"}}>
+            <div key={i} className="rk-count-live rk-daily-hero-stat" style={{background:"rgba(255,255,255,0.105)",border:"1px solid rgba(255,255,255,0.16)",borderRadius:12,padding:"10px 10px",minHeight:60,boxShadow:"inset 0 1px 0 rgba(255,255,255,.08)"}}>
               <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:c.tone==="gold"?"#E0C263":"#fff",lineHeight:1}}>{c.value}</div>
               <div style={{fontSize:7.5,color:"rgba(255,255,255,0.58)",letterSpacing:1.05,fontWeight:800,marginTop:5,textTransform:"uppercase",whiteSpace:"nowrap"}}>{c.label}</div>
             </div>
           ))}
         </div>
 
-        <div style={{marginTop:9,background:"linear-gradient(135deg,rgba(201,168,76,0.16),rgba(76,217,135,0.08))",border:"1px solid rgba(224,194,99,0.34)",borderRadius:14,padding:"10px 12px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:10}}>
+        <div className="rk-daily-hero-tomorrow" style={{marginTop:9,background:"linear-gradient(135deg,rgba(201,168,76,0.16),rgba(76,217,135,0.08))",border:"1px solid rgba(224,194,99,0.34)",borderRadius:14,padding:"10px 12px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:10}}>
           <div style={{minWidth:0}}>
             <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:3}}>
               <span style={{width:7,height:7,borderRadius:99,background:"#E0C263",display:"inline-block",flexShrink:0,boxShadow:"0 0 10px rgba(224,194,99,.35)"}}/>
