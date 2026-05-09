@@ -1292,6 +1292,122 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-quiet-chevron > .rk-chevron-mark{margin:auto!important;}
 
 
+/* ─── vNext FINAL HERO + LEADERBOARD VIEW FIXES ─────────────────────────── */
+.rk-quiet-desc{
+  font-size:12px;
+  line-height:1.45;
+  color:rgba(26,20,16,.58);
+  font-weight:700;
+  margin:-4px 0 11px;
+}
+.rk-quiet-board-head{padding:20px 18px!important;}
+.rk-quiet-topline{margin-bottom:8px!important;gap:8px!important;align-items:center!important;}
+.rk-quiet-mini-icon{width:30px!important;height:30px!important;font-size:14px!important;}
+.rk-quiet-kicker{line-height:1.18!important;}
+.rk-quiet-title{line-height:1.08!important;margin-bottom:7px!important;}
+.rk-quiet-preview-line{margin-top:7px!important;gap:7px!important;row-gap:7px!important;}
+.rk-quiet-board-panel{padding:18px 16px 20px!important;}
+.rk-quiet-row-list{gap:10px!important;}
+.rk-quiet-row{padding:13px 14px!important;}
+
+/* Mobile: remove PLAY text and flatten the button slightly */
+@media(max-width:899px){
+  .rk-play-button-premium{
+    width:76px!important;
+    height:76px!important;
+    transform:translateY(-4px)!important;
+    border-width:1.5px!important;
+    box-shadow:0 10px 22px rgba(0,0,0,.20),0 0 0 1px rgba(243,212,107,.24),inset 0 1px 0 rgba(255,255,255,.90),inset 0 -5px 12px rgba(160,120,40,.08)!important;
+    animation:none!important;
+  }
+  .rk-play-button-premium:before{inset:7px!important;border-width:1px!important;animation:none!important;}
+  .rk-play-button-premium:after{content:none!important;display:none!important;}
+  .rk-play-triangle{margin-top:0!important;border-top-width:12px!important;border-bottom-width:12px!important;border-left-width:19px!important;animation:none!important;}
+}
+
+/* Web/tablet: force a balanced hero and keep play visible */
+@media(min-width:900px){
+  .rk-daily-hero-card{
+    min-height:auto!important;
+    max-width:1100px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+    border-radius:34px!important;
+  }
+  .rk-daily-hero-inner{
+    min-height:520px!important;
+    padding:56px 64px 52px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 260px!important;
+    grid-template-areas:
+      "top top"
+      "copy play"
+      "stats stats"
+      "tomorrow tomorrow"!important;
+    column-gap:58px!important;
+    row-gap:28px!important;
+    align-items:center!important;
+  }
+  .rk-daily-hero-top{grid-area:top!important;margin:0!important;}
+  .rk-daily-hero-main{display:contents!important;}
+  .rk-daily-hero-copy{grid-area:copy!important;max-width:660px!important;display:block!important;}
+  .rk-daily-hero-title{
+    font-size:clamp(48px,5vw,72px)!important;
+    line-height:.96!important;
+    letter-spacing:-1.8px!important;
+    margin:0 0 22px!important;
+    max-width:760px!important;
+  }
+  .rk-daily-hero-title br{display:none!important;}
+  .rk-daily-hero-title span{display:block!important;}
+  .rk-daily-hero-subcopy{
+    font-size:18px!important;
+    line-height:1.52!important;
+    max-width:34ch!important;
+  }
+  .rk-daily-hero-card .rk-play-button-premium{
+    grid-area:play!important;
+    display:flex!important;
+    visibility:visible!important;
+    opacity:1!important;
+    justify-self:center!important;
+    align-self:center!important;
+    position:relative!important;
+    right:auto!important;
+    top:auto!important;
+    width:132px!important;
+    height:132px!important;
+    transform:none!important;
+    margin:0!important;
+    z-index:8!important;
+  }
+  .rk-daily-hero-card .rk-play-button-premium:after{content:none!important;display:none!important;}
+  .rk-daily-hero-card .rk-play-triangle{
+    border-top-width:20px!important;
+    border-bottom-width:20px!important;
+    border-left-width:32px!important;
+    margin-left:8px!important;
+    margin-top:0!important;
+  }
+  .rk-daily-hero-stats{
+    grid-area:stats!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:18px!important;
+    margin:4px 0 0!important;
+  }
+  .rk-daily-hero-stat{min-height:92px!important;border-radius:20px!important;padding:18px 22px!important;}
+  .rk-daily-hero-tomorrow{grid-area:tomorrow!important;margin:0!important;padding:18px 24px!important;border-radius:22px!important;}
+}
+@media(min-width:900px) and (max-width:1080px){
+  .rk-daily-hero-inner{grid-template-columns:minmax(0,1fr) 210px!important;padding:44px 44px 42px!important;column-gap:34px!important;min-height:470px!important;}
+  .rk-daily-hero-title{font-size:clamp(42px,5vw,56px)!important;}
+  .rk-daily-hero-subcopy{font-size:16px!important;}
+  .rk-daily-hero-card .rk-play-button-premium{width:112px!important;height:112px!important;}
+  .rk-daily-hero-card .rk-play-triangle{border-top-width:17px!important;border-bottom-width:17px!important;border-left-width:27px!important;}
+}
+
+
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
@@ -8726,6 +8842,7 @@ function ClubCodeEntry({setScreen,clubEntries=[],currentScore=0,currentRank=null
             </div>
           </div>
           <div className="rk-quiet-title">{savedClub?savedClub.name:"Club Leaderboard"}</div>
+          <div className="rk-quiet-desc">Your table’s daily score room.</div>
           {savedClub?(
             <div className="rk-quiet-preview-line">
               <span className="rk-quiet-preview-pill rk-quiet-preview-pill-green">{liveCount||1} live</span>
@@ -8831,6 +8948,7 @@ function GlobalLeaderboardPill({setScreen}){
             </div>
           </div>
           <div className="rk-quiet-title">Rackle Leaderboard</div>
+          <div className="rk-quiet-desc">See who owns today’s rack before the board resets.</div>
           {hasData?(
             <div className="rk-quiet-preview-line">
               <span className="rk-quiet-preview-pill rk-quiet-preview-pill-blue">{entries.length} players</span>
@@ -9714,7 +9832,7 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
         </div>
 
         <div className="rk-daily-hero-main" style={{display:"flex",alignItems:"center",gap:16}}>
-          <div style={{flex:1,minWidth:0}}>
+          <div className="rk-daily-hero-copy" style={{flex:1,minWidth:0}}>
             <div className="rk-daily-hero-title" style={{fontFamily:F.d,fontSize:24,fontWeight:900,letterSpacing:-0.75,lineHeight:1.02,marginBottom:11,textShadow:"0 1px 0 rgba(0,0,0,.08)"}}>
               Read the rack.<br/><span style={{color:"#E0C263"}}>Claim the table.</span>
             </div>
