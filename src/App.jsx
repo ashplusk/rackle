@@ -5509,6 +5509,19 @@ function getClubName(){
   // Historical key: this stores the player's display name, not the club name.
   return getPlayerDisplayName();
 }
+function getAffiliatedClubName(code=getClubCode()){
+  const cleanCode=String(code||"").trim();
+  const club=cleanCode&&CLUBS?.[cleanCode];
+  if(club?.name)return club.name;
+  const profile=ST.get("profile",null)||{};
+  const possible=String(profile?.clubName||profile?.club_name||profile?.club||"").trim();
+  if(possible&&!isClubDisplayName(possible)){
+    // Only use a stored free-text club label when it is not actually the player name.
+    const playerName=getPlayerDisplayName();
+    if(!playerName||rkNormText(possible)!==rkNormText(playerName))return possible;
+  }
+  return cleanCode&&cleanCode!=="__global__"?`Club ${cleanCode}`:null;
+}
 function setClubName(n){
   if(n&&isClubDisplayName(n))return;
   ST.set("clubName",n);
@@ -8344,14 +8357,15 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const score=Number(iq.totalScore||0);
   const time=Number(iq.timeSecs||iq.time_secs||0);
   const clubCode=getClubCode();
-  const clubName=getClubName();
+  const playerName=getPlayerDisplayName()||rkCurrentDisplayName?.()||"";
+  const affiliatedClubName=getAffiliatedClubName(clubCode);
   const globalRows=rkMergeCurrentScore(globalEntries,score,time,iq.streak||0,clubCode);
   const clubRows=clubCode?rkMergeCurrentScore(clubEntries,score,time,iq.streak||0,clubCode):[];
   const globalRank=rkRankOfCurrent(globalRows,score);
   const clubRank=clubCode?rkRankOfCurrent(clubRows,score):null;
   const globalTotal=globalRows.length||dailyStats?.total||dailyStats?.count||null;
   const clubTotal=clubCode?clubRows.length:null;
-  const rankLine=globalRank&&globalTotal?`#${globalRank} of ${globalTotal} today${clubRank&&clubTotal?` · #${clubRank} in ${clubName||"your club"}`:""}`:clubRank&&clubTotal?`#${clubRank} of ${clubTotal} in ${clubName||"your club"}`:"";
+  const rankLine=globalRank&&globalTotal?`#${globalRank} of ${globalTotal} today${clubRank&&clubTotal?` · #${clubRank} in ${affiliatedClubName||"your club"}`:""}`:clubRank&&clubTotal?`#${clubRank} of ${clubTotal} in ${affiliatedClubName||"your club"}`:"";
 
   const passEmoji=(iq.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
   const passDots=(iq.passInsights||[]).slice(0,3);
@@ -8417,7 +8431,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:8,marginBottom:12}}>
         <Metric label="Global" value={globalRank?`#${globalRank}`:"—"} sub={globalTotal?`of ${globalTotal}`:"loading"} accent={globalRank===1?C.gold:C.jade} onClick={()=>setScreen&&setScreen("globalLeaderboard")}/>
-        <Metric label="Club" value={clubRank?`#${clubRank}`:"—"} sub={clubName||"join"} accent={clubRank===1?C.gold:C.jade} onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")}/>
+        <Metric label="Club" value={clubRank?`#${clubRank}`:"—"} sub={affiliatedClubName||"join"} accent={clubRank===1?C.gold:C.jade} onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")}/>
         <Metric label="Time" value={time?`${time}s`:"—"} sub="finished" accent={C.ink}/>
       </div>
 
@@ -8437,17 +8451,19 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <SortableRack hand={hand}/>
       </div>
 
-      <div style={{marginBottom:12}}>
-        <ShareButton text={shareText} label="Share your score" sublabel="Send it to your mahjong group" variant="goldpill"/>
+      <div style={{marginBottom:10}}>
+        <ShareButton text={shareText} label="Share score" sublabel={affiliatedClubName?`Post it to ${affiliatedClubName}`:"Drop it in your group chat"} variant="goldpill"/>
       </div>
 
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9,marginBottom:12}}>
+        <button onClick={()=>setScreen&&setScreen("globalLeaderboard")} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.jade,cursor:"pointer"}}>Leaderboard</button>
+        <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>{clubCode?"Club room":"Join club"}</button>
         <button onClick={onPractice} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.jade,cursor:"pointer"}}>Free Play</button>
         {onCoachMode?<button onClick={onCoachMode} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>Quick Coach</button>:<button onClick={onHome} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>Home</button>}
       </div>
 
       <button onClick={()=>setShowDetails(v=>!v)} style={{width:"100%",border:`1px solid rgba(26,20,16,.075)`,borderRadius:16,background:"rgba(255,255,255,.55)",padding:"12px 14px",display:"flex",alignItems:"center",justifyContent:"space-between",fontFamily:F.b,cursor:"pointer",marginBottom:showDetails?10:16}}>
-        <span style={{fontSize:12,fontWeight:950,color:C.ink}}>Details</span>
+        <span style={{fontSize:12,fontWeight:950,color:C.ink}}>Show rack detail</span>
         <span style={{fontSize:12,color:C.mut,fontWeight:950}}>{showDetails?"⌃":"⌄"}</span>
       </button>
       {showDetails&&(
