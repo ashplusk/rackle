@@ -2375,6 +2375,97 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-live-ticker-side{display:none!important}
 }
 
+
+/* ─── ULTRA COMPACT HERO + QUIET LIVE STATUS STRIP ───────────────────────── */
+.rk-startup-hero-v4{
+  padding:6px 10px 4px!important;
+  margin:0 auto 6px!important;
+  max-width:620px!important;
+}
+.rk-startup-mark-v4{
+  width:36px!important;
+  height:36px!important;
+  margin:0 auto 8px!important;
+  border-radius:12px!important;
+  font-size:21px!important;
+  box-shadow:0 5px 12px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.86)!important;
+}
+.rk-startup-logo-v4{
+  font-size:clamp(48px,10.8vw,66px)!important;
+  line-height:.88!important;
+  letter-spacing:-2.4px!important;
+}
+.rk-startup-subtitle-v4{
+  margin:8px 0 0!important;
+  font-size:clamp(17px,3.9vw,23px)!important;
+  line-height:1.08!important;
+  font-weight:560!important;
+  font-variation-settings:'wght' 560!important;
+  letter-spacing:-.14px!important;
+}
+.rk-startup-description-v4{
+  margin:13px auto 0!important;
+  max-width:31ch!important;
+  color:rgba(26,20,16,.62)!important;
+  font-size:13px!important;
+  line-height:1.36!important;
+  font-weight:500!important;
+  letter-spacing:.01px!important;
+}
+.rk-startup-description-v4 .rk-desc-line{
+  margin-top:1px!important;
+  color:rgba(26,20,16,.62)!important;
+  font-size:13px!important;
+  line-height:1.36!important;
+  font-weight:500!important;
+  letter-spacing:.01px!important;
+}
+.rk-startup-description-v4 em{
+  margin-top:5px!important;
+  font-size:11.5px!important;
+  line-height:1.3!important;
+  font-weight:500!important;
+}
+.rk-live-ticker-v4{
+  min-height:30px!important;
+  max-height:30px!important;
+  margin:0 0 9px!important;
+  padding:0 10px!important;
+  border-radius:999px!important;
+  background:linear-gradient(145deg,rgba(255,253,248,.82),rgba(244,249,246,.66))!important;
+  border:1px solid rgba(23,107,66,.115)!important;
+  box-shadow:0 3px 10px rgba(23,107,66,.028),inset 0 1px 0 rgba(255,255,255,.78)!important;
+  gap:7px!important;
+}
+.rk-live-ticker-v4:after{display:none!important}
+.rk-live-ticker-dot{
+  width:7px!important;
+  height:7px!important;
+  box-shadow:0 0 0 4px rgba(76,217,135,.10),0 0 10px rgba(76,217,135,.35)!important;
+}
+.rk-live-ticker-text{
+  font-size:10.8px!important;
+  line-height:1!important;
+  font-weight:760!important;
+  letter-spacing:.12px!important;
+  text-transform:none!important;
+  color:rgba(23,107,66,.92)!important;
+}
+.rk-live-ticker-side{display:none!important}
+.rk-home-landing-flow{margin-top:0!important}
+.rk-streak-card{display:none!important}
+.rk-score-shell .rk-iq-hero,.rk-iq-hero{margin-top:0!important}
+@media(max-width:430px){
+  .rk-startup-hero-v4{padding:4px 8px 2px!important;margin-bottom:5px!important}
+  .rk-startup-mark-v4{width:34px!important;height:34px!important;font-size:20px!important;margin-bottom:7px!important}
+  .rk-startup-logo-v4{font-size:46px!important;letter-spacing:-2px!important}
+  .rk-startup-subtitle-v4{font-size:16.5px!important;margin-top:7px!important}
+  .rk-startup-description-v4{font-size:12.4px!important;max-width:30ch!important;margin-top:11px!important;line-height:1.34!important}
+  .rk-startup-description-v4 .rk-desc-line{font-size:12.4px!important;line-height:1.34!important}
+  .rk-live-ticker-v4{min-height:28px!important;max-height:28px!important;margin:0 0 8px!important;padding:0 9px!important}
+  .rk-live-ticker-text{font-size:10.4px!important;font-weight:760!important}
+}
+
 `;
 
 
