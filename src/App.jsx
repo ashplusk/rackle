@@ -375,6 +375,35 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-home-improve-card{position:relative;overflow:hidden;border:1px solid rgba(201,168,76,.22)!important;background:linear-gradient(145deg,#FFFDF8,#F6F0E5)!important;box-shadow:0 7px 20px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)!important}
 .rk-home-improve-card:after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 0%,rgba(201,168,76,.10) 45%,transparent 62%);transform:translateX(-120%);animation:rkGoldSweep 5.4s ease-in-out infinite;pointer-events:none}
 .rk-home-improve-card .rk-home-improve-icon{animation:rkTinyFloat 3.7s ease-in-out infinite}
+
+
+/* ─── vNext DAILY SCORECARD: POST-IMPROVE POLISH ─────────────────────────── */
+@keyframes rkReviewGlow{0%,100%{box-shadow:0 9px 26px rgba(26,20,16,.045),0 0 0 rgba(201,168,76,0)}50%{box-shadow:0 12px 34px rgba(26,20,16,.06),0 0 24px rgba(201,168,76,.11)}}
+@keyframes rkCoachNudge{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+.rk-review-flow{display:flex;flex-direction:column;gap:12px;margin:2px 0 14px}
+.rk-review-style-card{position:relative;overflow:hidden;border-radius:24px!important;padding:20px 18px!important;background:linear-gradient(145deg,#F4FBF7,#FFFDF8 62%,#F7F0E5)!important;border:1px solid rgba(23,107,66,.16)!important;box-shadow:0 10px 30px rgba(26,20,16,.05),inset 0 1px 0 rgba(255,255,255,.82)!important;text-align:center!important}
+.rk-review-style-card:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top,rgba(255,255,255,.72),transparent 44%);pointer-events:none}
+.rk-review-style-orb{width:54px;height:54px;border-radius:18px;background:linear-gradient(145deg,#FFFDF8,#EEE4D2);border:1px solid rgba(201,168,76,.22);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:22px;box-shadow:0 8px 18px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.84);animation:rkCoachNudge 4.4s ease-in-out infinite}
+.rk-review-style-title{font-family:'Fraunces',Georgia,serif;font-size:24px;line-height:1.04;font-weight:950;letter-spacing:-.55px;color:#1A1410;margin:0}
+.rk-review-style-note{font-size:14px;line-height:1.62;color:rgba(26,20,16,.62);font-weight:650;max-width:32ch;margin:9px auto 0}
+.rk-review-rank-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:2px 0 12px}
+.rk-review-rank-card{position:relative;overflow:hidden;border-radius:21px;padding:16px 11px 14px;text-align:center;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.075);box-shadow:0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78);min-width:0;animation:rkReviewGlow 5.2s ease-in-out infinite}
+.rk-review-rank-card:after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 0%,rgba(201,168,76,.09) 46%,transparent 62%);transform:translateX(-120%);animation:rkGoldSweep 5.6s ease-in-out infinite;pointer-events:none}
+.rk-review-rank-kicker{font-size:8px;letter-spacing:2px;text-transform:uppercase;font-weight:950;color:rgba(26,20,16,.46);margin-bottom:7px}
+.rk-review-rank-value{font-family:'Fraunces',Georgia,serif;font-size:30px;line-height:.92;font-weight:950;letter-spacing:-1px;color:#176B42}
+.rk-review-rank-sub{font-size:10px;font-weight:900;color:#6B6157;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk-review-share-card{position:relative;overflow:hidden;border-radius:23px;background:linear-gradient(145deg,#FFFDF8,#F6EFE3);border:1px solid rgba(201,168,76,.18);box-shadow:0 9px 28px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78);padding:14px;margin-bottom:14px}
+.rk-review-share-head{display:flex;align-items:center;gap:12px;text-align:left;margin-bottom:12px}
+.rk-review-share-icon{width:46px;height:46px;border-radius:16px;background:linear-gradient(145deg,#FFFDF8,#EEE4D2);border:1px solid rgba(201,168,76,.22);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 5px 13px rgba(26,20,16,.05)}
+.rk-review-share-title{font-family:'Fraunces',Georgia,serif;font-size:18px;line-height:1.08;font-weight:950;letter-spacing:-.35px;color:#1A1410}
+.rk-review-share-copy{font-size:12px;line-height:1.45;color:rgba(26,20,16,.58);font-weight:650;margin-top:3px}
+.rk-review-share-preview{font-family:'Nunito','Segoe UI',sans-serif;font-size:12px;color:#6B6157;background:rgba(26,20,16,.035);border:1px solid rgba(26,20,16,.045);border-radius:16px;padding:11px 12px;margin-bottom:11px;text-align:center;line-height:1.75;font-weight:700}
+.rk-review-social-note{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px;font-size:11px;color:#176B42;font-weight:900}
+.rk-review-social-note .rk-social-live-dot{width:7px;height:7px}
+.rk-review-foldout-label{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 10px;background:rgba(23,107,66,.07);border:1px solid rgba(23,107,66,.10);font-size:10px;font-weight:950;color:#176B42;margin:2px auto 12px}
+.rk-review-bottom-home{margin-top:16px;display:grid;grid-template-columns:1fr;gap:10px}
+@media(max-width:390px){.rk-review-rank-row{gap:8px}.rk-review-rank-card{padding:14px 8px}.rk-review-rank-value{font-size:27px}.rk-review-style-title{font-size:22px}.rk-review-share-preview{font-size:11px}}
+
 @media (prefers-reduced-motion: reduce){.rk-hero-live,.rk-iq-hero,.rk-soft-glow,.rk-count-live,.rk-streak-copy,.rk-float,.rk-pulse,.rk-live-dot,.rk-sweep:after{animation:none!important}}
 `;
 const S={
@@ -5837,20 +5866,20 @@ function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
   const headerLabel=sectionTitleCase(label);
   const headerDesc=sectionDescCase(desc);
   return(
-    <div style={{marginTop:9,marginBottom:0}}>
+    <div style={{marginTop:11,marginBottom:0}}>
       <button
         onClick={onToggle}
         aria-expanded={open}
         style={{
           width:"100%",cursor:"pointer",textAlign:"left",
           display:"flex",alignItems:"center",gap:11,
-          padding:"13px 14px",
-          borderRadius:17,
-          background:open?"linear-gradient(145deg,#FFFFFF,#FFF9F1)":"linear-gradient(145deg,#FFFFFF,#FFFCF7)",
+          padding:"15px 15px",
+          borderRadius:20,
+          background:open?"linear-gradient(145deg,#FFFDF8,#F6F1E7)":"linear-gradient(145deg,#FFFDF8,#F8F3EA)",
           border:`1px solid ${open?C.jade+"32":"#E7DFD2"}`,
           boxShadow:open
-            ?"0 6px 18px rgba(23,107,66,0.075), 0 1px 0 rgba(255,255,255,0.9) inset"
-            :"0 2px 9px rgba(0,0,0,0.035), 0 1px 0 rgba(255,255,255,0.9) inset",
+            ?"0 10px 26px rgba(23,107,66,0.075), 0 1px 0 rgba(255,255,255,0.9) inset"
+            :"0 6px 18px rgba(26,20,16,0.035), 0 1px 0 rgba(255,255,255,0.9) inset",
           transition:"all 0.18s ease",
           position:"relative",
           overflow:"hidden",
@@ -5999,12 +6028,13 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       <ImproveGameHero iq={iq} chosenSecObj={chosenSecObj} bestFitSec={bestFitSec} onPractice={onPractice} onCoachMode={onCoachMode} setScreen={setScreen}/>
 
       {/* ①b STYLE, light identity layer */}
-      {iq.styleName&&<div className="rk-score-card rk-style-card" style={{marginBottom:16,background:C.sage,border:`1px solid ${C.jade}20`}}>
-        <div className="rk-style-icon" style={{width:44,height:44,borderRadius:14,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>✨</div>
-        <div style={{width:"100%"}}>
-          <div style={{fontSize:10,color:C.jade,letterSpacing:2.4,fontWeight:900,marginBottom:6}}>YOUR STYLE</div>
-          <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,lineHeight:1.15}}>{iq.styleName}</div>
-          {iq.styleNote&&<div style={{fontSize:13,color:C.mut,lineHeight:1.45,marginTop:6,maxWidth:280,marginLeft:"auto",marginRight:"auto"}}>{iq.styleNote}</div>}
+      {iq.styleName&&<div className="rk-review-style-card" style={{marginBottom:14}}>
+        <div style={{position:"relative",zIndex:1}}>
+          <div className="rk-review-style-orb">✨</div>
+          <div style={{fontSize:9,color:C.jade,letterSpacing:2.7,fontWeight:950,marginBottom:7,textTransform:"uppercase"}}>Your Style</div>
+          <h3 className="rk-review-style-title">{iq.styleName}</h3>
+          {iq.styleNote&&<div className="rk-review-style-note">{iq.styleNote}</div>}
+          <div className="rk-review-social-note"><span className="rk-social-live-dot"/> This is the read to build on tomorrow</div>
         </div>
       </div>}
 
@@ -6036,65 +6066,60 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <div style={{marginBottom:10}}>
             {/* Rank pills, only when data has loaded */}
             {(globalRank||clubRank)&&(
-              <div style={{display:"flex",gap:8,marginBottom:8}}>
+              <div className="rk-review-rank-row">
                 {/* Global rank */}
                 {globalRank&&globalTotal&&(
-                  <div className="rk-rank-grid-card" style={{
-                    flex:1,borderRadius:16,padding:"14px 14px",
-                    background:globalRank<=3?`linear-gradient(135deg,${C.gilt}20,${C.gilt}08)`:"#FDFAF5",
-                    border:`1px solid ${globalRank<=3?C.gilt+"60":C.bdr}`,
-                  }}>
-                    <div style={{fontSize:9,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>GLOBAL</div>
-                    <div style={{display:"flex",alignItems:"baseline",justifyContent:"center",gap:4}}>
-                      <span style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:globalRank<=3?C.gold:C.ink,lineHeight:1}}>#{globalRank}</span>
-                      <span style={{fontSize:11,color:C.mut,lineHeight:1}}>of {globalTotal}</span>
-                    </div>
-                    <div style={{fontSize:9,fontWeight:700,marginTop:3,color:globalRank===1?C.gold:globalRank<=3?C.gold:C.mut}}>
-                      {globalRank===1?"🏆 Top score today":globalRank<=3?"🥉 Top 3 today":globalRank<=10?"Top 10":""}
+                  <div className="rk-review-rank-card">
+                    <div className="rk-review-rank-kicker">Global</div>
+                    <div className="rk-review-rank-value" style={{color:globalRank<=3?C.gold:C.jade}}>#{globalRank}</div>
+                    <div className="rk-review-rank-sub">of {globalTotal} today</div>
+                    <div style={{fontSize:10,fontWeight:950,marginTop:7,color:globalRank===1?C.gold:globalRank<=3?C.gold:C.mut}}>
+                      {globalRank===1?"Table leader":globalRank<=3?"Top 3 today":globalRank<=10?"Top 10":"On the board"}
                     </div>
                   </div>
                 )}
                 {/* Club rank, tappable */}
                 {clubRank&&clubTotal&&clubName?(
-                  <button onClick={()=>setScreen&&setScreen("leaderboard")} className="rk-rank-grid-card" style={{
-                    flex:1,borderRadius:16,padding:"14px 14px",cursor:"pointer",textAlign:"center",
-                    background:clubRank===1?`linear-gradient(135deg,${C.jade}16,${C.jade}06)`:"#FDFAF5",
-                    border:`1px solid ${clubRank<=3?C.jade+"50":C.bdr}`,
-                  }}>
-                    <div style={{fontSize:9,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>CLUB</div>
-                    <div style={{display:"flex",alignItems:"baseline",justifyContent:"center",gap:4}}>
-                      <span style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:clubRank<=3?C.jade:C.ink,lineHeight:1}}>#{clubRank}</span>
-                      <span style={{fontSize:11,color:C.mut,lineHeight:1}}>of {clubTotal}</span>
-                    </div>
-                    <div style={{fontSize:9,color:C.jade,fontWeight:600,marginTop:3,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
-                      {clubRank===1?"🏆 Club leader":clubRank<=3?"Top 3":clubName} ›
+                  <button onClick={()=>setScreen&&setScreen("leaderboard")} className="rk-review-rank-card" style={{cursor:"pointer"}}>
+                    <div className="rk-review-rank-kicker">Club</div>
+                    <div className="rk-review-rank-value">#{clubRank}</div>
+                    <div className="rk-review-rank-sub">of {clubTotal} players</div>
+                    <div style={{fontSize:10,color:C.jade,fontWeight:950,marginTop:7,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
+                      {clubRank===1?"Club leader":clubRank<=3?"Top 3 at the table":clubName} ›
                     </div>
                   </button>
                 ):(
                   /* No club, nudge to join */
-                  <button onClick={()=>setScreen&&setScreen("clubs")} className="rk-rank-grid-card" style={{
-                    flex:1,borderRadius:16,padding:"14px 14px",cursor:"pointer",textAlign:"center",
-                    background:C.bg2,border:`1px dashed ${C.bdr}`,
-                  }}>
-                    <div style={{fontSize:9,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>CLUB RANK</div>
-                    <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.ink,lineHeight:1.15}}>Join club rank</div>
-                    <div style={{fontSize:9,color:C.jade,fontWeight:700,marginTop:4}}>Browse club directory ›</div>
+                  <button onClick={()=>setScreen&&setScreen("clubs")} className="rk-review-rank-card" style={{cursor:"pointer",borderStyle:"dashed"}}>
+                    <div className="rk-review-rank-kicker">Club</div>
+                    <div style={{fontFamily:F.d,fontSize:17,fontWeight:950,color:C.ink,lineHeight:1.1}}>Join your table</div>
+                    <div className="rk-review-rank-sub" style={{color:C.jade}}>Find a club board ›</div>
                   </button>
                 )}
               </div>
             )}
 
             {/* Share block */}
-            <div style={{background:"linear-gradient(145deg,#FDFAF4,#F5EFE2)",border:`1px solid ${C.gold}25`,borderRadius:14,padding:"13px 14px 11px"}}>
-              {/* Share text preview */}
-              <div style={{fontFamily:"monospace",fontSize:10,color:"#7A6040",background:"rgba(0,0,0,0.035)",borderRadius:10,padding:"13px 14px",marginBottom:11,textAlign:"center",lineHeight:2.15,letterSpacing:0.15}}>
-                {richShareText.split("\n").map((line,i)=>line===""?<div key={i} style={{height:5}}/>:<div key={i}>{line}</div>)}
+            <div className="rk-review-share-card">
+              <div className="rk-review-share-head">
+                <div className="rk-review-share-icon">📣</div>
+                <div style={{flex:1,minWidth:0}}>
+                  <div className="rk-review-share-title">Bring the room in.</div>
+                  <div className="rk-review-share-copy">Share your score, start the chase, and make tomorrow’s rack feel social.</div>
+                </div>
+              </div>
+              <div className="rk-review-share-preview">
+                <div>Daily Rackle #{dayNum} · {iq.totalScore} · {iq.level}</div>
+                {rankLine&&<div>{rankLine}</div>}
+                <div>Think you can beat it?</div>
               </div>
               <ShareButton text={richShareText}/>
             </div>
           </div>
         );
       })()}
+
+      <div className="rk-review-foldout-label"><span className="rk-social-live-dot"/> Your coaching room</div>
 
       {/* ③ YOUR HAND, collapsible, open by default */}
       <CollapsibleSection label="Your Hand" desc="Final rack · Best path" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
@@ -6116,7 +6141,12 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
       {/* ⑥ NEXT STEPS, collapsible */}
       <CollapsibleSection label="Next Steps" desc="Coach Mode · Recommendations" icon="🎯" open={openSec.next} onToggle={()=>toggle("next")}>
-        <div style={{display:"flex",flexDirection:"column",gap:8,paddingBottom:4}}>
+        <div style={{display:"flex",flexDirection:"column",gap:10,paddingBottom:4}}>
+          <div style={{borderRadius:18,padding:"14px 14px",background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid ${C.jade}12`,boxShadow:"inset 0 1px 0 rgba(255,255,255,.78)",textAlign:"center"}}>
+            <div style={{fontSize:9,letterSpacing:2.1,fontWeight:950,color:C.jade,textTransform:"uppercase",marginBottom:5}}>Tomorrow's edge</div>
+            <div style={{fontFamily:F.d,fontSize:18,lineHeight:1.12,fontWeight:950,color:C.ink}}>One cleaner decision changes the rack.</div>
+            <div style={{fontSize:12,lineHeight:1.55,color:C.mut,fontWeight:650,marginTop:6}}>Open the coach for the lesson, or replay this exact feeling in Free Play.</div>
+          </div>
           {/* Coach Mode, primary action, full-bleed dark green */}
           {onCoachMode&&(
             <button onClick={onCoachMode} className="rk-improve-action rk-improve-action-dark" style={{}}>
@@ -6159,16 +6189,17 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       </CollapsibleSection>
 
       {/* ⑧ COUNTDOWN + HOME */}
-      <div style={{marginTop:20,paddingBottom:4}}>
+      <div className="rk-review-bottom-home">
         <MidnightCountdown dn={dayNum}/>
         <button onClick={onHome} style={{
-          width:"100%",border:`1px solid ${C.bdr}`,borderRadius:12,
-          background:"transparent",color:C.mut,
-          fontSize:12,fontWeight:700,cursor:"pointer",
-          padding:"11px 0",letterSpacing:0.5,
-          display:"flex",alignItems:"center",justifyContent:"center",gap:6,
+          width:"100%",border:`1px solid ${C.bdr}`,borderRadius:16,
+          background:"linear-gradient(180deg,#FFFDF8,#F1E9DB)",color:C.mut,
+          fontSize:13,fontWeight:900,cursor:"pointer",
+          padding:"13px 0",letterSpacing:0.3,
+          display:"flex",alignItems:"center",justifyContent:"center",gap:8,
+          boxShadow:"0 5px 16px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.75)"
         }}>
-          <span style={{fontSize:11,opacity:0.6}}>←</span> Home
+          <span style={{fontSize:12,opacity:0.65}}>←</span> Back to clubhouse
         </button>
       </div>
     </div>
