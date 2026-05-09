@@ -5626,7 +5626,7 @@ async function pushGameHistory(entry,playerId){
 async function pullGameHistory(playerId){
   try{
     const res=await fetch(
-      `${SB_URL}/rest/v1/game_history?player_id=eq.${playerId}&order=played_at.desc&limit=100`,
+      `${SB_URL}/rest/v1/game_history?player_id=eq.${encodeURIComponent(playerId)}&order=played_at.desc&limit=100`,
       {headers:SB_HEADERS}
     );
     if(!res.ok)return null;
@@ -5636,8 +5636,124 @@ async function pullGameHistory(playerId){
       mode:r.mode,sid:r.section_id,
       iqScore:r.iq_score,rating:r.rating,
       time:r.time_secs,gi:0,
+      daySeed:r.day_seed||null,day_seed:r.day_seed||null,
     }));
   }catch{return null;}
+}
+
+function rkScoreFromResult(result){return Number(result?.iq?.totalScore??result?.iqScore??result?.totalScore??0)||0;}
+function rkRatingFromResult(result){return result?.iq?.level||result?.rating||result?.level||null;}
+function rkTimeFromResult(result){return Number(result?.time??result?.totalTime??result?.time_secs??0)||0;}
+function rkDailyResultToLocal(row){
+  if(!row)return null;
+  const scorecard=row.scorecard_json&&typeof row.scorecard_json==="object"?row.scorecard_json:{};
+  const base={
+    ...scorecard,
+    mode:"daily",
+    daySeed:row.day_seed,
+    day_seed:row.day_seed,
+    ts:new Date(row.updated_at||row.created_at||Date.now()).getTime(),
+  };
+  if(!base.iq)base.iq={};
+  if(row.iq_score&&!base.iq.totalScore)base.iq.totalScore=row.iq_score;
+  if(row.rating&&!base.iq.level)base.iq.level=row.rating;
+  if(row.time_secs&&!base.time)base.time=row.time_secs;
+  return base;
+}
+async function upsertDailyResult(result,streakValue=ST.get("str",0)){
+  const pid=currentLeaderboardPlayerId?.()||rkProfilePlayerId()||rkStoredPlayerId();
+  if(!pid||!result)return false;
+  const daySeed=result.daySeed||result.day_seed||getDailySeed();
+  const body={
+    player_id:pid,
+    day_seed:daySeed,
+    iq_score:rkScoreFromResult(result)||null,
+    rating:rkRatingFromResult(result),
+    time_secs:rkTimeFromResult(result)||null,
+    streak:streakValue||ST.get("str",0)||0,
+    club_code:rkCurrentClubCode?.()||getClubCode?.()||null,
+    rack_json:result?.rack||result?.finalRack||result?.hand||null,
+    scorecard_json:result,
+    updated_at:new Date().toISOString(),
+  };
+  try{
+    const res=await fetch(`${SB_URL}/rest/v1/daily_results`,{
+      method:"POST",
+      headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates,return=minimal"},
+      body:JSON.stringify(body),
+    });
+    if(!res.ok){
+      console.warn("Daily result sync failed",res.status,await res.text().catch(()=>""));
+      return false;
+    }
+    return true;
+  }catch(err){console.warn("Daily result sync error",err);return false;}
+}
+async function pullDailyResult(playerId,daySeed=getDailySeed()){
+  if(!playerId)return null;
+  try{
+    const res=await fetch(`${SB_URL}/rest/v1/daily_results?player_id=eq.${encodeURIComponent(playerId)}&day_seed=eq.${daySeed}&select=*&limit=1`,{headers:SB_HEADERS});
+    if(!res.ok)return null;
+    const rows=await res.json();
+    return rkDailyResultToLocal(rows?.[0]);
+  }catch{return null;}
+}
+function rkApplyRemoteProfileToStorage(remote){
+  if(!remote?.playerId)return null;
+  const restored={
+    nickname:remote.nickname||remote.name||"",
+    clubCode:remote.clubCode||remote.club_code||"",
+    avatarUrl:remote.avatarUrl||remote.avatar_url||"",
+    email:(remote.email||"").trim().toLowerCase(),
+    playerId:remote.playerId||remote.player_id,
+    streak:Number(remote.streak||0),
+    roundsPlayed:Number(remote.roundsPlayed||remote.rounds_played||0),
+    bestIQ:remote.bestIQ||remote.best_iq||null,
+    passwordHash:remote.passwordHash||remote.password_hash||null,
+  };
+  setProfile(restored);
+  ST.set("playerId",restored.playerId);
+  ST.set("authPlayerId",restored.playerId);
+  ST.set("isAuthenticated",!!restored.email);
+  ST.set("lastSyncAt",Date.now());
+  ST.set("str",restored.streak||0);
+  ST.set("rnd",restored.roundsPlayed||0);
+  if(restored.clubCode)setClubCode(restored.clubCode);
+  else ST.set("clubCode",null);
+  if(restored.nickname)setClubName(restored.nickname);
+  if(restored.passwordHash)setStoredHash(restored.passwordHash);
+  return restored;
+}
+async function hydrateRemoteAccount(remote,{replaceLocal=true}={}){
+  if(!remote?.playerId)return null;
+  const restored=rkApplyRemoteProfileToStorage(remote);
+  const [remoteHist,remoteDaily]=await Promise.all([
+    pullGameHistory(remote.playerId),
+    pullDailyResult(remote.playerId,getDailySeed()),
+  ]);
+  if(remoteHist){
+    const localHist=replaceLocal?[]:(ST.get("hist",[])||[]);
+    const byKey=new Map();
+    [...localHist,...remoteHist].forEach((e,i)=>{
+      const key=[e.mode||"free",e.daySeed||e.day_seed||"",e.ts||i,e.iqScore||""].join("|");
+      byKey.set(key,e);
+    });
+    ST.set("hist",[...byKey.values()].sort((a,b)=>(a.ts||0)-(b.ts||0)).slice(-100));
+  }
+  if(remoteDaily){
+    ST.set("dd",remoteDaily.daySeed||remoteDaily.day_seed||getDailySeed());
+    ST.set("dres",remoteDaily);
+    ST.set("hadFirstDaily",true);
+  }
+  return{profile:restored,history:remoteHist||[],dailyResult:remoteDaily};
+}
+async function rkHydrateStoredProfileFromSupabase(){
+  const local=getProfile();
+  const email=String(local?.email||"").trim().toLowerCase();
+  if(!email)return null;
+  const remote=await fetchProfileByEmail(email);
+  if(!remote)return null;
+  return hydrateRemoteAccount(remote,{replaceLocal:true});
 }
 
 function isClubDisplayName(name){
@@ -6331,20 +6447,7 @@ async function rkPatchRowsForIdentityMigration({fromPlayerId,toPlayerId,name,clu
 
 async function rkAdoptRemoteProfile(remote,previousLocalId=null){
   if(!remote?.playerId)return null;
-  const restored={
-    nickname:remote.nickname,
-    clubCode:remote.clubCode,
-    avatarUrl:remote.avatarUrl,
-    email:remote.email,
-    playerId:remote.playerId,
-    streak:remote.streak||0,
-    roundsPlayed:remote.roundsPlayed||0,
-    bestIQ:remote.bestIQ||null,
-  };
-  setProfile(restored);
-  ST.set("playerId",remote.playerId);
-  if(restored.clubCode)setClubCode(restored.clubCode);
-  if(restored.nickname)setClubName(restored.nickname);
+  const restored=rkApplyRemoteProfileToStorage(remote);
   await rkPatchRowsForIdentityMigration({
     fromPlayerId:previousLocalId,
     toPlayerId:remote.playerId,
@@ -6360,12 +6463,13 @@ async function rkSyncLocalProfileToSupabase(reason="app_load"){
   if(!name||isClubDisplayName(name))return false;
 
   const previousLocalId=rkStoredPlayerId();
-  const pid=rkProfilePlayerId(profile)||previousLocalId||getOrCreatePlayerId();
+  const pid=rkProfilePlayerId(profile)||previousLocalId||createGuestPlayerId();
   const clubCode=profile?.clubCode||profile?.club_code||getClubCode()||null;
   const syncedProfile={
     ...profile,
     playerId:pid,
     nickname:name,
+    email:profile?.email?String(profile.email).trim().toLowerCase():profile?.email,
     clubCode:clubCode||"",
     streak:profile?.streak??ST.get("str",0)??0,
     roundsPlayed:profile?.roundsPlayed??ST.get("rnd",0)??0,
@@ -6404,7 +6508,7 @@ async function upsertProfile(profile){
     };
     if(profile.passwordHash!==undefined)body.password_hash=profile.passwordHash;
     if(profile.avatarUrl!==undefined)body.avatar_url=profile.avatarUrl;
-    if(profile.email!==undefined)body.email=profile.email;
+    if(profile.email!==undefined)body.email=String(profile.email||"").trim().toLowerCase();
     const res=await fetch(`${SB_URL}/rest/v1/profiles`,{
       method:"POST",
       headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates"},
@@ -6414,11 +6518,18 @@ async function upsertProfile(profile){
   }catch{return false;}
 }
 
-// Generate a stable player ID from localStorage
-function getOrCreatePlayerId(){
+// Generate a stable guest ID only when the app is truly in guest mode.
+// Registered users should be hydrated from Supabase first.
+function createGuestPlayerId(){
   let id=ST.get("playerId",null);
-  if(!id){id="P"+Math.random().toString(36).slice(2,10).toUpperCase();ST.set("playerId",id);}
+  if(!id){id="G"+Math.random().toString(36).slice(2,10).toUpperCase();ST.set("playerId",id);}
   return id;
+}
+function getOrCreatePlayerId(){
+  const profile=rkRawProfile?.()||{};
+  const registeredId=rkProfilePlayerId?.(profile)||ST.get("authPlayerId",null);
+  if(registeredId){ST.set("playerId",registeredId);return registeredId;}
+  return createGuestPlayerId();
 }
 
 // ─── AUTH HELPERS ─────────────────────────────────────────────────────────────
@@ -6544,25 +6655,41 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
   const saveProfile=async(pw)=>{
     const composedName=(firstName.trim()+(lastName.trim()?" "+lastName.trim():"")).trim();
     if(!composedName)return;
+    const cleanEmail=(profile.email||"").trim().toLowerCase();
     setSaving(true);
-    const pid=getOrCreatePlayerId();
-    let pwHash=getStoredHash();
+    const previousLocalId=ST.get("playerId",null);
+    const existingRemote=cleanEmail?await fetchProfileByEmail(cleanEmail):null;
+    const currentProfileId=rkProfilePlayerId(profile)||rkProfilePlayerId(existingProfile)||previousLocalId||null;
+    if(existingRemote?.playerId&&currentProfileId&&existingRemote.playerId!==currentProfileId){
+      setSaving(false);
+      setPwErr("That email already has a Rackle account. Log in instead.");
+      setMode("signin");
+      return;
+    }
+    if(existingRemote?.playerId&&!currentProfileId){
+      setSaving(false);
+      setPwErr("That email already has a Rackle account. Log in instead.");
+      setMode("signin");
+      return;
+    }
+    const pid=existingRemote?.playerId||currentProfileId||createGuestPlayerId();
+    let pwHash=getStoredHash()||existingRemote?.passwordHash||null;
     if(pw){pwHash=await hashPassword(pw);setStoredHash(pwHash);}
-    const p={...profile,playerId:pid,nickname:composedName,email:(profile.email||"").trim().toLowerCase(),streak,roundsPlayed:rounds,bestIQ:bestIQ?.score||null};
+    const p={...profile,playerId:pid,nickname:composedName,email:cleanEmail,streak,roundsPlayed:rounds,bestIQ:bestIQ?.score||null};
     setProfile(p);setProfileState(p);
     if(p.clubCode)setClubCode(p.clubCode);else setClubCode(null);
     if(p.nickname)setClubName(p.nickname);
     await upsertProfile({...p,passwordHash:pwHash});
-    await rkPatchRowsForIdentityMigration({fromPlayerId:ST.get("playerId",null),toPlayerId:p.playerId,name:p.nickname,clubCode:p.clubCode||null});
+    await rkPatchRowsForIdentityMigration({fromPlayerId:previousLocalId&&previousLocalId!==pid?previousLocalId:null,toPlayerId:p.playerId,name:p.nickname,clubCode:p.clubCode||null});
     setSaving(false);setMode("view");setUnlocked(true);
   };
 
   const tryLogin=async()=>{
     setPwErr("");
-    const pid=getOrCreatePlayerId();
+    const pid=rkProfilePlayerId(profile)||rkStoredPlayerId();
     const hash=await hashPassword(pwInput);
     let localHash=getStoredHash();
-    if(!localHash){localHash=await fetchPasswordHash(pid);if(localHash)setStoredHash(localHash);}
+    if(!localHash&&pid){localHash=await fetchPasswordHash(pid);if(localHash)setStoredHash(localHash);}
     if(hash===localHash){setUnlocked(true);setMode("view");setPwInput("");}
     else{setPwErr("Incorrect password. Try again.");}
   };
@@ -6589,20 +6716,10 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
     // Restore profile locally and migrate any anonymous/local rows to the registered identity.
     const previousLocalId=ST.get("playerId",null);
     const restored=await rkAdoptRemoteProfile(remote,previousLocalId);
-    setProfileState(restored);
+    const hydrated=await hydrateRemoteAccount(remote,{replaceLocal:true});
+    setProfileState(hydrated?.profile||restored);
     setStoredHash(remote.passwordHash);
-    // Pull game history from Supabase to restore stats on new device
-    const remoteHist=await pullGameHistory(remote.playerId);
-    if(remoteHist&&remoteHist.length){
-      const localHist=ST.get("hist",[]);
-      const merged=[...localHist,...remoteHist]
-        .sort((a,b)=>a.ts-b.ts)
-        .filter((e,i,arr)=>i===0||e.ts!==arr[i-1].ts);
-      ST.set("hist",merged.slice(-100));
-      // Restore streak and rounds from remote profile
-      if(remote.streak>ST.get("str",0))ST.set("str",remote.streak);
-      if(remote.roundsPlayed>ST.get("rnd",0))ST.set("rnd",remote.roundsPlayed);
-    }
+    window.dispatchEvent(new Event("rackle:remoteHydrated"));
     setUnlocked(true);setMode("view");
     setLoginEmail("");setLoginPw("");
     setLoginLoading(false);
@@ -6613,7 +6730,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
     if(!file)return;
     if(file.size>5*1024*1024){setPwErr("Photo must be under 5 MB.");return;}
     setUploadingPhoto(true);
-    const pid=getOrCreatePlayerId();
+    const pid=rkProfilePlayerId(profile)||rkStoredPlayerId()||createGuestPlayerId();
     const url=await uploadAvatar(pid,file);
     if(url){
       const updated={...profile,avatarUrl:url};
@@ -14206,14 +14323,40 @@ export default function Rackle(){
   const [showWeeklyNudge,setShowWeeklyNudge]=useState(shouldShowWeeklyRecap);
   const isFirstDaily=!ST.get("hadFirstDaily",false);
 
-  // Fetch clubs from Supabase on load
+  // Fetch clubs and hydrate registered profile from Supabase on load.
+  // Supabase is the source of truth. localStorage is only a cache.
   useEffect(()=>{
     fetchClubs();
-    rkSyncLocalProfileToSupabase("app_load").catch(err=>console.warn("Profile sync failed",err));
+    let cancelled=false;
+    (async()=>{
+      const hydrated=await rkHydrateStoredProfileFromSupabase().catch(err=>{console.warn("Remote profile hydrate failed",err);return null;});
+      if(cancelled)return;
+      if(hydrated?.profile){
+        setStreak(hydrated.profile.streak||0);
+        setRounds(hydrated.profile.roundsPlayed||0);
+        if(hydrated.dailyResult){
+          setDDone(true);
+          setDRes(hydrated.dailyResult);
+        }else{
+          setDDone(ST.get("dd",null)===getDailySeed());
+          setDRes(ST.get("dres",null));
+        }
+      }else{
+        rkSyncLocalProfileToSupabase("app_load").catch(err=>console.warn("Profile sync failed",err));
+      }
+    })();
+    const refresh=()=>{
+      setStreak(ST.get("str",0));
+      setRounds(ST.get("rnd",0));
+      setDDone(ST.get("dd",null)===getDailySeed());
+      setDRes(ST.get("dres",null));
+    };
+    window.addEventListener("rackle:remoteHydrated",refresh);
     // Handle /clubs/[slug] URL routing
     const path=window.location.pathname;
     const clubMatch=path.match(/\/clubs\/(.+)/);
     if(clubMatch)setScreen("clubs");
+    return()=>{cancelled=true;window.removeEventListener("rackle:remoteHydrated",refresh);};
   },[]);
 
   const onDone=(result)=>{
@@ -14238,6 +14381,7 @@ export default function Rackle(){
       }
       const dailyResult={...completedResult,mode:"daily",daySeed:today,day_seed:today};
       setDDone(true);ST.set("dd",today);setDRes(dailyResult);ST.set("dres",dailyResult);
+      upsertDailyResult(dailyResult,newStreak).catch(err=>console.warn("Daily result sync failed",err));
       if(isFirstDaily){ST.set("hadFirstDaily",true);}
       // Auto-post to club leaderboard if player has a club + name
       const autoCode=getClubCode();
