@@ -5412,7 +5412,7 @@ function addHist(e){
   const h=ST.get("hist",[]);
   h.push({...e,ts:Date.now()});
   ST.set("hist",h.slice(-100));
-  const pid=ST.get("playerId",null);
+  const pid=currentLeaderboardPlayerId?.()||ST.get("playerId",null);
   if(pid)pushGameHistory({...e,ts:Date.now()},pid);
 }
 function getHist(){return ST.get("hist",[]);}
@@ -5535,19 +5535,37 @@ function rkDayBounds(){
   end.setDate(end.getDate()+1);
   return{start:start.toISOString(),end:end.toISOString()};
 }
+function rkRawProfile(){return ST.get("profile",null)||{};}
+function rkProfilePlayerId(profile=rkRawProfile()){
+  return String(profile?.playerId||profile?.player_id||"").trim();
+}
+function rkStoredPlayerId(){return String(ST.get("playerId","")||"").trim();}
+function rkLocalPlayerIds(){
+  return Array.from(new Set([rkProfilePlayerId(),rkStoredPlayerId()].filter(Boolean)));
+}
 function currentLeaderboardPlayerId(){
-  const profile=getProfile?.()||ST.get("profile",null);
-  return profile?.playerId||profile?.player_id||getOrCreatePlayerId();
+  const fromProfile=rkProfilePlayerId();
+  if(fromProfile){ST.set("playerId",fromProfile);return fromProfile;}
+  return getOrCreatePlayerId();
 }
 function rkSeedFromRow(row,index=0){
   return [row?.id,row?.player_id,row?.name,row?.club_code,row?.day_seed,row?.iq_score,row?.time_secs,row?.updated_at,row?.created_at,row?.played_at,index]
     .filter(v=>v!==undefined&&v!==null&&String(v).trim()!=="")
     .join("|");
 }
+function rkLooksGeneratedPlayerName(name){return /^player\s*\d+$/i.test(String(name||"").trim());}
 function rkSafePlayerName(name,seed,index=0){
   const raw=String(name||"").trim();
   if(raw&&!isClubDisplayName(raw))return raw;
   return `Player ${hashLeaderboardSeed(seed||index)}`;
+}
+function rkLocalDisplayName(){
+  const profile=rkRawProfile();
+  const nick=String(profile?.nickname||profile?.name||"").trim();
+  if(nick&&!isClubDisplayName(nick))return nick;
+  const stored=String(ST.get("clubName","")||"").trim();
+  if(stored&&!isClubDisplayName(stored))return stored;
+  return null;
 }
 function rkProfileName(profile,index=0){
   return rkSafePlayerName(profile?.nickname||profile?.name,profile?.player_id||profile?.playerId,index);
@@ -5559,6 +5577,13 @@ function rkProfilesById(rows=[]){
     if(!id)return;
     map.set(id,{...p,player_id:id,nickname:rkProfileName(p,i),club_code:p?.club_code||p?.clubCode||null});
   });
+  // Always inject the local profile so the current player never becomes Player ### on their own device.
+  const localProfile=rkRawProfile();
+  const localId=rkProfilePlayerId(localProfile)||rkStoredPlayerId();
+  const localName=rkLocalDisplayName();
+  if(localId&&localName){
+    map.set(localId,{...localProfile,player_id:localId,nickname:localName,club_code:localProfile?.club_code||localProfile?.clubCode||getClubCode()||null,streak:localProfile?.streak||0});
+  }
   return map;
 }
 async function fetchProfilesByIds(ids=[]){
@@ -5579,7 +5604,15 @@ async function fetchProfilesForClub(code){
   try{
     const res=await fetch(`${SB_URL}/rest/v1/profiles?club_code=eq.${encodeURIComponent(code)}&select=player_id,nickname,club_code,streak&limit=500`,{headers:SB_HEADERS});
     if(!res.ok)return[];
-    return await res.json();
+    const rows=await res.json();
+    const localProfile=rkRawProfile();
+    const localId=rkProfilePlayerId(localProfile)||rkStoredPlayerId();
+    const localName=rkLocalDisplayName();
+    const localCode=localProfile?.club_code||localProfile?.clubCode||getClubCode();
+    if(localId&&localName&&String(localCode||"")===String(code)&&!rows.some(r=>String(r.player_id)===localId)){
+      rows.push({player_id:localId,nickname:localName,club_code:code,streak:localProfile?.streak||0});
+    }
+    return rows;
   }catch{return[];}
 }
 async function fetchLeaderboardRowsForSeed(seed=getDailySeed(),limit=1000){
@@ -5601,7 +5634,7 @@ async function fetchLeaderboardRowsForSeed(seed=getDailySeed(),limit=1000){
   }
   return out;
 }
-async function fetchTodayGameHistoryRows(seed=getDailySeed()){ 
+async function fetchTodayGameHistoryRows(seed=getDailySeed()){
   const urls=[`${SB_URL}/rest/v1/game_history?day_seed=eq.${seed}&mode=eq.daily&select=player_id,iq_score,time_secs,played_at,day_seed,mode&order=iq_score.desc&limit=1000`];
   if(seed===getDailySeed()){
     const {start,end}=rkDayBounds();
@@ -5624,11 +5657,12 @@ function historyRowsToLeaderboardRows(historyRows=[],profileRows=[]){
   return (historyRows||[])
     .filter(h=>h&&h.player_id&&Number(h.iq_score||0)>0)
     .map((h,index)=>{
-      const profile=profiles.get(String(h.player_id));
+      const pid=String(h.player_id||"").trim();
+      const profile=profiles.get(pid);
       return{
-        id:`history-${h.player_id}-${h.day_seed||getDailySeed()}-${index}`,
-        player_id:h.player_id,
-        name:rkSafePlayerName(profile?.nickname,h.player_id,index),
+        id:`history-${pid}-${h.day_seed||getDailySeed()}-${index}`,
+        player_id:pid,
+        name:rkSafePlayerName(profile?.nickname,pid,index),
         club_code:profile?.club_code||"__global__",
         day_seed:h.day_seed||getDailySeed(),
         iq_score:Number(h.iq_score||0),
@@ -5639,22 +5673,57 @@ function historyRowsToLeaderboardRows(historyRows=[],profileRows=[]){
       };
     });
 }
+function rkLatestLocalDailyScore(){
+  const seed=getDailySeed();
+  const hist=ST.get("hist",[])||[];
+  for(let i=hist.length-1;i>=0;i--){
+    const e=hist[i]||{};
+    if(e.mode!=="daily")continue;
+    const d=new Date(e.ts||Date.now());
+    const s=d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();
+    if(s===seed&&Number(e.iqScore||0)>0)return{iqScore:Number(e.iqScore||0),time:Number(e.time||0)};
+  }
+  return null;
+}
+function rkIsLikelyCurrentLocalRow(row){
+  const localName=rkLocalDisplayName();
+  if(!localName)return false;
+  const pid=String(row?.player_id||row?.playerId||"").trim();
+  if(pid&&rkLocalPlayerIds().includes(pid))return true;
+  if(pid)return false;
+  const raw=String(row?.name||row?.player_name||row?.nickname||"").trim();
+  if(!rkLooksGeneratedPlayerName(raw))return false;
+  const code=String(row?.club_code||"");
+  const localCode=String(getClubCode()||"__global__");
+  if(code&&code!==localCode&&!(code==="__global__"&&!getClubCode()))return false;
+  const daily=rkLatestLocalDailyScore();
+  if(!daily)return false;
+  const score=Number(row?.iq_score??row?.iqScore??row?.score??0);
+  return score===daily.iqScore;
+}
 function normalizeLeaderboardRow(row,index=0,profileMap=null){
   if(!row)return null;
-  const playerId=String(row.player_id||row.playerId||"").trim();
+  let playerId=String(row.player_id||row.playerId||"").trim();
+  const localIds=rkLocalPlayerIds();
+  const isLocal=playerId&&localIds.includes(playerId)||rkIsLikelyCurrentLocalRow(row);
+  if(isLocal&&!playerId)playerId=currentLeaderboardPlayerId();
   const profile=playerId&&profileMap?.get?profileMap.get(playerId):null;
   const rawName=String(row.name||row.player_name||row.nickname||"").trim();
-  const displayName=profile?.nickname&&!isClubDisplayName(profile.nickname)
-    ?profile.nickname
-    :rkSafePlayerName(rawName,playerId||rkSeedFromRow(row,index),index);
+  const localName=rkLocalDisplayName();
+  const displayName=isLocal&&localName
+    ?localName
+    :profile?.nickname&&!isClubDisplayName(profile.nickname)
+      ?profile.nickname
+      :rkSafePlayerName(rawName,playerId||rkSeedFromRow(row,index),index);
   const score=Number(row.iq_score??row.iqScore??row.score??0);
   if(!Number.isFinite(score)||score<=0)return null;
   const rowCode=row.club_code===null||row.club_code===undefined?null:String(row.club_code);
-  const clubCode=profile?.club_code||rowCode||"__global__";
+  const clubCode=(isLocal&&(rkRawProfile()?.club_code||rkRawProfile()?.clubCode||getClubCode()))||profile?.club_code||rowCode||"__global__";
   const updated=row.updated_at||row.played_at||row.created_at||new Date().toISOString();
   let key;
-  if(playerId)key=`player:${playerId}`;
-  else if(rawName&&!isClubDisplayName(rawName)&&!/^(player\s*\d+)$/i.test(rawName))key=`name:${rkNormText(rawName)}`;
+  if(isLocal)key=`local:${currentLeaderboardPlayerId()}`;
+  else if(playerId)key=`player:${playerId}`;
+  else if(rawName&&!isClubDisplayName(rawName)&&!rkLooksGeneratedPlayerName(rawName))key=`name:${rkNormText(rawName)}`;
   else if(row.id)key=`row:${row.id}`;
   else key=`guest:${hashLeaderboardSeed(rkSeedFromRow(row,index))}`;
   return{
@@ -5693,6 +5762,7 @@ function rkRowToEntry(r){
     ts:new Date(r.updated_at||r.played_at||0).getTime()||0,
     playerId:r.player_id||null,
     clubCode:r.club_code==="__global__"?null:(r.club_code||null),
+    created_at:r.created_at||r.updated_at||r.played_at||null,
   };
 }
 function normalizeLeaderboardEntries(rows=[],profileRows=[]){return cleanLeaderboardRows(rows,profileRows).map(rkRowToEntry);}
@@ -5702,6 +5772,7 @@ function rowBelongsToClub(row,code,profileMap=null){
   if(rowCode===String(code))return true;
   const pid=String(row.player_id||row.playerId||"").trim();
   if(pid&&profileMap?.get?.(pid)?.club_code===code)return true;
+  if(rkIsLikelyCurrentLocalRow(row)&&String(getClubCode()||"")===String(code))return true;
   return false;
 }
 async function buildTodayRows(){
@@ -5710,26 +5781,25 @@ async function buildTodayRows(){
     fetchLeaderboardRowsForSeed(seed,1200),
     fetchTodayGameHistoryRows(seed),
   ]);
-  const ids=Array.from(new Set([...(leaderboardRows||[]).map(r=>r.player_id),...(historyRows||[]).map(r=>r.player_id)].filter(Boolean)));
+  const ids=Array.from(new Set([...(leaderboardRows||[]).map(r=>r.player_id),...(historyRows||[]).map(r=>r.player_id),...rkLocalPlayerIds()].filter(Boolean)));
   const profiles=await fetchProfilesByIds(ids);
   const historyAsRows=historyRowsToLeaderboardRows(historyRows,profiles);
   return{rows:[...(leaderboardRows||[]),...historyAsRows],profiles};
 }
 async function fetchGlobalEntries(){
-  // Rackle Leaderboard = every Daily score today. No club filtering.
   try{
     const {rows,profiles}=await buildTodayRows();
     return normalizeLeaderboardEntries(rows,profiles);
   }catch(err){console.warn("[GlobalLB] fetch error:",err);return[];}
 }
 async function fetchLBEntries(code){
-  // Club Leaderboard = only players tied to this club.
   if(!code)return[];
   try{
     const [{rows,profiles},clubProfiles]=await Promise.all([buildTodayRows(),fetchProfilesForClub(code)]);
-    const profileMap=rkProfilesById([...(profiles||[]),...(clubProfiles||[])]);
-    const directAndProfileRows=(rows||[]).filter(r=>rowBelongsToClub(r,code,profileMap));
-    return normalizeLeaderboardEntries(directAndProfileRows,[...(profiles||[]),...(clubProfiles||[])]);
+    const allProfiles=[...(profiles||[]),...(clubProfiles||[])];
+    const profileMap=rkProfilesById(allProfiles);
+    const clubRows=(rows||[]).filter(r=>rowBelongsToClub(r,code,profileMap));
+    return normalizeLeaderboardEntries(clubRows,allProfiles);
   }catch(err){console.warn("Club leaderboard fetch error:",err);return[];}
 }
 async function fetchPeriodEntries(code,period){
@@ -5741,7 +5811,7 @@ async function fetchPeriodEntries(code,period){
       fetchProfilesForClub(code),
     ]);
     const allRows=allRes.ok?await allRes.json():[];
-    const ids=Array.from(new Set((allRows||[]).map(r=>r.player_id).filter(Boolean)));
+    const ids=Array.from(new Set([...(allRows||[]).map(r=>r.player_id),...rkLocalPlayerIds()].filter(Boolean)));
     const profiles=await fetchProfilesByIds(ids);
     const profileMap=rkProfilesById([...(profiles||[]),...(clubProfiles||[])]);
     const rows=(allRows||[]).filter(r=>rowBelongsToClub(r,code,profileMap));
@@ -5758,67 +5828,72 @@ async function fetchYesterdayEntries(code){
       fetchTodayGameHistoryRows(seed),
       fetchProfilesForClub(code),
     ]);
-    const ids=Array.from(new Set([...(leaderboardRows||[]).map(r=>r.player_id),...(historyRows||[]).map(r=>r.player_id)].filter(Boolean)));
+    const ids=Array.from(new Set([...(leaderboardRows||[]).map(r=>r.player_id),...(historyRows||[]).map(r=>r.player_id),...rkLocalPlayerIds()].filter(Boolean)));
     const profiles=await fetchProfilesByIds(ids);
-    const profileMap=rkProfilesById([...(profiles||[]),...(clubProfiles||[])]);
-    const historyAsRows=historyRowsToLeaderboardRows(historyRows,profiles);
-    const rows=[...(leaderboardRows||[]),...historyAsRows].filter(r=>rowBelongsToClub(r,code,profileMap));
-    return normalizeLeaderboardEntries(rows,[...(profiles||[]),...(clubProfiles||[])]);
+    const allProfiles=[...(profiles||[]),...(clubProfiles||[])];
+    const profileMap=rkProfilesById(allProfiles);
+    const rows=[...(leaderboardRows||[]),...historyRowsToLeaderboardRows(historyRows,allProfiles)].filter(r=>rowBelongsToClub(r,code,profileMap));
+    return normalizeLeaderboardEntries(rows,allProfiles);
   }catch(err){console.warn("Yesterday leaderboard fetch error:",err);return[];}
 }
 async function fetchDailyStats(){
+  const rows=await fetchGlobalEntries();
+  return{count:rows.length,topScore:rows[0]?.iqScore||null,rows};
+}
+async function deleteExistingOwnLeaderboardRows(body){
+  const pid=String(body?.player_id||"").trim();
+  if(!pid||!body?.club_code||!body?.day_seed)return;
   try{
-    const entries=await fetchGlobalEntries();
-    if(!entries.length)return null;
-    const scores=entries.map(e=>Number(e.iqScore||0));
-    const total=scores.length;
-    const avg=Math.round(scores.reduce((s,v)=>s+v,0)/total);
-    const max=Math.max(...scores);
-    return{total,avg,max,topScore:max};
-  }catch{return null;}
+    await fetch(`${SB_URL}/rest/v1/leaderboard?club_code=eq.${encodeURIComponent(body.club_code)}&day_seed=eq.${body.day_seed}&player_id=eq.${encodeURIComponent(pid)}`,{method:"DELETE",headers:SB_HEADERS});
+  }catch{}
 }
 async function postLeaderboardRow(body){
   try{
+    const clean={...body};
+    clean.player_id=clean.player_id||currentLeaderboardPlayerId();
+    clean.name=rkSafePlayerName(clean.name||rkLocalDisplayName(),clean.player_id);
+    clean.updated_at=clean.updated_at||new Date().toISOString();
+    await deleteExistingOwnLeaderboardRows(clean);
     const res=await fetch(`${SB_URL}/rest/v1/leaderboard`,{
       method:"POST",
-      headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates"},
-      body:JSON.stringify(body),
+      headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates,return=minimal"},
+      body:JSON.stringify(clean),
     });
     if(res.ok||res.status===201||res.status===204)return true;
     const text=await res.text().catch(()=>"");
-    if(body.player_id&&/player_id|schema cache|column/i.test(text)){
-      const fallback={...body};delete fallback.player_id;
-      const retry=await fetch(`${SB_URL}/rest/v1/leaderboard`,{method:"POST",headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates"},body:JSON.stringify(fallback)});
+    if(clean.player_id&&/player_id|schema cache|column/i.test(text)){
+      const fallback={...clean};delete fallback.player_id;
+      fallback.name=rkSafePlayerName(fallback.name||rkLocalDisplayName(),rkSeedFromRow(fallback));
+      const retry=await fetch(`${SB_URL}/rest/v1/leaderboard`,{method:"POST",headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates,return=minimal"},body:JSON.stringify(fallback)});
       return retry.ok||retry.status===201||retry.status===204;
     }
-    console.warn("Leaderboard upsert failed:",res.status,text);
+    console.warn("Leaderboard post failed:",res.status,text);
     return false;
-  }catch(err){console.warn("Leaderboard upsert error:",err);return false;}
+  }catch(err){console.warn("Leaderboard post error:",err);return false;}
 }
 async function upsertLBEntry(code,name,iqScore,time,streak,playerIdOverride=null){
   if(!code||!iqScore)return false;
   const pid=playerIdOverride||currentLeaderboardPlayerId();
+  const profile=rkRawProfile();
   return postLeaderboardRow({
     club_code:code,
     day_seed:getDailySeed(),
     player_id:pid,
-    name:rkSafePlayerName(name,pid),
+    name:rkSafePlayerName(name||rkLocalDisplayName(),pid),
     iq_score:iqScore,
     time_secs:time||0,
-    streak:streak||0,
+    streak:streak??profile?.streak??0,
     updated_at:new Date().toISOString(),
   });
 }
 async function upsertGlobalEntry(name,iqScore,time,streak,clubCode,playerIdOverride=null){
-  // Global board reads all club rows too. Only no-club players need a global-only row.
-  if(clubCode)return true;
   if(!iqScore)return false;
   const pid=playerIdOverride||currentLeaderboardPlayerId();
   return postLeaderboardRow({
-    club_code:"__global__",
+    club_code:clubCode||"__global__",
     day_seed:getDailySeed(),
     player_id:pid,
-    name:rkSafePlayerName(name,pid),
+    name:rkSafePlayerName(name||rkLocalDisplayName(),pid),
     iq_score:iqScore,
     time_secs:time||0,
     streak:streak||0,
@@ -5827,7 +5902,9 @@ async function upsertGlobalEntry(name,iqScore,time,streak,clubCode,playerIdOverr
 }
 async function deleteLBEntry(code,name){
   try{
-    await fetch(`${SB_URL}/rest/v1/leaderboard?club_code=eq.${encodeURIComponent(code)}&day_seed=eq.${getDailySeed()}&name=eq.${encodeURIComponent(name)}`,{method:"DELETE",headers:SB_HEADERS});
+    const pid=currentLeaderboardPlayerId();
+    if(pid)await fetch(`${SB_URL}/rest/v1/leaderboard?club_code=eq.${encodeURIComponent(code)}&day_seed=eq.${getDailySeed()}&player_id=eq.${encodeURIComponent(pid)}`,{method:"DELETE",headers:SB_HEADERS});
+    if(name)await fetch(`${SB_URL}/rest/v1/leaderboard?club_code=eq.${encodeURIComponent(code)}&day_seed=eq.${getDailySeed()}&name=eq.${encodeURIComponent(name)}`,{method:"DELETE",headers:SB_HEADERS});
   }catch{}
 }
 function getOrCreateAnonymousName(){
