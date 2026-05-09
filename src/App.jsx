@@ -10026,7 +10026,7 @@ function ClubCodeEntry({setScreen,clubEntries=[],currentScore=0,currentRank=null
             </div>}
             <div className="rk-quiet-row-list">
               {rows.map((e,i)=>{
-                const isMe=rkEntryMatchesCurrentPlayer(e,currentScore);
+                const isMe=rkEntryMatchesCurrentPlayer(e);
                 return(
                   <div key={i} className={`rk-quiet-row ${isMe?"rk-quiet-row-you":""}`}>
                     <div className={i===0?"rk-quiet-rank rk-quiet-rank-top":"rk-quiet-rank"}>{i+1}</div>
@@ -10142,7 +10142,7 @@ function GlobalLeaderboardPill({setScreen}){
             </div>}
             <div className="rk-quiet-row-list">
               {rows.map((e,i)=>{
-                const isMe=rkEntryMatchesCurrentPlayer(e,currentScore);
+                const isMe=rkEntryMatchesCurrentPlayer(e);
                 const clubLabel=e.clubCode&&CLUBS[e.clubCode]?CLUBS[e.clubCode].name:"Rackle player";
                 return(
                   <div key={i} className={`rk-quiet-row ${isMe?"rk-quiet-row-you":""}`}>
@@ -10159,7 +10159,7 @@ function GlobalLeaderboardPill({setScreen}){
           </>
         )}
         <div className="rk-quiet-footer">
-          {setScreen&&<button onClick={()=>setScreen("leaderboard")} className="rk-quiet-link">Open full room →</button>}
+          {setScreen&&<button onClick={()=>setScreen("globalLeaderboard")} className="rk-quiet-link">Open full room →</button>}
           <div style={{fontSize:10.5,color:C.mut,lineHeight:1.45}}>Play the Daily to appear · Board resets tonight</div>
         </div>
       </div>}
@@ -10432,6 +10432,102 @@ function ClubDirectoryScreen({home,setScreen}){
           </div>
         </>
       )}
+      <Footer/>
+    </div>
+  );
+}
+
+
+// ─── GLOBAL RACKLE LEADERBOARD SCREEN ───────────────────────────────────────
+function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
+  const dn=getDayNum();
+  const [entries,setEntries]=useState([]);
+  const [loading,setLoading]=useState(true);
+  const [refreshing,setRefreshing]=useState(false);
+  const iq=withIQStyle(dRes?.iq);
+
+  const load=useCallback(async()=>{
+    setRefreshing(true);
+    const rows=await fetchGlobalEntries();
+    const merged=rkMergeCurrentScore(rows||[],iq?.totalScore||null,dRes?.time||0,streak||0);
+    setEntries(rkSortLeaderboardEntries(merged.map(e=>rkNormalizeCurrentEntry(e))));
+    setLoading(false);
+    setRefreshing(false);
+  },[iq?.totalScore,dRes?.time,streak]);
+
+  useEffect(()=>{load();},[load]);
+
+  const myRank=rkRankOfCurrent(entries,iq?.totalScore||null)||null;
+  const leader=entries[0]||null;
+  const myEntry=myRank?entries[myRank-1]:null;
+  const gap=myEntry&&leader?Math.max(0,(Number(leader.iqScore)||0)-(Number(myEntry.iqScore)||0)):null;
+
+  return(
+    <div style={S.pg} className="rk-pg">
+      <RackleHeader onBack={home} setScreen={setScreen}/>
+
+      <div className="rk-premium-hero" style={{marginBottom:14,padding:"26px 20px 22px"}}>
+        <div style={{fontSize:9,letterSpacing:3,textTransform:"uppercase",fontWeight:950,color:"rgba(243,212,107,.82)",marginBottom:10}}>Global · Day #{dn}</div>
+        <div style={{fontFamily:F.d,fontSize:27,fontWeight:950,lineHeight:1.02,letterSpacing:-.7,color:"#fff",marginBottom:8}}>Rackle Leaderboard</div>
+        <div style={{fontSize:13,lineHeight:1.6,color:"rgba(255,255,255,.70)",maxWidth:300,margin:"0 auto 16px"}}>Every Daily Rackle score in one room. Registered players, guests, club players, everyone.</div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:8}}>
+          <div className="rk-improve-path-chip"><strong>{entries.length||0}</strong><span>players</span></div>
+          <div className="rk-improve-path-chip"><strong>{leader?.iqScore||"—"}</strong><span>leads</span></div>
+          <div className="rk-improve-path-chip"><strong>{myRank?`#${myRank}`:"—"}</strong><span>you</span></div>
+        </div>
+      </div>
+
+      {loading?(
+        <div className="rk-premium-card" style={{padding:28,textAlign:"center"}}>
+          <div style={{fontSize:28,opacity:.35,marginBottom:8}}>⏳</div>
+          <div style={{fontSize:13,color:C.mut}}>Loading the global room…</div>
+        </div>
+      ):entries.length===0?(
+        <div className="rk-premium-card" style={{padding:28,textAlign:"center"}}>
+          <div style={{fontSize:32,marginBottom:10}}>🀄</div>
+          <div style={{fontFamily:F.d,fontSize:20,fontWeight:950,color:C.ink,marginBottom:6}}>No scores yet today</div>
+          <div style={{fontSize:13,color:C.mut,lineHeight:1.65,marginBottom:14}}>Play today’s Daily Rackle and set the number everyone has to chase.</div>
+          <button onClick={()=>setScreen("home")} className="rk-primary-btn" style={{border:"none",borderRadius:14,padding:"12px 18px",color:"#fff",fontWeight:950,cursor:"pointer"}}>Play Daily →</button>
+        </div>
+      ):(
+        <>
+          {leader&&<div className="rk-quiet-leader" style={{marginBottom:12}}>
+            <div className="rk-quiet-badge">1</div>
+            <div style={{flex:1,minWidth:0,position:"relative",zIndex:1}}>
+              <div style={{fontSize:9,letterSpacing:2.2,textTransform:"uppercase",fontWeight:950,color:"rgba(243,212,107,.86)",marginBottom:5}}>Today’s table leader</div>
+              <div style={{fontFamily:F.d,fontSize:22,fontWeight:950,lineHeight:1.05,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{leader.name}</div>
+              <div style={{fontSize:12,color:"rgba(255,255,255,.72)",marginTop:3}}>{myEntry?`${gap} points ahead of you`:`${entries.length} players in the room`}</div>
+            </div>
+            <div style={{fontFamily:F.d,fontSize:42,fontWeight:950,color:"#F3D46B",lineHeight:1,position:"relative",zIndex:1}}>{leader.iqScore}</div>
+          </div>}
+
+          <div className="rk-premium-card" style={{padding:0,overflow:"hidden",marginBottom:12}}>
+            <div style={{display:"grid",gridTemplateColumns:"42px 1fr 58px 54px",gap:0,padding:"10px 14px",background:"rgba(26,20,16,.035)",borderBottom:`1px solid ${C.bdr}`}}>
+              {["#","Player","Score","Time"].map((h,i)=><div key={h} style={{fontSize:9,color:C.mut,letterSpacing:1.6,fontWeight:900,textAlign:i>1?"center":"left"}}>{h}</div>)}
+            </div>
+            {entries.map((e,i)=>{
+              const isMe=rkEntryMatchesCurrentPlayer(e,iq?.totalScore||null);
+              const clubLabel=e.clubCode&&CLUBS[e.clubCode]?CLUBS[e.clubCode].name:"Rackle player";
+              return(
+                <div key={`${e.playerId||e.name}-${i}`} style={{display:"grid",gridTemplateColumns:"42px 1fr 58px 54px",gap:0,alignItems:"center",padding:"13px 14px",background:isMe?C.jade+"09":"rgba(255,255,255,.78)",borderBottom:i<entries.length-1?`1px solid ${C.bdr}`:"none"}}>
+                  <div className={i===0?"rk-social-position rk-social-position-top":"rk-social-position"}>{i+1}</div>
+                  <div style={{minWidth:0}}>
+                    <div style={{fontFamily:F.d,fontSize:15,fontWeight:950,color:isMe?"#2460A8":C.ink,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{e.name}{isMe?" · you":""}</div>
+                    <div style={{fontSize:11,color:C.mut,marginTop:2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{clubLabel}{e.streak>1?` · ${e.streak}d streak`:""}</div>
+                  </div>
+                  <div style={{fontFamily:F.d,fontSize:21,fontWeight:950,textAlign:"center",color:e.iqScore>=80?C.jade:e.iqScore>=60?C.gold:C.cinn}}>{e.iqScore}</div>
+                  <div style={{fontSize:11,color:C.mut,textAlign:"center",fontWeight:800}}>{e.time?fT(e.time):"—"}</div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      <div style={{display:"flex",gap:8,marginBottom:10}}>
+        <button onClick={home} style={{...S.oBtn,flex:1}}>← Home</button>
+        <button onClick={load} disabled={refreshing} style={{...S.oBtn,flex:1,color:C.jade,fontWeight:900}}>{refreshing?"Refreshing…":"Refresh room"}</button>
+      </div>
       <Footer/>
     </div>
   );
@@ -13891,6 +13987,7 @@ export default function Rackle(){
         {screen==="settings"&&<Settings home={()=>setScreen("home")} settings={settings} setSettings={setSettings} showTutorial={()=>setScreen("tutorial")} setScreen={setScreen}/>}
         {screen==="scorecard"&&<ScorecardScreen res={dRes} home={()=>setScreen("home")} dayNum={getDayNum()} onPractice={()=>go("free")} setScreen={setScreen}/>}
         {screen==="leaderboard"&&<LeaderboardScreen home={()=>setScreen("home")} dRes={dRes} streak={streak} setScreen={setScreen}/>}
+        {screen==="globalLeaderboard"&&<GlobalLeaderboardScreen home={()=>setScreen("home")} dRes={dRes} streak={streak} setScreen={setScreen}/>}
         {screen==="clubs"&&<ClubDirectoryScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
         {screen==="profile"&&<ProfileScreen home={()=>setScreen("home")} streak={streak} rounds={rounds} dRes={dRes} setScreen={setScreen}/>}
         {screen==="recap"&&<WeeklyRecapScreen home={()=>setScreen("home")} go={go} dDone={dDone} setScreen={setScreen}/>}
