@@ -5562,11 +5562,84 @@ function cleanLeaderboardRows(rows=[]){
     const prev=best.get(key);
     const score=Number(r.iq_score||0);
     const prevScore=Number(prev?.iq_score||0);
-    const ts=new Date(r.updated_at||0).getTime()||0;
-    const prevTs=new Date(prev?.updated_at||0).getTime()||0;
+    const ts=new Date(r.updated_at||r.played_at||0).getTime()||0;
+    const prevTs=new Date(prev?.updated_at||prev?.played_at||0).getTime()||0;
     if(!prev||score>prevScore||(score===prevScore&&ts>prevTs))best.set(key,r);
   });
   return[...best.values()].sort((a,b)=>Number(b.iq_score||0)-Number(a.iq_score||0));
+}
+
+function rkNormText(v){return String(v||"").trim().toLowerCase();}
+function currentLeaderboardPlayerId(){
+  const profile=getProfile();
+  return profile?.playerId||getOrCreatePlayerId();
+}
+async function fetchClubProfileIndex(code){
+  const empty={ids:new Set(),names:new Set(),rows:[]};
+  if(!code)return empty;
+  try{
+    const res=await fetch(`${SB_URL}/rest/v1/profiles?club_code=eq.${encodeURIComponent(code)}&select=player_id,nickname,club_code&limit=500`,{headers:SB_HEADERS});
+    if(!res.ok)return empty;
+    const rows=await res.json();
+    const ids=new Set();
+    const names=new Set();
+    (rows||[]).forEach(r=>{
+      const id=String(r.player_id||"").trim();
+      const name=String(r.nickname||"").trim();
+      if(id)ids.add(id);
+      if(name&&!isClubDisplayName(name))names.add(rkNormText(name));
+    });
+    return{ids,names,rows:rows||[]};
+  }catch{return empty;}
+}
+function rawLeaderboardRowBelongsToClub(row,code,profileIndex){
+  if(!row||!code)return false;
+  if(String(row.club_code||"").trim()===String(code))return true;
+  const pid=String(row.player_id||"").trim();
+  if(pid&&profileIndex?.ids?.has(pid))return true;
+  const rawName=String(row.name||"").trim();
+  if(rawName&&!isClubDisplayName(rawName)&&profileIndex?.names?.has(rkNormText(rawName)))return true;
+  return false;
+}
+function mergeClubLeaderboardRows(code,clubRows=[],allRows=[],profileIndex={ids:new Set(),names:new Set()}){
+  const seen=new Set();
+  const merged=[];
+  [...(clubRows||[]),...(allRows||[]).filter(r=>rawLeaderboardRowBelongsToClub(r,code,profileIndex))].forEach((row,index)=>{
+    const key=[row?.id,row?.player_id,row?.club_code,row?.name,row?.day_seed,row?.iq_score,row?.time_secs,row?.updated_at,index].filter(v=>v!==undefined&&v!==null).join("|");
+    if(seen.has(key))return;
+    seen.add(key);
+    merged.push(row);
+  });
+  return merged;
+}
+async function postLeaderboardRow(body){
+  try{
+    const res=await fetch(`${SB_URL}/rest/v1/leaderboard`,{
+      method:"POST",
+      headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates"},
+      body:JSON.stringify(body),
+    });
+    if(res.ok||res.status===201||res.status===204)return true;
+    const text=await res.text().catch(()=>"");
+    // Some older Supabase tables may not have player_id yet. Keep the score visible
+    // rather than failing the post. The fetch layer will still recover registered rows
+    // through profile nickname matching.
+    if(body.player_id&&/player_id|schema cache|column/i.test(text)){
+      const fallback={...body};
+      delete fallback.player_id;
+      const retry=await fetch(`${SB_URL}/rest/v1/leaderboard`,{
+        method:"POST",
+        headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates"},
+        body:JSON.stringify(fallback),
+      });
+      return retry.ok||retry.status===201||retry.status===204;
+    }
+    console.warn("Leaderboard upsert failed:",res.status,text);
+    return false;
+  }catch(err){
+    console.warn("Leaderboard upsert error:",err);
+    return false;
+  }
 }
 
 // ─── PROFILE SYSTEM ───────────────────────────────────────────────────────────
@@ -6114,60 +6187,67 @@ const SB_HEADERS={"Content-Type":"application/json","apikey":SB_KEY,"Authorizati
 
 async function fetchLBEntries(code){
   try{
-    const res=await fetch(
-      `${SB_URL}/rest/v1/leaderboard?club_code=eq.${code}&day_seed=eq.${getDailySeed()}&order=iq_score.desc&limit=50`,
-      {headers:SB_HEADERS}
-    );
-    if(!res.ok)return[];
-    const rows=await res.json();
+    const seed=getDailySeed();
+    const profileIndex=await fetchClubProfileIndex(code);
+    const [clubRes,allRes]=await Promise.all([
+      fetch(`${SB_URL}/rest/v1/leaderboard?club_code=eq.${encodeURIComponent(code)}&day_seed=eq.${seed}&order=iq_score.desc&limit=200`,{headers:SB_HEADERS}),
+      fetch(`${SB_URL}/rest/v1/leaderboard?day_seed=eq.${seed}&order=iq_score.desc&limit=500`,{headers:SB_HEADERS}),
+    ]);
+    const clubRows=clubRes.ok?await clubRes.json():[];
+    const allRows=allRes.ok?await allRes.json():[];
+    const rows=mergeClubLeaderboardRows(code,clubRows,allRows,profileIndex);
     return cleanLeaderboardRows(rows)
-      .map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,ts:new Date(r.updated_at).getTime()}));
-  }catch{return[];}
+      .map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,ts:new Date(r.updated_at||r.played_at||0).getTime(),playerId:r.player_id||null,clubCode:r.club_code||null}));
+  }catch(err){console.warn("Club leaderboard fetch error:",err);return[];}
 }
 
 async function fetchPeriodEntries(code,period){
   // period: "weekly" | "monthly" | "alltime"
   const view=`leaderboard_${period}`;
   try{
-    const res=await fetch(
-      `${SB_URL}/rest/v1/${view}?club_code=eq.${code}&order=iq_score.desc&limit=50`,
-      {headers:SB_HEADERS}
-    );
-    if(!res.ok)return[];
-    const rows=await res.json();
+    const profileIndex=await fetchClubProfileIndex(code);
+    const [clubRes,allRes]=await Promise.all([
+      fetch(`${SB_URL}/rest/v1/${view}?club_code=eq.${encodeURIComponent(code)}&order=iq_score.desc&limit=200`,{headers:SB_HEADERS}),
+      fetch(`${SB_URL}/rest/v1/${view}?order=iq_score.desc&limit=500`,{headers:SB_HEADERS}),
+    ]);
+    const clubRows=clubRes.ok?await clubRes.json():[];
+    const allRows=allRes.ok?await allRes.json():[];
+    const rows=mergeClubLeaderboardRows(code,clubRows,allRows,profileIndex);
     return cleanLeaderboardRows(rows)
-      .map(r=>({name:r.name,iqScore:r.iq_score,streak:r.streak,ts:new Date(r.updated_at).getTime()}));
-  }catch{return[];}
+      .map(r=>({name:r.name,iqScore:r.iq_score,streak:r.streak,ts:new Date(r.updated_at||r.played_at||0).getTime(),playerId:r.player_id||null,clubCode:r.club_code||null}));
+  }catch(err){console.warn("Period leaderboard fetch error:",err);return[];}
 }
 
 async function fetchYesterdayEntries(code){
   const d=new Date();d.setDate(d.getDate()-1);
   const seed=d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();
   try{
-    const res=await fetch(
-      `${SB_URL}/rest/v1/leaderboard?club_code=eq.${code}&day_seed=eq.${seed}&order=iq_score.desc&limit=50`,
-      {headers:SB_HEADERS}
-    );
-    if(!res.ok)return[];
-    const rows=await res.json();
+    const profileIndex=await fetchClubProfileIndex(code);
+    const [clubRes,allRes]=await Promise.all([
+      fetch(`${SB_URL}/rest/v1/leaderboard?club_code=eq.${encodeURIComponent(code)}&day_seed=eq.${seed}&order=iq_score.desc&limit=200`,{headers:SB_HEADERS}),
+      fetch(`${SB_URL}/rest/v1/leaderboard?day_seed=eq.${seed}&order=iq_score.desc&limit=500`,{headers:SB_HEADERS}),
+    ]);
+    const clubRows=clubRes.ok?await clubRes.json():[];
+    const allRows=allRes.ok?await allRes.json():[];
+    const rows=mergeClubLeaderboardRows(code,clubRows,allRows,profileIndex);
     return cleanLeaderboardRows(rows)
-      .map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,ts:new Date(r.updated_at).getTime()}));
-  }catch{return[];}
+      .map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,ts:new Date(r.updated_at||r.played_at||0).getTime(),playerId:r.player_id||null,clubCode:r.club_code||null}));
+  }catch(err){console.warn("Yesterday leaderboard fetch error:",err);return[];}
 }
 
-async function upsertLBEntry(code,name,iqScore,time,streak){
-  try{
-    const res=await fetch(`${SB_URL}/rest/v1/leaderboard`,{
-      method:"POST",
-      headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates"},
-      body:JSON.stringify({
-        club_code:code,day_seed:getDailySeed(),
-        name,iq_score:iqScore,time_secs:time||0,streak:streak||0,
-        updated_at:new Date().toISOString(),
-      }),
-    });
-    return res.ok||res.status===201;
-  }catch{return false;}
+async function upsertLBEntry(code,name,iqScore,time,streak,playerIdOverride=null){
+  if(!code||!name||!iqScore)return false;
+  const body={
+    club_code:code,
+    day_seed:getDailySeed(),
+    player_id:playerIdOverride||currentLeaderboardPlayerId(),
+    name:String(name||"").trim(),
+    iq_score:iqScore,
+    time_secs:time||0,
+    streak:streak||0,
+    updated_at:new Date().toISOString(),
+  };
+  return postLeaderboardRow(body);
 }
 
 async function deleteLBEntry(code,name){
@@ -6264,33 +6344,23 @@ function getOrCreateAnonymousName(){
 }
 
 // Post to global leaderboard table (no club filter)
-async function upsertGlobalEntry(name,iqScore,time,streak,clubCode){
-  // Uses the existing `leaderboard` table, same table as club leaderboards.
-  // club_code stores the player's actual club (or null). Queried globally by omitting club_code filter.
-  // Deduplication key: name + day_seed (same as club LB).
+async function upsertGlobalEntry(name,iqScore,time,streak,clubCode,playerIdOverride=null){
+  // Uses the existing `leaderboard` table. Club players are already visible
+  // globally because the global fetch omits the club filter. Players without a
+  // club get a __global__ row so they can still appear in the public room.
   try{
-    const daySeed=getDailySeed();
-    // If player has a club, their score is already submitted via upsertLBEntry.
-    // For players without a club, write a global-only entry with club_code=null.
-    if(clubCode){
-      // Already submitted to club table, no duplicate needed.
-      return true;
-    }
-    const res=await fetch(`${SB_URL}/rest/v1/leaderboard`,{
-      method:"POST",
-      headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates"},
-      body:JSON.stringify({
-        club_code:"__global__",
-        day_seed:daySeed,
-        name,iq_score:iqScore,time_secs:time||0,streak:streak||0,
-        updated_at:new Date().toISOString(),
-      }),
-    });
-    if(!res.ok&&res.status!==201&&res.status!==204){
-      res.text().then(t=>console.warn("Global LB upsert failed:",res.status,t));
-      return false;
-    }
-    return true;
+    if(clubCode)return true;
+    const body={
+      club_code:"__global__",
+      day_seed:getDailySeed(),
+      player_id:playerIdOverride||currentLeaderboardPlayerId(),
+      name:String(name||"").trim(),
+      iq_score:iqScore,
+      time_secs:time||0,
+      streak:streak||0,
+      updated_at:new Date().toISOString(),
+    };
+    return postLeaderboardRow(body);
   }catch(err){
     console.warn("Global LB upsert error:",err);
     return false;
@@ -10227,7 +10297,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
     setSubmitting(true);setNameErr("");
     const name=nameInput.trim();
     setClubName(name);
-    const ok=await upsertLBEntry(code,name,iq.totalScore,dRes?.time||0,streak);
+    const ok=await upsertLBEntry(code,name,iq.totalScore,dRes?.time||0,streak,currentLeaderboardPlayerId());
     if(ok){
       const updated=await fetchLBEntries(code);
       setEntries(updated);setSubmitted(true);
@@ -13610,13 +13680,13 @@ export default function Rackle(){
       const profileName=getProfile()?.nickname||null;
       const autoName=getClubName()||profileName||getOrCreateAnonymousName();
       if(autoCode&&autoName&&dailyResult?.iq?.totalScore){
-        upsertLBEntry(autoCode,autoName,dailyResult.iq.totalScore,dailyResult.time||0,newStreak).then(ok=>{
+        upsertLBEntry(autoCode,autoName,dailyResult.iq.totalScore,dailyResult.time||0,newStreak,currentLeaderboardPlayerId()).then(ok=>{
           if(ok)setClubPostToast({clubName:CLUBS[autoCode]?.name||"your club",iqScore:dailyResult.iq.totalScore});
         });
       }
       // Auto-post to GLOBAL leaderboard, always, even without an account
       if(dailyResult?.iq?.totalScore){
-        upsertGlobalEntry(autoName,dailyResult.iq.totalScore,dailyResult.time||0,newStreak,autoCode||null);
+        upsertGlobalEntry(autoName,dailyResult.iq.totalScore,dailyResult.time||0,newStreak,autoCode||null,currentLeaderboardPlayerId());
       }
       completedResult.mode="daily";
       completedResult.daySeed=today;
