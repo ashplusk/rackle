@@ -106,6 +106,49 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 
 
 
+
+
+/* ─── WORDLE-LIKE DAILY SCORECARD SOCIAL POLISH ─────────────────────────── */
+.rk-score-social-room{
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:13px 14px;
+  margin:0 0 12px;
+  border-radius:20px;
+  background:linear-gradient(145deg,#FFFDF8,#F2EBDD);
+  border:1px solid rgba(23,107,66,.10);
+  box-shadow:0 6px 20px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78);
+}
+.rk-score-social-room:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(255,255,255,.58),transparent 36%);pointer-events:none}
+.rk-score-social-left{position:relative;z-index:1;display:flex;align-items:center;gap:10px;min-width:0;text-align:left}
+.rk-score-social-icon{width:40px;height:40px;border-radius:15px;display:flex;align-items:center;justify-content:center;background:rgba(23,107,66,.08);border:1px solid rgba(23,107,66,.10);font-size:18px;flex-shrink:0}
+.rk-score-social-title{font-family:'Fraunces',Georgia,serif;font-size:15px;line-height:1.05;font-weight:950;color:#1A1410;letter-spacing:-.2px}
+.rk-score-social-copy{font-size:11px;line-height:1.35;color:#6B6157;font-weight:750;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:210px}
+.rk-score-avatar-stack{position:relative;z-index:1;display:flex;align-items:center;padding-left:8px;flex-shrink:0}
+.rk-score-avatar-dot{width:24px;height:24px;margin-left:-7px;border-radius:999px;border:2px solid #FFFDF8;background:linear-gradient(145deg,#F3D46B,#FFF4C6);box-shadow:0 2px 7px rgba(26,20,16,.08)}
+.rk-score-action-grid button{transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.rk-score-action-grid button:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.78)!important}
+.rk-score-action-grid button:active{transform:scale(.99)}
+.rk-score-rack-card{margin-top:2px}
+@media(max-width:390px){.rk-score-social-copy{max-width:160px}.rk-score-social-room{padding:12px}.rk-score-action-grid{grid-template-columns:1fr!important}}
+
+
+/* ─── HOMEPAGE SIMPLIFICATION PASS ─────────────────────────────────────── */
+.rk-home-main-col{display:flex;flex-direction:column;gap:0}
+.rk-home-main-col > *{scroll-margin-top:18px}
+@media(max-width:599px){
+  .rk-home-desktop-insights{display:none!important}
+  .rk-organizer-card{margin-top:22px!important}
+  .rk-clubhouse-stack{margin-bottom:22px!important}
+  .rk-learn-shell{margin-top:26px!important}
+}
+@media(min-width:600px){
+  .rk-home-desktop-insights{display:block!important}
+}
 /* ─── FULL SCORECARD VISUAL REFRESH ───────────────────────────────────────── */
 .rk-score-shell{
   background:radial-gradient(circle at top,rgba(255,255,255,.72),transparent 240px),linear-gradient(180deg,#F8F4EE 0%,#F5EEE2 100%);
@@ -8366,6 +8409,10 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const globalTotal=globalRows.length||dailyStats?.total||dailyStats?.count||null;
   const clubTotal=clubCode?clubRows.length:null;
   const rankLine=globalRank&&globalTotal?`#${globalRank} of ${globalTotal} today${clubRank&&clubTotal?` · #${clubRank} in ${affiliatedClubName||"your club"}`:""}`:clubRank&&clubTotal?`#${clubRank} of ${clubTotal} in ${affiliatedClubName||"your club"}`:"";
+  const roomCount=Number(globalTotal||globalRows.length||0);
+  const roomLabel=roomCount===1?"1 player in today’s room":`${roomCount||1} players in today’s room`;
+  const clubRoomLabel=affiliatedClubName?`Posted to ${affiliatedClubName}`:"Share with your group";
+  const socialAvatarCount=Math.min(3,Math.max(1,roomCount||clubTotal||1));
 
   const passEmoji=(iq.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
   const passDots=(iq.passInsights||[]).slice(0,3);
@@ -8435,7 +8482,20 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <Metric label="Time" value={time?`${time}s`:"—"} sub="finished" accent={C.ink}/>
       </div>
 
-      <div style={{borderRadius:22,padding:14,background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid rgba(26,20,16,.075)`,boxShadow:"0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)",marginBottom:12,textAlign:"center"}}>
+      <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"globalLeaderboard")} className="rk-score-social-room" style={{width:"100%",appearance:"none",fontFamily:F.b,cursor:"pointer"}}>
+        <span className="rk-score-social-left">
+          <span className="rk-score-social-icon">{clubCode?"🏛️":"🌎"}</span>
+          <span style={{minWidth:0}}>
+            <span className="rk-score-social-title">{clubCode?"Club Room":"Today’s Room"}</span>
+            <span className="rk-score-social-copy">{clubCode?clubRoomLabel:roomLabel}</span>
+          </span>
+        </span>
+        <span className="rk-score-avatar-stack" aria-hidden="true">
+          {Array.from({length:socialAvatarCount}).map((_,i)=><span key={i} className="rk-score-avatar-dot" style={i%2?{background:"linear-gradient(145deg,#176B42,#DDEBDF)"}:undefined}/>) }
+        </span>
+      </button>
+
+      <div className="rk-score-rack-card" style={{borderRadius:22,padding:14,background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid rgba(26,20,16,.075)`,boxShadow:"0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)",marginBottom:12,textAlign:"center"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:12}}>
           <div style={{textAlign:"left"}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:950,color:C.ink,lineHeight:1.08}}>Your rack</div>
@@ -8452,18 +8512,18 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       </div>
 
       <div style={{marginBottom:10}}>
-        <ShareButton text={shareText} label="Share score" sublabel={affiliatedClubName?`Post it to ${affiliatedClubName}`:"Drop it in your group chat"} variant="goldpill"/>
+        <ShareButton text={shareText} label="Share your score" sublabel={affiliatedClubName?`Post it to ${affiliatedClubName}`:"Drop it in your group chat"} variant="goldpill"/>
       </div>
 
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9,marginBottom:12}}>
-        <button onClick={()=>setScreen&&setScreen("globalLeaderboard")} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.jade,cursor:"pointer"}}>Leaderboard</button>
-        <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>{clubCode?"Club room":"Join club"}</button>
+      <div className="rk-score-action-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9,marginBottom:12}}>
+        <button onClick={()=>setScreen&&setScreen("globalLeaderboard")} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.jade,cursor:"pointer"}}>Global Board</button>
+        <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>{clubCode?"Club Room":"Join club"}</button>
         <button onClick={onPractice} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.jade,cursor:"pointer"}}>Free Play</button>
         {onCoachMode?<button onClick={onCoachMode} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>Quick Coach</button>:<button onClick={onHome} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>Home</button>}
       </div>
 
       <button onClick={()=>setShowDetails(v=>!v)} style={{width:"100%",border:`1px solid rgba(26,20,16,.075)`,borderRadius:16,background:"rgba(255,255,255,.55)",padding:"12px 14px",display:"flex",alignItems:"center",justifyContent:"space-between",fontFamily:F.b,cursor:"pointer",marginBottom:showDetails?10:16}}>
-        <span style={{fontSize:12,fontWeight:950,color:C.ink}}>Show rack detail</span>
+        <span style={{fontSize:12,fontWeight:950,color:C.ink}}>Rack detail</span>
         <span style={{fontSize:12,color:C.mut,fontWeight:950}}>{showDetails?"⌃":"⌄"}</span>
       </button>
       {showDetails&&(
@@ -11790,7 +11850,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <button className="rk-learn-head" onClick={()=>setLeOpen(o=>!o)} aria-expanded={leOpen} style={{borderRadius:leOpen?"18px 18px 0 0":"18px"}}>
         <div style={{display:"flex",alignItems:"center",gap:11}}>
           <div style={{width:38,height:38,borderRadius:12,background:C.jade+"18",border:`1px solid ${C.jade}24`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>📚</div>
-          <div><div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.jade,letterSpacing:-0.1}}>Learn & Explore</div><div style={{fontSize:11,color:C.jade,opacity:0.72,marginTop:1}}>Tutorial · Card guide · Stats · How to play</div></div>
+          <div><div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.jade,letterSpacing:-0.1}}>Learn & Explore</div><div style={{fontSize:11,color:C.jade,opacity:0.72,marginTop:1}}>Stats · Rules · Card guide</div></div>
         </div>
         <span className="rk-quiet-chevron" aria-hidden="true"><span className={`rk-chevron-mark ${leOpen?"rk-chevron-mark-open":""}`} /></span>
       </button>
@@ -11847,7 +11907,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             {dDone?<CompletedDaily/>:<StartDaily/>}
             {dDone&&<TomorrowTease/>}
             <PracticeCard/>
-            <DesktopInsightDeck/>
+            <div className="rk-home-desktop-insights"><DesktopInsightDeck/></div>
           </div>
           <div className="rk-home-side-col">
             <Community/>
