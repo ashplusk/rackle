@@ -359,10 +359,14 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-social-board-cta{width:100%;border:none;background:transparent;color:#176B42;font-size:12px;font-weight:950;cursor:pointer;padding:5px 0 10px}
 .rk-improve-hero{position:relative;overflow:hidden;border-radius:26px;padding:22px 18px;background:linear-gradient(150deg,#062B18,#0D4A2E 58%,#051F11);border:1px solid rgba(201,168,76,.20);box-shadow:0 18px 46px rgba(6,43,24,.21),inset 0 1px 0 rgba(255,255,255,.09);color:#fff;text-align:center;margin:0 0 14px}
 .rk-improve-hero:after{content:'🀄';position:absolute;right:-18px;bottom:-28px;font-size:118px;opacity:.045;transform:rotate(-8deg)}
-.rk-improve-path-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:15px;position:relative;z-index:1}
-.rk-improve-path-chip{border-radius:16px;padding:11px 7px;background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.13);text-align:center}
-.rk-improve-path-chip strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:18px;line-height:1;font-weight:950;color:#F3D46B;margin-bottom:5px}
-.rk-improve-path-chip span{font-size:8px;letter-spacing:1.4px;text-transform:uppercase;font-weight:950;color:rgba(255,255,255,.55)}
+.rk-improve-path-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:15px;position:relative;z-index:1}
+.rk-improve-path-chip{border-radius:15px;padding:10px 5px 9px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);text-align:center;min-width:0;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.rk-improve-path-chip strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:15px;line-height:1.05;font-weight:950;color:#F3D46B;margin-bottom:6px;letter-spacing:-.35px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.rk-improve-path-chip span{display:block;font-size:7px;letter-spacing:1.15px;text-transform:uppercase;font-weight:950;color:rgba(255,255,255,.54);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.rk-improve-path-chip-primary strong{font-size:18px;letter-spacing:-.65px}
+.rk-improve-path-chip-label strong{font-size:14px;line-height:1.08}
+.rk-improve-path-chip-label span{font-size:6.8px;letter-spacing:1px}
+@media(max-width:390px){.rk-improve-path-row{gap:6px}.rk-improve-path-chip{padding:9px 4px 8px;border-radius:14px}.rk-improve-path-chip strong{font-size:13px}.rk-improve-path-chip-primary strong{font-size:17px}.rk-improve-path-chip span{font-size:6.5px;letter-spacing:.9px}}
 .rk-improve-coach-card{position:relative;overflow:hidden;border-radius:22px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.075);box-shadow:0 8px 26px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78);padding:16px;margin-bottom:12px;text-align:left}
 .rk-improve-coach-card:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(255,255,255,.58),transparent 34%);pointer-events:none}
 .rk-improve-action{position:relative;display:flex;align-items:center;gap:13px;width:100%;border-radius:18px;border:1px solid rgba(23,107,66,.12);background:linear-gradient(145deg,#FFFDF8,#F7F0E5);box-shadow:0 6px 20px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78);padding:14px;cursor:pointer;text-align:left}
@@ -5925,12 +5929,12 @@ function ImproveGameHero({iq,chosenSecObj,bestFitSec,onPractice,onCoachMode,setS
     <div className="rk-improve-hero rk-sweep">
       <div style={{position:"relative",zIndex:1}}>
         <div style={{fontSize:9,letterSpacing:2.7,fontWeight:950,color:"rgba(243,212,107,.82)",textTransform:"uppercase",marginBottom:8}}>Improve Your Game</div>
-        <div style={{fontFamily:F.d,fontSize:25,fontWeight:950,lineHeight:1.04,letterSpacing:-.65,marginBottom:8}}>Your next better read starts here.</div>
+        <div style={{fontFamily:F.d,fontSize:24,fontWeight:950,lineHeight:1.05,letterSpacing:-.65,marginBottom:8}}>Your next better read starts here.</div>
         <div style={{fontSize:13,lineHeight:1.55,color:"rgba(255,255,255,.72)",maxWidth:300,margin:"0 auto"}}>{mainTip}</div>
         <div className="rk-improve-path-row">
-          <div className="rk-improve-path-chip"><strong>{iq.totalScore}</strong><span>Rackle IQ</span></div>
-          <div className="rk-improve-path-chip"><strong>{sectionName}</strong><span>Best lane</span></div>
-          <div className="rk-improve-path-chip"><strong>{iq.level?.split(" ")?.[0]||"Ready"}</strong><span>Today’s read</span></div>
+          <div className="rk-improve-path-chip rk-improve-path-chip-primary"><strong>{iq.totalScore}</strong><span>Rackle IQ</span></div>
+          <div className="rk-improve-path-chip rk-improve-path-chip-label" title={sectionName}><strong>{sectionName}</strong><span>Best lane</span></div>
+          <div className="rk-improve-path-chip rk-improve-path-chip-label"><strong>{iq.level?.split(" ")?.[0]||"Ready"}</strong><span>Today’s read</span></div>
         </div>
         <div style={{display:"flex",gap:9,marginTop:14}}>
           {onCoachMode&&<button onClick={onCoachMode} className="rk-primary-btn" style={{flex:1,borderRadius:15,padding:"12px 10px",color:"#fff",fontSize:13,fontWeight:950,fontFamily:F.d,cursor:"pointer"}}>Open Coach →</button>}
