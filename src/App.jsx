@@ -2197,12 +2197,13 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 /* ─── v4 HOMEPAGE PREMIUM HERO + LIVE TICKER ───────────────────────────── */
 @keyframes rkMysteryBounce{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-5px) rotate(1deg)}}
 @keyframes rkMysteryRevealGlow{0%,100%{opacity:.22;transform:translateX(-120%)}50%{opacity:.55}100%{transform:translateX(120%)}}
-.rk-startup-hero-v4{text-align:center;padding:34px 16px 26px;margin:0 auto 16px}
-.rk-startup-mark-v4{width:44px;height:44px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:linear-gradient(145deg,#FFFDF8,#EEE4D2);border:1px solid rgba(26,20,16,.08);box-shadow:0 8px 18px rgba(26,20,16,.06),inset 0 1px 0 rgba(255,255,255,.85);font-size:25px}
-.rk-startup-logo-v4{margin:0;font-family:'Fraunces',Georgia,serif;font-size:clamp(56px,15vw,76px);line-height:.9;letter-spacing:-2.6px;color:#1A1410}
-.rk-startup-subtitle-v4{margin:12px 0 0;font-family:'Fraunces',Georgia,serif;color:#176B42;font-size:clamp(24px,6vw,32px);line-height:1.05;font-style:italic;font-weight:900}
-.rk-startup-description-v4{margin:30px auto 0;max-width:34ch;color:#1A1410;font-size:19px;line-height:1.42;font-weight:900}
-.rk-startup-description-v4 span{display:block;color:#6B6157;font-size:17px;font-weight:850;margin-top:12px}
+.rk-startup-hero-v4{text-align:center;padding:20px 14px 14px;margin:0 auto 12px}
+.rk-startup-mark-v4{width:36px;height:36px;margin:0 auto 9px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:linear-gradient(145deg,#FFFDF8,#EEE4D2);border:1px solid rgba(26,20,16,.08);box-shadow:0 6px 14px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.85);font-size:21px}
+.rk-startup-logo-v4{margin:0;font-family:'Fraunces',Georgia,serif;font-size:clamp(46px,12.5vw,58px);line-height:.92;letter-spacing:-2px;color:#1A1410}
+.rk-startup-subtitle-v4{margin:8px 0 0;font-family:'Fraunces',Georgia,serif;color:#176B42;font-size:clamp(20px,5.2vw,25px);line-height:1.08;font-style:italic;font-weight:900}
+.rk-startup-description-v4{margin:18px auto 0;max-width:39ch;color:#1A1410;font-size:16.5px;line-height:1.42;font-weight:900}
+.rk-startup-description-v4 .rk-desc-line{display:inline;color:#1A1410;font-size:inherit;font-weight:900;margin:0}
+.rk-startup-description-v4 em{display:block;margin-top:8px;color:#6B6157;font-size:14.5px;line-height:1.35;font-style:normal;font-weight:850}
 .rk-live-ticker-v4{width:100%;min-height:62px;margin:6px 0 18px;padding:0 16px;border-radius:999px;background:linear-gradient(145deg,rgba(255,255,255,.74),rgba(237,247,241,.78));border:1px solid rgba(23,107,66,.15);box-shadow:0 8px 24px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.82);display:flex;align-items:center;gap:12px}
 .rk-live-ticker-dot{width:14px;height:14px;border-radius:999px;background:#4CD987;box-shadow:0 0 0 7px rgba(76,217,135,.12),0 0 18px rgba(76,217,135,.55);animation:rkLiveHalo 2.4s ease-in-out infinite;flex-shrink:0}
 .rk-live-ticker-text{flex:1;min-width:0;color:#176B42;font-size:16px;line-height:1.15;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -2226,7 +2227,7 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-preview-copy-v4{text-align:center;color:#176B42;font-size:18px;line-height:1.25;font-weight:950}
 .rk-preview-copy-v4 span{display:block;margin-top:6px;color:#6B6157;font-size:15px;font-weight:850}
 .rk-home-landing-flow{width:100%}
-@media(max-width:390px){.rk-startup-hero-v4{padding-top:28px}.rk-startup-logo-v4{font-size:58px}.rk-startup-subtitle-v4{font-size:24px}.rk-startup-description-v4{font-size:18px}.rk-live-ticker-v4{min-height:58px;padding:0 14px}.rk-live-ticker-text{font-size:15px}.rk-live-ticker-side{display:none}.rk-mystery-rack{gap:6px}.rk-mystery-tile{width:36px;height:50px}}
+@media(max-width:390px){.rk-startup-hero-v4{padding-top:16px;margin-bottom:10px}.rk-startup-mark-v4{width:34px;height:34px;font-size:20px}.rk-startup-logo-v4{font-size:48px}.rk-startup-subtitle-v4{font-size:20px}.rk-startup-description-v4{font-size:15.5px;max-width:34ch;margin-top:16px}.rk-startup-description-v4 em{font-size:13.5px}.rk-live-ticker-v4{min-height:58px;padding:0 14px}.rk-live-ticker-text{font-size:15px}.rk-live-ticker-side{display:none}.rk-mystery-rack{gap:6px}.rk-mystery-tile{width:36px;height:50px}}
 `;
 
 
@@ -12458,9 +12459,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <h1 className="rk-startup-logo-v4">Rackle</h1>
         <p className="rk-startup-subtitle-v4">The Daily Mahjong Workout</p>
         <p className="rk-startup-description-v4">
-          Play one Charleston.<br/>
-          Get your score. Share it with your club.
-          {!dDone&&<span>2 minutes. Same daily rack for everyone.</span>}
+          Play one Charleston. <span className="rk-desc-line">Get your score. Share it with your club.</span>
+          {!dDone&&<em>2 minutes. Same daily rack for everyone.</em>}
         </p>
       </div>
     );
