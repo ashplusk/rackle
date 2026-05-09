@@ -404,6 +404,39 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-review-bottom-home{margin-top:16px;display:grid;grid-template-columns:1fr;gap:10px}
 @media(max-width:390px){.rk-review-rank-row{gap:8px}.rk-review-rank-card{padding:14px 8px}.rk-review-rank-value{font-size:27px}.rk-review-style-title{font-size:22px}.rk-review-share-preview{font-size:11px}}
 
+
+
+/* ─── vNext QUIET SOCIAL LEADERBOARDS + SIGNUP RETURN ───────────────────── */
+.rk-quiet-board{position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.078);box-shadow:0 12px 32px rgba(26,20,16,.046),inset 0 1px 0 rgba(255,255,255,.82)}
+.rk-quiet-board:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(255,255,255,.64),transparent 34%);pointer-events:none}
+.rk-quiet-board-head{position:relative;width:100%;border:none;background:transparent;padding:18px 16px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;text-align:left;cursor:pointer}
+.rk-quiet-board-panel{border-top:1px solid rgba(26,20,16,.07);background:linear-gradient(180deg,#FFFDF8,#F5EFE4);padding:12px;animation:rkSocialSlide .22s ease both}
+.rk-quiet-kicker{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;font-size:9px;letter-spacing:2.25px;text-transform:uppercase;font-weight:950;color:#176B42}
+.rk-quiet-title{font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1.03;font-weight:950;letter-spacing:-.55px;color:#1A1410;margin:0 0 10px}
+.rk-quiet-pill-row{display:flex;gap:7px;flex-wrap:wrap}
+.rk-quiet-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 10px;background:rgba(23,107,66,.065);border:1px solid rgba(23,107,66,.10);font-size:11px;font-weight:900;color:#176B42;line-height:1;white-space:nowrap}
+.rk-quiet-pill-blue{background:rgba(36,96,168,.08);border-color:rgba(36,96,168,.13);color:#2460A8}
+.rk-quiet-pill-gold{background:rgba(201,168,76,.13);border-color:rgba(201,168,76,.20);color:#8A6820}
+.rk-quiet-live{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:5px 10px;background:rgba(23,107,66,.075);border:1px solid rgba(23,107,66,.12);font-size:10px;font-weight:950;color:#176B42;line-height:1;letter-spacing:0;text-transform:none}
+.rk-quiet-live-dot{width:8px;height:8px;border-radius:999px;background:#4CD987;animation:rkTablePulse 2.25s ease-in-out infinite;flex-shrink:0}
+.rk-quiet-chevron{width:34px;height:34px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#FFFDF8,#EEE4D2);border:1px solid rgba(26,20,16,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.78);font-size:12px;font-weight:900;flex-shrink:0;color:#176B42}
+.rk-quiet-leader{display:flex;align-items:center;gap:13px;border-radius:18px;background:linear-gradient(150deg,#062B18,#0D4A2E 58%,#051F11);border:1px solid rgba(201,168,76,.18);box-shadow:0 12px 28px rgba(6,43,24,.16),inset 0 1px 0 rgba(255,255,255,.08);color:#fff;padding:14px;margin-bottom:10px;position:relative;overflow:hidden}
+.rk-quiet-leader:after{content:'🀄';position:absolute;right:-8px;bottom:-24px;font-size:82px;opacity:.045;transform:rotate(-8deg);pointer-events:none}
+.rk-quiet-badge{width:42px;height:42px;border-radius:16px;background:linear-gradient(145deg,#FFFDF8,#EEE4D2);border:1px solid rgba(243,212,107,.28);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',Georgia,serif;font-size:17px;font-weight:950;color:#8A6820;box-shadow:0 4px 12px rgba(0,0,0,.08),inset 0 1px 0 rgba(255,255,255,.76);flex-shrink:0}
+.rk-quiet-row-list{display:grid;gap:8px}
+.rk-quiet-row{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:10px;padding:11px 12px;border-radius:17px;background:rgba(255,255,255,.78);border:1px solid rgba(26,20,16,.055);box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+.rk-quiet-row-you{background:linear-gradient(145deg,rgba(23,107,66,.095),rgba(255,255,255,.76));border-color:rgba(23,107,66,.16)}
+.rk-quiet-rank{width:30px;height:30px;border-radius:999px;background:rgba(26,20,16,.055);color:#6B6157;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:950;flex-shrink:0}
+.rk-quiet-rank-top{background:rgba(201,168,76,.17);color:#8A6820;border:1px solid rgba(201,168,76,.24)}
+.rk-quiet-name{font-family:'Fraunces',Georgia,serif;font-size:15px;font-weight:900;color:#1A1410;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.08}
+.rk-quiet-sub{font-size:10.5px;color:#6B6157;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk-quiet-score{font-family:'Fraunces',Georgia,serif;font-size:24px;font-weight:950;line-height:1;color:#176B42}
+.rk-quiet-footer{margin-top:11px;padding-top:11px;border-top:1px solid rgba(26,20,16,.08);text-align:center}
+.rk-quiet-link{border:none;background:transparent;color:#176B42;font-size:12px;font-weight:950;cursor:pointer;padding:4px 0 8px}
+.rk-email-home{margin-top:14px!important;margin-bottom:20px!important;border-radius:22px!important;padding:18px!important;background:linear-gradient(145deg,#FFFDF8,#F4EFE3)!important;border:1px solid rgba(23,107,66,.14)!important;box-shadow:0 9px 28px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;text-align:center!important}
+.rk-email-home input{text-align:left!important}
+@media(max-width:390px){.rk-quiet-title{font-size:20px}.rk-quiet-board-head{padding:16px 14px}.rk-quiet-pill-row{gap:6px}.rk-quiet-pill{font-size:10.5px;padding:6px 9px}.rk-quiet-leader{padding:13px}.rk-quiet-row{grid-template-columns:30px minmax(0,1fr) auto;padding:10px}.rk-quiet-score{font-size:22px}}
+
 @media (prefers-reduced-motion: reduce){.rk-hero-live,.rk-iq-hero,.rk-soft-glow,.rk-count-live,.rk-streak-copy,.rk-float,.rk-pulse,.rk-live-dot,.rk-sweep:after{animation:none!important}}
 `;
 const S={
@@ -7722,7 +7755,7 @@ function EmailSignup(){
     catch{setErr("Something went wrong. Try again.");}
   };
   return(
-    <div style={{...S.card,background:"linear-gradient(145deg,#FFFFF8,#F4EFE3)",borderColor:C.jade+"25",marginBottom:8}}>
+    <div className="rk-email-home" style={{...S.card,background:"linear-gradient(145deg,#FFFFF8,#F4EFE3)",borderColor:C.jade+"25",marginBottom:8}}>
       <div style={{fontSize:10,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>STAY IN THE LOOP</div>
       {done?(<div style={{textAlign:"center",padding:"8px 0"}}><div style={{fontSize:18,marginBottom:4}}>🀄</div><div style={{fontSize:13,fontWeight:700,color:C.jade}}>You're on the list!</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>We'll let you know when we drop updates.</div></div>):(
         <>
@@ -7805,89 +7838,74 @@ function ClubCodeEntry({setScreen,clubEntries=[],currentScore=0,currentRank=null
       const top=rows[0];
       setClubStats({total:rows.length,topName:top?.name,topIQ:top?.iqScore,myRank:myRank>0?myRank:null,rows});
     });
-  },[savedCode]);
+  },[savedCode,myName]);
 
   const join=()=>{
     const trimmed=code.trim();
     if(!trimmed){setErr("Enter a 4-digit club code.");return;}
     if(!CLUBS[trimmed]){setErr("Code not recognised. Check with your club organiser.");return;}
-    setClubCode(trimmed);setErr("");setCode("");
-    setScreen("leaderboard");
+    setClubCode(trimmed);setErr("");setCode("");setScreen("leaderboard");
   };
 
   const addClubEmail="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20";
-  const totalClubs=Object.keys(CLUBS).length;
   const realClubEntries=Array.isArray(clubEntries)?clubEntries.filter(e=>Number.isFinite(Number(e.iqScore))):[];
-  const clubRows=(clubStats?.rows&&clubStats.rows.length?clubStats.rows:realClubEntries).slice(0,4);
-  const topClubEntry=clubRows[0]||realClubEntries[0]||null;
-  const liveClubCount=Math.max(realClubEntries.length,clubStats?.total||0,clubPlayers||0,currentScore?1:0);
-  const liveClubRank=currentRank||clubStats?.myRank||null;
-  const liveClubTop=topClubEntry?.iqScore||clubStats?.topIQ||null;
-  const chaseCopy=liveClubRank===1?"You own the room today.":liveClubRank?`You’re #${liveClubRank}. One cleaner read can move you up.`:"Post your Daily to enter the club room.";
+  const rows=(clubStats?.rows&&clubStats.rows.length?clubStats.rows:realClubEntries).slice(0,3);
+  const leader=rows[0]||null;
+  const liveCount=Math.max(realClubEntries.length,clubStats?.total||0,clubPlayers||0,currentScore?1:0);
+  const myRank=currentRank||clubStats?.myRank||null;
+  const topScore=leader?.iqScore||clubStats?.topIQ||null;
+  const roomCopy=myRank===1?"You lead your club today.":myRank?`You are #${myRank} in the room.`:"Post your Daily to enter the room.";
 
   return(
     <div style={{marginBottom:0}}>
-      <button onClick={()=>savedClub?setOpen(o=>!o):setScreen("clubs")} className="rk-social-preview-head" style={{borderTop:`1px solid ${C.bdr}`}} aria-expanded={open}>
+      <button onClick={()=>savedClub?setOpen(o=>!o):setScreen("clubs")} className="rk-quiet-board-head" style={{borderTop:`1px solid ${C.bdr}`}} aria-expanded={open}>
         <div style={{flex:1,minWidth:0}}>
-          <div className="rk-social-kicker-row">
-            <span className="rk-social-kicker">{savedClub?"Your club · Today":"Join your club"}</span>
-            {savedClub&&<span className="rk-social-live-pill"><span className="rk-social-live-dot"/>Club is active</span>}
+          <div className="rk-quiet-kicker">
+            <span>{savedClub?"Your club · Today":"Join your club"}</span>
+            {savedClub&&<span className="rk-quiet-live"><span className="rk-quiet-live-dot"/>Active</span>}
           </div>
-          <div className="rk-social-preview-title">{savedClub?savedClub.name:"Club Leaderboard"}</div>
+          <div className="rk-quiet-title">{savedClub?savedClub.name:"Club Leaderboard"}</div>
           {savedClub?(
-            <>
-              <div className="rk-social-pill-row">
-                <span className="rk-social-pill">{liveClubCount||1} club scores live</span>
-                {liveClubTop&&<span className="rk-social-pill rk-social-pill-gold">{liveClubTop} leads the table</span>}
-                {liveClubRank&&<span className="rk-social-pill rk-social-pill-blue">You’re #{liveClubRank}</span>}
-              </div>
-              <div style={{display:"flex",alignItems:"center",gap:9,marginTop:10}}>
-                <div className="rk-social-avatar-stack">
-                  {clubRows.slice(0,4).map((e,i)=><span key={i} className="rk-social-stack-avatar" style={{zIndex:5-i}}>{String(e.name||"R").slice(0,1).toUpperCase()}</span>)}
-                </div>
-                <div style={{fontSize:11,color:C.mut,fontWeight:800}}>{chaseCopy}</div>
-              </div>
-            </>
-          ):(
-            <div className="rk-social-pill-row">
-              <span className="rk-social-pill">{totalClubs} clubs active</span>
-              <span className="rk-social-pill rk-social-pill-gold">Bring your table online</span>
+            <div className="rk-quiet-pill-row">
+              <span className="rk-quiet-pill">{liveCount||1} scores live</span>
+              {topScore&&<span className="rk-quiet-pill rk-quiet-pill-gold">{topScore} leads</span>}
+              {myRank&&<span className="rk-quiet-pill rk-quiet-pill-blue">You’re #{myRank}</span>}
             </div>
-          )}
+          ):(<div style={{fontSize:12,color:C.mut,lineHeight:1.55}}>Bring your table online with one shared club board.</div>)}
         </div>
-        <span className="rk-social-chevron" style={{color:C.jade}}>{savedClub?(open?"▲":"▼"):"→"}</span>
+        <span className="rk-quiet-chevron">{open?"▲":"▼"}</span>
       </button>
 
-      {open&&<div className="rk-social-preview-panel">
+      {open&&<div className="rk-quiet-board-panel">
         {savedClub?(
           <>
-            <div className="rk-social-room-card" style={{marginBottom:10}}>
-              <div className="rk-social-room-kicker">Club room</div>
-              <div className="rk-social-room-main">
-                <div className="rk-social-room-avatar">🏆</div>
-                <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontFamily:F.d,fontSize:20,fontWeight:950,lineHeight:1.06}}>{liveClubTop?`${liveClubTop} is the score to catch`:"Your club is warming up"}</div>
-                  <div style={{fontSize:12,color:"rgba(255,255,255,.7)",marginTop:4}}>{chaseCopy}</div>
-                </div>
+            {leader&&<div className="rk-quiet-leader">
+              <div className="rk-quiet-badge">1</div>
+              <div style={{flex:1,minWidth:0,position:"relative",zIndex:1}}>
+                <div style={{fontSize:9,letterSpacing:2.2,textTransform:"uppercase",fontWeight:950,color:"rgba(243,212,107,.86)",marginBottom:5}}>Club table leader</div>
+                <div style={{fontFamily:F.d,fontSize:20,fontWeight:950,lineHeight:1.05,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{leader.name}</div>
+                <div style={{fontSize:12,color:"rgba(255,255,255,.72)",marginTop:3}}>{roomCopy}</div>
               </div>
-            </div>
-            {clubRows.length>0&&<div className="rk-social-player-list" style={{marginBottom:10}}>
-              {clubRows.map((e,i)=>{
+              <div style={{fontFamily:F.d,fontSize:36,fontWeight:950,color:"#F3D46B",lineHeight:1,position:"relative",zIndex:1}}>{leader.iqScore}</div>
+            </div>}
+            <div className="rk-quiet-row-list">
+              {rows.map((e,i)=>{
                 const isMe=myName&&(e.name||"").toLowerCase()===myName.toLowerCase();
                 return(
-                  <div key={i} className={`rk-social-player-card ${isMe?"rk-social-player-card-you":""}`}>
-                    <div className={i<3?"rk-social-position rk-social-position-top":"rk-social-position"}>{i===0?"🥇":i===1?"🥈":i===2?"🥉":i+1}</div>
-                    <div className="rk-social-room-avatar" style={{width:34,height:34,borderRadius:999,fontSize:13}}>{String(e.name||"R").trim().slice(0,1).toUpperCase()}</div>
-                    <div style={{flex:1,minWidth:0}}>
-                      <div style={{fontFamily:F.d,fontSize:15,fontWeight:isMe?950:850,color:isMe?C.jade:C.ink,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{e.name}{isMe?" · you":""}</div>
-                      <div style={{fontSize:10.5,color:C.mut,marginTop:2}}>{e.streak>1?`${e.streak}d streak`:"Club score posted"}</div>
+                  <div key={i} className={`rk-quiet-row ${isMe?"rk-quiet-row-you":""}`}>
+                    <div className={i===0?"rk-quiet-rank rk-quiet-rank-top":"rk-quiet-rank"}>{i+1}</div>
+                    <div style={{minWidth:0}}>
+                      <div className="rk-quiet-name" style={{color:isMe?C.jade:C.ink}}>{e.name}{isMe?" · you":""}</div>
+                      <div className="rk-quiet-sub">{e.streak>1?`${e.streak}d streak`:"Club score posted"}</div>
                     </div>
-                    <div style={{fontFamily:F.d,fontSize:22,fontWeight:950,color:e.iqScore>=80?C.jade:e.iqScore>=60?C.gold:C.cinn,lineHeight:1}}>{e.iqScore}</div>
+                    <div className="rk-quiet-score" style={{color:e.iqScore>=80?C.jade:e.iqScore>=60?C.gold:C.cinn}}>{e.iqScore}</div>
                   </div>
                 );
               })}
-            </div>}
-            <button onClick={()=>setScreen("leaderboard")} className="rk-primary-btn" style={{width:"100%",borderRadius:15,padding:"13px 14px",color:"#fff",fontFamily:F.d,fontWeight:950,fontSize:15,cursor:"pointer"}}>Open full club board →</button>
+            </div>
+            <div className="rk-quiet-footer">
+              <button onClick={()=>setScreen("leaderboard")} className="rk-quiet-link">Open full club board →</button>
+            </div>
           </>
         ):(
           <>
@@ -7931,47 +7949,39 @@ function GlobalLeaderboardPill({setScreen}){
     setOpen(o=>!o);
   };
   const refresh=()=>{setLoading(true);fetchGlobalEntries().then(rows=>{setEntries(rows||[]);setLoading(false);setFetched(true);});};
-  const top5=entries.slice(0,5);
+
+  const rows=entries.slice(0,3);
+  const leader=entries[0]||null;
   const myRank=myName?entries.findIndex(e=>(e.name||"").toLowerCase()===myName.toLowerCase())+1:0;
   const myEntry=myRank>0?entries[myRank-1]:null;
-  const leader=entries[0]||null;
-  const topIQ=leader?.iqScore||null;
-  const closeGap=myEntry&&leader?Math.max(0,(Number(leader.iqScore)||0)-(Number(myEntry.iqScore)||0)):null;
+  const gap=myEntry&&leader?Math.max(0,(Number(leader.iqScore)||0)-(Number(myEntry.iqScore)||0)):null;
   const hasData=entries.length>0;
-  const liveCopy=hasData?`${entries.length} players in the room`:"Same rack. One room. First score wins the table.";
+  const liveCopy=hasData?`${entries.length} players in the room`:"Same rack. One room. First score sets the table.";
 
   return(
-    <div id="global-leaderboard" className="rk-social-preview-board" style={{marginBottom:0,borderRadius:22}}>
-      <button onClick={toggle} className="rk-social-preview-head" aria-expanded={open}>
+    <div id="global-leaderboard" className="rk-quiet-board" style={{marginBottom:0,borderRadius:22}}>
+      <button onClick={toggle} className="rk-quiet-board-head" aria-expanded={open}>
         <div style={{flex:1,minWidth:0}}>
-          <div className="rk-social-kicker-row">
-            <span className="rk-social-kicker rk-social-kicker-blue">🌍 Global · Day #{dn}</span>
-            {hasData&&<span className="rk-social-live-pill"><span className="rk-social-live-dot"/>Live room</span>}
+          <div className="rk-quiet-kicker" style={{color:"#2460A8"}}>
+            <span>🌍 Global · Day #{dn}</span>
+            {hasData&&<span className="rk-quiet-live"><span className="rk-quiet-live-dot"/>Live room</span>}
           </div>
-          <div className="rk-social-preview-title">Rackle Leaderboard</div>
+          <div className="rk-quiet-title">Rackle Leaderboard</div>
           {hasData?(
-            <>
-              <div className="rk-social-pill-row">
-                <span className="rk-social-pill rk-social-pill-blue">{entries.length} players read today’s rack</span>
-                {topIQ&&<span className="rk-social-pill rk-social-pill-gold">{topIQ} owns the table</span>}
-                {myRank>0?<span className="rk-social-pill">You’re #{myRank}</span>:<span className="rk-social-pill rk-social-pill-gold">Play Daily to rank</span>}
-              </div>
-              <div style={{display:"flex",alignItems:"center",gap:9,marginTop:10}}>
-                <div className="rk-social-avatar-stack">
-                  {top5.slice(0,4).map((e,i)=><span key={i} className="rk-social-stack-avatar" style={{zIndex:5-i}}>{String(e.name||"R").slice(0,1).toUpperCase()}</span>)}
-                </div>
-                <div style={{fontSize:11,color:C.mut,fontWeight:800}}>{myRank>0?`You are chasing ${myRank===1?"no one":leader?.name||"the leader"}`:liveCopy}</div>
-              </div>
-            </>
+            <div className="rk-quiet-pill-row">
+              <span className="rk-quiet-pill rk-quiet-pill-blue">{entries.length} players read today</span>
+              {leader&&<span className="rk-quiet-pill rk-quiet-pill-gold">{leader.iqScore} leads</span>}
+              {myRank>0?<span className="rk-quiet-pill">You’re #{myRank}</span>:<span className="rk-quiet-pill rk-quiet-pill-gold">Play Daily to rank</span>}
+            </div>
           ):(<div style={{fontSize:12,color:C.mut,lineHeight:1.55}}>{loading?"Loading the room…":liveCopy}</div>)}
         </div>
-        <span className="rk-social-chevron" style={{color:"#2460A8"}}>{open?"▲":"▼"}</span>
+        <span className="rk-quiet-chevron" style={{color:"#2460A8"}}>{open?"▲":"▼"}</span>
       </button>
 
-      {open&&<div className="rk-social-preview-panel">
+      {open&&<div className="rk-quiet-board-panel">
         {loading?(
           <div style={{textAlign:"center",padding:"22px 14px"}}><div style={{fontSize:22,opacity:.28,marginBottom:6}}>⏳</div><div style={{fontSize:12,color:C.mut}}>Loading global scores…</div></div>
-        ):top5.length===0?(
+        ):rows.length===0?(
           <div style={{textAlign:"center",padding:"24px 14px"}}>
             <div style={{fontSize:28,marginBottom:8}}>🀄</div>
             <div style={{fontFamily:F.d,fontSize:17,fontWeight:950,color:C.ink,marginBottom:5}}>Board’s empty. Take the room.</div>
@@ -7980,39 +7990,35 @@ function GlobalLeaderboardPill({setScreen}){
           </div>
         ):(
           <>
-            {leader&&<div className="rk-social-room-card">
-              <div className="rk-social-room-kicker">Today’s table leader</div>
-              <div className="rk-social-room-main">
-                <div className="rk-social-room-avatar">1</div>
-                <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontFamily:F.d,fontSize:21,fontWeight:950,lineHeight:1.04,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{leader.name}</div>
-                  <div style={{fontSize:12,color:"rgba(255,255,255,.7)",marginTop:4}}>{myEntry?`${closeGap} points ahead of you`:`${entries.length} players are reading today’s rack`}</div>
-                </div>
-                <div style={{fontFamily:F.d,fontSize:36,fontWeight:950,color:"#F3D46B",lineHeight:1}}>{leader.iqScore}</div>
+            {leader&&<div className="rk-quiet-leader">
+              <div className="rk-quiet-badge">1</div>
+              <div style={{flex:1,minWidth:0,position:"relative",zIndex:1}}>
+                <div style={{fontSize:9,letterSpacing:2.2,textTransform:"uppercase",fontWeight:950,color:"rgba(243,212,107,.86)",marginBottom:5}}>Today’s table leader</div>
+                <div style={{fontFamily:F.d,fontSize:20,fontWeight:950,lineHeight:1.05,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{leader.name}</div>
+                <div style={{fontSize:12,color:"rgba(255,255,255,.72)",marginTop:3}}>{myEntry?`${gap} points ahead of you`:liveCopy}</div>
               </div>
+              <div style={{fontFamily:F.d,fontSize:36,fontWeight:950,color:"#F3D46B",lineHeight:1,position:"relative",zIndex:1}}>{leader.iqScore}</div>
             </div>}
-            <div className="rk-social-player-list">
-              {top5.map((e,i)=>{
+            <div className="rk-quiet-row-list">
+              {rows.map((e,i)=>{
                 const isMe=myName&&(e.name||"").toLowerCase()===myName.toLowerCase();
-                const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":null;
-                const clubLabel=e.clubCode&&CLUBS[e.clubCode]?CLUBS[e.clubCode].name:null;
+                const clubLabel=e.clubCode&&CLUBS[e.clubCode]?CLUBS[e.clubCode].name:"Rackle player";
                 return(
-                  <div key={i} className={`rk-social-player-card ${isMe?"rk-social-player-card-you":""}`}>
-                    <div className={i<3?"rk-social-position rk-social-position-top":"rk-social-position"}>{medal||i+1}</div>
-                    <div className="rk-social-room-avatar" style={{width:34,height:34,borderRadius:999,fontSize:13}}>{String(e.name||"R").trim().slice(0,1).toUpperCase()}</div>
-                    <div style={{flex:1,minWidth:0}}>
-                      <div style={{fontFamily:F.d,fontSize:15,fontWeight:isMe?950:850,color:isMe?"#2460A8":C.ink,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{e.name}{isMe?" · you":""}</div>
-                      <div style={{fontSize:10.5,color:C.mut,marginTop:2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{clubLabel||"Rackle player"}{e.streak>1?` · ${e.streak}d streak`:""}</div>
+                  <div key={i} className={`rk-quiet-row ${isMe?"rk-quiet-row-you":""}`}>
+                    <div className={i===0?"rk-quiet-rank rk-quiet-rank-top":"rk-quiet-rank"}>{i+1}</div>
+                    <div style={{minWidth:0}}>
+                      <div className="rk-quiet-name" style={{color:isMe?"#2460A8":C.ink}}>{e.name}{isMe?" · you":""}</div>
+                      <div className="rk-quiet-sub">{clubLabel}{e.streak>1?` · ${e.streak}d streak`:""}</div>
                     </div>
-                    <div style={{fontFamily:F.d,fontSize:22,fontWeight:950,color:e.iqScore>=80?C.jade:e.iqScore>=60?C.gold:C.cinn,lineHeight:1}}>{e.iqScore}</div>
+                    <div className="rk-quiet-score" style={{color:e.iqScore>=80?C.jade:e.iqScore>=60?C.gold:C.cinn}}>{e.iqScore}</div>
                   </div>
                 );
               })}
             </div>
           </>
         )}
-        <div style={{marginTop:12,paddingTop:12,borderTop:`1px solid ${C.bdr}`,textAlign:"center"}}>
-          {setScreen&&<button onClick={()=>setScreen("leaderboard")} className="rk-social-board-cta">Open the full room →</button>}
+        <div className="rk-quiet-footer">
+          {setScreen&&<button onClick={()=>setScreen("leaderboard")} className="rk-quiet-link">Open full room →</button>}
           <div style={{fontSize:10.5,color:C.mut,lineHeight:1.45}}>Play the Daily to appear · Board resets tonight</div>
         </div>
       </div>}
@@ -9407,6 +9413,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <PracticeCard/>
         <Community/>
         <Learn/>
+        <EmailSignup/>
         <Footer/>
       </div>
     </>
