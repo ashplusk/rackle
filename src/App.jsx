@@ -12305,7 +12305,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   };
 
   const Community=()=> {
-    const clubhouseName=activeClubCode?(savedClub?.name||"Your club"):"Rackle Clubhouse";
+    const clubhouseName=activeClubCode?((club&&club.name)||(CLUBS[activeClubCode]?.name)||"Your club"):"Rackle Clubhouse";
     const clubCount=Number(clubPlayers||displayHomeClubEntries?.length||0);
     const globalCount=Number(todayPlayers||0);
     const clubRankLabel=shownClubRank?`#${shownClubRank}`:"—";
