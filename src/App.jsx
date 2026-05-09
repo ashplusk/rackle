@@ -5499,7 +5499,8 @@ function isClubDisplayName(name){
 }
 function getPlayerDisplayName(){
   const profile=ST.get("profile",null);
-  if(profile?.nickname&&!isClubDisplayName(profile.nickname))return profile.nickname;
+  const nick=String(profile?.nickname||profile?.name||"").trim();
+  if(nick&&!isClubDisplayName(nick))return nick;
   const stored=ST.get("clubName",null);
   if(stored&&!isClubDisplayName(stored))return stored;
   return null;
@@ -5746,6 +5747,57 @@ function historyRowsToLeaderboardRows(historyRows=[],profileRows=[]){
       };
     });
 }
+
+function rkRepairLeaderboardRowsWithHistory(leaderboardRows=[],historyRows=[],profileRows=[]){
+  const profiles=rkProfilesById(profileRows);
+  const candidates=(historyRows||[])
+    .map((h,index)=>{
+      const pid=String(h?.player_id||"").trim();
+      const profile=pid?profiles.get(pid):null;
+      const name=rkSafePlayerName(profile?.nickname||profile?.name,pid,index);
+      const score=Number(h?.iq_score||0);
+      if(!pid||!score||!name||rkLooksGeneratedPlayerName(name)||isClubDisplayName(name))return null;
+      return{
+        player_id:pid,
+        name,
+        club_code:profile?.club_code||"__global__",
+        iq_score:score,
+        time_secs:Number(h?.time_secs||0)||0,
+        updated_at:h?.played_at||null,
+      };
+    })
+    .filter(Boolean);
+
+  if(!candidates.length)return leaderboardRows||[];
+
+  return (leaderboardRows||[]).map((row,index)=>{
+    const rawName=String(row?.name||"").trim();
+    const alreadyGood=rawName&&!rkLooksGeneratedPlayerName(rawName)&&!isClubDisplayName(rawName);
+    const hasPlayerId=String(row?.player_id||"").trim();
+    if(alreadyGood&&hasPlayerId)return row;
+
+    const rowScore=Number(row?.iq_score??row?.iqScore??0);
+    const rowTime=Number(row?.time_secs??row?.time??0)||0;
+    const rowCode=String(row?.club_code||"__global__");
+
+    const match=candidates.find(c=>{
+      if(Number(c.iq_score)!==rowScore)return false;
+      const clubOk=!rowCode||rowCode==="__global__"||rowCode===String(c.club_code||"__global__");
+      if(!clubOk)return false;
+      if(!rowTime||!c.time_secs)return true;
+      return Math.abs(Number(rowTime)-Number(c.time_secs))<=3;
+    });
+
+    if(!match)return row;
+    return{
+      ...row,
+      player_id:row.player_id||match.player_id,
+      name:alreadyGood?rawName:match.name,
+      club_code:row.club_code||match.club_code||"__global__",
+      _repairedFromHistory:true,
+    };
+  });
+}
 function rkLatestLocalDailyScore(){
   const seed=getDailySeed();
   const hist=ST.get("hist",[])||[];
@@ -5861,8 +5913,9 @@ async function buildTodayRows(){
   ]);
   const ids=Array.from(new Set([...(leaderboardRows||[]).map(r=>r.player_id),...(historyRows||[]).map(r=>r.player_id),...rkLocalPlayerIds()].filter(Boolean)));
   const profiles=await fetchProfilesByIds(ids);
+  const repairedLeaderboardRows=rkRepairLeaderboardRowsWithHistory(leaderboardRows,historyRows,profiles);
   const historyAsRows=historyRowsToLeaderboardRows(historyRows,profiles);
-  return{rows:[...(leaderboardRows||[]),...historyAsRows],profiles};
+  return{rows:[...(repairedLeaderboardRows||[]),...historyAsRows],profiles};
 }
 async function fetchGlobalEntries(){
   try{
@@ -6033,8 +6086,8 @@ async function upsertProfile(profile){
   try{
     const body={
       player_id:profile.playerId,
-      nickname:profile.nickname,
-      club_code:profile.clubCode||null,
+      nickname:profile.nickname||profile.name||rkLocalDisplayName()||null,
+      club_code:profile.clubCode||profile.club_code||getClubCode()||null,
       streak:profile.streak||0,
       rounds_played:profile.roundsPlayed||0,
       best_iq:profile.bestIQ||null,
@@ -13929,8 +13982,8 @@ export default function Rackle(){
       if(isFirstDaily){ST.set("hadFirstDaily",true);}
       // Auto-post to club leaderboard if player has a club + name
       const autoCode=getClubCode();
-      const profileName=getProfile()?.nickname||null;
-      const autoName=getClubName()||profileName||getOrCreateAnonymousName();
+      const profileName=getProfile()?.nickname||getProfile()?.name||null;
+      const autoName=rkCurrentDisplayName?.()||getClubName()||profileName||getOrCreateAnonymousName();
       if(autoCode&&autoName&&dailyResult?.iq?.totalScore){
         upsertLBEntry(autoCode,autoName,dailyResult.iq.totalScore,dailyResult.time||0,newStreak,currentLeaderboardPlayerId()).then(ok=>{
           if(ok)setClubPostToast({clubName:CLUBS[autoCode]?.name||"your club",iqScore:dailyResult.iq.totalScore});
@@ -13948,9 +14001,9 @@ export default function Rackle(){
     // Auto-sync profile if it exists
     const prof=getProfile();
     if(prof&&prof.nickname){
-      const pid=getOrCreatePlayerId();
+      const pid=currentLeaderboardPlayerId();
       const bestIQNow=getBestIQ();
-      upsertProfile({...prof,playerId:pid,streak:newStreak,roundsPlayed:ST.get("rnd",0),bestIQ:bestIQNow?.score||null});
+      upsertProfile({...prof,playerId:pid,nickname:prof.nickname||prof.name||rkCurrentDisplayName(),clubCode:prof.clubCode||prof.club_code||getClubCode()||"",streak:newStreak,roundsPlayed:ST.get("rnd",0),bestIQ:bestIQNow?.score||null});
     }
   };
 
