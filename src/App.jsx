@@ -2230,64 +2230,85 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 @media(max-width:390px){.rk-startup-hero-v4{padding:14px 12px 10px;margin-bottom:10px}.rk-startup-mark-v4{width:40px;height:40px;font-size:23px;margin-bottom:12px}.rk-startup-logo-v4{font-size:52px;letter-spacing:-2.2px}.rk-startup-subtitle-v4{font-size:20px;margin-top:11px;letter-spacing:-.1px}.rk-startup-description-v4{font-size:16px;max-width:36ch;margin-top:20px}.rk-startup-description-v4 em{font-size:13.5px}.rk-live-ticker-v4{min-height:58px;padding:0 14px}.rk-live-ticker-text{font-size:15px}.rk-live-ticker-side{display:none}.rk-mystery-rack{gap:6px}.rk-mystery-tile{width:36px;height:50px}}
 
 
-/* ─── REQUESTED POLISH: LIGHTER TAGLINE, DESCRIPTION, PREMIUM LIVE TRACKER ── */
+/* ─── FINAL HERO COMPACT + PREMIUM LIVE STRIP ───────────────────────────── */
+.rk-startup-hero-v4{
+  padding:12px 12px 8px!important;
+  margin:0 auto 10px!important;
+  max-width:620px!important;
+}
+.rk-startup-mark-v4{
+  width:42px!important;
+  height:42px!important;
+  margin:0 auto 10px!important;
+  border-radius:13px!important;
+  font-size:24px!important;
+}
+.rk-startup-logo-v4{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-weight:900!important;
+  font-variation-settings:'wght' 900!important;
+  font-size:clamp(50px,11.6vw,72px)!important;
+  line-height:.9!important;
+  letter-spacing:-2.6px!important;
+  color:#1A1410!important;
+}
 .rk-startup-subtitle-v4{
-  margin:12px 0 0!important;
+  margin:10px 0 0!important;
   font-family:'Fraunces',Georgia,serif!important;
   color:#176B42!important;
-  font-size:clamp(19px,4.4vw,27px)!important;
+  font-size:clamp(18px,4.2vw,25px)!important;
   line-height:1.08!important;
   font-style:italic!important;
-  font-weight:650!important;
-  font-variation-settings:'wght' 650!important;
-  letter-spacing:-.25px!important;
+  font-weight:620!important;
+  font-variation-settings:'wght' 620!important;
+  letter-spacing:-.2px!important;
   white-space:nowrap!important;
 }
 .rk-startup-description-v4{
-  margin:22px auto 0!important;
+  margin:17px auto 0!important;
   max-width:34ch!important;
-  color:rgba(26,20,16,.72)!important;
-  font-size:15px!important;
+  color:rgba(26,20,16,.68)!important;
+  font-size:14.5px!important;
   line-height:1.42!important;
-  font-weight:500!important;
-  letter-spacing:.05px!important;
+  font-weight:520!important;
+  letter-spacing:.02px!important;
 }
 .rk-startup-description-v4 .rk-desc-line{
   display:block!important;
-  margin-top:5px!important;
-  color:rgba(26,20,16,.78)!important;
-  font-size:16px!important;
-  line-height:1.34!important;
-  font-weight:650!important;
+  margin-top:3px!important;
+  color:rgba(26,20,16,.68)!important;
+  font-size:14.5px!important;
+  line-height:1.42!important;
+  font-weight:520!important;
   letter-spacing:.02px!important;
 }
 .rk-startup-description-v4 em{
   display:block!important;
-  margin-top:8px!important;
-  color:rgba(107,97,87,.82)!important;
-  font-size:13.5px!important;
+  margin-top:6px!important;
+  color:rgba(107,97,87,.72)!important;
+  font-size:12.5px!important;
   line-height:1.35!important;
   font-style:normal!important;
-  font-weight:600!important;
+  font-weight:520!important;
 }
 .rk-live-ticker-v4{
   position:relative!important;
   width:100%!important;
-  min-height:54px!important;
-  margin:4px 0 18px!important;
-  padding:0 14px!important;
+  min-height:40px!important;
+  max-height:40px!important;
+  margin:2px 0 14px!important;
+  padding:0 12px!important;
   border-radius:999px!important;
   background:
-    radial-gradient(circle at 12% 50%,rgba(76,217,135,.13),transparent 28%),
-    linear-gradient(145deg,rgba(255,253,248,.92),rgba(241,248,244,.86))!important;
-  border:1px solid rgba(23,107,66,.18)!important;
+    radial-gradient(circle at 10% 50%,rgba(76,217,135,.13),transparent 24%),
+    linear-gradient(145deg,rgba(255,253,248,.92),rgba(241,248,244,.78))!important;
+  border:1px solid rgba(23,107,66,.16)!important;
   box-shadow:
-    0 9px 24px rgba(23,107,66,.055),
-    0 0 0 1px rgba(255,255,255,.62) inset,
-    inset 0 1px 0 rgba(255,255,255,.88)!important;
+    0 6px 16px rgba(23,107,66,.045),
+    inset 0 1px 0 rgba(255,255,255,.92)!important;
   display:flex!important;
   align-items:center!important;
-  gap:11px!important;
+  gap:9px!important;
   overflow:hidden!important;
 }
 .rk-live-ticker-v4:after{
@@ -2295,24 +2316,24 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   position:absolute;
   inset:1px;
   border-radius:999px;
-  background:linear-gradient(110deg,transparent 0%,rgba(255,255,255,.42) 45%,transparent 64%);
+  background:linear-gradient(110deg,transparent 0%,rgba(255,255,255,.34) 46%,transparent 64%);
   transform:translateX(-120%);
-  animation:rkGoldSweep 6.8s ease-in-out infinite;
+  animation:rkGoldSweep 7s ease-in-out infinite;
   pointer-events:none;
-  opacity:.45;
+  opacity:.38;
 }
 .rk-live-ticker-dot{
   position:relative!important;
-  width:11px!important;
-  height:11px!important;
+  z-index:1!important;
+  width:9px!important;
+  height:9px!important;
   border-radius:999px!important;
   background:#4CD987!important;
   box-shadow:
-    0 0 0 6px rgba(76,217,135,.12),
-    0 0 16px rgba(76,217,135,.52)!important;
+    0 0 0 5px rgba(76,217,135,.12),
+    0 0 13px rgba(76,217,135,.46)!important;
   animation:rkLiveHalo 2.4s ease-in-out infinite!important;
   flex-shrink:0!important;
-  z-index:1!important;
 }
 .rk-live-ticker-text{
   position:relative!important;
@@ -2320,10 +2341,10 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   flex:1!important;
   min-width:0!important;
   color:#176B42!important;
-  font-size:14.5px!important;
-  line-height:1.18!important;
-  font-weight:800!important;
-  letter-spacing:.05px!important;
+  font-size:12.5px!important;
+  line-height:1.1!important;
+  font-weight:760!important;
+  letter-spacing:.02px!important;
   white-space:nowrap!important;
   overflow:hidden!important;
   text-overflow:ellipsis!important;
@@ -2332,24 +2353,28 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   position:relative!important;
   z-index:1!important;
   flex-shrink:0!important;
-  padding:6px 9px!important;
+  padding:4px 7px!important;
   border-radius:999px!important;
-  background:rgba(23,107,66,.075)!important;
-  border:1px solid rgba(23,107,66,.10)!important;
-  color:rgba(23,107,66,.84)!important;
-  font-size:9px!important;
-  letter-spacing:1.35px!important;
+  background:rgba(23,107,66,.065)!important;
+  border:1px solid rgba(23,107,66,.09)!important;
+  color:rgba(23,107,66,.78)!important;
+  font-size:8px!important;
+  letter-spacing:1.1px!important;
   text-transform:uppercase!important;
   font-weight:900!important;
 }
-@media(max-width:390px){
-  .rk-startup-subtitle-v4{font-size:21px!important;white-space:normal!important;max-width:310px!important;margin-left:auto!important;margin-right:auto!important}
-  .rk-startup-description-v4{font-size:14.5px!important;margin-top:20px!important;max-width:29ch!important}
-  .rk-startup-description-v4 .rk-desc-line{font-size:15.5px!important}
-  .rk-live-ticker-v4{min-height:52px!important;padding:0 13px!important}
-  .rk-live-ticker-text{font-size:14px!important}
+@media(max-width:430px){
+  .rk-startup-hero-v4{padding:8px 10px 6px!important;margin-bottom:8px!important}
+  .rk-startup-mark-v4{width:38px!important;height:38px!important;font-size:22px!important;margin-bottom:9px!important}
+  .rk-startup-logo-v4{font-size:50px!important;letter-spacing:-2.1px!important}
+  .rk-startup-subtitle-v4{font-size:18px!important;margin-top:9px!important;white-space:nowrap!important}
+  .rk-startup-description-v4{font-size:13.5px!important;margin-top:14px!important;max-width:31ch!important;line-height:1.38!important}
+  .rk-startup-description-v4 .rk-desc-line{font-size:13.5px!important;line-height:1.38!important;margin-top:2px!important}
+  .rk-live-ticker-v4{min-height:38px!important;max-height:38px!important;margin:0 0 12px!important;padding:0 11px!important}
+  .rk-live-ticker-text{font-size:12px!important;font-weight:760!important}
   .rk-live-ticker-side{display:none!important}
 }
+
 `;
 
 
