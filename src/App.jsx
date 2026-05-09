@@ -6032,6 +6032,9 @@ async function postLeaderboardRow(body){
     const clean={...body};
     clean.player_id=clean.player_id||currentLeaderboardPlayerId();
     clean.name=rkSafePlayerName(rkLocalDisplayName()||clean.name,clean.player_id);
+    if(clean.name&&isClubDisplayName(clean.name)){
+      clean.name=rkSafePlayerName(rkLocalDisplayName(),clean.player_id);
+    }
     clean.updated_at=clean.updated_at||new Date().toISOString();
     await deleteExistingOwnLeaderboardRows(clean);
     const res=await fetch(`${SB_URL}/rest/v1/leaderboard`,{
@@ -6188,6 +6191,39 @@ async function rkAdoptRemoteProfile(remote,previousLocalId=null){
     clubCode:restored.clubCode||getClubCode?.()||null,
   });
   return restored;
+}
+
+async function rkSyncLocalProfileToSupabase(reason="app_load"){
+  const profile=rkRawProfile();
+  const name=String(profile?.nickname||profile?.name||"").trim();
+  if(!name||isClubDisplayName(name))return false;
+
+  const previousLocalId=rkStoredPlayerId();
+  const pid=rkProfilePlayerId(profile)||previousLocalId||getOrCreatePlayerId();
+  const clubCode=profile?.clubCode||profile?.club_code||getClubCode()||null;
+  const syncedProfile={
+    ...profile,
+    playerId:pid,
+    nickname:name,
+    clubCode:clubCode||"",
+    streak:profile?.streak??ST.get("str",0)??0,
+    roundsPlayed:profile?.roundsPlayed??ST.get("rnd",0)??0,
+    bestIQ:profile?.bestIQ??getBestIQ?.()?.score??null,
+  };
+
+  setProfile(syncedProfile);
+  ST.set("playerId",pid);
+  if(clubCode)setClubCode(clubCode);
+  setClubName(name);
+
+  const ok=await upsertProfile(syncedProfile);
+  await rkPatchRowsForIdentityMigration({
+    fromPlayerId:previousLocalId&&previousLocalId!==pid?previousLocalId:null,
+    toPlayerId:pid,
+    name,
+    clubCode,
+  });
+  return ok;
 }
 
 function getProfile(){return ST.get("profile",null);}
@@ -14062,6 +14098,7 @@ export default function Rackle(){
   // Fetch clubs from Supabase on load
   useEffect(()=>{
     fetchClubs();
+    rkSyncLocalProfileToSupabase("app_load").catch(err=>console.warn("Profile sync failed",err));
     // Handle /clubs/[slug] URL routing
     const path=window.location.pathname;
     const clubMatch=path.match(/\/clubs\/(.+)/);
@@ -14084,6 +14121,10 @@ export default function Rackle(){
       if(badge&&(!prevBadge||badge.days>prevBadge.days))setBadgeToast(badge);
     }
     if(mode==="daily"){
+      const localProfileBeforePost=getProfile();
+      if(localProfileBeforePost?.nickname){
+        rkSyncLocalProfileToSupabase("daily_before_post").catch(err=>console.warn("Profile pre-post sync failed",err));
+      }
       const dailyResult={...completedResult,mode:"daily",daySeed:today,day_seed:today};
       setDDone(true);ST.set("dd",today);setDRes(dailyResult);ST.set("dres",dailyResult);
       if(isFirstDaily){ST.set("hadFirstDaily",true);}
