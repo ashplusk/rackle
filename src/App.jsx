@@ -1702,7 +1702,59 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-learn-shell{margin-top:22px!important}
 }
 
+/* ─── vNext LEARN + CLUBHOUSE SIMPLIFICATION ─────────────────────────────── */
+.rk-learn-shell{margin-top:28px!important;margin-bottom:18px!important}
+.rk-learn-head{min-height:74px!important;padding:15px 16px!important;border-radius:22px!important}
+.rk-learn-head[aria-expanded="true"]{border-radius:22px 22px 0 0!important}
+.rk-learn-panel{padding:12px!important;border-radius:0 0 22px 22px!important;background:linear-gradient(180deg,#FFFDF8,#F7F0E5)!important}
+.rk-learn-grid{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}
+.rk-learn-item{min-height:64px!important;padding:12px 13px!important;border-radius:17px!important;gap:12px!important;background:linear-gradient(145deg,#FFFDF8,#F8F1E6)!important}
+.rk-learn-item-title{display:block!important;font-family:'Fraunces',Georgia,serif!important;font-size:15px!important;line-height:1.08!important;font-weight:950!important;color:#1A1410!important;letter-spacing:-.18px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.rk-learn-item-sub{display:block!important;font-size:11px!important;line-height:1.35!important;color:#6B6157!important;font-weight:700!important;margin-top:3px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.rk-learn-icon-simple{width:40px!important;height:40px!important;border-radius:14px!important;background:linear-gradient(145deg,#FFFDF8,#EEE4D2)!important;border:1px solid rgba(26,20,16,.08)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.82),0 4px 12px rgba(26,20,16,.04)!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:18px!important;flex-shrink:0!important}
+.rk-learn-arrow-simple{width:28px!important;height:28px!important;border-radius:999px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:rgba(23,107,66,.06)!important;border:1px solid rgba(23,107,66,.08)!important;color:#176B42!important;font-size:14px!important;font-weight:950!important;flex-shrink:0!important}
+
+.rk-clubhouse-stack{border-radius:24px!important;box-shadow:0 10px 28px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.82)!important;background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;border:1px solid rgba(26,20,16,.07)!important;overflow:hidden!important}
+.rk-clubhouse-stack > div + div{border-top:1px solid rgba(26,20,16,.055)!important}
+.rk-clubhouse-stack .rk-quiet-board{background:transparent!important;border:none!important;box-shadow:none!important;border-radius:0!important}
+.rk-clubhouse-stack > div:first-child .rk-quiet-board{border-radius:24px 24px 0 0!important}
+.rk-clubhouse-stack > div:last-child{border-radius:0 0 24px 24px!important;overflow:hidden!important}
+.rk-quiet-board-head{min-height:auto!important;padding:16px!important;align-items:center!important;background:transparent!important}
+.rk-quiet-head-closed:after{display:none!important}
+.rk-quiet-topline{margin-bottom:7px!important;gap:7px!important}
+.rk-quiet-mini-icon{width:31px!important;height:31px!important;border-radius:12px!important;font-size:15px!important}
+.rk-quiet-kicker{font-size:8.5px!important;letter-spacing:2.1px!important;margin:0!important;line-height:1.05!important}
+.rk-quiet-title{font-size:18px!important;line-height:1.05!important;margin:0!important;letter-spacing:-.38px!important}
+.rk-quiet-desc{font-size:11.5px!important;line-height:1.35!important;margin-top:4px!important;color:rgba(107,97,87,.86)!important;font-weight:650!important}
+.rk-quiet-preview-line{margin-top:10px!important;gap:6px!important}
+.rk-quiet-preview-pill{font-size:10px!important;padding:6px 8px!important;line-height:1!important}
+.rk-quiet-chevron{width:34px!important;height:34px!important;border-radius:14px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.78),0 4px 12px rgba(26,20,16,.035)!important}
+.rk-quiet-board-panel{padding:12px!important;background:linear-gradient(180deg,#FFFDF8 0%,#F5EFE4 100%)!important;border-top:1px solid rgba(26,20,16,.055)!important}
+.rk-quiet-leader{padding:12px!important;border-radius:17px!important;margin-bottom:9px!important;gap:11px!important}
+.rk-quiet-badge{width:38px!important;height:38px!important;border-radius:14px!important;font-size:16px!important}
+.rk-quiet-row-list{gap:7px!important}
+.rk-quiet-row{grid-template-columns:28px minmax(0,1fr) auto!important;padding:9px 10px!important;border-radius:15px!important;gap:9px!important}
+.rk-quiet-rank{width:27px!important;height:27px!important;font-size:10.5px!important}
+.rk-quiet-name{font-size:13.5px!important;line-height:1.05!important}
+.rk-quiet-sub{font-size:10px!important;margin-top:3px!important}
+.rk-quiet-score{font-size:21px!important}
+.rk-quiet-footer{margin-top:9px!important;padding-top:10px!important}
+.rk-quiet-link{font-size:12px!important;padding:3px 0 7px!important}
+.rk-inline-code-row{background:rgba(255,255,255,.52)!important}
+.rk-inline-code-button{width:100%!important;display:flex!important;align-items:center!important;justify-content:space-between!important;padding:14px 16px!important;background:transparent!important;border:none!important;cursor:pointer!important;text-align:left!important}
+.rk-inline-code-copy{font-size:11px!important;color:#6B6157!important;margin-top:3px!important;line-height:1.32!important;font-weight:650!important}
+@media(max-width:390px){
+  .rk-quiet-board-head{padding:14px 13px!important}
+  .rk-quiet-title{font-size:17px!important}
+  .rk-quiet-preview-pill{font-size:9.5px!important;padding:5px 7px!important}
+  .rk-learn-item-title{font-size:14px!important}
+  .rk-learn-item-sub{font-size:10.5px!important}
+}
+
+
 `;
+
+
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
   app:{fontFamily:F.b,background:C.bg,minHeight:"100vh",color:C.ink,width:"100%",maxWidth:560,borderLeft:`1px solid ${C.bdr}`,borderRight:`1px solid ${C.bdr}`,overflowX:"hidden"},
@@ -10164,13 +10216,13 @@ function InlineCodeEntry({setScreen}){
     setScreen("leaderboard");
   };
   return(
-    <div style={{borderTop:`1px solid ${C.bdr}`,background:C.bg}}>
-      <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",padding:"13px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
+    <div className="rk-inline-code-row" style={{borderTop:`1px solid ${C.bdr}`,background:C.bg}}>
+      <button className="rk-inline-code-button" onClick={()=>setOpen(o=>!o)}>
         <div style={{display:"flex",alignItems:"center",gap:10}}>
           <div style={{width:30,height:30,borderRadius:8,background:C.jade+"15",border:`1px solid ${C.jade}25`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,flexShrink:0}}>🔑</div>
           <div>
             <div style={{fontSize:13,fontWeight:800,color:C.jade,fontFamily:F.d,letterSpacing:-0.05}}>I have a club code</div>
-            <div style={{fontSize:10,color:C.mut,marginTop:1}}>Enter it to join your club's leaderboard</div>
+            <div className="rk-inline-code-copy">Join your club board</div>
           </div>
         </div>
         <span style={{fontSize:12,color:C.jade,opacity:0.7,transform:open?"rotate(180deg)":"rotate(0deg)",transition:"transform 0.2s",display:"inline-block"}}>▾</span>
@@ -11916,10 +11968,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   const Learn=()=> (
     <div className="rk-learn-shell">
-      <button className="rk-learn-head" onClick={()=>setLeOpen(o=>!o)} aria-expanded={leOpen} style={{borderRadius:leOpen?"18px 18px 0 0":"18px"}}>
-        <div style={{display:"flex",alignItems:"center",gap:11}}>
-          <div style={{width:38,height:38,borderRadius:12,background:C.jade+"18",border:`1px solid ${C.jade}24`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>📚</div>
-          <div><div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.jade,letterSpacing:-0.1}}>Learn & Explore</div><div style={{fontSize:11,color:C.jade,opacity:0.72,marginTop:1}}>Stats · Rules · Card guide</div></div>
+      <button className="rk-learn-head" onClick={()=>setLeOpen(o=>!o)} aria-expanded={leOpen} style={{borderRadius:leOpen?"22px 22px 0 0":"22px"}}>
+        <div style={{display:"flex",alignItems:"center",gap:12,minWidth:0}}>
+          <div className="rk-learn-icon-simple">📚</div>
+          <div style={{minWidth:0}}>
+            <div style={{fontFamily:F.d,fontSize:16,fontWeight:950,color:C.jade,letterSpacing:-0.2,lineHeight:1.05}}>Learn & Explore</div>
+            <div style={{fontSize:11,color:C.jade,opacity:0.72,marginTop:3,fontWeight:800}}>Stats · Tutorial · 2026 card</div>
+          </div>
         </div>
         <span className="rk-quiet-chevron" aria-hidden="true"><span className={`rk-chevron-mark ${leOpen?"rk-chevron-mark-open":""}`} /></span>
       </button>
@@ -11927,16 +11982,16 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div className="rk-in rk-learn-panel">
           <div className="rk-learn-grid">
           {[
-            ["📊","Your Stats","Last 5 scores · tendencies",showStats],
-            ["🎓","Interactive Tutorial","Learn Rackle step by step",showTutorial],
-            ["📋","2026 NMJL Hand Browser","Visual hand breakdowns",()=>setScreen("handbrowser")],
-            ["📖","How to Play","Quick rules · Charleston basics",()=>setScreen("howto")],
-            ["🔤","Mahjong Glossary","Terms for new players",()=>setScreen("glossary")],
+            ["📊","Your Stats","Scores, streaks, progress",showStats],
+            ["🎓","Tutorial","Learn Rackle in 60 seconds",showTutorial],
+            ["📋","2026 Card Browser","Scan hands by section",()=>setScreen("handbrowser")],
+            ["📖","How to Play","Simple rules and Charleston basics",()=>setScreen("howto")],
+            ["🔤","Glossary","Mahjong terms, plain English",()=>setScreen("glossary")],
           ].map(([icon,title,sub,fn])=>(
             <button key={title} className="rk-learn-item" onClick={fn}>
-              <span style={{width:38,height:38,borderRadius:13,background:C.bg2,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{icon}</span>
+              <span className="rk-learn-icon-simple">{icon}</span>
               <span style={{flex:1,minWidth:0}}><span className="rk-learn-item-title">{title}</span><span className="rk-learn-item-sub">{sub}</span></span>
-              <span className="rk-quiet-chevron" style={{width:30,height:30,fontSize:10,color:C.jade}}>›</span>
+              <span className="rk-learn-arrow-simple">›</span>
             </button>
           ))}
           </div>
