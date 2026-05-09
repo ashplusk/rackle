@@ -1572,6 +1572,40 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
     height:38px!important;
   }
 }
+
+
+/* ─── vNext FINAL MICRO SPACING PATCH ───────────────────────────────────── */
+/* Hero: keep the two status lines tight and conversational */
+.rk-home-ritual-hero .rk-hero-status{
+  margin-top:8px!important;
+}
+.rk-home-ritual-hero .rk-hero-status p{
+  margin:0!important;
+  line-height:1.42!important;
+}
+.rk-home-ritual-hero .rk-hero-status p + p{
+  margin-top:0!important;
+}
+
+/* Closed leaderboard headers: small clean gap between title and descriptor */
+.rk-clubhouse-stack .rk-quiet-board:not(.rk-global-board-open) .rk-quiet-title,
+.rk-quiet-board:not(.rk-global-board-open) .rk-quiet-title{
+  margin-bottom:5px!important;
+}
+.rk-clubhouse-stack .rk-quiet-board:not(.rk-global-board-open) .rk-quiet-desc,
+.rk-quiet-board:not(.rk-global-board-open) .rk-quiet-desc{
+  margin:0 0 10px!important;
+  font-weight:500!important;
+  color:rgba(26,20,16,.50)!important;
+  line-height:1.42!important;
+  letter-spacing:0!important;
+}
+
+/* Specific descriptor copy should feel lighter than the title */
+.rk-quiet-desc{
+  font-weight:500!important;
+  color:rgba(26,20,16,.50)!important;
+}
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
@@ -10375,8 +10409,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div className="rk-float rk-hero-tile" style={{fontSize:37,marginBottom:12,lineHeight:1}}>🀄</div>
         <h1 className="rk-hero-logo" style={{fontFamily:F.d,fontSize:52,color:C.ink,margin:"0 0 12px",fontWeight:900,letterSpacing:-2.8,lineHeight:0.95}}>Rackle</h1>
         <p className="rk-hero-subtitle" style={{fontFamily:F.d,fontSize:16,color:C.jade,margin:"0 0 16px",fontWeight:700,fontStyle:"italic",letterSpacing:0.2}}>The Daily Mahjong Workout</p>
-        <div className="rk-hero-status" style={{marginTop:0}}><p style={{fontSize:13,color:C.mut,margin:"0 0 6px",lineHeight:1.5}}>{lines[0]}</p>
-        <p style={{fontSize:13,color:C.mut,margin:0,lineHeight:1.5,fontWeight:700}}>{lines[1]}</p></div>
+        <div className="rk-hero-status" style={{marginTop:0}}><p style={{fontSize:13,color:C.mut,margin:0,lineHeight:1.42}}>{lines[0]}</p>
+        <p style={{fontSize:13,color:C.mut,margin:0,lineHeight:1.42,fontWeight:700}}>{lines[1]}</p></div>
       </div>
     );
   };
