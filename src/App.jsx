@@ -2466,6 +2466,30 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-live-ticker-text{font-size:10.4px!important;font-weight:760!important}
 }
 
+
+/* ─── vNext DAILY ENTRY + WARMUP REDESIGN ─────────────────────────────── */
+.rk-hidden-rack-entry{width:100%;margin:14px 0 14px;padding:22px 16px 20px;border-radius:28px;border:1px solid rgba(26,20,16,.08);background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.86),transparent 42%),linear-gradient(145deg,#FFFDF8,#F4EDDF);box-shadow:0 14px 34px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.84);text-align:center;cursor:pointer;appearance:none;-webkit-appearance:none;color:inherit;display:block;position:relative;overflow:hidden}
+.rk-hidden-rack-entry:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 15% 10%,rgba(23,107,66,.07),transparent 26%);pointer-events:none}.rk-hidden-rack-entry:active{transform:scale(.992)}
+.rk-hidden-rack-row{position:relative;z-index:1;display:flex;justify-content:center;gap:10px;margin:0 0 18px}
+.rk-mystery-tile-back{position:relative;width:46px;height:60px;border-radius:14px;background:linear-gradient(145deg,#FFFDF8 0%,#F3EBDD 58%,#E4D7C2 100%);border:1px solid rgba(26,20,16,.10);box-shadow:0 8px 16px rgba(26,20,16,.10),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -5px 10px rgba(160,120,40,.10);display:flex;align-items:center;justify-content:center;overflow:hidden;animation:rkMysteryFloat 3.8s ease-in-out infinite}
+.rk-mystery-tile-back:nth-child(2){animation-delay:.12s}.rk-mystery-tile-back:nth-child(3){animation-delay:.24s}.rk-mystery-tile-back:nth-child(4){animation-delay:.36s}.rk-mystery-tile-back:nth-child(5){animation-delay:.48s}.rk-mystery-tile-back:nth-child(6){animation-delay:.60s}.rk-mystery-tile-back:nth-child(7){animation-delay:.72s}.rk-mystery-tile-back:nth-child(8){animation-delay:.84s}
+.rk-mystery-tile-back:after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,.55) 45%,transparent 62%);transform:translateX(-120%);animation:rkMysteryShine 5s ease-in-out infinite}
+.rk-mystery-mark{position:relative;z-index:1;width:28px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,rgba(255,255,255,.64),rgba(238,228,210,.92));border:1px solid rgba(176,42,42,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.78);color:#B02A2A;font-family:'Fraunces',Georgia,serif;font-size:20px;font-weight:900;line-height:1}
+.rk-hidden-rack-title{position:relative;z-index:1;font-family:'Fraunces',Georgia,serif;font-size:26px;line-height:1.04;letter-spacing:-.55px;font-weight:900;color:#176B42;margin:0 0 7px}
+.rk-hidden-rack-copy{position:relative;z-index:1;font-family:'Fraunces',Georgia,serif;font-size:17px;line-height:1.2;letter-spacing:-.18px;font-weight:700;color:#1A1410;opacity:.72;margin-bottom:13px}
+.rk-hidden-rack-social{position:relative;z-index:1;display:flex;justify-content:center;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.rk-hidden-rack-social span{display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:0 10px;border-radius:999px;background:rgba(23,107,66,.07);border:1px solid rgba(23,107,66,.10);color:#176B42;font-size:11px;font-weight:900;line-height:1}
+.rk-hidden-rack-cta{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 19px;border-radius:999px;background:linear-gradient(145deg,#176B42,#0F5432);color:#FFFDF8;font-family:'Fraunces',Georgia,serif;font-size:15px;font-weight:900;letter-spacing:-.1px;box-shadow:0 10px 22px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.18)}
+.rk-action-strip{display:grid;gap:12px;margin:12px 0 18px}
+.rk-warmup-card-v2,.rk-club-room-card-v2{width:100%;border:1px solid rgba(26,20,16,.075);border-radius:24px;padding:17px 16px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);box-shadow:0 8px 26px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78);display:flex;align-items:center;justify-content:space-between;gap:14px;text-align:left;color:#1A1410;cursor:pointer}
+.rk-club-room-card-v2{background:linear-gradient(145deg,#F7FBF8,#F3EFE6);border-color:rgba(23,107,66,.12)}.rk-warmup-card-v2:active,.rk-club-room-card-v2:active{transform:scale(.992)}
+.rk-warmup-top-v2{display:flex;align-items:center;gap:12px;min-width:0}.rk-warmup-icon-v2{width:42px;height:42px;flex-shrink:0;border-radius:16px;background:linear-gradient(145deg,#FFFDF8,#EEE4D2);border:1px solid rgba(26,20,16,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 4px 12px rgba(26,20,16,.05);display:flex;align-items:center;justify-content:center;font-size:19px}
+.rk-warmup-text-v2{display:block;min-width:0}.rk-warmup-text-v2 strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1.03;letter-spacing:-.45px;font-weight:900;color:#1A1410;margin-bottom:5px}.rk-warmup-text-v2 span{display:block;font-size:12.5px;line-height:1.35;font-weight:800;color:#6B6157}
+.rk-warmup-cta-v2{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 13px;border-radius:999px;background:rgba(23,107,66,.08);border:1px solid rgba(23,107,66,.10);color:#176B42;font-size:12px;font-weight:950;white-space:nowrap}
+@keyframes rkMysteryFloat{0%,100%{translate:0 0}50%{translate:0 -4px}}@keyframes rkMysteryShine{0%,75%{transform:translateX(-125%);opacity:.12}86%{opacity:.6}100%{transform:translateX(125%);opacity:.12}}
+@media(max-width:599px){.rk-mystery-tile-back:nth-child(n+7){display:none}.rk-hidden-rack-entry{margin-top:12px;padding:20px 16px 19px}.rk-hidden-rack-row{gap:9px;margin-bottom:17px}.rk-mystery-tile-back{width:44px;height:58px}.rk-hidden-rack-title{font-size:24px}.rk-hidden-rack-copy{font-size:16px}.rk-warmup-card-v2,.rk-club-room-card-v2{align-items:flex-start;flex-direction:column}.rk-warmup-cta-v2{width:100%}}
+@media(max-width:380px){.rk-hidden-rack-row{gap:7px}.rk-mystery-tile-back{width:40px;height:54px}.rk-hidden-rack-title{font-size:22px}.rk-hidden-rack-social span{font-size:10.5px}}
+
 `;
 
 
@@ -12710,17 +12734,27 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const TodayRackPreview=()=>{
     const posted=Number(todayPlayers||0);
     const count=posted||2;
+    const scoreToBeat=topToday||currentScore||78;
     const postedText=`${count} ${count===1?"player has":"players already"} posted`;
+    const pressureText=`${scoreToBeat} is the score to beat`;
+    const tilts=[-2,-1,1,0,-1,2,-1,1];
     return(
-      <div className="rk-rack-preview-card-v4" aria-label="Today's hidden rack preview">
-        <div className="rk-mystery-rack" aria-hidden="true">
-          {Array.from({length:8}).map((_,i)=><span key={i} className="rk-mystery-tile">?</span>)}
+      <button type="button" onClick={()=>go("daily")} className="rk-hidden-rack-entry" aria-label="Reveal today's Rackle">
+        <div className="rk-hidden-rack-row" aria-hidden="true">
+          {Array.from({length:8}).map((_,i)=>(
+            <span key={i} className="rk-mystery-tile-back" style={{transform:`rotate(${tilts[i]}deg)`}}>
+              <span className="rk-mystery-mark">中</span>
+            </span>
+          ))}
         </div>
-        <div className="rk-preview-copy-v4">
-          Play to reveal today’s rack
+        <div className="rk-hidden-rack-title">Today’s rack is waiting</div>
+        <div className="rk-hidden-rack-copy">Play to reveal the Charleston.</div>
+        <div className="rk-hidden-rack-social">
           <span>{postedText}</span>
+          <span>{pressureText}</span>
         </div>
-      </div>
+        <span className="rk-hidden-rack-cta">Reveal today’s rack →</span>
+      </button>
     );
   };
 
@@ -12750,20 +12784,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     );
   };
 
-  const StartDaily=()=> (
-    <div style={{width:"100%"}}>
-      <button type="button" onClick={()=>go("daily")} className="rk-daily-play-card-v4" aria-label={`Play Daily Rackle number ${dn}`}>
-        <div className="rk-daily-play-card-v4-inner">
-          <div className="rk-daily-play-pill"><span className="rk-live-spark"/> Daily Rackle · #{dn}</div>
-          <h2 className="rk-daily-play-title">Today’s Rackle<strong>Play now.</strong></h2>
-          <p className="rk-daily-play-copy">Same rack. Every player. One daily score.</p>
-          <div className="rk-daily-play-meta">2 minutes · score · share · come back tomorrow</div>
-          <div className="rk-daily-play-button" aria-hidden="true">▶</div>
-        </div>
-      </button>
-      <TodayRackPreview/>
-    </div>
-  );
+  const StartDaily=()=> <TodayRackPreview/>;
 
   const CompletedDaily=()=> (
     <div className="rk-home-section-lg" style={{borderRadius:24,overflow:"hidden",marginBottom:24,background:"#fff",boxShadow:"0 10px 32px rgba(0,0,0,0.08)",border:`1px solid ${C.bdr}`}}>
@@ -12832,21 +12853,26 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   );
 
   const PracticeCard=()=> (
-    <div className="rk-home-split" aria-label="Play options">
-      {!dDone&&<button onClick={()=>go("daily")} className="rk-home-action-card">
-        <span style={{fontSize:20}}>🀄</span>
-        <strong>Play the Daily</strong>
-        <span>One Charleston. One score.</span>
-      </button>}
-      <button onClick={()=>go("free")} className={`rk-home-action-card ${dDone?"rk-home-action-card-single":"rk-home-action-card-secondary"}`}>
-        <span style={{fontSize:20}}>🎓</span>
-        <strong>Warm up</strong>
-        <span>{dDone?"Practice another rack without changing today’s score.":"Practice first. The Daily waits."}</span>
+    <div className="rk-action-strip" aria-label="Practice and club options">
+      <button onClick={()=>go("free")} className="rk-warmup-card-v2">
+        <div className="rk-warmup-top-v2">
+          <span className="rk-warmup-icon-v2" aria-hidden="true">🎓</span>
+          <span className="rk-warmup-text-v2">
+            <strong>Warm up</strong>
+            <span>{dDone?"Practice another rack without changing today’s score.":"Practice first. The Daily waits."}</span>
+          </span>
+        </div>
+        <span className="rk-warmup-cta-v2">Start practice →</span>
       </button>
-      {dDone&&<button onClick={()=>activeClubCode?setScreen("leaderboard"):setScreen("clubs")} className="rk-home-action-card">
-        <span style={{fontSize:20}}>🏛️</span>
-        <strong>{activeClubCode?"Club Room":"Join a Club"}</strong>
-        <span>{activeClubCode?"See who your table is chasing.":"Create a board for your table."}</span>
+      {dDone&&<button onClick={()=>activeClubCode?setScreen("leaderboard"):setScreen("clubs")} className="rk-club-room-card-v2">
+        <div className="rk-warmup-top-v2">
+          <span className="rk-warmup-icon-v2" aria-hidden="true">🏛️</span>
+          <span className="rk-warmup-text-v2">
+            <strong>{activeClubCode?"Club Room":"Join a Club"}</strong>
+            <span>{activeClubCode?"See who your table is chasing.":"Create a board for your table."}</span>
+          </span>
+        </div>
+        <span className="rk-warmup-cta-v2">Open room →</span>
       </button>}
     </div>
   );
