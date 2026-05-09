@@ -8853,33 +8853,49 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
             </div>
           </div>
 
-          {/* Play Button - reverted to original premium circle */}
+          {/* Premium play button */}
           <div
+            className="rk-tap-card rk-sweep"
+            aria-hidden="true"
             style={{
               width:78,
               height:78,
               borderRadius:"50%",
-              background:"#F8F4EE",
+              background:"linear-gradient(145deg,#FFFDF8 0%,#F0E7D8 100%)",
               display:"flex",
               alignItems:"center",
               justifyContent:"center",
-              boxShadow:"0 12px 28px rgba(0,0,0,0.20), inset 0 1px 0 rgba(255,255,255,.7)",
-              border:"1px solid rgba(255,255,255,0.55)",
+              boxShadow:"0 16px 34px rgba(0,0,0,0.24), 0 0 0 1px rgba(243,212,107,.20), inset 0 1px 0 rgba(255,255,255,.86), inset 0 -8px 18px rgba(160,120,40,.08)",
+              border:"2px solid rgba(26,20,16,.18)",
               cursor:"pointer",
               zIndex:3,
               flexShrink:0,
               transform:"translateY(-8px)",
-              transition:"transform .18s ease, box-shadow .18s ease",
+              transition:"transform .18s ease, box-shadow .18s ease, border-color .18s ease",
+              position:"relative",
             }}
           >
             <div
               style={{
+                position:"absolute",
+                inset:6,
+                borderRadius:"50%",
+                border:"1px solid rgba(201,168,76,.30)",
+                boxShadow:"inset 0 1px 0 rgba(255,255,255,.62)",
+                pointerEvents:"none",
+              }}
+            />
+            <div
+              style={{
                 width:0,
                 height:0,
-                borderTop:"12px solid transparent",
-                borderBottom:"12px solid transparent",
-                borderLeft:"18px solid #6F92C9",
-                marginLeft:4,
+                borderTop:"13px solid transparent",
+                borderBottom:"13px solid transparent",
+                borderLeft:"20px solid #1A1410",
+                marginLeft:5,
+                filter:"drop-shadow(0 1px 0 rgba(255,255,255,.38))",
+                position:"relative",
+                zIndex:1,
               }}
             />
           </div>
