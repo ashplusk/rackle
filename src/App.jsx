@@ -724,6 +724,68 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-quiet-chevron{width:32px!important;height:32px!important;}
 }
 
+/* ─── vNext DESKTOP RESPONSIVE + PREMIUM PLAY BUTTON ─────────────────────── */
+@keyframes rkPlayInvite{0%,100%{transform:translateY(-8px) scale(1);box-shadow:0 18px 38px rgba(0,0,0,.25),0 0 0 1px rgba(243,212,107,.25),0 0 0 0 rgba(243,212,107,0),inset 0 1px 0 rgba(255,255,255,.9),inset 0 -10px 20px rgba(160,120,40,.10)}50%{transform:translateY(-10px) scale(1.025);box-shadow:0 22px 44px rgba(0,0,0,.29),0 0 0 1px rgba(243,212,107,.38),0 0 0 8px rgba(243,212,107,.055),inset 0 1px 0 rgba(255,255,255,.92),inset 0 -10px 20px rgba(160,120,40,.12)}}
+@keyframes rkPlayRing{0%,100%{opacity:.68;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}
+.rk-play-button-premium{
+  width:84px!important;
+  height:84px!important;
+  border-radius:999px!important;
+  background:radial-gradient(circle at 38% 28%,#FFFFFF 0%,#FFFDF8 34%,#EFE3CF 100%)!important;
+  border:2px solid rgba(26,20,16,.22)!important;
+  box-shadow:0 18px 38px rgba(0,0,0,.25),0 0 0 1px rgba(243,212,107,.25),inset 0 1px 0 rgba(255,255,255,.9),inset 0 -10px 20px rgba(160,120,40,.10)!important;
+  animation:rkPlayInvite 4.2s ease-in-out infinite!important;
+}
+.rk-play-button-premium:before{
+  content:"";
+  position:absolute;
+  inset:8px;
+  border-radius:999px;
+  border:1.5px solid rgba(201,168,76,.42);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 0 18px rgba(201,168,76,.10);
+  animation:rkPlayRing 3.2s ease-in-out infinite;
+  pointer-events:none;
+}
+.rk-play-button-premium:after{
+  content:"PLAY";
+  position:absolute;
+  bottom:13px;
+  left:0;
+  right:0;
+  text-align:center;
+  font-size:6.5px;
+  line-height:1;
+  letter-spacing:1.6px;
+  font-weight:950;
+  color:rgba(26,20,16,.54);
+  z-index:2;
+}
+.rk-daily-hero-card:hover .rk-play-button-premium{animation-play-state:paused!important;transform:translateY(-12px) scale(1.045)!important;box-shadow:0 26px 54px rgba(0,0,0,.31),0 0 0 1px rgba(243,212,107,.48),0 0 24px rgba(243,212,107,.18),inset 0 1px 0 rgba(255,255,255,.94),inset 0 -10px 20px rgba(160,120,40,.13)!important;}
+.rk-play-triangle{border-left-color:#11100E!important;filter:drop-shadow(0 1px 0 rgba(255,255,255,.42)) drop-shadow(0 3px 5px rgba(0,0,0,.10))!important;margin-top:-7px!important;}
+.rk-daily-hero-card:active .rk-play-button-premium{transform:translateY(-6px) scale(.97)!important;}
+
+@media(min-width:900px){
+  .rk-outer{padding:32px 24px 52px!important;background:radial-gradient(circle at top,#FFFDF8 0%,#F8F4EE 42%,#EFE7DA 100%)!important;}
+  .rk-app{width:min(1180px,calc(100vw - 48px))!important;max-width:1180px!important;border-radius:28px!important;overflow:hidden!important;border:1px solid rgba(26,20,16,.08)!important;box-shadow:0 24px 90px rgba(26,20,16,.14),0 0 0 1px rgba(255,255,255,.72) inset!important;background:linear-gradient(180deg,#F8F4EE 0%,#F4EDDF 100%)!important;}
+  .rk-pg{padding:30px 34px 64px!important;}
+  .rk-home-responsive-shell{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(360px,.88fr);gap:28px;align-items:start;}
+  .rk-home-main-col,.rk-home-side-col{min-width:0;}
+  .rk-home-side-col{position:sticky;top:24px;align-self:start;}
+  .rk-daily-hero-card{min-height:430px!important;border-radius:30px!important;margin-bottom:28px!important;}
+  .rk-daily-hero-card>div:last-child{padding:30px 30px 26px!important;}
+  .rk-daily-hero-card .rk-play-button-premium{width:104px!important;height:104px!important;}
+  .rk-daily-hero-card .rk-play-triangle{border-top-width:16px!important;border-bottom-width:16px!important;border-left-width:25px!important;}
+  .rk-learn-shell{margin-top:22px!important;}
+}
+@media(min-width:1180px){
+  .rk-home-responsive-shell{grid-template-columns:minmax(0,1.18fr) 410px;gap:34px;}
+  .rk-pg{padding-left:42px!important;padding-right:42px!important;}
+}
+@media(min-width:900px){
+  .rk-pg:not(:has(.rk-home-responsive-shell)){max-width:760px!important;margin:0 auto!important;width:100%!important;}
+}
+
+
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
@@ -9122,7 +9184,7 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
   ].filter(Boolean);
 
   return(
-    <button onClick={onPlay} aria-label={`Play Daily Rackle challenge number ${dn}`} className="rk-in rk-hero-live rk-hero-bright rk-tap-card rk-sweep" style={{
+    <button onClick={onPlay} aria-label={`Play Daily Rackle challenge number ${dn}`} className="rk-in rk-daily-hero-card rk-hero-live rk-hero-bright rk-tap-card rk-sweep" style={{
       width:"100%",border:"none",cursor:"pointer",textAlign:"left",borderRadius:22,overflow:"hidden",padding:0,
       background:`linear-gradient(150deg,#041F12 0%,#07331E 42%,#0B4A2C 68%,#03170D 100%)`,
       color:"#fff",boxShadow:"0 18px 50px rgba(3,23,13,0.38),0 0 0 1px rgba(201,168,76,.14)",marginBottom:28,position:"relative"
@@ -9153,7 +9215,7 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
 
           {/* Premium play button */}
           <div
-            className="rk-tap-card rk-sweep"
+            className="rk-play-button-premium rk-tap-card rk-sweep"
             aria-hidden="true"
             style={{
               width:78,
@@ -9184,6 +9246,7 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
               }}
             />
             <div
+              className="rk-play-triangle"
               style={{
                 width:0,
                 height:0,
@@ -9709,27 +9772,33 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         )}
         <Menu/>
         <Hero/>
-        {!dDone&&<div style={{display:"flex",alignItems:"center",gap:12,margin:"4px 0 22px"}}>
-          <div style={{flex:1,height:1,background:`linear-gradient(90deg,transparent,${C.bdr})`}}/>
-          <div className="rk-daily-cta" style={{display:"inline-flex",alignItems:"center",gap:7,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:999,padding:"8px 18px",minHeight:52}}><span style={{fontSize:12}}>🗓️</span><span style={{fontSize:10,color:C.mut,letterSpacing:2.4,fontWeight:900}}>TODAY'S RACKLE</span></div>
-          <div style={{flex:1,height:1,background:`linear-gradient(90deg,${C.bdr},transparent)`}}/>
-        </div>}
+        <div className="rk-home-responsive-shell">
+          <div className="rk-home-main-col">
+            {!dDone&&<div style={{display:"flex",alignItems:"center",gap:12,margin:"4px 0 22px"}}>
+              <div style={{flex:1,height:1,background:`linear-gradient(90deg,transparent,${C.bdr})`}}/>
+              <div className="rk-daily-cta" style={{display:"inline-flex",alignItems:"center",gap:7,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:999,padding:"8px 18px",minHeight:52}}><span style={{fontSize:12}}>🗓️</span><span style={{fontSize:10,color:C.mut,letterSpacing:2.4,fontWeight:900}}>TODAY'S RACKLE</span></div>
+              <div style={{flex:1,height:1,background:`linear-gradient(90deg,${C.bdr},transparent)`}}/>
+            </div>}
 
-        {!dDone&&ydIQ&&(
-          <div style={{display:"flex",alignItems:"center",gap:10,background:"linear-gradient(135deg,#FFF9EA,#F4EFE0)",border:`1px solid ${C.gold}22`,borderRadius:15,padding:"12px 14px",marginBottom:18}}>
-            <span style={{fontSize:18}}>🔥</span>
-            <div style={{fontSize:12,color:C.mut,lineHeight:1.45}}>Yesterday you scored <b style={{color:C.ink}}>{ydIQ}</b>. Today is a clean shot at the board.</div>
+            {!dDone&&ydIQ&&(
+              <div style={{display:"flex",alignItems:"center",gap:10,background:"linear-gradient(135deg,#FFF9EA,#F4EFE0)",border:`1px solid ${C.gold}22`,borderRadius:15,padding:"12px 14px",marginBottom:18}}>
+                <span style={{fontSize:18}}>🔥</span>
+                <div style={{fontSize:12,color:C.mut,lineHeight:1.45}}>Yesterday you scored <b style={{color:C.ink}}>{ydIQ}</b>. Today is a clean shot at the board.</div>
+              </div>
+            )}
+
+            {dDone&&<SocialPresence/>}
+            {dDone?<CompletedDaily/>:<StartDaily/>}
+            {dDone&&<TomorrowTease/>}
+            <PracticeCard/>
           </div>
-        )}
-
-        {dDone&&<SocialPresence/>}
-        {dDone?<CompletedDaily/>:<StartDaily/>}
-        {dDone&&<TomorrowTease/>}
-        <PracticeCard/>
-        <Community/>
-        <Learn/>
-        <EmailSignup/>
-        <Footer/>
+          <div className="rk-home-side-col">
+            <Community/>
+            <Learn/>
+            <EmailSignup/>
+            <Footer/>
+          </div>
+        </div>
       </div>
     </>
   );
