@@ -108,6 +108,45 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 
 
 
+
+
+/* ─── vNext AUTH SESSION + CLUBHOUSE MENU POLISH ───────────────────────── */
+.rk-boot-splash{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(150deg,#041F12 0%,#07331E 48%,#0A4328 72%,#03170D 100%);color:#fff;text-align:center;padding:28px;position:relative;overflow:hidden}
+.rk-boot-splash:after{content:'🀄';position:absolute;right:-38px;bottom:-38px;font-size:190px;opacity:.045;transform:rotate(-8deg);pointer-events:none}
+.rk-boot-tile{width:62px;height:62px;border-radius:22px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.08);border:1px solid rgba(243,212,107,.24);box-shadow:0 18px 44px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.12);font-size:32px;animation:rkFloat 3s ease-in-out infinite}
+.rk-boot-logo{font-family:'Fraunces',Georgia,serif;font-size:40px;font-weight:950;letter-spacing:-1.8px;color:#F3D46B;line-height:1}
+.rk-boot-copy{margin-top:8px;font-size:13px;color:rgba(255,255,255,.68);font-weight:800;letter-spacing:.2px}
+.rk-boot-shimmer{width:150px;height:3px;border-radius:999px;margin:18px auto 0;background:linear-gradient(90deg,transparent,rgba(243,212,107,.78),transparent);animation:rkGoldSweep 1.8s ease-in-out infinite}
+.rk-menu-backdrop{position:fixed;inset:0;z-index:260;background:rgba(11,9,7,.38);backdrop-filter:blur(9px);animation:rkMenuFade .18s ease both}
+.rk-menu-drawer{position:fixed;top:10px;right:10px;bottom:10px;width:min(368px,calc(100vw - 20px));z-index:270;border-radius:28px;background:linear-gradient(145deg,#FFFDF8,#F6EFE4);border:1px solid rgba(26,20,16,.08);box-shadow:0 18px 50px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.82);overflow:hidden;display:flex;flex-direction:column;animation:rkDrawerIn .24s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rkMenuFade{from{opacity:0}to{opacity:1}}
+@keyframes rkDrawerIn{from{opacity:0;transform:translateX(18px) scale(.985)}to{opacity:1;transform:translateX(0) scale(1)}}
+.rk-menu-hero{position:relative;overflow:hidden;padding:22px 20px 18px;background:linear-gradient(150deg,#041F12 0%,#07331E 48%,#0A4328 72%,#03170D 100%);color:#fff;border-bottom:1px solid rgba(243,212,107,.24)}
+.rk-menu-hero:after{content:'🀄';position:absolute;right:-18px;bottom:-30px;font-size:118px;opacity:.045;transform:rotate(-8deg);pointer-events:none}
+.rk-menu-close{position:absolute;right:14px;top:14px;width:34px;height:34px;border-radius:13px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);color:#fff;font-size:16px;font-weight:900;cursor:pointer;z-index:2}
+.rk-menu-avatar{width:58px;height:58px;border-radius:22px;background:linear-gradient(145deg,#FFFDF8,#EEE4D2);border:1px solid rgba(243,212,107,.38);box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;color:#176B42;font-family:'Fraunces',Georgia,serif;font-size:24px;font-weight:950;margin-bottom:12px;position:relative;z-index:1;overflow:hidden}
+.rk-menu-name{font-family:'Fraunces',Georgia,serif;font-size:24px;line-height:1.03;font-weight:950;letter-spacing:-.7px;color:#fff;position:relative;z-index:1}
+.rk-menu-club{font-size:12px;line-height:1.4;color:rgba(255,255,255,.68);font-weight:850;margin-top:5px;position:relative;z-index:1}
+.rk-menu-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;position:relative;z-index:1}
+.rk-menu-badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);color:#F3D46B;font-size:11px;font-weight:950;line-height:1}
+.rk-menu-live-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:11px 13px;background:rgba(23,107,66,.055);border-bottom:1px solid rgba(26,20,16,.06)}
+.rk-menu-live-stat{border-radius:15px;padding:10px 6px;background:rgba(255,255,255,.70);border:1px solid rgba(23,107,66,.075);text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.72)}
+.rk-menu-live-stat strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:17px;line-height:1;color:#176B42;font-weight:950;letter-spacing:-.4px;margin-bottom:5px}
+.rk-menu-live-stat span{display:flex;align-items:center;justify-content:center;gap:5px;font-size:8px;line-height:1.05;letter-spacing:1.1px;text-transform:uppercase;font-weight:950;color:rgba(26,20,16,.50)}
+.rk-menu-scroll{padding:13px;overflow:auto;flex:1}
+.rk-menu-section{display:grid;gap:8px;margin-bottom:13px}
+.rk-menu-section-title{font-size:9px;letter-spacing:2.2px;text-transform:uppercase;color:rgba(26,20,16,.42);font-weight:950;margin:5px 3px 0}
+.rk-menu-row{width:100%;min-height:54px;border-radius:18px;border:1px solid rgba(26,20,16,.07);background:linear-gradient(145deg,#FFFDF8,#F7F0E5);box-shadow:0 4px 14px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78);display:flex;align-items:center;gap:12px;padding:12px 13px;text-align:left;cursor:pointer;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;color:#1A1410}
+.rk-menu-row:hover{transform:translateY(-1px);border-color:rgba(23,107,66,.16);box-shadow:0 8px 22px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.85)}
+.rk-menu-row:active{transform:scale(.992)}
+.rk-menu-row-icon{width:34px;height:34px;border-radius:14px;background:rgba(23,107,66,.075);border:1px solid rgba(23,107,66,.09);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.rk-menu-row strong{display:block;font-size:13px;line-height:1.1;font-weight:950;color:#1A1410}
+.rk-menu-row span{display:block;font-size:10.5px;line-height:1.35;color:#6B6157;font-weight:750;margin-top:3px}
+.rk-menu-cta{position:relative;overflow:hidden;border-color:rgba(23,107,66,.20)!important;background:linear-gradient(135deg,#176B42,#0F5432)!important;color:#fff!important;box-shadow:0 10px 24px rgba(23,107,66,.17),inset 0 1px 0 rgba(255,255,255,.16)!important}
+.rk-menu-cta strong,.rk-menu-cta span{color:#fff!important}.rk-menu-cta span{opacity:.78}
+.rk-menu-footer{padding:13px 15px 16px;border-top:1px solid rgba(26,20,16,.06);text-align:center;font-size:10.5px;line-height:1.5;color:#6B6157;font-weight:800;background:linear-gradient(180deg,rgba(255,255,255,.4),rgba(247,240,229,.75))}
+@media(max-width:380px){.rk-menu-drawer{top:6px;right:6px;bottom:6px;width:calc(100vw - 12px);border-radius:24px}.rk-menu-live-strip{grid-template-columns:1fr}.rk-menu-hero{padding:19px 18px 16px}.rk-menu-name{font-size:22px}}
+
 /* ─── WORDLE-LIKE DAILY SCORECARD SOCIAL POLISH ─────────────────────────── */
 .rk-score-social-room{
   position:relative;
@@ -5481,6 +5520,51 @@ const ST={
   get(k,d){try{const v=JSON.parse(localStorage.getItem("rk-"+k));return v!==null?v:d;}catch{return mem[k]!==undefined?mem[k]:d;}},
   set(k,v){try{localStorage.setItem("rk-"+k,JSON.stringify(v));}catch(e){mem[k]=v;if(e.name==="QuotaExceededError")console.warn("localStorage full");}}
 };
+
+const SESSION_KEY="rk_session_v1";
+const SESSION_DAYS=30;
+const SESSION_AUTH_VERSION="v1";
+function rkNow(){return Date.now();}
+function rkSessionExpiry(){return rkNow()+SESSION_DAYS*24*60*60*1000;}
+function rkReadSession(){
+  const session=ST.get("session_v1",null)||ST.get("session",null);
+  if(!session||!session.expiresAt)return null;
+  if(Number(session.expiresAt)<=rkNow())return null;
+  if(session.authVersion&&session.authVersion!==SESSION_AUTH_VERSION)return null;
+  return session;
+}
+function rkWriteSession(profile={}){
+  const playerId=String(profile.playerId||profile.player_id||ST.get("playerId","")||"").trim();
+  const email=String(profile.email||"").trim().toLowerCase();
+  if(!playerId||!email)return null;
+  const session={
+    playerId,
+    email,
+    nickname:profile.nickname||profile.name||"",
+    club:profile.clubCode||profile.club_code||ST.get("clubCode",null)||null,
+    avatar:profile.avatarUrl||profile.avatar_url||null,
+    streak:Number(profile.streak||ST.get("str",0)||0),
+    expiresAt:rkSessionExpiry(),
+    authVersion:SESSION_AUTH_VERSION,
+  };
+  ST.set("session_v1",session);
+  ST.set("isAuthenticated",true);
+  ST.set("authPlayerId",playerId);
+  return session;
+}
+function rkClearSession(){ST.set("session_v1",null);ST.set("isAuthenticated",false);ST.set("authPlayerId",null);}
+function rkHasValidSession(){return !!rkReadSession();}
+async function rkHydrateSessionFromSupabase(){
+  const session=rkReadSession();
+  if(!session?.email)return null;
+  const remote=await fetchProfileByEmail(session.email);
+  if(!remote)return null;
+  const hydrated=await hydrateRemoteAccount(remote,{replaceLocal:true});
+  if(hydrated?.profile)rkWriteSession(hydrated.profile);
+  return hydrated;
+}
+function rkLogout(){rkClearSession();ST.set("profile",null);ST.set("authPlayerId",null);}
+
 function getDailySeed(){const d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();}
 function getDayNum(){return Math.floor((new Date()-new Date(2026,3,25))/86400000)+1;}
 
@@ -5722,6 +5806,7 @@ function rkApplyRemoteProfileToStorage(remote){
   else ST.set("clubCode",null);
   if(restored.nickname)setClubName(restored.nickname);
   if(restored.passwordHash)setStoredHash(restored.passwordHash);
+  rkWriteSession(restored);
   return restored;
 }
 async function hydrateRemoteAccount(remote,{replaceLocal=true}={}){
@@ -5748,12 +5833,15 @@ async function hydrateRemoteAccount(remote,{replaceLocal=true}={}){
   return{profile:restored,history:remoteHist||[],dailyResult:remoteDaily};
 }
 async function rkHydrateStoredProfileFromSupabase(){
+  const session=rkReadSession();
   const local=getProfile();
-  const email=String(local?.email||"").trim().toLowerCase();
+  const email=String(session?.email||local?.email||"").trim().toLowerCase();
   if(!email)return null;
   const remote=await fetchProfileByEmail(email);
   if(!remote)return null;
-  return hydrateRemoteAccount(remote,{replaceLocal:true});
+  const hydrated=await hydrateRemoteAccount(remote,{replaceLocal:true});
+  if(hydrated?.profile)rkWriteSession(hydrated.profile);
+  return hydrated;
 }
 
 function isClubDisplayName(name){
@@ -6611,11 +6699,12 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
   const hasLocalHash=!!getStoredHash();
 
   const [mode,setMode]=useState(()=>{
-    if(hasProfile)return"view";
+    if(hasProfile||rkHasValidSession())return"view";
     const goto=sessionStorage.getItem("rk-goto");
     if(goto==="signin"){sessionStorage.removeItem("rk-goto");return"signin";}
     return"setup";
   });
+  const [authHydrating,setAuthHydrating]=useState(()=>rkHasValidSession()&&!hasProfile);
   const [profile,setProfileState]=useState(()=>{
     const base=existingProfile||{nickname:"",clubCode:"",avatarUrl:"",email:""};
     const urlClub=getUrlParam("club");
@@ -6640,6 +6729,35 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
   const [loginErr,setLoginErr]=useState("");
   const [loginLoading,setLoginLoading]=useState(false);
   const [showLoginPw,setShowLoginPw]=useState(false);
+
+  useEffect(()=>{
+    let alive=true;
+    if(!authHydrating)return()=>{alive=false};
+    (async()=>{
+      const hydrated=await rkHydrateSessionFromSupabase().catch(()=>null);
+      if(!alive)return;
+      if(hydrated?.profile){
+        setProfileState(hydrated.profile);
+        setMode("view");
+        setUnlocked(true);
+      }
+      setAuthHydrating(false);
+    })();
+    return()=>{alive=false};
+  },[authHydrating]);
+
+  if(authHydrating){
+    return(
+      <div className="rk-pg" style={{...S.pg,paddingTop:18}}>
+        <RackleHeader onBack={home} setScreen={setScreen}/>
+        <div className="rk-premium-card" style={{padding:22,textAlign:"center"}}>
+          <div style={{width:46,height:46,borderRadius:18,margin:"0 auto 12px",background:"rgba(23,107,66,.08)",border:"1px solid rgba(23,107,66,.10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>🀄</div>
+          <div style={{fontFamily:F.d,fontSize:20,fontWeight:950,color:C.ink,letterSpacing:-.4}}>Welcome back</div>
+          <div style={{fontSize:12,color:C.mut,lineHeight:1.55,marginTop:6,fontWeight:750}}>Restoring your Rackle account...</div>
+        </div>
+      </div>
+    );
+  }
 
   const bestIQ=getBestIQ();
   const streakBadge=getStreakBadge(streak);
@@ -6680,6 +6798,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
     if(p.clubCode)setClubCode(p.clubCode);else setClubCode(null);
     if(p.nickname)setClubName(p.nickname);
     await upsertProfile({...p,passwordHash:pwHash});
+    rkWriteSession({...p,passwordHash:pwHash});
     await rkPatchRowsForIdentityMigration({fromPlayerId:previousLocalId&&previousLocalId!==pid?previousLocalId:null,toPlayerId:p.playerId,name:p.nickname,clubCode:p.clubCode||null});
     setSaving(false);setMode("view");setUnlocked(true);
   };
@@ -6718,6 +6837,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
     const restored=await rkAdoptRemoteProfile(remote,previousLocalId);
     const hydrated=await hydrateRemoteAccount(remote,{replaceLocal:true});
     setProfileState(hydrated?.profile||restored);
+    rkWriteSession(hydrated?.profile||restored||remote);
     setStoredHash(remote.passwordHash);
     window.dispatchEvent(new Event("rackle:remoteHydrated"));
     setUnlocked(true);setMode("view");
@@ -9763,6 +9883,110 @@ function ClubPostToast({toast,onDismiss}){
   );
 }
 
+
+function RackleBootSplash(){
+  return(
+    <div className="rk-boot-splash">
+      <div style={{position:"relative",zIndex:1}}>
+        <div className="rk-boot-tile">🀄</div>
+        <div className="rk-boot-logo">Rackle</div>
+        <div className="rk-boot-copy">Setting the table...</div>
+        <div className="rk-boot-shimmer" />
+      </div>
+    </div>
+  );
+}
+
+function PremiumClubMenu({open,onClose,setScreen,go,showSettings,streak=0,dRes=null}){
+  if(!open)return null;
+  const profile=getProfile();
+  const hasProfile=!!(profile?.nickname||profile?.email||rkHasValidSession());
+  const nickname=(profile?.nickname||rkReadSession()?.nickname||"Guest Player").trim();
+  const firstName=nickname.split(" ")[0]||"Guest";
+  const clubName=getAffiliatedClubName(profile?.clubCode||profile?.club_code||getClubCode())||"No club yet";
+  const score=Number(dRes?.iq?.totalScore||rkLatestLocalDailyScore?.()?.iqScore||0)||null;
+  const todayCount=Number(ST.get("rk_menu_today_count",0)||0)||"—";
+  const clubsActive=Number(Object.keys(CLUBS||{}).length||0)||"—";
+  const shares=Number(ST.get("rk_total_shares",0)||0)||"—";
+  const goTo=(screen)=>{onClose?.();setScreen?.(screen);};
+  const goPlay=(mode)=>{onClose?.();go?.(mode);};
+  const shareRackle=async()=>{
+    const text="🀄 Rackle\nThe daily mahjong workout.\nPlay with your club: playrackle.com";
+    try{if(navigator.share)await navigator.share({title:"Rackle",text});else await navigator.clipboard.writeText(text);}catch{}
+    onClose?.();
+  };
+  const logout=()=>{rkLogout();onClose?.();setScreen?.("home");window.dispatchEvent(new Event("rackle:remoteHydrated"));};
+  const Row=({icon,title,sub,onClick,cta=false})=>(
+    <button className={"rk-menu-row"+(cta?" rk-menu-cta":"")} onClick={onClick}>
+      <span className="rk-menu-row-icon">{icon}</span>
+      <span style={{flex:1,minWidth:0}}><strong>{title}</strong>{sub&&<span>{sub}</span>}</span>
+      <span style={{fontSize:14,color:cta?"#fff":"#8A6820",fontWeight:950}}>›</span>
+    </button>
+  );
+  return(
+    <>
+      <div className="rk-menu-backdrop" onClick={onClose}/>
+      <aside className="rk-menu-drawer" role="dialog" aria-modal="true" aria-label="Rackle Clubhouse menu">
+        <div className="rk-menu-hero">
+          <button className="rk-menu-close" onClick={onClose} aria-label="Close menu">×</button>
+          <div className="rk-menu-avatar">{(nickname||"R").charAt(0).toUpperCase()}</div>
+          <div className="rk-menu-name">{hasProfile?nickname:"Rackle Clubhouse"}</div>
+          <div className="rk-menu-club"><span className="rk-live-dot-dynamic" style={{width:7,height:7,display:"inline-block",marginRight:7,verticalAlign:"middle"}}/> {hasProfile?clubName:"Save your streak and join your club"}</div>
+          <div className="rk-menu-badges">
+            <span className="rk-menu-badge">🔥 {Number(streak||profile?.streak||0)}-day streak</span>
+            <span className="rk-menu-badge">🧠 {score?`${score} IQ today`:"Daily ready"}</span>
+          </div>
+        </div>
+        <div className="rk-menu-live-strip">
+          <div className="rk-menu-live-stat"><strong>{todayCount}</strong><span><i className="rk-live-dot-dynamic" style={{width:6,height:6}}/> players</span></div>
+          <div className="rk-menu-live-stat"><strong>{clubsActive}</strong><span><i className="rk-live-dot-dynamic" style={{width:6,height:6}}/> clubs</span></div>
+          <div className="rk-menu-live-stat"><strong>{shares}</strong><span><i className="rk-live-dot-dynamic" style={{width:6,height:6}}/> shares</span></div>
+        </div>
+        <div className="rk-menu-scroll">
+          {!hasProfile&&(
+            <div className="rk-menu-section">
+              <Row icon="🔐" title="Log In" sub="Save your streak. Track your Mahjong IQ." onClick={()=>{sessionStorage.setItem("rk-goto","signin");goTo("profile");}} cta/>
+              <Row icon="✨" title="Create Account" sub="Join your club and keep your scores." onClick={()=>goTo("profile")}/>
+            </div>
+          )}
+          <div className="rk-menu-section">
+            <div className="rk-menu-section-title">Play</div>
+            <Row icon="🀄" title="Play Daily" sub="One rack. One score. Beat the room." onClick={()=>goPlay("daily")}/>
+            <Row icon="🎯" title="Practice Mode" sub="Train another Charleston read." onClick={()=>goPlay("free")}/>
+            <Row icon="🏛️" title="Club Room" sub="See your table and club board." onClick={()=>goTo(getClubCode()?"leaderboard":"clubs")}/>
+            <Row icon="🌎" title="Global Leaderboard" sub="See who owns today’s rack." onClick={()=>goTo("globalLeaderboard")}/>
+          </div>
+          <div className="rk-menu-section">
+            <div className="rk-menu-section-title">Improve</div>
+            <Row icon="📈" title="Stats" sub="Your streak, scores, and progress." onClick={()=>goTo("stats")}/>
+            <Row icon="🃏" title="2026 Card Browser" sub="Scan the card faster." onClick={()=>goTo("handbrowser")}/>
+            <Row icon="🎓" title="Learn Mahjong" sub="Tutorials, glossary, and basics." onClick={()=>goTo("tutorial")}/>
+            <Row icon="❔" title="How To Play" sub="Quick Rackle walkthrough." onClick={()=>goTo("howto")}/>
+          </div>
+          <div className="rk-menu-section">
+            <div className="rk-menu-section-title">Account</div>
+            {hasProfile?(
+              <>
+                <Row icon="👤" title="Profile" sub={firstName?`Signed in as ${firstName}`:"Your Rackle account"} onClick={()=>goTo("profile")}/>
+                <Row icon="⚙️" title="Settings" sub="Sound, motion, and preferences." onClick={()=>{onClose?.();showSettings?showSettings():setScreen?.("settings");}}/>
+                <Row icon="↩️" title="Logout" sub="This device only." onClick={logout}/>
+              </>
+            ):(
+              <Row icon="🔐" title="Log In" sub="Resume your Rackle account." onClick={()=>{sessionStorage.setItem("rk-goto","signin");goTo("profile");}}/>
+            )}
+          </div>
+          <div className="rk-menu-section">
+            <div className="rk-menu-section-title">Share</div>
+            <Row icon="🏆" title="Invite Your Club" sub="Bring your mahjong group in." onClick={()=>goTo("clubs")}/>
+            <Row icon="📨" title="Share Rackle" sub="Send it to the table." onClick={shareRackle}/>
+          </div>
+        </div>
+        <div className="rk-menu-footer">Built for the modern mahjong table.</div>
+      </aside>
+    </>
+  );
+}
+
 function RackleHeader({onBack,setScreen}){
   const [menuOpen,setMenuOpen]=useState(false);
   const profile=getProfile();
@@ -11859,7 +12083,6 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   };
 
   const Menu=()=>{
-    const hasProfile=!!(profile&&profile.nickname);
     return(
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:10,marginBottom:2,position:"relative"}}>
         {streak>0?(
@@ -11870,18 +12093,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <span style={{fontSize:9,color:C.gold,marginLeft:1}}>›</span>
           </button>
         ):<div/>}
-        <button onClick={()=>setMenuOpen(o=>!o)} aria-label="Menu" style={{width:40,height:40,background:menuOpen?C.bg2:"transparent",border:`1px solid ${menuOpen?C.bdr:"transparent"}`,borderRadius:12,cursor:"pointer",display:"flex",flexDirection:"column",gap:4,alignItems:"center",justifyContent:"center"}}>
-          <span style={{display:"block",width:17,height:1.6,background:C.ink,borderRadius:2}}/>
-          <span style={{display:"block",width:17,height:1.6,background:C.ink,borderRadius:2}}/>
-          <span style={{display:"block",width:17,height:1.6,background:C.ink,borderRadius:2}}/>
+        <button onClick={()=>setMenuOpen(o=>!o)} aria-label="Menu" style={{width:42,height:42,background:menuOpen?"linear-gradient(180deg,#F2EBDD,#E9E0CF)":"rgba(23,107,66,.06)",border:`1px solid ${menuOpen?C.bdr:"rgba(23,107,66,.10)"}`,borderRadius:15,cursor:"pointer",display:"flex",flexDirection:"column",gap:4,alignItems:"center",justifyContent:"center",boxShadow:"inset 0 1px 0 rgba(255,255,255,.66),0 4px 14px rgba(26,20,16,.035)"}}>
+          <span style={{display:"block",width:17,height:1.7,background:C.ink,borderRadius:2}}/>
+          <span style={{display:"block",width:17,height:1.7,background:C.ink,borderRadius:2}}/>
+          <span style={{display:"block",width:17,height:1.7,background:C.ink,borderRadius:2}}/>
         </button>
-        {menuOpen&&(
-          <div className="rk-in" style={{position:"absolute",top:44,right:0,zIndex:50,background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:14,boxShadow:"0 12px 34px rgba(0,0,0,0.14)",minWidth:170,overflow:"hidden"}}>
-            <button onClick={()=>{setMenuOpen(false);setScreen("profile");}} style={{width:"100%",padding:"13px 15px",background:hasProfile?"#fff":C.jade+"08",border:"none",borderBottom:`1px solid ${C.bdr}`,cursor:"pointer",textAlign:"left",fontSize:13,fontWeight:800,color:hasProfile?C.ink:C.jade}}>{hasProfile?"View profile":"Join Rackle →"}</button>
-            <button onClick={()=>{setMenuOpen(false);setScreen("leaderboard");}} style={{width:"100%",padding:"13px 15px",background:"#fff",border:"none",borderBottom:`1px solid ${C.bdr}`,cursor:"pointer",textAlign:"left",fontSize:13,fontWeight:700,color:C.ink}}>Leaderboards</button>
-            <button onClick={()=>{setMenuOpen(false);showSettings();}} style={{width:"100%",padding:"13px 15px",background:"#fff",border:"none",cursor:"pointer",textAlign:"left",fontSize:13,fontWeight:700,color:C.ink}}>Settings</button>
-          </div>
-        )}
+        <PremiumClubMenu open={menuOpen} onClose={()=>setMenuOpen(false)} setScreen={setScreen} go={go} showSettings={showSettings} streak={streak} dRes={dRes}/>
       </div>
     );
   };
@@ -14321,6 +14538,8 @@ export default function Rackle(){
   const [badgeToast,setBadgeToast]=useState(null);
   const [clubPostToast,setClubPostToast]=useState(null);
   const [showWeeklyNudge,setShowWeeklyNudge]=useState(shouldShowWeeklyRecap);
+  const [isHydrated,setIsHydrated]=useState(false);
+  const [appReady,setAppReady]=useState(false);
   const isFirstDaily=!ST.get("hadFirstDaily",false);
 
   // Fetch clubs and hydrate registered profile from Supabase on load.
@@ -14328,23 +14547,6 @@ export default function Rackle(){
   useEffect(()=>{
     fetchClubs();
     let cancelled=false;
-    (async()=>{
-      const hydrated=await rkHydrateStoredProfileFromSupabase().catch(err=>{console.warn("Remote profile hydrate failed",err);return null;});
-      if(cancelled)return;
-      if(hydrated?.profile){
-        setStreak(hydrated.profile.streak||0);
-        setRounds(hydrated.profile.roundsPlayed||0);
-        if(hydrated.dailyResult){
-          setDDone(true);
-          setDRes(hydrated.dailyResult);
-        }else{
-          setDDone(ST.get("dd",null)===getDailySeed());
-          setDRes(ST.get("dres",null));
-        }
-      }else{
-        rkSyncLocalProfileToSupabase("app_load").catch(err=>console.warn("Profile sync failed",err));
-      }
-    })();
     const refresh=()=>{
       setStreak(ST.get("str",0));
       setRounds(ST.get("rnd",0));
@@ -14352,10 +14554,30 @@ export default function Rackle(){
       setDRes(ST.get("dres",null));
     };
     window.addEventListener("rackle:remoteHydrated",refresh);
-    // Handle /clubs/[slug] URL routing
-    const path=window.location.pathname;
-    const clubMatch=path.match(/\/clubs\/(.+)/);
-    if(clubMatch)setScreen("clubs");
+    (async()=>{
+      try{
+        const hydrated=await rkHydrateStoredProfileFromSupabase().catch(err=>{console.warn("Remote profile hydrate failed",err);return null;});
+        if(cancelled)return;
+        if(hydrated?.profile){
+          setStreak(hydrated.profile.streak||0);
+          setRounds(hydrated.profile.roundsPlayed||0);
+          if(hydrated.dailyResult){
+            setDDone(true);
+            setDRes(hydrated.dailyResult);
+          }else{
+            setDDone(ST.get("dd",null)===getDailySeed());
+            setDRes(ST.get("dres",null));
+          }
+        }else if(getProfile()?.nickname){
+          rkSyncLocalProfileToSupabase("app_load").catch(err=>console.warn("Profile sync failed",err));
+        }
+        const path=window.location.pathname;
+        const clubMatch=path.match(/\/clubs\/(.+)/);
+        if(clubMatch)setScreen("clubs");
+      }finally{
+        if(!cancelled){setIsHydrated(true);setAppReady(true);}
+      }
+    })();
     return()=>{cancelled=true;window.removeEventListener("rackle:remoteHydrated",refresh);};
   },[]);
 
@@ -14411,6 +14633,14 @@ export default function Rackle(){
   };
 
   const go=(m)=>{setMode(m);setScreen("play");};
+
+  if(!appReady){
+    return(
+      <AppShell>
+        <RackleBootSplash/>
+      </AppShell>
+    );
+  }
 
   return(
     <AppShell>
