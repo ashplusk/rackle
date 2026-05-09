@@ -1469,6 +1469,109 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-social-presence-wrap + .rk-home-section-lg{
   margin-top:6px!important;
 }
+
+
+/* ─── vNext FOOTER + CLOSED LEADERBOARD + HERO PILL TUNE ─────────────────── */
+.rk-footer > .rk-footer-inner > div:first-child > div[aria-hidden="true"]{
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+@media(min-width:900px){
+  .rk-footer-inner > div:first-child > div[aria-hidden="true"]{
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+}
+
+/* tighten the hero-to-club-active transition without making it cramped */
+.rk-home-ritual-hero{
+  padding-bottom:14px!important;
+}
+.rk-home-ritual-hero .rk-hero-status{
+  margin-top:8px!important;
+}
+.rk-home-ritual-hero .rk-hero-status p:last-child{
+  margin-bottom:0!important;
+}
+.rk-social-presence-wrap{
+  margin-top:-4px!important;
+  margin-bottom:20px!important;
+}
+.rk-club-active-pill{
+  transform:translateY(-1px);
+}
+
+/* closed leaderboard preview cards: cleaner, more premium, less heavy */
+.rk-clubhouse-stack .rk-quiet-board:not(.rk-global-board-open) .rk-quiet-board-head{
+  min-height:94px!important;
+  padding:16px 16px!important;
+  background:
+    radial-gradient(circle at top left,rgba(255,255,255,.72),transparent 40%),
+    linear-gradient(145deg,#FFFDF8 0%,#F5EEE3 100%)!important;
+}
+.rk-clubhouse-stack .rk-quiet-board:not(.rk-global-board-open) .rk-quiet-head-closed:after{
+  left:18px!important;
+  right:18px!important;
+  bottom:0!important;
+  background:linear-gradient(90deg,transparent,rgba(160,120,40,.22),transparent)!important;
+}
+.rk-clubhouse-stack .rk-quiet-board:not(.rk-global-board-open) .rk-quiet-topline{
+  margin-bottom:7px!important;
+  gap:9px!important;
+}
+.rk-clubhouse-stack .rk-quiet-board:not(.rk-global-board-open) .rk-quiet-mini-icon{
+  width:38px!important;
+  height:38px!important;
+  border-radius:14px!important;
+  background:linear-gradient(145deg,#FFFDF8,#ECE2D2)!important;
+  box-shadow:0 5px 14px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.88)!important;
+}
+.rk-clubhouse-stack .rk-quiet-board:not(.rk-global-board-open) .rk-quiet-kicker{
+  margin-bottom:0!important;
+  line-height:1.2!important;
+}
+.rk-clubhouse-stack .rk-quiet-board:not(.rk-global-board-open) .rk-quiet-title{
+  font-size:20px!important;
+  line-height:1.04!important;
+  margin-top:2px!important;
+  margin-bottom:8px!important;
+}
+.rk-clubhouse-stack .rk-quiet-board:not(.rk-global-board-open) .rk-quiet-preview-line{
+  margin-top:8px!important;
+  gap:7px!important;
+}
+.rk-clubhouse-stack .rk-quiet-board:not(.rk-global-board-open) .rk-quiet-preview-pill{
+  padding:6px 9px!important;
+  font-size:10.25px!important;
+  border-color:rgba(26,20,16,.055)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.65)!important;
+}
+.rk-clubhouse-stack .rk-quiet-board:not(.rk-global-board-open) .rk-quiet-chevron{
+  width:40px!important;
+  height:40px!important;
+  border-radius:16px!important;
+  box-shadow:0 5px 14px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-clubhouse-stack .rk-quiet-board:not(.rk-global-board-open):hover .rk-quiet-chevron{
+  transform:translateY(-1px);
+}
+@media(max-width:420px){
+  .rk-clubhouse-stack .rk-quiet-board:not(.rk-global-board-open) .rk-quiet-board-head{
+    min-height:88px!important;
+    padding:14px 14px!important;
+  }
+  .rk-clubhouse-stack .rk-quiet-board:not(.rk-global-board-open) .rk-quiet-title{
+    font-size:19px!important;
+  }
+  .rk-clubhouse-stack .rk-quiet-board:not(.rk-global-board-open) .rk-quiet-mini-icon{
+    width:34px!important;
+    height:34px!important;
+  }
+  .rk-clubhouse-stack .rk-quiet-board:not(.rk-global-board-open) .rk-quiet-chevron{
+    width:38px!important;
+    height:38px!important;
+  }
+}
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
@@ -8294,7 +8397,7 @@ function Footer(){
     <div className="rk-footer">
       <div className="rk-footer-inner">
         <div>
-          <div aria-hidden="true" style={{width:40,height:1,background:C.bdr,margin:"0 0 16px"}}/>
+          <div aria-hidden="true" style={{width:40,height:1,background:C.bdr,margin:"0 auto 16px"}}/>
           <div style={{fontSize:12,color:C.jade,fontFamily:F.d,fontStyle:"italic"}}>The Daily Mahjong Workout 🀄</div>
           <div style={{fontSize:11,color:C.mut,marginTop:8,lineHeight:1.6}}>Made for the American Mahjong community</div>
           <div style={{marginTop:12}}><a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,letterSpacing:-0.3,textDecoration:"none"}}>Rackle</a></div>
