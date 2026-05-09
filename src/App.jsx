@@ -5075,7 +5075,7 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
 
   // ── PASS QUALITY: hand-aware strong/weak tile determination ──────────────────
   let{passQualityScore,passInsights,brokenPairsCount}=iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId,chosenHandObj);
-  const{timingScore,timingInsight}=iqTiming(totalTime||0,roundCount,passedTilesByRound);
+  let{timingScore,timingInsight}=iqTiming(totalTime||0,roundCount,passedTilesByRound);
 
   // ── OUTCOME VALIDATION FLOOR ─────────────────────────────────────────────────
   // Outcome validation floor: if direction AND tile strength are both high (now using honest
