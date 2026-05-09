@@ -437,6 +437,31 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-email-home input{text-align:left!important}
 @media(max-width:390px){.rk-quiet-title{font-size:20px}.rk-quiet-board-head{padding:16px 14px}.rk-quiet-pill-row{gap:6px}.rk-quiet-pill{font-size:10.5px;padding:6px 9px}.rk-quiet-leader{padding:13px}.rk-quiet-row{grid-template-columns:30px minmax(0,1fr) auto;padding:10px}.rk-quiet-score{font-size:22px}}
 
+
+
+/* ─── vNext CLOSED LEADERBOARDS + SIGNUP ALIGNMENT ───────────────────────── */
+.rk-email-home{text-align:left!important}
+.rk-email-home p{text-align:left!important;margin-left:0!important;margin-right:0!important}
+.rk-email-home input{text-align:left!important}
+.rk-quiet-board{border-radius:24px!important;background:linear-gradient(145deg,#FFFDF8 0%,#F6EFE4 100%)!important;border:1px solid rgba(26,20,16,.075)!important;box-shadow:0 10px 28px rgba(26,20,16,.042),inset 0 1px 0 rgba(255,255,255,.82)!important}
+.rk-quiet-board-head{padding:15px 15px!important;align-items:center!important;background:linear-gradient(145deg,#FFFDF8 0%,#F7F0E5 100%)!important;min-height:104px}
+.rk-quiet-board-head:active{transform:scale(.995)}
+.rk-quiet-head-closed{position:relative;overflow:hidden}
+.rk-quiet-head-closed:after{content:'';position:absolute;left:16px;right:16px;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(160,120,40,.18),transparent);pointer-events:none}
+.rk-quiet-head-open{border-bottom:1px solid rgba(26,20,16,.07)!important}
+.rk-quiet-topline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.rk-quiet-mini-icon{width:32px;height:32px;border-radius:12px;background:linear-gradient(145deg,#FFFDF8,#EEE4D2);border:1px solid rgba(26,20,16,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.86),0 4px 12px rgba(26,20,16,.04);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.rk-quiet-title{font-size:20px!important;margin:0!important;letter-spacing:-.45px!important}
+.rk-quiet-preview-line{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px}
+.rk-quiet-preview-pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:6px 9px;background:rgba(26,20,16,.045);border:1px solid rgba(26,20,16,.055);font-size:10.5px;font-weight:900;color:#6B6157;line-height:1;white-space:nowrap}
+.rk-quiet-preview-pill-green{background:rgba(23,107,66,.075);border-color:rgba(23,107,66,.11);color:#176B42}
+.rk-quiet-preview-pill-blue{background:rgba(36,96,168,.075);border-color:rgba(36,96,168,.12);color:#2460A8}
+.rk-quiet-preview-pill-gold{background:rgba(201,168,76,.13);border-color:rgba(201,168,76,.18);color:#8A6820}
+.rk-quiet-live{padding:4px 9px!important;font-size:9.5px!important}
+.rk-quiet-chevron{width:36px!important;height:36px!important;border-radius:15px!important;background:linear-gradient(145deg,#FFFDF8,#F0E7D8)!important;color:#176B42!important;transition:transform .18s ease,box-shadow .18s ease}
+.rk-quiet-chevron:hover{box-shadow:0 6px 14px rgba(26,20,16,.06),inset 0 1px 0 rgba(255,255,255,.84)}
+@media(max-width:390px){.rk-quiet-board-head{padding:14px 13px!important;min-height:98px}.rk-quiet-title{font-size:19px!important}.rk-quiet-preview-line{gap:5px}.rk-quiet-preview-pill{font-size:10px;padding:6px 8px}.rk-quiet-mini-icon{width:30px;height:30px}}
+
 @media (prefers-reduced-motion: reduce){.rk-hero-live,.rk-iq-hero,.rk-soft-glow,.rk-count-live,.rk-streak-copy,.rk-float,.rk-pulse,.rk-live-dot,.rk-sweep:after{animation:none!important}}
 `;
 const S={
@@ -7755,11 +7780,11 @@ function EmailSignup(){
     catch{setErr("Something went wrong. Try again.");}
   };
   return(
-    <div className="rk-email-home" style={{...S.card,background:"linear-gradient(145deg,#FFFFF8,#F4EFE3)",borderColor:C.jade+"25",marginBottom:8}}>
-      <div style={{fontSize:10,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>STAY IN THE LOOP</div>
+    <div className="rk-email-home" style={{...S.card,background:"linear-gradient(145deg,#FFFFF8,#F4EFE3)",borderColor:C.jade+"25",marginBottom:8,textAlign:"left"}}>
+      <div style={{fontSize:10,color:C.jade,letterSpacing:1.5,fontWeight:800,marginBottom:6,textAlign:"left"}}>STAY IN THE LOOP</div>
       {done?(<div style={{textAlign:"center",padding:"8px 0"}}><div style={{fontSize:18,marginBottom:4}}>🀄</div><div style={{fontSize:13,fontWeight:700,color:C.jade}}>You're on the list!</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>We'll let you know when we drop updates.</div></div>):(
         <>
-          <p style={{fontSize:12,color:C.mut,margin:"0 0 10px",lineHeight:1.5}}>Get notified about new features, updates, and more.</p>
+          <p style={{fontSize:12,color:C.mut,margin:"0 0 10px",lineHeight:1.5,textAlign:"left"}}>Get notified about new features, updates, and more.</p>
           <div style={{display:"flex",gap:6}}>
             <input type="email" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} placeholder="your@email.com" aria-label="Email address for updates" style={{flex:1,padding:"10px 12px",borderRadius:10,border:`1.5px solid ${err?C.cinn:C.bdr}`,fontSize:12,fontFamily:F.b,background:"#fff",color:C.ink,outline:"none"}}/>
             <button onClick={submit} style={{padding:"10px 16px",borderRadius:10,border:"none",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:F.b,whiteSpace:"nowrap"}}>Notify me</button>
@@ -7858,18 +7883,21 @@ function ClubCodeEntry({setScreen,clubEntries=[],currentScore=0,currentRank=null
 
   return(
     <div style={{marginBottom:0}}>
-      <button onClick={()=>savedClub?setOpen(o=>!o):setScreen("clubs")} className="rk-quiet-board-head" style={{borderTop:`1px solid ${C.bdr}`}} aria-expanded={open}>
+      <button onClick={()=>savedClub?setOpen(o=>!o):setScreen("clubs")} className={`rk-quiet-board-head ${open?"rk-quiet-head-open":"rk-quiet-head-closed"}`} style={{borderTop:`1px solid ${C.bdr}`}} aria-expanded={open}>
         <div style={{flex:1,minWidth:0}}>
-          <div className="rk-quiet-kicker">
-            <span>{savedClub?"Your club · Today":"Join your club"}</span>
-            {savedClub&&<span className="rk-quiet-live"><span className="rk-quiet-live-dot"/>Active</span>}
+          <div className="rk-quiet-topline">
+            <span className="rk-quiet-mini-icon">{savedClub?"🗝️":"🏛️"}</span>
+            <div className="rk-quiet-kicker" style={{marginBottom:0}}>
+              <span>{savedClub?"Your club · Today":"Join your club"}</span>
+              {savedClub&&<span className="rk-quiet-live"><span className="rk-quiet-live-dot"/>Active</span>}
+            </div>
           </div>
           <div className="rk-quiet-title">{savedClub?savedClub.name:"Club Leaderboard"}</div>
           {savedClub?(
-            <div className="rk-quiet-pill-row">
-              <span className="rk-quiet-pill">{liveCount||1} scores live</span>
-              {topScore&&<span className="rk-quiet-pill rk-quiet-pill-gold">{topScore} leads</span>}
-              {myRank&&<span className="rk-quiet-pill rk-quiet-pill-blue">You’re #{myRank}</span>}
+            <div className="rk-quiet-preview-line">
+              <span className="rk-quiet-preview-pill rk-quiet-preview-pill-green">{liveCount||1} live</span>
+              {topScore&&<span className="rk-quiet-preview-pill rk-quiet-preview-pill-gold">{topScore} leads</span>}
+              {myRank&&<span className="rk-quiet-preview-pill rk-quiet-preview-pill-blue">You #{myRank}</span>}
             </div>
           ):(<div style={{fontSize:12,color:C.mut,lineHeight:1.55}}>Bring your table online with one shared club board.</div>)}
         </div>
@@ -7960,18 +7988,21 @@ function GlobalLeaderboardPill({setScreen}){
 
   return(
     <div id="global-leaderboard" className="rk-quiet-board" style={{marginBottom:0,borderRadius:22}}>
-      <button onClick={toggle} className="rk-quiet-board-head" aria-expanded={open}>
+      <button onClick={toggle} className={`rk-quiet-board-head ${open?"rk-quiet-head-open":"rk-quiet-head-closed"}`} aria-expanded={open}>
         <div style={{flex:1,minWidth:0}}>
-          <div className="rk-quiet-kicker" style={{color:"#2460A8"}}>
-            <span>🌍 Global · Day #{dn}</span>
-            {hasData&&<span className="rk-quiet-live"><span className="rk-quiet-live-dot"/>Live room</span>}
+          <div className="rk-quiet-topline">
+            <span className="rk-quiet-mini-icon">🌍</span>
+            <div className="rk-quiet-kicker" style={{color:"#2460A8",marginBottom:0}}>
+              <span>Global · Day #{dn}</span>
+              {hasData&&<span className="rk-quiet-live"><span className="rk-quiet-live-dot"/>Live room</span>}
+            </div>
           </div>
           <div className="rk-quiet-title">Rackle Leaderboard</div>
           {hasData?(
-            <div className="rk-quiet-pill-row">
-              <span className="rk-quiet-pill rk-quiet-pill-blue">{entries.length} players read today</span>
-              {leader&&<span className="rk-quiet-pill rk-quiet-pill-gold">{leader.iqScore} leads</span>}
-              {myRank>0?<span className="rk-quiet-pill">You’re #{myRank}</span>:<span className="rk-quiet-pill rk-quiet-pill-gold">Play Daily to rank</span>}
+            <div className="rk-quiet-preview-line">
+              <span className="rk-quiet-preview-pill rk-quiet-preview-pill-blue">{entries.length} players</span>
+              {leader&&<span className="rk-quiet-preview-pill rk-quiet-preview-pill-gold">{leader.iqScore} leads</span>}
+              {myRank>0?<span className="rk-quiet-preview-pill rk-quiet-preview-pill-green">You #{myRank}</span>:<span className="rk-quiet-preview-pill rk-quiet-preview-pill-gold">Play to rank</span>}
             </div>
           ):(<div style={{fontSize:12,color:C.mut,lineHeight:1.55}}>{loading?"Loading the room…":liveCopy}</div>)}
         </div>
