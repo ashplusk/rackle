@@ -419,6 +419,200 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-quiet-board-panel{padding-top:16px!important;padding-bottom:18px!important}
 .rk-quiet-leader{background:linear-gradient(150deg,#041F12 0%,#07331E 46%,#0A4328 70%,#03170D 100%)!important}
 
+
+
+/* ─── vNext CLUB ORGANIZER PREMIUM CARD v2 ──────────────────────────────── */
+.rk-organizer-card{
+  position:relative;
+  overflow:hidden;
+  text-align:left!important;
+  background:
+    radial-gradient(circle at top left,rgba(255,255,255,.72),transparent 34%),
+    linear-gradient(145deg,#F6FCF8 0%,#EAF5EF 62%,#F8F4EE 100%)!important;
+  border:1.5px solid rgba(23,107,66,.15)!important;
+  box-shadow:0 12px 34px rgba(23,107,66,.075),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-organizer-card:after{
+  content:'🀄';
+  position:absolute;
+  right:-14px;
+  bottom:-26px;
+  font-size:104px;
+  opacity:.035;
+  transform:rotate(-8deg);
+  pointer-events:none;
+}
+.rk-organizer-topline{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:9px;
+}
+.rk-organizer-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  border-radius:999px;
+  padding:6px 10px;
+  background:rgba(23,107,66,.075);
+  border:1px solid rgba(23,107,66,.12);
+  color:#176B42;
+  font-size:9px;
+  letter-spacing:1.65px;
+  text-transform:uppercase;
+  font-weight:950;
+  line-height:1;
+}
+.rk-organizer-badge-dot{
+  width:7px;
+  height:7px;
+  border-radius:99px;
+  background:#4CD987;
+  box-shadow:0 0 0 4px rgba(76,217,135,.10),0 0 12px rgba(76,217,135,.45);
+}
+.rk-organizer-mini-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  padding:6px 10px;
+  background:rgba(201,168,76,.11);
+  border:1px solid rgba(201,168,76,.18);
+  color:#8A6820;
+  font-size:10px;
+  font-weight:900;
+  white-space:nowrap;
+}
+.rk-organizer-title{
+  position:relative;
+  z-index:1;
+  font-family:'Fraunces',Georgia,serif;
+  font-size:25px;
+  line-height:1.02;
+  letter-spacing:-.7px;
+  font-weight:950;
+  color:#1A1410;
+  margin:0 0 9px;
+  max-width:11ch;
+}
+.rk-organizer-copy{
+  position:relative;
+  z-index:1;
+  font-size:13px;
+  line-height:1.55;
+  color:rgba(26,20,16,.62);
+  font-weight:650;
+  margin:0 0 15px;
+  max-width:32ch;
+}
+.rk-organizer-benefits{
+  position:relative;
+  z-index:1;
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:9px!important;
+  margin:15px 0 17px!important;
+}
+.rk-organizer-benefit{
+  align-items:flex-start!important;
+  justify-content:flex-start!important;
+  gap:11px!important;
+  padding:12px!important;
+  border-radius:17px!important;
+  background:rgba(255,255,255,.70)!important;
+  border:1px solid rgba(23,107,66,.09)!important;
+  box-shadow:0 4px 14px rgba(23,107,66,.035),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-organizer-benefit-dot{
+  margin-top:4px;
+  width:9px!important;
+  height:9px!important;
+  background:#176B42!important;
+  box-shadow:0 0 0 5px rgba(23,107,66,.08)!important;
+}
+.rk-organizer-benefit-text{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  text-align:left!important;
+  line-height:1.2!important;
+}
+.rk-organizer-benefit-text strong{
+  font-size:13px;
+  line-height:1.15;
+  color:#1A1410;
+  font-weight:950;
+}
+.rk-organizer-benefit-text span{
+  font-size:11px;
+  line-height:1.35;
+  color:rgba(26,20,16,.56);
+  font-weight:700;
+}
+.rk-organizer-actions{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:1.35fr .75fr;
+  gap:9px;
+}
+.rk-organizer-primary{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:50px;
+  padding:13px 12px;
+  border-radius:15px;
+  background:linear-gradient(135deg,#0F633C,#06351F)!important;
+  color:#fff;
+  font-size:15px;
+  font-weight:950;
+  font-family:'Fraunces',Georgia,serif;
+  text-decoration:none;
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 10px 24px rgba(23,107,66,.20),inset 0 1px 0 rgba(255,255,255,.18);
+}
+.rk-organizer-secondary{
+  min-height:50px;
+  padding:13px 10px;
+  border-radius:15px;
+  border:1px solid rgba(23,107,66,.16)!important;
+  background:rgba(255,255,255,.72)!important;
+  color:#176B42;
+  font-size:13px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78);
+}
+.rk-organizer-proof{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex-wrap:wrap;
+  margin:1px 0 15px;
+}
+.rk-organizer-proof span{
+  display:inline-flex;
+  align-items:center;
+  border-radius:999px;
+  padding:6px 9px;
+  background:rgba(255,255,255,.62);
+  border:1px solid rgba(26,20,16,.06);
+  font-size:10.5px;
+  color:rgba(26,20,16,.60);
+  font-weight:850;
+}
+@media(max-width:390px){
+  .rk-organizer-title{font-size:23px;max-width:12ch}
+  .rk-organizer-actions{grid-template-columns:1fr}
+  .rk-organizer-secondary{min-height:46px}
+}
+
 /* ─── vNext SOCIAL PREVIEW BOARDS + IMPROVE GAME OVERHAUL ───────────────── */
 @keyframes rkTablePulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(76,217,135,.28),0 0 12px rgba(76,217,135,.46)}50%{transform:scale(1.08);box-shadow:0 0 0 8px rgba(76,217,135,0),0 0 18px rgba(76,217,135,.62)}}
 @keyframes rkSocialSlide{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -9465,22 +9659,32 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       </div>
       {!activeClubCode&&(
         <div className="rk-organizer-card">
-          <div style={{fontSize:9,color:C.jade,letterSpacing:2.2,fontWeight:900,marginBottom:6}}>FOR CLUB ORGANIZERS</div>
-          <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:C.ink,lineHeight:1.12,marginBottom:8,letterSpacing:-0.25}}>Your club room starts here</div>
+          <div className="rk-organizer-topline">
+            <div className="rk-organizer-badge"><span className="rk-organizer-badge-dot"/>FOR CLUB ORGANIZERS</div>
+            <div className="rk-organizer-mini-pill">Founding clubs</div>
+          </div>
+          <h3 className="rk-organizer-title">Bring your table online.</h3>
+          <p className="rk-organizer-copy">Give your group one shared rack, one daily board, and one reason to talk Mahjong between games.</p>
+          <div className="rk-organizer-proof">
+            <span>Private code</span>
+            <span>Daily scores</span>
+            <span>Club bragging rights</span>
+          </div>
           <div className="rk-organizer-benefits">
             {[
-              "Daily Rackle",
-              "Private leaderboard"
-            ].map((item)=>(
-              <div key={item} className="rk-organizer-benefit">
+              ["Shared daily ritual","Everyone plays the same Charleston and compares reads."],
+              ["Private club board","Members chase today’s score without extra setup."],
+              ["More table talk","A simple reason to come back before the next game."]
+            ].map(([title,sub])=>(
+              <div key={title} className="rk-organizer-benefit">
                 <span className="rk-organizer-benefit-dot"/>
-                <span className="rk-organizer-benefit-text">{item}</span>
+                <span className="rk-organizer-benefit-text"><strong>{title}</strong><span>{sub}</span></span>
               </div>
             ))}
           </div>
-          <div style={{display:"flex",gap:9}}>
-            <a href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20" style={{flex:2,display:"flex",alignItems:"center",justifyContent:"center",padding:"13px 0",borderRadius:12,background:`linear-gradient(135deg,${C.jade},#115C38)`,color:"#fff",fontSize:14,fontWeight:900,fontFamily:F.d,textDecoration:"none"}}>Start my club →</a>
-            <button onClick={()=>setScreen("clubs")} style={{flex:1,padding:"13px 0",borderRadius:12,border:`1px solid ${C.jade}28`,background:"#fff",color:C.jade,fontSize:12,fontWeight:800,cursor:"pointer"}}>Join</button>
+          <div className="rk-organizer-actions">
+            <a className="rk-organizer-primary" href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20">Start my club →</a>
+            <button className="rk-organizer-secondary" onClick={()=>setScreen("clubs")}>Join one</button>
           </div>
         </div>
       )}
