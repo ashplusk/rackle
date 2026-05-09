@@ -269,6 +269,33 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-tutorial-choice{width:100%;border:1px solid rgba(26,20,16,.075);background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border-radius:18px;padding:13px 14px;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;box-shadow:0 4px 14px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.76)}
 .rk-tutorial-choice strong{font-family:'Fraunces',Georgia,serif;color:#1A1410;font-size:14px}.rk-tutorial-choice span{font-size:12px;color:#6B6157;line-height:1.45}
 
+
+
+/* ─── vNext DROPDOWN CONNECTIONS + HAND BROWSER + WEEKLY RECAP ───────────── */
+.rk-clubhouse-stack{margin-bottom:18px;border:1px solid rgba(26,20,16,.08);border-radius:22px;overflow:hidden;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);box-shadow:0 10px 30px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)}
+.rk-clubhouse-stack .rk-leaderboard-card{border-radius:0!important;margin:0!important;box-shadow:none!important;border-left:none!important;border-right:none!important;border-top:none!important;background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important}
+.rk-clubhouse-stack > div:first-child .rk-leaderboard-card{border-radius:22px 22px 0 0!important}
+.rk-clubhouse-stack > div:not(:last-child){border-bottom:1px solid rgba(26,20,16,.07)}
+.rk-clubhouse-stack .rk-connected-panel{border-left:none!important;border-right:none!important;border-bottom:none!important;border-radius:0!important;background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.72)!important}
+.rk-clubhouse-stack .rk-connected-panel:last-child{border-radius:0 0 22px 22px!important}
+.rk-clubhouse-stack input{background:#FFFDF8!important}
+.rk-connected-panel{background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;border:1px solid rgba(26,20,16,.075)!important;border-top:none!important;border-radius:0 0 22px 22px!important;box-shadow:0 10px 26px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)!important}
+
+.rk-browser-sticky{position:sticky;top:0;z-index:12;padding:10px 0 12px;background:linear-gradient(180deg,#F8F4EE 72%,rgba(248,244,238,0));backdrop-filter:blur(8px)}
+.rk-browser-prompt{border-radius:22px;padding:18px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(23,107,66,.10);box-shadow:0 8px 24px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78);text-align:center;margin:10px 0 14px}
+.rk-browser-load{width:100%;border:1px solid rgba(23,107,66,.14);background:linear-gradient(180deg,#F2EBDD,#E9E0CF);color:#176B42;border-radius:16px;padding:13px 14px;font-weight:900;font-size:13px;cursor:pointer;box-shadow:0 5px 14px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.72)}
+.rk-hand-count-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 10px;background:rgba(23,107,66,.07);border:1px solid rgba(23,107,66,.10);font-size:11px;font-weight:900;color:#176B42}
+@media(max-width:420px){.rk-browser-hero{padding:21px 15px!important}.rk-section-card{min-height:92px!important}.rk-section-grid{gap:8px!important}.rk-hand-card{font-size:.96em}.rk-browser-search{text-align:left!important}}
+
+.rk-recap-shell{text-align:center;padding-bottom:58px!important}
+.rk-recap-hero{position:relative;overflow:hidden;border-radius:28px!important;background:linear-gradient(150deg,#062B18,#0D4A2E 58%,#051F11)!important;border:1px solid rgba(201,168,76,.18)!important;box-shadow:0 18px 48px rgba(6,43,24,.22),inset 0 1px 0 rgba(255,255,255,.08)!important;padding:28px 20px 22px!important;margin-bottom:14px!important}
+.rk-recap-hero:after{content:'🀄';position:absolute;right:-18px;bottom:-26px;font-size:112px;opacity:.045;transform:rotate(-8deg);pointer-events:none}
+.rk-recap-card{background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;border:1px solid rgba(26,20,16,.075)!important;border-radius:22px!important;box-shadow:0 8px 26px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)!important;text-align:center!important}
+.rk-recap-metric-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:12px}
+.rk-recap-metric{border-radius:18px;padding:14px 8px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.07);box-shadow:0 5px 16px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.76);text-align:center}
+.rk-recap-metric strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:24px;line-height:1;font-weight:900;margin-bottom:7px}
+.rk-recap-metric span{font-size:8px;letter-spacing:1.6px;text-transform:uppercase;font-weight:900;color:rgba(26,20,16,.48)}
+
 @media (prefers-reduced-motion: reduce){.rk-hero-live,.rk-iq-hero,.rk-soft-glow,.rk-count-live,.rk-streak-copy,.rk-float,.rk-pulse,.rk-live-dot,.rk-sweep:after{animation:none!important}}
 `;
 const S={
@@ -4048,11 +4075,11 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.jade}}>{avgIQ}</div>
             <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>AVG SCORE</div>
           </div>}
-          {bestIQ&&<div style={{flex:1,background:C.gold+"08",borderRadius:10,padding:"10px",textAlign:"center",border:`1px solid ${C.gold}15`}}>
+          {bestIQ&&<div className="rk-recap-metric" style={{color:C.gold}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.gold}}>{bestIQ.score}</div>
             <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>BEST SCORE</div>
           </div>}
-          <div style={{flex:1,background:C.cinn+"06",borderRadius:10,padding:"10px",textAlign:"center",border:`1px solid ${C.cinn}15`}}>
+          <div className="rk-recap-metric" style={{color:C.cinn}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.cinn}}>{streak}</div>
             <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>STREAK</div>
           </div>
@@ -7601,7 +7628,7 @@ function InlineCodeEntry({setScreen}){
         <span style={{fontSize:12,color:C.jade,opacity:0.7,transform:open?"rotate(180deg)":"rotate(0deg)",transition:"transform 0.2s",display:"inline-block"}}>▾</span>
       </button>
       {open&&(
-        <div className="rk-in" style={{padding:"0 14px 14px"}}>
+        <div className="rk-in rk-connected-panel" style={{padding:"0 14px 14px"}}>
           <div style={{display:"flex",gap:8,width:"100%",boxSizing:"border-box"}}>
             <input
               value={code}
@@ -7692,7 +7719,7 @@ function ClubCodeEntry({setScreen,clubEntries=[],currentScore=0,currentRank=null
         <span style={{fontSize:11,color:C.jade,opacity:0.7,marginLeft:8,marginTop:2}}>{savedClub?(open?"▴":"▾"):"→"}</span>
       </button>
 
-      {open&&<div className="rk-in" style={{background:"#fff",border:`1px solid ${C.jade+"25"}`,borderTop:"none",borderRadius:"0 0 12px 12px",padding:"14px 16px"}}>
+      {open&&<div className="rk-in rk-connected-panel" style={{background:"#fff",border:`1px solid ${C.jade+"25"}`,borderTop:"none",borderRadius:"0 0 20px 20px",padding:"14px 16px"}}>
         {savedClub?(
           <>
             <button onClick={()=>setScreen("leaderboard")} style={{width:"100%",borderRadius:12,background:C.sage,border:`1px solid ${C.sageB}25`,cursor:"pointer",display:"flex",alignItems:"center",gap:12,padding:"12px 14px",marginBottom:10,textAlign:"left"}}>
@@ -7803,7 +7830,7 @@ function GlobalLeaderboardPill({setScreen}){
         <span style={{fontSize:11,color:"#2460A8",opacity:0.7,marginLeft:8,marginTop:2}}>{open?"▴":"▾"}</span>
       </button>
 
-      {open&&<div className="rk-in" style={{border:`1px solid #2460A825`,borderTop:"none",borderRadius:"0 0 0 0",overflow:"hidden",background:"#fff"}}>
+      {open&&<div className="rk-in rk-connected-panel" style={{border:`1px solid #2460A825`,borderTop:"none",borderRadius:"0 0 20px 20px",overflow:"hidden",background:"#fff"}}>
         {myEntry&&(
           <div style={{background:`linear-gradient(135deg,#2460A810,#2460A806)`,borderBottom:`1px solid #2460A815`,padding:"10px 14px",display:"flex",alignItems:"center",gap:10}}>
             <div style={{width:28,height:28,borderRadius:8,background:"#2460A815",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:900,color:"#2460A8",fontFamily:F.d,flexShrink:0}}>#{myRank}</div>
@@ -9157,7 +9184,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div style={{display:"flex",alignItems:"center",gap:6,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:999,padding:"5px 14px"}}><span style={{fontSize:10}}>🀄</span><span style={{fontSize:9,color:C.mut,letterSpacing:2.3,fontWeight:900}}>THE CLUBHOUSE</span></div>
         <div style={{flex:1,height:1,background:`linear-gradient(90deg,${C.bdr},transparent)`}}/>
       </div>
-      <div style={{marginBottom:18,borderRadius:16,overflow:"hidden",border:`1px solid ${C.bdr}`,boxShadow:"0 4px 16px rgba(0,0,0,0.025)"}}>
+      <div className="rk-clubhouse-stack">
         <GlobalLeaderboardPill setScreen={setScreen}/>
         <ClubCodeEntry onJoin={()=>setScreen("leaderboard")} setScreen={setScreen} clubEntries={displayHomeClubEntries} currentScore={currentScore} currentRank={shownClubRank} clubPlayers={clubPlayers}/>
         <InlineCodeEntry setScreen={setScreen}/>
@@ -9219,11 +9246,11 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         )}
         <Menu/>
         <Hero/>
-        <div style={{display:"flex",alignItems:"center",gap:12,margin:"4px 0 22px"}}>
+        {!dDone&&<div style={{display:"flex",alignItems:"center",gap:12,margin:"4px 0 22px"}}>
           <div style={{flex:1,height:1,background:`linear-gradient(90deg,transparent,${C.bdr})`}}/>
           <div className="rk-daily-cta" style={{display:"inline-flex",alignItems:"center",gap:7,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:999,padding:"8px 18px",minHeight:52}}><span style={{fontSize:12}}>🗓️</span><span style={{fontSize:10,color:C.mut,letterSpacing:2.4,fontWeight:900}}>TODAY'S RACKLE</span></div>
           <div style={{flex:1,height:1,background:`linear-gradient(90deg,${C.bdr},transparent)`}}/>
-        </div>
+        </div>}
 
         {!dDone&&ydIQ&&(
           <div style={{display:"flex",alignItems:"center",gap:10,background:"linear-gradient(135deg,#FFF9EA,#F4EFE0)",border:`1px solid ${C.gold}22`,borderRadius:15,padding:"12px 14px",marginBottom:18}}>
@@ -9977,11 +10004,11 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
   const shareText=`🀄 My Rackle week:\n${avgIQ} avg score · ${daysPlayed}/7 days · ${weekRounds} hands\n${lvl.label}${topSec?` · Fave: ${topSec.icon} ${topSec.name}`:""}\nplayrackle.com`;
 
   return(
-    <div style={S.pg} className="rk-pg">
+    <div style={S.pg} className="rk-pg rk-recap-shell">
       <RackleHeader onBack={home} setScreen={setScreen}/>
 
       {/* Hero */}
-      <div style={{borderRadius:20,background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"24px 20px 20px",textAlign:"center",boxShadow:"0 8px 32px rgba(0,0,0,0.2)",marginBottom:12}}>
+      <div className="rk-recap-hero" style={{borderRadius:20,background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"24px 20px 20px",textAlign:"center",boxShadow:"0 8px 32px rgba(0,0,0,0.2)",marginBottom:12}}>
         <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:10}}>YOUR WEEK IN RACKLE</div>
         {profile?.nickname&&<div style={{fontSize:12,color:"rgba(255,255,255,0.45)",marginBottom:8}}>{profile.nickname}</div>}
         <div style={{fontFamily:F.d,fontSize:56,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,marginBottom:4}}>{avgIQ}</div>
@@ -10021,8 +10048,8 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
       </div>}
 
       {/* Insights */}
-      <div style={{...S.card,marginBottom:8}}>
-        <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:12}}>THIS WEEK'S HIGHLIGHTS</div>
+      <div className="rk-recap-card" style={{...S.card,marginBottom:10,padding:16}}>
+        <div style={{fontSize:9,color:C.jade,letterSpacing:2.4,fontWeight:900,marginBottom:12}}>THIS WEEK'S HIGHLIGHTS</div>
         {topSec&&<div style={{display:"flex",alignItems:"center",gap:10,paddingBottom:10,marginBottom:10,borderBottom:`1px solid ${C.bdr}`}}>
           <div style={{width:36,height:36,borderRadius:10,background:topSec.color+"12",border:`1px solid ${topSec.color}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{topSec.icon}</div>
           <div>
@@ -10030,16 +10057,16 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
             <div style={{fontSize:10,color:C.mut,marginTop:1}}>Your go-to section this week</div>
           </div>
         </div>}
-        <div style={{display:"flex",gap:6}}>
-          <div style={{flex:1,background:C.jade+"08",borderRadius:10,padding:"10px",textAlign:"center",border:`1px solid ${C.jade}15`}}>
+        <div className="rk-recap-metric-row">
+          <div className="rk-recap-metric" style={{color:C.jade}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.jade}}>{dailyDaysPlayed||dailyH.length}</div>
             <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>DAILIES</div>
           </div>
-          <div style={{flex:1,background:C.gold+"08",borderRadius:10,padding:"10px",textAlign:"center",border:`1px solid ${C.gold}15`}}>
+          <div className="rk-recap-metric" style={{color:C.gold}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.gold}}>{bestEntry.iqScore}</div>
             <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>BEST SCORE</div>
           </div>
-          <div style={{flex:1,background:C.cinn+"06",borderRadius:10,padding:"10px",textAlign:"center",border:`1px solid ${C.cinn}15`}}>
+          <div className="rk-recap-metric" style={{color:C.cinn}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.cinn}}>{daysPlayed}</div>
             <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>DAYS PLAYED</div>
           </div>
@@ -10047,7 +10074,7 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
       </div>
 
       {/* Delta message */}
-      {delta!=null&&<div style={{...S.card,marginBottom:8,background:delta>=0?C.jade+"06":C.cinn+"06",borderColor:delta>=0?C.jade+"25":C.cinn+"25"}}>
+      {delta!=null&&<div className="rk-recap-card" style={{...S.card,marginBottom:10,background:delta>=0?C.jade+"06":C.cinn+"06",borderColor:delta>=0?C.jade+"25":C.cinn+"25"}}>
         <div style={{fontSize:12,color:delta>=0?C.jade:C.cinn,fontWeight:700,lineHeight:1.6}}>
           {delta>=0
             ?`↑ Up ${delta} IQ points from last week, you're improving. Keep the streak going.`
@@ -10056,7 +10083,7 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
       </div>}
 
       {/* Share */}
-      <div style={{...S.card,marginBottom:12}}>
+      <div className="rk-recap-card" style={{...S.card,marginBottom:12,padding:16}}>
         <div style={{fontFamily:"monospace",fontSize:10,color:C.mut,background:C.bg2,borderRadius:8,padding:"10px 12px",marginBottom:10,textAlign:"center",borderBottom:`1px solid ${C.bdr}`}}>
           {shareText.split("\n").map((line,i)=>line===""?<div key={i} style={{height:8}}/>:<div key={i} style={{lineHeight:1.9}}>{line}</div>)}
         </div>
@@ -11266,6 +11293,7 @@ function HandBrowserScreen({home,setScreen}){
   const [search,setSearch]=useState("");
   const [onlyConcealed,setOnlyConcealed]=useState(false);
   const [compact,setCompact]=useState(true);
+  const [visibleLimit,setVisibleLimit]=useState(18);
 
   const q=search.trim().toLowerCase();
   const allHands=HAND_CATALOG.filter(h=>{
@@ -11277,6 +11305,10 @@ function HandBrowserScreen({home,setScreen}){
   });
   const sec=activeSec?SECS.find(s=>s.id===activeSec):null;
   const sectionCounts=SECS.map(s=>({sec:s,count:HAND_CATALOG.filter(h=>h.sec===s.id).length,concealed:HAND_CATALOG.filter(h=>h.sec===s.id&&h.concealed).length}));
+  const shouldShowHands=!!(activeSec||search||onlyConcealed);
+  const visibleHands=shouldShowHands?allHands.slice(0,visibleLimit):[];
+
+  useEffect(()=>{setVisibleLimit(18);},[activeSec,search,onlyConcealed]);
 
   return(
     <div style={S.pg} className="rk-pg">
@@ -11286,7 +11318,7 @@ function HandBrowserScreen({home,setScreen}){
         <div style={{fontSize:9,letterSpacing:2.6,fontWeight:900,color:"rgba(243,212,107,.86)",marginBottom:8}}>2026 NMJL CARD</div>
         <div style={{fontFamily:F.d,fontSize:28,fontWeight:900,lineHeight:1.02,letterSpacing:-.7,marginBottom:8}}>{sec?sec.name:"Hand Browser"}</div>
         <div style={{fontSize:13,lineHeight:1.6,color:"rgba(255,255,255,.72)",maxWidth:370}}>
-          {sec?`${allHands.length} hands in this section. Scan the shapes, suits, jokers, and concealed rules.`:"A faster way to study the card. Search a number, section, suit rule, or hand shape."}
+          {sec?`${allHands.length} hands in this section. Start with the shape, then expand for suit and joker notes.`:"Pick a section first, or search a number, dragon, concealed hand, or suit rule."}
         </div>
         <input className="rk-browser-search" value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search 2468, concealed, dragons, any 2 suits…" />
       </div>
@@ -11311,10 +11343,10 @@ function HandBrowserScreen({home,setScreen}){
         </div>
       )}
 
-      <div className="rk-hand-toolbar">
+      <div className="rk-hand-toolbar rk-browser-sticky">
         <div>
           <div style={{fontSize:9,letterSpacing:2,fontWeight:900,color:C.jade}}>BROWSING</div>
-          <div style={{fontSize:12,color:C.mut,marginTop:2}}>{allHands.length} matching hands</div>
+          <div style={{fontSize:12,color:C.mut,marginTop:2}}>{shouldShowHands?`${allHands.length} matching hands`:"Choose a section to start"}</div>
         </div>
         <div style={{display:"flex",gap:7,alignItems:"center"}}>
           <button className="rk-small-toggle" onClick={()=>setOnlyConcealed(v=>!v)} style={{color:onlyConcealed?C.jade:C.mut,borderColor:onlyConcealed?C.jade+"40":"rgba(26,20,16,.08)"}}>🔒 Concealed</button>
@@ -11327,9 +11359,25 @@ function HandBrowserScreen({home,setScreen}){
           No hands found. Try “dragon”, “consecutive”, “any 2 suits”, or a number like “2468”.
         </div>
       )}
-      {allHands.map((hand,i)=>(
-        <HandRenderer key={`${hand.sec}-${hand.label}-${i}`} hand={hand} defaultOpen={!compact&&i<8}/>
+      {!shouldShowHands&&(
+        <div className="rk-browser-prompt">
+          <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:C.ink,marginBottom:6}}>Start with a section</div>
+          <div style={{fontSize:13,lineHeight:1.6,color:C.mut,maxWidth:330,margin:"0 auto"}}>The 2026 card is easier to study in small chunks. Tap a section above, or search a tile pattern like 2468, dragons, or concealed.</div>
+        </div>
+      )}
+      {visibleHands.map((hand,i)=>(
+        <HandRenderer key={`${hand.sec}-${hand.label}-${i}`} hand={hand} defaultOpen={!compact&&i<6}/>
       ))}
+      {shouldShowHands&&allHands.length>visibleLimit&&(
+        <button className="rk-browser-load" onClick={()=>setVisibleLimit(v=>v+18)}>
+          Show {Math.min(18,allHands.length-visibleLimit)} more hands →
+        </button>
+      )}
+      {shouldShowHands&&visibleLimit>18&&allHands.length<=visibleLimit&&(
+        <button className="rk-browser-load" onClick={()=>setVisibleLimit(18)}>
+          Collapse list ↑
+        </button>
+      )}
 
       {!search&&!activeSec&&(
         <div className="rk-lux-card" style={{marginTop:10,padding:16,borderRadius:20,background:"linear-gradient(145deg,#FFFFF8,#F4EFE3)",borderColor:C.gold+"30"}}>
