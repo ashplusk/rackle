@@ -324,6 +324,64 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 
 
 
+
+
+/* ─── vNext CLUBHOUSE CONNECTION + ORGANIZER SCAN CARD ───────────────────── */
+.rk-clubhouse-stack > div:first-child .rk-quiet-board,
+.rk-clubhouse-stack > div:first-child#global-leaderboard{
+  border-radius:22px 22px 0 0!important;
+}
+.rk-clubhouse-stack > div:first-child .rk-quiet-board-head,
+.rk-clubhouse-stack > div:first-child .rk-quiet-head-closed,
+.rk-clubhouse-stack > div:first-child .rk-quiet-head-open{
+  border-radius:22px 22px 0 0!important;
+}
+.rk-clubhouse-stack > div:first-child .rk-quiet-head-closed:after{
+  left:0!important;
+  right:0!important;
+  background:linear-gradient(90deg,rgba(26,20,16,.055),rgba(160,120,40,.18),rgba(26,20,16,.055))!important;
+}
+.rk-clubhouse-stack > div:first-child .rk-quiet-board-panel{
+  border-radius:0!important;
+}
+.rk-organizer-card{
+  margin:18px 0 12px;
+  background:linear-gradient(145deg,#F4FBF7 0%,#EAF5EF 100%);
+  padding:18px;
+  border:1.5px solid rgba(23,107,66,.14);
+  border-radius:20px;
+  box-shadow:0 8px 24px rgba(23,107,66,.07),inset 0 1px 0 rgba(255,255,255,.72);
+}
+.rk-organizer-benefits{
+  display:grid;
+  gap:8px;
+  margin:14px 0 16px;
+}
+.rk-organizer-benefit{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 11px;
+  border-radius:15px;
+  background:rgba(255,255,255,.66);
+  border:1px solid rgba(23,107,66,.08);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+}
+.rk-organizer-benefit-dot{
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:#176B42;
+  box-shadow:0 0 0 4px rgba(23,107,66,.08);
+  flex-shrink:0;
+}
+.rk-organizer-benefit-text{
+  font-size:12px;
+  line-height:1.35;
+  color:#1A1410;
+  font-weight:850;
+}
+
 /* ─── vNext SOCIAL PREVIEW BOARDS + IMPROVE GAME OVERHAUL ───────────────── */
 @keyframes rkTablePulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(76,217,135,.28),0 0 12px rgba(76,217,135,.46)}50%{transform:scale(1.08);box-shadow:0 0 0 8px rgba(76,217,135,0),0 0 18px rgba(76,217,135,.62)}}
 @keyframes rkSocialSlide{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -9369,10 +9427,21 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <InlineCodeEntry setScreen={setScreen}/>
       </div>
       {!activeClubCode&&(
-        <div style={{margin:"18px 0 12px",background:"linear-gradient(135deg,#F2FAF6,#EAF5EF)",padding:"18px",border:`1.5px solid ${C.jade}22`,borderRadius:18,boxShadow:`0 4px 18px ${C.jade}08`}}>
+        <div className="rk-organizer-card">
           <div style={{fontSize:9,color:C.jade,letterSpacing:2.2,fontWeight:900,marginBottom:6}}>FOR CLUB ORGANIZERS</div>
-          <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:C.ink,lineHeight:1.12,marginBottom:10,letterSpacing:-0.25}}>Your club's daily Charleston starts here</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.6,marginBottom:15}}>Your Mahjong group deserves a daily ritual. Keep the table connected between games with one shared Charleston, one club board, and a reason to come back tomorrow.</div>
+          <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:C.ink,lineHeight:1.12,marginBottom:8,letterSpacing:-0.25}}>Your club's daily Charleston starts here</div>
+          <div className="rk-organizer-benefits">
+            {[
+              "One shared Daily Rackle for your group",
+              "A private club board everyone can chase",
+              "A reason to come back before the next game"
+            ].map((item)=>(
+              <div key={item} className="rk-organizer-benefit">
+                <span className="rk-organizer-benefit-dot"/>
+                <span className="rk-organizer-benefit-text">{item}</span>
+              </div>
+            ))}
+          </div>
           <div style={{display:"flex",gap:9}}>
             <a href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20" style={{flex:2,display:"flex",alignItems:"center",justifyContent:"center",padding:"13px 0",borderRadius:12,background:`linear-gradient(135deg,${C.jade},#115C38)`,color:"#fff",fontSize:14,fontWeight:900,fontFamily:F.d,textDecoration:"none"}}>Start my club →</a>
             <button onClick={()=>setScreen("clubs")} style={{flex:1,padding:"13px 0",borderRadius:12,border:`1px solid ${C.jade}28`,background:"#fff",color:C.jade,fontSize:12,fontWeight:800,cursor:"pointer"}}>Join</button>
