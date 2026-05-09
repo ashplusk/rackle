@@ -419,200 +419,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-quiet-board-panel{padding-top:16px!important;padding-bottom:18px!important}
 .rk-quiet-leader{background:linear-gradient(150deg,#041F12 0%,#07331E 46%,#0A4328 70%,#03170D 100%)!important}
 
-
-
-/* ─── vNext CLUB ORGANIZER PREMIUM CARD v2 ──────────────────────────────── */
-.rk-organizer-card{
-  position:relative;
-  overflow:hidden;
-  text-align:left!important;
-  background:
-    radial-gradient(circle at top left,rgba(255,255,255,.72),transparent 34%),
-    linear-gradient(145deg,#F6FCF8 0%,#EAF5EF 62%,#F8F4EE 100%)!important;
-  border:1.5px solid rgba(23,107,66,.15)!important;
-  box-shadow:0 12px 34px rgba(23,107,66,.075),inset 0 1px 0 rgba(255,255,255,.78)!important;
-}
-.rk-organizer-card:after{
-  content:'🀄';
-  position:absolute;
-  right:-14px;
-  bottom:-26px;
-  font-size:104px;
-  opacity:.035;
-  transform:rotate(-8deg);
-  pointer-events:none;
-}
-.rk-organizer-topline{
-  position:relative;
-  z-index:1;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:9px;
-}
-.rk-organizer-badge{
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-  border-radius:999px;
-  padding:6px 10px;
-  background:rgba(23,107,66,.075);
-  border:1px solid rgba(23,107,66,.12);
-  color:#176B42;
-  font-size:9px;
-  letter-spacing:1.65px;
-  text-transform:uppercase;
-  font-weight:950;
-  line-height:1;
-}
-.rk-organizer-badge-dot{
-  width:7px;
-  height:7px;
-  border-radius:99px;
-  background:#4CD987;
-  box-shadow:0 0 0 4px rgba(76,217,135,.10),0 0 12px rgba(76,217,135,.45);
-}
-.rk-organizer-mini-pill{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:999px;
-  padding:6px 10px;
-  background:rgba(201,168,76,.11);
-  border:1px solid rgba(201,168,76,.18);
-  color:#8A6820;
-  font-size:10px;
-  font-weight:900;
-  white-space:nowrap;
-}
-.rk-organizer-title{
-  position:relative;
-  z-index:1;
-  font-family:'Fraunces',Georgia,serif;
-  font-size:25px;
-  line-height:1.02;
-  letter-spacing:-.7px;
-  font-weight:950;
-  color:#1A1410;
-  margin:0 0 9px;
-  max-width:11ch;
-}
-.rk-organizer-copy{
-  position:relative;
-  z-index:1;
-  font-size:13px;
-  line-height:1.55;
-  color:rgba(26,20,16,.62);
-  font-weight:650;
-  margin:0 0 15px;
-  max-width:32ch;
-}
-.rk-organizer-benefits{
-  position:relative;
-  z-index:1;
-  display:grid!important;
-  grid-template-columns:1fr!important;
-  gap:9px!important;
-  margin:15px 0 17px!important;
-}
-.rk-organizer-benefit{
-  align-items:flex-start!important;
-  justify-content:flex-start!important;
-  gap:11px!important;
-  padding:12px!important;
-  border-radius:17px!important;
-  background:rgba(255,255,255,.70)!important;
-  border:1px solid rgba(23,107,66,.09)!important;
-  box-shadow:0 4px 14px rgba(23,107,66,.035),inset 0 1px 0 rgba(255,255,255,.78)!important;
-}
-.rk-organizer-benefit-dot{
-  margin-top:4px;
-  width:9px!important;
-  height:9px!important;
-  background:#176B42!important;
-  box-shadow:0 0 0 5px rgba(23,107,66,.08)!important;
-}
-.rk-organizer-benefit-text{
-  display:flex;
-  flex-direction:column;
-  gap:3px;
-  text-align:left!important;
-  line-height:1.2!important;
-}
-.rk-organizer-benefit-text strong{
-  font-size:13px;
-  line-height:1.15;
-  color:#1A1410;
-  font-weight:950;
-}
-.rk-organizer-benefit-text span{
-  font-size:11px;
-  line-height:1.35;
-  color:rgba(26,20,16,.56);
-  font-weight:700;
-}
-.rk-organizer-actions{
-  position:relative;
-  z-index:1;
-  display:grid;
-  grid-template-columns:1.35fr .75fr;
-  gap:9px;
-}
-.rk-organizer-primary{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:50px;
-  padding:13px 12px;
-  border-radius:15px;
-  background:linear-gradient(135deg,#0F633C,#06351F)!important;
-  color:#fff;
-  font-size:15px;
-  font-weight:950;
-  font-family:'Fraunces',Georgia,serif;
-  text-decoration:none;
-  border:1px solid rgba(255,255,255,.16);
-  box-shadow:0 10px 24px rgba(23,107,66,.20),inset 0 1px 0 rgba(255,255,255,.18);
-}
-.rk-organizer-secondary{
-  min-height:50px;
-  padding:13px 10px;
-  border-radius:15px;
-  border:1px solid rgba(23,107,66,.16)!important;
-  background:rgba(255,255,255,.72)!important;
-  color:#176B42;
-  font-size:13px;
-  font-weight:900;
-  cursor:pointer;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.78);
-}
-.rk-organizer-proof{
-  position:relative;
-  z-index:1;
-  display:flex;
-  align-items:center;
-  gap:7px;
-  flex-wrap:wrap;
-  margin:1px 0 15px;
-}
-.rk-organizer-proof span{
-  display:inline-flex;
-  align-items:center;
-  border-radius:999px;
-  padding:6px 9px;
-  background:rgba(255,255,255,.62);
-  border:1px solid rgba(26,20,16,.06);
-  font-size:10.5px;
-  color:rgba(26,20,16,.60);
-  font-weight:850;
-}
-@media(max-width:390px){
-  .rk-organizer-title{font-size:23px;max-width:12ch}
-  .rk-organizer-actions{grid-template-columns:1fr}
-  .rk-organizer-secondary{min-height:46px}
-}
-
 /* ─── vNext SOCIAL PREVIEW BOARDS + IMPROVE GAME OVERHAUL ───────────────── */
 @keyframes rkTablePulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(76,217,135,.28),0 0 12px rgba(76,217,135,.46)}50%{transform:scale(1.08);box-shadow:0 0 0 8px rgba(76,217,135,0),0 0 18px rgba(76,217,135,.62)}}
 @keyframes rkSocialSlide{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -752,6 +558,72 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 @media(max-width:390px){.rk-quiet-board-head{padding:14px 13px!important;min-height:98px}.rk-quiet-title{font-size:19px!important}.rk-quiet-preview-line{gap:5px}.rk-quiet-preview-pill{font-size:10px;padding:6px 8px}.rk-quiet-mini-icon{width:30px;height:30px}}
 
 @media (prefers-reduced-motion: reduce){.rk-hero-live,.rk-iq-hero,.rk-soft-glow,.rk-count-live,.rk-streak-copy,.rk-float,.rk-pulse,.rk-live-dot,.rk-sweep:after{animation:none!important}}
+
+/* ─── vNext CONNECTED LEADERBOARD + HOMEPAGE TYPE TUNING ───────────────── */
+.rk-global-board-home.rk-global-board-open,
+.rk-clubhouse-stack > div:first-child .rk-global-board-home.rk-global-board-open,
+.rk-clubhouse-stack > div:first-child .rk-quiet-board.rk-global-board-open{
+  border-radius:22px 22px 0 0!important;
+  margin-bottom:0!important;
+}
+.rk-global-board-home.rk-global-board-open .rk-quiet-board-panel{
+  border-radius:0!important;
+  border-bottom-left-radius:0!important;
+  border-bottom-right-radius:0!important;
+}
+.rk-global-board-home.rk-global-board-open .rk-quiet-head-open,
+.rk-global-board-home.rk-global-board-open .rk-quiet-board-head{
+  border-radius:22px 22px 0 0!important;
+}
+.rk-global-board-home.rk-global-board-open + *,
+.rk-clubhouse-stack > div:first-child + *{
+  margin-top:0!important;
+}
+.rk-clubhouse-stack{gap:0!important}
+.rk-quiet-title{font-size:19px!important;line-height:1.02!important;letter-spacing:-.42px!important}
+.rk-quiet-kicker{font-size:8.5px!important;letter-spacing:2.05px!important}
+.rk-quiet-preview-pill{font-size:10px!important;padding:6px 8px!important}
+.rk-quiet-row{padding:10px 11px!important}
+.rk-quiet-name{font-size:14.25px!important}
+.rk-quiet-score{font-size:22px!important}
+.rk-quiet-leader{padding:13px!important;border-radius:17px!important}
+.rk-quiet-badge{width:40px!important;height:40px!important;border-radius:15px!important}
+@media(max-width:390px){
+  .rk-quiet-title{font-size:18px!important}
+  .rk-quiet-board-head{min-height:92px!important;padding:13px 12px!important}
+  .rk-quiet-preview-pill{font-size:9.5px!important;padding:5px 7px!important}
+  .rk-quiet-mini-icon{width:28px!important;height:28px!important;font-size:14px!important}
+  .rk-quiet-chevron{width:34px!important;height:34px!important}
+}
+
+/* ─── vNext CLUB ORGANIZER PREMIUM V3 ───────────────────────────────────── */
+.rk-organizer-premium{
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 88% 10%,rgba(201,168,76,.12),transparent 30%),
+    linear-gradient(145deg,#F7FCF9 0%,#EAF5EF 100%)!important;
+  border:1.5px solid rgba(23,107,66,.16)!important;
+  box-shadow:0 12px 34px rgba(23,107,66,.075),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-organizer-premium:after{
+  content:'🀄';position:absolute;right:-14px;bottom:-24px;font-size:96px;opacity:.035;transform:rotate(-8deg);pointer-events:none;
+}
+.rk-organizer-topline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;position:relative;z-index:1}
+.rk-organizer-topline span:first-child{font-size:9px;color:#176B42;letter-spacing:2.15px;font-weight:950}
+.rk-organizer-pill{display:inline-flex;align-items:center;border-radius:999px;padding:5px 9px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.20);color:#8A6820;font-size:10px!important;font-weight:900;letter-spacing:0!important;white-space:nowrap}
+.rk-organizer-proof-row{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px;position:relative;z-index:1}
+.rk-organizer-proof-row span{display:inline-flex;border-radius:999px;padding:6px 9px;background:rgba(255,255,255,.66);border:1px solid rgba(23,107,66,.09);color:#176B42;font-size:10.5px;font-weight:900;line-height:1;white-space:nowrap}
+.rk-organizer-benefits-rich{display:grid!important;grid-template-columns:1fr!important;gap:8px!important;margin:13px 0 16px!important;position:relative;z-index:1}
+.rk-organizer-benefit-rich{justify-content:flex-start!important;text-align:left!important;padding:10px 11px!important;background:rgba(255,255,255,.72)!important}
+.rk-organizer-benefit-icon{width:30px;height:30px;border-radius:12px;background:linear-gradient(145deg,#FFFDF8,#EEE4D2);border:1px solid rgba(26,20,16,.07);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+.rk-organizer-benefit-sub{display:block;font-size:10.8px;line-height:1.35;color:rgba(26,20,16,.58);font-weight:700;margin-top:2px}
+.rk-organizer-benefit-rich .rk-organizer-benefit-text{display:block;text-align:left!important;font-size:12.25px!important;line-height:1.18!important;font-weight:900!important;color:#1A1410!important}
+@media(max-width:390px){
+  .rk-organizer-proof-row span{font-size:10px;padding:6px 8px}
+  .rk-organizer-benefit-rich{padding:10px!important}
+}
+
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
@@ -8276,7 +8148,7 @@ function GlobalLeaderboardPill({setScreen}){
   const liveCopy=hasData?`${entries.length} players in the room`:"Same rack. One room. First score sets the table.";
 
   return(
-    <div id="global-leaderboard" className="rk-quiet-board rk-global-board-home" style={{marginBottom:0,borderRadius:"22px 22px 0 0"}}>
+    <div id="global-leaderboard" className={`rk-quiet-board rk-global-board-home ${open?"rk-global-board-open":""}`} style={{marginBottom:0,borderRadius:open?"22px 22px 0 0":"22px 22px 0 0"}}>
       <button onClick={toggle} className={`rk-quiet-board-head ${open?"rk-quiet-head-open":"rk-quiet-head-closed"}`} aria-expanded={open}>
         <div style={{flex:1,minWidth:0}}>
           <div className="rk-quiet-topline">
@@ -9166,15 +9038,15 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
             <span style={{fontSize:9,letterSpacing:2,fontWeight:900,color:"rgba(255,255,255,0.84)"}}>DAILY RACKLE · #{dn}</span>
             <span style={{fontSize:7,letterSpacing:1.5,fontWeight:900,color:"#082D1A",background:"#4CD987",borderRadius:999,padding:"3px 6px",lineHeight:1}}>LIVE</span>
           </div>
-          <div style={{fontSize:10,color:"rgba(255,255,255,0.72)",fontWeight:900}}>new rack in {reset}</div>
+          <div style={{fontSize:9.5,color:"rgba(255,255,255,0.72)",fontWeight:900}}>new rack in {reset}</div>
         </div>
 
         <div style={{display:"flex",alignItems:"center",gap:16}}>
           <div style={{flex:1,minWidth:0}}>
-            <div style={{fontFamily:F.d,fontSize:26,fontWeight:900,letterSpacing:-0.85,lineHeight:1.02,marginBottom:11,textShadow:"0 1px 0 rgba(0,0,0,.08)"}}>
+            <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,letterSpacing:-0.75,lineHeight:1.02,marginBottom:11,textShadow:"0 1px 0 rgba(0,0,0,.08)"}}>
               Read the rack.<br/><span style={{color:"#E0C263"}}>Claim the table.</span>
             </div>
-            <div style={{fontSize:12,color:"rgba(255,255,255,0.78)",lineHeight:1.5,maxWidth:280}}>
+            <div style={{fontSize:11.5,color:"rgba(255,255,255,0.78)",lineHeight:1.55,maxWidth:250}}>
               Same daily Charleston. One score to beat.
             </div>
           </div>
@@ -9230,8 +9102,8 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
         <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:7,marginTop:18}}>
           {statCards.map((c,i)=>(
             <div key={i} className="rk-count-live" style={{background:"rgba(255,255,255,0.105)",border:"1px solid rgba(255,255,255,0.16)",borderRadius:12,padding:"10px 10px",minHeight:60,boxShadow:"inset 0 1px 0 rgba(255,255,255,.08)"}}>
-              <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:c.tone==="gold"?"#E0C263":"#fff",lineHeight:1}}>{c.value}</div>
-              <div style={{fontSize:8,color:"rgba(255,255,255,0.58)",letterSpacing:1.1,fontWeight:800,marginTop:5,textTransform:"uppercase",whiteSpace:"nowrap"}}>{c.label}</div>
+              <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:c.tone==="gold"?"#E0C263":"#fff",lineHeight:1}}>{c.value}</div>
+              <div style={{fontSize:7.5,color:"rgba(255,255,255,0.58)",letterSpacing:1.05,fontWeight:800,marginTop:5,textTransform:"uppercase",whiteSpace:"nowrap"}}>{c.label}</div>
             </div>
           ))}
         </div>
@@ -9242,7 +9114,7 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
               <span style={{width:7,height:7,borderRadius:99,background:"#E0C263",display:"inline-block",flexShrink:0,boxShadow:"0 0 10px rgba(224,194,99,.35)"}}/>
               <div style={{fontSize:8,color:"rgba(255,255,255,0.62)",fontWeight:900,letterSpacing:1.5}}>TOMORROW</div>
             </div>
-            <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:"#fff",lineHeight:1.15,letterSpacing:-0.1,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{tomorrowHint}</div>
+            <div style={{fontFamily:F.d,fontSize:13.5,fontWeight:900,color:"#fff",lineHeight:1.16,letterSpacing:-0.1,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{tomorrowHint}</div>
           </div>
           <span style={{color:"rgba(255,255,255,.52)",fontSize:16,flexShrink:0}}>›</span>
         </div>
@@ -9638,7 +9510,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div style={{width:44,height:44,borderRadius:14,background:dDone?C.jade+"10":C.cinn+"10",border:`1px solid ${dDone?C.jade+"20":C.cinn+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🀄</div>
       <div style={{flex:1,minWidth:0}}>
         <div style={{fontSize:9,color:dDone?C.jade:C.cinn,letterSpacing:2.15,fontWeight:900,marginBottom:5}}>FREE PLAY</div>
-        <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,marginBottom:7,lineHeight:1.12,letterSpacing:-0.15}}>Unlimited racks</div>
+        <div style={{fontFamily:F.d,fontSize:15.5,fontWeight:900,color:C.ink,marginBottom:7,lineHeight:1.12,letterSpacing:-0.15}}>Unlimited racks</div>
         <div style={{fontSize:12,color:C.mut,lineHeight:1.55,maxWidth:330}}>{dDone?"Daily done. Sharpen one more rack before tomorrow.":"New deal every time. Try new reads and build your Charleston instincts."}</div>
       </div>
       <span style={{fontSize:18,color:dDone?C.jade:C.mut,fontWeight:900,flexShrink:0}}>›</span>
@@ -9658,33 +9530,36 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <InlineCodeEntry setScreen={setScreen}/>
       </div>
       {!activeClubCode&&(
-        <div className="rk-organizer-card">
+        <div className="rk-organizer-card rk-organizer-premium">
           <div className="rk-organizer-topline">
-            <div className="rk-organizer-badge"><span className="rk-organizer-badge-dot"/>FOR CLUB ORGANIZERS</div>
-            <div className="rk-organizer-mini-pill">Founding clubs</div>
+            <span>FOR CLUB ORGANIZERS</span>
+            <span className="rk-organizer-pill">Founding clubs</span>
           </div>
-          <h3 className="rk-organizer-title">Bring your table online.</h3>
-          <p className="rk-organizer-copy">Give your group one shared rack, one daily board, and one reason to talk Mahjong between games.</p>
-          <div className="rk-organizer-proof">
+          <div style={{fontFamily:F.d,fontSize:21,fontWeight:950,color:C.ink,lineHeight:1.08,marginBottom:8,letterSpacing:-0.45}}>Bring your table online.</div>
+          <div style={{fontSize:12.5,color:C.mut,lineHeight:1.55,maxWidth:330,marginBottom:13}}>Give your group one daily rack, one private board, and one reason to talk mahjong between games.</div>
+          <div className="rk-organizer-proof-row">
             <span>Private code</span>
             <span>Daily scores</span>
             <span>Club bragging rights</span>
           </div>
-          <div className="rk-organizer-benefits">
+          <div className="rk-organizer-benefits rk-organizer-benefits-rich">
             {[
-              ["Shared daily ritual","Everyone plays the same Charleston and compares reads."],
-              ["Private club board","Members chase today’s score without extra setup."],
-              ["More table talk","A simple reason to come back before the next game."]
-            ].map(([title,sub])=>(
-              <div key={title} className="rk-organizer-benefit">
-                <span className="rk-organizer-benefit-dot"/>
-                <span className="rk-organizer-benefit-text"><strong>{title}</strong><span>{sub}</span></span>
+              {icon:"🀄",title:"Daily club ritual",copy:"Everyone plays the same Charleston."},
+              {icon:"🏆",title:"Private leaderboard",copy:"Your table gets its own room."},
+              {icon:"💬",title:"Group chat ready",copy:"Scores are easy to share."}
+            ].map((item)=>(
+              <div key={item.title} className="rk-organizer-benefit rk-organizer-benefit-rich">
+                <span className="rk-organizer-benefit-icon">{item.icon}</span>
+                <span style={{minWidth:0}}>
+                  <span className="rk-organizer-benefit-text">{item.title}</span>
+                  <span className="rk-organizer-benefit-sub">{item.copy}</span>
+                </span>
               </div>
             ))}
           </div>
-          <div className="rk-organizer-actions">
-            <a className="rk-organizer-primary" href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20">Start my club →</a>
-            <button className="rk-organizer-secondary" onClick={()=>setScreen("clubs")}>Join one</button>
+          <div style={{display:"flex",gap:9}}>
+            <a href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20" style={{flex:2,display:"flex",alignItems:"center",justifyContent:"center",padding:"13px 0",borderRadius:14,background:`linear-gradient(135deg,${C.jade},#115C38)`,color:"#fff",fontSize:14,fontWeight:900,fontFamily:F.d,textDecoration:"none",boxShadow:"0 10px 22px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16)"}}>Start my club →</a>
+            <button onClick={()=>setScreen("clubs")} style={{flex:1,padding:"13px 0",borderRadius:14,border:`1px solid ${C.jade}28`,background:"#fff",color:C.jade,fontSize:12,fontWeight:900,cursor:"pointer"}}>Join</button>
           </div>
         </div>
       )}
