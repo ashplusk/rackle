@@ -4786,88 +4786,211 @@ function rkCoreOverlap(struct,liveSections){
   return rkClamp(overlap,0,40);
 }
 
+function rkShapeLabel(score){
+  if(score>=88)return "Elite Shape";
+  if(score>=75)return "Strong Shape";
+  if(score>=58)return "Growing Shape";
+  if(score>=43)return "Loose Shape";
+  if(score>=28)return "Fragile Shape";
+  return "Broken Shape";
+}
+function rkDirectionLabelFromWindow(w){
+  if(!w)return null;
+  const a=w.nums[0],b=w.nums[2];
+  const band=b<=4?"low":a>=6?"high":"middle";
+  return `${band} consecutive momentum in ${RK_SUIT_NAMES[w.suit]}`;
+}
+function rkReadableNumberCluster(nc,nums,label){
+  const total=nums.reduce((a,n)=>a+(nc[n]||0),0);
+  const dense=nums.filter(n=>(nc[n]||0)>=2);
+  if(total<4)return null;
+  if(dense.length)return `${label} shape with duplication around ${dense.join("/")}s`;
+  return `${label} shape, but still spread`;
+}
+function rkMaxNaturalGroup(struct){return Math.max(0,...Object.values(struct.counts||{}).filter(Boolean));}
+function rkBuildLiveDirections(struct,sectionReads=[]){
+  const nc=struct.sameNumberCounts||{};
+  const dirs=[];
+  const add=(text,score=50)=>{if(text&&!dirs.some(d=>d.label===text))dirs.push({label:text,score});};
+  if(struct.bestWindow?.depth>=3)add(rkDirectionLabelFromWindow(struct.bestWindow),struct.bestWindow.depth>=5?78:62);
+  const odd=rkReadableNumberCluster(nc,[1,3,5,7,9],"odd-number");
+  const even=rkReadableNumberCluster(nc,[2,4,6,8],"even-number");
+  const n369=rkReadableNumberCluster(nc,[3,6,9],"3-6-9");
+  if(even)add(even,(nc[2]||0)+(nc[4]||0)+(nc[6]||0)+(nc[8]||0)>=6?72:56);
+  if(odd)add(odd,(nc[1]||0)+(nc[3]||0)+(nc[5]||0)+(nc[7]||0)+(nc[9]||0)>=6?72:56);
+  if(n369)add(n369,(nc[3]||0)+(nc[6]||0)+(nc[9]||0)>=5?68:52);
+  if(struct.pairs.length>=3)add("pair-heavy shape",70);
+  else if(struct.pairs.length>=2)add("early pair pressure",56);
+  if(Number(struct.bestSameNumber?.[1]||0)>=3)add(`same-number pressure around ${struct.bestSameNumber[0]}s`,70);
+  if(struct.jokers>=2&&rkMaxNaturalGroup(struct)>=2)add("growing quint ceiling",62);
+  else if(rkMaxNaturalGroup(struct)>=3)add("natural group strength",64);
+  if(struct.honorTotal>=5&&struct.groupedHonor>=1)add("honor-based Winds/Dragons support",66);
+  const twos=nc[2]||0,sixes=nc[6]||0,soap=(struct.dragons||[]).filter(t=>t.v==="Soap").length;
+  if(twos+sixes+soap>=4&&twos&&sixes)add("2026-style number pressure",60);
+  sectionReads.slice(0,4).forEach(s=>{
+    if(s.score>=58){
+      const map={cr:"consecutive run pressure",2468:"clean even-number flow",369:"3-6-9 lane",13579:"odd-number lane",aln:"like-number lane",q:"quint possibility",sp:"singles-and-pairs texture",wd:"winds/dragons texture",2026:"2026 texture"};
+      add(map[s.id]||s.name,s.score);
+    }
+  });
+  return dirs.sort((a,b)=>b.score-a.score).slice(0,5);
+}
+function rkCoreSignal(struct){
+  const nc=struct.sameNumberCounts||{};
+  const dominantSuit=struct.strongestSuit?RK_SUIT_NAMES[struct.strongestSuit]:null;
+  const bestSuitCount=struct.suitEntries?.[0]?.[1]||0;
+  const maxGroup=rkMaxNaturalGroup(struct);
+  const bestSame=Number(struct.bestSameNumber?.[1]||0);
+  if(struct.bestWindow?.depth>=5)return `The ${RK_SUIT_NAMES[struct.bestWindow.suit]} ${struct.bestWindow.nums[0]}-${struct.bestWindow.nums[2]} window was carrying the rack.`;
+  if(struct.pungs.length)return `${struct.pungs[0].label} gave the rack real group strength.`;
+  if(bestSuitCount>=6)return `${dominantSuit} concentration gave the rack its cleanest identity.`;
+  if(struct.pairs.length>=3)return `The pair density was the strongest clue in the rack.`;
+  if(bestSame>=3)return `The repeated ${struct.bestSameNumber[0]}s created the clearest same-number pressure.`;
+  if(struct.bestWindow?.depth>=3)return `The ${RK_SUIT_NAMES[struct.bestWindow.suit]} number window gave the rack its best momentum.`;
+  const odd=(nc[1]||0)+(nc[3]||0)+(nc[5]||0)+(nc[7]||0)+(nc[9]||0);
+  const even=(nc[2]||0)+(nc[4]||0)+(nc[6]||0)+(nc[8]||0);
+  if(even>=5)return `The even tiles were starting to create direction.`;
+  if(odd>=5)return `The odd tiles were starting to create direction.`;
+  if(struct.pairs.length>=2)return `Two natural pairs gave the rack something to protect.`;
+  if(maxGroup>=2)return `The rack had a small grouping clue, but it was still early.`;
+  return `The rack had clues, but no true engine yet.`;
+}
+function rkStrategicTension(struct,top,liveDirections){
+  const issues=[];
+  const bestSuit=struct.suitEntries?.[0]?.[1]||0;
+  const midSuit=struct.suitEntries?.[1]?.[1]||0;
+  const lowSuit=struct.suitEntries?.[2]?.[1]||0;
+  const maxGroup=rkMaxNaturalGroup(struct);
+  if(struct.isolated.length>=5)issues.push(`The rack was too fragmented. Too many tiles were not pairing, connecting, or sharing a lane.`);
+  else if(struct.isolated.length>=3)issues.push(`The shape was alive, but several isolated tiles were slowing the read.`);
+  if(struct.pairs.length<2&&maxGroup<3)issues.push(`There was not enough duplication yet to fully trust the direction.`);
+  if(bestSuit<5&&midSuit>=3&&lowSuit>=2)issues.push(`The suits were still splitting, which made the rack feel wider than it felt strong.`);
+  if(struct.honorTotal>=3&&struct.groupedHonor===0)issues.push(`Loose honors created friction unless Winds and Dragons became real quickly.`);
+  const terminalSingles=struct.nums.filter(t=>(t.n===1||t.n===9)&&(struct.counts[rkTileKey(t)]||0)===1).length;
+  if(terminalSingles>=2)issues.push(`The terminal singles were stretched. They needed support or they would become discard pressure.`);
+  if(top?.id==="q"&&struct.jokers<2)issues.push(`Quints was a thin idea without enough joker help or natural depth.`);
+  if(top?.id==="sp"&&struct.jokers>0)issues.push(`Singles and Pairs carried hidden friction because jokers cannot help that section.`);
+  if(!issues.length&&liveDirections.length>=3)issues.push(`The main tension was timing. The rack had options, but choosing too early could cut off the best pivot.`);
+  if(!issues.length)issues.push(`The rack was playable, but it still needed one cleaner pickup before it deserved full trust.`);
+  return issues.slice(0,3);
+}
+function rkWhyShapeWorked(struct,liveDirections,shapeQuality){
+  const lines=[];
+  if(struct.bestWindow?.depth>=4)lines.push(`The shape had natural flow because the ${RK_SUIT_NAMES[struct.bestWindow.suit]} ${struct.bestWindow.nums[0]}-${struct.bestWindow.nums[2]} window connected without forcing.`);
+  if(struct.pairs.length>=2)lines.push(`${rkPlural(struct.pairs.length,"natural pair")} gave the rack density, not just loose possibility.`);
+  if(struct.suitEntries?.[0]?.[1]>=5)lines.push(`${RK_SUIT_NAMES[struct.strongestSuit]} gave the rack concentration, which reduces future discard pain.`);
+  if(liveDirections.length>=3)lines.push(`Several directions shared the same core tiles, so the rack could stay loose without becoming muddy.`);
+  if(struct.pungs.length)lines.push(`The existing pung strength gave the rack a real engine.`);
+  if(struct.jokers>=2)lines.push(`The jokers raised the ceiling for open-hand lanes, but the natural shape still mattered most.`);
+  if(!lines.length&&shapeQuality==="Loose Shape")lines.push(`The rack had some live ideas, but the value was still spread rather than concentrated.`);
+  if(!lines.length)lines.push(`The rack had early clues, but not enough clean shape to claim momentum yet.`);
+  return lines.slice(0,3);
+}
+function rkShapeQualityScore(struct,sectionReads){
+  const bestSuit=struct.suitEntries?.[0]?.[1]||0;
+  const secondSuit=struct.suitEntries?.[1]?.[1]||0;
+  const thirdSuit=struct.suitEntries?.[2]?.[1]||0;
+  const bestRunLen=(struct.connectedSequences||[]).reduce((m,s)=>Math.max(m,s.nums.length),0);
+  const maxGroup=rkMaxNaturalGroup(struct);
+  const top=sectionReads?.[0]?.score||0;
+  return rkClamp(
+    18+
+    struct.pairs.length*7+
+    struct.pungs.length*13+
+    struct.kongs.length*16+
+    (maxGroup>=4?16:maxGroup>=3?11:maxGroup>=2?5:0)+
+    (struct.bestWindow?Math.min(struct.bestWindow.depth*5+struct.bestWindow.dup*4,26):0)+
+    (bestRunLen>=4?16:bestRunLen>=3?10:bestRunLen>=2?5:0)+
+    (bestSuit>=7?16:bestSuit>=6?12:bestSuit>=5?8:bestSuit>=4?4:0)+
+    (secondSuit>=3&&thirdSuit>=3?-10:0)+
+    Math.min(top*.10,8)+
+    struct.jokers*3-
+    struct.isolated.length*5-
+    (struct.honorTotal>=3&&struct.groupedHonor===0?7:0)
+  );
+}
+function rkCommitmentClarityScore(struct,top,second,liveDirections){
+  const gap=top&&second?top.score-second.score:top?.score||0;
+  const density=struct.pairs.length*6+struct.pungs.length*10+(struct.bestWindow?.depth||0)*4+(struct.suitEntries?.[0]?.[1]||0)*2;
+  const overSpread=liveDirections.length>=4?8:0;
+  return rkClamp(20+(top?.score||0)*.38+gap*.65+density*.35-overSpread-struct.isolated.length*3);
+}
+function rkCommitmentState(iq,shapeScore,commitmentClarity,top,second,liveDirections,struct){
+  const gap=top&&second?top.score-second.score:top?.score||0;
+  const hasDensity=struct.pairs.length>=2||struct.pungs.length>=1||(struct.bestWindow?.depth||0)>=5||(struct.suitEntries?.[0]?.[1]||0)>=6;
+  if(iq>=82&&shapeScore>=76&&commitmentClarity>=72&&gap>=14&&hasDensity)return "Committed";
+  if((top?.score||0)>=58&&gap>=8&&shapeScore>=52)return "Leaning";
+  if(liveDirections.length>=3&&gap<18&&shapeScore>=45)return "Flexible";
+  if(shapeScore>=30||(top?.score||0)>=38||struct.pairs.length>=2||struct.bestWindow?.depth>=3)return "Watching";
+  return "Resetting";
+}
+function rkCoachingInsight(commitmentState,shapeQuality,struct,top){
+  if(commitmentState==="Committed")return `The rack has earned a lane. Commit, but do not chase loose edges that do not feed the engine.`;
+  if(commitmentState==="Leaning")return `You are close to choosing a lane. One clean pickup probably commits this rack.`;
+  if(commitmentState==="Flexible")return `Stay loose. Protect the shared core tiles and let the next draw choose the lane.`;
+  if(commitmentState==="Resetting")return `Reset the read. Keep only tiles that pair, connect, or build a clear window.`;
+  if(struct.bestWindow?.depth>=3)return `The clues are real, but this still wants patience before commitment.`;
+  if(struct.pairs.length>=2)return `Protect the pairs, but do not turn them into a final plan too early.`;
+  return `Watch one more turn before forcing an idea.`;
+}
+
 function rkEvaluateCharlestonEngine({finalRack,startingRack=[],passedTilesByRound=[],sectionId,chosenHand,allSections=[]}){
   const rack=finalRack||[];
   const struct=rkAnalyzeTileStructure(rack);
   const sectionReads=(SECS||[]).map(sec=>rkEvaluateSection(struct,rack,sec)).sort((a,b)=>b.score-a.score);
-  const liveSections=sectionReads.filter(s=>s.score>=40&&s.status!=="thin");
-  const realisticSections=sectionReads.filter(s=>s.score>=52&&s.status==="realistically playable"||s.score>=58);
   const top=sectionReads[0]||null;
   const second=sectionReads[1]||null;
-  const chosen=sectionReads.find(s=>s.id===sectionId)||top;
+  const liveSections=sectionReads.filter(s=>s.score>=40&&s.status!=="thin");
+  const liveDirections=rkBuildLiveDirections(struct,sectionReads);
   const overlap=rkCoreOverlap(struct,liveSections);
 
-  const sectionViability=rkClamp((top?.score||0)*0.72+(second?.score||0)*0.18+Math.min(liveSections.length*3,10));
-  const flexibility=rkClamp(22+Math.min(liveSections.length*10,34)+overlap+struct.jokers*4-struct.isolated.length*4-(top&&second?Math.max(0,top.score-second.score-24):0));
+  const shapeScore=rkShapeQualityScore(struct,sectionReads);
+  const shapeQuality=rkShapeLabel(shapeScore);
   const tileEfficiency=struct.tileEfficiency;
-  const suitDiscipline=struct.suitDiscipline;
+  const commitmentClarity=rkCommitmentClarityScore(struct,top,second,liveDirections);
+  const flexibility=rkClamp(24+Math.min(liveDirections.length*9,30)+overlap+struct.jokers*3-struct.isolated.length*5-(top&&second?Math.max(0,top.score-second.score-22):0));
   const growthPotential=struct.growthPotential;
-  const rackleIQScore=rkClamp(tileEfficiency*.30+sectionViability*.25+flexibility*.20+suitDiscipline*.15+growthPotential*.10);
+  const rackleIQScore=rkClamp(shapeScore*.35+tileEfficiency*.25+commitmentClarity*.20+flexibility*.10+growthPotential*.10);
+  const commitmentState=rkCommitmentState(rackleIQScore,shapeScore,commitmentClarity,top,second,liveDirections,struct);
 
-  const topGap=top&&second?top.score-second.score:top?.score||0;
-  let commitmentStatus="Maybe";
-  if(rackleIQScore>=78&&top?.score>=72&&topGap>=14&&(struct.pungs.length+struct.kongs.length>=1||struct.suitEntries[0]?.[1]>=6))commitmentStatus="Strong Commit";
-  else if(top?.score>=60&&topGap>=8)commitmentStatus="Leaning";
-  else if(liveSections.length>=3&&flexibility>=58)commitmentStatus="Flexible";
-  else if(top?.score>=38||struct.pairs.length>=2||struct.bestWindow?.depth>=3)commitmentStatus="Maybe";
-  else commitmentStatus="Bail Out";
+  const coreSignal=rkCoreSignal(struct);
+  const whyTheRackWorked=rkWhyShapeWorked(struct,liveDirections,shapeQuality);
+  const strategicTension=rkStrategicTension(struct,top,liveDirections);
+  const coachingInsight=rkCoachingInsight(commitmentState,shapeQuality,struct,top);
 
-  const directionScore=rkClamp(sectionViability*.4,0,40);
+  const bestDirection=liveDirections[0]?.label||top?.name||"Still watching";
+  const directionScore=rkClamp(commitmentClarity*.4,0,40);
   const tileStrengthScore=rkClamp(tileEfficiency*.25,0,25);
-  const passQualityScore=rkClamp((flexibility*.62+suitDiscipline*.38)*.25,0,25);
+  const passQualityScore=rkClamp((shapeScore*.55+flexibility*.45)*.25,0,25);
   const timingScore=rkClamp(growthPotential*.10,0,10);
-
   const dominantSuit=struct.strongestSuit?RK_SUIT_NAMES[struct.strongestSuit]:"No clear suit";
-  const bestDirection=top?`${top.icon?top.icon+" ":""}${top.name}`:"Still open";
-  const why=[];
-  if(struct.bestWindow?.depth>=4)why.push(`${RK_SUIT_NAMES[struct.bestWindow.suit]} ${struct.bestWindow.nums[0]}-${struct.bestWindow.nums[2]} has the cleanest number window.`);
-  if(struct.pungs.length)why.push(`${struct.pungs.map(g=>g.label).slice(0,2).join(" and ")} gives you real group strength.`);
-  else if(struct.pairs.length)why.push(`${rkPlural(struct.pairs.length,"pair")} gives the rack a base, but it still needs depth.`);
-  if(struct.suitEntries[0]?.[1]>=5)why.push(`${dominantSuit} is carrying the suit concentration.`);
-  if(struct.jokers>=2)why.push(`${struct.jokers} jokers create strong open-hand ceiling.`);
-  if(!why.length)why.push("The rack has clues, but not enough grouped strength yet.");
 
-  const strengths=[];
-  if(struct.connectedSequences.length)strengths.push(...struct.connectedSequences.slice(0,2).map(s=>`${RK_SUIT_NAMES[s.suit]} ${s.nums.join("-")} connection`));
-  if(struct.pairs.length)strengths.push(`${rkPlural(struct.pairs.length,"pair")} to protect`);
-  if(struct.pungs.length)strengths.push(`${rkPlural(struct.pungs.length,"pung")} already forming`);
-  if(struct.suitEntries[0]?.[1]>=5)strengths.push(`${dominantSuit} concentration`);
-  if(struct.jokers)strengths.push(`${rkPlural(struct.jokers,"joker")} for open hands`);
-
-  const danger=[];
-  if(struct.isolated.length>=4)danger.push(`${struct.isolated.length} disconnected tiles create too much miracle-draw dependence.`);
-  else if(struct.isolated.length>=2)danger.push(`${struct.isolated.length} isolated tiles need to pair up or leave soon.`);
-  if(struct.honorTotal>=3&&struct.groupedHonor===0&&top?.id!=="wd")danger.push("Loose honors are not helping unless Winds & Dragons becomes real.");
-  if(top?.id==="q"&&struct.jokers<2)danger.push("Quints is too thin without at least two jokers or natural group depth.");
-  if(top?.id==="sp"&&struct.jokers>0)danger.push("S&P cannot use jokers, so that path carries hidden friction.");
-  if(!danger.length&&commitmentStatus==="Strong Commit")danger.push("The main risk is overcommitting before the next draw confirms the lane.");
-  if(!danger.length)danger.push("No major red flag, but avoid chasing disconnected singletons.");
-
-  let coachingInsight="Stay flexible another pass before locking in.";
-  if(commitmentStatus==="Strong Commit")coachingInsight=`Commit to ${top?.name||"the main lane"}, but keep one exit if the next draw misses.`;
-  else if(commitmentStatus==="Leaning")coachingInsight=`You are leaning ${top?.name||"one way"}. One clean pickup can make it a commit.`;
-  else if(commitmentStatus==="Flexible")coachingInsight="Do not force a hand yet. Protect the shared core tiles and let the next draw decide.";
-  else if(commitmentStatus==="Bail Out")coachingInsight="Reset the read. Keep only tiles that connect, pair, or create a clear window.";
-  else if(struct.bestWindow?.depth>=3)coachingInsight=`Build around the ${RK_SUIT_NAMES[struct.bestWindow.suit]} window, not the loose edges.`;
-
-  const bestPaths=sectionReads.slice(0,4).filter(s=>s.score>=34).map(s=>({
-    section:s.name,
-    hand:s.bestHand?.label||null,
-    confidence:s.confidence,
-    support:s.support.slice(0,3),
-    needs:s.needs.slice(0,3),
-    overlapStrength:s.score>=68?"Strong":s.score>=50?"Medium":"Thin",
-    status:s.status,
-    score:s.score,
+  const bestPaths=liveDirections.slice(0,4).map(d=>({
+    section:d.label,
+    hand:null,
+    confidence:d.score>=70?"High":d.score>=56?"Medium":"Low",
+    support:[coreSignal],
+    needs:strategicTension.slice(0,2),
+    overlapStrength:d.score>=70?"Strong":d.score>=56?"Medium":"Thin",
+    status:d.score>=68?"realistically playable":d.score>=48?"alive":"technically possible",
+    score:d.score,
   }));
 
-  const output={
-    rackleIQScore,commitmentStatus,bestDirection,
-    whyItWorks:why.slice(0,3),
-    patternStrengths:strengths.length?strengths.slice(0,4):["Early shape only, not enough grouped strength yet"],
-    dangerAreas:danger.slice(0,3),
-    liveSections:sectionReads.filter(s=>s.score>=34).slice(0,5).map(s=>({name:s.name,confidence:s.confidence,status:s.status,score:s.score})),
+  return{
+    rackleIQScore,
+    shapeQuality,
+    commitmentState,
+    commitmentStatus:commitmentState,
+    bestDirection,
+    coreSignal,
+    whyTheRackWorked,
+    whyItWorks:whyTheRackWorked,
+    strategicTension,
+    dangerAreas:strategicTension,
+    liveDirections:liveDirections.map(d=>d.label),
+    liveSections:liveDirections.map(d=>({name:d.label,confidence:d.score>=70?"High":d.score>=56?"Medium":"Low",status:d.score>=68?"realistically playable":d.score>=48?"alive":"watching",score:d.score})),
     coachingInsight,
+    patternStrengths:[coreSignal,...whyTheRackWorked].slice(0,4),
     bestPaths,
     tileStructure:{
       strongestSuit:dominantSuit,weakestSuit:struct.weakestSuit?RK_SUIT_NAMES[struct.weakestSuit]:null,
@@ -4875,50 +4998,55 @@ function rkEvaluateCharlestonEngine({finalRack,startingRack=[],passedTilesByRoun
       connectedSequences:struct.connectedSequences.map(s=>`${RK_SUIT_NAMES[s.suit]} ${s.nums.join("-")}`),
       isolatedCount:struct.isolated.length,jokers:struct.jokers,flowers:struct.flowers
     },
-    componentScores:{tileEfficiency,sectionViability,flexibility,suitDiscipline,growthPotential,directionScore,tileStrengthScore,passQualityScore,timingScore},
-    topSection:top,chosenSection:chosen,sectionReads
+    componentScores:{shapeQuality:shapeScore,tileEfficiency,commitmentClarity,flexibility,growthPotential,directionScore,tileStrengthScore,passQualityScore,timingScore},
+    topSection:top,chosenSection:sectionReads.find(s=>s.id===sectionId)||top,sectionReads
   };
-  return output;
 }
-
 function StrategicCharlestonReadCard({iq}){
   const r=iq?.strategicRead;
   if(!r)return null;
-  const statusColor={"Strong Commit":C.jade,"Leaning":C.gold,"Flexible":"#2460A8","Maybe":C.mut,"Bail Out":C.cinn}[r.commitmentStatus]||C.mut;
+  const state=r.commitmentState||r.commitmentStatus;
+  const statusColor={"Committed":C.jade,"Leaning":C.gold,"Flexible":"#2460A8","Watching":C.mut,"Resetting":C.cinn,"Strong Commit":C.jade,"Maybe":C.mut,"Bail Out":C.cinn}[state]||C.mut;
+  const shapeColor={"Elite Shape":C.jade,"Strong Shape":C.jade,"Growing Shape":C.gold,"Loose Shape":"#2460A8","Fragile Shape":C.cinn,"Broken Shape":C.cinn}[r.shapeQuality]||C.mut;
   return(
     <div className="rk-score-card" style={{padding:18,textAlign:"left",marginBottom:12}}>
-      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,marginBottom:12}}>
+      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,marginBottom:13}}>
         <div style={{minWidth:0}}>
-          <div style={{fontSize:9,letterSpacing:2.2,fontWeight:950,color:C.jade,textTransform:"uppercase",marginBottom:5}}>Charleston Read</div>
-          <div style={{fontFamily:F.d,fontSize:20,fontWeight:950,lineHeight:1.08,color:C.ink}}>Expert rack direction</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.45,marginTop:5}}>Not a final hand call. This is what your rack is realistically showing after the Charleston.</div>
+          <div style={{fontSize:9,letterSpacing:2.2,fontWeight:950,color:C.jade,textTransform:"uppercase",marginBottom:5}}>Mahjong Intuition</div>
+          <div style={{fontFamily:F.d,fontSize:20,fontWeight:950,lineHeight:1.08,color:C.ink}}>What your rack is trying to become</div>
+          <div style={{fontSize:12,color:C.mut,lineHeight:1.45,marginTop:5}}>Charleston guidance only. Shape, momentum, and timing before a final hand call.</div>
         </div>
-        <div style={{borderRadius:999,padding:"7px 10px",background:statusColor+"12",border:`1px solid ${statusColor}22`,color:statusColor,fontSize:11,fontWeight:950,whiteSpace:"nowrap"}}>{r.commitmentStatus}</div>
+        <div style={{display:"grid",gap:6,justifyItems:"end",flexShrink:0}}>
+          <div style={{borderRadius:999,padding:"7px 10px",background:shapeColor+"12",border:`1px solid ${shapeColor}22`,color:shapeColor,fontSize:10,fontWeight:950,whiteSpace:"nowrap"}}>{r.shapeQuality||"Shape Read"}</div>
+          <div style={{borderRadius:999,padding:"7px 10px",background:statusColor+"12",border:`1px solid ${statusColor}22`,color:statusColor,fontSize:10,fontWeight:950,whiteSpace:"nowrap"}}>{state}</div>
+        </div>
       </div>
 
       <div style={{borderRadius:18,padding:"13px 14px",background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid ${C.jade}12`,boxShadow:"inset 0 1px 0 rgba(255,255,255,.76)",marginBottom:12}}>
-        <div style={{fontSize:9,letterSpacing:2,fontWeight:950,color:C.jade,textTransform:"uppercase",marginBottom:4}}>Best Direction</div>
-        <div style={{fontFamily:F.d,fontSize:18,fontWeight:950,color:C.ink,lineHeight:1.12}}>{r.bestDirection}</div>
+        <div style={{fontSize:9,letterSpacing:2,fontWeight:950,color:C.jade,textTransform:"uppercase",marginBottom:4}}>Core Signal</div>
+        <div style={{fontSize:13,lineHeight:1.55,color:C.ink,fontWeight:850}}>{r.coreSignal||r.bestDirection}</div>
       </div>
 
-      <div style={{display:"grid",gap:9}}>
+      <div style={{display:"grid",gap:11}}>
         <div>
-          <div style={{fontSize:10,fontWeight:950,color:C.ink,marginBottom:5}}>Why it works</div>
-          {(r.whyItWorks||[]).slice(0,3).map((x,i)=><div key={i} style={{fontSize:12,lineHeight:1.55,color:"rgba(26,20,16,.72)",fontWeight:700}}>• {x}</div>)}
+          <div style={{fontSize:10,fontWeight:950,color:C.ink,marginBottom:5}}>Why it had value</div>
+          {(r.whyTheRackWorked||r.whyItWorks||[]).slice(0,3).map((x,i)=><div key={i} style={{fontSize:12,lineHeight:1.55,color:"rgba(26,20,16,.72)",fontWeight:700}}>• {x}</div>)}
         </div>
         <div>
-          <div style={{fontSize:10,fontWeight:950,color:C.ink,marginBottom:5}}>Danger areas</div>
-          {(r.dangerAreas||[]).slice(0,2).map((x,i)=><div key={i} style={{fontSize:12,lineHeight:1.55,color:"rgba(26,20,16,.68)",fontWeight:650}}>• {x}</div>)}
+          <div style={{fontSize:10,fontWeight:950,color:C.ink,marginBottom:5}}>Strategic tension</div>
+          {(r.strategicTension||r.dangerAreas||[]).slice(0,2).map((x,i)=><div key={i} style={{fontSize:12,lineHeight:1.55,color:"rgba(26,20,16,.68)",fontWeight:650}}>• {x}</div>)}
         </div>
-        <div style={{display:"flex",gap:7,flexWrap:"wrap",paddingTop:2}}>
-          {(r.liveSections||[]).slice(0,4).map((s,i)=><span key={i} className="rk-soft-pill" style={{fontSize:10,padding:"6px 9px"}}>{s.name} · {s.confidence}</span>)}
+        <div>
+          <div style={{fontSize:10,fontWeight:950,color:C.ink,marginBottom:7}}>Live directions</div>
+          <div style={{display:"flex",gap:7,flexWrap:"wrap"}}>
+            {(r.liveDirections||[]).slice(0,4).map((x,i)=><span key={i} className="rk-soft-pill" style={{fontSize:10,padding:"6px 9px"}}>{x}</span>)}
+          </div>
         </div>
         <div style={{borderTop:`1px solid ${C.bdr}80`,paddingTop:10,fontSize:13,lineHeight:1.55,color:C.ink,fontWeight:850,textAlign:"center"}}>{r.coachingInsight}</div>
       </div>
     </div>
   );
 }
-
 function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   const{startingRack,finalRack,passedTilesByRound,totalTime,sectionId,chosenHand}=gameState;
   if(!startingRack||!finalRack||!sectionId)return null;
