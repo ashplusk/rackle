@@ -382,6 +382,43 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   font-weight:850;
 }
 
+
+
+/* ─── vNext HOMEPAGE BREATHING ROOM + DARKER CLUB GREEN ─────────────────── */
+.rk-home-section{margin-bottom:24px!important}
+.rk-home-section-lg{margin-bottom:30px!important}
+.rk-clubhouse-stack{margin-top:4px!important;margin-bottom:28px!important}
+.rk-learn-shell{margin-top:32px!important;margin-bottom:18px!important}
+.rk-organizer-card{margin:26px 0 22px!important;padding:22px!important;border-radius:24px!important}
+.rk-organizer-benefits{grid-template-columns:1fr 1fr!important;gap:9px!important;margin:16px 0 18px!important}
+.rk-organizer-benefit{justify-content:center;padding:12px 10px!important;border-radius:16px!important}
+.rk-organizer-benefit-text{text-align:center;font-size:11.5px!important;line-height:1.2!important}
+@media(max-width:390px){.rk-organizer-benefits{grid-template-columns:1fr!important}.rk-organizer-card{padding:20px!important}}
+.rk-lux-card-dark,.rk-premium-hero,.rk-browser-hero,.rk-improve-hero,.rk-quiet-leader,.rk-social-room-card,.rk-social-lb-feature,.rk-recap-hero,.rk-tutorial-stage{
+  background:linear-gradient(150deg,#041F12 0%,#07331E 46%,#0A4328 70%,#03170D 100%)!important;
+}
+.rk-global-board-home,
+.rk-clubhouse-stack > div:first-child,
+.rk-clubhouse-stack > div:first-child .rk-quiet-board,
+.rk-clubhouse-stack > div:first-child#global-leaderboard{
+  border-radius:22px 22px 0 0!important;
+}
+.rk-global-board-home .rk-quiet-board-head,
+.rk-clubhouse-stack > div:first-child .rk-quiet-board-head{
+  border-radius:22px 22px 0 0!important;
+}
+.rk-global-board-home .rk-quiet-board-panel,
+.rk-clubhouse-stack > div:first-child .rk-quiet-board-panel{
+  border-radius:0!important;
+}
+.rk-global-board-home .rk-quiet-head-open,
+.rk-clubhouse-stack > div:first-child .rk-quiet-head-open{
+  border-radius:22px 22px 0 0!important;
+}
+.rk-global-board-home:has(.rk-quiet-board-panel){border-radius:22px 22px 0 0!important}
+.rk-quiet-board-panel{padding-top:16px!important;padding-bottom:18px!important}
+.rk-quiet-leader{background:linear-gradient(150deg,#041F12 0%,#07331E 46%,#0A4328 70%,#03170D 100%)!important}
+
 /* ─── vNext SOCIAL PREVIEW BOARDS + IMPROVE GAME OVERHAUL ───────────────── */
 @keyframes rkTablePulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(76,217,135,.28),0 0 12px rgba(76,217,135,.46)}50%{transform:scale(1.08);box-shadow:0 0 0 8px rgba(76,217,135,0),0 0 18px rgba(76,217,135,.62)}}
 @keyframes rkSocialSlide{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -8045,7 +8082,7 @@ function GlobalLeaderboardPill({setScreen}){
   const liveCopy=hasData?`${entries.length} players in the room`:"Same rack. One room. First score sets the table.";
 
   return(
-    <div id="global-leaderboard" className="rk-quiet-board" style={{marginBottom:0,borderRadius:22}}>
+    <div id="global-leaderboard" className="rk-quiet-board rk-global-board-home" style={{marginBottom:0,borderRadius:"22px 22px 0 0"}}>
       <button onClick={toggle} className={`rk-quiet-board-head ${open?"rk-quiet-head-open":"rk-quiet-head-closed"}`} aria-expanded={open}>
         <div style={{flex:1,minWidth:0}}>
           <div className="rk-quiet-topline">
@@ -8921,10 +8958,10 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
   return(
     <button onClick={onPlay} aria-label={`Play Daily Rackle challenge number ${dn}`} className="rk-in rk-hero-live rk-hero-bright rk-tap-card rk-sweep" style={{
       width:"100%",border:"none",cursor:"pointer",textAlign:"left",borderRadius:22,overflow:"hidden",padding:0,
-      background:`linear-gradient(150deg,#07351F 0%,#0F5F3A 43%,#177549 68%,#07301B 100%)`,
-      color:"#fff",boxShadow:"0 16px 46px rgba(6,43,24,0.30),0 0 0 1px rgba(201,168,76,.10)",marginBottom:20,position:"relative"
+      background:`linear-gradient(150deg,#041F12 0%,#07331E 42%,#0B4A2C 68%,#03170D 100%)`,
+      color:"#fff",boxShadow:"0 18px 50px rgba(3,23,13,0.38),0 0 0 1px rgba(201,168,76,.14)",marginBottom:28,position:"relative"
     }}>
-      <div aria-hidden style={{position:"absolute",inset:0,background:"radial-gradient(circle at 76% 18%,rgba(229,204,123,.20),transparent 30%),radial-gradient(circle at 18% 86%,rgba(76,217,135,.12),transparent 32%),linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,0))",pointerEvents:"none"}}/>
+      <div aria-hidden style={{position:"absolute",inset:0,background:"radial-gradient(circle at 76% 18%,rgba(229,204,123,.16),transparent 30%),radial-gradient(circle at 18% 86%,rgba(76,217,135,.08),transparent 32%),linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0))",pointerEvents:"none"}}/>
       <div aria-hidden style={{position:"absolute",right:-24,top:-28,fontSize:140,opacity:0.042,lineHeight:1,transform:"rotate(12deg)",pointerEvents:"none"}}>🀄</div>
       <div aria-hidden style={{position:"absolute",left:-36,bottom:-30,fontSize:110,opacity:0.032,lineHeight:1,transform:"rotate(-10deg)",pointerEvents:"none"}}>🀄</div>
 
@@ -9403,7 +9440,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   );
 
   const PracticeCard=()=> (
-    <button onClick={()=>go("free")} aria-label="Play Free Play" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:13,marginBottom:24,borderRadius:18,padding:"16px 18px",textAlign:"left",background:dDone?"linear-gradient(135deg,#fff,#F4FAF6)":"linear-gradient(135deg,#FFF9F6,#fff)",border:`1.5px solid ${dDone?C.jade+"22":C.cinn+"18"}`,boxShadow:"0 5px 18px rgba(0,0,0,0.032)"}}>
+    <button onClick={()=>go("free")} aria-label="Play Free Play" style={{width:"100%",cursor:"pointer",display:"flex",alignItems:"center",gap:13,marginBottom:30,borderRadius:18,padding:"16px 18px",textAlign:"left",background:dDone?"linear-gradient(135deg,#fff,#F4FAF6)":"linear-gradient(135deg,#FFF9F6,#fff)",border:`1.5px solid ${dDone?C.jade+"22":C.cinn+"18"}`,boxShadow:"0 5px 18px rgba(0,0,0,0.032)"}}>
       <div style={{width:44,height:44,borderRadius:14,background:dDone?C.jade+"10":C.cinn+"10",border:`1px solid ${dDone?C.jade+"20":C.cinn+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🀄</div>
       <div style={{flex:1,minWidth:0}}>
         <div style={{fontSize:9,color:dDone?C.jade:C.cinn,letterSpacing:2.15,fontWeight:900,marginBottom:5}}>FREE PLAY</div>
@@ -9416,7 +9453,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   const Community=()=> (
     <>
-      <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,marginTop:8}}>
+      <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20,marginTop:12}}>
         <div style={{flex:1,height:1,background:`linear-gradient(90deg,transparent,${C.bdr})`}}/>
         <div style={{display:"flex",alignItems:"center",gap:6,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:999,padding:"5px 14px"}}><span style={{fontSize:10}}>🀄</span><span style={{fontSize:9,color:C.mut,letterSpacing:2.3,fontWeight:900}}>THE CLUBHOUSE</span></div>
         <div style={{flex:1,height:1,background:`linear-gradient(90deg,${C.bdr},transparent)`}}/>
@@ -9429,12 +9466,11 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       {!activeClubCode&&(
         <div className="rk-organizer-card">
           <div style={{fontSize:9,color:C.jade,letterSpacing:2.2,fontWeight:900,marginBottom:6}}>FOR CLUB ORGANIZERS</div>
-          <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:C.ink,lineHeight:1.12,marginBottom:8,letterSpacing:-0.25}}>Your club's daily Charleston starts here</div>
+          <div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:C.ink,lineHeight:1.12,marginBottom:8,letterSpacing:-0.25}}>Your club room starts here</div>
           <div className="rk-organizer-benefits">
             {[
-              "One shared Daily Rackle for your group",
-              "A private club board everyone can chase",
-              "A reason to come back before the next game"
+              "Daily Rackle",
+              "Private leaderboard"
             ].map((item)=>(
               <div key={item} className="rk-organizer-benefit">
                 <span className="rk-organizer-benefit-dot"/>
