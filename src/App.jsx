@@ -5567,6 +5567,79 @@ function rkLocalDisplayName(){
   if(stored&&!isClubDisplayName(stored))return stored;
   return null;
 }
+function rkCurrentDisplayName(){
+  return rkLocalDisplayName()||getPlayerDisplayName?.()||getOrCreateAnonymousName();
+}
+function rkCurrentClubCode(){
+  const p=rkRawProfile();
+  return p?.club_code||p?.clubCode||getClubCode()||null;
+}
+function rkEntryMatchesCurrentPlayer(entry,scoreHint=null){
+  if(!entry)return false;
+  const ids=rkLocalPlayerIds();
+  const entryId=String(entry.playerId||entry.player_id||"").trim();
+  if(entryId&&ids.includes(entryId))return true;
+  const currentName=rkCurrentDisplayName();
+  const entryName=String(entry.name||entry.player_name||entry.nickname||"").trim();
+  if(currentName&&entryName&&rkNormText(currentName)===rkNormText(entryName))return true;
+
+  // Legacy anonymous row fallback: generated player name, same club, same score.
+  // If scoreHint is not provided, use today's latest local Daily score.
+  const localDailyScore=Number(scoreHint??rkLatestLocalDailyScore()?.iqScore??0);
+  if(rkLooksGeneratedPlayerName(entryName)&&localDailyScore>0){
+    const entryScore=Number(entry.iqScore??entry.iq_score??entry.score??0);
+    const entryCode=String(entry.clubCode||entry.club_code||"__global__");
+    const localCode=String(rkCurrentClubCode()||"__global__");
+    const clubMatches=entryCode===localCode||(entryCode==="__global__"&&!rkCurrentClubCode());
+    if(clubMatches&&Number.isFinite(entryScore)&&entryScore===localDailyScore)return true;
+  }
+  return false;
+}
+function rkNormalizeCurrentEntry(entry,scoreHint=null){
+  if(!entry)return entry;
+  if(!rkEntryMatchesCurrentPlayer(entry,scoreHint))return entry;
+  return{
+    ...entry,
+    name:rkCurrentDisplayName(),
+    playerId:currentLeaderboardPlayerId(),
+    player_id:currentLeaderboardPlayerId(),
+    clubCode:rkCurrentClubCode()||entry.clubCode||entry.club_code||null,
+    club_code:rkCurrentClubCode()||entry.clubCode||entry.club_code||null,
+  };
+}
+function rkSortLeaderboardEntries(entries=[]){
+  return [...(entries||[])]
+    .filter(e=>e&&Number.isFinite(Number(e.iqScore??e.iq_score??0))&&Number(e.iqScore??e.iq_score??0)>0)
+    .sort((a,b)=>(Number(b.iqScore??b.iq_score)||0)-(Number(a.iqScore??a.iq_score)||0)||((Number(a.time??a.time_secs)||99999)-(Number(b.time??b.time_secs)||99999)));
+}
+function rkMergeCurrentScore(entries=[],score,time=0,streak=0,clubCode=null){
+  const scoreNum=Number(score||0);
+  let found=false;
+  const normalized=(entries||[]).map(e=>{
+    if(rkEntryMatchesCurrentPlayer(e,scoreNum)){
+      found=true;
+      const current=rkNormalizeCurrentEntry(e,scoreNum);
+      return{...current,iqScore:Number(current.iqScore??current.iq_score??scoreNum)||scoreNum,time:Number(current.time??current.time_secs??time)||time,streak:Number(current.streak??streak)||streak,clubCode:clubCode||current.clubCode||current.club_code||null};
+    }
+    return e;
+  });
+  if(scoreNum>0&&!found){
+    normalized.push({name:rkCurrentDisplayName(),iqScore:scoreNum,time:time||0,streak:streak||0,ts:Date.now(),playerId:currentLeaderboardPlayerId(),clubCode:clubCode||rkCurrentClubCode()||null,optimistic:true});
+  }
+  const best=new Map();
+  rkSortLeaderboardEntries(normalized).forEach((e,i)=>{
+    const key=rkEntryMatchesCurrentPlayer(e,scoreNum)?`current:${currentLeaderboardPlayerId()}`:(e.playerId?`player:${e.playerId}`:e.name?`name:${rkNormText(e.name)}`:`guest:${i}`);
+    if(!best.has(key))best.set(key,e);
+  });
+  return rkSortLeaderboardEntries([...best.values()]);
+}
+function rkRankOfCurrent(entries=[],scoreHint=null){
+  const idx=(entries||[]).findIndex(e=>rkEntryMatchesCurrentPlayer(e,scoreHint));
+  if(idx>=0)return idx+1;
+  const score=Number(scoreHint||0);
+  if(score>0)return (entries||[]).filter(e=>Number(e.iqScore??e.iq_score??0)>score).length+1;
+  return null;
+}
 function rkProfileName(profile,index=0){
   return rkSafePlayerName(profile?.nickname||profile?.name,profile?.player_id||profile?.playerId,index);
 }
@@ -5687,26 +5760,31 @@ function rkLatestLocalDailyScore(){
 }
 function rkIsLikelyCurrentLocalRow(row){
   const localName=rkLocalDisplayName();
-  if(!localName)return false;
   const pid=String(row?.player_id||row?.playerId||"").trim();
-  if(pid&&rkLocalPlayerIds().includes(pid))return true;
-  if(pid)return false;
+  const localIds=rkLocalPlayerIds();
+  if(pid&&localIds.includes(pid))return true;
   const raw=String(row?.name||row?.player_name||row?.nickname||"").trim();
+  if(localName&&raw&&rkNormText(raw)===rkNormText(localName))return true;
+
+  // Repair legacy rows created before the profile identity fix.
+  // Older rows can have a stale player_id and a generated name like "Player 701".
+  // If the row matches today's local daily score and club, treat it as the current player
+  // so the UI can show the real profile name and calculate rank correctly.
   if(!rkLooksGeneratedPlayerName(raw))return false;
-  const code=String(row?.club_code||"");
+  const code=String(row?.club_code||"__global__");
   const localCode=String(getClubCode()||"__global__");
   if(code&&code!==localCode&&!(code==="__global__"&&!getClubCode()))return false;
   const daily=rkLatestLocalDailyScore();
   if(!daily)return false;
   const score=Number(row?.iq_score??row?.iqScore??row?.score??0);
-  return score===daily.iqScore;
+  return Number.isFinite(score)&&score===Number(daily.iqScore||0);
 }
 function normalizeLeaderboardRow(row,index=0,profileMap=null){
   if(!row)return null;
   let playerId=String(row.player_id||row.playerId||"").trim();
   const localIds=rkLocalPlayerIds();
-  const isLocal=playerId&&localIds.includes(playerId)||rkIsLikelyCurrentLocalRow(row);
-  if(isLocal&&!playerId)playerId=currentLeaderboardPlayerId();
+  const isLocal=(playerId&&localIds.includes(playerId))||rkIsLikelyCurrentLocalRow(row);
+  if(isLocal)playerId=currentLeaderboardPlayerId();
   const profile=playerId&&profileMap?.get?profileMap.get(playerId):null;
   const rawName=String(row.name||row.player_name||row.nickname||"").trim();
   const localName=rkLocalDisplayName();
@@ -5838,7 +5916,7 @@ async function fetchYesterdayEntries(code){
 }
 async function fetchDailyStats(){
   const rows=await fetchGlobalEntries();
-  return{count:rows.length,topScore:rows[0]?.iqScore||null,rows};
+  return{count:rows.length,total:rows.length,topScore:rows[0]?.iqScore||null,max:rows[0]?.iqScore||null,rows};
 }
 async function deleteExistingOwnLeaderboardRows(body){
   const pid=String(body?.player_id||"").trim();
@@ -8121,15 +8199,15 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
       {/* ② SOCIAL, ranks + share, always visible, right after hero */}
       {(()=>{
-        const myScore=iq.totalScore;
-        const globalRank=globalEntries.length>0?globalEntries.findIndex(e=>e.iqScore<=myScore)+1:null;
-        const globalTotal=globalEntries.length||dailyStats?.total||null;
+        const myScore=Number(iq.totalScore||0);
         const clubCode=getClubCode();
         const clubName=clubCode?CLUBS[clubCode]?.name:null;
-        const profileName=(getProfile()?.nickname||getOrCreateAnonymousName()).trim().toLowerCase();
-        const currentAlreadyOnClubBoard=clubEntries.some(e=>(e.name||"").trim().toLowerCase()===profileName);
-        const clubRank=clubCode?clubEntries.filter(e=>(Number(e.iqScore)||0)>myScore).length+1:null;
-        const clubTotal=clubCode?clubEntries.length+(currentAlreadyOnClubBoard?0:1):null;
+        const globalRows=rkMergeCurrentScore(globalEntries,myScore,iq.totalTime||0,0,null);
+        const clubRows=clubCode?rkMergeCurrentScore(clubEntries,myScore,iq.totalTime||0,0,clubCode):[];
+        const globalRank=globalRows.length>0?rkRankOfCurrent(globalRows,myScore):null;
+        const globalTotal=globalRows.length||dailyStats?.total||dailyStats?.count||null;
+        const clubRank=clubCode?rkRankOfCurrent(clubRows,myScore):null;
+        const clubTotal=clubCode?clubRows.length:null;
 
         // Enrich share text with rank context
         const rankLine=globalRank&&globalTotal?`#${globalRank} of ${globalTotal} players today${clubRank&&clubTotal?` · #${clubRank} in my club`:""}`:
@@ -9881,17 +9959,17 @@ function ClubCodeEntry({setScreen,clubEntries=[],currentScore=0,currentRank=null
   const hasProfile=!!(profile&&profile.nickname);
   const savedCode=hasProfile?getClubCode():null;
   const savedClub=savedCode?CLUBS[savedCode]:null;
-  const myName=getClubName()||(profile?.nickname||null);
+  const myName=rkCurrentDisplayName();
 
   useEffect(()=>{
     if(!savedCode)return;
     fetchLBEntries(savedCode).then(rows=>{
-      const safeRows=Array.isArray(rows)?rows:[];
-      const myRank=myName?safeRows.findIndex(e=>(e.name||"").toLowerCase()===myName.toLowerCase())+1:0;
+      const safeRows=rkSortLeaderboardEntries(Array.isArray(rows)?rows:[]).map(e=>rkNormalizeCurrentEntry(e));
+      const myRank=rkRankOfCurrent(safeRows,currentScore||null);
       const top=safeRows[0];
-      setClubStats({total:safeRows.length,topName:top?.name,topIQ:top?.iqScore,myRank:myRank>0?myRank:null,rows:safeRows});
+      setClubStats({total:safeRows.length,topName:top?.name,topIQ:top?.iqScore,myRank:myRank||null,rows:safeRows});
     });
-  },[savedCode,myName]);
+  },[savedCode,currentScore]);
 
   const join=()=>{
     const trimmed=code.trim();
@@ -9902,10 +9980,11 @@ function ClubCodeEntry({setScreen,clubEntries=[],currentScore=0,currentRank=null
 
   const addClubEmail="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20";
   const realClubEntries=Array.isArray(clubEntries)?clubEntries.filter(e=>Number.isFinite(Number(e.iqScore))):[];
-  const rows=(clubStats?.rows&&clubStats.rows.length?clubStats.rows:realClubEntries).slice(0,3);
-  const leader=rows[0]||null;
-  const liveCount=rows.length;
-  const myRank=currentRank||clubStats?.myRank||null;
+  const allRows=rkSortLeaderboardEntries((clubStats?.rows&&clubStats.rows.length?clubStats.rows:realClubEntries).map(e=>rkNormalizeCurrentEntry(e,currentScore)));
+  const rows=allRows.slice(0,3);
+  const leader=allRows[0]||null;
+  const liveCount=allRows.length;
+  const myRank=currentRank||clubStats?.myRank||rkRankOfCurrent(allRows,currentScore)||null;
   const topScore=leader?.iqScore||clubStats?.topIQ||null;
   const roomCopy=myRank===1?"You lead your club today.":myRank?`You are #${myRank} in the room.`:"Post your Daily to enter the room.";
 
@@ -9947,7 +10026,7 @@ function ClubCodeEntry({setScreen,clubEntries=[],currentScore=0,currentRank=null
             </div>}
             <div className="rk-quiet-row-list">
               {rows.map((e,i)=>{
-                const isMe=myName&&(e.name||"").toLowerCase()===myName.toLowerCase();
+                const isMe=rkEntryMatchesCurrentPlayer(e,currentScore);
                 return(
                   <div key={i} className={`rk-quiet-row ${isMe?"rk-quiet-row-you":""}`}>
                     <div className={i===0?"rk-quiet-rank rk-quiet-rank-top":"rk-quiet-rank"}>{i+1}</div>
@@ -9993,7 +10072,7 @@ function GlobalLeaderboardPill({setScreen}){
   const [entries,setEntries]=useState([]);
   const [loading,setLoading]=useState(false);
   const [fetched,setFetched]=useState(false);
-  const myName=getClubName()||(getProfile()?.nickname||null);
+  const myName=rkCurrentDisplayName();
   const dn=getDayNum();
 
   useEffect(()=>{
@@ -10007,13 +10086,14 @@ function GlobalLeaderboardPill({setScreen}){
   };
   const refresh=()=>{setLoading(true);fetchGlobalEntries().then(rows=>{setEntries(rows||[]);setLoading(false);setFetched(true);});};
 
-  const rows=entries.slice(0,3);
-  const leader=entries[0]||null;
-  const myRank=myName?entries.findIndex(e=>(e.name||"").toLowerCase()===myName.toLowerCase())+1:0;
-  const myEntry=myRank>0?entries[myRank-1]:null;
+  const allEntries=rkSortLeaderboardEntries((entries||[]).map(e=>rkNormalizeCurrentEntry(e)));
+  const rows=allEntries.slice(0,3);
+  const leader=allEntries[0]||null;
+  const myRank=rkRankOfCurrent(allEntries,null)||0;
+  const myEntry=myRank>0?allEntries[myRank-1]:null;
   const gap=myEntry&&leader?Math.max(0,(Number(leader.iqScore)||0)-(Number(myEntry.iqScore)||0)):null;
-  const hasData=entries.length>0;
-  const liveCopy=hasData?`${entries.length} players in the room`:"Same rack. One room. First score sets the table.";
+  const hasData=allEntries.length>0;
+  const liveCopy=hasData?`${allEntries.length} players in the room`:"Same rack. One room. First score sets the table.";
 
   return(
     <div id="global-leaderboard" className={`rk-quiet-board rk-global-board-home ${open?"rk-global-board-open":""}`} style={{marginBottom:0,borderRadius:open?"22px 22px 0 0":"22px 22px 0 0"}}>
@@ -10030,7 +10110,7 @@ function GlobalLeaderboardPill({setScreen}){
           <div className="rk-quiet-desc">See who owns today’s rack before the board resets.</div>
           {hasData?(
             <div className="rk-quiet-preview-line">
-              <span className="rk-quiet-preview-pill rk-quiet-preview-pill-blue">{entries.length} players</span>
+              <span className="rk-quiet-preview-pill rk-quiet-preview-pill-blue">{allEntries.length} players</span>
               {leader&&<span className="rk-quiet-preview-pill rk-quiet-preview-pill-gold">{leader.iqScore} leads</span>}
               {myRank>0?<span className="rk-quiet-preview-pill rk-quiet-preview-pill-green">You #{myRank}</span>:<span className="rk-quiet-preview-pill rk-quiet-preview-pill-gold">Play to rank</span>}
             </div>
@@ -10062,7 +10142,7 @@ function GlobalLeaderboardPill({setScreen}){
             </div>}
             <div className="rk-quiet-row-list">
               {rows.map((e,i)=>{
-                const isMe=myName&&(e.name||"").toLowerCase()===myName.toLowerCase();
+                const isMe=rkEntryMatchesCurrentPlayer(e,currentScore);
                 const clubLabel=e.clubCode&&CLUBS[e.clubCode]?CLUBS[e.clubCode].name:"Rackle player";
                 return(
                   <div key={i} className={`rk-quiet-row ${isMe?"rk-quiet-row-you":""}`}>
@@ -10145,7 +10225,7 @@ function PeriodTable({code,period,myName,showTime,fetchFn}){
         ))}
       </div>
       {entries.map((e,i)=>{
-        const isMe=myName&&e.name.toLowerCase()===myName.toLowerCase();
+        const isMe=rkEntryMatchesCurrentPlayer(e);
         const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":null;
         return(
           <div key={i} style={{display:"grid",gridTemplateColumns:cols.template,gap:0,padding:"11px 14px",background:isMe?C.jade+"06":"#fff",borderBottom:i<entries.length-1?`1px solid ${C.bdr}`:"none",alignItems:"center"}}>
@@ -10364,20 +10444,20 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
   const [entries,setEntries]=useState([]);
   const [loading,setLoading]=useState(true);
   const [submitting,setSubmitting]=useState(false);
-  const [nameInput,setNameInput]=useState(getClubName()||"");
+  const [nameInput,setNameInput]=useState(rkCurrentDisplayName()||"");
   const [submitted,setSubmitted]=useState(false);
   const [nameErr,setNameErr]=useState("");
   const [period,setPeriod]=useState("today");
 
   const iq=withIQStyle(dRes?.iq);
-  const myName=getClubName();
+  const myName=rkCurrentDisplayName();
 
   useEffect(()=>{
     if(!code)return;
     setLoading(true);
     fetchLBEntries(code).then(rows=>{
       setEntries(rows);
-      if(myName&&rows.some(e=>e.name.toLowerCase()===myName.toLowerCase()))setSubmitted(true);
+      if(rows.some(e=>rkEntryMatchesCurrentPlayer(e,iq?.totalScore||null)))setSubmitted(true);
       setLoading(false);
     });
   },[code]);
@@ -10555,7 +10635,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
                 ))}
               </div>
               {entries.map((e,i)=>{
-                const isMe=myName&&e.name.toLowerCase()===myName.toLowerCase();
+                const isMe=rkEntryMatchesCurrentPlayer(e);
                 const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":null;
                 return(
                   <div key={i} style={{display:"grid",gridTemplateColumns:"28px 1fr 44px 44px 36px",gap:0,padding:"11px 14px",background:isMe?C.jade+"06":"#fff",borderBottom:i<entries.length-1?`1px solid ${C.bdr}`:"none",alignItems:"center"}}>
@@ -11165,27 +11245,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const topToday=Math.max(ds?.topScore||ds?.max||0,iq?.totalScore||0);
   const bestScore=Number.isFinite(Number(bestIQ?.score ?? bestIQ))?Number(bestIQ?.score ?? bestIQ):0;
   const currentScore=Number.isFinite(Number(iq?.totalScore))?Number(iq.totalScore):0;
-  const currentName=(profile?.nickname||getClubName()||getOrCreateAnonymousName()).trim();
-  const currentNameKey=currentName.toLowerCase();
-  const currentAlreadyOnClubBoard=homeClubEntries.some(e=>(e.name||"").trim().toLowerCase()===currentNameKey);
+  const currentName=rkCurrentDisplayName();
   const hasClubScore=!!(club&&dDone&&currentScore>0);
-  const optimisticClubEntry=hasClubScore&&!currentAlreadyOnClubBoard?{
-    name:currentName,
-    iqScore:currentScore,
-    time:iq?.totalTime||dRes?.time||0,
-    streak,
-    ts:Date.now(),
-    optimistic:true,
-  }:null;
-  const displayHomeClubEntries=(optimisticClubEntry?[...homeClubEntries,optimisticClubEntry]:homeClubEntries)
-    .filter(e=>Number.isFinite(Number(e.iqScore)))
-    .sort((a,b)=>(Number(b.iqScore)||0)-(Number(a.iqScore)||0)||((Number(a.time)||9999)-(Number(b.time)||9999)));
-  const homeClubRank=hasClubScore?(()=>{
-    const idx=displayHomeClubEntries.findIndex(e=>(e.name||"").trim().toLowerCase()===currentNameKey);
-    return idx>=0?idx+1:null;
-  })():null;
-  const scoreBasedClubRank=hasClubScore&&!homeClubRank?displayHomeClubEntries.findIndex(e=>Number(e.iqScore)<=currentScore)+1:null;
-  const shownClubRank=homeClubRank||scoreBasedClubRank||null;
+  const displayHomeClubEntries=club
+    ?rkMergeCurrentScore(homeClubEntries,currentScore,iq?.totalTime||dRes?.time||0,streak,activeClubCode)
+    :[];
+  const shownClubRank=hasClubScore?rkRankOfCurrent(displayHomeClubEntries,currentScore):null;
   const homeClubTotal=club?displayHomeClubEntries.length:null;
   const liveClubPlayedToday=club?(homeClubTotal||0):0;
   const liveClubSharesToday=club?Math.max(clubSharesToday||0,getLocalClubShareCount(activeClubCode)):0;
@@ -11230,7 +11295,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     "Most players missed one pivot today",
     club?`${club.name} is active today`:"The club board is active today",
   ].filter(Boolean);
-  const socialPresenceLine=socialPresenceFeed[dn%socialPresenceFeed.length];
+  const socialPresenceLine=club?`${club.name} is active today`:socialPresenceFeed[dn%socialPresenceFeed.length];
 
   const levelLine=iq?.totalScore>=90?"Elite read. Your club will notice.":iq?.totalScore>=80?"Strong read. Make them chase it.":iq?.totalScore>=70?"Solid read. One better pass moves you up.":iq?.totalScore>=60?"You're warming up. The next rack is where it clicks.":"Tough rack. Come back sharper tomorrow.";
   const brightScoreColor="#F3D46B";
