@@ -139,7 +139,16 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-menu-row{width:100%;min-height:54px;border-radius:18px;border:1px solid rgba(26,20,16,.07);background:linear-gradient(145deg,#FFFDF8,#F7F0E5);box-shadow:0 4px 14px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78);display:flex;align-items:center;gap:12px;padding:12px 13px;text-align:left;cursor:pointer;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;color:#1A1410}
 .rk-menu-row:hover{transform:translateY(-1px);border-color:rgba(23,107,66,.16);box-shadow:0 8px 22px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.85)}
 .rk-menu-row:active{transform:scale(.992)}
-.rk-menu-row-icon{width:34px;height:34px;border-radius:14px;background:rgba(23,107,66,.075);border:1px solid rgba(23,107,66,.09);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.rk-menu-row-icon{width:36px;height:36px;border-radius:14px;background:linear-gradient(145deg,#FFFDF8,#EEE4D2);border:1px solid rgba(23,107,66,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 4px 10px rgba(26,20,16,.04);display:flex;align-items:center;justify-content:center;font-size:17px;line-height:1;flex-shrink:0;position:relative;overflow:hidden;transform:translateY(-.25px)}
+.rk-menu-row-icon .rk-menu-emoji{width:100%;height:100%;display:flex;align-items:center;justify-content:center;line-height:1;transform:translateY(-.5px);font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif}
+.rk-menu-play .rk-menu-row-icon{background:linear-gradient(145deg,#FFFDF8,#E9F3ED);border-color:rgba(23,107,66,.10)}
+.rk-menu-community .rk-menu-row-icon{background:linear-gradient(145deg,#FFFDF8,#F6F0E2);border-color:rgba(201,168,76,.16)}
+.rk-menu-learn .rk-menu-row-icon{background:linear-gradient(145deg,#FFFDF8,#EEF2F8);border-color:rgba(36,96,168,.10)}
+.rk-menu-account .rk-menu-row-icon{background:linear-gradient(145deg,#FFFDF8,#F4F1EC);border-color:rgba(26,20,16,.075)}
+.rk-menu-share .rk-menu-row-icon{background:linear-gradient(145deg,#FFFDF8,#F7EEDF);border-color:rgba(201,168,76,.16)}
+.rk-menu-cta .rk-menu-row-icon{background:rgba(255,255,255,.13)!important;border-color:rgba(255,255,255,.18)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.18)!important}
+.rk-menu-badge{line-height:1!important}.rk-menu-badge .rk-menu-inline-emoji{display:inline-flex;align-items:center;justify-content:center;line-height:1;transform:translateY(-.5px);margin-right:1px}
+.rk-menu-live-stat span{line-height:1!important}.rk-menu-live-stat .rk-live-dot-dynamic{flex-shrink:0;transform:translateY(-.25px)}
 .rk-menu-row strong{display:block;font-size:13px;line-height:1.1;font-weight:950;color:#1A1410}
 .rk-menu-row span{display:block;font-size:10.5px;line-height:1.35;color:#6B6157;font-weight:750;margin-top:3px}
 .rk-menu-cta{position:relative;overflow:hidden;border-color:rgba(23,107,66,.20)!important;background:linear-gradient(135deg,#176B42,#0F5432)!important;color:#fff!important;box-shadow:0 10px 24px rgba(23,107,66,.17),inset 0 1px 0 rgba(255,255,255,.16)!important}
@@ -9916,11 +9925,11 @@ function PremiumClubMenu({open,onClose,setScreen,go,showSettings,streak=0,dRes=n
     onClose?.();
   };
   const logout=()=>{rkLogout();onClose?.();setScreen?.("home");window.dispatchEvent(new Event("rackle:remoteHydrated"));};
-  const Row=({icon,title,sub,onClick,cta=false})=>(
-    <button className={"rk-menu-row"+(cta?" rk-menu-cta":"")} onClick={onClick}>
-      <span className="rk-menu-row-icon">{icon}</span>
+  const Row=({icon,title,sub,onClick,cta=false,section="account"})=>(
+    <button className={`rk-menu-row rk-menu-${section}${cta?" rk-menu-cta":""}`} onClick={onClick}>
+      <span className="rk-menu-row-icon" aria-hidden="true"><span className="rk-menu-emoji">{icon}</span></span>
       <span style={{flex:1,minWidth:0}}><strong>{title}</strong>{sub&&<span>{sub}</span>}</span>
-      <span style={{fontSize:14,color:cta?"#fff":"#8A6820",fontWeight:950}}>›</span>
+      <span style={{fontSize:14,color:cta?"#fff":"#8A6820",fontWeight:950,lineHeight:1}}>›</span>
     </button>
   );
   return(
@@ -9933,8 +9942,8 @@ function PremiumClubMenu({open,onClose,setScreen,go,showSettings,streak=0,dRes=n
           <div className="rk-menu-name">{hasProfile?nickname:"Rackle Clubhouse"}</div>
           <div className="rk-menu-club"><span className="rk-live-dot-dynamic" style={{width:7,height:7,display:"inline-block",marginRight:7,verticalAlign:"middle"}}/> {hasProfile?clubName:"Save your streak and join your club"}</div>
           <div className="rk-menu-badges">
-            <span className="rk-menu-badge">🔥 {Number(streak||profile?.streak||0)}-day streak</span>
-            <span className="rk-menu-badge">🧠 {score?`${score} IQ today`:"Daily ready"}</span>
+            <span className="rk-menu-badge"><span className="rk-menu-inline-emoji">🔥</span>{Number(streak||profile?.streak||0)}-day streak</span>
+            <span className="rk-menu-badge"><span className="rk-menu-inline-emoji">🧠</span>{score?`${score} IQ today`:"Daily ready"}</span>
           </div>
         </div>
         <div className="rk-menu-live-strip">
@@ -9945,40 +9954,40 @@ function PremiumClubMenu({open,onClose,setScreen,go,showSettings,streak=0,dRes=n
         <div className="rk-menu-scroll">
           {!hasProfile&&(
             <div className="rk-menu-section">
-              <Row icon="🔐" title="Log In" sub="Save your streak. Track your Mahjong IQ." onClick={()=>{sessionStorage.setItem("rk-goto","signin");goTo("profile");}} cta/>
-              <Row icon="✨" title="Create Account" sub="Join your club and keep your scores." onClick={()=>goTo("profile")}/>
+              <Row icon="🔐" title="Log In" sub="Save your streak. Track your Mahjong IQ." section="account" onClick={()=>{sessionStorage.setItem("rk-goto","signin");goTo("profile");}} cta/>
+              <Row icon="✨" title="Create Account" sub="Join your club and keep your scores." section="account" onClick={()=>goTo("profile")}/>
             </div>
           )}
           <div className="rk-menu-section">
             <div className="rk-menu-section-title">Play</div>
-            <Row icon="🀄" title="Play Daily" sub="One rack. One score. Beat the room." onClick={()=>goPlay("daily")}/>
-            <Row icon="🎯" title="Practice Mode" sub="Train another Charleston read." onClick={()=>goPlay("free")}/>
-            <Row icon="🏛️" title="Club Room" sub="See your table and club board." onClick={()=>goTo(getClubCode()?"leaderboard":"clubs")}/>
-            <Row icon="🌎" title="Global Leaderboard" sub="See who owns today’s rack." onClick={()=>goTo("globalLeaderboard")}/>
+            <Row icon="🀄" title="Play Daily" sub="One rack. One score. Beat the room." section="play" onClick={()=>goPlay("daily")}/>
+            <Row icon="🎯" title="Practice Mode" sub="Train another Charleston read." section="play" onClick={()=>goPlay("free")}/>
+            <Row icon="👥" title="Club Room" sub="See your table and club board." section="community" onClick={()=>goTo(getClubCode()?"leaderboard":"clubs")}/>
+            <Row icon="🏆" title="Global Leaderboard" sub="See who owns today’s rack." section="community" onClick={()=>goTo("globalLeaderboard")}/>
           </div>
           <div className="rk-menu-section">
             <div className="rk-menu-section-title">Improve</div>
-            <Row icon="📈" title="Stats" sub="Your streak, scores, and progress." onClick={()=>goTo("stats")}/>
-            <Row icon="🃏" title="2026 Card Browser" sub="Scan the card faster." onClick={()=>goTo("handbrowser")}/>
-            <Row icon="🎓" title="Learn Mahjong" sub="Tutorials, glossary, and basics." onClick={()=>goTo("tutorial")}/>
-            <Row icon="❔" title="How To Play" sub="Quick Rackle walkthrough." onClick={()=>goTo("howto")}/>
+            <Row icon="📊" title="Stats" sub="Your streak, scores, and progress." section="learn" onClick={()=>goTo("stats")}/>
+            <Row icon="🃏" title="2026 Card Browser" sub="Scan the card faster." section="learn" onClick={()=>goTo("handbrowser")}/>
+            <Row icon="📚" title="Learn Mahjong" sub="Tutorials, glossary, and basics." section="learn" onClick={()=>goTo("tutorial")}/>
+            <Row icon="🧭" title="How To Play" sub="Quick Rackle walkthrough." section="learn" onClick={()=>goTo("howto")}/>
           </div>
           <div className="rk-menu-section">
             <div className="rk-menu-section-title">Account</div>
             {hasProfile?(
               <>
-                <Row icon="👤" title="Profile" sub={firstName?`Signed in as ${firstName}`:"Your Rackle account"} onClick={()=>goTo("profile")}/>
-                <Row icon="⚙️" title="Settings" sub="Sound, motion, and preferences." onClick={()=>{onClose?.();showSettings?showSettings():setScreen?.("settings");}}/>
-                <Row icon="↩️" title="Logout" sub="This device only." onClick={logout}/>
+                <Row icon="👤" title="Profile" sub={firstName?`Signed in as ${firstName}`:"Your Rackle account"} section="account" onClick={()=>goTo("profile")}/>
+                <Row icon="⚙️" title="Settings" sub="Sound, motion, and preferences." section="account" onClick={()=>{onClose?.();showSettings?showSettings():setScreen?.("settings");}}/>
+                <Row icon="↩️" title="Logout" sub="This device only." section="account" onClick={logout}/>
               </>
             ):(
-              <Row icon="🔐" title="Log In" sub="Resume your Rackle account." onClick={()=>{sessionStorage.setItem("rk-goto","signin");goTo("profile");}}/>
+              <Row icon="🔐" title="Log In" sub="Resume your Rackle account." section="account" onClick={()=>{sessionStorage.setItem("rk-goto","signin");goTo("profile");}}/>
             )}
           </div>
           <div className="rk-menu-section">
             <div className="rk-menu-section-title">Share</div>
-            <Row icon="🏆" title="Invite Your Club" sub="Bring your mahjong group in." onClick={()=>goTo("clubs")}/>
-            <Row icon="📨" title="Share Rackle" sub="Send it to the table." onClick={shareRackle}/>
+            <Row icon="🏛️" title="Invite Your Club" sub="Bring your mahjong group in." section="share" onClick={()=>goTo("clubs")}/>
+            <Row icon="📨" title="Share Rackle" sub="Send it to the table." section="share" onClick={shareRackle}/>
           </div>
         </div>
         <div className="rk-menu-footer">Built for the modern mahjong table.</div>
