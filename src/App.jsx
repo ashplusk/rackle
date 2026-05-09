@@ -8331,230 +8331,141 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const [dailyStats,setDailyStats]=useState(null);
   const [globalEntries,setGlobalEntries]=useState([]);
   const [clubEntries,setClubEntries]=useState([]);
-  const [openSec,setOpenSec]=useState({hand:false,alts:false,score:false,next:false});
-  const toggle=(k)=>setOpenSec(s=>({...s,[k]:!s[k]}));
+  const [showDetails,setShowDetails]=useState(false);
   if(!iq)return null;
 
+  useEffect(()=>{
+    fetchDailyStats().then(s=>{if(s)setDailyStats(s);}).catch(()=>{});
+    fetchGlobalEntries().then(rows=>{if(rows)setGlobalEntries(rows);}).catch(()=>{});
+    const clubCode=getClubCode();
+    if(clubCode)fetchLBEntries(clubCode).then(rows=>{if(rows)setClubEntries(rows);}).catch(()=>{});
+  },[]);
+
+  const score=Number(iq.totalScore||0);
+  const time=Number(iq.timeSecs||iq.time_secs||0);
+  const clubCode=getClubCode();
+  const clubName=getClubName();
+  const globalRows=rkMergeCurrentScore(globalEntries,score,time,iq.streak||0,clubCode);
+  const clubRows=clubCode?rkMergeCurrentScore(clubEntries,score,time,iq.streak||0,clubCode):[];
+  const globalRank=rkRankOfCurrent(globalRows,score);
+  const clubRank=clubCode?rkRankOfCurrent(clubRows,score):null;
+  const globalTotal=globalRows.length||dailyStats?.total||dailyStats?.count||null;
+  const clubTotal=clubCode?clubRows.length:null;
+  const rankLine=globalRank&&globalTotal?`#${globalRank} of ${globalTotal} today${clubRank&&clubTotal?` · #${clubRank} in ${clubName||"your club"}`:""}`:clubRank&&clubTotal?`#${clubRank} of ${clubTotal} in ${clubName||"your club"}`:"";
+
   const passEmoji=(iq.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
+  const passDots=(iq.passInsights||[]).slice(0,3);
   const shareText=[
     `🀄 Daily Rackle #${dayNum}`,
-    `${iq.totalScore} · ${iq.level}`,
+    `${score} · ${iq.level}`,
     passEmoji?`Passes: ${passEmoji}`:"",
+    rankLine||"",
     "Think you can beat it?",
     "playrackle.com"
   ].filter(Boolean).join("\n\n");
 
-  useEffect(()=>{
-    fetchDailyStats().then(s=>{if(s&&s.total>=1)setDailyStats(s);});
-    fetchGlobalEntries().then(rows=>{if(rows)setGlobalEntries(rows);});
-    const clubCode=getClubCode();
-    if(clubCode)fetchLBEntries(clubCode).then(rows=>{if(rows)setClubEntries(rows);});
-  },[]);
-
-  const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
-  const sortedSecs=allSections?[...allSections].sort((a,b)=>b.score-a.score):[];
-  const bestFitSec=sortedSecs[0];
-  const chosenFit=chosenSec&&allSections?allSections.find(s=>s.id===chosenSec):null;
-  const chosenPct=chosenFit?Math.round(chosenFit.score*100):null;
-  const bestPct=bestFitSec?Math.round(bestFitSec.score*100):null;
-  const sectionMatch=chosenSec===bestFitSec?.id;
-
-  // Scored hand for teaser line
+  const quickRead=(()=>{
+    if(score>=85)return "Great rack. Clean, calm, and hard to chase.";
+    if(score>=70)return "Strong read. You gave yourself a real lane.";
+    if(score>=55)return "Playable rack. A little cleaner next time.";
+    if(score>=40)return "Messy, but alive. Keep the shape tighter.";
+    return "Tough rack. Reset faster and protect pairs.";
+  })();
+  const scoreLabel=score>=85?"Excellent":score>=70?"Strong":score>=55?"Playable":score>=40?"Scrappy":"Tough";
+  const scoreAccent=score>=85?C.gold:score>=70?C.jade:score>=55?"#2460A8":score>=40?C.gold:C.cinn;
   const scoredHandLabel=iq.scoredHandLabel||chosenHand||null;
   const scoredHandObj=scoredHandLabel?HAND_CATALOG.find(h=>h.sec===chosenSec&&h.label===scoredHandLabel):null;
 
-  const scoreColor=(v,max)=>v/max>=0.8?C.jade:v/max>=0.55?C.gold:C.cinn;
+  const Metric=({label,value,sub,accent=C.ink,onClick})=>{
+    const Tag=onClick?"button":"div";
+    return(
+      <Tag onClick={onClick} style={{
+        border:`1px solid rgba(26,20,16,.075)`,borderRadius:18,
+        background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",
+        boxShadow:"0 5px 16px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78)",
+        padding:"13px 10px",textAlign:"center",fontFamily:F.b,cursor:onClick?"pointer":"default",
+        width:"100%",appearance:"none"
+      }}>
+        <div style={{fontSize:8,letterSpacing:1.6,textTransform:"uppercase",fontWeight:950,color:"rgba(26,20,16,.45)",marginBottom:5}}>{label}</div>
+        <div style={{fontFamily:F.d,fontSize:22,lineHeight:1,fontWeight:950,color:accent,letterSpacing:-.7}}>{value}</div>
+        {sub&&<div style={{fontSize:10,lineHeight:1.25,color:C.mut,fontWeight:750,marginTop:6,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{sub}</div>}
+      </Tag>
+    );
+  };
 
   return(
-    <div className="rk-score-shell">
-      <div className="rk-editorial-header">
-        <div className="rk-editorial-kicker">Improve Your Game</div>
-        <div className="rk-editorial-title">Your Rackle Review</div>
-        <div className="rk-editorial-copy">A quick coaching view of what worked, what was close, and what to try next.</div>
-      </div>
-      <div className="rk-score-divider" />
-      {/* ① IQ HERO */}
-      <div style={{marginBottom:10}}>
-        <IQHero iq={iq} isDaily dayNum={dayNum} section={section} totalTime={iq.totalTime||0} chosenSec={chosenSec} allSections={allSections}/>
+    <div className="rk-score-shell" style={{paddingBottom:36}}>
+      <div style={{textAlign:"center",margin:"8px 0 16px"}}>
+        <div style={{fontSize:9,letterSpacing:2.4,textTransform:"uppercase",fontWeight:950,color:C.jade,marginBottom:6}}>Daily Rackle #{dayNum}</div>
+        <div style={{fontFamily:F.d,fontSize:28,lineHeight:1.02,fontWeight:950,color:C.ink,letterSpacing:-.8}}>Scorecard</div>
       </div>
 
-      <ImproveGameHero iq={iq} chosenSecObj={chosenSecObj} bestFitSec={bestFitSec} onPractice={onPractice} onCoachMode={onCoachMode} setScreen={setScreen}/>
-
-      <StrategicCharlestonReadCard iq={iq}/>
-
-      {/* ①b STYLE, light identity layer */}
-      {iq.styleName&&<div className="rk-review-style-card" style={{marginBottom:14}}>
-        <div style={{position:"relative",zIndex:1}}>
-          <div className="rk-review-style-orb">✨</div>
-          <div style={{fontSize:9,color:C.jade,letterSpacing:2.7,fontWeight:950,marginBottom:7,textTransform:"uppercase"}}>Your Style</div>
-          <h3 className="rk-review-style-title">{iq.styleName}</h3>
-          {iq.styleNote&&<div className="rk-review-style-note">{iq.styleNote}</div>}
-          <div className="rk-review-social-note"><span className="rk-social-live-dot"/> This is the read to build on tomorrow</div>
-        </div>
-      </div>}
-
-      {/* ② SOCIAL, ranks + share, always visible, right after hero */}
-      {(()=>{
-        const myScore=Number(iq.totalScore||0);
-        const clubCode=getClubCode();
-        const clubName=clubCode?CLUBS[clubCode]?.name:null;
-        const globalRows=rkMergeCurrentScore(globalEntries,myScore,iq.totalTime||0,0,null);
-        const clubRows=clubCode?rkMergeCurrentScore(clubEntries,myScore,iq.totalTime||0,0,clubCode):[];
-        const globalRank=globalRows.length>0?rkRankOfCurrent(globalRows,myScore):null;
-        const globalTotal=globalRows.length||dailyStats?.total||dailyStats?.count||null;
-        const clubRank=clubCode?rkRankOfCurrent(clubRows,myScore):null;
-        const clubTotal=clubCode?clubRows.length:null;
-
-        // Enrich share text with rank context
-        const rankLine=globalRank&&globalTotal?`#${globalRank} of ${globalTotal} players today${clubRank&&clubTotal?` · #${clubRank} in my club`:""}`:
-          clubRank&&clubTotal?`#${clubRank} of ${clubTotal} in my club`:"";
-        const richShareText=[
-          `🀄 Daily Rackle #${dayNum}`,
-          `${iq.totalScore} · ${iq.level}`,
-          passEmoji?`Passes: ${passEmoji}`:"",
-          rankLine||"",
-          "Think you can beat it?",
-          "playrackle.com"
-        ].filter(Boolean).join("\n\n");
-
-        return(
-          <div style={{marginBottom:10}}>
-            {/* Rank pills, only when data has loaded */}
-            {(globalRank||clubRank)&&(
-              <div className="rk-review-rank-row">
-                {/* Global rank */}
-                {globalRank&&globalTotal&&(
-                  <div className="rk-review-rank-card">
-                    <div className="rk-review-rank-kicker">Global</div>
-                    <div className="rk-review-rank-value" style={{color:globalRank<=3?C.gold:C.jade}}>#{globalRank}</div>
-                    <div className="rk-review-rank-sub">of {globalTotal} today</div>
-                    <div style={{fontSize:10,fontWeight:950,marginTop:7,color:globalRank===1?C.gold:globalRank<=3?C.gold:C.mut}}>
-                      {globalRank===1?"Table leader":globalRank<=3?"Top 3 today":globalRank<=10?"Top 10":"On the board"}
-                    </div>
-                  </div>
-                )}
-                {/* Club rank, tappable */}
-                {clubRank&&clubTotal&&clubName?(
-                  <button onClick={()=>setScreen&&setScreen("leaderboard")} className="rk-review-rank-card" style={{cursor:"pointer"}}>
-                    <div className="rk-review-rank-kicker">Club</div>
-                    <div className="rk-review-rank-value">#{clubRank}</div>
-                    <div className="rk-review-rank-sub">of {clubTotal} players</div>
-                    <div style={{fontSize:10,color:C.jade,fontWeight:950,marginTop:7,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
-                      {clubRank===1?"Club leader":clubRank<=3?"Top 3 at the table":clubName} ›
-                    </div>
-                  </button>
-                ):(
-                  /* No club, nudge to join */
-                  <button onClick={()=>setScreen&&setScreen("clubs")} className="rk-review-rank-card" style={{cursor:"pointer",borderStyle:"dashed"}}>
-                    <div className="rk-review-rank-kicker">Club</div>
-                    <div style={{fontFamily:F.d,fontSize:17,fontWeight:950,color:C.ink,lineHeight:1.1}}>Join your table</div>
-                    <div className="rk-review-rank-sub" style={{color:C.jade}}>Find a club board ›</div>
-                  </button>
-                )}
-              </div>
-            )}
-
-            {/* Share block */}
-            <div className="rk-review-share-card">
-              <div className="rk-review-share-head">
-                <div className="rk-review-share-icon">📣</div>
-                <div style={{flex:1,minWidth:0}}>
-                  <div className="rk-review-share-title">Bring the room in.</div>
-                  <div className="rk-review-share-copy">Share your score, start the chase, and make tomorrow’s rack feel social.</div>
-                </div>
-              </div>
-              <div className="rk-review-share-preview">
-                <div>Daily Rackle #{dayNum} · {iq.totalScore} · {iq.level}</div>
-                {rankLine&&<div>{rankLine}</div>}
-                <div>Think you can beat it?</div>
-              </div>
-              <ShareButton text={richShareText}/>
-            </div>
+      <div className="rk-iq-hero rk-sweep" style={{padding:"28px 22px 22px",borderRadius:28,marginBottom:14}}>
+        <div className="rk-iq-glow"/>
+        <div style={{position:"relative",zIndex:2,textAlign:"center"}}>
+          <div style={{fontSize:10,letterSpacing:2.8,textTransform:"uppercase",fontWeight:950,color:"rgba(255,255,255,.52)",marginBottom:10}}>Rackle IQ</div>
+          <div style={{fontFamily:F.d,fontSize:88,lineHeight:.86,fontWeight:950,letterSpacing:-4,color:"#F3D46B",marginBottom:14}}>{score}</div>
+          <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:7,border:`1px solid rgba(243,212,107,.38)`,background:"rgba(255,255,255,.08)",borderRadius:999,padding:"7px 14px",color:"#F3D46B",fontSize:12,fontWeight:950,marginBottom:14}}>
+            <span>{scoreLabel}</span>
+            <span style={{opacity:.5}}>·</span>
+            <span>{iq.level}</span>
           </div>
-        );
-      })()}
+          <div style={{fontSize:14,lineHeight:1.45,color:"rgba(255,255,255,.78)",fontWeight:750,maxWidth:290,margin:"0 auto"}}>{quickRead}</div>
+          {rankLine&&<div style={{fontSize:11,lineHeight:1.35,color:"rgba(255,255,255,.58)",fontWeight:800,marginTop:12}}>{rankLine}</div>}
+        </div>
+      </div>
 
-      <div className="rk-review-foldout-label"><span className="rk-social-live-dot"/> Your coaching room</div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:8,marginBottom:12}}>
+        <Metric label="Global" value={globalRank?`#${globalRank}`:"—"} sub={globalTotal?`of ${globalTotal}`:"loading"} accent={globalRank===1?C.gold:C.jade} onClick={()=>setScreen&&setScreen("globalLeaderboard")}/>
+        <Metric label="Club" value={clubRank?`#${clubRank}`:"—"} sub={clubName||"join"} accent={clubRank===1?C.gold:C.jade} onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")}/>
+        <Metric label="Time" value={time?`${time}s`:"—"} sub="finished" accent={C.ink}/>
+      </div>
 
-      {/* ③ YOUR HAND, collapsible, open by default */}
-      <CollapsibleSection label="Your Hand" desc="Final rack · Best path" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
+      <div style={{borderRadius:22,padding:14,background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid rgba(26,20,16,.075)`,boxShadow:"0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)",marginBottom:12,textAlign:"center"}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:12}}>
+          <div style={{textAlign:"left"}}>
+            <div style={{fontFamily:F.d,fontSize:18,fontWeight:950,color:C.ink,lineHeight:1.08}}>Your rack</div>
+            <div style={{fontSize:11,color:C.mut,fontWeight:750,marginTop:3}}>Final Charleston shape</div>
+          </div>
+          <div style={{display:"flex",gap:5,alignItems:"center"}}>
+            {passDots.length?passDots.map((p,i)=>{
+              const col=p.quality==="strong"?C.jade:p.quality==="weak"?C.cinn:C.gold;
+              return <span key={i} title={`Pass ${i+1}`} style={{width:9,height:9,borderRadius:999,background:col,boxShadow:`0 0 0 4px ${col}16`}}/>;
+            }):<span style={{fontSize:10,color:C.mut,fontWeight:800}}>No passes</span>}
+          </div>
+        </div>
         <SortableRack hand={hand}/>
-        <div style={{marginTop:8}}>
-          <HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={onCoachMode}/>
+      </div>
+
+      <div style={{marginBottom:12}}>
+        <ShareButton text={shareText} label="Share your score" sublabel="Send it to your mahjong group" variant="goldpill"/>
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9,marginBottom:12}}>
+        <button onClick={onPractice} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.jade,cursor:"pointer"}}>Free Play</button>
+        {onCoachMode?<button onClick={onCoachMode} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>Quick Coach</button>:<button onClick={onHome} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>Home</button>}
+      </div>
+
+      <button onClick={()=>setShowDetails(v=>!v)} style={{width:"100%",border:`1px solid rgba(26,20,16,.075)`,borderRadius:16,background:"rgba(255,255,255,.55)",padding:"12px 14px",display:"flex",alignItems:"center",justifyContent:"space-between",fontFamily:F.b,cursor:"pointer",marginBottom:showDetails?10:16}}>
+        <span style={{fontSize:12,fontWeight:950,color:C.ink}}>Details</span>
+        <span style={{fontSize:12,color:C.mut,fontWeight:950}}>{showDetails?"⌃":"⌄"}</span>
+      </button>
+      {showDetails&&(
+        <div className="rk-score-card" style={{padding:14,marginBottom:16,textAlign:"center"}}>
+          <HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSec&&SECS.find(s=>s.id===chosenSec)} iq={iq} onCoachMode={onCoachMode}/>
         </div>
-      </CollapsibleSection>
+      )}
 
-      {/* ④b ALT HANDS, own collapsible section, closed by default */}
-      {hand&&hand.length>0&&chosenSec&&(()=>{
-        const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
-        return(
-          <CollapsibleSection label="Other Paths" desc="A few roads you could have taken" icon="🔀" open={openSec.alts} onToggle={()=>toggle("alts")}>
-            <AltHandsCard hand={hand} resolvedHandLabel={scoredHandObj?.label||null} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecs} primaryCoveragePct={primPct}/>
-          </CollapsibleSection>
-        );
-      })()}
-
-      {/* ⑥ NEXT STEPS, collapsible */}
-      <CollapsibleSection label="Next Steps" desc="Coach Mode · Recommendations" icon="🎯" open={openSec.next} onToggle={()=>toggle("next")}>
-        <div style={{display:"flex",flexDirection:"column",gap:10,paddingBottom:4}}>
-          <div style={{borderRadius:18,padding:"14px 14px",background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid ${C.jade}12`,boxShadow:"inset 0 1px 0 rgba(255,255,255,.78)",textAlign:"center"}}>
-            <div style={{fontSize:9,letterSpacing:2.1,fontWeight:950,color:C.jade,textTransform:"uppercase",marginBottom:5}}>Tomorrow's edge</div>
-            <div style={{fontFamily:F.d,fontSize:18,lineHeight:1.12,fontWeight:950,color:C.ink}}>One cleaner decision changes the rack.</div>
-            <div style={{fontSize:12,lineHeight:1.55,color:C.mut,fontWeight:650,marginTop:6}}>Open the coach for the lesson, or replay this exact feeling in Free Play.</div>
-          </div>
-          {/* Coach Mode, primary action, full-bleed dark green */}
-          {onCoachMode&&(
-            <button onClick={onCoachMode} className="rk-improve-action rk-improve-action-dark" style={{}}>
-              {/* Subtle shimmer stripe */}
-              <div style={{position:"absolute",top:0,left:0,right:0,height:"40%",background:"linear-gradient(180deg,rgba(255,255,255,0.06),transparent)",borderRadius:"14px 14px 0 0",pointerEvents:"none"}}/>
-              <div style={{width:44,height:44,borderRadius:12,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>🎓</div>
-              <div style={{flex:1}}>
-                <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#fff",lineHeight:1.2,marginBottom:2}}>Your Rackle Coach</div>
-                <div style={{fontSize:11,color:"rgba(255,255,255,0.62)",lineHeight:1.4}}>Tips and guidance for your next Charleston</div>
-              </div>
-              <div style={{width:28,height:28,borderRadius:8,background:"rgba(255,255,255,0.10)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                <span style={{fontSize:14,color:"rgba(255,255,255,0.7)",fontWeight:700}}>›</span>
-              </div>
-            </button>
-          )}
-          {/* Practice CTA, secondary, warm sage */}
-          {(()=>{
-            const lowDir=iq.directionScore<24;
-            const wrongSec=!sectionMatch&&bestFitSec;
-            let headline="Free Play";
-            let sub="Unlimited hands · Build real instincts";
-            if(wrongSec){headline=`Try ${bestFitSec.name}`;sub=`Your tiles leaned that way, practice reading it faster`;}
-            else if(lowDir){headline="Work on Section Reads";sub="Your first read sets up the whole Charleston";}
-            else if(iq.passQualityScore<15){headline="Sharpen Your Passes";sub="Practice makes the Charleston feel automatic";}
-            return(
-              <button onClick={onPractice} className="rk-improve-action" style={{}}>
-                <div style={{width:40,height:40,borderRadius:11,background:C.jade+"12",border:`1px solid ${C.jade}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:19,flexShrink:0}}>🀄</div>
-                <div style={{flex:1}}>
-                  <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:2}}>FREE PLAY</div>
-                  <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.3}}>{headline}</div>
-                  <div style={{fontSize:11,color:C.mut,lineHeight:1.4,marginTop:1}}>{sub}</div>
-                </div>
-                <div style={{width:26,height:26,borderRadius:7,background:C.bg2,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                  <span style={{fontSize:13,color:C.mut,fontWeight:700}}>›</span>
-                </div>
-              </button>
-            );
-          })()}
-        </div>
-      </CollapsibleSection>
-
-      {/* ⑧ COUNTDOWN + HOME */}
-      <div className="rk-review-bottom-home">
+      <div className="rk-review-bottom-home" style={{display:"grid",gap:10}}>
         <MidnightCountdown dn={dayNum}/>
         <button onClick={onHome} style={{
           width:"100%",border:`1px solid ${C.bdr}`,borderRadius:16,
           background:"linear-gradient(180deg,#FFFDF8,#F1E9DB)",color:C.mut,
-          fontSize:13,fontWeight:900,cursor:"pointer",
-          padding:"13px 0",letterSpacing:0.3,
+          fontSize:13,fontWeight:900,cursor:"pointer",padding:"13px 0",letterSpacing:.2,
           display:"flex",alignItems:"center",justifyContent:"center",gap:8,
           boxShadow:"0 5px 16px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.75)"
         }}>
-          <span style={{fontSize:12,opacity:0.65}}>←</span> Back to clubhouse
+          <span style={{fontSize:12,opacity:.65}}>←</span> Back to clubhouse
         </button>
       </div>
     </div>
