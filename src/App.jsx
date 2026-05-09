@@ -5522,16 +5522,51 @@ function setClubName(n){
   if(n&&isClubDisplayName(n))return;
   ST.set("clubName",n);
 }
+function hashLeaderboardSeed(seed){
+  const str=String(seed||"rackler");
+  let h=0;
+  for(let i=0;i<str.length;i++)h=(h*31+str.charCodeAt(i))>>>0;
+  return 100+(h%900);
+}
+function normalizeLeaderboardRow(row,index=0){
+  if(!row)return null;
+  const rawName=String(row.name||"").trim();
+  const isBadName=!rawName||isClubDisplayName(rawName);
+  const stableSeed=[
+    row.player_id,
+    row.id,
+    row.updated_at,
+    row.club_code,
+    row.iq_score,
+    row.time_secs,
+    index,
+  ].filter(v=>v!==undefined&&v!==null&&String(v).trim()!=="").join("|");
+  const fallbackName=`Player ${hashLeaderboardSeed(stableSeed||index)}`;
+  return{
+    ...row,
+    name:isBadName?fallbackName:rawName,
+    _legacyClubName:isBadName,
+    _dedupeKey:row.player_id
+      ?`player:${row.player_id}`
+      :isBadName
+        ?`legacy:${stableSeed||index}`
+        :`name:${rawName.toLowerCase()}`,
+  };
+}
 function cleanLeaderboardRows(rows=[]){
-  const seen=new Set();
-  return (rows||[])
-    .filter(r=>r&&r.name&&!isClubDisplayName(r.name))
-    .filter(r=>{
-      const key=String(r.name||"").trim().toLowerCase();
-      if(!key||seen.has(key))return false;
-      seen.add(key);
-      return true;
-    });
+  const best=new Map();
+  (rows||[]).forEach((row,index)=>{
+    const r=normalizeLeaderboardRow(row,index);
+    if(!r||!r.name)return;
+    const key=r._dedupeKey||String(r.name||"").trim().toLowerCase();
+    const prev=best.get(key);
+    const score=Number(r.iq_score||0);
+    const prevScore=Number(prev?.iq_score||0);
+    const ts=new Date(r.updated_at||0).getTime()||0;
+    const prevTs=new Date(prev?.updated_at||0).getTime()||0;
+    if(!prev||score>prevScore||(score===prevScore&&ts>prevTs))best.set(key,r);
+  });
+  return[...best.values()].sort((a,b)=>Number(b.iq_score||0)-Number(a.iq_score||0));
 }
 
 // ─── PROFILE SYSTEM ───────────────────────────────────────────────────────────
@@ -6277,17 +6312,11 @@ async function fetchGlobalEntries(){
       return[];
     }
     const rows=cleanLeaderboardRows(await res.json());
-    // Deduplicate by player name, keep highest score. Filter out club names so
-    // the global room always shows players, not clubs.
-    const bestByName=new Map();
-    rows.forEach(r=>{
-      const key=String(r.name||"").trim().toLowerCase();
-      if(!key)return;
-      const prev=bestByName.get(key);
-      if(!prev||Number(r.iq_score||0)>Number(prev.iq_score||0))bestByName.set(key,r);
-    });
-    const deduped=[...bestByName.values()].sort((a,b)=>Number(b.iq_score||0)-Number(a.iq_score||0));
-    return deduped.map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,clubCode:r.club_code==="__global__"?null:r.club_code}));
+    // cleanLeaderboardRows already sanitizes legacy club-name rows into stable
+    // anonymous players and dedupes by player identity/name while keeping the
+    // highest score. This prevents the global room from dropping older scores
+    // that were accidentally saved under a club name.
+    return rows.map(r=>({name:r.name,iqScore:r.iq_score,time:r.time_secs,streak:r.streak,clubCode:r.club_code==="__global__"?null:r.club_code}));
   }catch(err){
     console.warn("[GlobalLB] fetch error:",err);
     return[];
