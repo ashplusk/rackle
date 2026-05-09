@@ -4560,6 +4560,365 @@ function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScor
   return{strengths:uniqueStr,weaknesses:uniqueWk,coachNote,tryNextTime};
 }
 
+
+
+// ─── vNext EXPERT CHARLESTON ANALYSIS ENGINE ───────────────────────────────
+// Human-first NMJL Charleston evaluator. This layer reads the whole rack,
+// suits, grouping, overlap, and realistic section viability. It intentionally
+// avoids raw hand-count inflation and treats the Charleston as directional,
+// not final-hand certainty.
+const RK_SEC_NAMES={
+  "2026":"2026","2468":"Even Numbers","369":"369","13579":"Odd Numbers",
+  "cr":"Consecutive Run","wd":"Winds & Dragons","aln":"Like Numbers","q":"Quints","sp":"Singles & Pairs"
+};
+const RK_SUIT_NAMES={bam:"Bam",crak:"Crak",dot:"Dot"};
+
+function rkTileKey(t){
+  if(!t)return"?";
+  if(t.t==="s")return`${t.s}-${t.n}`;
+  if(t.t==="w")return`W-${t.v}`;
+  if(t.t==="d")return`D-${t.v}`;
+  if(t.t==="f")return"Flower";
+  if(t.t==="j")return"Joker";
+  return`${t.t}-${t.v||t.n||""}`;
+}
+function rkTileLabelFromKey(k){
+  if(!k)return"";
+  if(k.startsWith("bam-"))return`${k.split("-")[1]} Bam`;
+  if(k.startsWith("crak-"))return`${k.split("-")[1]} Crak`;
+  if(k.startsWith("dot-"))return`${k.split("-")[1]} Dot`;
+  if(k.startsWith("W-"))return`${k.slice(2)} Wind`;
+  if(k.startsWith("D-"))return`${k.slice(2)} Dragon`;
+  return k;
+}
+function rkClamp(n,min=0,max=100){return Math.max(min,Math.min(max,Math.round(n)));}
+function rkPlural(n,s){return `${n} ${s}${n===1?"":"s"}`;}
+function rkToneForScore(score){return score>=75?"High":score>=55?"Medium":score>=38?"Low":"Thin";}
+
+function rkAnalyzeTileStructure(rack=[]){
+  const nums=rack.filter(t=>t.t==="s");
+  const winds=rack.filter(t=>t.t==="w");
+  const dragons=rack.filter(t=>t.t==="d");
+  const flowers=rack.filter(t=>t.t==="f").length;
+  const jokers=rack.filter(t=>t.t==="j").length;
+  const counts={};
+  rack.forEach(t=>{const k=rkTileKey(t);counts[k]=(counts[k]||0)+1;});
+  const groups=Object.entries(counts).map(([key,count])=>({key,count,label:rkTileLabelFromKey(key)}));
+  const pairs=groups.filter(g=>g.count===2&&!g.key.startsWith("Joker"));
+  const pungs=groups.filter(g=>g.count===3&&!g.key.startsWith("Joker"));
+  const kongs=groups.filter(g=>g.count>=4&&!g.key.startsWith("Joker"));
+  const duplicates=groups.filter(g=>g.count>=2&&!g.key.startsWith("Joker"));
+  const suitCounts={bam:0,crak:0,dot:0};
+  nums.forEach(t=>{suitCounts[t.s]=(suitCounts[t.s]||0)+1;});
+  const suitEntries=Object.entries(suitCounts).sort((a,b)=>b[1]-a[1]);
+  const strongestSuit=suitEntries[0]?.[0]||null;
+  const weakestSuit=suitEntries[2]?.[0]||null;
+
+  const bySuit={bam:[],crak:[],dot:[]};
+  nums.forEach(t=>bySuit[t.s].push(t.n));
+  const suitWindows=[];
+  Object.entries(bySuit).forEach(([suit,arr])=>{
+    const c={};arr.forEach(n=>{c[n]=(c[n]||0)+1;});
+    const unique=[...new Set(arr)].sort((a,b)=>a-b);
+    let bestRun=[];
+    let cur=[];
+    unique.forEach((n,i)=>{
+      if(i===0||n===unique[i-1]+1)cur.push(n);
+      else{if(cur.length>bestRun.length)bestRun=cur;cur=[n];}
+    });
+    if(cur.length>bestRun.length)bestRun=cur;
+    let bestWindow=null;
+    for(let start=1;start<=7;start++){
+      const window=[start,start+1,start+2];
+      const depth=window.reduce((a,n)=>a+(c[n]||0),0);
+      const dup=window.reduce((a,n)=>a+((c[n]||0)>=2?1:0),0);
+      const score=depth+dup*1.5;
+      if(!bestWindow||score>bestWindow.score)bestWindow={suit,nums:window,depth,dup,score};
+    }
+    suitWindows.push({suit,counts:c,unique,bestRun,bestWindow});
+  });
+  const bestWindow=suitWindows.map(x=>x.bestWindow).filter(Boolean).sort((a,b)=>b.score-a.score)[0]||null;
+  const connectedSequences=[];
+  suitWindows.forEach(sw=>{
+    if(sw.bestRun.length>=2)connectedSequences.push({suit:sw.suit,nums:sw.bestRun,depth:sw.bestRun.reduce((a,n)=>a+(sw.counts[n]||0),0)});
+  });
+
+  const sameNumberCounts={};
+  nums.forEach(t=>{sameNumberCounts[t.n]=(sameNumberCounts[t.n]||0)+1;});
+  const bestSameNumber=Object.entries(sameNumberCounts).sort((a,b)=>b[1]-a[1])[0]||null;
+
+  const isolated=[];
+  nums.forEach(t=>{
+    const k=rkTileKey(t);
+    if((counts[k]||0)>1)return;
+    const hasNeighbor=nums.some(o=>o.s===t.s&&Math.abs(o.n-t.n)===1);
+    const hasSameNum=nums.some(o=>o!==t&&o.n===t.n);
+    if(!hasNeighbor&&!hasSameNum)isolated.push(t);
+  });
+  winds.concat(dragons).forEach(t=>{if((counts[rkTileKey(t)]||0)===1)isolated.push(t);});
+
+  const honorTotal=winds.length+dragons.length;
+  const groupedHonor=groups.filter(g=>(g.key.startsWith("W-")||g.key.startsWith("D-"))&&g.count>=2).length;
+  const numberedTerminalSingles=nums.filter(t=>(t.n===1||t.n===9)&&(counts[rkTileKey(t)]||0)===1).length;
+
+  const tileEfficiency=rkClamp(
+    20+
+    duplicates.length*7+pairs.length*5+pungs.length*10+kongs.length*14+
+    connectedSequences.reduce((a,s)=>a+(s.nums.length>=4?13:s.nums.length>=3?9:s.nums.length>=2?4:0),0)+
+    (bestWindow?Math.min(bestWindow.score*5,18):0)+
+    jokers*4+flowers*2-
+    isolated.length*5-numberedTerminalSingles*3-(honorTotal>=3&&groupedHonor===0?8:0)
+  );
+  const suitDiscipline=rkClamp(nums.length?(
+    25+
+    (suitEntries[0][1]/Math.max(nums.length,1))*45+
+    (suitEntries[1][1]>=2?10:0)-
+    (suitEntries[2][1]>=2?12:0)-
+    isolated.length*2
+  ):35);
+  const growthPotential=rkClamp(
+    18+
+    pairs.length*8+pungs.length*7+kongs.length*5+
+    connectedSequences.length*7+
+    (bestWindow?bestWindow.depth*4:0)+
+    jokers*7+flowers*3-
+    isolated.length*4
+  );
+
+  return{
+    nums,winds,dragons,flowers,jokers,counts,groups,pairs,pungs,kongs,duplicates,
+    suitCounts,suitEntries,strongestSuit,weakestSuit,bestWindow,connectedSequences,
+    sameNumberCounts,bestSameNumber,isolated,honorTotal,groupedHonor,
+    tileEfficiency,suitDiscipline,growthPotential
+  };
+}
+
+function rkSectionRawSignals(struct,secId){
+  const nc=struct.sameNumberCounts||{};
+  const odd=(nc[1]||0)+(nc[3]||0)+(nc[5]||0)+(nc[7]||0)+(nc[9]||0);
+  const even=(nc[2]||0)+(nc[4]||0)+(nc[6]||0)+(nc[8]||0);
+  const n369=(nc[3]||0)+(nc[6]||0)+(nc[9]||0);
+  const soap=(struct.dragons||[]).filter(t=>t.v==="Soap").length;
+  const twos=nc[2]||0,sixes=nc[6]||0;
+  const bestSame=Number(struct.bestSameNumber?.[1]||0);
+  const bestRunLen=(struct.connectedSequences||[]).reduce((m,s)=>Math.max(m,s.nums.length),0);
+  const pairCount=struct.pairs.length;
+  const maxDup=Math.max(0,...Object.values(struct.counts||{}));
+  const hasConsecDepth=struct.bestWindow&&struct.bestWindow.depth>=4;
+  const signals={
+    "cr":bestRunLen*12+(hasConsecDepth?22:0)+struct.pairs.length*5+struct.pungs.length*8,
+    "2468":even*8+(nc[6]||0)*7+struct.pairs.filter(p=>/[2468] /.test(p.label)).length*5,
+    "369":n369*10+(nc[6]||0)*8+((nc[3]||0)>=2?5:0)+((nc[9]||0)>=2?5:0),
+    "13579":odd*7+(nc[3]||0)*5+(nc[5]||0)*5+((nc[7]||0)>=2?4:0),
+    "2026":twos*11+sixes*11+soap*12+((twos&&sixes)?10:0),
+    "wd":struct.honorTotal*9+struct.groupedHonor*12-(struct.nums.length>=7?10:0),
+    "aln":bestSame*18+(bestSame>=3?18:bestSame>=2?8:0),
+    "q":struct.jokers*20+maxDup*12+(maxDup>=3?18:0),
+    "sp":pairCount*14+(struct.jokers===0?10:-18)-(struct.pungs.length+struct.kongs.length)*6,
+  };
+  return rkClamp(signals[secId]||0);
+}
+
+function rkBestHandForSection(rack,secId){
+  const hands=(HAND_CATALOG||[]).filter(h=>h.sec===secId);
+  if(!hands.length)return null;
+  return hands.map(h=>{
+    let cov=null;
+    try{cov=computeHonestCoverage(rack,h);}catch(e){cov={pct:Math.round((h.fit?.(rack)||0)*100),credibility:0,isCredible:true,groupNuance:"",plan:null};}
+    const credibility=typeof cov.credibility==="number"?cov.credibility:cov.pct;
+    return{hand:h,cov,pct:cov.pct||0,credibility,isCredible:cov.isCredible!==false};
+  }).sort((a,b)=>(b.credibility-a.credibility)||(b.pct-a.pct))[0];
+}
+
+function rkEvaluateSection(struct,rack,sec){
+  const secId=sec.id;
+  const best=rkBestHandForSection(rack,secId);
+  const coverage=best?.pct||Math.round((sec.ck?.(rack)||0)*100)||0;
+  const signal=rkSectionRawSignals(struct,secId);
+  let realism=(coverage*.48)+(signal*.52);
+  const reasons=[];
+  const needs=[];
+  const support=[];
+
+  if(struct.bestWindow&&secId==="cr")support.push(`${RK_SUIT_NAMES[struct.bestWindow.suit]} ${struct.bestWindow.nums[0]}-${struct.bestWindow.nums[2]} window`);
+  if(secId==="2468")support.push(`${(struct.sameNumberCounts[2]||0)+(struct.sameNumberCounts[4]||0)+(struct.sameNumberCounts[6]||0)+(struct.sameNumberCounts[8]||0)} even tiles`);
+  if(secId==="369")support.push(`${(struct.sameNumberCounts[3]||0)+(struct.sameNumberCounts[6]||0)+(struct.sameNumberCounts[9]||0)} tiles across 3/6/9`);
+  if(secId==="13579")support.push(`${(struct.sameNumberCounts[1]||0)+(struct.sameNumberCounts[3]||0)+(struct.sameNumberCounts[5]||0)+(struct.sameNumberCounts[7]||0)+(struct.sameNumberCounts[9]||0)} odd tiles`);
+  if(secId==="2026")support.push(`${struct.sameNumberCounts[2]||0} twos · ${struct.sameNumberCounts[6]||0} sixes · ${struct.dragons.filter(t=>t.v==="Soap").length} Soap`);
+  if(secId==="wd")support.push(`${struct.honorTotal} honors${struct.groupedHonor?` · ${struct.groupedHonor} grouped`:""}`);
+  if(secId==="aln"&&struct.bestSameNumber)support.push(`${struct.bestSameNumber[1]} tiles around ${struct.bestSameNumber[0]}s`);
+  if(secId==="q")support.push(`${struct.jokers} jokers · deepest natural group ${Math.max(0,...Object.values(struct.counts||{}))}`);
+  if(secId==="sp")support.push(`${struct.pairs.length} natural pairs · ${struct.jokers} jokers`);
+
+  // Human realism caps. These prevent fake optimism from raw technical coverage.
+  if(secId==="q"&&struct.jokers<2&&Math.max(0,...Object.values(struct.counts||{}))<3){realism=Math.min(realism,34);needs.push("at least two jokers or real natural depth");}
+  if(secId==="wd"&&struct.honorTotal<5&&struct.groupedHonor===0){realism=Math.min(realism,38);needs.push("more honors before this is real");}
+  if(secId==="sp"&&(struct.pairs.length<3||struct.jokers>0)){realism=Math.min(realism,struct.pairs.length>=2?45:32);needs.push(struct.jokers>0?"jokers are dead in S&P":"more natural pairs");}
+  if(secId==="aln"&&Number(struct.bestSameNumber?.[1]||0)<2){realism=Math.min(realism,35);needs.push("a clearer number anchor");}
+  if(secId==="cr"&&!(struct.bestWindow&&struct.bestWindow.depth>=4)&&struct.connectedSequences.length===0){realism=Math.min(realism,36);needs.push("a tighter 3-number window");}
+  if(secId==="2026"&&!((struct.sameNumberCounts[2]||0)&&(struct.sameNumberCounts[6]||0))){realism=Math.min(realism,44);needs.push("both 2s and 6s before committing");}
+  if(secId==="369"&&(struct.sameNumberCounts[6]||0)===0){realism=Math.min(realism,48);needs.push("6s, the section anchor");}
+  if(secId==="2468"&&(struct.sameNumberCounts[6]||0)===0&&((struct.sameNumberCounts[2]||0)+(struct.sameNumberCounts[4]||0)+(struct.sameNumberCounts[8]||0))<4){realism=Math.min(realism,45);needs.push("deeper even grouping");}
+  if(secId==="13579"&&((struct.sameNumberCounts[3]||0)+(struct.sameNumberCounts[5]||0))<2&&struct.pairs.length<2){realism=Math.min(realism,46);needs.push("3s, 5s, or real pair density");}
+
+  if(best?.cov?.groupNuance)reasons.push(best.cov.groupNuance);
+  if(best?.cov?.plan?.needed?.length)needs.push(...best.cov.plan.needed.slice(0,2));
+
+  const status=realism>=68?"realistically playable":realism>=48?"alive":realism>=34?"technically possible":"thin";
+  const confidence=realism>=74?"High":realism>=56?"Medium":realism>=40?"Low":"Very low";
+  return{
+    id:secId,name:RK_SEC_NAMES[secId]||sec.name||secId,icon:sec.icon||"",score:rkClamp(realism),coverage,signal,status,confidence,
+    bestHand:best?.hand||null,bestCoverage:best?.cov||null,support:support.filter(Boolean),needs:[...new Set(needs.filter(Boolean))],reasons
+  };
+}
+
+function rkCoreOverlap(struct,liveSections){
+  let overlap=0;
+  const ids=liveSections.map(s=>s.id);
+  const nc=struct.sameNumberCounts;
+  if(ids.includes("cr")&&(ids.includes("2468")||ids.includes("369")||ids.includes("13579")))overlap+=14;
+  if((nc[6]||0)>=1&&ids.includes("2468")&&ids.includes("369"))overlap+=14;
+  if((nc[2]||0)>=1&&ids.includes("2026")&&ids.includes("2468"))overlap+=12;
+  if((nc[3]||0)>=1&&ids.includes("369")&&ids.includes("13579"))overlap+=10;
+  if((nc[5]||0)>=1&&ids.includes("13579")&&ids.includes("aln"))overlap+=8;
+  if(struct.pairs.length>=3&&ids.includes("sp"))overlap+=8;
+  if(struct.bestWindow?.depth>=5)overlap+=8;
+  return rkClamp(overlap,0,40);
+}
+
+function rkEvaluateCharlestonEngine({finalRack,startingRack=[],passedTilesByRound=[],sectionId,chosenHand,allSections=[]}){
+  const rack=finalRack||[];
+  const struct=rkAnalyzeTileStructure(rack);
+  const sectionReads=(SECS||[]).map(sec=>rkEvaluateSection(struct,rack,sec)).sort((a,b)=>b.score-a.score);
+  const liveSections=sectionReads.filter(s=>s.score>=40&&s.status!=="thin");
+  const realisticSections=sectionReads.filter(s=>s.score>=52&&s.status==="realistically playable"||s.score>=58);
+  const top=sectionReads[0]||null;
+  const second=sectionReads[1]||null;
+  const chosen=sectionReads.find(s=>s.id===sectionId)||top;
+  const overlap=rkCoreOverlap(struct,liveSections);
+
+  const sectionViability=rkClamp((top?.score||0)*0.72+(second?.score||0)*0.18+Math.min(liveSections.length*3,10));
+  const flexibility=rkClamp(22+Math.min(liveSections.length*10,34)+overlap+struct.jokers*4-struct.isolated.length*4-(top&&second?Math.max(0,top.score-second.score-24):0));
+  const tileEfficiency=struct.tileEfficiency;
+  const suitDiscipline=struct.suitDiscipline;
+  const growthPotential=struct.growthPotential;
+  const rackleIQScore=rkClamp(tileEfficiency*.30+sectionViability*.25+flexibility*.20+suitDiscipline*.15+growthPotential*.10);
+
+  const topGap=top&&second?top.score-second.score:top?.score||0;
+  let commitmentStatus="Maybe";
+  if(rackleIQScore>=78&&top?.score>=72&&topGap>=14&&(struct.pungs.length+struct.kongs.length>=1||struct.suitEntries[0]?.[1]>=6))commitmentStatus="Strong Commit";
+  else if(top?.score>=60&&topGap>=8)commitmentStatus="Leaning";
+  else if(liveSections.length>=3&&flexibility>=58)commitmentStatus="Flexible";
+  else if(top?.score>=38||struct.pairs.length>=2||struct.bestWindow?.depth>=3)commitmentStatus="Maybe";
+  else commitmentStatus="Bail Out";
+
+  const directionScore=rkClamp(sectionViability*.4,0,40);
+  const tileStrengthScore=rkClamp(tileEfficiency*.25,0,25);
+  const passQualityScore=rkClamp((flexibility*.62+suitDiscipline*.38)*.25,0,25);
+  const timingScore=rkClamp(growthPotential*.10,0,10);
+
+  const dominantSuit=struct.strongestSuit?RK_SUIT_NAMES[struct.strongestSuit]:"No clear suit";
+  const bestDirection=top?`${top.icon?top.icon+" ":""}${top.name}`:"Still open";
+  const why=[];
+  if(struct.bestWindow?.depth>=4)why.push(`${RK_SUIT_NAMES[struct.bestWindow.suit]} ${struct.bestWindow.nums[0]}-${struct.bestWindow.nums[2]} has the cleanest number window.`);
+  if(struct.pungs.length)why.push(`${struct.pungs.map(g=>g.label).slice(0,2).join(" and ")} gives you real group strength.`);
+  else if(struct.pairs.length)why.push(`${rkPlural(struct.pairs.length,"pair")} gives the rack a base, but it still needs depth.`);
+  if(struct.suitEntries[0]?.[1]>=5)why.push(`${dominantSuit} is carrying the suit concentration.`);
+  if(struct.jokers>=2)why.push(`${struct.jokers} jokers create strong open-hand ceiling.`);
+  if(!why.length)why.push("The rack has clues, but not enough grouped strength yet.");
+
+  const strengths=[];
+  if(struct.connectedSequences.length)strengths.push(...struct.connectedSequences.slice(0,2).map(s=>`${RK_SUIT_NAMES[s.suit]} ${s.nums.join("-")} connection`));
+  if(struct.pairs.length)strengths.push(`${rkPlural(struct.pairs.length,"pair")} to protect`);
+  if(struct.pungs.length)strengths.push(`${rkPlural(struct.pungs.length,"pung")} already forming`);
+  if(struct.suitEntries[0]?.[1]>=5)strengths.push(`${dominantSuit} concentration`);
+  if(struct.jokers)strengths.push(`${rkPlural(struct.jokers,"joker")} for open hands`);
+
+  const danger=[];
+  if(struct.isolated.length>=4)danger.push(`${struct.isolated.length} disconnected tiles create too much miracle-draw dependence.`);
+  else if(struct.isolated.length>=2)danger.push(`${struct.isolated.length} isolated tiles need to pair up or leave soon.`);
+  if(struct.honorTotal>=3&&struct.groupedHonor===0&&top?.id!=="wd")danger.push("Loose honors are not helping unless Winds & Dragons becomes real.");
+  if(top?.id==="q"&&struct.jokers<2)danger.push("Quints is too thin without at least two jokers or natural group depth.");
+  if(top?.id==="sp"&&struct.jokers>0)danger.push("S&P cannot use jokers, so that path carries hidden friction.");
+  if(!danger.length&&commitmentStatus==="Strong Commit")danger.push("The main risk is overcommitting before the next draw confirms the lane.");
+  if(!danger.length)danger.push("No major red flag, but avoid chasing disconnected singletons.");
+
+  let coachingInsight="Stay flexible another pass before locking in.";
+  if(commitmentStatus==="Strong Commit")coachingInsight=`Commit to ${top?.name||"the main lane"}, but keep one exit if the next draw misses.`;
+  else if(commitmentStatus==="Leaning")coachingInsight=`You are leaning ${top?.name||"one way"}. One clean pickup can make it a commit.`;
+  else if(commitmentStatus==="Flexible")coachingInsight="Do not force a hand yet. Protect the shared core tiles and let the next draw decide.";
+  else if(commitmentStatus==="Bail Out")coachingInsight="Reset the read. Keep only tiles that connect, pair, or create a clear window.";
+  else if(struct.bestWindow?.depth>=3)coachingInsight=`Build around the ${RK_SUIT_NAMES[struct.bestWindow.suit]} window, not the loose edges.`;
+
+  const bestPaths=sectionReads.slice(0,4).filter(s=>s.score>=34).map(s=>({
+    section:s.name,
+    hand:s.bestHand?.label||null,
+    confidence:s.confidence,
+    support:s.support.slice(0,3),
+    needs:s.needs.slice(0,3),
+    overlapStrength:s.score>=68?"Strong":s.score>=50?"Medium":"Thin",
+    status:s.status,
+    score:s.score,
+  }));
+
+  const output={
+    rackleIQScore,commitmentStatus,bestDirection,
+    whyItWorks:why.slice(0,3),
+    patternStrengths:strengths.length?strengths.slice(0,4):["Early shape only, not enough grouped strength yet"],
+    dangerAreas:danger.slice(0,3),
+    liveSections:sectionReads.filter(s=>s.score>=34).slice(0,5).map(s=>({name:s.name,confidence:s.confidence,status:s.status,score:s.score})),
+    coachingInsight,
+    bestPaths,
+    tileStructure:{
+      strongestSuit:dominantSuit,weakestSuit:struct.weakestSuit?RK_SUIT_NAMES[struct.weakestSuit]:null,
+      pairs:struct.pairs.map(g=>g.label),pungs:struct.pungs.map(g=>g.label),kongs:struct.kongs.map(g=>g.label),
+      connectedSequences:struct.connectedSequences.map(s=>`${RK_SUIT_NAMES[s.suit]} ${s.nums.join("-")}`),
+      isolatedCount:struct.isolated.length,jokers:struct.jokers,flowers:struct.flowers
+    },
+    componentScores:{tileEfficiency,sectionViability,flexibility,suitDiscipline,growthPotential,directionScore,tileStrengthScore,passQualityScore,timingScore},
+    topSection:top,chosenSection:chosen,sectionReads
+  };
+  return output;
+}
+
+function StrategicCharlestonReadCard({iq}){
+  const r=iq?.strategicRead;
+  if(!r)return null;
+  const statusColor={"Strong Commit":C.jade,"Leaning":C.gold,"Flexible":"#2460A8","Maybe":C.mut,"Bail Out":C.cinn}[r.commitmentStatus]||C.mut;
+  return(
+    <div className="rk-score-card" style={{padding:18,textAlign:"left",marginBottom:12}}>
+      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,marginBottom:12}}>
+        <div style={{minWidth:0}}>
+          <div style={{fontSize:9,letterSpacing:2.2,fontWeight:950,color:C.jade,textTransform:"uppercase",marginBottom:5}}>Charleston Read</div>
+          <div style={{fontFamily:F.d,fontSize:20,fontWeight:950,lineHeight:1.08,color:C.ink}}>Expert rack direction</div>
+          <div style={{fontSize:12,color:C.mut,lineHeight:1.45,marginTop:5}}>Not a final hand call. This is what your rack is realistically showing after the Charleston.</div>
+        </div>
+        <div style={{borderRadius:999,padding:"7px 10px",background:statusColor+"12",border:`1px solid ${statusColor}22`,color:statusColor,fontSize:11,fontWeight:950,whiteSpace:"nowrap"}}>{r.commitmentStatus}</div>
+      </div>
+
+      <div style={{borderRadius:18,padding:"13px 14px",background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid ${C.jade}12`,boxShadow:"inset 0 1px 0 rgba(255,255,255,.76)",marginBottom:12}}>
+        <div style={{fontSize:9,letterSpacing:2,fontWeight:950,color:C.jade,textTransform:"uppercase",marginBottom:4}}>Best Direction</div>
+        <div style={{fontFamily:F.d,fontSize:18,fontWeight:950,color:C.ink,lineHeight:1.12}}>{r.bestDirection}</div>
+      </div>
+
+      <div style={{display:"grid",gap:9}}>
+        <div>
+          <div style={{fontSize:10,fontWeight:950,color:C.ink,marginBottom:5}}>Why it works</div>
+          {(r.whyItWorks||[]).slice(0,3).map((x,i)=><div key={i} style={{fontSize:12,lineHeight:1.55,color:"rgba(26,20,16,.72)",fontWeight:700}}>• {x}</div>)}
+        </div>
+        <div>
+          <div style={{fontSize:10,fontWeight:950,color:C.ink,marginBottom:5}}>Danger areas</div>
+          {(r.dangerAreas||[]).slice(0,2).map((x,i)=><div key={i} style={{fontSize:12,lineHeight:1.55,color:"rgba(26,20,16,.68)",fontWeight:650}}>• {x}</div>)}
+        </div>
+        <div style={{display:"flex",gap:7,flexWrap:"wrap",paddingTop:2}}>
+          {(r.liveSections||[]).slice(0,4).map((s,i)=><span key={i} className="rk-soft-pill" style={{fontSize:10,padding:"6px 9px"}}>{s.name} · {s.confidence}</span>)}
+        </div>
+        <div style={{borderTop:`1px solid ${C.bdr}80`,paddingTop:10,fontSize:13,lineHeight:1.55,color:C.ink,fontWeight:850,textAlign:"center"}}>{r.coachingInsight}</div>
+      </div>
+    </div>
+  );
+}
+
 function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   const{startingRack,finalRack,passedTilesByRound,totalTime,sectionId,chosenHand}=gameState;
   if(!startingRack||!finalRack||!sectionId)return null;
@@ -4679,7 +5038,21 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
     directionScore=Math.min(40,directionScore+1);
   }
 
-  const totalScore=Math.max(0,Math.min(100,directionScore+tileStrengthScore+passQualityScore+timingScore));
+  // ── EXPERT CHARLESTON AUDIT ───────────────────────────────────────────────
+  // Re-score through the human Charleston engine: whole-rack structure, suits,
+  // grouped strength, live section realism, pivot value, and overcommitment risk.
+  const strategicRead=rkEvaluateCharlestonEngine({
+    finalRack,startingRack,passedTilesByRound,sectionId,chosenHand,allSections:SECS.map(s=>({...s,score:s.ck(finalRack)}))
+  });
+  if(strategicRead?.componentScores){
+    directionScore=strategicRead.componentScores.directionScore;
+    tileStrengthScore=strategicRead.componentScores.tileStrengthScore;
+    passQualityScore=Math.max(0,Math.min(25,Math.round((passQualityScore*0.45)+(strategicRead.componentScores.passQualityScore*0.55))));
+    timingScore=strategicRead.componentScores.timingScore;
+    directionExplanation=`${strategicRead.commitmentStatus}: ${strategicRead.bestDirection}. ${strategicRead.whyItWorks?.[0]||"Whole-rack structure reviewed."}`;
+  }
+
+  const totalScore=strategicRead?.rackleIQScore ?? Math.max(0,Math.min(100,directionScore+tileStrengthScore+passQualityScore+timingScore));
   const{level,levelExplanation,tier}=iqScoreLevel(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
   const style=getIQStyle(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
 
@@ -4714,7 +5087,14 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
     strengths,weaknesses,
     tileInsights:tileIns,
     passInsights,
-    timingInsight,coachNote,tryNextTime,
+    timingInsight,
+    strategicRead,
+    commitmentStatus:strategicRead?.commitmentStatus,
+    bestDirection:strategicRead?.bestDirection,
+    liveSections:strategicRead?.liveSections,
+    coachingInsight:strategicRead?.coachingInsight,
+    coachNote:strategicRead?.coachingInsight||coachNote,
+    tryNextTime:strategicRead?.coachingInsight||tryNextTime,
     totalTime,shareText,
   };
 }
@@ -5889,6 +6269,29 @@ function computeFlexibility(finalRack, allSections, passLog, startingRack){
 // Returns rich structured read: primaryDirection, secondaryPaths, pivotPotential,
 // flexibility, commitment, structuralStrength, deadnessRisk, observations[], expertInsight.
 function computeExpertRead(finalRack, chosenSec, allSections, passLog, iq){
+  if(iq?.strategicRead){
+    const r=iq.strategicRead;
+    const topName=r.bestDirection||"Still open";
+    return{
+      primaryDirection:`${r.commitmentStatus}: ${topName}. ${(r.whyItWorks||[])[0]||"Whole-rack structure reviewed."}`,
+      secondaryPaths:(r.bestPaths||[]).slice(1,4).map(p=>`${p.section} · ${p.confidence} confidence. Support: ${(p.support||[]).join(", ")||"thin"}. Needs: ${(p.needs||[]).join(", ")||"more grouped strength"}.`),
+      pivotPotential:r.componentScores?.flexibility>=70?"Strong":r.componentScores?.flexibility>=48?"Moderate":"Weak",
+      flexibility:rkToneForScore(r.componentScores?.flexibility||0),
+      commitment:r.commitmentStatus,
+      structuralStrength:rkToneForScore(r.componentScores?.tileEfficiency||0),
+      deadnessRisk:(r.dangerAreas||[]).some(x=>/miracle|disconnected|too thin|dead/i.test(x))?"Medium":"Low",
+      observations:[...(r.whyItWorks||[]),...(r.patternStrengths||[])].slice(0,5),
+      expertInsight:r.coachingInsight,
+      sectionFitLabel:r.topSection?.status||"alive",
+      sectionFitConfidence:r.topSection?.confidence||"Medium",
+      chosenPct:r.chosenSection?.score||0,
+      topPct:r.topSection?.score||0,
+      sectionMatch:r.chosenSection?.id===r.topSection?.id,
+      topSec:r.topSection,
+      risk:(r.dangerAreas||[]).length?"Medium":"Low",
+      bullets:[],
+    };
+  }
   if(!finalRack||!chosenSec)return null;
 
   // ── TILE INVENTORY ──────────────────────────────────────────────────────────
@@ -7287,6 +7690,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
       <ImproveGameHero iq={iq} chosenSecObj={chosenSecObj} bestFitSec={bestFitSec} onPractice={onPractice} onCoachMode={onCoachMode} setScreen={setScreen}/>
 
+      <StrategicCharlestonReadCard iq={iq}/>
+
       {/* ①b STYLE, light identity layer */}
       {iq.styleName&&<div className="rk-review-style-card" style={{marginBottom:14}}>
         <div style={{position:"relative",zIndex:1}}>
@@ -7493,6 +7898,8 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
       <div style={{marginBottom:10}}>
         <IQHero iq={iq} isDaily={false} section={section} totalTime={iq.totalTime||0} chosenSec={chosenSec} allSections={allSections}/>
       </div>
+
+      <StrategicCharlestonReadCard iq={iq}/>
 
       {/* YOUR HAND, rack only, closed */}
       <CollapsibleSection label="Your Hand" desc="Final rack · Best path" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
