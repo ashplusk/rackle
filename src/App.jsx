@@ -2144,6 +2144,54 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-stats-identity-line{margin:12px auto 14px;padding:12px 14px;border-radius:18px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.075);box-shadow:0 6px 18px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.76);font-size:13px;line-height:1.55;color:#1A1410;font-weight:850;text-align:center;max-width:34ch}
 .rk-mode-label-daily{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 10px;background:rgba(23,107,66,.08);border:1px solid rgba(23,107,66,.12);font-size:10px;font-weight:950;color:#176B42}
 @media(max-width:390px){.rk-score-outcome-strip{grid-template-columns:1fr}.rk-game-flow-title{font-size:18px}}
+
+
+/* ─── vNext BREATHING ROOM + LIGHTER SHARE CTA PATCH ───────────────────── */
+.rk-game-flow-card{
+  padding:18px 18px 20px!important;
+  margin:10px 0 16px!important;
+  border-radius:26px!important;
+}
+.rk-game-flow-kicker{
+  padding:7px 14px!important;
+  margin-bottom:14px!important;
+  font-size:11px!important;
+  letter-spacing:.2px!important;
+}
+.rk-game-flow-title{
+  font-size:24px!important;
+  line-height:1.02!important;
+  margin:0 0 10px!important;
+}
+.rk-game-flow-copy{
+  font-size:14px!important;
+  line-height:1.45!important;
+  font-weight:800!important;
+  max-width:280px!important;
+  margin:0 auto!important;
+}
+.rk-score-ultra-simple .rk-iq-hero{
+  margin-bottom:18px!important;
+  padding:32px 22px 26px!important;
+}
+.rk-score-ultra-simple .rk-iq-hero + div{
+  margin-bottom:18px!important;
+}
+.rk-score-social-room{
+  margin:4px 0 18px!important;
+}
+.rk-score-share-card{
+  margin-top:10px!important;
+  margin-bottom:18px!important;
+}
+.rk-score-share-artifact{
+  margin:8px 0 14px!important;
+}
+@media(max-width:390px){
+  .rk-game-flow-card{padding:16px 14px 18px!important;margin:8px 0 14px!important}
+  .rk-game-flow-title{font-size:22px!important}
+  .rk-game-flow-copy{font-size:13.5px!important}
+}
 `;
 
 
@@ -8673,7 +8721,7 @@ const SHARE_VARIANTS={
   green:{bg:"linear-gradient(135deg,#2E6B48,#1B5035)",shadow:"rgba(27,80,53,0.28)",color:"#fff"},
   jadepill:{bg:"#1B7D4E0F",shadow:"rgba(27,125,78,0.10)",color:"#1B7D4E",border:`1.5px solid #1B7D4E25`},
   goldpill:{bg:"#B08A350F",shadow:"rgba(176,138,53,0.10)",color:"#221E1A",border:`1.5px solid #B08A3525`},
-  viral:{bg:"linear-gradient(135deg,#0D5B37,#064223)",shadow:"rgba(6,66,35,0.26)",color:"#fff",border:`1px solid rgba(243,212,107,.32)`},
+  viral:{bg:"linear-gradient(145deg,#FFF9ED,#F2E8D5)",shadow:"rgba(160,120,40,0.12)",color:"#1A1410",border:`1px solid rgba(160,120,40,.26)`},
   card:{bg:"#ffffff",shadow:"rgba(0,0,0,0.06)",color:"#221E1A",border:`1px solid #E3DDD3`},
 };
 function ShareButton({text,label,sublabel,variant="goldpill"}){
@@ -8696,11 +8744,11 @@ function ShareButton({text,label,sublabel,variant="goldpill"}){
     }
   };
   const v=SHARE_VARIANTS[variant]||SHARE_VARIANTS.goldpill;
-  const isLight=variant==="goldpill"||variant==="jadepill"||variant==="card";
-  const iconBg=isLight?`${C.gold}25`:"rgba(255,255,255,0.15)";
+  const isLight=variant==="goldpill"||variant==="jadepill"||variant==="card"||variant==="viral";
+  const iconBg=isLight?`${C.gold}20`:"rgba(255,255,255,0.15)";
   const titleColor=isLight?C.ink:"#fff";
-  const subColor=isLight?C.amberB:"rgba(255,255,255,0.7)";
-  const arrowColor=isLight?C.amberB:"rgba(255,255,255,0.6)";
+  const subColor=isLight?C.mut:"rgba(255,255,255,0.7)";
+  const arrowColor=isLight?C.gold:"rgba(255,255,255,0.6)";
   return(
     <div style={{position:"relative"}}>
       <button onClick={share} className="rk-share-card" style={{width:"100%",borderRadius:variant==="viral"?18:14,
@@ -9128,7 +9176,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     : globalRank?`#${globalRank} on today’s Rackle board`:"";
   const shareText=[
     `🀄 Rackle #${dayNum}`,
-    `${shareName} scored ${score}. Beat me before the board resets.`,
+    `${shareName} scored ${score}. Can you beat it before tonight’s reset?`,
     globalRank?`Global #${globalRank}${globalTotal?` of ${globalTotal}`:""}`:"",
     shareClubLine,
     `Streak: ${iq.streak||ST.get("str",0)||0}d`,
@@ -9184,11 +9232,6 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <Metric label="Time" value={time?`${time}s`:"—"} sub="finished" accent={C.ink}/>
       </div>
 
-      <div className="rk-score-outcome-strip" aria-label="Score summary">
-        <div className="rk-score-outcome"><strong>{score}</strong><span>Score</span></div>
-        <div className="rk-score-outcome"><strong>{globalRank?`#${globalRank}`:"—"}</strong><span>Global</span></div>
-        <div className="rk-score-outcome"><strong>{clubRank?`#${clubRank}`:(clubCode?"live":"join")}</strong><span>Club</span></div>
-      </div>
 
       <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"globalLeaderboard")} className="rk-score-social-room" style={{width:"100%",appearance:"none",fontFamily:F.b,cursor:"pointer"}}>
         <span className="rk-score-social-left">
@@ -9208,7 +9251,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <span style={{width:38,height:38,borderRadius:14,display:"inline-flex",alignItems:"center",justifyContent:"center",background:"rgba(23,107,66,.08)",border:`1px solid rgba(23,107,66,.10)`,fontSize:18}}>📲</span>
           <span style={{minWidth:0}}>
             <span style={{display:"block",fontFamily:F.d,fontSize:18,lineHeight:1.04,fontWeight:950,color:C.ink,letterSpacing:-.3}}>Share this score</span>
-            <span style={{display:"block",fontSize:12,lineHeight:1.35,color:C.mut,fontWeight:800,marginTop:4}}>{`Beat ${score}. Board resets tonight.`}</span>
+            <span style={{display:"block",fontSize:12,lineHeight:1.35,color:C.mut,fontWeight:800,marginTop:4}}>{`Can your table beat ${score} tonight?`}</span>
           </span>
         </div>
         <div className="rk-score-share-artifact" aria-label="Share preview">
@@ -9217,7 +9260,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <em>{passEmoji}</em>
           <small>playrackle.com</small>
         </div>
-        <ShareButton text={shareText} label={affiliatedClubName?"Beat this score":"Share your score"} sublabel={affiliatedClubName?`Send it to ${affiliatedClubName}`:"Drop it in your group chat"} variant="viral"/>
+        <ShareButton text={shareText} label="Share this score" sublabel={affiliatedClubName?`Send it to ${affiliatedClubName}`:"Drop it in your group chat"} variant="viral"/>
       </div>
 
       <div className="rk-score-rack-card" style={{borderRadius:22,padding:14,background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid rgba(26,20,16,.075)`,boxShadow:"0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)",marginBottom:12,textAlign:"center"}}>
