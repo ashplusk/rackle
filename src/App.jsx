@@ -1974,6 +1974,50 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-daily-divider-row{margin-bottom:20px!important;}
 }
 
+
+
+/* ─── vNext CLUBHOUSE v4: country club score rooms ─────────────────────── */
+.rk-clubhouse-v4{margin:26px 0 28px;position:relative}
+.rk-clubhouse-v4-divider{display:flex;align-items:center;gap:12px;margin:4px 0 14px}
+.rk-clubhouse-v4-divider:before,.rk-clubhouse-v4-divider:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,rgba(160,120,40,.24))}
+.rk-clubhouse-v4-divider:after{background:linear-gradient(90deg,rgba(160,120,40,.24),transparent)}
+.rk-clubhouse-v4-label{display:inline-flex;align-items:center;gap:7px;padding:7px 15px;border-radius:999px;background:linear-gradient(145deg,#F5EFE4,#EDE3D3);border:1px solid rgba(160,120,40,.20);box-shadow:inset 0 1px 0 rgba(255,255,255,.72);font-size:9px;letter-spacing:2.5px;text-transform:uppercase;font-weight:950;color:rgba(26,20,16,.56);white-space:nowrap}
+.rk-clubhouse-v4-suite{border-radius:28px;overflow:hidden;background:linear-gradient(145deg,#FFFDF8 0%,#F6EFE4 100%);border:1px solid rgba(26,20,16,.08);box-shadow:0 14px 38px rgba(26,20,16,.06),inset 0 1px 0 rgba(255,255,255,.82)}
+.rk-clubhouse-v4-overview{position:relative;overflow:hidden;display:grid;grid-template-columns:1.05fr 1fr;gap:14px;align-items:stretch;padding:18px;background:linear-gradient(135deg,#FFFDF8 0%,#F2EBDC 56%,#EEF6F1 100%);border-bottom:1px solid rgba(26,20,16,.07)}
+.rk-clubhouse-v4-overview:after{content:'🀄';position:absolute;right:-10px;bottom:-24px;font-size:108px;opacity:.045;transform:rotate(-9deg);pointer-events:none}
+.rk-clubhouse-v4-copyblock{position:relative;z-index:1;min-width:0}
+.rk-clubhouse-v4-kicker{display:flex;align-items:center;gap:8px;font-size:9px;letter-spacing:2.2px;text-transform:uppercase;font-weight:950;color:#176B42;margin-bottom:9px;line-height:1.1}
+.rk-clubhouse-v4-live-dot{width:8px;height:8px;border-radius:999px;background:#4CD987;box-shadow:0 0 0 4px rgba(76,217,135,.13),0 0 14px rgba(76,217,135,.52);animation:rkLiveBreathe 2.4s ease-in-out infinite;display:inline-block;flex-shrink:0}
+.rk-clubhouse-v4-title{font-family:'Fraunces',Georgia,serif;font-size:25px;line-height:1.02;font-weight:950;letter-spacing:-.65px;color:#1A1410;margin:0 0 6px}
+.rk-clubhouse-v4-copy{font-size:12.5px;line-height:1.48;color:rgba(26,20,16,.62);font-weight:760;margin:0;max-width:30ch}
+.rk-clubhouse-v4-room-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:9px;min-width:0}
+.rk-clubhouse-v4-room{position:relative;overflow:hidden;text-align:left;border-radius:20px;padding:13px 13px 12px;min-height:104px;cursor:pointer;border:1px solid rgba(23,107,66,.13);background:rgba(255,255,255,.72);box-shadow:0 5px 16px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.82);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.rk-clubhouse-v4-room:hover{transform:translateY(-1px);border-color:rgba(23,107,66,.22);box-shadow:0 9px 24px rgba(26,20,16,.06),inset 0 1px 0 rgba(255,255,255,.86)}
+.rk-clubhouse-v4-room-primary{background:linear-gradient(145deg,#FCF8EA,#FFFDF8);border-color:rgba(160,120,40,.18)}
+.rk-clubhouse-v4-room-top{display:block;font-size:8px;letter-spacing:1.85px;text-transform:uppercase;font-weight:950;color:rgba(26,20,16,.42);margin-bottom:9px}
+.rk-clubhouse-v4-room strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:25px;line-height:1;font-weight:950;letter-spacing:-.7px;color:#176B42;margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk-clubhouse-v4-room-primary strong{color:#A07828}
+.rk-clubhouse-v4-room span:last-child{display:block;font-size:10.5px;line-height:1.25;color:#6B6157;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk-clubhouse-v4-boards{background:linear-gradient(180deg,#FFFDF8,#F6EFE4)}
+.rk-clubhouse-v4-boards > div + div{border-top:1px solid rgba(26,20,16,.065)}
+.rk-clubhouse-v4-boards .rk-quiet-board,.rk-clubhouse-v4-boards .rk-social-preview-board,.rk-clubhouse-v4-boards .rk-leaderboard-card{border:none!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;margin:0!important}
+.rk-clubhouse-v4-boards .rk-quiet-board-head{min-height:auto!important;padding:18px 18px!important;background:transparent!important;border:none!important}
+.rk-clubhouse-v4-boards .rk-quiet-title{font-size:21px!important;line-height:1.04!important;margin:4px 0 7px!important;letter-spacing:-.45px!important}
+.rk-clubhouse-v4-boards .rk-quiet-desc{font-size:12.25px!important;line-height:1.42!important;color:rgba(26,20,16,.58)!important;font-weight:700!important;max-width:34ch!important}
+.rk-clubhouse-v4-boards .rk-quiet-preview-line{display:flex!important;gap:7px!important;flex-wrap:wrap!important;margin-top:12px!important}
+.rk-clubhouse-v4-boards .rk-quiet-preview-pill{padding:7px 11px!important;border-radius:999px!important;font-size:11px!important;font-weight:950!important;line-height:1!important}
+.rk-clubhouse-v4-boards .rk-quiet-chevron{width:46px!important;height:46px!important;border-radius:16px!important;background:linear-gradient(145deg,#FFFDF8,#EFE6D8)!important;border:1px solid rgba(26,20,16,.08)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important}
+.rk-clubhouse-v4-boards .rk-quiet-board-panel{padding:14px!important;background:linear-gradient(180deg,#FFFDF8 0%,#F3EBDE 100%)!important;border:none!important;border-top:1px solid rgba(26,20,16,.065)!important;border-radius:0!important;box-shadow:none!important}
+.rk-clubhouse-v4-boards .rk-quiet-leader{border-radius:22px!important;margin-bottom:12px!important;padding:16px!important;background:linear-gradient(150deg,#041F12,#07331E 55%,#03170D)!important;border:1px solid rgba(243,212,107,.18)!important;box-shadow:0 10px 26px rgba(6,43,24,.14),inset 0 1px 0 rgba(255,255,255,.08)!important}
+.rk-clubhouse-v4-boards .rk-quiet-row-list{display:grid!important;gap:8px!important}.rk-clubhouse-v4-boards .rk-quiet-row{border-radius:18px!important;background:rgba(255,255,255,.76)!important;border:1px solid rgba(26,20,16,.055)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important;padding:11px!important}
+.rk-clubhouse-v4-boards .rk-quiet-row-you{background:linear-gradient(145deg,#F4FBF7,#FFFDF8)!important;border-color:rgba(23,107,66,.16)!important}
+.rk-clubhouse-v4-boards .rk-quiet-footer{padding-top:13px!important;margin-top:12px!important;border-top:1px solid rgba(26,20,16,.075)!important;text-align:center!important}
+.rk-clubhouse-v4-organizer{position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(145deg,#F4FBF7,#FFFDF8);border:1px solid rgba(23,107,66,.13);box-shadow:0 10px 26px rgba(23,107,66,.055),inset 0 1px 0 rgba(255,255,255,.80);padding:18px;margin:16px 0 20px}
+.rk-clubhouse-v4-organizer-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.rk-clubhouse-v4-organizer-head span{font-size:9px;letter-spacing:2.45px;text-transform:uppercase;font-weight:950;color:#176B42}.rk-clubhouse-v4-organizer-head b{border-radius:999px;padding:6px 10px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.18);color:#8A6820;font-size:10px;font-weight:950;white-space:nowrap}
+.rk-clubhouse-v4-organizer h3{font-family:'Fraunces',Georgia,serif;font-size:23px;line-height:1.02;font-weight:950;letter-spacing:-.6px;color:#1A1410;margin:0 0 8px}.rk-clubhouse-v4-organizer p{font-size:12.5px;line-height:1.5;color:#6B6157;font-weight:750;margin:0 0 13px;max-width:40ch}.rk-clubhouse-v4-organizer-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}.rk-clubhouse-v4-organizer-row span{border-radius:999px;padding:7px 10px;background:rgba(23,107,66,.06);border:1px solid rgba(23,107,66,.08);color:#176B42;font-size:10.5px;font-weight:900}.rk-clubhouse-v4-organizer-actions{display:grid;grid-template-columns:1.45fr .85fr;gap:9px}.rk-clubhouse-v4-organizer-actions a,.rk-clubhouse-v4-organizer-actions button{display:flex;align-items:center;justify-content:center;border-radius:16px;padding:13px 10px;font-family:'Fraunces',Georgia,serif;font-size:14px;font-weight:950;text-decoration:none;cursor:pointer}.rk-clubhouse-v4-organizer-actions a{border:1px solid rgba(255,255,255,.16);background:linear-gradient(135deg,#176B42,#0F5432);color:#fff;box-shadow:0 10px 22px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16)}.rk-clubhouse-v4-organizer-actions button{border:1px solid rgba(23,107,66,.18);background:rgba(255,255,255,.78);color:#176B42}
+@media(min-width:760px){.rk-clubhouse-v4-overview{grid-template-columns:1fr 1.1fr;padding:22px}.rk-clubhouse-v4-title{font-size:29px}.rk-clubhouse-v4-room{min-height:110px}.rk-clubhouse-v4-boards .rk-quiet-board-head{padding:20px 22px!important}.rk-clubhouse-v4-boards .rk-quiet-title{font-size:24px!important}.rk-clubhouse-v4-organizer{padding:22px}.rk-clubhouse-v4-organizer-row{gap:9px}}
+@media(max-width:430px){.rk-clubhouse-v4{margin-top:22px}.rk-clubhouse-v4-overview{grid-template-columns:1fr;padding:16px;gap:13px}.rk-clubhouse-v4-title{font-size:23px}.rk-clubhouse-v4-copy{max-width:100%}.rk-clubhouse-v4-room-grid{grid-template-columns:1fr 1fr}.rk-clubhouse-v4-room{min-height:96px;padding:12px}.rk-clubhouse-v4-boards .rk-quiet-board-head{padding:16px!important}.rk-clubhouse-v4-boards .rk-quiet-title{font-size:20px!important}.rk-clubhouse-v4-organizer-actions{grid-template-columns:1fr}.rk-clubhouse-v4-organizer-row span{font-size:10px}}
+@media(max-width:360px){.rk-clubhouse-v4-room-grid{grid-template-columns:1fr}.rk-clubhouse-v4-room{min-height:auto}.rk-clubhouse-v4-boards .rk-quiet-preview-line{gap:5px!important}.rk-clubhouse-v4-boards .rk-quiet-preview-pill{font-size:10px!important;padding:6px 9px!important}}
 `;
 
 
@@ -12435,62 +12479,60 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   };
 
   const Community=()=> {
-    const clubhouseName=activeClubCode?((club&&club.name)||(CLUBS[activeClubCode]?.name)||"Your club"):"Rackle Clubhouse";
-    const clubCount=Number(clubPlayers||displayHomeClubEntries?.length||0);
+    const clubhouseName=activeClubCode?((club&&club.name)||(CLUBS[activeClubCode]?.name)||"Your club"):"Find your club";
     const globalCount=Number(todayPlayers||0);
+    const clubCount=Number(clubPlayers||displayHomeClubEntries?.length||0);
     const clubRankLabel=shownClubRank?`#${shownClubRank}`:"—";
     const leadLabel=topToday&&topToday!=="—"?topToday:"—";
-    const clubRoomLabel=activeClubCode?clubhouseName:"Join a club";
     const jumpToGlobal=()=>document.getElementById("global-leaderboard")?.scrollIntoView({behavior:"smooth",block:"center"});
     const jumpToClub=()=>activeClubCode?setScreen("leaderboard"):setScreen("clubs");
+    const roomLine=activeClubCode?`${clubhouseName} is live`:"Join a club to unlock your table";
     return(
-      <section className="rk-clubhouse-v3" aria-label="Rackle Clubhouse">
-        <div className="rk-clubhouse-v3-divider"><span className="rk-clubhouse-v3-label">🀄 The Clubhouse</span></div>
+      <section className="rk-clubhouse-v4" aria-label="Rackle Clubhouse">
+        <div className="rk-clubhouse-v4-divider"><span className="rk-clubhouse-v4-label">The Clubhouse</span></div>
 
-        <div className="rk-clubhouse-v3-hero">
-          <div className="rk-clubhouse-v3-hero-top">
-            <div>
-              <div className="rk-clubhouse-v3-kicker">Daily competition</div>
-              <h2 className="rk-clubhouse-v3-title">Two boards. One rack.</h2>
-              <p className="rk-clubhouse-v3-copy">Chase the global room, defend your club table, then share the score where your group actually talks.</p>
+        <div className="rk-clubhouse-v4-suite">
+          <div className="rk-clubhouse-v4-overview">
+            <div className="rk-clubhouse-v4-copyblock">
+              <div className="rk-clubhouse-v4-kicker"><span className="rk-clubhouse-v4-live-dot"/>Score rooms are open</div>
+              <h2 className="rk-clubhouse-v4-title">Chase the room.</h2>
+              <p className="rk-clubhouse-v4-copy">One daily rack, two boards, quick bragging rights.</p>
             </div>
-            <div className="rk-clubhouse-v3-live"><span className="rk-clubhouse-v3-live-dot"/>Live now</div>
+            <div className="rk-clubhouse-v4-room-grid">
+              <button className="rk-clubhouse-v4-room rk-clubhouse-v4-room-primary" onClick={jumpToGlobal}>
+                <span className="rk-clubhouse-v4-room-top">Global</span>
+                <strong>{globalCount||"—"}</strong>
+                <span>{leadLabel!=="—"?`${leadLabel} leads`:"Play to rank"}</span>
+              </button>
+              <button className="rk-clubhouse-v4-room" onClick={jumpToClub}>
+                <span className="rk-clubhouse-v4-room-top">Club</span>
+                <strong>{activeClubCode?clubRankLabel:"Join"}</strong>
+                <span>{activeClubCode?roomLine:"Get a club code"}</span>
+              </button>
+            </div>
           </div>
 
-          <div className="rk-clubhouse-v3-score-strip">
-            <div className="rk-clubhouse-v3-stat"><strong>{globalCount||"—"}</strong><span>Global players</span></div>
-            <div className="rk-clubhouse-v3-stat"><strong>{leadLabel}</strong><span>Score to beat</span></div>
-            <div className="rk-clubhouse-v3-stat"><strong>{clubRankLabel}</strong><span>{activeClubCode?"Your club rank":"Club rank"}</span></div>
+          <div className="rk-clubhouse-v4-boards">
+            <GlobalLeaderboardPill setScreen={setScreen}/>
+            <ClubCodeEntry onJoin={()=>setScreen("leaderboard")} setScreen={setScreen} clubEntries={displayHomeClubEntries} currentScore={currentScore} currentRank={shownClubRank} clubPlayers={clubPlayers}/>
+            {!activeClubCode&&<InlineCodeEntry setScreen={setScreen}/>} 
           </div>
-
-          <div className="rk-clubhouse-v3-actions">
-            <button className="rk-clubhouse-v3-action rk-clubhouse-v3-action-primary" onClick={jumpToGlobal}>Open Global Room →</button>
-            <button className="rk-clubhouse-v3-action" onClick={jumpToClub}>{activeClubCode?"Open Club Room":"Find Your Club"} →</button>
-          </div>
-        </div>
-
-        <div className="rk-clubhouse-v3-stack">
-          <GlobalLeaderboardPill setScreen={setScreen}/>
-          <ClubCodeEntry onJoin={()=>setScreen("leaderboard")} setScreen={setScreen} clubEntries={displayHomeClubEntries} currentScore={currentScore} currentRank={shownClubRank} clubPlayers={clubPlayers}/>
-          {!activeClubCode&&<InlineCodeEntry setScreen={setScreen}/>}
         </div>
 
         {!activeClubCode&&(
-          <div className="rk-clubhouse-v3-organizer">
-            <div className="rk-clubhouse-v3-organizer-head">
-              <span className="rk-clubhouse-v3-organizer-kicker">For club organizers</span>
-              <span className="rk-clubhouse-v3-organizer-pill">Founding clubs</span>
+          <div className="rk-clubhouse-v4-organizer">
+            <div className="rk-clubhouse-v4-organizer-head">
+              <span>For club organizers</span>
+              <b>Founding clubs</b>
             </div>
-            <h3 className="rk-clubhouse-v3-organizer-title">Give your group a daily table.</h3>
-            <p className="rk-clubhouse-v3-organizer-copy">A private Rackle room turns one daily Charleston into a reason your group comes back.</p>
-            <div className="rk-clubhouse-v3-benefits">
-              <div className="rk-clubhouse-v3-benefit">One shared Daily Rackle</div>
-              <div className="rk-clubhouse-v3-benefit">Private club rankings</div>
-              <div className="rk-clubhouse-v3-benefit">Scores made for group chat</div>
+            <h3>Start your club table.</h3>
+            <p>Give your Mahjong group one shared daily rack, one private board, and one reason to talk between games.</p>
+            <div className="rk-clubhouse-v4-organizer-row">
+              <span>Private code</span><span>Daily scores</span><span>Group chat ready</span>
             </div>
-            <div className="rk-clubhouse-v3-organizer-actions">
-              <a className="rk-clubhouse-v3-primary" href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20">Start my club →</a>
-              <button className="rk-clubhouse-v3-secondary" onClick={()=>setScreen("clubs")}>Join</button>
+            <div className="rk-clubhouse-v4-organizer-actions">
+              <a href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20">Start my club →</a>
+              <button onClick={()=>setScreen("clubs")}>Join</button>
             </div>
           </div>
         )}
