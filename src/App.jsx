@@ -2091,6 +2091,7 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-rooms-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px}.rk-rooms-kicker{font-size:9px;letter-spacing:2.4px;text-transform:uppercase;font-weight:950;color:#176B42;margin-bottom:7px}.rk-rooms-title{font-family:'Fraunces',Georgia,serif;font-size:25px;line-height:1.02;font-weight:950;letter-spacing:-.7px;color:#1A1410;margin:0 0 6px}.rk-rooms-copy{font-size:12.5px;line-height:1.45;color:#6B6157;font-weight:750;margin:0;max-width:38ch}
 .rk-rooms-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}.rk-room-mini{border-radius:18px;padding:12px 10px;background:rgba(255,255,255,.72);border:1px solid rgba(23,107,66,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.82);min-width:0}.rk-room-mini strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:21px;line-height:1;font-weight:950;color:#176B42;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rk-room-mini span{display:block;font-size:8px;letter-spacing:1.55px;text-transform:uppercase;font-weight:950;color:rgba(26,20,16,.46);line-height:1.2}.rk-room-mini.gold strong{color:#A07828}
 .rk-rooms-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.rk-rooms-actions button{border-radius:16px;padding:13px 10px;border:1px solid rgba(23,107,66,.14);background:linear-gradient(180deg,#FFFDF8,#F1E9DB);color:#176B42;font-weight:950;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.75)}.rk-rooms-actions button:first-child{background:linear-gradient(135deg,#176B42,#0F5432);color:#fff;border-color:rgba(255,255,255,.16)}
+.rk-rooms-pulse{display:grid;gap:8px;margin:14px 0 12px}.rk-rooms-pulse-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.rk-rooms-pulse-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:950;color:rgba(26,20,16,.46)}.rk-rooms-pulse-note{font-size:10.5px;color:#176B42;font-weight:900;white-space:nowrap}.rk-rooms-board-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}.rk-rooms-board-card{border-radius:18px;padding:12px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.07);box-shadow:0 4px 14px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78);min-width:0}.rk-rooms-board-card.is-live{border-color:rgba(23,107,66,.15);background:linear-gradient(145deg,#F8FCF9,#F7F0E5)}.rk-rooms-board-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.rk-rooms-board-name{font-family:'Fraunces',Georgia,serif;font-size:15px;line-height:1.05;font-weight:950;color:#1A1410;letter-spacing:-.25px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rk-rooms-board-count{font-size:10px;font-weight:950;color:#176B42;background:rgba(23,107,66,.07);border:1px solid rgba(23,107,66,.09);border-radius:999px;padding:5px 8px;white-space:nowrap}.rk-rooms-live-list{display:grid;gap:7px}.rk-rooms-live-row{display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:center;gap:8px;border-radius:14px;padding:9px 9px;background:rgba(255,255,255,.72);border:1px solid rgba(26,20,16,.055)}.rk-rooms-live-rank{width:24px;height:24px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:rgba(160,120,40,.12);color:#8A6820;font-size:10px;font-weight:950}.rk-rooms-live-name{font-size:11.5px;font-weight:900;color:#1A1410;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rk-rooms-live-score{font-family:'Fraunces',Georgia,serif;font-size:16px;font-weight:950;color:#176B42}.rk-rooms-empty{border-radius:15px;padding:12px;background:rgba(23,107,66,.055);border:1px dashed rgba(23,107,66,.18);font-size:12px;line-height:1.4;color:#176B42;font-weight:850;text-align:center}.rk-rooms-social-nudge{display:flex;align-items:center;justify-content:space-between;gap:10px;border-radius:17px;padding:12px 13px;background:linear-gradient(145deg,#FFF9ED,#F4EAD7);border:1px solid rgba(160,120,40,.16);margin:12px 0 0}.rk-rooms-social-nudge span{font-size:12px;font-weight:850;color:#6B6157;line-height:1.35}.rk-rooms-social-nudge strong{color:#1A1410}.rk-rooms-social-nudge button{border:none;border-radius:999px;background:#176B42;color:#fff;font-size:11px;font-weight:950;padding:8px 10px;white-space:nowrap;cursor:pointer}.rk-home-action-card-single{grid-column:1/-1}.rk-home-action-card-secondary{opacity:.92}@media(max-width:430px){.rk-rooms-board-tabs{grid-template-columns:1fr}.rk-rooms-social-nudge{align-items:flex-start;flex-direction:column}.rk-rooms-social-nudge button{width:100%}}
 .rk-share-preview-card{border-radius:24px;padding:18px;background:linear-gradient(145deg,#FFF9ED,#F7EFE0);border:1px solid rgba(160,120,40,.16);box-shadow:0 10px 26px rgba(160,120,40,.06),inset 0 1px 0 rgba(255,255,255,.8)}.rk-share-preview-title{font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1.05;font-weight:950;color:#1A1410;margin:0 0 6px}.rk-share-preview-copy{font-size:12.5px;line-height:1.5;color:#6B6157;font-weight:750;margin:0 0 14px}.rk-share-artifact{border-radius:18px;background:#FFFDF8;border:1px solid rgba(26,20,16,.07);padding:14px;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.82);margin-bottom:12px}.rk-share-artifact strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:18px;color:#1A1410;margin-bottom:5px}.rk-share-artifact span{display:block;font-size:12px;color:#6B6157;font-weight:850;line-height:1.55}.rk-share-grid{letter-spacing:3px;font-size:18px;margin-top:8px}
 .rk-how-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.rk-how-card{border-radius:18px;padding:14px 12px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.07);box-shadow:0 5px 18px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78)}.rk-how-card b{display:block;font-family:'Fraunces',Georgia,serif;font-size:15px;line-height:1.1;color:#1A1410;margin:7px 0 5px}.rk-how-card span{font-size:11.5px;line-height:1.35;color:#6B6157;font-weight:750}
 .rk-activity-strip{display:flex;align-items:center;gap:8px;overflow:hidden;border-radius:999px;padding:9px 12px;background:rgba(23,107,66,.06);border:1px solid rgba(23,107,66,.09);color:#176B42;font-size:11.5px;font-weight:900;white-space:nowrap}.rk-activity-dot{width:8px;height:8px;border-radius:999px;background:#4CD987;box-shadow:0 0 0 4px rgba(76,217,135,.10);flex-shrink:0}
@@ -12195,11 +12196,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const [clubSharesToday,setClubSharesToday]=useState(0);
   const [clubPlayers,setClubPlayers]=useState(null);
   const [homeClubEntries,setHomeClubEntries]=useState([]);
+  const [homeGlobalEntries,setHomeGlobalEntries]=useState([]);
   const [ds,setDs]=useState(null);
   const dismissNudge=()=>{ST.set("nudgeDismissed",getDailySeed());setNudgeDismissed(true);};
 
   useEffect(()=>{
     fetchDailyStats().then(s=>{if(s&&s.total>=1)setDs(s);});
+    fetchGlobalEntries().then(rows=>{if(rows)setHomeGlobalEntries(rows);}).catch(()=>{});
     const code=activeClubCode||getClubCode();
     if(code){
       fetchLBEntries(code).then(rows=>{
@@ -12456,16 +12459,21 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   const PracticeCard=()=> (
     <div className="rk-home-split" aria-label="Play options">
-      <button onClick={()=>go(dDone?"free":"daily")} className="rk-home-action-card">
+      {!dDone&&<button onClick={()=>go("daily")} className="rk-home-action-card">
         <span style={{fontSize:20}}>🀄</span>
-        <strong>{dDone?"Replay a rack":"Play the Daily"}</strong>
-        <span>{dDone?"New deal. Sharpen one read.":"One Charleston. One score."}</span>
-      </button>
-      <button onClick={()=>go("free")} className="rk-home-action-card">
+        <strong>Play the Daily</strong>
+        <span>One Charleston. One score.</span>
+      </button>}
+      <button onClick={()=>go("free")} className={`rk-home-action-card ${dDone?"rk-home-action-card-single":"rk-home-action-card-secondary"}`}>
         <span style={{fontSize:20}}>🎓</span>
         <strong>Warm up</strong>
-        <span>Practice before the Daily.</span>
+        <span>{dDone?"Practice another rack without changing today’s score.":"Practice first. The Daily waits."}</span>
       </button>
+      {dDone&&<button onClick={()=>activeClubCode?setScreen("leaderboard"):setScreen("clubs")} className="rk-home-action-card">
+        <span style={{fontSize:20}}>🏛️</span>
+        <strong>{activeClubCode?"Club Room":"Join a Club"}</strong>
+        <span>{activeClubCode?"See who your table is chasing.":"Create a board for your table."}</span>
+      </button>}
     </div>
   );
 
@@ -12485,27 +12493,24 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const score=currentScore||topToday||78;
     const globalRank=currentScore?`#${Math.max(1,rkRankOfCurrent([],currentScore)||1)}`:"#1";
     const clubRank=shownClubRank?`#${shownClubRank}`:(club?"#1":"Join a club");
-    const pattern=rkSharePattern(iq);
     return(
-      <section className="rk-share-preview-card rk-share-preview-card-v2" aria-label="Share your score preview">
+      <section className="rk-share-preview-card" aria-label="Share your score preview">
         <div>
           <h2 className="rk-share-preview-title">Make the group chat talk.</h2>
-          <p className="rk-share-preview-copy">Post your score. Defend your rank. Make your table chase.</p>
-          <button onClick={copyShare} className="rk-room-btn rk-room-btn-primary" style={{width:"100%"}}>{shareCopied?"Copied":"Copy beat-this-score"}</button>
+          <p className="rk-share-preview-copy">Post your score, defend your rank, and make your table chase.</p>
+          <button onClick={copyShare} className="rk-room-btn rk-room-btn-primary" style={{width:"100%"}}>{shareCopied?"Copied":"Copy share card"}</button>
         </div>
-        <div className="rk-share-artifact rk-share-artifact-v2">
-          <div className="rk-share-artifact-logo">Rackle</div>
-          <strong>Daily #{dn}</strong>
+        <div className="rk-share-artifact">
+          <strong>Rackle #{dn}</strong>
           <span>Score: {score}</span>
           <span>Global: {globalRank}</span>
           <span>Club: {clubRank}</span>
-          <span>Streak: {streak||0}d</span>
-          <div className="rk-share-grid">{pattern}</div>
-          <small>playrackle.com</small>
+          <div className="rk-share-grid">🀄🟩🟩🟨⬜</div>
         </div>
       </section>
     );
   };
+
 
   const HowItWorks=()=> (
     <section aria-label="How Rackle works">
@@ -12542,8 +12547,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </div>
         <div className="rk-web-data-card">
           <div className="rk-web-data-kicker">Practice room</div>
-          <h3 className="rk-web-data-title">Build the next read</h3>
-          <p className="rk-web-data-copy">Free Play lets you test sections, replay the Charleston, and learn without risking the Daily board.</p>
+          <h3 className="rk-web-data-title">Warm up between Dailies</h3>
+          <p className="rk-web-data-copy">Warm up with extra racks without touching today’s score.</p>
           <div className="rk-web-metric-row" style={{gridTemplateColumns:"repeat(2,minmax(0,1fr))"}}>
             <div className="rk-web-metric"><strong>{avgDaily}</strong><span>Daily avg</span></div>
             <div className="rk-web-metric"><strong>{avgPractice}</strong><span>Practice avg</span></div>
@@ -12566,50 +12571,96 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   const Community=()=> {
     const clubhouseName=activeClubCode?((club&&club.name)||(CLUBS[activeClubCode]?.name)||"Your club"):"Join your club";
-    const globalCount=Number(todayPlayers||0);
-    const clubCount=Number(clubPlayers||displayHomeClubEntries?.length||0);
-    const leadLabel=topToday&&topToday!=="—"?topToday:"—";
+    const globalRows=rkMergeCurrentScore(homeGlobalEntries,currentScore,iq?.totalTime||dRes?.time||0,streak,activeClubCode);
+    const clubRows=displayHomeClubEntries;
+    const globalCount=Math.max(Number(todayPlayers||0),globalRows.length,currentScore?1:0);
+    const clubCount=Number(clubPlayers||clubRows.length||0);
+    const leadLabel=topToday&&topToday!=="—"?topToday:(globalRows[0]?.iqScore||"—");
     const openGlobal=()=>setScreen("globalLeaderboard");
     const openClub=()=>activeClubCode?setScreen("leaderboard"):setScreen("clubs");
+    const rowName=(e,i)=>{
+      const raw=(e?.name||"").trim();
+      if(raw)return raw;
+      return i===0?"Room open":"Player";
+    };
+    const rowScore=(e)=>Number.isFinite(Number(e?.iqScore))?Number(e.iqScore):(e?.iqScore||"—");
+    const boardRows=(rows,emptyLead)=>rows&&rows.length?rows.slice(0,3):[{name:"Room open",iqScore:emptyLead||"—"},{name:"First score gets the room",iqScore:"—"}];
+    const copyClubInvite=async()=>{
+      const link=activeClubCode?`https://playrackle.com?club=${activeClubCode}`:"https://playrackle.com";
+      const text=activeClubCode
+        ?`I made us a Rackle club room. Same daily Charleston, private leaderboard. Join here: ${link}`
+        :`Join my Rackle room. Same daily Charleston, private leaderboard. Play here: ${link}`;
+      try{await navigator.clipboard.writeText(text);setShareCopied(true);setTimeout(()=>setShareCopied(false),1400);}catch{}
+    };
     return(
       <section className="rk-rooms-card" aria-label="Today's rooms">
         <div className="rk-rooms-head">
           <div>
             <div className="rk-rooms-kicker"><span className="rk-live-dot-dynamic"/> Today’s Rooms</div>
-            <h2 className="rk-rooms-title">See who owns today’s rack.</h2>
-            <p className="rk-rooms-copy">Check the board before it resets.</p>
+            <h2 className="rk-rooms-title">Beat the room.</h2>
+            <p className="rk-rooms-copy">Global board, club board, one rack.</p>
           </div>
         </div>
         <div className="rk-rooms-grid">
-          <div className="rk-room-mini"><strong>{globalCount||2}</strong><span>Global room</span></div>
-          <div className="rk-room-mini"><strong>{activeClubCode?(clubCount||1):"Join"}</strong><span>{activeClubCode?clubhouseName:"Club room"}</span></div>
+          <div className="rk-room-mini"><strong>{globalCount||1}</strong><span>Global players</span></div>
+          <div className="rk-room-mini"><strong>{activeClubCode?(clubCount||clubRows.length||1):"Join"}</strong><span>{activeClubCode?"Club players":"Club room"}</span></div>
           <div className="rk-room-mini gold"><strong>{leadLabel||78}</strong><span>Score to beat</span></div>
         </div>
-        <div className="rk-home-leaderboard-live">
-          {(displayHomeClubEntries.length?displayHomeClubEntries.slice(0,3):[{name:"Room open",iqScore:leadLabel||78},{name:"First score gets the room",iqScore:"—"}]).map((e,i)=>(
-            <div className="rk-home-live-row" key={`${e.name}-${i}`}>
-              <span className="rk-home-live-rank">{i+1}</span>
-              <span className="rk-home-live-name">{i===0&&displayHomeClubEntries.length?`${e.name} leads`:e.name}</span>
-              <strong>{e.iqScore}</strong>
+
+        <div className="rk-rooms-pulse">
+          <div className="rk-rooms-pulse-head">
+            <span className="rk-rooms-pulse-title">Live boards</span>
+            <span className="rk-rooms-pulse-note">Board resets tonight</span>
+          </div>
+          <div className="rk-rooms-board-tabs">
+            <div className={`rk-rooms-board-card ${globalRows.length?"is-live":""}`}>
+              <div className="rk-rooms-board-top">
+                <span className="rk-rooms-board-name">Global Room</span>
+                <span className="rk-rooms-board-count">{globalCount||1} live</span>
+              </div>
+              <div className="rk-rooms-live-list">
+                {boardRows(globalRows,leadLabel).map((e,i)=>(
+                  <div className="rk-rooms-live-row" key={`g-${rowName(e,i)}-${i}`}>
+                    <span className="rk-rooms-live-rank">{i+1}</span>
+                    <span className="rk-rooms-live-name">{globalRows.length&&i===0?`${rowName(e,i)} leads`:rowName(e,i)}</span>
+                    <strong className="rk-rooms-live-score">{rowScore(e)}</strong>
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
+            <div className={`rk-rooms-board-card ${clubRows.length?"is-live":""}`}>
+              <div className="rk-rooms-board-top">
+                <span className="rk-rooms-board-name">{activeClubCode?clubhouseName:"Club Room"}</span>
+                <span className="rk-rooms-board-count">{activeClubCode?(clubRows.length||1):"private"}</span>
+              </div>
+              {activeClubCode?
+                <div className="rk-rooms-live-list">
+                  {boardRows(clubRows,leadLabel).map((e,i)=>(
+                    <div className="rk-rooms-live-row" key={`c-${rowName(e,i)}-${i}`}>
+                      <span className="rk-rooms-live-rank">{i+1}</span>
+                      <span className="rk-rooms-live-name">{clubRows.length&&i===0?`${rowName(e,i)} leads`:rowName(e,i)}</span>
+                      <strong className="rk-rooms-live-score">{rowScore(e)}</strong>
+                    </div>
+                  ))}
+                </div>
+                :<div className="rk-rooms-empty">Create a room for your table.</div>
+              }
+            </div>
+          </div>
         </div>
+
         <div className="rk-rooms-actions">
           <button onClick={openGlobal}>Open Global Room</button>
           <button onClick={openClub}>{activeClubCode?"Open Club Room":"Find Your Club"}</button>
         </div>
-        {!activeClubCode&&(
-          <div style={{marginTop:12,paddingTop:12,borderTop:"1px solid rgba(26,20,16,.07)",display:"grid",gap:9}}>
-            <div style={{fontSize:12,color:C.mut,lineHeight:1.45,fontWeight:750}}>Create a private board for your mahjong group.</div>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
-              <a href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20" className="rk-room-btn rk-room-btn-primary" style={{textAlign:"center",textDecoration:"none"}}>Start my club</a>
-              <button onClick={()=>setScreen("clubs")} className="rk-room-btn">Join</button>
-            </div>
-          </div>
-        )}
+        <div className="rk-rooms-social-nudge">
+          <span><strong>{activeClubCode?"Bring your table in.":"Start a club room."}</strong> Same daily rack, private leaderboard, easy group-chat bragging.</span>
+          <button onClick={copyClubInvite}>{shareCopied?"Copied":"Copy invite"}</button>
+        </div>
       </section>
     );
   };
+
 
   const Learn=()=> (
     <section className="rk-learn-shell">
@@ -12618,7 +12669,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         {[
           ["📖","How to Play","Quick rules and Charleston basics",()=>setScreen("howto")],
           ["📋","2026 Hand Browser","Scan hands by section",()=>setScreen("handbrowser")],
-          ["🎓","Practice Mode","Try unlimited racks",()=>go("free")],
+          ["🎓","Warm up","Try a rack without touching today’s score",()=>go("free")],
         ].map(([icon,title,sub,fn])=>(
           <button key={title} className="rk-learn-item" onClick={fn}>
             <span className="rk-learn-icon-simple">{icon}</span>
