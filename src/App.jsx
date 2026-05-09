@@ -5533,6 +5533,65 @@ async function deleteLBEntry(code,name){
   }catch{}
 }
 
+// Club activity helpers for the homepage social layer.
+// Plays come from the live leaderboard. Shares are stored in Supabase when the
+// optional `club_share_events` table exists, with a local fallback so the UI
+// still updates instantly.
+function getClubShareKey(code){return `${getDailySeed()}-${code||"global"}`;}
+function getLocalClubShareCount(code){
+  const key=getClubShareKey(code);
+  const map=ST.get("clubShareEvents",{});
+  const ids=Array.isArray(map[key])?map[key]:[];
+  return new Set(ids).size;
+}
+function markLocalClubShare(code,playerId){
+  if(!code||!playerId)return 0;
+  const key=getClubShareKey(code);
+  const map=ST.get("clubShareEvents",{});
+  const current=Array.isArray(map[key])?map[key]:[];
+  const next=Array.from(new Set([...current,playerId]));
+  ST.set("clubShareEvents",{...map,[key]:next});
+  return next.length;
+}
+async function fetchClubShareCount(code){
+  if(!code)return 0;
+  const local=getLocalClubShareCount(code);
+  try{
+    const res=await fetch(
+      `${SB_URL}/rest/v1/club_share_events?club_code=eq.${encodeURIComponent(code)}&day_seed=eq.${getDailySeed()}&select=player_id`,
+      {headers:SB_HEADERS}
+    );
+    if(!res.ok)return local;
+    const rows=await res.json();
+    const remote=new Set((rows||[]).map(r=>r.player_id).filter(Boolean)).size;
+    return Math.max(local,remote);
+  }catch{return local;}
+}
+async function recordClubShare(code,playerName){
+  if(!code)return 0;
+  const playerId=getOrCreatePlayerId();
+  const local=markLocalClubShare(code,playerId);
+  try{
+    await fetch(`${SB_URL}/rest/v1/club_share_events`,{
+      method:"POST",
+      headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates"},
+      body:JSON.stringify({
+        club_code:code,
+        day_seed:getDailySeed(),
+        player_id:playerId,
+        player_name:playerName||"Rackler",
+        shared_at:new Date().toISOString(),
+      }),
+    });
+  }catch{}
+  return Math.max(local,await fetchClubShareCount(code));
+}
+function pluralizeClubMembers(n,verb){
+  const safe=Math.max(0,Number(n)||0);
+  if(safe===0)return verb==="played"?"Be the first club score today":"No club shares yet";
+  return `${safe} club member${safe===1?"":"s"} ${verb} today`;
+}
+
 // Fetch global daily stats, total unique players + avg score across all clubs today
 // Reuses fetchGlobalEntries to guarantee the count matches the global leaderboard exactly
 async function fetchDailyStats(){
@@ -10259,6 +10318,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const [leOpen,setLeOpen]=useState(false);
   const [menuOpen,setMenuOpen]=useState(false);
   const [shareCopied,setShareCopied]=useState(false);
+  const [clubSharesToday,setClubSharesToday]=useState(0);
   const [clubPlayers,setClubPlayers]=useState(null);
   const [homeClubEntries,setHomeClubEntries]=useState([]);
   const [ds,setDs]=useState(null);
@@ -10274,8 +10334,9 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           if(rows.length>0)setClubPlayers(rows.length);
         }
       });
+      fetchClubShareCount(code).then(count=>setClubSharesToday(count||0));
     }
-  },[]);
+  },[activeClubCode]);
 
   const ydIQ=yd?.iq?.totalScore||null;
   const todayPlayers=Math.max(ds?.total||0,clubPlayers||0,3);
@@ -10304,6 +10365,14 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const scoreBasedClubRank=hasClubScore&&!homeClubRank?displayHomeClubEntries.findIndex(e=>Number(e.iqScore)<=currentScore)+1:null;
   const shownClubRank=homeClubRank||scoreBasedClubRank||null;
   const homeClubTotal=club?displayHomeClubEntries.length:null;
+  const liveClubPlayedToday=club?Math.max(homeClubTotal||0,clubPlayers||0,hasClubScore?1:0):0;
+  const liveClubSharesToday=club?Math.max(clubSharesToday||0,getLocalClubShareCount(activeClubCode)):0;
+  const clubActivityText=club
+    ?(liveClubSharesToday>0
+      ?`${liveClubPlayedToday||1} played · ${liveClubSharesToday} shared`
+      :pluralizeClubMembers(liveClubPlayedToday,"played"))
+    :"Invite your club today";
+  const clubAvatarCount=club?Math.min(3,Math.max(liveClubPlayedToday||liveClubSharesToday||1,1)):1;
   const pb=Math.max(bestScore,currentScore,100);
   const firstName=profile?.nickname?profile.nickname.split(" ")[0]:"";
   const streakMessages=[
@@ -10356,11 +10425,23 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const copyShare=async()=>{
     const passEmoji=(iq?.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
     const text=[`🀄 Daily Rackle #${dn}`,iq?`${iq.totalScore} · ${iq.level}`:dRes?`${dRes.rating} ${dRes.emoji}`:"I played today's Rackle",passEmoji?`Passes: ${passEmoji}`:"",club?`${club.name}`:"Think you can beat it?","playrackle.com"].filter(Boolean).join("\n\n");
+    const markShared=async()=>{
+      if(!activeClubCode)return;
+      const count=await recordClubShare(activeClubCode,currentName);
+      setClubSharesToday(count||1);
+    };
     try{
-      if(navigator.share){await navigator.share({title:`Daily Rackle #${dn}`,text});setShareCopied(true);setTimeout(()=>setShareCopied(false),1600);return;}
-      await navigator.clipboard.writeText(text);
+      if(navigator.share){await navigator.share({title:`Daily Rackle #${dn}`,text});}
+      else{await navigator.clipboard.writeText(text);}
+      await markShared();
       setShareCopied(true);setTimeout(()=>setShareCopied(false),1600);
-    }catch(e){try{await navigator.clipboard.writeText(text);setShareCopied(true);setTimeout(()=>setShareCopied(false),1600);}catch{}}
+    }catch(e){
+      try{
+        await navigator.clipboard.writeText(text);
+        await markShared();
+        setShareCopied(true);setTimeout(()=>setShareCopied(false),1600);
+      }catch{}
+    }
   };
 
   const MiniStat=({value,label,accent})=>{
@@ -10457,7 +10538,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div style={{padding:16,display:"grid",gap:12}}>
         <button onClick={copyShare} className={`rk-share-card ${shareCopied?"rk-copied-state":""}`} style={{width:"100%",border:`1px solid ${C.gold}25`,background:`linear-gradient(135deg,#FFF9ED,#F7EFE0)`,borderRadius:14,padding:"14px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left",boxShadow:"0 4px 14px rgba(0,0,0,.025)"}}>
           <div className="rk-share-icon" style={{width:48,height:48,borderRadius:14,background:C.gold+"14",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20}}>📲</div>
-          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>{shareCopied?"Copied for your club":"Challenge Your Club"}</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>{shareCopied?"Drop it in your group chat":"Tap to copy · Drop it in your group chat"}</div><div style={{display:"flex",alignItems:"center",gap:8,marginTop:6}}><span className="rk-mini-avatars"><span className="rk-mini-avatar"/><span className="rk-mini-avatar" style={{background:C.jade+"44"}}/></span><span style={{fontSize:10.5,color:C.mut,fontWeight:700}}>2 club members shared today</span></div></div>
+          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>{shareCopied?"Copied for your club":"Challenge Your Club"}</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>{shareCopied?"Drop it in your group chat":"Tap to copy · Drop it in your group chat"}</div><div style={{display:"flex",alignItems:"center",gap:8,marginTop:6}}>{clubAvatarCount>0&&<span className="rk-mini-avatars">{Array.from({length:clubAvatarCount}).map((_,i)=><span key={i} className="rk-mini-avatar" style={i%2?{background:C.jade+"44"}:undefined}/>)}</span>}<span style={{fontSize:10.5,color:C.mut,fontWeight:700}}>{clubActivityText}</span></div></div>
           <span style={{fontSize:18,color:C.gold}}>›</span>
         </button>
         <button onClick={showScorecard} className="rk-home-improve-card" style={{width:"100%",borderRadius:14,padding:"13px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left",position:"relative"}}>
