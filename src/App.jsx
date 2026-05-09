@@ -2192,6 +2192,41 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-game-flow-title{font-size:22px!important}
   .rk-game-flow-copy{font-size:13.5px!important}
 }
+
+
+/* ─── v4 HOMEPAGE PREMIUM HERO + LIVE TICKER ───────────────────────────── */
+@keyframes rkMysteryBounce{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-5px) rotate(1deg)}}
+@keyframes rkMysteryRevealGlow{0%,100%{opacity:.22;transform:translateX(-120%)}50%{opacity:.55}100%{transform:translateX(120%)}}
+.rk-startup-hero-v4{text-align:center;padding:34px 16px 26px;margin:0 auto 16px}
+.rk-startup-mark-v4{width:44px;height:44px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:linear-gradient(145deg,#FFFDF8,#EEE4D2);border:1px solid rgba(26,20,16,.08);box-shadow:0 8px 18px rgba(26,20,16,.06),inset 0 1px 0 rgba(255,255,255,.85);font-size:25px}
+.rk-startup-logo-v4{margin:0;font-family:'Fraunces',Georgia,serif;font-size:clamp(56px,15vw,76px);line-height:.9;letter-spacing:-2.6px;color:#1A1410}
+.rk-startup-subtitle-v4{margin:12px 0 0;font-family:'Fraunces',Georgia,serif;color:#176B42;font-size:clamp(24px,6vw,32px);line-height:1.05;font-style:italic;font-weight:900}
+.rk-startup-description-v4{margin:30px auto 0;max-width:34ch;color:#1A1410;font-size:19px;line-height:1.42;font-weight:900}
+.rk-startup-description-v4 span{display:block;color:#6B6157;font-size:17px;font-weight:850;margin-top:12px}
+.rk-live-ticker-v4{width:100%;min-height:62px;margin:6px 0 18px;padding:0 16px;border-radius:999px;background:linear-gradient(145deg,rgba(255,255,255,.74),rgba(237,247,241,.78));border:1px solid rgba(23,107,66,.15);box-shadow:0 8px 24px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.82);display:flex;align-items:center;gap:12px}
+.rk-live-ticker-dot{width:14px;height:14px;border-radius:999px;background:#4CD987;box-shadow:0 0 0 7px rgba(76,217,135,.12),0 0 18px rgba(76,217,135,.55);animation:rkLiveHalo 2.4s ease-in-out infinite;flex-shrink:0}
+.rk-live-ticker-text{flex:1;min-width:0;color:#176B42;font-size:16px;line-height:1.15;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk-live-ticker-side{flex-shrink:0;padding:7px 10px;border-radius:999px;background:rgba(23,107,66,.08);color:#176B42;font-size:10px;letter-spacing:1.4px;text-transform:uppercase;font-weight:950}
+.rk-daily-play-card-v4{width:100%;position:relative;overflow:hidden;border-radius:30px;padding:28px 22px 26px;background:radial-gradient(circle at 18% 18%,rgba(255,255,255,.12),transparent 28%),linear-gradient(145deg,#041F12 0%,#07331E 48%,#0A4328 78%,#03170D 100%);border:1px solid rgba(243,212,107,.22);box-shadow:0 18px 46px rgba(6,43,24,.22),inset 0 1px 0 rgba(255,255,255,.10);display:block;text-align:left;font-family:'Nunito','Segoe UI',sans-serif;cursor:pointer;color:inherit;appearance:none;-webkit-appearance:none}
+.rk-daily-play-card-v4:before{content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 0%,rgba(255,255,255,.14) 45%,transparent 60%);animation:rkGoldSweep 5.8s ease-in-out infinite;pointer-events:none;z-index:2}
+.rk-daily-play-card-v4:after{content:'🀄';position:absolute;right:-20px;bottom:-28px;font-size:130px;opacity:.055;transform:rotate(-8deg);pointer-events:none}
+.rk-daily-play-card-v4-inner{position:relative;z-index:1}
+.rk-daily-play-pill{display:inline-flex;align-items:center;gap:8px;padding:9px 15px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);color:rgba(255,255,255,.72);font-size:10px;letter-spacing:2.4px;text-transform:uppercase;font-weight:950}
+.rk-daily-play-title{margin:28px 0 10px;font-family:'Fraunces',Georgia,serif;font-size:clamp(42px,10vw,58px);line-height:.93;letter-spacing:-1.6px;color:#fff}
+.rk-daily-play-title strong{display:block;color:#F3D46B}
+.rk-daily-play-copy{margin:0;max-width:31ch;color:rgba(255,255,255,.72);font-size:16px;line-height:1.35;font-weight:850}
+.rk-daily-play-meta{margin-top:18px;color:rgba(255,255,255,.54);font-size:14px;line-height:1.4;font-weight:800}
+.rk-daily-play-button{margin-top:26px;width:88px;height:88px;border-radius:999px;border:4px solid rgba(255,255,255,.30);background:linear-gradient(145deg,#FFFDF8,#EDE3D3);box-shadow:0 12px 26px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.85);color:#1A1410;display:flex;align-items:center;justify-content:center;font-size:38px;transition:transform .18s ease,box-shadow .18s ease}
+.rk-daily-play-card-v4:active .rk-daily-play-button{transform:scale(.96)}
+.rk-rack-preview-card-v4{width:100%;margin-top:16px;border-radius:28px;padding:24px 16px 22px;background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.85),transparent 42%),linear-gradient(145deg,#FFFDF8,#F4EDDF);border:1px solid rgba(26,20,16,.08);box-shadow:0 12px 34px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.82);overflow:hidden}
+.rk-mystery-rack{display:flex;justify-content:center;gap:9px;margin-bottom:20px;padding:2px 0 4px}
+.rk-mystery-tile{position:relative;width:42px;height:56px;border-radius:13px;background:linear-gradient(145deg,#FFFDF8 0%,#F3EBDD 58%,#E4D7C2 100%);border:1px solid rgba(26,20,16,.10);box-shadow:0 8px 16px rgba(26,20,16,.10),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -5px 10px rgba(160,120,40,.10);display:flex;align-items:center;justify-content:center;color:rgba(26,20,16,.28);font-family:'Fraunces',Georgia,serif;font-size:25px;font-weight:950;animation:rkMysteryBounce 3.2s ease-in-out infinite;overflow:hidden;flex-shrink:0}
+.rk-mystery-tile:after{content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 0%,rgba(255,255,255,.55) 45%,transparent 62%);transform:translateX(-120%);animation:rkMysteryRevealGlow 4.2s ease-in-out infinite}
+.rk-mystery-tile:nth-child(2){animation-delay:.12s}.rk-mystery-tile:nth-child(3){animation-delay:.24s}.rk-mystery-tile:nth-child(4){animation-delay:.36s}.rk-mystery-tile:nth-child(5){animation-delay:.48s}.rk-mystery-tile:nth-child(6){animation-delay:.60s}.rk-mystery-tile:nth-child(7){animation-delay:.72s}.rk-mystery-tile:nth-child(8){animation-delay:.84s}
+.rk-preview-copy-v4{text-align:center;color:#176B42;font-size:18px;line-height:1.25;font-weight:950}
+.rk-preview-copy-v4 span{display:block;margin-top:6px;color:#6B6157;font-size:15px;font-weight:850}
+.rk-home-landing-flow{width:100%}
+@media(max-width:390px){.rk-startup-hero-v4{padding-top:28px}.rk-startup-logo-v4{font-size:58px}.rk-startup-subtitle-v4{font-size:24px}.rk-startup-description-v4{font-size:18px}.rk-live-ticker-v4{min-height:58px;padding:0 14px}.rk-live-ticker-text{font-size:15px}.rk-live-ticker-side{display:none}.rk-mystery-rack{gap:6px}.rk-mystery-tile{width:36px;height:50px}}
 `;
 
 
@@ -12417,49 +12452,73 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   };
 
   const Hero=()=>{
-    const yesterdayLine=ydIQ?`Yesterday: ${ydIQ}. `:"";
-    const chaseLine=topToday?`Beat ${topToday}. `:"";
-    const clubLine=club?`${club.name} is open.`:"Your table is waiting.";
-    const headline=dDone
-      ?["You played today.","Share it with your club."]
-      :isFirstTime
-        ?["Play one Charleston.","Get your score. Share it with your club."]
-        :[`${streak?`${streak}d streak. `:""}${yesterdayLine}${chaseLine}`,clubLine];
     return(
-      <div className="rk-startup-hero">
-        <div className="rk-float rk-hero-tile" style={{fontSize:28,marginBottom:7,lineHeight:1}}>🀄</div>
-        <h1 className="rk-startup-logo">Rackle</h1>
-        <p className="rk-startup-subtitle">The Daily Mahjong Workout</p>
-        <p className="rk-startup-line">{headline[0]}<strong>{headline[1]}</strong></p>
-        {!dDone&&<p className="rk-first-play-reassurance">2 minutes. Same daily rack for everyone.</p>}
+      <div className="rk-startup-hero-v4">
+        <div className="rk-startup-mark-v4 rk-float">🀄</div>
+        <h1 className="rk-startup-logo-v4">Rackle</h1>
+        <p className="rk-startup-subtitle-v4">The Daily Mahjong Workout</p>
+        <p className="rk-startup-description-v4">
+          Play one Charleston.<br/>
+          Get your score. Share it with your club.
+          {!dDone&&<span>2 minutes. Same daily rack for everyone.</span>}
+        </p>
       </div>
     );
   };
 
   const TodayRackPreview=()=>{
     const posted=Number(todayPlayers||0);
+    const count=posted||2;
+    const postedText=`${count} ${count===1?"player has":"players already"} posted`;
     return(
-      <div className="rk-rack-preview-card" aria-label="Today's rack preview">
-        <div className="rk-preview-tiles" aria-hidden="true">
-          {Array.from({length:8}).map((_,i)=><span key={i} className="rk-preview-tile" />)}
+      <div className="rk-rack-preview-card-v4" aria-label="Today's hidden rack preview">
+        <div className="rk-mystery-rack" aria-hidden="true">
+          {Array.from({length:8}).map((_,i)=><span key={i} className="rk-mystery-tile">?</span>)}
         </div>
-        <div className="rk-preview-copy"><b>Play to reveal today’s rack</b><br/>{posted||2} {(posted||2)===1?"player has":"players already"} posted</div>
+        <div className="rk-preview-copy-v4">
+          Play to reveal today’s rack
+          <span>{postedText}</span>
+        </div>
+      </div>
+    );
+  };
+
+  const LiveTicker=()=>{
+    const posted=Number(todayPlayers||0)||2;
+    const updates=[
+      "Board resets tonight",
+      `${posted} ${posted===1?"player has":"players already"} posted`,
+      topToday?`Top score today: ${topToday}`:null,
+      club?.name?`${club.name} is active`:null,
+      `Daily Rackle #${dn} is live`,
+      streak?`${streak}-day streak on the line`:null,
+      dDone?"Come back tomorrow to keep your streak":"Your table is waiting",
+    ].filter(Boolean);
+    const [idx,setIdx]=useState(0);
+    useEffect(()=>{
+      if(updates.length<2)return;
+      const t=setInterval(()=>setIdx(i=>(i+1)%updates.length),3500);
+      return()=>clearInterval(t);
+    },[updates.length]);
+    return(
+      <div className="rk-live-ticker-v4" aria-live="polite">
+        <div className="rk-live-ticker-dot" />
+        <div key={idx} className="rk-live-ticker-text rk-tick">{updates[idx]}</div>
+        <div className="rk-live-ticker-side">Live</div>
       </div>
     );
   };
 
   const StartDaily=()=> (
-    <div>
-      <button onClick={()=>go("daily")} className="rk-primary-daily-card" aria-label={`Play Daily Rackle number ${dn}`}>
-        <div>
-          <div className="rk-primary-daily-top">
-            <span className="rk-primary-daily-pill"><span className="rk-live-dot-dynamic"/> Daily Rackle · #{dn}</span>
-          </div>
-          <h2 className="rk-primary-daily-title">Today’s Rackle<br/><span>Play now.</span></h2>
-          <p className="rk-primary-daily-copy">Same rack. Every player. One daily score.</p>
-          <p className="rk-primary-daily-reassure">2 minutes · score · share · come back tomorrow</p>
+    <div style={{width:"100%"}}>
+      <button type="button" onClick={()=>go("daily")} className="rk-daily-play-card-v4" aria-label={`Play Daily Rackle number ${dn}`}>
+        <div className="rk-daily-play-card-v4-inner">
+          <div className="rk-daily-play-pill"><span className="rk-live-spark"/> Daily Rackle · #{dn}</div>
+          <h2 className="rk-daily-play-title">Today’s Rackle<strong>Play now.</strong></h2>
+          <p className="rk-daily-play-copy">Same rack. Every player. One daily score.</p>
+          <div className="rk-daily-play-meta">2 minutes · score · share · come back tomorrow</div>
+          <div className="rk-daily-play-button" aria-hidden="true">▶</div>
         </div>
-        <span className="rk-primary-daily-play" aria-hidden="true" />
       </button>
       <TodayRackPreview/>
     </div>
@@ -12776,7 +12835,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <Menu/>
         <Hero/>
         <div className="rk-home-landing-flow">
-          <ActivityStrip/>
+          <LiveTicker/>
           {!dDone&&<StartDaily/>}
           {dDone&&<CompletedDaily/>}
           {dDone&&<TomorrowTease/>}
