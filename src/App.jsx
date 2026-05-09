@@ -1053,6 +1053,174 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 }
 
 
+/* ─── vNext WEB HERO BALANCE + LEADERBOARD RHYTHM PATCH ──────────────────
+   Fixes wide/tablet Daily Rackle hero, relaxes leaderboard spacing,
+   and swaps text triangles for Rackle chevrons.
+*/
+.rk-chevron-mark{
+  width:10px;
+  height:10px;
+  border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;
+  transform:rotate(45deg) translateY(-1px);
+  transition:transform .18s ease;
+  display:block;
+}
+.rk-chevron-mark-open{
+  transform:rotate(225deg) translateY(-1px);
+}
+.rk-quiet-chevron{font-size:0!important;}
+
+.rk-quiet-board-head{
+  padding:22px 18px!important;
+  min-height:unset!important;
+  align-items:center!important;
+}
+.rk-quiet-topline{margin-bottom:10px!important;}
+.rk-quiet-title{
+  line-height:1.14!important;
+  margin-bottom:10px!important;
+}
+.rk-quiet-preview-line{
+  margin-top:10px!important;
+  gap:8px!important;
+  row-gap:8px!important;
+}
+.rk-quiet-board-panel{
+  padding:18px 16px 20px!important;
+}
+.rk-quiet-leader{
+  margin-bottom:14px!important;
+}
+.rk-quiet-row-list{gap:11px!important;}
+.rk-quiet-row{
+  padding:13px 14px!important;
+  gap:12px!important;
+}
+.rk-quiet-name{line-height:1.18!important;}
+.rk-quiet-sub{
+  margin-top:5px!important;
+  line-height:1.35!important;
+}
+.rk-clubhouse-stack > div:not(:last-child){
+  border-bottom:1px solid rgba(26,20,16,.09)!important;
+}
+
+@media(min-width:900px){
+  .rk-daily-hero-card{
+    min-height:500px!important;
+    max-width:100%!important;
+    border-radius:34px!important;
+    overflow:hidden!important;
+  }
+  .rk-daily-hero-card > div:last-child{
+    min-height:500px!important;
+    padding:40px 54px 42px!important;
+    display:grid!important;
+    grid-template-rows:auto minmax(0,1fr) auto auto!important;
+    gap:0!important;
+  }
+  .rk-daily-hero-card > div:last-child > div:nth-child(1){
+    margin-bottom:26px!important;
+  }
+  .rk-daily-hero-card > div:last-child > div:nth-child(2){
+    display:grid!important;
+    grid-template-columns:minmax(360px, .88fr) minmax(260px, .72fr)!important;
+    align-items:center!important;
+    gap:42px!important;
+    min-height:190px!important;
+  }
+  .rk-daily-hero-card > div:last-child > div:nth-child(2) > div:first-child{
+    max-width:520px!important;
+    min-width:0!important;
+  }
+  .rk-daily-hero-card > div:last-child > div:nth-child(2) > div:first-child > div:first-child{
+    font-size:clamp(44px,4.1vw,66px)!important;
+    line-height:.96!important;
+    letter-spacing:-1.7px!important;
+    margin-bottom:18px!important;
+    max-width:10.5ch!important;
+  }
+  .rk-daily-hero-card > div:last-child > div:nth-child(2) > div:first-child > div:nth-child(2){
+    font-size:18px!important;
+    line-height:1.45!important;
+    max-width:30ch!important;
+    color:rgba(255,255,255,.82)!important;
+  }
+  .rk-daily-hero-card .rk-play-button-premium{
+    justify-self:center!important;
+    align-self:center!important;
+    width:132px!important;
+    height:132px!important;
+    right:auto!important;
+    top:auto!important;
+    transform:none!important;
+  }
+  .rk-daily-hero-card > div:last-child > div:nth-child(3){
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:14px!important;
+    margin-top:34px!important;
+  }
+  .rk-daily-hero-card > div:last-child > div:nth-child(3) > div{
+    min-height:84px!important;
+    padding:17px 18px!important;
+  }
+  .rk-daily-hero-card > div:last-child > div:nth-child(4){
+    margin-top:18px!important;
+    padding:18px 20px!important;
+  }
+  .rk-home-responsive-shell{
+    grid-template-columns:minmax(0,1.1fr) minmax(370px,.9fr)!important;
+    gap:40px!important;
+  }
+}
+
+@media(min-width:1180px){
+  .rk-daily-hero-card{min-height:520px!important;}
+  .rk-daily-hero-card > div:last-child{
+    min-height:520px!important;
+    padding:46px 64px 46px!important;
+  }
+  .rk-daily-hero-card > div:last-child > div:nth-child(2){
+    grid-template-columns:minmax(420px,.95fr) minmax(320px,.7fr)!important;
+    gap:54px!important;
+  }
+  .rk-daily-hero-card .rk-play-button-premium{
+    width:148px!important;
+    height:148px!important;
+  }
+}
+
+@media(min-width:900px) and (max-width:1080px){
+  .rk-daily-hero-card{min-height:470px!important;}
+  .rk-daily-hero-card > div:last-child{
+    min-height:470px!important;
+    padding:34px 38px 38px!important;
+  }
+  .rk-daily-hero-card > div:last-child > div:nth-child(2){
+    grid-template-columns:minmax(320px,.95fr) minmax(210px,.65fr)!important;
+    gap:30px!important;
+  }
+  .rk-daily-hero-card > div:last-child > div:nth-child(2) > div:first-child > div:first-child{
+    font-size:40px!important;
+    max-width:10.25ch!important;
+  }
+  .rk-daily-hero-card > div:last-child > div:nth-child(2) > div:first-child > div:nth-child(2){
+    font-size:16px!important;
+  }
+  .rk-daily-hero-card .rk-play-button-premium{
+    width:112px!important;
+    height:112px!important;
+  }
+}
+
+@media(max-width:899px){
+  .rk-quiet-board-head{padding:18px 15px!important;}
+  .rk-quiet-board-panel{padding:16px 14px 18px!important;}
+  .rk-quiet-row{padding:12px 12px!important;}
+}
+
+
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
@@ -8495,7 +8663,7 @@ function ClubCodeEntry({setScreen,clubEntries=[],currentScore=0,currentRank=null
             </div>
           ):(<div style={{fontSize:12,color:C.mut,lineHeight:1.55}}>Bring your table online with one shared club board.</div>)}
         </div>
-        <span className="rk-quiet-chevron">{open?"▲":"▼"}</span>
+        <span className="rk-quiet-chevron" aria-hidden="true"><span className={`rk-chevron-mark ${open?"rk-chevron-mark-open":""}`} /></span>
       </button>
 
       {open&&<div className="rk-quiet-board-panel">
@@ -8600,7 +8768,7 @@ function GlobalLeaderboardPill({setScreen}){
             </div>
           ):(<div style={{fontSize:12,color:C.mut,lineHeight:1.55}}>{loading?"Loading the room…":liveCopy}</div>)}
         </div>
-        <span className="rk-quiet-chevron" style={{color:"#2460A8"}}>{open?"▲":"▼"}</span>
+        <span className="rk-quiet-chevron" style={{color:"#2460A8"}} aria-hidden="true"><span className={`rk-chevron-mark ${open?"rk-chevron-mark-open":""}`} /></span>
       </button>
 
       {open&&<div className="rk-quiet-board-panel">
@@ -10050,7 +10218,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <div style={{width:38,height:38,borderRadius:12,background:C.jade+"18",border:`1px solid ${C.jade}24`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>📚</div>
           <div><div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.jade,letterSpacing:-0.1}}>Learn & Explore</div><div style={{fontSize:11,color:C.jade,opacity:0.72,marginTop:1}}>Tutorial · Card guide · Stats · How to play</div></div>
         </div>
-        <span className="rk-quiet-chevron" aria-hidden="true">{leOpen?"▲":"▼"}</span>
+        <span className="rk-quiet-chevron" aria-hidden="true"><span className={`rk-chevron-mark ${leOpen?"rk-chevron-mark-open":""}`} /></span>
       </button>
       {leOpen&&(
         <div className="rk-in rk-learn-panel">
