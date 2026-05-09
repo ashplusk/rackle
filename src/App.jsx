@@ -5700,9 +5700,9 @@ async function fetchProfilesByIds(ids=[]){
     for(let i=0;i<clean.length;i+=60){
       const group=clean.slice(i,i+60);
       const chunk=rkPostgrestTextIn(group);
-      let res=await fetch(`${SB_URL}/rest/v1/profiles?player_id=in.(${encodeURIComponent(chunk)})&select=${richProfileSelect}&limit=500`,{headers:SB_HEADERS});
+      let res=await fetch(`${SB_URL}/rest/v1/profiles?player_id=in.(${chunk})&select=${richProfileSelect}&limit=500`,{headers:SB_HEADERS});
       if(!res.ok){
-        res=await fetch(`${SB_URL}/rest/v1/profiles?player_id=in.(${encodeURIComponent(chunk)})&select=${profileSelect}&limit=500`,{headers:SB_HEADERS});
+        res=await fetch(`${SB_URL}/rest/v1/profiles?player_id=in.(${chunk})&select=${profileSelect}&limit=500`,{headers:SB_HEADERS});
       }
       if(res.ok){
         out.push(...await res.json());
@@ -6031,7 +6031,7 @@ async function postLeaderboardRow(body){
   try{
     const clean={...body};
     clean.player_id=clean.player_id||currentLeaderboardPlayerId();
-    clean.name=rkSafePlayerName(clean.name||rkLocalDisplayName(),clean.player_id);
+    clean.name=rkSafePlayerName(rkLocalDisplayName()||clean.name,clean.player_id);
     clean.updated_at=clean.updated_at||new Date().toISOString();
     await deleteExistingOwnLeaderboardRows(clean);
     const res=await fetch(`${SB_URL}/rest/v1/leaderboard`,{
@@ -6059,7 +6059,7 @@ async function upsertLBEntry(code,name,iqScore,time,streak,playerIdOverride=null
     club_code:code,
     day_seed:getDailySeed(),
     player_id:pid,
-    name:rkSafePlayerName(name||rkLocalDisplayName(),pid),
+    name:rkSafePlayerName(rkLocalDisplayName()||name,pid),
     iq_score:iqScore,
     time_secs:time||0,
     streak:streak??profile?.streak??0,
@@ -6073,7 +6073,7 @@ async function upsertGlobalEntry(name,iqScore,time,streak,clubCode,playerIdOverr
     club_code:clubCode||"__global__",
     day_seed:getDailySeed(),
     player_id:pid,
-    name:rkSafePlayerName(name||rkLocalDisplayName(),pid),
+    name:rkSafePlayerName(rkLocalDisplayName()||name,pid),
     iq_score:iqScore,
     time_secs:time||0,
     streak:streak||0,
@@ -6127,6 +6127,69 @@ function pluralizeClubMembers(n,verb){
 }
 
 // ─── PROFILE SYSTEM ───────────────────────────────────────────────────────────
+
+async function rkPatchRowsForIdentityMigration({fromPlayerId,toPlayerId,name,clubCode}){
+  const fromId=String(fromPlayerId||"").trim();
+  const toId=String(toPlayerId||"").trim();
+  const displayName=String(name||"").trim();
+  if(!toId||!displayName)return false;
+  const patchBody={
+    player_id:toId,
+    name:displayName,
+    updated_at:new Date().toISOString(),
+  };
+  if(clubCode)patchBody.club_code=clubCode;
+  const daySeed=getDailySeed();
+  const urls=[];
+  if(fromId&&fromId!==toId){
+    urls.push(`${SB_URL}/rest/v1/leaderboard?player_id=eq.${encodeURIComponent(fromId)}`);
+    urls.push(`${SB_URL}/rest/v1/game_history?player_id=eq.${encodeURIComponent(fromId)}`);
+  }
+  // Also repair today's legacy generated rows that match this device's Daily score.
+  const localDaily=rkLatestLocalDailyScore?.();
+  if(localDaily?.iqScore){
+    const code=clubCode||getClubCode?.()||"__global__";
+    urls.push(`${SB_URL}/rest/v1/leaderboard?day_seed=eq.${daySeed}&club_code=eq.${encodeURIComponent(code)}&iq_score=eq.${Number(localDaily.iqScore)}`);
+    if(code!=="__global__")urls.push(`${SB_URL}/rest/v1/leaderboard?day_seed=eq.${daySeed}&club_code=eq.__global__&iq_score=eq.${Number(localDaily.iqScore)}`);
+  }
+  let ok=false;
+  for(const url of Array.from(new Set(urls))){
+    try{
+      const body=url.includes('/game_history?')
+        ? {player_id:toId}
+        : patchBody;
+      const res=await fetch(url,{method:"PATCH",headers:{...SB_HEADERS,"Prefer":"return=minimal"},body:JSON.stringify(body)});
+      if(res.ok||res.status===204)ok=true;
+    }catch(err){console.warn("Identity migration patch failed:",err);}
+  }
+  return ok;
+}
+
+async function rkAdoptRemoteProfile(remote,previousLocalId=null){
+  if(!remote?.playerId)return null;
+  const restored={
+    nickname:remote.nickname,
+    clubCode:remote.clubCode,
+    avatarUrl:remote.avatarUrl,
+    email:remote.email,
+    playerId:remote.playerId,
+    streak:remote.streak||0,
+    roundsPlayed:remote.roundsPlayed||0,
+    bestIQ:remote.bestIQ||null,
+  };
+  setProfile(restored);
+  ST.set("playerId",remote.playerId);
+  if(restored.clubCode)setClubCode(restored.clubCode);
+  if(restored.nickname)setClubName(restored.nickname);
+  await rkPatchRowsForIdentityMigration({
+    fromPlayerId:previousLocalId,
+    toPlayerId:remote.playerId,
+    name:restored.nickname,
+    clubCode:restored.clubCode||getClubCode?.()||null,
+  });
+  return restored;
+}
+
 function getProfile(){return ST.get("profile",null);}
 function setProfile(p){ST.set("profile",p);}
 
@@ -6293,6 +6356,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
     if(p.clubCode)setClubCode(p.clubCode);else setClubCode(null);
     if(p.nickname)setClubName(p.nickname);
     await upsertProfile({...p,passwordHash:pwHash});
+    await rkPatchRowsForIdentityMigration({fromPlayerId:ST.get("playerId",null),toPlayerId:p.playerId,name:p.nickname,clubCode:p.clubCode||null});
     setSaving(false);setMode("view");setUnlocked(true);
   };
 
@@ -6325,17 +6389,11 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
     if(!remote){setLoginErr("No account found with that email. Check the spelling or create a profile first.");setLoginLoading(false);return;}
     if(!remote.passwordHash){setLoginErr("This profile needs a password reset before you can log in on this device.");setLoginLoading(false);return;}
     if(hash!==remote.passwordHash){setLoginErr("Incorrect password. Try again.");setLoginLoading(false);return;}
-    // Restore profile locally
-    const restored={
-      nickname:remote.nickname,clubCode:remote.clubCode,
-      avatarUrl:remote.avatarUrl,email:remote.email,
-      playerId:remote.playerId,
-    };
-    setProfile(restored);setProfileState(restored);
+    // Restore profile locally and migrate any anonymous/local rows to the registered identity.
+    const previousLocalId=ST.get("playerId",null);
+    const restored=await rkAdoptRemoteProfile(remote,previousLocalId);
+    setProfileState(restored);
     setStoredHash(remote.passwordHash);
-    ST.set("playerId",remote.playerId);
-    if(restored.clubCode)setClubCode(restored.clubCode);
-    if(restored.nickname)setClubName(restored.nickname);
     // Pull game history from Supabase to restore stats on new device
     const remoteHist=await pullGameHistory(remote.playerId);
     if(remoteHist&&remoteHist.length){
