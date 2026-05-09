@@ -4874,6 +4874,69 @@ function rkStrategicTension(struct,top,liveDirections){
   if(!issues.length)issues.push(`The rack was playable, but it still needed one cleaner pickup before it deserved full trust.`);
   return issues.slice(0,3);
 }
+
+function rkRackPersonality(struct,shapeQuality,commitmentState,liveDirections,sectionReads=[]){
+  const bestSuit=struct.suitEntries?.[0]?.[1]||0;
+  const secondSuit=struct.suitEntries?.[1]?.[1]||0;
+  const thirdSuit=struct.suitEntries?.[2]?.[1]||0;
+  const maxGroup=rkMaxNaturalGroup(struct);
+  const top=sectionReads?.[0]?.score||0;
+  const second=sectionReads?.[1]?.score||0;
+  const gap=top-second;
+  const directionCount=liveDirections?.length||0;
+  const hasRun=(struct.bestWindow?.depth||0)>=4;
+  const hasDenseRun=(struct.bestWindow?.depth||0)>=5;
+  const pairCount=struct.pairs?.length||0;
+  const isolation=struct.isolated?.length||0;
+  const looseHonors=struct.honorTotal>=3&&struct.groupedHonor===0;
+
+  if(shapeQuality==="Broken Shape")return "Broken Shape";
+  if(directionCount>=4&&pairCount<2&&maxGroup<3)return "False Flex";
+  if(bestSuit<5&&secondSuit>=3&&thirdSuit>=2)return "Split Rack";
+  if(pairCount>=4)return "Pair Engine";
+  if(pairCount>=3&&commitmentState!=="Committed")return "Quiet Momentum";
+  if(hasDenseRun&&bestSuit>=5)return "Clean Builder";
+  if(hasRun&&directionCount>=3)return "Slippery Rack";
+  if(isolation>=5)return "Noisy Rack";
+  if(isolation>=4&&top<58)return "Drift Rack";
+  if(maxGroup>=3&&isolation>=3)return "Fragile Core";
+  if(directionCount>=3&&gap<8)return "Double Lane Rack";
+  if(commitmentState==="Leaning"&&gap>=10&&shapeQuality==="Growing Shape")return "Delayed Commit";
+  if(pairCount<2&&maxGroup<3&&top>=48)return "Thin Rack";
+  if(looseHonors&&directionCount>=2)return "Shape Trap";
+  if(bestSuit>=7&&maxGroup>=2)return "Dense Rack";
+  if(top>=62&&gap>=14&&shapeQuality!=="Fragile Shape")return "Stubborn Rack";
+  if(shapeQuality==="Fragile Shape")return "Fragile Core";
+  if(shapeQuality==="Loose Shape")return directionCount>=3?"Wide Rack":"Loose Rack";
+  if(shapeQuality==="Growing Shape")return "Slow Burn";
+  if(shapeQuality==="Strong Shape")return "Clean Builder";
+  return "Watching Rack";
+}
+function rkRackPersonalityCopy(personality){
+  const map={
+    "False Flex":"Looks flexible at first, but the density is not fully backing it up yet.",
+    "Split Rack":"Two lanes are competing, and neither has fully earned control.",
+    "Pair Engine":"The rack is being powered by pairs more than by a finished lane.",
+    "Quiet Momentum":"The rack is improving quietly through small duplication and shared tiles.",
+    "Clean Builder":"The shape is growing naturally without asking you to force much.",
+    "Slippery Rack":"The rack can still move, but the next pass matters because it can drift fast.",
+    "Noisy Rack":"Too many tiles are talking at once. The rack needs cleaner priorities.",
+    "Drift Rack":"The rack is alive, but it has not chosen a real identity yet.",
+    "Fragile Core":"There is one real clue, but the support around it is still thin.",
+    "Double Lane Rack":"Two believable directions remain live through overlapping tiles.",
+    "Delayed Commit":"The rack is close to choosing, but it needs one more clean signal.",
+    "Thin Rack":"The idea exists, but the structure is still light.",
+    "Shape Trap":"The rack looks tempting, but some tiles may be creating false comfort.",
+    "Dense Rack":"The rack has real weight through concentration and grouping.",
+    "Stubborn Rack":"The rack keeps pointing back to the same lane.",
+    "Wide Rack":"The rack has options, but not all of them are equally real.",
+    "Loose Rack":"There are clues, but the structure is still more open than strong.",
+    "Slow Burn":"The rack is not loud yet, but it has healthy long-term growth.",
+    "Watching Rack":"The right move is to observe one more beat before forcing a read.",
+    "Broken Shape":"The rack needs a reset more than it needs a target."
+  };
+  return map[personality]||"The rack has a personality, but it still needs one clearer signal.";
+}
 function rkWhyShapeWorked(struct,liveDirections,shapeQuality){
   const lines=[];
   if(struct.bestWindow?.depth>=4)lines.push(`The shape had natural flow because the ${RK_SUIT_NAMES[struct.bestWindow.suit]} ${struct.bestWindow.nums[0]}-${struct.bestWindow.nums[2]} window connected without forcing.`);
@@ -4950,8 +5013,12 @@ function rkEvaluateCharlestonEngine({finalRack,startingRack=[],passedTilesByRoun
   const commitmentClarity=rkCommitmentClarityScore(struct,top,second,liveDirections);
   const flexibility=rkClamp(24+Math.min(liveDirections.length*9,30)+overlap+struct.jokers*3-struct.isolated.length*5-(top&&second?Math.max(0,top.score-second.score-22):0));
   const growthPotential=struct.growthPotential;
-  const rackleIQScore=rkClamp(shapeScore*.35+tileEfficiency*.25+commitmentClarity*.20+flexibility*.10+growthPotential*.10);
+  const momentumStrength=rkClamp((liveDirections[0]?.score||0)*.36+shapeScore*.24+overlap*.55+(struct.bestWindow?.depth||0)*4+struct.pairs.length*4+struct.pungs.length*8-struct.isolated.length*4);
+  const commitmentTiming=rkClamp(commitmentClarity*.70+(liveDirections.length>=3?10:0)-(struct.isolated.length>=5?12:0));
+  const rackleIQScore=rkClamp(shapeScore*.35+tileEfficiency*.25+momentumStrength*.20+commitmentTiming*.10+flexibility*.10);
   const commitmentState=rkCommitmentState(rackleIQScore,shapeScore,commitmentClarity,top,second,liveDirections,struct);
+  const rackPersonality=rkRackPersonality(struct,shapeQuality,commitmentState,liveDirections,sectionReads);
+  const rackPersonalityCopy=rkRackPersonalityCopy(rackPersonality);
 
   const coreSignal=rkCoreSignal(struct);
   const whyTheRackWorked=rkWhyShapeWorked(struct,liveDirections,shapeQuality);
@@ -4977,6 +5044,8 @@ function rkEvaluateCharlestonEngine({finalRack,startingRack=[],passedTilesByRoun
   }));
 
   return{
+    rackPersonality,
+    rackPersonalityCopy,
     rackleIQScore,
     shapeQuality,
     commitmentState,
@@ -4998,7 +5067,7 @@ function rkEvaluateCharlestonEngine({finalRack,startingRack=[],passedTilesByRoun
       connectedSequences:struct.connectedSequences.map(s=>`${RK_SUIT_NAMES[s.suit]} ${s.nums.join("-")}`),
       isolatedCount:struct.isolated.length,jokers:struct.jokers,flowers:struct.flowers
     },
-    componentScores:{shapeQuality:shapeScore,tileEfficiency,commitmentClarity,flexibility,growthPotential,directionScore,tileStrengthScore,passQualityScore,timingScore},
+    componentScores:{shapeQuality:shapeScore,tileEfficiency,momentumStrength,commitmentTiming,commitmentClarity,flexibility,growthPotential,directionScore,tileStrengthScore,passQualityScore,timingScore},
     topSection:top,chosenSection:sectionReads.find(s=>s.id===sectionId)||top,sectionReads
   };
 }
@@ -5012,14 +5081,20 @@ function StrategicCharlestonReadCard({iq}){
     <div className="rk-score-card" style={{padding:18,textAlign:"left",marginBottom:12}}>
       <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,marginBottom:13}}>
         <div style={{minWidth:0}}>
-          <div style={{fontSize:9,letterSpacing:2.2,fontWeight:950,color:C.jade,textTransform:"uppercase",marginBottom:5}}>Mahjong Intuition</div>
+          <div style={{fontSize:9,letterSpacing:2.2,fontWeight:950,color:C.jade,textTransform:"uppercase",marginBottom:5}}>Mahjong Intuition v2</div>
           <div style={{fontFamily:F.d,fontSize:20,fontWeight:950,lineHeight:1.08,color:C.ink}}>What your rack is trying to become</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.45,marginTop:5}}>Charleston guidance only. Shape, momentum, and timing before a final hand call.</div>
+          <div style={{fontSize:12,color:C.mut,lineHeight:1.45,marginTop:5}}>Shape, momentum, timing, and rack personality before a final hand call.</div>
         </div>
         <div style={{display:"grid",gap:6,justifyItems:"end",flexShrink:0}}>
           <div style={{borderRadius:999,padding:"7px 10px",background:shapeColor+"12",border:`1px solid ${shapeColor}22`,color:shapeColor,fontSize:10,fontWeight:950,whiteSpace:"nowrap"}}>{r.shapeQuality||"Shape Read"}</div>
           <div style={{borderRadius:999,padding:"7px 10px",background:statusColor+"12",border:`1px solid ${statusColor}22`,color:statusColor,fontSize:10,fontWeight:950,whiteSpace:"nowrap"}}>{state}</div>
         </div>
+      </div>
+
+      <div style={{borderRadius:18,padding:"14px 14px",background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid ${C.gold}1F`,boxShadow:"inset 0 1px 0 rgba(255,255,255,.76)",marginBottom:10}}>
+        <div style={{fontSize:9,letterSpacing:2,fontWeight:950,color:C.gold,textTransform:"uppercase",marginBottom:5}}>Rack Personality</div>
+        <div style={{fontFamily:F.d,fontSize:19,lineHeight:1.08,color:C.ink,fontWeight:950,marginBottom:5}}>{r.rackPersonality||"Watching Rack"}</div>
+        <div style={{fontSize:12,lineHeight:1.5,color:"rgba(26,20,16,.68)",fontWeight:700}}>{r.rackPersonalityCopy||"The rack needs one clearer signal before it deserves a hard commitment."}</div>
       </div>
 
       <div style={{borderRadius:18,padding:"13px 14px",background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid ${C.jade}12`,boxShadow:"inset 0 1px 0 rgba(255,255,255,.76)",marginBottom:12}}>
@@ -5177,7 +5252,7 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
     tileStrengthScore=strategicRead.componentScores.tileStrengthScore;
     passQualityScore=Math.max(0,Math.min(25,Math.round((passQualityScore*0.45)+(strategicRead.componentScores.passQualityScore*0.55))));
     timingScore=strategicRead.componentScores.timingScore;
-    directionExplanation=`${strategicRead.commitmentStatus}: ${strategicRead.bestDirection}. ${strategicRead.whyItWorks?.[0]||"Whole-rack structure reviewed."}`;
+    directionExplanation=`${strategicRead.rackPersonality||strategicRead.commitmentStatus}: ${strategicRead.bestDirection}. ${strategicRead.whyItWorks?.[0]||"Whole-rack structure reviewed."}`;
   }
 
   const totalScore=strategicRead?.rackleIQScore ?? Math.max(0,Math.min(100,directionScore+tileStrengthScore+passQualityScore+timingScore));
