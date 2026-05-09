@@ -1408,6 +1408,67 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 }
 
 
+
+
+/* ─── vNext HERO SPACING + SOCIAL RETENTION POLISH ───────────────────────── */
+.rk-home-ritual-hero{
+  padding-top:32px!important;
+  padding-bottom:30px!important;
+}
+.rk-home-ritual-hero .rk-hero-tile{
+  margin-bottom:12px!important;
+}
+.rk-home-ritual-hero .rk-hero-logo{
+  margin-bottom:13px!important;
+}
+.rk-home-ritual-hero .rk-hero-subtitle{
+  margin-top:0!important;
+  margin-bottom:18px!important;
+  line-height:1.32!important;
+}
+.rk-home-ritual-hero .rk-hero-status{
+  margin-top:0!important;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.rk-home-ritual-hero .rk-hero-status p{
+  line-height:1.5!important;
+}
+.rk-social-presence-wrap{
+  margin-top:8px!important;
+  margin-bottom:26px!important;
+}
+.rk-club-active-pill{
+  min-height:36px!important;
+  padding:9px 15px!important;
+  border-radius:999px!important;
+  background:linear-gradient(180deg,rgba(23,107,66,.075),rgba(23,107,66,.045))!important;
+  border:1px solid rgba(23,107,66,.16)!important;
+  box-shadow:0 5px 16px rgba(23,107,66,.06),inset 0 1px 0 rgba(255,255,255,.68)!important;
+}
+.rk-club-active-pill span:last-child{
+  font-size:12px!important;
+  line-height:1.2!important;
+  letter-spacing:.05px!important;
+}
+.rk-live-dot-dynamic{
+  width:9px!important;
+  height:9px!important;
+}
+@media(max-width:420px){
+  .rk-home-ritual-hero{padding-top:28px!important;padding-bottom:26px!important;}
+  .rk-home-ritual-hero .rk-hero-tile{margin-bottom:11px!important;}
+  .rk-home-ritual-hero .rk-hero-logo{margin-bottom:12px!important;}
+  .rk-home-ritual-hero .rk-hero-subtitle{margin-bottom:17px!important;}
+  .rk-social-presence-wrap{margin-top:7px!important;margin-bottom:24px!important;}
+}
+
+/* Make the completed-score card breathe better below the hero */
+.rk-home-ritual-hero + .rk-social-presence-wrap + .rk-home-section-lg,
+.rk-social-presence-wrap + .rk-home-section-lg{
+  margin-top:6px!important;
+}
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
@@ -10207,12 +10268,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const lines=dDone?["You showed up today.","Now make your club chase the score."]:
       rounds===0?["Train your Charleston in 2 minutes.","Same rack. Every player. One daily read."]:["The table is set.","Come back stronger."];
     return(
-      <div className="rk-hero-stack" style={{textAlign:"center",padding:"26px 0 24px"}}>
-        <div className="rk-float rk-hero-tile" style={{fontSize:37,marginBottom:6,lineHeight:1}}>🀄</div>
-        <h1 style={{fontFamily:F.d,fontSize:52,color:C.ink,margin:"0 0 5px",fontWeight:900,letterSpacing:-2.8,lineHeight:0.95}}>Rackle</h1>
-        <p className="rk-hero-subtitle" style={{fontFamily:F.d,fontSize:16,color:C.jade,margin:"8px 0 10px",fontWeight:700,fontStyle:"italic",letterSpacing:0.2}}>The Daily Mahjong Workout</p>
-        <div className="rk-hero-status" style={{marginTop:10}}><p style={{fontSize:13,color:C.mut,margin:"0 0 2px",lineHeight:1.45}}>{lines[0]}</p>
-        <p style={{fontSize:13,color:C.mut,margin:0,lineHeight:1.45,fontWeight:700}}>{lines[1]}</p></div>
+      <div className="rk-hero-stack rk-home-ritual-hero" style={{textAlign:"center",padding:"30px 0 28px"}}>
+        <div className="rk-float rk-hero-tile" style={{fontSize:37,marginBottom:12,lineHeight:1}}>🀄</div>
+        <h1 className="rk-hero-logo" style={{fontFamily:F.d,fontSize:52,color:C.ink,margin:"0 0 12px",fontWeight:900,letterSpacing:-2.8,lineHeight:0.95}}>Rackle</h1>
+        <p className="rk-hero-subtitle" style={{fontFamily:F.d,fontSize:16,color:C.jade,margin:"0 0 16px",fontWeight:700,fontStyle:"italic",letterSpacing:0.2}}>The Daily Mahjong Workout</p>
+        <div className="rk-hero-status" style={{marginTop:0}}><p style={{fontSize:13,color:C.mut,margin:"0 0 6px",lineHeight:1.5}}>{lines[0]}</p>
+        <p style={{fontSize:13,color:C.mut,margin:0,lineHeight:1.5,fontWeight:700}}>{lines[1]}</p></div>
       </div>
     );
   };
@@ -10288,8 +10349,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
 
   const SocialPresence=()=> (
-    <div style={{display:"flex",justifyContent:"center",margin:"-6px 0 16px"}}>
-      <div className="rk-live-pill-dynamic">
+    <div className="rk-social-presence-wrap" style={{display:"flex",justifyContent:"center",margin:"6px 0 24px"}}>
+      <div className="rk-live-pill-dynamic rk-club-active-pill">
         <span className="rk-live-dot-dynamic"/>
         <span>{socialPresenceLine}</span>
       </div>
