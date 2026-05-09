@@ -149,6 +149,18 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 @media(min-width:600px){
   .rk-home-desktop-insights{display:block!important}
 }
+
+/* ─── VIRAL-READY SCORECARD + HOMEPAGE SIMPLIFICATION ───────────────────── */
+.rk-share-card{will-change:transform}
+.rk-score-shell .rk-iq-hero{margin-bottom:12px!important}
+.rk-score-action-grid button{min-height:46px!important}
+@media(max-width:599px){
+  .rk-home-side-col{display:flex;flex-direction:column}
+  .rk-organizer-card{margin-top:18px!important}
+  .rk-email-home{margin-top:16px!important}
+  .rk-score-rack-card{margin-top:8px!important}
+}
+
 /* ─── FULL SCORECARD VISUAL REFRESH ───────────────────────────────────────── */
 .rk-score-shell{
   background:radial-gradient(circle at top,rgba(255,255,255,.72),transparent 240px),linear-gradient(180deg,#F8F4EE 0%,#F5EEE2 100%);
@@ -7978,6 +7990,7 @@ const SHARE_VARIANTS={
   green:{bg:"linear-gradient(135deg,#2E6B48,#1B5035)",shadow:"rgba(27,80,53,0.28)",color:"#fff"},
   jadepill:{bg:"#1B7D4E0F",shadow:"rgba(27,125,78,0.10)",color:"#1B7D4E",border:`1.5px solid #1B7D4E25`},
   goldpill:{bg:"#B08A350F",shadow:"rgba(176,138,53,0.10)",color:"#221E1A",border:`1.5px solid #B08A3525`},
+  viral:{bg:"linear-gradient(135deg,#0D5B37,#064223)",shadow:"rgba(6,66,35,0.26)",color:"#fff",border:`1px solid rgba(243,212,107,.32)`},
   card:{bg:"#ffffff",shadow:"rgba(0,0,0,0.06)",color:"#221E1A",border:`1px solid #E3DDD3`},
 };
 function ShareButton({text,label,sublabel,variant="goldpill"}){
@@ -8007,14 +8020,14 @@ function ShareButton({text,label,sublabel,variant="goldpill"}){
   const arrowColor=isLight?C.amberB:"rgba(255,255,255,0.6)";
   return(
     <div style={{position:"relative"}}>
-      <button onClick={share} className="rk-share-card" style={{width:"100%",borderRadius:14,
+      <button onClick={share} className="rk-share-card" style={{width:"100%",borderRadius:variant==="viral"?18:14,
         background:v.bg,border:v.border||"none",
-        cursor:"pointer",display:"flex",alignItems:"center",gap:10,padding:"11px 14px",
-        textAlign:"left",boxShadow:`0 3px 12px ${v.shadow}`,transition:"opacity 0.15s"}}>
-        <div style={{width:32,height:32,borderRadius:8,background:iconBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,flexShrink:0}}>{copied?"✓":"📲"}</div>
+        cursor:"pointer",display:"flex",alignItems:"center",gap:variant==="viral"?12:10,padding:variant==="viral"?"15px 16px":"11px 14px",
+        textAlign:"left",boxShadow:variant==="viral"?`0 12px 26px ${v.shadow}, inset 0 1px 0 rgba(255,255,255,.16)`:`0 3px 12px ${v.shadow}`,transition:"opacity 0.15s"}}>
+        <div style={{width:variant==="viral"?42:32,height:variant==="viral"?42:32,borderRadius:variant==="viral"?14:8,background:iconBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:variant==="viral"?19:15,flexShrink:0}}>{copied?"✓":"📲"}</div>
         <div style={{flex:1,minWidth:0,display:"flex",flexDirection:"column",gap:2}}>
-          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:titleColor,lineHeight:1.2}}>{copied?"Copied to clipboard!":label||"Challenge Your Club"}</div>
-          <div style={{fontSize:11,color:subColor,lineHeight:1.3}}>{copied?"Paste it into your group chat":sublabel||"Tap to copy · Drop it in your group chat"}</div>
+          <div style={{fontFamily:F.d,fontSize:variant==="viral"?17:14,fontWeight:900,color:titleColor,lineHeight:1.1,letterSpacing:variant==="viral"?-.25:0}}>{copied?"Copied to clipboard!":label||"Challenge Your Club"}</div>
+          <div style={{fontSize:variant==="viral"?12:11,color:subColor,lineHeight:1.35,fontWeight:variant==="viral"?750:400}}>{copied?"Paste it into your group chat":sublabel||"Tap to copy · Drop it in your group chat"}</div>
         </div>
         <span style={{fontSize:14,color:arrowColor,fontWeight:700,flexShrink:0}}>{copied?"":"›"}</span>
       </button>
@@ -8411,29 +8424,33 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const rankLine=globalRank&&globalTotal?`#${globalRank} of ${globalTotal} today${clubRank&&clubTotal?` · #${clubRank} in ${affiliatedClubName||"your club"}`:""}`:clubRank&&clubTotal?`#${clubRank} of ${clubTotal} in ${affiliatedClubName||"your club"}`:"";
   const roomCount=Number(globalTotal||globalRows.length||0);
   const roomLabel=roomCount===1?"1 player in today’s room":`${roomCount||1} players in today’s room`;
-  const clubRoomLabel=affiliatedClubName?`Posted to ${affiliatedClubName}`:"Share with your group";
+  const clubRoomLabel=affiliatedClubName?`${affiliatedClubName} is chasing ${score}`:"Your group can chase this";
   const socialAvatarCount=Math.min(3,Math.max(1,roomCount||clubTotal||1));
 
   const passEmoji=(iq.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
   const passDots=(iq.passInsights||[]).slice(0,3);
-  const shareText=[
-    `🀄 Daily Rackle #${dayNum}`,
-    `${score} · ${iq.level}`,
-    passEmoji?`Passes: ${passEmoji}`:"",
-    rankLine||"",
-    "Think you can beat it?",
-    "playrackle.com"
-  ].filter(Boolean).join("\n\n");
-
   const quickRead=(()=>{
-    if(score>=85)return "Great rack. Clean, calm, and hard to chase.";
-    if(score>=70)return "Strong read. You gave yourself a real lane.";
-    if(score>=55)return "Playable rack. A little cleaner next time.";
-    if(score>=40)return "Messy, but alive. Keep the shape tighter.";
-    return "Tough rack. Reset faster and protect pairs.";
+    if(score>=85)return "Great rack. Hard to chase.";
+    if(score>=70)return "Strong read. Make them beat it.";
+    if(score>=55)return "Playable rack. Stay in it.";
+    if(score>=40)return "Scrappy. Still alive.";
+    return "Tough rack. Reset fast.";
   })();
   const scoreLabel=score>=85?"Excellent":score>=70?"Strong":score>=55?"Playable":score>=40?"Scrappy":"Tough";
   const scoreAccent=score>=85?C.gold:score>=70?C.jade:score>=55?"#2460A8":score>=40?C.gold:C.cinn;
+  const shareName=(playerName||"I").trim();
+  const shareClubLine=affiliatedClubName
+    ? `${clubRank?`#${clubRank} in `:""}${affiliatedClubName}`
+    : globalRank?`#${globalRank} on today’s Rackle board`:"";
+  const shareText=[
+    `🀄 Rackle #${dayNum}`,
+    `${shareName} scored ${score}`,
+    `${scoreLabel} · ${iq.level}`,
+    shareClubLine,
+    `Can you beat ${score}?`,
+    "playrackle.com"
+  ].filter(Boolean).join("\n");
+  const viralPrompt=affiliatedClubName?`Can ${affiliatedClubName} beat ${score} before midnight?`:`Can your group beat ${score} before midnight?`;
   const scoredHandLabel=iq.scoredHandLabel||chosenHand||null;
   const scoredHandObj=scoredHandLabel?HAND_CATALOG.find(h=>h.sec===chosenSec&&h.label===scoredHandLabel):null;
 
@@ -8511,13 +8528,20 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <SortableRack hand={hand}/>
       </div>
 
-      <div style={{marginBottom:10}}>
-        <ShareButton text={shareText} label="Share your score" sublabel={affiliatedClubName?`Post it to ${affiliatedClubName}`:"Drop it in your group chat"} variant="goldpill"/>
+      <div style={{marginBottom:12,border:`1px solid rgba(201,168,76,.18)`,borderRadius:22,padding:12,background:"linear-gradient(145deg,#FFFDF8,#F4EFE3)",boxShadow:"0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)"}}>
+        <div style={{display:"flex",alignItems:"center",gap:10,margin:"0 2px 10px",textAlign:"left"}}>
+          <span style={{width:34,height:34,borderRadius:13,display:"inline-flex",alignItems:"center",justifyContent:"center",background:"rgba(23,107,66,.08)",border:`1px solid rgba(23,107,66,.10)`,fontSize:17}}>📲</span>
+          <span style={{minWidth:0}}>
+            <span style={{display:"block",fontFamily:F.d,fontSize:17,lineHeight:1.05,fontWeight:950,color:C.ink,letterSpacing:-.25}}>Send it to the table</span>
+            <span style={{display:"block",fontSize:11.5,lineHeight:1.35,color:C.mut,fontWeight:750,marginTop:3}}>{viralPrompt}</span>
+          </span>
+        </div>
+        <ShareButton text={shareText} label={affiliatedClubName?"Share to my club":"Share your score"} sublabel={affiliatedClubName?`Drop it in ${affiliatedClubName}`:"Drop it in your group chat"} variant="viral"/>
       </div>
 
       <div className="rk-score-action-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9,marginBottom:12}}>
-        <button onClick={()=>setScreen&&setScreen("globalLeaderboard")} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.jade,cursor:"pointer"}}>Global Board</button>
-        <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>{clubCode?"Club Room":"Join club"}</button>
+        <button onClick={()=>setScreen&&setScreen("globalLeaderboard")} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.jade,cursor:"pointer"}}>Leaderboard</button>
+        <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>{clubCode?"Club Room":"Join Club"}</button>
         <button onClick={onPractice} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.jade,cursor:"pointer"}}>Free Play</button>
         {onCoachMode?<button onClick={onCoachMode} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>Quick Coach</button>:<button onClick={onHome} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>Home</button>}
       </div>
@@ -11590,7 +11614,10 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   const copyShare=async()=>{
     const passEmoji=(iq?.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
-    const text=[`🀄 Daily Rackle #${dn}`,iq?`${iq.totalScore} · ${iq.level}`:dRes?`${dRes.rating} ${dRes.emoji}`:"I played today's Rackle",passEmoji?`Passes: ${passEmoji}`:"",club?`${club.name}`:"Think you can beat it?","playrackle.com"].filter(Boolean).join("\n\n");
+    const myName=(currentName||"I").trim();
+    const scoreLine=iq?`${myName} scored ${iq.totalScore}`:dRes?`${myName} played today's Rackle`:"I played today's Rackle";
+    const clubLine=club?`${club.name} · beat me before midnight`:"Can you beat me before midnight?";
+    const text=[`🀄 Rackle #${dn}`,scoreLine,iq?`${iq.level}`:"",clubLine,"playrackle.com"].filter(Boolean).join("\n");
     const markShared=async()=>{
       if(!activeClubCode)return;
       const count=await recordClubShare(activeClubCode,currentName);
