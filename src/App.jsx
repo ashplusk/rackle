@@ -1844,6 +1844,65 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 }
 
 
+
+/* ─── vNext CLUBHOUSE v3: premium social moat ───────────────────────────── */
+.rk-clubhouse-v3{margin:30px 0 28px;position:relative}
+.rk-clubhouse-v3-divider{display:flex;align-items:center;gap:12px;margin:6px 0 14px}
+.rk-clubhouse-v3-divider:before,.rk-clubhouse-v3-divider:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,rgba(160,120,40,.28))}
+.rk-clubhouse-v3-divider:after{background:linear-gradient(90deg,rgba(160,120,40,.28),transparent)}
+.rk-clubhouse-v3-label{display:inline-flex;align-items:center;gap:7px;padding:7px 15px;border-radius:999px;background:linear-gradient(145deg,#F5EFE4,#EDE3D3);border:1px solid rgba(160,120,40,.20);box-shadow:inset 0 1px 0 rgba(255,255,255,.72);font-size:9px;letter-spacing:2.45px;text-transform:uppercase;font-weight:950;color:rgba(26,20,16,.58);white-space:nowrap}
+.rk-clubhouse-v3-hero{position:relative;overflow:hidden;border-radius:28px;background:linear-gradient(150deg,#041F12 0%,#062B18 44%,#0A4328 76%,#03170D 100%);border:1px solid rgba(243,212,107,.20);box-shadow:0 18px 46px rgba(6,43,24,.19),inset 0 1px 0 rgba(255,255,255,.10);padding:20px 18px;color:#fff;margin-bottom:12px}
+.rk-clubhouse-v3-hero:after{content:'🀄';position:absolute;right:-18px;bottom:-30px;font-size:124px;opacity:.04;transform:rotate(-8deg);pointer-events:none}
+.rk-clubhouse-v3-hero-top{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px}
+.rk-clubhouse-v3-kicker{font-size:9px;letter-spacing:2.55px;text-transform:uppercase;font-weight:950;color:rgba(243,212,107,.80);margin-bottom:8px}
+.rk-clubhouse-v3-title{font-family:'Fraunces',Georgia,serif;font-size:26px;line-height:1.02;font-weight:950;letter-spacing:-.78px;color:#fff;margin:0 0 7px}
+.rk-clubhouse-v3-copy{font-size:12.5px;line-height:1.55;color:rgba(255,255,255,.70);font-weight:760;max-width:39ch;margin:0}
+.rk-clubhouse-v3-live{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:8px 12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#F3D46B;font-size:10.5px;font-weight:950;white-space:nowrap;flex-shrink:0}
+.rk-clubhouse-v3-live-dot{width:8px;height:8px;border-radius:999px;background:#4CD987;box-shadow:0 0 0 4px rgba(76,217,135,.12),0 0 14px rgba(76,217,135,.55);animation:rkLiveBreathe 2.35s ease-in-out infinite;display:inline-block}
+.rk-clubhouse-v3-score-strip{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.rk-clubhouse-v3-stat{border-radius:18px;padding:13px 11px;background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.10);min-width:0}
+.rk-clubhouse-v3-stat strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1;font-weight:950;color:#F3D46B;letter-spacing:-.45px;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk-clubhouse-v3-stat span{display:block;font-size:8px;letter-spacing:1.55px;text-transform:uppercase;font-weight:950;color:rgba(255,255,255,.56);line-height:1.2}
+.rk-clubhouse-v3-actions{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.rk-clubhouse-v3-action{min-height:44px;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.075);color:#fff;font-size:12px;font-weight:950;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:inset 0 1px 0 rgba(255,255,255,.10);transition:transform .16s ease,background .16s ease,border-color .16s ease}
+.rk-clubhouse-v3-action:hover{transform:translateY(-1px);background:rgba(255,255,255,.11);border-color:rgba(243,212,107,.28)}
+.rk-clubhouse-v3-action-primary{background:linear-gradient(145deg,rgba(243,212,107,.18),rgba(255,255,255,.07));color:#F3D46B;border-color:rgba(243,212,107,.26)}
+.rk-clubhouse-v3-stack{border-radius:28px;overflow:hidden;background:linear-gradient(145deg,#FFFDF8,#F5EFE4);border:1px solid rgba(26,20,16,.075);box-shadow:0 14px 36px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.82);margin-bottom:16px}
+.rk-clubhouse-v3-stack > div + div{border-top:1px solid rgba(26,20,16,.065)}
+.rk-clubhouse-v3-stack .rk-quiet-board,.rk-clubhouse-v3-stack .rk-social-preview-board,.rk-clubhouse-v3-stack .rk-leaderboard-card{border:none!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;margin:0!important}
+.rk-clubhouse-v3-stack .rk-quiet-board-head{padding:18px 18px!important;min-height:118px!important;background:linear-gradient(145deg,#FFFDF8 0%,#F6EFE4 100%)!important;border:none!important}
+.rk-clubhouse-v3-stack .rk-quiet-head-open{background:linear-gradient(145deg,#FFFDF8,#F1E8D9)!important}
+.rk-clubhouse-v3-stack .rk-quiet-topline{margin-bottom:8px!important;gap:10px!important;align-items:center!important}
+.rk-clubhouse-v3-stack .rk-quiet-mini-icon{width:42px!important;height:42px!important;border-radius:16px!important;background:linear-gradient(145deg,#FFFDF8,#ECE1CF)!important;border:1px solid rgba(160,120,40,.14)!important;box-shadow:0 6px 16px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.86)!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:18px!important}
+.rk-clubhouse-v3-stack .rk-quiet-kicker{font-size:9px!important;letter-spacing:2.35px!important;line-height:1.15!important;margin:0!important;color:#176B42!important;display:flex!important;align-items:center!important;gap:9px!important;flex-wrap:wrap!important}
+.rk-clubhouse-v3-stack .rk-quiet-title{font-size:22px!important;line-height:1.03!important;margin:4px 0 7px!important;letter-spacing:-.45px!important;max-width:260px!important}
+.rk-clubhouse-v3-stack .rk-quiet-desc{font-size:12.5px!important;line-height:1.45!important;color:rgba(26,20,16,.58)!important;font-weight:700!important;max-width:38ch!important}
+.rk-clubhouse-v3-stack .rk-quiet-preview-line{display:flex!important;gap:7px!important;flex-wrap:wrap!important;margin-top:12px!important}
+.rk-clubhouse-v3-stack .rk-quiet-preview-pill{padding:7px 11px!important;border-radius:999px!important;font-size:11px!important;font-weight:950!important;line-height:1!important}
+.rk-clubhouse-v3-stack .rk-quiet-chevron{width:48px!important;height:48px!important;border-radius:17px!important;background:linear-gradient(145deg,#FFFDF8,#EFE6D8)!important;border:1px solid rgba(26,20,16,.08)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-shrink:0!important}
+.rk-clubhouse-v3-stack .rk-quiet-board-panel{padding:14px!important;background:linear-gradient(180deg,#FFFDF8 0%,#F3EBDE 100%)!important;border:none!important;border-top:1px solid rgba(26,20,16,.065)!important;border-radius:0!important;box-shadow:none!important}
+.rk-clubhouse-v3-stack .rk-quiet-leader{border-radius:22px!important;margin-bottom:12px!important;padding:16px!important;background:linear-gradient(150deg,#041F12,#07331E 55%,#03170D)!important;border:1px solid rgba(243,212,107,.18)!important;box-shadow:0 10px 26px rgba(6,43,24,.14),inset 0 1px 0 rgba(255,255,255,.08)!important}
+.rk-clubhouse-v3-stack .rk-quiet-row-list{display:grid!important;gap:8px!important}
+.rk-clubhouse-v3-stack .rk-quiet-row{border-radius:18px!important;background:rgba(255,255,255,.76)!important;border:1px solid rgba(26,20,16,.055)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important;padding:11px!important}
+.rk-clubhouse-v3-stack .rk-quiet-row-you{background:linear-gradient(145deg,#F4FBF7,#FFFDF8)!important;border-color:rgba(23,107,66,.16)!important}
+.rk-clubhouse-v3-stack .rk-quiet-footer{padding-top:13px!important;margin-top:12px!important;border-top:1px solid rgba(26,20,16,.075)!important;text-align:center!important}
+.rk-clubhouse-v3-organizer{position:relative;overflow:hidden;border-radius:26px;background:linear-gradient(145deg,#F4FBF7,#EAF5EF);border:1.5px solid rgba(23,107,66,.14);box-shadow:0 12px 30px rgba(23,107,66,.07),inset 0 1px 0 rgba(255,255,255,.80);padding:20px;margin:16px 0 20px}
+.rk-clubhouse-v3-organizer:after{content:'🏛️';position:absolute;right:-8px;bottom:-22px;font-size:104px;opacity:.055;transform:rotate(-6deg);pointer-events:none}
+.rk-clubhouse-v3-organizer-head{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
+.rk-clubhouse-v3-organizer-kicker{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;font-weight:950;color:#176B42}
+.rk-clubhouse-v3-organizer-pill{border-radius:999px;padding:7px 11px;background:rgba(201,168,76,.13);border:1px solid rgba(201,168,76,.20);color:#8A6820;font-size:10.5px;font-weight:950;white-space:nowrap}
+.rk-clubhouse-v3-organizer-title{position:relative;z-index:1;font-family:'Fraunces',Georgia,serif;font-size:24px;line-height:1.02;font-weight:950;letter-spacing:-.65px;color:#1A1410;margin:0 0 9px}
+.rk-clubhouse-v3-organizer-copy{position:relative;z-index:1;font-size:12.5px;line-height:1.55;color:#6B6157;font-weight:750;max-width:40ch;margin:0 0 14px}
+.rk-clubhouse-v3-benefits{position:relative;z-index:1;display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:15px}
+.rk-clubhouse-v3-benefit{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:17px;background:rgba(255,255,255,.72);border:1px solid rgba(23,107,66,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.78);font-size:12.5px;line-height:1.25;color:#1A1410;font-weight:900}
+.rk-clubhouse-v3-benefit:before{content:"";width:9px;height:9px;border-radius:999px;background:#176B42;box-shadow:0 0 0 4px rgba(23,107,66,.08);flex-shrink:0}
+.rk-clubhouse-v3-organizer-actions{position:relative;z-index:1;display:grid;grid-template-columns:1.45fr .85fr;gap:9px}
+.rk-clubhouse-v3-primary,.rk-clubhouse-v3-secondary{display:flex;align-items:center;justify-content:center;border-radius:16px;padding:13px 10px;font-family:'Fraunces',Georgia,serif;font-size:14px;font-weight:950;text-decoration:none;cursor:pointer}
+.rk-clubhouse-v3-primary{border:1px solid rgba(255,255,255,.16);background:linear-gradient(135deg,#176B42,#0F5432);color:#fff;box-shadow:0 10px 22px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16)}
+.rk-clubhouse-v3-secondary{border:1px solid rgba(23,107,66,.18);background:rgba(255,255,255,.78);color:#176B42}
+@media(min-width:760px){.rk-clubhouse-v3-hero{padding:24px 24px}.rk-clubhouse-v3-title{font-size:31px}.rk-clubhouse-v3-stack .rk-quiet-board-head{min-height:126px!important;padding:22px 24px!important}.rk-clubhouse-v3-stack .rk-quiet-title{font-size:25px!important;max-width:none!important}.rk-clubhouse-v3-benefits{grid-template-columns:repeat(3,minmax(0,1fr))}.rk-clubhouse-v3-benefit{align-items:flex-start;min-height:58px}.rk-clubhouse-v3-organizer{padding:24px}}
+@media(max-width:390px){.rk-clubhouse-v3-hero-top{flex-direction:column}.rk-clubhouse-v3-title{font-size:24px}.rk-clubhouse-v3-score-strip{grid-template-columns:1fr 1fr}.rk-clubhouse-v3-stat:last-child{grid-column:1/-1}.rk-clubhouse-v3-actions,.rk-clubhouse-v3-organizer-actions{grid-template-columns:1fr}.rk-clubhouse-v3-stack .rk-quiet-board-head{min-height:112px!important;padding:16px!important}.rk-clubhouse-v3-stack .rk-quiet-title{font-size:20px!important}.rk-clubhouse-v3-stack .rk-quiet-desc{max-width:28ch!important}}
+
 `;
 
 
@@ -12310,48 +12369,57 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const globalCount=Number(todayPlayers||0);
     const clubRankLabel=shownClubRank?`#${shownClubRank}`:"—";
     const leadLabel=topToday&&topToday!=="—"?topToday:"—";
+    const clubRoomLabel=activeClubCode?clubhouseName:"Join a club";
+    const jumpToGlobal=()=>document.getElementById("global-leaderboard")?.scrollIntoView({behavior:"smooth",block:"center"});
+    const jumpToClub=()=>activeClubCode?setScreen("leaderboard"):setScreen("clubs");
     return(
-      <section className="rk-clubhouse-v2" aria-label="Rackle Clubhouse">
-        <div className="rk-clubhouse-v2-divider"><span className="rk-clubhouse-v2-label">🀄 The Clubhouse</span></div>
+      <section className="rk-clubhouse-v3" aria-label="Rackle Clubhouse">
+        <div className="rk-clubhouse-v3-divider"><span className="rk-clubhouse-v3-label">🀄 The Clubhouse</span></div>
 
-        <div className="rk-clubhouse-v2-hero rk-sweep">
-          <div className="rk-clubhouse-v2-top">
+        <div className="rk-clubhouse-v3-hero">
+          <div className="rk-clubhouse-v3-hero-top">
             <div>
-              <div className="rk-clubhouse-v2-kicker">Live score rooms</div>
-              <h2 className="rk-clubhouse-v2-title">Today’s table is open.</h2>
-              <p className="rk-clubhouse-v2-copy">Check the daily board, climb your club, then drop your score in the group chat.</p>
+              <div className="rk-clubhouse-v3-kicker">Daily competition</div>
+              <h2 className="rk-clubhouse-v3-title">Two boards. One rack.</h2>
+              <p className="rk-clubhouse-v3-copy">Chase the global room, defend your club table, then share the score where your group actually talks.</p>
             </div>
-            <div className="rk-clubhouse-v2-live"><span/>Live now</div>
+            <div className="rk-clubhouse-v3-live"><span className="rk-clubhouse-v3-live-dot"/>Live now</div>
           </div>
-          <div className="rk-clubhouse-v2-metrics">
-            <div className="rk-clubhouse-v2-metric"><strong>{globalCount||"—"}</strong><span>Daily players</span></div>
-            <div className="rk-clubhouse-v2-metric"><strong>{leadLabel}</strong><span>Score to chase</span></div>
-            <div className="rk-clubhouse-v2-metric"><strong>{clubRankLabel}</strong><span>Your club rank</span></div>
+
+          <div className="rk-clubhouse-v3-score-strip">
+            <div className="rk-clubhouse-v3-stat"><strong>{globalCount||"—"}</strong><span>Global players</span></div>
+            <div className="rk-clubhouse-v3-stat"><strong>{leadLabel}</strong><span>Score to beat</span></div>
+            <div className="rk-clubhouse-v3-stat"><strong>{clubRankLabel}</strong><span>{activeClubCode?"Your club rank":"Club rank"}</span></div>
+          </div>
+
+          <div className="rk-clubhouse-v3-actions">
+            <button className="rk-clubhouse-v3-action rk-clubhouse-v3-action-primary" onClick={jumpToGlobal}>Open Global Room →</button>
+            <button className="rk-clubhouse-v3-action" onClick={jumpToClub}>{activeClubCode?"Open Club Room":"Find Your Club"} →</button>
           </div>
         </div>
 
-        <div className="rk-clubhouse-v2-stack">
+        <div className="rk-clubhouse-v3-stack">
           <GlobalLeaderboardPill setScreen={setScreen}/>
           <ClubCodeEntry onJoin={()=>setScreen("leaderboard")} setScreen={setScreen} clubEntries={displayHomeClubEntries} currentScore={currentScore} currentRank={shownClubRank} clubPlayers={clubPlayers}/>
-          <InlineCodeEntry setScreen={setScreen}/>
+          {!activeClubCode&&<InlineCodeEntry setScreen={setScreen}/>}
         </div>
 
         {!activeClubCode&&(
-          <div className="rk-clubhouse-v2-organizer">
-            <div className="rk-clubhouse-v2-organizer-head">
-              <span className="rk-clubhouse-v2-organizer-kicker">For club organizers</span>
-              <span className="rk-clubhouse-v2-organizer-pill">Founding clubs</span>
+          <div className="rk-clubhouse-v3-organizer">
+            <div className="rk-clubhouse-v3-organizer-head">
+              <span className="rk-clubhouse-v3-organizer-kicker">For club organizers</span>
+              <span className="rk-clubhouse-v3-organizer-pill">Founding clubs</span>
             </div>
-            <h3 className="rk-clubhouse-v2-organizer-title">Bring your table online.</h3>
-            <p className="rk-clubhouse-v2-organizer-copy">A private daily board for your mahjong group. Easy to join, easy to share, fun to chase.</p>
-            <div className="rk-clubhouse-v2-benefits">
-              <div className="rk-clubhouse-v2-benefit"><span className="rk-clubhouse-v2-benefit-dot"/><span className="rk-clubhouse-v2-benefit-text">One shared Daily Rackle for your group</span></div>
-              <div className="rk-clubhouse-v2-benefit"><span className="rk-clubhouse-v2-benefit-dot"/><span className="rk-clubhouse-v2-benefit-text">Private rankings without extra setup</span></div>
-              <div className="rk-clubhouse-v2-benefit"><span className="rk-clubhouse-v2-benefit-dot"/><span className="rk-clubhouse-v2-benefit-text">Score cards made for group chats</span></div>
+            <h3 className="rk-clubhouse-v3-organizer-title">Give your group a daily table.</h3>
+            <p className="rk-clubhouse-v3-organizer-copy">A private Rackle room turns one daily Charleston into a reason your group comes back.</p>
+            <div className="rk-clubhouse-v3-benefits">
+              <div className="rk-clubhouse-v3-benefit">One shared Daily Rackle</div>
+              <div className="rk-clubhouse-v3-benefit">Private club rankings</div>
+              <div className="rk-clubhouse-v3-benefit">Scores made for group chat</div>
             </div>
-            <div className="rk-clubhouse-v2-actions">
-              <a className="rk-clubhouse-v2-primary" href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20">Start my club →</a>
-              <button className="rk-clubhouse-v2-secondary" onClick={()=>setScreen("clubs")}>Join</button>
+            <div className="rk-clubhouse-v3-organizer-actions">
+              <a className="rk-clubhouse-v3-primary" href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20">Start my club →</a>
+              <button className="rk-clubhouse-v3-secondary" onClick={()=>setScreen("clubs")}>Join</button>
             </div>
           </div>
         )}
