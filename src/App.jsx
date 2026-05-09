@@ -1661,6 +1661,47 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   font-weight:500!important;
   color:rgba(26,20,16,.50)!important;
 }
+
+/* ─── VIRAL SCORECARD FINAL POLISH: CLUB ROOM + SHARE-FIRST FLOW ───────── */
+.rk-score-social-room{
+  min-height:74px!important;
+  padding:14px 15px!important;
+  align-items:center!important;
+  margin:0 0 12px!important;
+  border-radius:22px!important;
+  background:linear-gradient(145deg,#FFFDF8 0%,#F4EFE3 100%)!important;
+  border:1px solid rgba(23,107,66,.13)!important;
+  box-shadow:0 9px 26px rgba(26,20,16,.05),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-score-social-room:hover{transform:translateY(-1px);box-shadow:0 13px 30px rgba(26,20,16,.065),inset 0 1px 0 rgba(255,255,255,.86)!important}
+.rk-score-social-left{align-items:center!important;gap:11px!important;min-width:0!important;flex:1!important}
+.rk-score-social-left > span:last-child{display:flex!important;flex-direction:column!important;align-items:flex-start!important;min-width:0!important;gap:3px!important}
+.rk-score-social-icon{width:44px!important;height:44px!important;border-radius:16px!important;font-size:19px!important;background:rgba(23,107,66,.075)!important;border-color:rgba(23,107,66,.12)!important}
+.rk-score-social-title{display:block!important;font-family:'Fraunces',Georgia,serif!important;font-size:18px!important;line-height:1.02!important;font-weight:950!important;color:#1A1410!important;letter-spacing:-.25px!important;margin:0!important;white-space:normal!important}
+.rk-score-social-copy{display:block!important;margin:0!important;font-size:12px!important;line-height:1.28!important;color:rgba(26,20,16,.58)!important;font-weight:800!important;white-space:normal!important;overflow:hidden!important;text-overflow:ellipsis!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;max-width:230px!important;text-align:left!important}
+.rk-score-avatar-stack{padding-left:10px!important;margin-left:auto!important}
+.rk-score-avatar-dot{width:26px!important;height:26px!important;border-width:2px!important;box-shadow:0 3px 10px rgba(26,20,16,.09)!important}
+.rk-score-share-card{position:relative;overflow:hidden;border:1px solid rgba(201,168,76,.22)!important;border-radius:24px!important;padding:14px!important;background:linear-gradient(145deg,#FFFDF8 0%,#F4EFE3 100%)!important;box-shadow:0 10px 30px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.82)!important;margin-bottom:12px!important}
+.rk-score-share-card:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(255,255,255,.62),transparent 34%);pointer-events:none}
+.rk-score-share-card > *{position:relative;z-index:1}
+.rk-score-rack-card{margin-top:0!important}
+.rk-score-action-grid{margin-top:2px!important}
+.rk-score-action-grid button:first-child{color:#176B42!important}
+@media(max-width:390px){
+  .rk-score-social-copy{max-width:170px!important;font-size:11.5px!important}
+  .rk-score-social-title{font-size:17px!important}
+  .rk-score-avatar-dot{width:24px!important;height:24px!important}
+  .rk-score-social-room{padding:13px!important}
+}
+
+/* Homepage: lighter first impression, keep social proof but reduce clutter */
+@media(max-width:599px){
+  .rk-home-main-col{gap:0!important}
+  .rk-clubhouse-stack{margin-top:22px!important}
+  .rk-organizer-card,.rk-email-home{display:none!important}
+  .rk-learn-shell{margin-top:22px!important}
+}
+
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
@@ -8423,8 +8464,9 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const clubTotal=clubCode?clubRows.length:null;
   const rankLine=globalRank&&globalTotal?`#${globalRank} of ${globalTotal} today${clubRank&&clubTotal?` · #${clubRank} in ${affiliatedClubName||"your club"}`:""}`:clubRank&&clubTotal?`#${clubRank} of ${clubTotal} in ${affiliatedClubName||"your club"}`:"";
   const roomCount=Number(globalTotal||globalRows.length||0);
-  const roomLabel=roomCount===1?"1 player in today’s room":`${roomCount||1} players in today’s room`;
-  const clubRoomLabel=affiliatedClubName?`${affiliatedClubName} is chasing ${score}`:"Your group can chase this";
+  const roomLabel=roomCount===1?"1 player played today":`${roomCount||1} players played today`;
+  const clubShortName=affiliatedClubName?affiliatedClubName.replace(/\s+Mahjong Club$/i,""):"";
+  const clubRoomLabel=affiliatedClubName?`${clubShortName||affiliatedClubName} is chasing ${score}`:"Your group can chase this";
   const socialAvatarCount=Math.min(3,Math.max(1,roomCount||clubTotal||1));
 
   const passEmoji=(iq.passInsights||[]).map(p=>p.quality==="strong"?"🟢":p.quality==="weak"?"🔴":"🟡").join("");
@@ -8512,6 +8554,17 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </span>
       </button>
 
+      <div className="rk-score-share-card">
+        <div style={{display:"flex",alignItems:"center",gap:10,margin:"0 2px 10px",textAlign:"left"}}>
+          <span style={{width:38,height:38,borderRadius:14,display:"inline-flex",alignItems:"center",justifyContent:"center",background:"rgba(23,107,66,.08)",border:`1px solid rgba(23,107,66,.10)`,fontSize:18}}>📲</span>
+          <span style={{minWidth:0}}>
+            <span style={{display:"block",fontFamily:F.d,fontSize:18,lineHeight:1.04,fontWeight:950,color:C.ink,letterSpacing:-.3}}>Send it to the table</span>
+            <span style={{display:"block",fontSize:12,lineHeight:1.35,color:C.mut,fontWeight:800,marginTop:4}}>{viralPrompt}</span>
+          </span>
+        </div>
+        <ShareButton text={shareText} label={affiliatedClubName?"Share to my club":"Share your score"} sublabel={affiliatedClubName?`Drop it in ${affiliatedClubName}`:"Drop it in your group chat"} variant="viral"/>
+      </div>
+
       <div className="rk-score-rack-card" style={{borderRadius:22,padding:14,background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid rgba(26,20,16,.075)`,boxShadow:"0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)",marginBottom:12,textAlign:"center"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:12}}>
           <div style={{textAlign:"left"}}>
@@ -8528,21 +8581,10 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <SortableRack hand={hand}/>
       </div>
 
-      <div style={{marginBottom:12,border:`1px solid rgba(201,168,76,.18)`,borderRadius:22,padding:12,background:"linear-gradient(145deg,#FFFDF8,#F4EFE3)",boxShadow:"0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)"}}>
-        <div style={{display:"flex",alignItems:"center",gap:10,margin:"0 2px 10px",textAlign:"left"}}>
-          <span style={{width:34,height:34,borderRadius:13,display:"inline-flex",alignItems:"center",justifyContent:"center",background:"rgba(23,107,66,.08)",border:`1px solid rgba(23,107,66,.10)`,fontSize:17}}>📲</span>
-          <span style={{minWidth:0}}>
-            <span style={{display:"block",fontFamily:F.d,fontSize:17,lineHeight:1.05,fontWeight:950,color:C.ink,letterSpacing:-.25}}>Send it to the table</span>
-            <span style={{display:"block",fontSize:11.5,lineHeight:1.35,color:C.mut,fontWeight:750,marginTop:3}}>{viralPrompt}</span>
-          </span>
-        </div>
-        <ShareButton text={shareText} label={affiliatedClubName?"Share to my club":"Share your score"} sublabel={affiliatedClubName?`Drop it in ${affiliatedClubName}`:"Drop it in your group chat"} variant="viral"/>
-      </div>
-
       <div className="rk-score-action-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9,marginBottom:12}}>
-        <button onClick={()=>setScreen&&setScreen("globalLeaderboard")} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.jade,cursor:"pointer"}}>Leaderboard</button>
+        <button onClick={()=>setScreen&&setScreen("globalLeaderboard")} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.jade,cursor:"pointer"}}>Global Board</button>
         <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>{clubCode?"Club Room":"Join Club"}</button>
-        <button onClick={onPractice} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.jade,cursor:"pointer"}}>Free Play</button>
+        <button onClick={onPractice} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.jade,cursor:"pointer"}}>Play Again</button>
         {onCoachMode?<button onClick={onCoachMode} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>Quick Coach</button>:<button onClick={onHome} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>Home</button>}
       </div>
 
