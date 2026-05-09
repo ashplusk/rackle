@@ -786,6 +786,71 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 }
 
 
+/* ─── vNext DESKTOP STARTUP RESPONSIVE + FOOTER + CTA POLISH ────────────── */
+@keyframes rkPlayPressMe{0%,100%{transform:translateY(-8px) scale(1);box-shadow:0 18px 38px rgba(0,0,0,.28),0 0 0 1px rgba(243,212,107,.38),0 0 0 0 rgba(243,212,107,0),inset 0 2px 0 rgba(255,255,255,.95),inset 0 -12px 22px rgba(160,120,40,.16)}50%{transform:translateY(-11px) scale(1.028);box-shadow:0 24px 52px rgba(0,0,0,.34),0 0 0 1px rgba(243,212,107,.62),0 0 0 10px rgba(243,212,107,.06),0 0 24px rgba(243,212,107,.16),inset 0 2px 0 rgba(255,255,255,.96),inset 0 -12px 24px rgba(160,120,40,.20)}}
+@keyframes rkPlayArrowNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(2px)}}
+.rk-play-button-premium{
+  width:92px!important;
+  height:92px!important;
+  background:radial-gradient(circle at 36% 26%,#FFFFFF 0%,#FFFDF8 34%,#F1E5CF 73%,#E7D4B3 100%)!important;
+  border:2px solid rgba(26,20,16,.30)!important;
+  box-shadow:0 18px 38px rgba(0,0,0,.28),0 0 0 1px rgba(243,212,107,.38),inset 0 2px 0 rgba(255,255,255,.95),inset 0 -12px 22px rgba(160,120,40,.16)!important;
+  animation:rkPlayPressMe 3.8s ease-in-out infinite!important;
+}
+.rk-play-button-premium:before{inset:9px!important;border:2px solid rgba(201,168,76,.48)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.82),0 0 22px rgba(201,168,76,.14)!important}
+.rk-play-button-premium:after{bottom:14px!important;font-size:7px!important;letter-spacing:1.8px!important;color:rgba(26,20,16,.62)!important}
+.rk-play-triangle{animation:rkPlayArrowNudge 2.4s ease-in-out infinite!important;border-left-color:#11100E!important;margin-top:-7px!important}
+.rk-daily-hero-card:hover .rk-play-button-premium{transform:translateY(-12px) scale(1.055)!important;box-shadow:0 28px 60px rgba(0,0,0,.36),0 0 0 1px rgba(243,212,107,.70),0 0 30px rgba(243,212,107,.20),inset 0 2px 0 rgba(255,255,255,.98),inset 0 -12px 24px rgba(160,120,40,.22)!important}
+.rk-daily-hero-card:hover .rk-play-triangle{animation-play-state:paused!important}
+.rk-learn-head .rk-quiet-chevron{margin-left:auto}
+.rk-learn-item{line-height:1.25!important}
+.rk-learn-item-title{display:block;font-family:'Fraunces',Georgia,serif;font-size:15px;font-weight:900;color:#1A1410;line-height:1.06;letter-spacing:-.2px}
+.rk-learn-item-sub{display:block;font-size:11px;color:#6B6157;line-height:1.35;margin-top:5px;font-weight:650}
+.rk-desktop-only{display:none!important}
+.rk-footer{width:100%;text-align:center;padding:34px 0 84px;margin-top:20px;opacity:.88}
+.rk-desktop-insight-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 16px}
+.rk-web-data-card{background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.075);border-radius:20px;box-shadow:0 8px 26px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78);padding:16px;overflow:hidden;position:relative}
+.rk-web-data-card:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(255,255,255,.58),transparent 38%);pointer-events:none}
+.rk-web-data-kicker{font-size:8px;letter-spacing:2.25px;text-transform:uppercase;font-weight:950;color:#176B42;margin-bottom:7px;position:relative}
+.rk-web-data-title{font-family:'Fraunces',Georgia,serif;font-size:19px;line-height:1.05;font-weight:950;letter-spacing:-.45px;color:#1A1410;margin:0 0 7px;position:relative}
+.rk-web-data-copy{font-size:12px;line-height:1.55;color:#6B6157;font-weight:650;margin:0;position:relative}
+.rk-web-metric-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0 0}
+.rk-web-metric{border-radius:18px;padding:14px 12px;background:rgba(255,255,255,.72);border:1px solid rgba(26,20,16,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.8);text-align:center}
+.rk-web-metric strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:25px;line-height:1;color:#176B42;letter-spacing:-.9px;margin-bottom:7px}
+.rk-web-metric span{font-size:8px;letter-spacing:1.7px;text-transform:uppercase;font-weight:950;color:rgba(26,20,16,.50)}
+.rk-web-footer-band{display:none}
+
+@media(min-width:900px){
+  .rk-desktop-only{display:block!important}
+  .rk-outer{padding:0!important;background:radial-gradient(circle at 50% -120px,#FFFDF8 0%,#F8F4EE 42%,#EFE7DA 100%)!important}
+  .rk-app{width:100%!important;max-width:none!important;min-height:100vh!important;border-radius:0!important;margin-top:0!important;border:none!important;box-shadow:none!important;background:linear-gradient(180deg,#F8F4EE 0%,#F3EBDC 100%)!important}
+  .rk-pg{max-width:1240px!important;margin:0 auto!important;padding:34px 42px 0!important}
+  .rk-home-responsive-shell{grid-template-columns:minmax(0,1.12fr) minmax(380px,.88fr)!important;gap:34px!important;align-items:start!important}
+  .rk-home-main-col{display:flex;flex-direction:column;gap:0;min-width:0}
+  .rk-home-side-col{position:sticky;top:28px;align-self:start;min-width:0}
+  .rk-daily-hero-card{min-height:456px!important;border-radius:32px!important;margin-bottom:30px!important}
+  .rk-daily-hero-card>div:last-child{padding:34px 34px 30px!important}
+  .rk-daily-hero-card .rk-play-button-premium{width:118px!important;height:118px!important;right:46px!important}
+  .rk-daily-hero-card .rk-play-triangle{border-top-width:18px!important;border-bottom-width:18px!important;border-left-width:29px!important;margin-top:-8px!important}
+  .rk-home-desktop-panel{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:-10px;margin-bottom:22px}
+  .rk-home-desktop-wide{grid-column:1/-1}
+  .rk-learn-item{min-height:76px!important;padding:16px!important;gap:14px!important}
+  .rk-learn-item-title{font-size:16px!important;line-height:1.05!important}
+  .rk-learn-item-sub{font-size:12px!important;line-height:1.38!important;margin-top:6px!important}
+  .rk-footer{display:block!important;max-width:none!important;width:100vw!important;margin-left:calc(50% - 50vw)!important;margin-right:calc(50% - 50vw)!important;margin-top:44px!important;padding:36px 42px 44px!important;background:linear-gradient(180deg,#EFE7DA 0%,#E8DECE 100%);border-top:1px solid rgba(26,20,16,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.66)}
+  .rk-footer-inner{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:1fr auto;align-items:center;gap:22px;text-align:left}
+  .rk-footer-actions{justify-content:flex-end!important;margin-top:0!important}
+  .rk-web-footer-band{display:block;margin-top:20px}
+}
+@media(min-width:1180px){
+  .rk-home-responsive-shell{grid-template-columns:minmax(0,1.22fr) 430px!important;gap:40px!important}
+  .rk-pg{padding-left:54px!important;padding-right:54px!important}
+}
+@media(max-width:899px){
+  .rk-footer-inner{display:block;text-align:center}
+}
+
+
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
@@ -7608,19 +7673,23 @@ function RackleHeader({onBack,setScreen}){
 
 function Footer(){
   return(
-    <div style={{textAlign:"center",padding:"34px 0 84px",marginTop:20,opacity:0.88}}>
-      <div aria-hidden="true" style={{width:40,height:1,background:C.bdr,margin:"0 auto 16px"}}/>
-      <div style={{fontSize:12,color:C.jade,fontFamily:F.d,fontStyle:"italic"}}>The Daily Mahjong Workout 🀄</div>
-      <div style={{fontSize:11,color:C.mut,marginTop:8,lineHeight:1.6}}>Made for the American Mahjong community</div>
-      <div style={{marginTop:12}}><a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,letterSpacing:-0.3,textDecoration:"none"}}>Rackle</a></div>
-      <div style={{marginTop:10,display:"flex",justifyContent:"center",alignItems:"center",gap:8}}>
-        <a href="https://instagram.com/playrackle" target="_blank" rel="noopener noreferrer" style={{display:"flex",alignItems:"center",gap:6,fontSize:12,color:C.ink,textDecoration:"none",fontWeight:600,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:20,padding:"5px 14px"}}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5.5" stroke={C.ink} strokeWidth="2" fill="none"/><circle cx="12" cy="12" r="4.5" stroke={C.ink} strokeWidth="2" fill="none"/><circle cx="17.5" cy="6.5" r="1" fill={C.ink}/></svg>
-          @playrackle
-        </a>
-        <a href="mailto:hello@playrackle.com" style={{display:"flex",alignItems:"center",fontSize:12,color:C.ink,textDecoration:"none",fontWeight:600,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:20,padding:"5px 14px"}}>Contact</a>
+    <div className="rk-footer">
+      <div className="rk-footer-inner">
+        <div>
+          <div aria-hidden="true" style={{width:40,height:1,background:C.bdr,margin:"0 0 16px"}}/>
+          <div style={{fontSize:12,color:C.jade,fontFamily:F.d,fontStyle:"italic"}}>The Daily Mahjong Workout 🀄</div>
+          <div style={{fontSize:11,color:C.mut,marginTop:8,lineHeight:1.6}}>Made for the American Mahjong community</div>
+          <div style={{marginTop:12}}><a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,letterSpacing:-0.3,textDecoration:"none"}}>Rackle</a></div>
+          <div style={{fontSize:10,color:C.mut,marginTop:14,opacity:0.7}}>© {new Date().getFullYear()} <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" style={{color:C.mut,textDecoration:"none"}}>playrackle.com</a> · All rights reserved</div>
+        </div>
+        <div className="rk-footer-actions" style={{marginTop:10,display:"flex",justifyContent:"center",alignItems:"center",gap:8,flexWrap:"wrap"}}>
+          <a href="https://instagram.com/playrackle" target="_blank" rel="noopener noreferrer" style={{display:"flex",alignItems:"center",gap:6,fontSize:12,color:C.ink,textDecoration:"none",fontWeight:600,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:20,padding:"5px 14px"}}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5.5" stroke={C.ink} strokeWidth="2" fill="none"/><circle cx="12" cy="12" r="4.5" stroke={C.ink} strokeWidth="2" fill="none"/><circle cx="17.5" cy="6.5" r="1" fill={C.ink}/></svg>
+            @playrackle
+          </a>
+          <a href="mailto:hello@playrackle.com" style={{display:"flex",alignItems:"center",fontSize:12,color:C.ink,textDecoration:"none",fontWeight:600,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:20,padding:"5px 14px"}}>Contact</a>
+        </div>
       </div>
-      <div style={{fontSize:10,color:C.mut,marginTop:14,opacity:0.7}}>© {new Date().getFullYear()} <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" style={{color:C.mut,textDecoration:"none"}}>playrackle.com</a> · All rights reserved</div>
     </div>
   );
 }
@@ -9680,6 +9749,49 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     </button>
   );
 
+
+  const DesktopInsightDeck=()=>{
+    const todayScore=iq?.totalScore||"—";
+    const hist=getHist().filter(e=>e.iqScore!=null);
+    const dailyAvgRows=hist.filter(e=>e.mode==="daily").slice(-7);
+    const practiceAvgRows=hist.filter(e=>e.mode!=="daily").slice(-7);
+    const avgDaily=dailyAvgRows.length?Math.round(dailyAvgRows.reduce((a,e)=>a+e.iqScore,0)/dailyAvgRows.length):"—";
+    const avgPractice=practiceAvgRows.length?Math.round(practiceAvgRows.reduce((a,e)=>a+e.iqScore,0)/practiceAvgRows.length):"—";
+    return(
+      <div className="rk-desktop-only rk-home-desktop-panel">
+        <div className="rk-web-data-card">
+          <div className="rk-web-data-kicker">Daily read</div>
+          <h3 className="rk-web-data-title">Today’s table pressure</h3>
+          <p className="rk-web-data-copy">Same Charleston for every player. Your read, rank, and score become the room’s benchmark.</p>
+          <div className="rk-web-metric-row" style={{gridTemplateColumns:"repeat(2,minmax(0,1fr))"}}>
+            <div className="rk-web-metric"><strong>{todayScore}</strong><span>Your IQ</span></div>
+            <div className="rk-web-metric"><strong>{topToday}</strong><span>Lead score</span></div>
+          </div>
+        </div>
+        <div className="rk-web-data-card">
+          <div className="rk-web-data-kicker">Practice room</div>
+          <h3 className="rk-web-data-title">Build the next read</h3>
+          <p className="rk-web-data-copy">Free Play lets you test sections, replay the Charleston, and learn without risking the Daily board.</p>
+          <div className="rk-web-metric-row" style={{gridTemplateColumns:"repeat(2,minmax(0,1fr))"}}>
+            <div className="rk-web-metric"><strong>{avgDaily}</strong><span>Daily avg</span></div>
+            <div className="rk-web-metric"><strong>{avgPractice}</strong><span>Practice avg</span></div>
+          </div>
+        </div>
+        <div className="rk-web-data-card rk-home-desktop-wide">
+          <div className="rk-web-data-kicker">Rackle intelligence</div>
+          <h3 className="rk-web-data-title">Track the signals that make better Charleston players.</h3>
+          <p className="rk-web-data-copy">Rackle turns each rack into a simple coaching loop: section direction, passing quality, tile strength, timing, and club rank.</p>
+          <div className="rk-web-metric-row">
+            <div className="rk-web-metric"><strong>{todayPlayers}</strong><span>Players live</span></div>
+            <div className="rk-web-metric"><strong>{shownClubRank?`#${shownClubRank}`:"—"}</strong><span>Club rank</span></div>
+            <div className="rk-web-metric"><strong>{streak||0}d</strong><span>Streak</span></div>
+            <div className="rk-web-metric"><strong>{bestScore||"—"}</strong><span>Best IQ</span></div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const Community=()=> (
     <>
       <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20,marginTop:12}}>
@@ -9736,7 +9848,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <div style={{width:38,height:38,borderRadius:12,background:C.jade+"18",border:`1px solid ${C.jade}24`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>📚</div>
           <div><div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.jade,letterSpacing:-0.1}}>Learn & Explore</div><div style={{fontSize:11,color:C.jade,opacity:0.72,marginTop:1}}>Tutorial · Card guide · Stats · How to play</div></div>
         </div>
-        <span style={{fontSize:13,color:C.jade,transform:leOpen?"rotate(180deg)":"rotate(0deg)",display:"inline-block"}}>▾</span>
+        <span className="rk-quiet-chevron" aria-hidden="true">{leOpen?"▲":"▼"}</span>
       </button>
       {leOpen&&(
         <div className="rk-in rk-learn-panel">
@@ -9750,8 +9862,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           ].map(([icon,title,sub,fn])=>(
             <button key={title} className="rk-learn-item" onClick={fn}>
               <span style={{width:38,height:38,borderRadius:13,background:C.bg2,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{icon}</span>
-              <span style={{flex:1}}><span style={{display:"block",fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.1}}>{title}</span><span style={{display:"block",fontSize:11,color:C.mut,marginTop:3}}>{sub}</span></span>
-              <span style={{fontSize:16,color:C.mut}}>›</span>
+              <span style={{flex:1,minWidth:0}}><span className="rk-learn-item-title">{title}</span><span className="rk-learn-item-sub">{sub}</span></span>
+              <span className="rk-quiet-chevron" style={{width:30,height:30,fontSize:10,color:C.jade}}>›</span>
             </button>
           ))}
           </div>
@@ -9791,14 +9903,15 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             {dDone?<CompletedDaily/>:<StartDaily/>}
             {dDone&&<TomorrowTease/>}
             <PracticeCard/>
+            <DesktopInsightDeck/>
           </div>
           <div className="rk-home-side-col">
             <Community/>
             <Learn/>
             <EmailSignup/>
-            <Footer/>
           </div>
         </div>
+        <Footer/>
       </div>
     </>
   );
