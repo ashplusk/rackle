@@ -5641,34 +5641,80 @@ function rkRankOfCurrent(entries=[],scoreHint=null){
   if(score>0)return (entries||[]).filter(e=>Number(e.iqScore??e.iq_score??0)>score).length+1;
   return null;
 }
+function rkFirstNonEmpty(...values){
+  for(const value of values){
+    const clean=String(value||"").trim();
+    if(clean)return clean;
+  }
+  return "";
+}
 function rkProfileName(profile,index=0){
-  return rkSafePlayerName(profile?.nickname||profile?.name,profile?.player_id||profile?.playerId,index);
+  const name=rkFirstNonEmpty(
+    profile?.nickname,
+    profile?.name,
+    profile?.full_name,
+    profile?.display_name,
+    profile?.username,
+    profile?.email?String(profile.email).split("@")[0]:""
+  );
+  return rkSafePlayerName(name,profile?.player_id||profile?.playerId,index);
 }
 function rkProfilesById(rows=[]){
   const map=new Map();
   (rows||[]).forEach((p,i)=>{
     const id=String(p?.player_id||p?.playerId||"").trim();
     if(!id)return;
-    map.set(id,{...p,player_id:id,nickname:rkProfileName(p,i),club_code:p?.club_code||p?.clubCode||null});
+    const nickname=rkProfileName(p,i);
+    map.set(id,{
+      ...p,
+      player_id:id,
+      nickname,
+      name:nickname,
+      club_code:p?.club_code||p?.clubCode||null
+    });
   });
   // Always inject the local profile so the current player never becomes Player ### on their own device.
   const localProfile=rkRawProfile();
   const localId=rkProfilePlayerId(localProfile)||rkStoredPlayerId();
   const localName=rkLocalDisplayName();
   if(localId&&localName){
-    map.set(localId,{...localProfile,player_id:localId,nickname:localName,club_code:localProfile?.club_code||localProfile?.clubCode||getClubCode()||null,streak:localProfile?.streak||0});
+    map.set(localId,{...localProfile,player_id:localId,nickname:localName,name:localName,club_code:localProfile?.club_code||localProfile?.clubCode||getClubCode()||null,streak:localProfile?.streak||0});
   }
   return map;
+}
+function rkPostgrestTextIn(values=[]){
+  return values
+    .map(v=>String(v||"").trim())
+    .filter(Boolean)
+    .map(v=>`"${v.replace(/\\/g,"\\\\").replace(/"/g,'\\"')}"`)
+    .join(",");
 }
 async function fetchProfilesByIds(ids=[]){
   const clean=Array.from(new Set((ids||[]).map(v=>String(v||"").trim()).filter(Boolean)));
   if(!clean.length)return[];
+  const profileSelect="player_id,nickname,club_code,streak";
+  // Keep this separate so we can safely use richer profile schemas later without breaking older tables.
+  const richProfileSelect="player_id,nickname,name,full_name,display_name,username,email,club_code,streak";
   try{
     const out=[];
-    for(let i=0;i<clean.length;i+=75){
-      const chunk=clean.slice(i,i+75).map(encodeURIComponent).join(",");
-      const res=await fetch(`${SB_URL}/rest/v1/profiles?player_id=in.(${chunk})&select=player_id,nickname,club_code,streak&limit=500`,{headers:SB_HEADERS});
-      if(res.ok)out.push(...await res.json());
+    for(let i=0;i<clean.length;i+=60){
+      const group=clean.slice(i,i+60);
+      const chunk=rkPostgrestTextIn(group);
+      let res=await fetch(`${SB_URL}/rest/v1/profiles?player_id=in.(${encodeURIComponent(chunk)})&select=${richProfileSelect}&limit=500`,{headers:SB_HEADERS});
+      if(!res.ok){
+        res=await fetch(`${SB_URL}/rest/v1/profiles?player_id=in.(${encodeURIComponent(chunk)})&select=${profileSelect}&limit=500`,{headers:SB_HEADERS});
+      }
+      if(res.ok){
+        out.push(...await res.json());
+      }else{
+        // Fallback to one-at-a-time lookups. This protects the leaderboard if PostgREST
+        // text IN syntax behaves differently across environments.
+        for(const id of group){
+          let one=await fetch(`${SB_URL}/rest/v1/profiles?player_id=eq.${encodeURIComponent(id)}&select=${richProfileSelect}&limit=1`,{headers:SB_HEADERS});
+          if(!one.ok)one=await fetch(`${SB_URL}/rest/v1/profiles?player_id=eq.${encodeURIComponent(id)}&select=${profileSelect}&limit=1`,{headers:SB_HEADERS});
+          if(one.ok)out.push(...await one.json());
+        }
+      }
     }
     return out;
   }catch(err){console.warn("Profile lookup failed:",err);return[];}
@@ -5676,7 +5722,10 @@ async function fetchProfilesByIds(ids=[]){
 async function fetchProfilesForClub(code){
   if(!code)return[];
   try{
-    const res=await fetch(`${SB_URL}/rest/v1/profiles?club_code=eq.${encodeURIComponent(code)}&select=player_id,nickname,club_code,streak&limit=500`,{headers:SB_HEADERS});
+    const profileSelect="player_id,nickname,club_code,streak";
+    const richProfileSelect="player_id,nickname,name,full_name,display_name,username,email,club_code,streak";
+    let res=await fetch(`${SB_URL}/rest/v1/profiles?club_code=eq.${encodeURIComponent(code)}&select=${richProfileSelect}&limit=500`,{headers:SB_HEADERS});
+    if(!res.ok)res=await fetch(`${SB_URL}/rest/v1/profiles?club_code=eq.${encodeURIComponent(code)}&select=${profileSelect}&limit=500`,{headers:SB_HEADERS});
     if(!res.ok)return[];
     const rows=await res.json();
     const localProfile=rkRawProfile();
