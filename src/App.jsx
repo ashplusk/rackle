@@ -1903,6 +1903,77 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 @media(min-width:760px){.rk-clubhouse-v3-hero{padding:24px 24px}.rk-clubhouse-v3-title{font-size:31px}.rk-clubhouse-v3-stack .rk-quiet-board-head{min-height:126px!important;padding:22px 24px!important}.rk-clubhouse-v3-stack .rk-quiet-title{font-size:25px!important;max-width:none!important}.rk-clubhouse-v3-benefits{grid-template-columns:repeat(3,minmax(0,1fr))}.rk-clubhouse-v3-benefit{align-items:flex-start;min-height:58px}.rk-clubhouse-v3-organizer{padding:24px}}
 @media(max-width:390px){.rk-clubhouse-v3-hero-top{flex-direction:column}.rk-clubhouse-v3-title{font-size:24px}.rk-clubhouse-v3-score-strip{grid-template-columns:1fr 1fr}.rk-clubhouse-v3-stat:last-child{grid-column:1/-1}.rk-clubhouse-v3-actions,.rk-clubhouse-v3-organizer-actions{grid-template-columns:1fr}.rk-clubhouse-v3-stack .rk-quiet-board-head{min-height:112px!important;padding:16px!important}.rk-clubhouse-v3-stack .rk-quiet-title{font-size:20px!important}.rk-clubhouse-v3-stack .rk-quiet-desc{max-width:28ch!important}}
 
+
+/* ─── vNext HOMEPAGE HERO COMPRESSION + BREATHING ROOM ─────────────────────
+   Goal: keep the premium identity, but stop the hero from eating the first screen.
+   The page should get players to Today’s Rackle faster. */
+.rk-home-ritual-hero{
+  padding-top:18px!important;
+  padding-bottom:14px!important;
+  max-width:760px;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.rk-home-ritual-hero .rk-hero-tile{
+  font-size:30px!important;
+  margin-bottom:8px!important;
+  filter:drop-shadow(0 4px 8px rgba(26,20,16,.08));
+}
+.rk-home-ritual-hero .rk-hero-logo{
+  font-size:46px!important;
+  line-height:.92!important;
+  margin-bottom:8px!important;
+  letter-spacing:-2.4px!important;
+}
+.rk-home-ritual-hero .rk-hero-subtitle{
+  font-size:14.5px!important;
+  line-height:1.25!important;
+  margin-bottom:10px!important;
+}
+.rk-home-ritual-hero .rk-hero-status{
+  margin-top:0!important;
+  gap:1px!important;
+}
+.rk-home-ritual-hero .rk-hero-status p{
+  font-size:12.5px!important;
+  line-height:1.34!important;
+}
+.rk-home-ritual-hero .rk-hero-status p:last-child{
+  font-weight:850!important;
+}
+.rk-daily-divider-row{
+  margin:0 0 18px!important;
+}
+.rk-daily-divider-row .rk-daily-cta{
+  min-height:46px!important;
+  padding:7px 17px!important;
+  border-radius:18px!important;
+}
+.rk-daily-divider-row .rk-daily-cta span:last-child{
+  font-size:9.5px!important;
+  letter-spacing:2.15px!important;
+}
+.rk-social-presence-wrap{
+  margin-top:2px!important;
+  margin-bottom:17px!important;
+}
+@media(max-width:420px){
+  .rk-home-ritual-hero{padding-top:15px!important;padding-bottom:12px!important;}
+  .rk-home-ritual-hero .rk-hero-tile{font-size:28px!important;margin-bottom:7px!important;}
+  .rk-home-ritual-hero .rk-hero-logo{font-size:43px!important;margin-bottom:7px!important;}
+  .rk-home-ritual-hero .rk-hero-subtitle{font-size:14px!important;margin-bottom:9px!important;}
+  .rk-daily-divider-row{margin-bottom:16px!important;}
+}
+@media(min-width:900px){
+  .rk-home-ritual-hero{
+    padding-top:14px!important;
+    padding-bottom:12px!important;
+  }
+  .rk-home-ritual-hero .rk-hero-tile{font-size:29px!important;}
+  .rk-home-ritual-hero .rk-hero-logo{font-size:48px!important;}
+  .rk-daily-divider-row{margin-bottom:20px!important;}
+}
+
 `;
 
 
@@ -12219,12 +12290,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const lines=dDone?["You showed up today.","Now make your club chase the score."]:
       rounds===0?["Train your Charleston in 2 minutes.","Same rack. Every player. One daily read."]:["The table is set.","Come back stronger."];
     return(
-      <div className="rk-hero-stack rk-home-ritual-hero" style={{textAlign:"center",padding:"30px 0 28px"}}>
-        <div className="rk-float rk-hero-tile" style={{fontSize:37,marginBottom:12,lineHeight:1}}>🀄</div>
-        <h1 className="rk-hero-logo" style={{fontFamily:F.d,fontSize:52,color:C.ink,margin:"0 0 12px",fontWeight:900,letterSpacing:-2.8,lineHeight:0.95}}>Rackle</h1>
-        <p className="rk-hero-subtitle" style={{fontFamily:F.d,fontSize:16,color:C.jade,margin:"0 0 16px",fontWeight:700,fontStyle:"italic",letterSpacing:0.2}}>The Daily Mahjong Workout</p>
-        <div className="rk-hero-status" style={{marginTop:0}}><p style={{fontSize:13,color:C.mut,margin:0,lineHeight:1.42}}>{lines[0]}</p>
-        <p style={{fontSize:13,color:C.mut,margin:0,lineHeight:1.42,fontWeight:700}}>{lines[1]}</p></div>
+      <div className="rk-hero-stack rk-home-ritual-hero" style={{textAlign:"center",padding:"18px 0 14px"}}>
+        <div className="rk-float rk-hero-tile" style={{fontSize:30,marginBottom:8,lineHeight:1}}>🀄</div>
+        <h1 className="rk-hero-logo" style={{fontFamily:F.d,fontSize:46,color:C.ink,margin:"0 0 8px",fontWeight:900,letterSpacing:-2.4,lineHeight:0.92}}>Rackle</h1>
+        <p className="rk-hero-subtitle" style={{fontFamily:F.d,fontSize:14.5,color:C.jade,margin:"0 0 10px",fontWeight:700,fontStyle:"italic",letterSpacing:0.2}}>The Daily Mahjong Workout</p>
+        <div className="rk-hero-status" style={{marginTop:0}}><p style={{fontSize:12.5,color:C.mut,margin:0,lineHeight:1.34}}>{lines[0]}</p>
+        <p style={{fontSize:12.5,color:C.mut,margin:0,lineHeight:1.34,fontWeight:850}}>{lines[1]}</p></div>
       </div>
     );
   };
@@ -12475,7 +12546,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <Hero/>
         <div className="rk-home-responsive-shell">
           <div className="rk-home-main-col">
-            {!dDone&&<div style={{display:"flex",alignItems:"center",gap:12,margin:"4px 0 22px"}}>
+            {!dDone&&<div className="rk-daily-divider-row" style={{display:"flex",alignItems:"center",gap:12,margin:"0 0 18px"}}>
               <div style={{flex:1,height:1,background:`linear-gradient(90deg,transparent,${C.bdr})`}}/>
               <div className="rk-daily-cta" style={{display:"inline-flex",alignItems:"center",gap:7,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:999,padding:"8px 18px",minHeight:52}}><span style={{fontSize:12}}>🗓️</span><span style={{fontSize:10,color:C.mut,letterSpacing:2.4,fontWeight:900}}>TODAY'S RACKLE</span></div>
               <div style={{flex:1,height:1,background:`linear-gradient(90deg,${C.bdr},transparent)`}}/>
