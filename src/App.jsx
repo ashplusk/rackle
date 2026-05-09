@@ -851,6 +851,208 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 }
 
 
+/* ─── vNext DESKTOP DAILY HERO POLISH ─────────────────────────────────────
+   Makes the web/tablet Daily Rackle card feel designed for wide screens,
+   not just a stretched mobile card.
+*/
+@media(min-width:900px){
+  .rk-daily-hero-card{
+    min-height:410px!important;
+    border-radius:34px!important;
+    margin-bottom:32px!important;
+    box-shadow:
+      0 28px 80px rgba(3,23,13,.26),
+      0 0 0 1px rgba(201,168,76,.16),
+      inset 0 1px 0 rgba(255,255,255,.08)!important;
+  }
+
+  .rk-daily-hero-card > div:last-child{
+    min-height:410px!important;
+    padding:34px 48px 36px!important;
+    display:grid!important;
+    grid-template-rows:auto 1fr auto auto!important;
+    gap:0!important;
+  }
+
+  .rk-daily-hero-card > div:last-child > div:nth-child(1){
+    margin-bottom:22px!important;
+  }
+
+  .rk-daily-hero-card > div:last-child > div:nth-child(1) > div:first-child{
+    padding:7px 14px!important;
+    border-color:rgba(255,255,255,.24)!important;
+    background:rgba(255,255,255,.14)!important;
+  }
+
+  .rk-daily-hero-card > div:last-child > div:nth-child(1) > div:last-child{
+    font-size:11px!important;
+    letter-spacing:.2px!important;
+    color:rgba(255,255,255,.78)!important;
+  }
+
+  .rk-daily-hero-card > div:last-child > div:nth-child(2){
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 320px!important;
+    align-items:center!important;
+    gap:56px!important;
+    min-height:174px!important;
+  }
+
+  .rk-daily-hero-card > div:last-child > div:nth-child(2) > div:first-child{
+    max-width:520px!important;
+  }
+
+  .rk-daily-hero-card > div:last-child > div:nth-child(2) > div:first-child > div:first-child{
+    font-size:42px!important;
+    line-height:.98!important;
+    letter-spacing:-1.35px!important;
+    margin-bottom:18px!important;
+  }
+
+  .rk-daily-hero-card > div:last-child > div:nth-child(2) > div:first-child > div:nth-child(2){
+    font-size:17px!important;
+    line-height:1.55!important;
+    max-width:440px!important;
+    color:rgba(255,255,255,.82)!important;
+  }
+
+  .rk-daily-hero-card .rk-play-button-premium{
+    justify-self:center!important;
+    align-self:center!important;
+    width:138px!important;
+    height:138px!important;
+    transform:none!important;
+    margin-top:0!important;
+    background:
+      radial-gradient(circle at 34% 26%,#FFFFFF 0%,#FFFDF8 31%,#F3E7D0 67%,#DECAA6 100%)!important;
+    border:2.5px solid rgba(26,20,16,.34)!important;
+    box-shadow:
+      0 30px 70px rgba(0,0,0,.33),
+      0 0 0 1px rgba(243,212,107,.55),
+      0 0 44px rgba(243,212,107,.14),
+      inset 0 3px 0 rgba(255,255,255,.96),
+      inset 0 -14px 26px rgba(160,120,40,.20)!important;
+  }
+
+  .rk-daily-hero-card .rk-play-button-premium:before{
+    inset:12px!important;
+    border:2px solid rgba(201,168,76,.58)!important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.86),
+      0 0 24px rgba(201,168,76,.18)!important;
+  }
+
+  .rk-daily-hero-card .rk-play-button-premium:after{
+    bottom:20px!important;
+    font-size:8px!important;
+    letter-spacing:2.1px!important;
+    color:rgba(26,20,16,.58)!important;
+  }
+
+  .rk-daily-hero-card .rk-play-triangle{
+    border-top-width:20px!important;
+    border-bottom-width:20px!important;
+    border-left-width:32px!important;
+    margin-left:8px!important;
+    margin-top:-9px!important;
+  }
+
+  .rk-daily-hero-card:hover .rk-play-button-premium{
+    transform:translateY(-3px) scale(1.025)!important;
+    box-shadow:
+      0 34px 78px rgba(0,0,0,.37),
+      0 0 0 1px rgba(243,212,107,.74),
+      0 0 56px rgba(243,212,107,.22),
+      inset 0 3px 0 rgba(255,255,255,.98),
+      inset 0 -14px 28px rgba(160,120,40,.22)!important;
+  }
+
+  .rk-daily-hero-card > div:last-child > div:nth-child(3){
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:16px!important;
+    margin-top:34px!important;
+  }
+
+  .rk-daily-hero-card > div:last-child > div:nth-child(3) > div{
+    min-height:88px!important;
+    border-radius:18px!important;
+    padding:18px 20px!important;
+    background:rgba(255,255,255,.105)!important;
+    border:1px solid rgba(255,255,255,.18)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 10px 22px rgba(0,0,0,.06)!important;
+  }
+
+  .rk-daily-hero-card > div:last-child > div:nth-child(3) > div > div:first-child{
+    font-size:28px!important;
+    letter-spacing:-.8px!important;
+  }
+
+  .rk-daily-hero-card > div:last-child > div:nth-child(3) > div > div:last-child{
+    font-size:9px!important;
+    letter-spacing:1.7px!important;
+    margin-top:10px!important;
+  }
+
+  .rk-daily-hero-card > div:last-child > div:nth-child(4){
+    margin-top:18px!important;
+    padding:16px 20px!important;
+    border-radius:19px!important;
+    background:linear-gradient(135deg,rgba(201,168,76,.18),rgba(23,107,66,.16))!important;
+    border:1px solid rgba(224,194,99,.38)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.10)!important;
+  }
+
+  .rk-daily-hero-card > div:last-child > div:nth-child(4) > div:first-child > div:last-child{
+    font-size:17px!important;
+    line-height:1.2!important;
+  }
+}
+
+@media(min-width:1200px){
+  .rk-daily-hero-card{
+    min-height:430px!important;
+  }
+  .rk-daily-hero-card > div:last-child{
+    min-height:430px!important;
+    padding:38px 58px 40px!important;
+  }
+  .rk-daily-hero-card > div:last-child > div:nth-child(2){
+    grid-template-columns:minmax(0,1fr) 360px!important;
+    gap:70px!important;
+  }
+  .rk-daily-hero-card > div:last-child > div:nth-child(2) > div:first-child > div:first-child{
+    font-size:48px!important;
+    letter-spacing:-1.6px!important;
+  }
+  .rk-daily-hero-card .rk-play-button-premium{
+    width:150px!important;
+    height:150px!important;
+  }
+  .rk-daily-hero-card .rk-play-triangle{
+    border-top-width:22px!important;
+    border-bottom-width:22px!important;
+    border-left-width:35px!important;
+  }
+}
+
+@media(min-width:900px) and (max-width:1080px){
+  .rk-daily-hero-card > div:last-child{
+    padding:30px 36px 34px!important;
+  }
+  .rk-daily-hero-card > div:last-child > div:nth-child(2){
+    grid-template-columns:minmax(0,1fr) 230px!important;
+    gap:32px!important;
+  }
+  .rk-daily-hero-card > div:last-child > div:nth-child(2) > div:first-child > div:first-child{
+    font-size:36px!important;
+  }
+  .rk-daily-hero-card .rk-play-button-premium{
+    width:124px!important;
+    height:124px!important;
+  }
+}
+
+
 `;
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
