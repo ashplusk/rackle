@@ -2946,7 +2946,7 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 
 /* ─── Launch ritual flow polish ─────────────────────────────────────────── */
 .rk-home-landing-flow{display:flex;flex-direction:column;gap:14px}
-.rk-daily-entry-v6{margin:10px 0 10px!important;border:1px solid rgba(26,20,16,.10)!important;box-shadow:0 16px 36px rgba(26,20,16,.07),inset 0 1px 0 rgba(255,255,255,.88)!important}
+.rk-daily-entry-v6{margin:10px 0 10px!important;border:1.5px solid rgba(23,107,66,.24)!important;box-shadow:0 18px 44px rgba(23,107,66,.11),0 0 0 4px rgba(23,107,66,.035),inset 0 1px 0 rgba(255,255,255,.9)!important}
 .rk-daily-entry-v6-title{font-size:26px!important;letter-spacing:-.75px!important;margin-bottom:7px!important}
 .rk-daily-entry-v6-copy{font-size:14.5px!important;font-weight:760!important;margin-bottom:12px!important;color:#176B42!important}
 .rk-daily-entry-v6-stats{margin-bottom:14px!important}.rk-daily-entry-v6-stats span{font-size:10.5px!important;min-height:24px!important;padding:0 9px!important}
@@ -2961,7 +2961,7 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 /* ─── FINAL LAUNCH POLISH: one clear ritual loop ───────────────────────── */
 .rk-daily-entry-v6{
   border-radius:32px!important;
-  border:1px solid rgba(26,20,16,.10)!important;
+  border:1.5px solid rgba(23,107,66,.34)!important;
   background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.95),transparent 38%),linear-gradient(145deg,#FFFDF8,#F1E8D8)!important;
 }
 .rk-daily-entry-v6-kicker{color:#176B42!important;font-weight:950!important}
@@ -3017,38 +3017,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-daily-entry-v6-title{font-size:26px!important}
   .rk-daily-entry-v6-cta{min-height:54px!important;font-size:16px!important;width:100%!important}
   .rk-tomorrow-mystery-final .rk-tomorrow-v11-title{font-size:20px!important}
-}
-
-
-/* ─── vFinal request: left-align warmup copy + remove green daily border hint ─── */
-.rk-warmup-card-v6{
-  text-align:left!important;
-  align-items:flex-start!important;
-}
-.rk-warmup-v6-main{
-  text-align:left!important;
-  align-self:flex-start!important;
-}
-.rk-warmup-v6-kicker{
-  justify-content:flex-start!important;
-  text-align:left!important;
-  width:100%!important;
-}
-.rk-warmup-v6-title,
-.rk-warmup-v6-copy{
-  text-align:left!important;
-  margin-left:0!important;
-  margin-right:auto!important;
-}
-.rk-daily-entry-v6{
-  border:1px solid rgba(26,20,16,.10)!important;
-  box-shadow:0 16px 36px rgba(26,20,16,.07),inset 0 1px 0 rgba(255,255,255,.88)!important;
-}
-.rk-daily-entry-v6:before{
-  background:radial-gradient(circle at 12% 8%,rgba(160,120,40,.10),transparent 28%),radial-gradient(circle at 88% 20%,rgba(243,212,107,.16),transparent 30%)!important;
-}
-.rk-daily-entry-v6-glow{
-  display:none!important;
 }
 
 `;
@@ -6987,6 +6955,29 @@ function rkDailyResultToLocal(row){
   if(row.time_secs&&!base.time)base.time=row.time_secs;
   return base;
 }
+function rkResultDaySeed(result){
+  return Number(result?.daySeed||result?.day_seed||0)||null;
+}
+function rkIsTodayDailyResult(result){
+  if(!result)return false;
+  const today=getDailySeed();
+  const resultSeed=rkResultDaySeed(result);
+  if(resultSeed)return resultSeed===today;
+  // Legacy fallback for older local results that were saved before daySeed existed.
+  return ST.get("dd",null)===today&&sameLocalDay(result?.ts||0,Date.now());
+}
+function rkGetTodayDailyResult(){
+  const today=getDailySeed();
+  const stored=ST.get("dres",null);
+  if(ST.get("dd",null)===today&&rkIsTodayDailyResult(stored))return stored;
+  return null;
+}
+function rkClearStaleDailyResultCache(){
+  const today=getDailySeed();
+  const stored=ST.get("dres",null);
+  if(ST.get("dd",null)!==today)ST.set("dd",null);
+  if(stored&&!rkIsTodayDailyResult(stored))ST.set("dres",null);
+}
 async function upsertDailyResult(result,streakValue=ST.get("str",0)){
   const pid=currentLeaderboardPlayerId?.()||rkProfilePlayerId()||rkStoredPlayerId();
   if(!pid||!result)return false;
@@ -7359,7 +7350,7 @@ async function fetchLeaderboardRowsForSeed(seed=getDailySeed(),limit=1000){
       const res=await fetch(url,{headers:SB_HEADERS});
       if(res.ok){
         const rows=await res.json();
-        if(Array.isArray(rows))out.push(...rows);
+        if(Array.isArray(rows))out.push(...rows.filter(r=>!r?.day_seed||Number(r.day_seed)===Number(seed)));
       }
     }catch{}
   }
@@ -7377,7 +7368,7 @@ async function fetchTodayGameHistoryRows(seed=getDailySeed()){
       const res=await fetch(url,{headers:SB_HEADERS});
       if(res.ok){
         const rows=await res.json();
-        if(Array.isArray(rows))out.push(...rows);
+        if(Array.isArray(rows))out.push(...rows.filter(r=>!r?.day_seed||Number(r.day_seed)===Number(seed)));
       }
     }catch{}
   }
@@ -12431,9 +12422,10 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
   const [entries,setEntries]=useState([]);
   const [loading,setLoading]=useState(true);
   const [copied,setCopied]=useState(false);
-  const iq=withIQStyle(dRes?.iq);
+  const todayDRes=rkIsTodayDailyResult(dRes)?dRes:null;
+  const iq=withIQStyle(todayDRes?.iq);
   const score=Number(iq?.totalScore||0);
-  const time=Number(dRes?.time||iq?.totalTime||0);
+  const time=Number(todayDRes?.time||iq?.totalTime||0);
   const load=useCallback(async()=>{
     setLoading(true);
     const rows=await fetchGlobalEntries();
@@ -12489,9 +12481,10 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
   const [posting,setPosting]=useState(false);
   const [copied,setCopied]=useState(false);
   const [nameInput,setNameInput]=useState(rkCurrentDisplayName()||"");
-  const iq=withIQStyle(dRes?.iq);
+  const todayDRes=rkIsTodayDailyResult(dRes)?dRes:null;
+  const iq=withIQStyle(todayDRes?.iq);
   const score=Number(iq?.totalScore||0);
-  const time=Number(dRes?.time||iq?.totalTime||0);
+  const time=Number(todayDRes?.time||iq?.totalTime||0);
 
   const load=useCallback(async()=>{
     if(!code)return;
@@ -13102,7 +13095,8 @@ function TomorrowPreviewCard(){
 // ─── HOME ─────────────────────────────────────────────────────────────────────
 function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSettings,showTutorial,showCardGuide,settings,showScorecard,setScreen}){
   const dn=getDayNum(),yd=getYesterday();
-  const iq=withIQStyle(dRes?.iq);
+  const todayDRes=dDone&&rkIsTodayDailyResult(dRes)?dRes:null;
+  const iq=withIQStyle(todayDRes?.iq);
   const bestIQ=getBestIQ();
   const profile=getProfile();
   // Single source for club membership. Some returning users have clubCode in local storage,
@@ -13138,13 +13132,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   const ydIQ=yd?.iq?.totalScore||null;
   const todayPlayers=Math.max(ds?.total||0,0);
-  const topToday=Math.max(ds?.topScore||ds?.max||0,iq?.totalScore||0);
+  const topToday=Math.max(ds?.topScore||ds?.max||0,dDone?iq?.totalScore||0:0);
   const bestScore=Number.isFinite(Number(bestIQ?.score ?? bestIQ))?Number(bestIQ?.score ?? bestIQ):0;
-  const currentScore=Number.isFinite(Number(iq?.totalScore))?Number(iq.totalScore):0;
+  const currentScore=dDone&&Number.isFinite(Number(iq?.totalScore))?Number(iq.totalScore):0;
   const currentName=rkCurrentDisplayName();
   const hasClubScore=!!(club&&dDone&&currentScore>0);
   const displayHomeClubEntries=club
-    ?rkMergeCurrentScore(homeClubEntries,currentScore,iq?.totalTime||dRes?.time||0,streak,activeClubCode)
+    ?rkMergeCurrentScore(homeClubEntries,currentScore,iq?.totalTime||todayDRes?.time||0,streak,activeClubCode)
     :[];
   const shownClubRank=hasClubScore?rkRankOfCurrent(displayHomeClubEntries,currentScore):null;
   const homeClubTotal=club?displayHomeClubEntries.length:null;
@@ -13539,7 +13533,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   };
 
   const Community=()=> {
-    const globalRows=rkMergeCurrentScore(homeGlobalEntries,currentScore,iq?.totalTime||dRes?.time||0,streak,activeClubCode);
+    const globalRows=rkMergeCurrentScore(homeGlobalEntries,currentScore,iq?.totalTime||todayDRes?.time||0,streak,activeClubCode);
     const clubRows=displayHomeClubEntries;
     const globalCount=Math.max(Number(todayPlayers||0),globalRows.length,currentScore?1:0);
     const clubCount=Number(clubPlayers||clubRows.length||0);
@@ -15314,16 +15308,6 @@ function HandRenderer({hand, defaultOpen=false}){
   }
 }
 
-
-/* ─── vFinal request override: warmup left alignment + neutral daily card ─── */
-.rk-warmup-card-v6{text-align:left!important;align-items:flex-start!important;}
-.rk-warmup-v6-main{text-align:left!important;align-self:flex-start!important;width:100%!important;margin-left:0!important;margin-right:auto!important;}
-.rk-warmup-v6-kicker{justify-content:flex-start!important;text-align:left!important;width:100%!important;}
-.rk-warmup-v6-title,.rk-warmup-v6-copy{text-align:left!important;margin-left:0!important;margin-right:auto!important;}
-.rk-daily-entry-v6{border:1px solid rgba(26,20,16,.10)!important;box-shadow:0 16px 36px rgba(26,20,16,.07),inset 0 1px 0 rgba(255,255,255,.88)!important;}
-.rk-daily-entry-v6:before{background:radial-gradient(circle at 12% 8%,rgba(160,120,40,.10),transparent 28%),radial-gradient(circle at 88% 20%,rgba(243,212,107,.16),transparent 30%)!important;}
-.rk-daily-entry-v6-glow{display:none!important;}
-
 `;
     return{...g,tileDesc,typeInfo,cardColor:cc};
   });
@@ -15882,8 +15866,10 @@ export default function Rackle(){
   const [mode,setMode]=useState("free");
   const [streak,setStreak]=useState(ST.get("str",0));
   const [rounds,setRounds]=useState(ST.get("rnd",0));
-  const [dDone,setDDone]=useState(ST.get("dd",null)===getDailySeed());
-  const [dRes,setDRes]=useState(ST.get("dres",null));
+  rkClearStaleDailyResultCache();
+  const initialDailyResult=rkGetTodayDailyResult();
+  const [dDone,setDDone]=useState(!!initialDailyResult);
+  const [dRes,setDRes]=useState(initialDailyResult);
   const [showHelp,setShowHelp]=useState(false);
   const [settings,setSettings]=useState({...DEFAULT_SETTINGS,...ST.get("settings",{})});
   const [badgeToast,setBadgeToast]=useState(null);
@@ -15901,8 +15887,9 @@ export default function Rackle(){
     const refresh=()=>{
       setStreak(ST.get("str",0));
       setRounds(ST.get("rnd",0));
-      setDDone(ST.get("dd",null)===getDailySeed());
-      setDRes(ST.get("dres",null));
+      const todayResult=rkGetTodayDailyResult();
+      setDDone(!!todayResult);
+      setDRes(todayResult);
     };
     window.addEventListener("rackle:remoteHydrated",refresh);
     (async()=>{
@@ -15912,12 +15899,13 @@ export default function Rackle(){
         if(hydrated?.profile){
           setStreak(hydrated.profile.streak||0);
           setRounds(hydrated.profile.roundsPlayed||0);
-          if(hydrated.dailyResult){
+          if(rkIsTodayDailyResult(hydrated.dailyResult)){
             setDDone(true);
             setDRes(hydrated.dailyResult);
           }else{
-            setDDone(ST.get("dd",null)===getDailySeed());
-            setDRes(ST.get("dres",null));
+            const todayResult=rkGetTodayDailyResult();
+            setDDone(!!todayResult);
+            setDRes(todayResult);
           }
         }else if(getProfile()?.nickname){
           rkSyncLocalProfileToSupabase("app_load").catch(err=>console.warn("Profile sync failed",err));
@@ -16022,7 +16010,7 @@ export default function Rackle(){
         {screen==="play"&&<Game mode={mode} home={()=>setScreen("home")} onDone={onDone} settings={settings} setScreen={setScreen}/>}
         {screen==="stats"&&<Stats home={()=>setScreen("home")} onShowScorecard={()=>setScreen("scorecard")} onRecap={()=>setScreen("recap")} dRes={dRes} setScreen={setScreen}/>}
         {screen==="settings"&&<Settings home={()=>setScreen("home")} settings={settings} setSettings={setSettings} showTutorial={()=>setScreen("tutorial")} setScreen={setScreen}/>}
-        {screen==="scorecard"&&<ScorecardScreen res={dRes} home={()=>setScreen("home")} dayNum={getDayNum()} onPractice={()=>go("free")} setScreen={setScreen}/>}
+        {screen==="scorecard"&&<ScorecardScreen res={rkIsTodayDailyResult(dRes)?dRes:null} home={()=>setScreen("home")} dayNum={getDayNum()} onPractice={()=>go("free")} setScreen={setScreen}/>}
         {screen==="leaderboard"&&<LeaderboardScreen home={()=>setScreen("home")} dRes={dRes} streak={streak} setScreen={setScreen}/>}
         {screen==="globalLeaderboard"&&<GlobalLeaderboardScreen home={()=>setScreen("home")} dRes={dRes} streak={streak} setScreen={setScreen}/>}
         {screen==="clubs"&&<ClubDirectoryScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
