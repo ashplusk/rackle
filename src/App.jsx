@@ -3241,6 +3241,89 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 }
 
 
+
+
+/* ─── v13 homepage readability + dropdown polish ───────────────────────── */
+.rk-daily-entry-v6-copy{
+  max-width:315px!important;
+  margin:12px auto 18px!important;
+  color:rgba(26,20,16,.58)!important;
+  font-size:14.5px!important;
+  line-height:1.55!important;
+  font-weight:520!important;
+  letter-spacing:.01em!important;
+}
+.rk-daily-entry-v6-copy span{display:block!important;margin-bottom:2px!important}
+.rk-daily-entry-v6-title{margin-bottom:6px!important}
+.rk-room-live-v6-drop{display:block!important;cursor:pointer!important;overflow:hidden!important}
+.rk-room-live-v6-summary{list-style:none!important;cursor:pointer!important;border-radius:24px!important;position:relative!important}
+.rk-room-live-v6-summary::-webkit-details-marker{display:none!important}
+.rk-room-live-v6-summary:after{
+  content:'⌄';position:absolute;right:17px;top:19px;width:30px;height:30px;border-radius:999px;
+  display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.10);
+  border:1px solid rgba(243,212,107,.22);color:#F3D46B;font-size:18px;font-weight:900;
+  transition:transform .18s ease, background .18s ease;
+}
+.rk-room-live-v6-drop[open] .rk-room-live-v6-summary:after{transform:rotate(180deg);background:rgba(243,212,107,.12)}
+.rk-room-live-v6-kicker{padding-right:42px!important;line-height:1.25!important}
+.rk-dropdown-hint-v12{display:inline-flex!important;margin-left:7px!important;padding:3px 7px!important;border-radius:999px!important;background:rgba(255,255,255,.10)!important;border:1px solid rgba(255,255,255,.13)!important;color:rgba(255,255,255,.72)!important;font-size:9px!important;letter-spacing:.9px!important;text-transform:uppercase!important;vertical-align:middle!important}
+.rk-room-live-v6-title{font-size:26px!important;line-height:1.02!important;letter-spacing:-.7px!important;margin-top:8px!important;margin-bottom:7px!important}
+.rk-room-live-v6-copy{font-size:12.5px!important;line-height:1.5!important;color:rgba(255,255,255,.72)!important;max-width:28ch!important}
+.rk-room-live-v6-list{padding-top:12px!important;display:grid!important;gap:8px!important}
+.rk-room-live-v6-row{min-height:48px!important;border-radius:16px!important;padding:11px 12px!important;background:rgba(255,255,255,.86)!important}
+.rk-room-live-v6-meta{padding-top:10px!important;gap:8px!important;flex-wrap:wrap!important}
+.rk-room-live-v6-cta{margin-top:12px!important;min-height:44px!important;border-radius:15px!important}
+
+/* Clubhouse updates: more breathing room, smaller fields */
+.rk-email-home,.rk-email-card-v8,.rk-email-shell-v8{padding:18px 16px!important;gap:10px!important;margin-top:20px!important;margin-bottom:22px!important}
+.rk-email-title-v8{font-size:24px!important;line-height:1.02!important;margin-bottom:7px!important}
+.rk-email-copy-v8{font-size:12.5px!important;line-height:1.5!important;margin-bottom:13px!important;max-width:31ch!important}
+.rk-email-input-v8,.rk-email-btn-v8{height:38px!important;min-height:38px!important;border-radius:13px!important;font-size:12px!important;padding-top:8px!important;padding-bottom:8px!important}
+.rk-email-home form,.rk-email-form-v8{gap:8px!important}
+
+/* ─── v13 hand browser: simpler, more scannable ────────────────────────── */
+.rk-hand-browser-v9{padding-bottom:78px!important}
+.rk-browser-v9-hero{padding:22px 18px 18px!important;border-radius:24px!important;margin-bottom:12px!important;text-align:left!important}
+.rk-browser-v9-hero h1{font-size:31px!important;line-height:.98!important;letter-spacing:-1px!important;margin-bottom:8px!important}
+.rk-browser-v9-hero p{font-size:13px!important;line-height:1.5!important;color:rgba(255,255,255,.72)!important;max-width:31ch!important;margin:0!important}
+.rk-browser-v9-search-wrap{margin-top:14px!important}
+.rk-browser-v9-search-wrap input{height:44px!important;text-align:left!important;font-size:13px!important;border-radius:15px!important;padding:0 14px!important}
+.rk-browser-v9-section-grid{
+  position:sticky!important;top:0!important;z-index:25!important;display:flex!important;gap:8px!important;overflow-x:auto!important;
+  padding:10px 2px 12px!important;margin:0 -2px 8px!important;background:linear-gradient(180deg,#F8F4EE 74%,rgba(248,244,238,.92) 100%)!important;
+  -webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;
+}
+.rk-browser-v9-section-grid::-webkit-scrollbar{display:none!important}
+.rk-browser-v9-section{min-width:132px!important;min-height:78px!important;padding:10px 11px!important;text-align:left!important;border-radius:17px!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important}
+.rk-browser-v9-section-icon{font-size:18px!important;margin-bottom:4px!important}
+.rk-browser-v9-section strong{font-size:12px!important;line-height:1.08!important;letter-spacing:-.1px!important}
+.rk-browser-v9-section em{font-size:9.5px!important;line-height:1.25!important;margin-top:4px!important;color:rgba(26,20,16,.54)!important}
+.rk-browser-v13-helper{font-size:11.5px!important;line-height:1.45!important;color:#6B6157!important;background:rgba(255,255,255,.62)!important;border:1px solid rgba(26,20,16,.06)!important;border-radius:14px!important;padding:9px 11px!important;margin:0 0 10px!important}
+.rk-browser-v9-controls{position:sticky!important;top:92px!important;z-index:24!important;background:rgba(248,244,238,.94)!important;backdrop-filter:blur(10px)!important;padding:8px 0 10px!important;margin:0 0 10px!important;display:flex!important;gap:7px!important}
+.rk-browser-v9-controls button{height:34px!important;border-radius:999px!important;font-size:11px!important;padding:0 12px!important}
+.rk-browser-v9-guide{margin:12px 0 14px!important;padding:14px!important;border-radius:20px!important}
+.rk-browser-v9-dragon-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
+.rk-browser-v9-dragon{padding:9px 6px!important;border-radius:14px!important;text-align:center!important}
+.rk-browser-v9-results-head{margin:14px 0 10px!important;padding:0 2px!important}
+.rk-browser-v9-results-head span{font-size:9px!important;letter-spacing:2px!important;color:#176B42!important;font-weight:900!important;text-transform:uppercase!important}
+.rk-browser-v9-results-head h2{font-size:22px!important;line-height:1.05!important;margin-top:4px!important}
+.rk-hand-browser-v9 .rk-hand-card{border-radius:18px!important;margin-bottom:10px!important;border:1px solid rgba(26,20,16,.08)!important;background:linear-gradient(145deg,#FFFDF8,#F8F1E6)!important;box-shadow:0 5px 18px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)!important}
+.rk-hand-browser-v9 .rk-hand-card>button{padding:13px 14px!important;min-height:70px!important}
+.rk-hand-browser-v9 .rk-hand-card>button span[style*="Fraunces"]{font-size:16px!important;line-height:1.12!important}
+.rk-hand-browser-v9 .rk-hand-card>button div[style*="font-size:10px"]{font-size:11.5px!important;line-height:1.35!important;color:rgba(26,20,16,.55)!important}
+.rk-hand-card-open{border-color:rgba(23,107,66,.22)!important;box-shadow:0 10px 26px rgba(26,20,16,.06),inset 0 1px 0 rgba(255,255,255,.82)!important}
+.rk-hand-browser-v9 .rk-hand-card-open [style*="COMPLETED HAND"],.rk-hand-browser-v9 .rk-hand-card-open [style*="WHAT TO BUILD"]{font-size:9px!important;letter-spacing:2.2px!important;color:#176B42!important;font-weight:950!important}
+.rk-hand-browser-v9 .rk-hand-card-open [style*="background:C.bg2"]{border-radius:0!important}
+.rk-hand-browser-v9 .rk-hand-card-open [style*="font-size:11"]{line-height:1.42!important}
+.rk-browser-v9-empty{padding:20px 18px!important;border-radius:21px!important;text-align:left!important}
+.rk-browser-v9-empty h2{font-size:24px!important;line-height:1.02!important;margin-bottom:7px!important}
+.rk-browser-v9-load{height:46px!important;border-radius:16px!important;margin-top:8px!important}
+@media(max-width:390px){
+  .rk-daily-entry-v6-copy{font-size:13.5px!important;max-width:286px!important}
+  .rk-room-live-v6-title{font-size:24px!important}
+  .rk-browser-v9-section{min-width:122px!important}
+  .rk-browser-v9-controls{top:88px!important}
+}
 `;
 
 
@@ -13478,7 +13561,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     return(
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:10,marginBottom:2,position:"relative"}}>
         {streak>0?(
-          <button onClick={()=>setScreen("profile")} aria-label="View streak" style={{display:"inline-flex",alignItems:"center",gap:6,border:`1px solid ${C.gold}30`,background:`linear-gradient(135deg,#FFF9EA,${C.cinn}08)`,color:C.cinn,borderRadius:999,padding:"5px 9px 5px 7px",fontSize:11,fontWeight:900,cursor:"pointer",boxShadow:`0 4px 14px ${C.cinn}10`,minHeight:30}}>
+          <button onClick={()=>setScreen("stats")} aria-label="View streak stats" style={{display:"inline-flex",alignItems:"center",gap:6,border:`1px solid ${C.gold}30`,background:`linear-gradient(135deg,#FFF9EA,${C.cinn}08)`,color:C.cinn,borderRadius:999,padding:"5px 9px 5px 7px",fontSize:11,fontWeight:900,cursor:"pointer",boxShadow:`0 4px 14px ${C.cinn}10`,minHeight:30}}>
             <span style={{width:19,height:19,borderRadius:99,display:"inline-flex",alignItems:"center",justifyContent:"center",background:C.cinn+"12",fontSize:10,lineHeight:1}}>🔥</span>
             <span style={{fontFamily:F.d,fontSize:12,fontWeight:900,lineHeight:1}}>{streak}d</span>
             <span style={{fontSize:9,fontWeight:900,letterSpacing:0.5,textTransform:"uppercase",opacity:0.72}}>streak</span>
@@ -15543,7 +15626,7 @@ function HandRenderer({hand, defaultOpen=false}){
 
         {/* Plain-English breakdown */}
         <div style={{padding:"10px 14px"}}>
-          <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>BUILD THIS WITH</div>
+          <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>WHAT TO BUILD</div>
           <div style={{display:"flex",flexDirection:"column",gap:5}}>
             {breakdown.map((g,i)=>{
               const cc=g.cardColor;
@@ -15930,9 +16013,9 @@ function HandBrowserScreen({home,setScreen}){
       <section className="rk-browser-v9-hero">
         <div className="rk-simple-kicker">2026 NMJL Card</div>
         <h1>{sec?sec.name:"Hand Browser"}</h1>
-        <p>{sec?`${allHands.length} matching hands. Open a hand to study shape, section, and constraints.`:"Pick a section or search for a tile, pattern, dragon, or rule."}</p>
+        <p>{sec?`${allHands.length} matching hands. Tap a hand to see the tiles, joker rules, and constraints.`:"Pick a section. Tap a hand. See the exact groups you need."}</p>
         <div className="rk-browser-v9-search-wrap">
-          <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search: 2468, dragon, concealed, any 2 suits" />
+          <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search hands: 2468, dragon, concealed, flowers" />
         </div>
       </section>
 
@@ -15945,6 +16028,8 @@ function HandBrowserScreen({home,setScreen}){
           </button>
         ))}
       </section>
+
+      <div className="rk-browser-v13-helper">Tip: sections stay close by. Pick one, then open the first hand to scan the shape.</div>
 
       <section className="rk-browser-v9-controls">
         <button className={onlyConcealed?"active":""} onClick={()=>setOnlyConcealed(v=>!v)}>Concealed only</button>
@@ -15974,15 +16059,15 @@ function HandBrowserScreen({home,setScreen}){
       <section id="rk-hand-results" className="rk-browser-v9-results-head">
         <div>
           <span>{activeSec||search||onlyConcealed?"Results":"Start here"}</span>
-          <h2>{activeSec||search||onlyConcealed?`${allHands.length} matching hands`:"Choose a section to browse."}</h2>
+          <h2>{activeSec||search||onlyConcealed?`${allHands.length} matching hands`:"Choose a section above to browse hands."}</h2>
         </div>
       </section>
 
       {!(activeSec||search||onlyConcealed)&&(
         <div className="rk-browser-v9-empty">
-          <h2>Make the card feel smaller.</h2>
-          <p>Start with one section. Scan the shape. Then open the hand details when a pattern looks familiar.</p>
-          <button onClick={()=>setActiveSec("cr")}>Start with Consecutive Runs</button>
+          <h2>Start with one section.</h2>
+          <p>The card gets easier when you look at one family of hands at a time.</p>
+          <button onClick={()=>setActiveSec("cr")}>Browse Consecutive Runs</button>
         </div>
       )}
 
@@ -15991,7 +16076,7 @@ function HandBrowserScreen({home,setScreen}){
       )}
 
       {(activeSec||search||onlyConcealed)&&visibleHands.map((hand,i)=>(
-        <HandRenderer key={`${hand.sec}-${hand.label}-${i}`} hand={hand} defaultOpen={i<2}/>
+        <HandRenderer key={`${hand.sec}-${hand.label}-${i}`} hand={hand} defaultOpen={i===0}/>
       ))}
 
       {(activeSec||search||onlyConcealed)&&allHands.length>visibleLimit&&(
