@@ -3696,6 +3696,256 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-room-live-v6-preview-card{border-radius:16px;padding:11px 12px}
 }
 
+
+/* ─── Final homepage polish: spacing, social standings, learning, email ─── */
+.rk-startup-hero-v4{
+  padding-bottom:10px!important;
+  margin-bottom:12px!important;
+}
+.rk-startup-subtitle-v4{
+  margin-bottom:10px!important;
+}
+.rk-home-landing-flow{
+  gap:17px!important;
+}
+.rk-daily-entry-v6{
+  margin-top:6px!important;
+}
+
+.rk-room-live-v6{
+  padding:0!important;
+  border-radius:30px!important;
+  overflow:hidden!important;
+  background:linear-gradient(150deg,#062B18 0%,#0E3B25 46%,#145333 72%,#061E12 100%)!important;
+  box-shadow:0 18px 46px rgba(6,43,24,.20),inset 0 1px 0 rgba(255,255,255,.10)!important;
+}
+.rk-room-live-v6-summary{
+  padding:22px 20px 16px!important;
+  background:transparent!important;
+}
+.rk-room-live-v6-top{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 84px!important;
+  align-items:start!important;
+  gap:14px!important;
+}
+.rk-room-live-v6-kicker{
+  margin-bottom:11px!important;
+  font-size:9px!important;
+  letter-spacing:2.55px!important;
+}
+.rk-room-live-v6-title{
+  font-size:26px!important;
+  line-height:1.02!important;
+  letter-spacing:-.72px!important;
+  margin:0 0 8px!important;
+}
+.rk-room-live-v6-copy{
+  font-size:12.4px!important;
+  line-height:1.45!important;
+  color:rgba(255,255,255,.70)!important;
+  max-width:24ch!important;
+  font-weight:760!important;
+}
+.rk-room-live-v6-score{
+  width:84px!important;
+  min-width:84px!important;
+  height:84px!important;
+  border-radius:24px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:rgba(255,255,255,.075)!important;
+  border:1px solid rgba(243,212,107,.20)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10)!important;
+  padding:0!important;
+}
+.rk-room-live-v6-score strong{
+  font-size:34px!important;
+  color:#F3D46B!important;
+}
+.rk-room-live-v6-score span{
+  margin-top:7px!important;
+  font-size:7.5px!important;
+  letter-spacing:1.55px!important;
+  color:rgba(255,255,255,.54)!important;
+}
+.rk-room-live-v6-preview-grid{
+  position:relative!important;
+  z-index:2!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:10px!important;
+  padding:0 18px 18px!important;
+  margin-top:0!important;
+}
+.rk-room-live-v6-preview-card{
+  position:relative!important;
+  overflow:hidden!important;
+  border-radius:19px!important;
+  padding:13px!important;
+  text-align:left!important;
+  background:rgba(255,255,255,.105)!important;
+  border:1px solid rgba(255,255,255,.15)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10)!important;
+  transition:transform .18s ease,background .18s ease,border-color .18s ease!important;
+}
+.rk-room-live-v6-preview-card:active{
+  transform:scale(.985)!important;
+}
+.rk-room-live-v6-preview-head{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:8px!important;
+  margin-bottom:9px!important;
+}
+.rk-room-live-v6-preview-card strong{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:13.5px!important;
+  line-height:1.05!important;
+  color:#fff!important;
+  letter-spacing:-.15px!important;
+}
+.rk-room-live-v6-preview-head span{
+  border-radius:999px!important;
+  padding:4px 7px!important;
+  background:rgba(243,212,107,.12)!important;
+  border:1px solid rgba(243,212,107,.18)!important;
+  color:#F3D46B!important;
+  font-size:8px!important;
+  font-weight:950!important;
+  white-space:nowrap!important;
+}
+.rk-room-live-v6-preview-row{
+  min-height:28px!important;
+  padding:6px 0!important;
+  border-top:1px solid rgba(255,255,255,.08)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:8px!important;
+}
+.rk-room-live-v6-preview-row:first-of-type{
+  background:transparent!important;
+  border-radius:0!important;
+  padding-top:7px!important;
+}
+.rk-room-live-v6-preview-name{
+  font-size:10.8px!important;
+  font-weight:850!important;
+  color:rgba(255,255,255,.75)!important;
+  min-width:0!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.rk-room-live-v6-preview-score{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:15px!important;
+  color:#F3D46B!important;
+  flex-shrink:0!important;
+}
+.rk-room-live-v6-preview-link{
+  margin-top:9px!important;
+  font-size:10.5px!important;
+  color:rgba(255,255,255,.82)!important;
+  font-weight:950!important;
+}
+
+.rk-learn-home-v8{
+  padding:20px 18px!important;
+  border-radius:28px!important;
+}
+.rk-learn-home-head{
+  margin-bottom:14px!important;
+}
+.rk-learn-home-kicker{
+  margin-bottom:10px!important;
+  font-size:9px!important;
+  letter-spacing:2.4px!important;
+}
+.rk-learn-home-title{
+  font-size:23px!important;
+  line-height:1.04!important;
+  letter-spacing:-.6px!important;
+  margin-bottom:8px!important;
+}
+.rk-learn-home-copy{
+  font-size:12.3px!important;
+  line-height:1.48!important;
+  max-width:31ch!important;
+}
+.rk-learn-home-grid{
+  gap:9px!important;
+}
+.rk-learn-home-card{
+  min-height:62px!important;
+  padding:13px 14px!important;
+  border-radius:18px!important;
+}
+.rk-learn-home-text strong{
+  font-size:14px!important;
+  line-height:1.1!important;
+}
+.rk-learn-home-text span{
+  font-size:11.5px!important;
+  line-height:1.35!important;
+}
+
+.rk-email-home-v8{
+  margin-top:2px!important;
+  padding:21px 18px 19px!important;
+  border-radius:28px!important;
+  background:linear-gradient(150deg,#092316 0%,#123E28 50%,#082014 100%)!important;
+}
+.rk-email-kicker-v8{
+  margin-bottom:10px!important;
+}
+.rk-email-title-v8{
+  font-size:22px!important;
+  line-height:1.05!important;
+  margin-bottom:9px!important;
+}
+.rk-email-copy-v8{
+  margin:0 0 14px!important;
+  font-size:12.4px!important;
+  line-height:1.48!important;
+  color:rgba(255,255,255,.70)!important;
+  max-width:31ch!important;
+}
+.rk-email-form-v8{
+  gap:9px!important;
+  align-items:center!important;
+}
+.rk-email-input-v8,
+.rk-email-btn-v8{
+  height:42px!important;
+}
+.rk-email-input-v8{
+  font-size:12.5px!important;
+  padding:0 13px!important;
+}
+.rk-email-btn-v8{
+  padding:0 15px!important;
+  font-size:12px!important;
+}
+
+@media(max-width:430px){
+  .rk-home-landing-flow{gap:18px!important;}
+  .rk-startup-hero-v4{padding-bottom:12px!important;margin-bottom:14px!important;}
+  .rk-room-live-v6-preview-grid{grid-template-columns:1fr!important;padding:0 15px 16px!important;}
+  .rk-room-live-v6-summary{padding:21px 18px 16px!important;}
+  .rk-room-live-v6-top{grid-template-columns:minmax(0,1fr) 78px!important;gap:12px!important;}
+  .rk-room-live-v6-score{width:78px!important;min-width:78px!important;height:78px!important;border-radius:22px!important;}
+  .rk-room-live-v6-score strong{font-size:31px!important;}
+  .rk-room-live-v6-title{font-size:25px!important;}
+  .rk-learn-home-title,.rk-email-title-v8{font-size:22px!important;}
+  .rk-email-form-v8{flex-direction:column!important;align-items:stretch!important;}
+  .rk-email-input-v8,.rk-email-btn-v8{width:100%!important;}
+}
+
 `;
 
 
@@ -14231,7 +14481,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const leader=(globalRows&&globalRows[0])||{};
     const leaderName=(leader.name||currentName||"Top player").trim();
     const pointsBehind=Number.isFinite(leadValue)&&Number.isFinite(Number(currentScore))?Math.max(0,leadValue-Number(currentScore)):null;
-    const roomLine=currentScore?pointsBehind===0?"You own the room right now.":`You’re ${pointsBehind} points off first.`:`${leadValue} is the score to beat.`;
+    const roomLine=currentScore?pointsBehind===0?"You’re holding the table today.":`You’re ${pointsBehind} points off first.`:"See who’s posted and chase the room.";
     const openBoard=()=>activeClubCode?setScreen("leaderboard"):setScreen("globalLeaderboard");
     const boardRows=(globalRows&&globalRows.length?globalRows:homeClubEntries&&homeClubEntries.length?homeClubEntries:[]).slice(0,3);
     const fallbackRows=[
@@ -14244,14 +14494,14 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const clubPreviewRows=(clubRows&&clubRows.length?clubRows:(activeClubCode?fallbackRows:rows)).slice(0,3);
     const PreviewBoard=({label,items,onClick})=>(
       <button type="button" onClick={onClick} className="rk-room-live-v6-preview-card">
-        <strong>{label}</strong>
+        <div className="rk-room-live-v6-preview-head"><strong>{label}</strong><span>Open board</span></div>
         {items.map((r,i)=>(
           <div key={`${label}-${i}-${r.name||'row'}`} className="rk-room-live-v6-preview-row">
             <span className="rk-room-live-v6-preview-name">#{i+1} {r.name||"Player"}</span>
             <span className="rk-room-live-v6-preview-score">{r.iqScore||r.score||"—"}</span>
           </div>
         ))}
-        <div className="rk-room-live-v6-preview-link">Tap to open →</div>
+        <div className="rk-room-live-v6-preview-link">View today’s room →</div>
       </button>
     );
     return(
@@ -14263,7 +14513,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               <h2 className="rk-room-live-v6-title">Challenge Your Club</h2>
               <p className="rk-room-live-v6-copy">{roomLine}</p>
             </div>
-            <div className="rk-room-live-v6-score"><strong>{leadValue}</strong><span>to beat</span></div>
+            <div className="rk-room-live-v6-score"><strong>{leadValue}</strong><span>room lead</span></div>
           </div>
         </button>
         <div className="rk-room-live-v6-preview-grid">
