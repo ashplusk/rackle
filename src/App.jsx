@@ -4122,6 +4122,47 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-email-input-v8,.rk-email-btn-v8{width:100%!important;}
 }
 
+
+
+/* ─── v17: Live standings declutter + lighter clubhouse updates ─────────── */
+.rk-room-live-v17{padding-bottom:14px!important;overflow:hidden!important}
+.rk-room-live-v17 .rk-room-live-v6-title{font-size:26px!important;line-height:1.02!important;letter-spacing:-.65px!important}
+.rk-room-live-v17 .rk-room-live-v6-copy{font-size:12.5px!important;line-height:1.36!important;max-width:27ch!important;color:rgba(255,255,255,.70)!important;font-weight:760!important;margin-top:6px!important}
+.rk-room-live-v17 .rk-room-live-v6-score{min-width:68px!important;padding:10px 10px!important;border-radius:17px!important}
+.rk-room-live-v17 .rk-room-live-v6-score strong{font-size:26px!important}
+.rk-room-live-v17-table{position:relative;z-index:3;width:calc(100% - 32px);margin:4px 16px 10px;padding:12px;border:1px solid rgba(255,255,255,.13);border-radius:20px;background:rgba(255,255,255,.075);box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 8px 20px rgba(0,0,0,.06);color:#fff;text-align:left;cursor:pointer;transition:transform .18s ease,background .18s ease,border-color .18s ease}
+.rk-room-live-v17-table:hover{transform:translateY(-1px);background:rgba(255,255,255,.10);border-color:rgba(243,212,107,.22)}
+.rk-room-live-v17-table:active{transform:scale(.992)}
+.rk-room-live-v17-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;min-width:0}
+.rk-room-live-v17-head-copy{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.rk-room-live-v17-head-copy strong{font-family:'Fraunces',Georgia,serif;font-size:15px;line-height:1.05;font-weight:950;color:#fff;letter-spacing:-.25px}
+.rk-room-live-v17-head-copy span{font-size:10.5px;line-height:1.25;color:rgba(255,255,255,.58);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk-room-live-v17-cta{flex-shrink:0;border-radius:999px;padding:6px 9px;background:rgba(243,212,107,.13);border:1px solid rgba(243,212,107,.18);color:#F3D46B;font-size:10.5px;font-weight:950}
+.rk-room-live-v17-rows{display:grid;gap:6px}
+.rk-room-live-v17-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 9px;border-radius:13px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.075)}
+.rk-room-live-v17-row span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px;color:rgba(255,255,255,.78);font-weight:850}
+.rk-room-live-v17-row strong{font-family:'Fraunces',Georgia,serif;font-size:14px;color:#F3D46B;font-weight:950}
+.rk-room-live-v17-row-you{background:rgba(243,212,107,.13)!important;border-color:rgba(243,212,107,.20)!important}
+.rk-room-live-v17-actions{position:relative;z-index:3;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 16px}
+.rk-room-live-v17-actions button{height:38px;border-radius:999px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.075);color:rgba(255,255,255,.82);font-size:11.5px;font-weight:950;cursor:pointer;transition:transform .16s ease,background .16s ease,border-color .16s ease}
+.rk-room-live-v17-actions button:first-child{background:linear-gradient(145deg,#F3D46B,#E8C65B);border-color:rgba(255,255,255,.18);color:#1A1410;box-shadow:0 8px 18px rgba(160,120,40,.14)}
+.rk-room-live-v17-actions button:hover{transform:translateY(-1px);border-color:rgba(243,212,107,.24)}
+.rk-room-live-v17 .rk-room-live-v6-social-strip,.rk-room-live-v17 .rk-room-live-v6-preview-grid,.rk-room-live-v17 .rk-room-live-v6-action-row{display:none!important}
+.rk-room-live-v17 .rk-room-live-v6-avatar{width:23px!important;height:23px!important;font-size:9px!important;margin-left:-5px!important}
+.rk-room-live-v17 .rk-room-live-v6-avatars{padding-left:5px!important}
+@media(max-width:390px){.rk-room-live-v17 .rk-room-live-v6-title{font-size:25px!important}.rk-room-live-v17-table{width:calc(100% - 28px);margin-left:14px;margin-right:14px}.rk-room-live-v17-actions{margin-left:14px;margin-right:14px}.rk-room-live-v17-head-copy span{white-space:normal}.rk-room-live-v17-actions button{height:36px;font-size:11px}}
+
+.rk-email-home-v8{background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;border:1px solid rgba(26,20,16,.075)!important;box-shadow:0 8px 24px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78)!important;color:#1A1410!important}
+.rk-email-home-v8:after{opacity:.03!important}
+.rk-email-kicker-v8{background:rgba(23,107,66,.07)!important;border-color:rgba(23,107,66,.10)!important;color:#176B42!important}
+.rk-email-title-v8{color:#1A1410!important}
+.rk-email-copy-v8{color:rgba(26,20,16,.58)!important;font-weight:720!important}
+.rk-email-form-v8{background:rgba(26,20,16,.035)!important;border-color:rgba(26,20,16,.065)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important}
+.rk-email-input-v8{background:#FFFDF8!important;border-color:rgba(26,20,16,.10)!important;color:#1A1410!important}
+.rk-email-input-v8::placeholder{color:rgba(26,20,16,.42)!important}
+.rk-email-btn-v8{background:linear-gradient(135deg,#176B42,#0F5432)!important;color:#fff!important;border-color:rgba(255,255,255,.14)!important;box-shadow:0 8px 16px rgba(23,107,66,.14),inset 0 1px 0 rgba(255,255,255,.16)!important}
+.rk-email-done-v8{background:rgba(23,107,66,.06)!important;border-color:rgba(23,107,66,.10)!important;color:#1A1410!important}
+.rk-email-done-v8 div{color:#1A1410!important}
 `;
 
 
@@ -14678,50 +14719,48 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const socialCopy=activeClubCode
       ? `${clubCount||1} club score${(clubCount||1)===1?"":"s"} live today`
       : `${globalCount||1} player${(globalCount||1)===1?"":"s"} in today’s Rackle room`;
-    const PreviewBoard=({label,items,onClick,isClub=false})=>(
-      <button type="button" onClick={onClick} className="rk-room-live-v6-preview-card">
-        <div className="rk-room-live-v6-preview-head"><strong>{label}</strong><span>{isClub?"Club":"Global"}</span></div>
-        {items.slice(0,3).map((r,i)=>{
-          const isYou=(r.name||"").toLowerCase().includes((currentName||"__never__").toLowerCase()) && !!currentScore;
-          return (
-            <div key={`${label}-${i}-${r.name||'row'}`} className={`rk-room-live-v6-preview-row ${isYou?"rk-room-live-v6-preview-row-you":""}`}>
-              <span className="rk-room-live-v6-preview-name">#{i+1} {isYou?"You":(r.name||"Player")}</span>
-              <span className="rk-room-live-v6-preview-score">{r.iqScore||r.score||"—"}</span>
-            </div>
-          );
-        })}
-        <div className="rk-room-live-v6-preview-link">Tap to open the chase →</div>
-      </button>
-    );
+    const previewRows=(activeClubCode&&clubPreviewRows.length?clubPreviewRows:globalPreviewRows).slice(0,3);
+    const boardLabel=activeClubCode?"Club board":"Rackle room";
+    const secondaryLabel=activeClubCode?"View global":"View club";
+    const secondaryAction=activeClubCode?()=>setScreen("globalLeaderboard"):openBoard;
     return(
-      <section className="rk-room-live-v6" aria-label="Live club standings">
+      <section className="rk-room-live-v6 rk-room-live-v17" aria-label="Live club standings">
         <button type="button" onClick={openBoard} className="rk-room-live-v6-summary" style={{width:"100%",textAlign:"left",display:"block",border:0}}>
           <div className="rk-room-live-v6-top">
             <div>
               <div className="rk-room-live-v6-kicker"><span className="rk-live-spark"/> Live club standings</div>
               <h2 className="rk-room-live-v6-title">Challenge Your Club</h2>
-              <p className="rk-room-live-v6-copy">{roomLine}</p>
+              <p className="rk-room-live-v6-copy">{chaseCopy}</p>
             </div>
-            <div className="rk-room-live-v6-score"><strong>{leadValue}</strong><span>room lead</span></div>
+            <div className="rk-room-live-v6-score"><strong>{leadValue}</strong><span>leader</span></div>
           </div>
         </button>
-        <div className="rk-room-live-v6-social-strip" onClick={openBoard} role="button" tabIndex={0}>
-          <div className="rk-room-live-v6-social-left">
+
+        <button type="button" onClick={openBoard} className="rk-room-live-v17-table">
+          <div className="rk-room-live-v17-head">
             <div className="rk-room-live-v6-avatars" aria-hidden="true">
               {(firstNames.length?firstNames:[leaderName,"You","Club"]).slice(0,3).map((n,i)=><span key={`${n}-${i}`} className="rk-room-live-v6-avatar">{initials(n)}</span>)}
             </div>
-            <div className="rk-room-live-v6-social-copy"><strong>{socialCopy}</strong><br/>{chaseCopy}</div>
+            <div className="rk-room-live-v17-head-copy"><strong>{boardLabel}</strong><span>{socialCopy}</span></div>
+            <span className="rk-room-live-v17-cta">Open →</span>
           </div>
-          <div className="rk-room-live-v6-mini-cta">Tap to chase</div>
-        </div>
-        <div className="rk-room-live-v6-preview-grid">
-          <PreviewBoard label="Rackle room" items={globalPreviewRows} onClick={()=>setScreen("globalLeaderboard")} />
-          <PreviewBoard label="Club room" items={clubPreviewRows} onClick={openBoard} isClub />
-        </div>
-        <button type="button" onClick={openBoard} className="rk-room-live-v6-action-row">
-          <span className="rk-room-live-v6-action-copy"><strong>See the full table</strong>{currentScore?"Check who moved, who posted, and where you sit.":"Play the daily rack, then come back to climb the room."}</span>
-          <span className="rk-room-live-v6-action-button">Open standings</span>
+          <div className="rk-room-live-v17-rows">
+            {previewRows.map((r,i)=>{
+              const isYou=(r.name||"").toLowerCase().includes((currentName||"__never__").toLowerCase()) && !!currentScore;
+              return (
+                <div key={`${i}-${r.name||'row'}`} className={`rk-room-live-v17-row ${isYou?"rk-room-live-v17-row-you":""}`}>
+                  <span>{i+1}. {isYou?"You":(r.name||"Player")}</span>
+                  <strong>{r.iqScore||r.score||"—"}</strong>
+                </div>
+              );
+            })}
+          </div>
         </button>
+
+        <div className="rk-room-live-v17-actions">
+          <button type="button" onClick={openBoard}>See standings</button>
+          <button type="button" onClick={secondaryAction}>{secondaryLabel}</button>
+        </div>
       </section>
     );
   };
