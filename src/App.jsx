@@ -4163,6 +4163,83 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-email-btn-v8{background:linear-gradient(135deg,#176B42,#0F5432)!important;color:#fff!important;border-color:rgba(255,255,255,.14)!important;box-shadow:0 8px 16px rgba(23,107,66,.14),inset 0 1px 0 rgba(255,255,255,.16)!important}
 .rk-email-done-v8{background:rgba(23,107,66,.06)!important;border-color:rgba(23,107,66,.10)!important;color:#1A1410!important}
 .rk-email-done-v8 div{color:#1A1410!important}
+
+/* ─── v18: Improve game, Learn overhaul, no-pill updates ───────────── */
+.rk-warmup-card-v18{
+  border-radius:24px!important;
+  padding:18px 18px 17px!important;
+  background:linear-gradient(145deg,#FFFDF8 0%,#F7F0E5 68%,rgba(23,107,66,.055) 100%)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 8px 24px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.80)!important;
+  align-items:flex-start!important;
+  gap:14px!important;
+}
+.rk-warmup-card-v18:after{
+  content:""!important;
+  right:-30px!important;bottom:-36px!important;
+  width:136px!important;height:136px!important;
+  background:radial-gradient(circle,rgba(23,107,66,.075),transparent 67%)!important;
+}
+.rk-warmup-card-v18:hover{transform:translateY(-1px)!important;box-shadow:0 12px 30px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.86)!important}
+.rk-warmup-v18-left{position:relative;z-index:1;min-width:0;flex:1!important}
+.rk-warmup-v18-kicker{margin-bottom:8px!important;color:#176B42!important;letter-spacing:2.1px!important}
+.rk-warmup-v18-title{font-size:22px!important;line-height:1.03!important;margin-bottom:7px!important;letter-spacing:-.55px!important}
+.rk-warmup-v18-copy{font-size:12.5px!important;line-height:1.42!important;font-weight:720!important;color:rgba(26,20,16,.60)!important;max-width:33ch!important}
+.rk-warmup-v18-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+.rk-warmup-v18-tags span{display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:999px;background:rgba(23,107,66,.055);border:1px solid rgba(23,107,66,.085);color:#176B42;font-size:10px;font-weight:900;line-height:1}
+.rk-warmup-v18-cta{margin-top:2px!important;background:#176B42!important;color:#fff!important;border-color:rgba(255,255,255,.16)!important;box-shadow:0 8px 18px rgba(23,107,66,.14),inset 0 1px 0 rgba(255,255,255,.16)!important}
+
+.rk-learn-home-v18{
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+  padding:8px 0 4px!important;
+  margin-top:2px!important;
+}
+.rk-learn-home-v18-head{margin-bottom:13px!important;padding:0 2px!important}
+.rk-learn-home-v18-kicker{display:block!important;margin-bottom:7px!important;padding:0!important;background:transparent!important;border:none!important;color:rgba(23,107,66,.82)!important;font-size:8.5px!important;letter-spacing:2.35px!important;font-weight:950!important;text-transform:uppercase!important}
+.rk-learn-home-v18-title{font-size:22px!important;line-height:1.04!important;letter-spacing:-.55px!important;margin:0 0 7px!important;color:#1A1410!important}
+.rk-learn-home-v18-copy{font-size:12.3px!important;line-height:1.45!important;color:rgba(26,20,16,.58)!important;font-weight:720!important;max-width:35ch!important;margin:0!important}
+.rk-learn-home-v18-grid{display:grid!important;gap:8px!important}
+.rk-learn-home-v18-card{min-height:64px!important;padding:12px 12px!important;border-radius:18px!important;background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;border:1px solid rgba(26,20,16,.07)!important;box-shadow:0 5px 16px rgba(26,20,16,.032),inset 0 1px 0 rgba(255,255,255,.76)!important;gap:11px!important}
+.rk-learn-home-v18-card:hover{transform:translateY(-1px)!important;border-color:rgba(23,107,66,.14)!important;box-shadow:0 9px 22px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important}
+.rk-learn-home-v18-icon{width:31px!important;height:31px!important;min-width:31px!important;border-radius:12px!important;background:rgba(23,107,66,.06)!important;border:1px solid rgba(23,107,66,.09)!important;color:#176B42!important;font-size:12px!important}
+.rk-learn-home-v18-text strong{font-size:14px!important;line-height:1.12!important;letter-spacing:-.15px!important}
+.rk-learn-home-v18-text span{font-size:11.5px!important;line-height:1.32!important;color:rgba(26,20,16,.55)!important;font-weight:720!important}
+.rk-learn-home-v18-arrow{font-size:10.5px!important;font-weight:950!important;color:#176B42!important;background:rgba(23,107,66,.065)!important;border:1px solid rgba(23,107,66,.09)!important;border-radius:999px!important;padding:5px 9px!important;line-height:1!important}
+
+.rk-email-home-v8{
+  border-radius:0!important;
+  margin:12px 0 4px!important;
+  padding:18px 2px 6px!important;
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+}
+.rk-email-home-v8:after{display:none!important}
+.rk-email-kicker-v18{
+  display:block!important;
+  padding:0!important;
+  margin:0 0 7px!important;
+  background:transparent!important;
+  border:none!important;
+  color:rgba(23,107,66,.82)!important;
+  font-size:8.5px!important;
+  letter-spacing:2.35px!important;
+  font-weight:950!important;
+  text-transform:uppercase!important;
+}
+.rk-email-title-v8{font-size:21px!important;line-height:1.05!important;margin-bottom:7px!important;color:#1A1410!important}
+.rk-email-copy-v8{font-size:12.3px!important;line-height:1.45!important;margin:0 0 12px!important;color:rgba(26,20,16,.56)!important;max-width:34ch!important}
+.rk-email-form-v8{padding:0!important;background:transparent!important;border:none!important;box-shadow:none!important;gap:8px!important}
+.rk-email-input-v8{height:40px!important;border-radius:14px!important;background:#FFFDF8!important;border:1px solid rgba(26,20,16,.10)!important}
+.rk-email-btn-v8{height:40px!important;border-radius:14px!important}
+.rk-email-done-v8{background:rgba(23,107,66,.055)!important;border:1px solid rgba(23,107,66,.09)!important;border-radius:18px!important;color:#1A1410!important}
+@media(max-width:599px){
+  .rk-warmup-card-v18{flex-direction:column!important}
+  .rk-warmup-v18-cta{width:100%!important}
+}
+
 `;
 
 
@@ -12934,7 +13011,7 @@ function EmailSignup(){
   };
   return(
     <section className="rk-email-home-v8" aria-label="Sign up for Rackle updates">
-      <div className="rk-email-kicker-v8"><span className="rk-live-spark"/> Clubhouse updates</div>
+      <div className="rk-email-kicker-v8 rk-email-kicker-v18">Clubhouse updates</div>
       <h2 className="rk-email-title-v8">Bring your table back tomorrow.</h2>
       {done?(
         <div className="rk-email-done-v8"><div style={{fontFamily:F.d,fontSize:20,fontWeight:950,marginBottom:4}}>You’re on the list.</div><div style={{fontSize:12,color:"rgba(255,255,255,.72)",fontWeight:800}}>We’ll send new Rackle drops and club updates.</div></div>
@@ -14564,13 +14641,18 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   );
 
   const PracticeCard=()=> (
-    <button onClick={()=>go("free")} className="rk-warmup-card-v6" aria-label="Start a warm up rack">
-      <div className="rk-warmup-v6-main">
-        <div className="rk-warmup-v6-kicker"><span>🔥</span> 2 minute daily warm-up</div>
-        <div className="rk-warmup-v6-title">Improve Your Game</div>
-        <div className="rk-warmup-v6-copy">Free play. Practice more hands. No pressure.</div>
+    <button onClick={()=>go("free")} className="rk-warmup-card-v6 rk-warmup-card-v18" aria-label="Start a free play rack">
+      <div className="rk-warmup-v18-left">
+        <div className="rk-warmup-v6-kicker rk-warmup-v18-kicker"><span>🔥</span> Free play room</div>
+        <div className="rk-warmup-v6-title rk-warmup-v18-title">Improve Your Game</div>
+        <div className="rk-warmup-v6-copy rk-warmup-v18-copy">Play another Charleston without touching today’s score.</div>
+        <div className="rk-warmup-v18-tags" aria-hidden="true">
+          <span>Practice rack</span>
+          <span>Coach view</span>
+          <span>No streak pressure</span>
+        </div>
       </div>
-      <span className="rk-warmup-v6-cta">Play Free Play →</span>
+      <span className="rk-warmup-v6-cta rk-warmup-v18-cta">Start free play →</span>
     </button>
   );
 
@@ -14767,26 +14849,25 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
 
   const Learn=()=> (
-    <section className="rk-learn-home-v8 rk-learn-home-v12" aria-label="Learn and explore Rackle">
-      <div className="rk-learn-home-head">
-        <div className="rk-learn-home-kicker"><span className="rk-live-spark"/> Learn + Explore</div>
-        <h2 className="rk-learn-home-title">Sharpen your table read</h2>
-        <p className="rk-learn-home-copy">Quick guides, the hand browser, and extra racks when you want more practice.</p>
+    <section className="rk-learn-home-v8 rk-learn-home-v12 rk-learn-home-v18" aria-label="Learn and explore Rackle">
+      <div className="rk-learn-home-head rk-learn-home-v18-head">
+        <div className="rk-learn-home-kicker rk-learn-home-v18-kicker">Learn + Explore</div>
+        <h2 className="rk-learn-home-title rk-learn-home-v18-title">Sharpen your table read</h2>
+        <p className="rk-learn-home-copy rk-learn-home-v18-copy">Three quick ways to learn the card, check a section, or play another rack.</p>
       </div>
-      <div className="rk-learn-home-grid">
+      <div className="rk-learn-home-grid rk-learn-home-v18-grid">
         {[
-          ["01","How to Play","Quick rules and scoring.",()=>setScreen("howto")],
-          ["02","2026 Hand Browser","Find a section faster.",()=>setScreen("handbrowser")],
-          ["03","Free Play","Practice another rack.",()=>go("free")],
+          ["01","How to Play","Get the flow before your first rack.",()=>setScreen("howto")],
+          ["02","2026 Hand Browser","Scan sections and hand shapes faster.",()=>setScreen("handbrowser")],
+          ["03","Free Play","Play extra hands outside the Daily.",()=>go("free")],
         ].map(([mark,title,sub,fn])=>(
-          <button key={title} className="rk-learn-home-card" onClick={fn}>
-            <span className="rk-learn-home-icon">{mark}</span>
-            <span className="rk-learn-home-text"><strong>{title}</strong><span>{sub}</span></span>
-            <span className="rk-learn-home-arrow">›</span>
+          <button key={title} className="rk-learn-home-card rk-learn-home-v18-card" onClick={fn}>
+            <span className="rk-learn-home-icon rk-learn-home-v18-icon">{mark}</span>
+            <span className="rk-learn-home-text rk-learn-home-v18-text"><strong>{title}</strong><span>{sub}</span></span>
+            <span className="rk-learn-home-arrow rk-learn-home-v18-arrow">Open</span>
           </button>
         ))}
       </div>
-
     </section>
   );
 
