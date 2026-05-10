@@ -4423,6 +4423,157 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-next-rack-card-v11 [class*="timer"] *{
   color:#FFF8E6!important;
 }
+
+
+/* ─── v24 Free Play Room homepage overhaul ─────────────────────────────── */
+.rk-freeplay-v24{
+  position:relative;
+  overflow:hidden;
+  margin:0 0 22px;
+  padding:23px 20px 20px;
+  border-radius:28px;
+  background:
+    radial-gradient(circle at 92% 14%,rgba(23,107,66,.10),transparent 110px),
+    linear-gradient(145deg,#FFFDF8 0%,#F7F0E5 100%);
+  border:1px solid rgba(26,20,16,.075);
+  box-shadow:0 10px 30px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82);
+  text-align:left;
+}
+.rk-freeplay-v24:after{
+  content:"";
+  position:absolute;
+  right:-34px;
+  bottom:-38px;
+  width:150px;
+  height:150px;
+  border-radius:999px;
+  background:rgba(23,107,66,.045);
+  pointer-events:none;
+}
+.rk-freeplay-v24-top{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:16px;
+  align-items:start;
+}
+.rk-freeplay-v24-kicker{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:9px;
+  letter-spacing:2.65px;
+  text-transform:uppercase;
+  font-weight:950;
+  color:#176B42;
+  margin-bottom:11px;
+}
+.rk-freeplay-v24 h2{
+  font-family:'Fraunces',Georgia,serif;
+  font-size:27px;
+  line-height:1.02;
+  font-weight:950;
+  letter-spacing:-.8px;
+  color:#1A1410;
+  margin:0 0 9px;
+}
+.rk-freeplay-v24 p{
+  font-size:13px;
+  line-height:1.48;
+  color:rgba(26,20,16,.62);
+  font-weight:760;
+  margin:0;
+  max-width:33ch;
+}
+.rk-freeplay-v24-rack{
+  display:flex;
+  gap:5px;
+  padding:7px;
+  border-radius:18px;
+  background:rgba(255,255,255,.62);
+  border:1px solid rgba(23,107,66,.09);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82),0 6px 18px rgba(26,20,16,.04);
+}
+.rk-freeplay-v24-rack span{
+  width:30px;
+  height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:10px;
+  background:linear-gradient(145deg,#FFFDF8,#EEE4D2);
+  border:1px solid rgba(26,20,16,.075);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.92),0 4px 10px rgba(26,20,16,.055);
+  font-family:'Fraunces',Georgia,serif;
+  font-size:18px;
+  font-weight:950;
+  color:#176B42;
+}
+.rk-freeplay-v24-steps{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin:17px 0 15px;
+}
+.rk-freeplay-v24-steps div{
+  min-height:58px;
+  padding:10px 8px;
+  border-radius:17px;
+  background:rgba(255,255,255,.64);
+  border:1px solid rgba(26,20,16,.065);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78);
+}
+.rk-freeplay-v24-steps strong{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:22px;
+  height:22px;
+  border-radius:999px;
+  background:rgba(23,107,66,.08);
+  color:#176B42;
+  font-size:11px;
+  font-weight:950;
+  margin-bottom:6px;
+}
+.rk-freeplay-v24-steps span{
+  display:block;
+  font-size:11px;
+  line-height:1.2;
+  color:rgba(26,20,16,.62);
+  font-weight:850;
+}
+.rk-freeplay-v24-cta{
+  position:relative;
+  z-index:1;
+  width:100%;
+  height:52px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);
+  background:linear-gradient(135deg,#176B42,#0F5432);
+  color:#fff;
+  font-family:'Fraunces',Georgia,serif;
+  font-size:16px;
+  font-weight:950;
+  letter-spacing:-.15px;
+  box-shadow:0 10px 24px rgba(23,107,66,.15),inset 0 1px 0 rgba(255,255,255,.18);
+  cursor:pointer;
+  transition:transform .16s ease,box-shadow .16s ease;
+}
+.rk-freeplay-v24-cta:hover{transform:translateY(-1px);box-shadow:0 14px 28px rgba(23,107,66,.18),inset 0 1px 0 rgba(255,255,255,.20)}
+.rk-freeplay-v24-cta:active{transform:scale(.99)}
+@media(max-width:390px){
+  .rk-freeplay-v24{padding:21px 18px 18px;border-radius:26px}
+  .rk-freeplay-v24-top{grid-template-columns:1fr}
+  .rk-freeplay-v24-rack{width:max-content}
+  .rk-freeplay-v24 h2{font-size:25px}
+  .rk-freeplay-v24-steps{grid-template-columns:1fr}
+  .rk-freeplay-v24-steps div{display:flex;align-items:center;gap:9px;min-height:48px}
+  .rk-freeplay-v24-steps strong{margin-bottom:0;flex-shrink:0}
+}
 .rk-next-rack-card-v11 [style*="color: rgb(26, 20, 16)"],
 .rk-next-rack-card-v11 [style*="color:#1A1410"],
 .rk-next-rack-card-v11 [style*="color: #1A1410"],
@@ -7958,7 +8109,8 @@ function StrategicCharlestonReadCard({iq}){
   );
 }
 function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
-  const{startingRack,finalRack,passedTilesByRound,totalTime,sectionId,chosenHand}=gameState;
+  const{startingRack,finalRack,totalTime,sectionId,chosenHand}=gameState;
+  const passedTilesByRound=rkSanitizePassLog(gameState?.passedTilesByRound||[]);
   if(!startingRack||!finalRack||!sectionId)return null;
 
   // Resolve the specific chosen hand from the catalog.
@@ -14876,21 +15028,28 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   );
 
   const PracticeCard=()=> (
-    <button onClick={()=>go("free")} className="rk-warmup-card-v6 rk-warmup-card-v18 rk-warmup-card-v21" aria-label="Start a free play rack">
-      <div className="rk-warmup-v21-head">
-        <div className="rk-warmup-v21-copy">
-          <div className="rk-warmup-v6-kicker rk-warmup-v18-kicker"><span>🔥</span> Free play room</div>
+    <section className="rk-freeplay-v24" aria-label="Free play practice room">
+      <div className="rk-freeplay-v24-top">
+        <div className="rk-freeplay-v24-copy">
+          <div className="rk-freeplay-v24-kicker"><span>🔥</span> Free play room</div>
           <h2>Improve Your Game</h2>
-          <p>Play extra Charlestons, test different sections, and build confidence without touching today’s score.</p>
+          <p>Practice another Charleston whenever you want. Try a section, get a scorecard, and keep today’s Daily Rackle score untouched.</p>
         </div>
-        <div className="rk-warmup-v21-badge">Unlimited<br/>hands</div>
+        <div className="rk-freeplay-v24-rack" aria-hidden="true">
+          <span>2</span><span>5</span><span>8</span>
+        </div>
       </div>
-      <div className="rk-warmup-v21-actions" aria-hidden="true">
-        <div className="rk-warmup-v21-action"><strong>Practice</strong> another rack</div>
-        <div className="rk-warmup-v21-action"><strong>Review</strong> your read</div>
+
+      <div className="rk-freeplay-v24-steps" aria-label="How Free Play works">
+        <div><strong>1</strong><span>Get a fresh rack</span></div>
+        <div><strong>2</strong><span>Run the Charleston</span></div>
+        <div><strong>3</strong><span>Review your read</span></div>
       </div>
-      <span className="rk-warmup-v21-cta">Start free play →</span>
-    </button>
+
+      <button type="button" onClick={()=>go("free")} className="rk-freeplay-v24-cta">
+        Start Free Play →
+      </button>
+    </section>
   );
 
   const ActivityStrip=()=>{
@@ -15422,12 +15581,7 @@ function Game({mode,home,onDone,settings,setScreen}){
     const dn=getDayNum();
     const isD=mode==="daily";
 
-    const legalPassLog=(passLog||[]).map(p=>({
-      ...p,
-      out:(p.out||[]).filter(t=>t&&t.t!=="j"),
-      in:(p.in||[]).filter(t=>t&&t.t!=="j"),
-      jokerRuleOk:!(p.out||[]).some(t=>t?.t==="j")&&!(p.in||[]).some(t=>t?.t==="j"),
-    }));
+    const legalPassLog=rkSanitizePassLog(passLog);
     const iq=calculateCharlestonIQ({
       startingRack,finalRack:hand,passedTilesByRound:legalPassLog,
       totalTime:totalEl,sectionId:chosenSec,chosenHand,
@@ -15548,13 +15702,14 @@ function Game({mode,home,onDone,settings,setScreen}){
                 const dn2=getDayNum();
                 const isD=mode==="daily";
                 const sr=startingRack&&startingRack.length>0?startingRack:hand;
-                const iq=calculateCharlestonIQ({startingRack:sr,finalRack:hand,passedTilesByRound:passLog,totalTime:totalEl,sectionId:s.id,chosenHand:null},getDailySeed(),isD,dn2);
+                const safeLog=rkSanitizePassLog(passLog);
+                const iq=calculateCharlestonIQ({startingRack:sr,finalRack:hand,passedTilesByRound:safeLog,totalTime:totalEl,sectionId:s.id,chosenHand:null},getDailySeed(),isD,dn2);
                 chosenSecRef.current=s.id;
                 iqResultRef.current=iq;
                 setChosenSec(s.id);
                 setChosenHand(null);
                 setIqResult(iq);
-                const result={rating:RATS[gi],emoji:REMO[gi],section:`${top.icon} ${top.name}`,sid:top.id,score:top.score,time:totalEl,gi,iqScore:iq?iq.totalScore:null,iq,finalRack:hand,startingRack:sr,passLog,chosenSec:s.id,chosenHand:null,allSections:ev(hand)};
+                const result={rating:RATS[gi],emoji:REMO[gi],section:`${top.icon} ${top.name}`,sid:top.id,score:top.score,time:totalEl,gi,iqScore:iq?iq.totalScore:null,iq,finalRack:hand,startingRack:sr,passLog:safeLog,chosenSec:s.id,chosenHand:null,allSections:ev(hand)};
                 setTimeout(()=>{try{onDone(result);}catch(_){}},0);
                 window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;
                 setPhase("result");
@@ -16430,6 +16585,24 @@ function rkExpandHandVariants(handObj){
   else if(/Any\s+Like\s+Nos|Any\s+Like\s+No\b/i.test(txt))out.push(...rkLikeNumberVariantLabels(base,[1,2,3,4,5,6,7,8,9]));
 
   // Exact card bracket variants that are not captured by the generic text.
+  // These matter for trust: the scorecard should not say a player was chasing
+  // the printed placeholder when the actual legal variant was different.
+  if(base==="2026 DDD 2222 DDD"){
+    // Card says Kong 2 or 6. Try both exact kong targets.
+    out.push("2026 DDD 2222 DDD","2026 DDD 6666 DDD");
+  }
+  if(base==="NNNN EEE WWW SSSS"){
+    // Printed line has two forms. Keep both exact wind-shape variants.
+    out.push("NNNN EEE WWW SSSS","NNN EEEE WWWW SSS");
+  }
+  if(base==="FFF NNNN FFF DDDD"){
+    // Any Wind, Any Dragon. Wind must be one specific wind group, not always North.
+    ["N","E","W","S"].forEach(w=>out.push(`FFF ${w.repeat(4)} FFF DDDD`));
+  }
+  if(base==="FF NNNN SSSS DD DD"){
+    // The card allows the wind pair as N+S or E+W.
+    out.push("FF NNNN SSSS DD DD","FF EEEE WWWW DD DD");
+  }
   if(base==="2468 2222 D 2222 D"){
     [2,4,6,8].forEach(n=>out.push(`2468 ${rkRepeatDigit(n,4)} D ${rkRepeatDigit(n,4)} D`));
   }
@@ -16622,9 +16795,50 @@ function rkEnhancedHandFit(rack,handObj){
   const groupBonus=Math.min(completed*0.012,0.08);
   return Math.min(1,(plan.held/plan.total)+groupBonus);
 }
+function rkSanitizePassLog(passLog=[]){
+  return (passLog||[]).map(p=>({
+    ...p,
+    out:(p.out||p.passedTiles||[]).filter(t=>t&&t.t!=="j"),
+    in:(p.in||[]).filter(t=>t&&t.t!=="j"),
+    jokerRuleOk:!(p.out||p.passedTiles||[]).some(t=>t?.t==="j")&&!(p.in||[]).some(t=>t?.t==="j"),
+  }));
+}
+function rkExpectedPassRange(label="",blind=false){
+  const l=String(label||"").toLowerCase();
+  if(l.includes("courtesy"))return{min:1,max:3,optional:true,kind:"Courtesy"};
+  if(blind||l.includes("blind"))return{min:0,max:3,optional:false,kind:"Blind"};
+  if(l.includes("pass"))return{min:3,max:3,optional:false,kind:"Standard"};
+  return{min:0,max:3,optional:true,kind:"Unknown"};
+}
+function rkValidateCharlestonPassLog(passLog=[]){
+  const raw=passLog||[];
+  const issues=[];
+  let passedJokerCount=0,incomingJokerCount=0;
+  const rounds=raw.map((p,idx)=>{
+    const out=p.out||p.passedTiles||[];
+    const inc=p.in||[];
+    const label=p.label||p.roundName||`Pass ${idx+1}`;
+    const range=rkExpectedPassRange(label,!!p.blind);
+    const outJ=out.filter(t=>t&&t.t==="j").length;
+    const inJ=inc.filter(t=>t&&t.t==="j").length;
+    passedJokerCount+=outJ;incomingJokerCount+=inJ;
+    if(outJ)issues.push(`${label}: Joker in outgoing pass`);
+    if(inJ)issues.push(`${label}: Joker in incoming pass`);
+    if(out.length<range.min||out.length>range.max)issues.push(`${label}: expected ${range.min===range.max?range.min:`${range.min}-${range.max}`} passed tiles, saw ${out.length}`);
+    return{label,passed:out.length,received:inc.length,blind:!!p.blind,kind:range.kind,jokerOut:outJ,jokerIn:inJ,ok:outJ===0&&inJ===0&&out.length>=range.min&&out.length<=range.max};
+  });
+  return{
+    charlestonRuleOk:issues.length===0,
+    jokerRuleOk:passedJokerCount===0&&incomingJokerCount===0,
+    passedJokerCount,
+    incomingJokerCount,
+    issues,
+    rounds,
+  };
+}
 function rkExactCharlestonAudit({finalRack=[],startingRack=[],passedTilesByRound=[],sectionId=null,chosenHandObj=null}={}){
-  const passEvents=(passedTilesByRound||[]);
-  const passedJokers=passEvents.flatMap(p=>[...(p.out||[]),...(p.in||[])]).filter(t=>t&&t.t==="j");
+  const validation=rkValidateCharlestonPassLog(passedTilesByRound||[]);
+  const passEvents=rkSanitizePassLog(passedTilesByRound||[]);
   const candidateHand=chosenHandObj||rkBestHandForSection(finalRack,sectionId)?.hand||null;
   const plan=candidateHand?buildCoveragePlan(finalRack,candidateHand,passEvents):null;
   const groupStatus=(plan?.groupStatus||[]).map(gs=>({
@@ -16639,9 +16853,14 @@ function rkExactCharlestonAudit({finalRack=[],startingRack=[],passedTilesByRound
     passedMatching:(gs.passedMatching||[]).map(t=>tLabel(t)),
   }));
   return{
-    jokerRuleOk:passedJokers.length===0,
-    passedJokerCount:passedJokers.length,
+    jokerRuleOk:validation.jokerRuleOk,
+    charlestonRuleOk:validation.charlestonRuleOk,
+    passedJokerCount:validation.passedJokerCount,
+    incomingJokerCount:validation.incomingJokerCount,
+    charlestonIssues:validation.issues,
+    passRoundAudit:validation.rounds,
     handLabel:candidateHand?.label||null,
+    exactVariantLabel:plan?.labelForDisplay||plan?.variantLabel||candidateHand?.label||null,
     sectionId:sectionId||candidateHand?.sec||null,
     exactCoveragePct:plan?.pct||0,
     held:plan?.held||0,
