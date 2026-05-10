@@ -3854,6 +3854,182 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   font-weight:950!important;
 }
 
+
+
+/* ─── v16: Live Club Standings social interaction pass ───────────────────── */
+.rk-room-live-v6{
+  cursor:pointer!important;
+  position:relative!important;
+  isolation:isolate!important;
+  transform:translateZ(0)!important;
+}
+.rk-room-live-v6:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background:
+    radial-gradient(circle at 15% 12%,rgba(76,217,135,.16),transparent 28%),
+    radial-gradient(circle at 86% 28%,rgba(243,212,107,.14),transparent 26%);
+  pointer-events:none;
+}
+.rk-room-live-v6:after{
+  content:"";
+  position:absolute;
+  inset:-40% -80%;
+  z-index:1;
+  background:linear-gradient(110deg,transparent 42%,rgba(255,255,255,.10) 50%,transparent 58%);
+  transform:translateX(-35%);
+  animation:rkGoldSweep 7.5s ease-in-out infinite;
+  pointer-events:none;
+}
+.rk-room-live-v6-summary,.rk-room-live-v6-preview-grid,.rk-room-live-v6-social-strip,.rk-room-live-v6-action-row{
+  position:relative!important;
+  z-index:2!important;
+}
+.rk-room-live-v6-summary:hover .rk-room-live-v6-title{
+  color:#F7E7AD!important;
+}
+.rk-room-live-v6-social-strip{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  margin:2px 18px 14px!important;
+  padding:11px 12px!important;
+  border-radius:18px!important;
+  background:rgba(255,255,255,.075)!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08)!important;
+}
+.rk-room-live-v6-social-left{
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  min-width:0!important;
+}
+.rk-room-live-v6-avatars{
+  display:flex!important;
+  align-items:center!important;
+  padding-left:6px!important;
+  flex-shrink:0!important;
+}
+.rk-room-live-v6-avatar{
+  width:25px!important;
+  height:25px!important;
+  margin-left:-6px!important;
+  border-radius:999px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:linear-gradient(145deg,#FFF8DD,#D8B955)!important;
+  border:2px solid rgba(6,43,24,.95)!important;
+  color:#062B18!important;
+  font-size:10px!important;
+  font-weight:950!important;
+  box-shadow:0 4px 10px rgba(0,0,0,.14)!important;
+}
+.rk-room-live-v6-social-copy{
+  min-width:0!important;
+  font-size:11.5px!important;
+  line-height:1.25!important;
+  color:rgba(255,255,255,.78)!important;
+  font-weight:850!important;
+}
+.rk-room-live-v6-social-copy strong{
+  color:#F3D46B!important;
+  font-weight:950!important;
+}
+.rk-room-live-v6-mini-cta{
+  flex-shrink:0!important;
+  border-radius:999px!important;
+  padding:7px 10px!important;
+  background:rgba(243,212,107,.13)!important;
+  border:1px solid rgba(243,212,107,.20)!important;
+  color:#F3D46B!important;
+  font-size:10px!important;
+  font-weight:950!important;
+  white-space:nowrap!important;
+}
+.rk-room-live-v6-preview-card{
+  cursor:pointer!important;
+}
+.rk-room-live-v6-preview-card:hover{
+  transform:translateY(-2px)!important;
+  background:rgba(255,255,255,.13)!important;
+  border-color:rgba(243,212,107,.25)!important;
+  box-shadow:0 12px 26px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.14)!important;
+}
+.rk-room-live-v6-preview-card:before{
+  content:"";
+  position:absolute;
+  top:12px;
+  right:12px;
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:#4CD987;
+  box-shadow:0 0 0 5px rgba(76,217,135,.10),0 0 12px rgba(76,217,135,.48);
+}
+.rk-room-live-v6-preview-head span{
+  margin-right:15px!important;
+}
+.rk-room-live-v6-preview-row-you{
+  margin:4px -6px 0!important;
+  padding:7px 6px!important;
+  border-radius:13px!important;
+  background:rgba(243,212,107,.10)!important;
+  border-top:1px solid rgba(243,212,107,.16)!important;
+}
+.rk-room-live-v6-action-row{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  margin:-4px 18px 18px!important;
+  padding:13px 14px!important;
+  border-radius:18px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.07))!important;
+  border:1px solid rgba(255,255,255,.14)!important;
+  color:#fff!important;
+}
+.rk-room-live-v6-action-copy{
+  min-width:0!important;
+  font-size:12px!important;
+  line-height:1.3!important;
+  color:rgba(255,255,255,.76)!important;
+  font-weight:850!important;
+}
+.rk-room-live-v6-action-copy strong{
+  display:block!important;
+  color:#fff!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:15px!important;
+  line-height:1.08!important;
+  letter-spacing:-.2px!important;
+  margin-bottom:2px!important;
+}
+.rk-room-live-v6-action-button{
+  flex-shrink:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:38px!important;
+  padding:0 14px!important;
+  border-radius:999px!important;
+  background:#F3D46B!important;
+  color:#062B18!important;
+  font-size:12px!important;
+  font-weight:950!important;
+  box-shadow:0 8px 18px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.36)!important;
+}
+@media(max-width:390px){
+  .rk-room-live-v6-social-strip{align-items:flex-start!important;flex-direction:column!important;margin:0 15px 13px!important}
+  .rk-room-live-v6-mini-cta{align-self:flex-start!important}
+  .rk-room-live-v6-action-row{align-items:stretch!important;flex-direction:column!important;margin:-2px 15px 16px!important}
+  .rk-room-live-v6-action-button{width:100%!important}
+}
+
 .rk-learn-home-v8{
   padding:20px 18px!important;
   border-radius:28px!important;
@@ -14492,16 +14668,29 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const rows=(boardRows.length?boardRows:fallbackRows).slice(0,3);
     const globalPreviewRows=(globalRows&&globalRows.length?globalRows:fallbackRows).slice(0,3);
     const clubPreviewRows=(clubRows&&clubRows.length?clubRows:(activeClubCode?fallbackRows:rows)).slice(0,3);
-    const PreviewBoard=({label,items,onClick})=>(
+    const firstNames=rows.map(r=>(r.name||"Player").trim()).filter(Boolean).slice(0,3);
+    const initials=(name)=>String(name||"?").trim().slice(0,1).toUpperCase();
+    const chaseCopy=currentScore
+      ? pointsBehind===0
+        ? "You’re on top. Open the room and defend it."
+        : `You’re ${pointsBehind} point${pointsBehind===1?"":"s"} back. Open the room and chase.`
+      : "Post your score, then see exactly who you’re chasing.";
+    const socialCopy=activeClubCode
+      ? `${clubCount||1} club score${(clubCount||1)===1?"":"s"} live today`
+      : `${globalCount||1} player${(globalCount||1)===1?"":"s"} in today’s Rackle room`;
+    const PreviewBoard=({label,items,onClick,isClub=false})=>(
       <button type="button" onClick={onClick} className="rk-room-live-v6-preview-card">
-        <div className="rk-room-live-v6-preview-head"><strong>{label}</strong><span>Open board</span></div>
-        {items.map((r,i)=>(
-          <div key={`${label}-${i}-${r.name||'row'}`} className="rk-room-live-v6-preview-row">
-            <span className="rk-room-live-v6-preview-name">#{i+1} {r.name||"Player"}</span>
-            <span className="rk-room-live-v6-preview-score">{r.iqScore||r.score||"—"}</span>
-          </div>
-        ))}
-        <div className="rk-room-live-v6-preview-link">View today’s room →</div>
+        <div className="rk-room-live-v6-preview-head"><strong>{label}</strong><span>{isClub?"Club":"Global"}</span></div>
+        {items.slice(0,3).map((r,i)=>{
+          const isYou=(r.name||"").toLowerCase().includes((currentName||"__never__").toLowerCase()) && !!currentScore;
+          return (
+            <div key={`${label}-${i}-${r.name||'row'}`} className={`rk-room-live-v6-preview-row ${isYou?"rk-room-live-v6-preview-row-you":""}`}>
+              <span className="rk-room-live-v6-preview-name">#{i+1} {isYou?"You":(r.name||"Player")}</span>
+              <span className="rk-room-live-v6-preview-score">{r.iqScore||r.score||"—"}</span>
+            </div>
+          );
+        })}
+        <div className="rk-room-live-v6-preview-link">Tap to open the chase →</div>
       </button>
     );
     return(
@@ -14516,10 +14705,23 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <div className="rk-room-live-v6-score"><strong>{leadValue}</strong><span>room lead</span></div>
           </div>
         </button>
+        <div className="rk-room-live-v6-social-strip" onClick={openBoard} role="button" tabIndex={0}>
+          <div className="rk-room-live-v6-social-left">
+            <div className="rk-room-live-v6-avatars" aria-hidden="true">
+              {(firstNames.length?firstNames:[leaderName,"You","Club"]).slice(0,3).map((n,i)=><span key={`${n}-${i}`} className="rk-room-live-v6-avatar">{initials(n)}</span>)}
+            </div>
+            <div className="rk-room-live-v6-social-copy"><strong>{socialCopy}</strong><br/>{chaseCopy}</div>
+          </div>
+          <div className="rk-room-live-v6-mini-cta">Tap to chase</div>
+        </div>
         <div className="rk-room-live-v6-preview-grid">
           <PreviewBoard label="Rackle room" items={globalPreviewRows} onClick={()=>setScreen("globalLeaderboard")} />
-          <PreviewBoard label="Club room" items={clubPreviewRows} onClick={openBoard} />
+          <PreviewBoard label="Club room" items={clubPreviewRows} onClick={openBoard} isClub />
         </div>
+        <button type="button" onClick={openBoard} className="rk-room-live-v6-action-row">
+          <span className="rk-room-live-v6-action-copy"><strong>See the full table</strong>{currentScore?"Check who moved, who posted, and where you sit.":"Play the daily rack, then come back to climb the room."}</span>
+          <span className="rk-room-live-v6-action-button">Open standings</span>
+        </button>
       </section>
     );
   };
