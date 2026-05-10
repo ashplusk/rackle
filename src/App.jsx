@@ -4345,6 +4345,23 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 @media(max-width:390px){.rk-email-home-v19 .rk-email-form-v8{grid-template-columns:1fr!important}.rk-email-home-v19 .rk-email-btn-v8{width:100%!important}}
 
 
+
+
+/* ─── v20 Scorecard fixes and polish ───────────────────────────────────── */
+.rk-score-club-room-v20{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 15px;margin:0 0 12px;border-radius:22px;background:linear-gradient(145deg,#FFFDF8,#F1E9DB);border:1px solid rgba(26,20,16,.075);box-shadow:0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82);text-align:left;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.rk-score-club-room-v20:hover{transform:translateY(-1px);border-color:rgba(23,107,66,.18);box-shadow:0 12px 28px rgba(26,20,16,.06),inset 0 1px 0 rgba(255,255,255,.88)}
+.rk-score-club-room-v20:active{transform:scale(.992)}
+.rk-score-club-room-v20-main{display:flex;align-items:center;gap:11px;min-width:0;flex:1}.rk-score-club-room-v20-icon{width:42px;height:42px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:rgba(23,107,66,.08);border:1px solid rgba(23,107,66,.10);font-size:18px;flex-shrink:0}.rk-score-club-room-v20-copy{min-width:0}.rk-score-club-room-v20-kicker{display:block;font-size:8px;letter-spacing:1.9px;text-transform:uppercase;font-weight:950;color:#176B42;margin-bottom:4px}.rk-score-club-room-v20-copy strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:17px;line-height:1.05;font-weight:950;color:#1A1410;letter-spacing:-.3px}.rk-score-club-room-v20-copy small{display:block;font-size:11.5px;line-height:1.35;color:#6B6157;font-weight:750;margin-top:4px}.rk-score-club-room-v20-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}.rk-score-club-room-v20-side b{font-size:10.5px;color:#176B42;font-weight:950;white-space:nowrap}
+.rk-score-share-v20{padding:16px!important;border-radius:24px!important;background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;border:1px solid rgba(26,20,16,.075)!important;box-shadow:0 9px 26px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important}.rk-score-share-v20-head{display:flex;gap:11px;align-items:flex-start;text-align:left;margin-bottom:12px}.rk-score-share-v20-icon{width:40px;height:40px;border-radius:15px;display:flex;align-items:center;justify-content:center;background:rgba(23,107,66,.08);border:1px solid rgba(23,107,66,.10);font-size:18px;flex-shrink:0}.rk-score-share-v20-head small{display:block;font-size:8px;letter-spacing:2px;text-transform:uppercase;font-weight:950;color:#176B42;margin-bottom:5px}.rk-score-share-v20-head strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:19px;line-height:1.05;font-weight:950;color:#1A1410;letter-spacing:-.4px}.rk-score-share-v20-head p{font-size:12px;line-height:1.45;color:#6B6157;font-weight:750;margin:6px 0 0}.rk-score-share-v20-preview{border-radius:18px;background:linear-gradient(155deg,#062B18,#0D4A2E 62%,#051F11);border:1px solid rgba(243,212,107,.18);padding:14px;margin-bottom:12px;color:#fff;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}.rk-score-share-v20-preview div{display:flex;align-items:center;justify-content:space-between;gap:12px}.rk-score-share-v20-preview span{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:950;color:rgba(255,255,255,.56)}.rk-score-share-v20-preview strong{font-family:'Fraunces',Georgia,serif;font-size:38px;line-height:1;color:#F3D46B}.rk-score-share-v20-preview p{font-size:11.5px;color:rgba(255,255,255,.70);font-weight:850;margin:6px 0 8px}.rk-score-share-v20-preview em{font-style:normal;font-size:15px;letter-spacing:2px}
+.rk-daily-review-v20-detail{display:grid;gap:10px;margin-top:10px}.rk-daily-review-v20-detail-card{border-radius:18px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.07);padding:13px 14px;box-shadow:0 5px 16px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78)}.rk-daily-review-v20-detail-card span{display:block;font-size:8px;letter-spacing:2px;text-transform:uppercase;font-weight:950;color:#176B42;margin-bottom:6px}.rk-daily-review-v20-detail-card p{font-size:12px;line-height:1.55;color:#6B6157;font-weight:750;margin:0}.rk-daily-review-v20-coach{width:100%;border-radius:16px;border:1px solid rgba(23,107,66,.18);background:linear-gradient(135deg,#176B42,#0F5432);color:#fff;padding:12px 14px;font-family:'Fraunces',Georgia,serif;font-size:14px;font-weight:950;cursor:pointer;box-shadow:0 8px 20px rgba(23,107,66,.15)}
+.rk-next-rack-card-v11 .rk-midnight-countdown,
+.rk-next-rack-card-v11 [class*="countdown"],
+.rk-next-rack-card-v11 .rk-midnight-countdown *,
+.rk-next-rack-card-v11 [class*="countdown"] *{color:#fff!important}.rk-next-rack-card-v11 [style*="color: rgb(26, 20, 16)"],.rk-next-rack-card-v11 [style*="color:#1A1410"]{color:#fff!important}.rk-next-rack-card-v11 [style*="background: rgb(237, 231, 218)"],.rk-next-rack-card-v11 [style*="background:#EDE7DA"]{background:rgba(255,255,255,.10)!important;border-color:rgba(255,255,255,.16)!important}.rk-next-rack-card-v11 [style*="background: rgb(221, 214, 200)"]{background:rgba(255,255,255,.36)!important}
+.rk-recap-card [style*="Most played"]{text-align:left!important}.rk-recap-card [style*="Your go-to"]{text-align:left!important}
+.rk-menu-quick-card-v20{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;background:linear-gradient(145deg,#FFFDF8,#F4EEE4);border-bottom:1px solid rgba(26,20,16,.06)}.rk-menu-quick-card-v20 strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:16px;line-height:1.05;font-weight:950;color:#1A1410}.rk-menu-quick-card-v20 span{display:block;font-size:11px;line-height:1.35;color:#6B6157;font-weight:750;margin-top:4px}.rk-menu-quick-card-v20 button{border:1px solid rgba(23,107,66,.18);background:linear-gradient(135deg,#176B42,#0F5432);color:#fff;border-radius:14px;padding:10px 14px;font-size:12px;font-weight:950;cursor:pointer;box-shadow:0 8px 18px rgba(23,107,66,.14)}.rk-menu-drawer{border-radius:30px!important}.rk-menu-row{min-height:56px!important}.rk-menu-section-title{margin-top:8px!important}
+.rk-learn-home-v18,.rk-learn-home-v8{overflow:visible!important}.rk-learn-home-v18-kicker,.rk-learn-home-kicker{padding-left:1px!important}.rk-learn-home-v18-action,.rk-learn-home-action,.rk-learn-home-v18 .rk-learn-home-action{font-size:10px!important;letter-spacing:0!important;min-width:44px!important;padding:7px 9px!important;border-radius:999px!important}.rk-learn-home-v18-title{font-size:24px!important;line-height:1.04!important}
+@media(max-width:390px){.rk-score-club-room-v20{align-items:flex-start}.rk-score-club-room-v20-side{display:none}.rk-score-share-v20-preview strong{font-size:34px}}
 `;
 
 
@@ -11276,7 +11293,7 @@ function ImproveGameHero({iq,chosenSecObj,bestFitSec,onPractice,onCoachMode,setS
   );
 }
 
-function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onHome,onPractice,onCoachMode,setScreen}){
+function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onHome,onPractice,onCoachMode,setScreen,resultTime=0}){
   const [dailyStats,setDailyStats]=useState(null);
   const [globalEntries,setGlobalEntries]=useState([]);
   const [clubEntries,setClubEntries]=useState([]);
@@ -11291,7 +11308,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   },[]);
 
   const score=Number(iq.totalScore||0);
-  const time=Number(iq.timeSecs||iq.time_secs||0);
+  const time=Number(resultTime||iq.timeSecs||iq.time_secs||iq.totalTime||iq.time||0);
+  const timeLabel=time?fT(Math.round(time)):"—";
   const clubCode=getClubCode();
   const playerName=getPlayerDisplayName()||rkCurrentDisplayName?.()||"";
   const affiliatedClubName=getAffiliatedClubName(clubCode);
@@ -11305,7 +11323,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const roomCount=Number(globalTotal||globalRows.length||0);
   const roomLabel=roomCount===1?"1 player played today":`${roomCount||1} players played today`;
   const clubShortName=affiliatedClubName?affiliatedClubName.replace(/\s+Mahjong Club$/i,""):"";
-  const clubRoomLabel=affiliatedClubName?`${clubShortName||affiliatedClubName} is chasing ${score}`:"Your group can chase this";
+  const clubRoomLabel=affiliatedClubName?`${clubShortName||affiliatedClubName} room is live`:"Today’s room is live";
+  const clubRoomSub=clubCode?`Tap to see who posted, who leads, and where your ${score} sits.`:`Tap to see today’s Rackle board.`;
   const socialAvatarCount=Math.min(3,Math.max(1,roomCount||clubTotal||1));
 
   const passEmoji=rkSharePattern(iq);
@@ -11390,36 +11409,40 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:8,marginBottom:12}}>
         <Metric label="Global" value={globalRank?`#${globalRank}`:"—"} sub={globalTotal?`of ${globalTotal}`:"loading"} accent={globalRank===1?C.gold:C.jade} onClick={()=>setScreen&&setScreen("globalLeaderboard")}/>
         <Metric label="Club" value={clubRank?`#${clubRank}`:"—"} sub={affiliatedClubName||"join"} accent={clubRank===1?C.gold:C.jade} onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")}/>
-        <Metric label="Time" value={time?`${time}s`:"—"} sub="finished" accent={C.ink}/>
+        <Metric label="Time" value={timeLabel} sub={time?"finished":"not tracked"} accent={C.ink}/>
       </div>
 
 
-      <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"globalLeaderboard")} className="rk-score-social-room" style={{width:"100%",appearance:"none",fontFamily:F.b,cursor:"pointer"}}>
-        <span className="rk-score-social-left">
-          <span className="rk-score-social-icon">{clubCode?"🏛️":"🌎"}</span>
-          <span style={{minWidth:0}}>
-            <span className="rk-score-social-title">{clubCode?"Club Room":"Today’s Room"}</span>
-            <span className="rk-score-social-copy">{clubCode?clubRoomLabel:roomLabel}</span>
+      <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"globalLeaderboard")} className="rk-score-club-room-v20" style={{width:"100%",appearance:"none",fontFamily:F.b,cursor:"pointer"}}>
+        <span className="rk-score-club-room-v20-main">
+          <span className="rk-score-club-room-v20-icon">{clubCode?"🏛️":"🌎"}</span>
+          <span className="rk-score-club-room-v20-copy">
+            <span className="rk-score-club-room-v20-kicker">{clubCode?"Club room":"Today’s room"}</span>
+            <strong>{clubCode?clubRoomLabel:roomLabel}</strong>
+            <small>{clubRoomSub}</small>
           </span>
         </span>
-        <span className="rk-score-avatar-stack" aria-hidden="true">
-          {Array.from({length:socialAvatarCount}).map((_,i)=><span key={i} className="rk-score-avatar-dot" style={i%2?{background:"linear-gradient(145deg,#176B42,#DDEBDF)"}:undefined}/>) }
+        <span className="rk-score-club-room-v20-side">
+          <span className="rk-score-avatar-stack" aria-hidden="true">
+            {Array.from({length:socialAvatarCount}).map((_,i)=><span key={i} className="rk-score-avatar-dot" style={i%2?{background:"linear-gradient(145deg,#176B42,#DDEBDF)"}:undefined}/>) }
+          </span>
+          <b>Open →</b>
         </span>
       </button>
 
-      <div className="rk-score-share-card">
-        <div style={{display:"flex",alignItems:"center",gap:10,margin:"0 2px 10px",textAlign:"left"}}>
-          <span style={{width:38,height:38,borderRadius:14,display:"inline-flex",alignItems:"center",justifyContent:"center",background:"rgba(23,107,66,.08)",border:`1px solid rgba(23,107,66,.10)`,fontSize:18}}>📲</span>
-          <span style={{minWidth:0}}>
-            <span style={{display:"block",fontFamily:F.d,fontSize:18,lineHeight:1.04,fontWeight:950,color:C.ink,letterSpacing:-.3}}>Charleston Complete</span>
-            <span style={{display:"block",fontSize:12,lineHeight:1.35,color:C.mut,fontWeight:800,marginTop:4}}>{`${clubRank===1?"🏆 ":""}${clubRank?`#${clubRank} in your club. `:""}Make your table chase ${score}.`}</span>
+      <div className="rk-score-share-card rk-score-share-v20">
+        <div className="rk-score-share-v20-head">
+          <span className="rk-score-share-v20-icon">📲</span>
+          <span>
+            <small>Share your score</small>
+            <strong>Send this to the table.</strong>
+            <p>{clubRank?`You’re #${clubRank} in your club. Make them chase ${score}.`:`Post your ${score} and see who can beat it before midnight.`}</p>
           </span>
         </div>
-        <div className="rk-score-share-artifact" aria-label="Share preview">
-          <div><strong>Rackle #{dayNum}</strong><span>{score}</span></div>
+        <div className="rk-score-share-v20-preview" aria-label="Share preview">
+          <div><span>Rackle #{dayNum}</span><strong>{score}</strong></div>
           <p>{globalRank?`Global #${globalRank}`:"Global board"}{clubRank?` · Club #${clubRank}`:""}</p>
           <em>{passEmoji}</em>
-          <small>playrackle.com</small>
         </div>
         <ShareButton text={shareText} label="Share My Score" sublabel={affiliatedClubName?`Send it to ${affiliatedClubName}`:"Drop it in your group chat"} variant="viral"/>
       </div>
@@ -11473,8 +11496,16 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           </div>
         </div>
         {showDetails&&(
-          <div className="rk-daily-review-v10-detail rk-in">
-            <HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSec&&SECS.find(s=>s.id===chosenSec)} iq={iq} onCoachMode={onCoachMode}/>
+          <div className="rk-daily-review-v20-detail rk-in">
+            <div className="rk-daily-review-v20-detail-card">
+              <span>What this means</span>
+              <p>{reviewCopy}</p>
+            </div>
+            <div className="rk-daily-review-v20-detail-card">
+              <span>Best next move</span>
+              <p>{pivotCopy}</p>
+            </div>
+            {onCoachMode&&<button onClick={onCoachMode} className="rk-daily-review-v20-coach">See the better play →</button>}
           </div>
         )}
       </section>
@@ -12384,7 +12415,7 @@ function IQScorecard({iq,hand,startingRack,passLog,isDaily,dayNum,section,chosen
   if(isDaily&&coachMode)return(
     <CoachModeScreen iq={iq} hand={hand} startingRack={startingRack} passLog={passLog} dayNum={dayNum} section={section} chosenSec={chosenSec} chosenHand={chosenHand} allSections={allSections} onBack={exitCoach} setScreen={setScreen}/>
   );
-  if(isDaily)return <DailyIQScorecard iq={iq} hand={hand} startingRack={startingRack} passLog={passLog} dayNum={dayNum} section={section} chosenSec={chosenSec} chosenHand={chosenHand} allSections={allSections} onHome={onHome} onPractice={onPractice} onCoachMode={enterCoach}/>;
+  if(isDaily)return <DailyIQScorecard iq={iq} hand={hand} startingRack={startingRack} passLog={passLog} dayNum={dayNum} section={section} chosenSec={chosenSec} chosenHand={chosenHand} allSections={allSections} onHome={onHome} onPractice={onPractice} onCoachMode={enterCoach} resultTime={iq?.timeSecs||iq?.time_secs||iq?.totalTime||0}/>;
   return <PracticeIQScorecard iq={iq} hand={hand} passLog={passLog} section={section} chosenSec={chosenSec} allSections={allSections} onHome={onHome} onDealAgain={onDealAgain}/>;
 }
 
@@ -12411,7 +12442,7 @@ function ScorecardScreen({res,home,dayNum,onPractice,setScreen}){
   return(
     <div style={S.pg} className="rk-pg">
       <RackleHeader onBack={home} setScreen={setScreen}/>
-      <DailyIQScorecard iq={res.iq} hand={res.finalRack||[]} startingRack={res.startingRack||[]} passLog={res.passLog||[]} dayNum={dayNum} section={res.section} chosenSec={res.chosenSec} chosenHand={res.chosenHand} allSections={res.allSections||[]} onHome={home} onPractice={onPractice} onCoachMode={enterCoach} setScreen={setScreen}/>
+      <DailyIQScorecard iq={res.iq} hand={res.finalRack||[]} startingRack={res.startingRack||[]} passLog={res.passLog||[]} dayNum={dayNum} section={res.section} chosenSec={res.chosenSec} chosenHand={res.chosenHand} allSections={res.allSections||[]} onHome={home} onPractice={onPractice} onCoachMode={enterCoach} setScreen={setScreen} resultTime={res.time||res.totalTime||res.time_secs||res.iq?.timeSecs||res.iq?.totalTime||0}/>
       <Footer/>
     </div>
   );
@@ -12524,10 +12555,12 @@ function PremiumClubMenu({open,onClose,setScreen,go,showSettings,streak=0,dRes=n
             <span className="rk-menu-badge"><span className="rk-menu-inline-emoji">🧠</span>{score?`${score} IQ today`:"Daily ready"}</span>
           </div>
         </div>
-        <div className="rk-menu-live-strip">
-          <div className="rk-menu-live-stat"><strong>{todayCount}</strong><span><i className="rk-live-dot-dynamic" style={{width:6,height:6}}/> players</span></div>
-          <div className="rk-menu-live-stat"><strong>{clubsActive}</strong><span><i className="rk-live-dot-dynamic" style={{width:6,height:6}}/> clubs</span></div>
-          <div className="rk-menu-live-stat"><strong>{shares}</strong><span><i className="rk-live-dot-dynamic" style={{width:6,height:6}}/> shares</span></div>
+        <div className="rk-menu-quick-card-v20">
+          <div>
+            <strong>{score?`${score} posted today`:"Daily Rackle is open"}</strong>
+            <span>{hasProfile?"Keep your streak moving.":"Create an account to save your streak."}</span>
+          </div>
+          <button onClick={()=>goPlay(dRes?"free":"daily")}>{dRes?"Free Play":"Play"}</button>
         </div>
         <div className="rk-menu-scroll">
           {!hasProfile&&(
@@ -15680,7 +15713,11 @@ function sameLocalDay(a,b){
 
 function isDailyEntry(e){
   const todaySeed=getDailySeed();
-  return e?.mode==="daily"||e?.daySeed!=null||e?.day_seed!=null||(ST.get("dd",null)===todaySeed&&ST.get("dres",null)&&sameLocalDay(e?.ts||0,Date.now())&&Number(e?.iqScore)===Number((ST.get("dres",null)?.iqScore??ST.get("dres",null)?.iq?.totalScore)));
+  const dres=ST.get("dres",null);
+  const hasDailySeed=e?.daySeed!=null||e?.day_seed!=null;
+  const explicitDaily=e?.mode==="daily"||e?.isDaily===true||e?.daily===true;
+  const currentTodayDaily=ST.get("dd",null)===todaySeed&&dres&&sameLocalDay(e?.ts||0,Date.now())&&Number(e?.iqScore)===Number((dres?.iqScore??dres?.iq?.totalScore));
+  return explicitDaily||hasDailySeed||currentTodayDaily;
 }
 
 function getWeeklyRecapData(){
@@ -15704,7 +15741,13 @@ function getWeeklyRecapData(){
   const prevH=getWeeklyHist().filter(e=>e.iqScore!=null&&e.ts>=prevWeekStart.getTime()&&e.ts<weekStart.getTime());
   const prevAvg=prevH.length?Math.round(prevH.reduce((a,e)=>a+Number(e.iqScore||0),0)/prevH.length):null;
   const delta=prevAvg!=null?avgIQ-prevAvg:null;
-  const dailyDaysPlayed=new Set(dailyH.map(e=>{const d=new Date(e.ts);return`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;})).size;
+  const dailyKeys=new Set(dailyH.map(e=>{
+    const seed=e.daySeed||e.day_seed;
+    if(seed)return `seed-${seed}`;
+    const d=new Date(e.ts);return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+  }));
+  // Some older builds saved Daily games without mode/daySeed. For the recap, use unique play days as a safe fallback so daily streaks are not undercounted.
+  const dailyDaysPlayed=Math.max(dailyKeys.size,Math.min(7,daysPlayed));
   return{h,dailyH,avgIQ,bestEntry,daysPlayed,topSec,delta,prevAvg,weekRounds:h.length,dailyDaysPlayed};
 }
 
@@ -15796,7 +15839,7 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
         <div style={{fontSize:9,color:C.jade,letterSpacing:2.4,fontWeight:900,marginBottom:12}}>THIS WEEK'S HIGHLIGHTS</div>
         {topSec&&<div style={{display:"flex",alignItems:"center",gap:10,paddingBottom:10,marginBottom:10,borderBottom:`1px solid ${C.bdr}`}}>
           <div style={{width:36,height:36,borderRadius:10,background:topSec.color+"12",border:`1px solid ${topSec.color}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{topSec.icon}</div>
-          <div>
+          <div style={{minWidth:0,textAlign:"left"}}>
             <div style={{fontSize:11,fontWeight:700,color:C.ink}}>Most played: {topSec.name}</div>
             <div style={{fontSize:10,color:C.mut,marginTop:1}}>Your go-to section this week</div>
           </div>
