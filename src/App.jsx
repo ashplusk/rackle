@@ -2956,6 +2956,68 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-learn-home-v12{background:transparent!important;box-shadow:none!important;border-color:rgba(26,20,16,.06)!important}.rk-learn-home-kicker .rk-live-spark{display:none!important}.rk-learn-home-title{font-size:18px!important}.rk-learn-home-icon{background:transparent!important;border:none!important;box-shadow:none!important;width:24px!important;height:auto!important;color:rgba(26,20,16,.42)!important;font-family:'Fraunces',Georgia,serif!important;font-size:13px!important}.rk-learn-home-card{min-height:56px!important;padding:12px 10px!important}.rk-learn-home-text strong{font-size:13px!important}.rk-learn-home-text span{font-size:11px!important}
 .rk-share-score-v6{margin-top:4px!important}.rk-share-score-v6-copy{font-size:12px!important;line-height:1.45!important}.rk-score-action-panel-v8{margin-top:14px!important}.rk-score-link-row-v8{justify-content:center!important}.rk-score-link-row-v8 span{display:none!important}.rk-score-link-row-v8 button:not(:first-child){display:none!important}
 @media(max-width:390px){.rk-daily-entry-v6-title{font-size:24px!important}.rk-tomorrow-v11-title{font-size:20px!important}.rk-room-live-v6-title,.rk-warmup-v6-title{font-size:16px!important}}
+
+/* ─── FINAL LAUNCH POLISH: one clear ritual loop ───────────────────────── */
+.rk-daily-entry-v6{
+  border-radius:32px!important;
+  border:1.5px solid rgba(23,107,66,.34)!important;
+  background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.95),transparent 38%),linear-gradient(145deg,#FFFDF8,#F1E8D8)!important;
+}
+.rk-daily-entry-v6-kicker{color:#176B42!important;font-weight:950!important}
+.rk-daily-entry-v6-title{font-size:28px!important;line-height:1.02!important;margin-top:6px!important;margin-bottom:8px!important}
+.rk-daily-entry-v6-copy{max-width:26ch!important;margin-left:auto!important;margin-right:auto!important;font-size:13px!important;line-height:1.35!important;color:rgba(26,20,16,.62)!important}
+.rk-daily-entry-v6-cta{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:9px!important;
+  min-height:56px!important;padding:0 28px!important;border-radius:999px!important;
+  background:linear-gradient(135deg,#176B42,#0D4A2E)!important;color:#fff!important;
+  font-family:'Fraunces',Georgia,serif!important;font-size:17px!important;font-weight:950!important;letter-spacing:-.15px!important;
+  box-shadow:0 14px 30px rgba(23,107,66,.26),0 0 0 5px rgba(23,107,66,.06),inset 0 1px 0 rgba(255,255,255,.20)!important;
+}
+.rk-daily-entry-v6:active .rk-daily-entry-v6-cta{transform:scale(.985)}
+.rk-real-tile-row-v6{margin-bottom:18px!important}
+.rk-tomorrow-mystery-final{
+  position:relative!important;overflow:hidden!important;
+  background:radial-gradient(circle at 18% 0%,rgba(243,212,107,.22),transparent 34%),radial-gradient(circle at 90% 10%,rgba(255,255,255,.10),transparent 28%),linear-gradient(145deg,#24152F 0%,#3A2146 42%,#5A3563 100%)!important;
+  border:1px solid rgba(243,212,107,.34)!important;
+  box-shadow:0 18px 44px rgba(36,21,47,.24),inset 0 1px 0 rgba(255,255,255,.11)!important;
+}
+.rk-tomorrow-mystery-final .rk-tomorrow-v11-title{max-width:18ch!important;color:#FFF8E6!important;font-size:22px!important;line-height:1.05!important}
+.rk-tomorrow-mystery-final .rk-tomorrow-v11-copy{max-width:26ch!important;color:rgba(255,248,230,.76)!important;font-size:12.5px!important;line-height:1.35!important}
+.rk-tomorrow-mystery-final .rk-tomorrow-v11-badge{background:rgba(243,212,107,.12)!important;border:1px solid rgba(243,212,107,.24)!important;color:#F3D46B!important;box-shadow:0 0 18px rgba(243,212,107,.12)!important}
+.rk-tomorrow-mystery-final .rk-tomorrow-v11-row span{background:rgba(255,255,255,.08)!important;border-color:rgba(243,212,107,.20)!important;color:rgba(255,248,230,.76)!important}
+.rk-tomorrow-float-tiles{position:absolute;right:12px;bottom:10px;display:flex;gap:5px;opacity:.11;transform:rotate(-8deg);pointer-events:none}
+.rk-tomorrow-float-tiles span{font-size:28px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.18))}
+.rk-room-live-v6-copy,.rk-warmup-v6-copy,.rk-learn-home-copy,.rk-share-score-v6-copy{max-width:28ch!important;line-height:1.38!important}
+.rk-warmup-v6-cta,.rk-room-live-v6-cta,.rk-share-score-v6-btn{font-family:'Fraunces',Georgia,serif!important;font-weight:950!important}
+.rk-learn-home-v12{padding:12px 2px!important;border:none!important}
+.rk-learn-home-v12:after{display:none!important}
+.rk-learn-home-kicker{background:transparent!important;border:none!important;padding:0!important;margin-bottom:7px!important;color:rgba(23,107,66,.72)!important}
+.rk-learn-home-card{box-shadow:none!important;background:transparent!important;border-color:rgba(26,20,16,.07)!important;border-radius:16px!important}
+.rk-learn-home-arrow{background:transparent!important;border:none!important;color:rgba(26,20,16,.38)!important}
+.rk-score-share-card{
+  border:1px solid rgba(160,120,40,.18)!important;
+  background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.88),transparent 40%),linear-gradient(145deg,#FFFDF8,#F4ECDE)!important;
+  box-shadow:0 14px 34px rgba(26,20,16,.065),inset 0 1px 0 rgba(255,255,255,.86)!important;
+}
+.rk-score-share-card .rk-share-button,.rk-score-share-card button{font-family:'Fraunces',Georgia,serif!important;font-weight:950!important}
+.rk-score-primary-next-v8{
+  background:transparent!important;color:#176B42!important;border:1px solid rgba(23,107,66,.16)!important;
+  box-shadow:none!important;min-height:42px!important;font-size:13px!important;
+}
+.rk-next-rack-panel-v11{margin-top:16px!important}
+.rk-next-rack-card-v11{
+  background:radial-gradient(circle at 20% 0%,rgba(243,212,107,.20),transparent 36%),linear-gradient(145deg,#24152F,#3A2146 52%,#5A3563)!important;
+  color:#FFF8E6!important;border:1px solid rgba(243,212,107,.26)!important;
+}
+.rk-next-rack-kicker-v11{color:#F3D46B!important}
+.rk-next-rack-title-v11{color:#FFF8E6!important;max-width:22ch!important}
+.rk-next-rack-copy-v11{color:rgba(255,248,230,.72)!important;max-width:28ch!important}
+@media(max-width:390px){
+  .rk-daily-entry-v6-title{font-size:26px!important}
+  .rk-daily-entry-v6-cta{min-height:54px!important;font-size:16px!important;width:100%!important}
+  .rk-tomorrow-mystery-final .rk-tomorrow-v11-title{font-size:20px!important}
+}
+
 `;
 
 
@@ -9983,8 +10045,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <div style={{display:"flex",alignItems:"center",gap:10,margin:"0 2px 10px",textAlign:"left"}}>
           <span style={{width:38,height:38,borderRadius:14,display:"inline-flex",alignItems:"center",justifyContent:"center",background:"rgba(23,107,66,.08)",border:`1px solid rgba(23,107,66,.10)`,fontSize:18}}>📲</span>
           <span style={{minWidth:0}}>
-            <span style={{display:"block",fontFamily:F.d,fontSize:18,lineHeight:1.04,fontWeight:950,color:C.ink,letterSpacing:-.3}}>Nice score. Share it.</span>
-            <span style={{display:"block",fontSize:12,lineHeight:1.35,color:C.mut,fontWeight:800,marginTop:4}}>{`Make your table chase ${score}.`}</span>
+            <span style={{display:"block",fontFamily:F.d,fontSize:18,lineHeight:1.04,fontWeight:950,color:C.ink,letterSpacing:-.3}}>Charleston Complete</span>
+            <span style={{display:"block",fontSize:12,lineHeight:1.35,color:C.mut,fontWeight:800,marginTop:4}}>{`${clubRank===1?"🏆 ":""}${clubRank?`#${clubRank} in your club. `:""}Make your table chase ${score}.`}</span>
           </span>
         </div>
         <div className="rk-score-share-artifact" aria-label="Share preview">
@@ -9993,7 +10055,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <em>{passEmoji}</em>
           <small>playrackle.com</small>
         </div>
-        <ShareButton text={shareText} label="Share your score" sublabel={affiliatedClubName?`Send it to ${affiliatedClubName}`:"Drop it in your group chat"} variant="viral"/>
+        <ShareButton text={shareText} label="Share My Score" sublabel={affiliatedClubName?`Send it to ${affiliatedClubName}`:"Drop it in your group chat"} variant="viral"/>
       </div>
 
       <div className="rk-score-rack-card" style={{borderRadius:22,padding:14,background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid rgba(26,20,16,.075)`,boxShadow:"0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)",marginBottom:12,textAlign:"center"}}>
@@ -10013,7 +10075,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       </div>
 
       <div className="rk-score-action-panel-v8" aria-label="Scorecard actions">
-        <button onClick={onCoachMode||onPractice} className="rk-score-primary-next-v8">{onCoachMode?"Open Coach →":"Play again in Free Play →"}</button>
+        <button onClick={onPractice} className="rk-score-primary-next-v8">Play Free Play →</button>
         <div className="rk-score-link-row-v8">
           <button onClick={onHome}>Back to clubhouse</button>
         </div>
@@ -10053,9 +10115,9 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
       <div className="rk-review-bottom-home rk-next-rack-panel-v11">
         <div className="rk-next-rack-card-v11">
-          <div className="rk-next-rack-kicker-v11">Next Daily Rackle</div>
-          <div className="rk-next-rack-title-v11">Come back tomorrow.</div>
-          <p className="rk-next-rack-copy-v11">A fresh rack drops at midnight. Keep your streak alive.</p>
+          <div className="rk-next-rack-kicker-v11">Tomorrow’s Rackle</div>
+          <div className="rk-next-rack-title-v11">Tomorrow’s Charleston unlocks at midnight.</div>
+          <p className="rk-next-rack-copy-v11">Come back tomorrow and defend your spot.</p>
           <MidnightCountdown dn={dayNum}/>
         </div>
         <button onClick={onHome} className="rk-back-clubhouse-v11">
@@ -12770,7 +12832,7 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
   ].filter(Boolean);
 
   return(
-    <button onClick={onPlay} aria-label={`Play Daily Rackle challenge number ${dn}`} className="rk-in rk-daily-hero-card rk-hero-live rk-hero-bright rk-tap-card rk-sweep" style={{
+    <button onClick={onPlay} aria-label={`Play Today’s Rackle challenge number ${dn}`} className="rk-in rk-daily-hero-card rk-hero-live rk-hero-bright rk-tap-card rk-sweep" style={{
       width:"100%",border:"none",cursor:"pointer",textAlign:"left",borderRadius:22,overflow:"hidden",padding:0,
       background:`linear-gradient(150deg,#041F12 0%,#07331E 42%,#0B4A2C 68%,#03170D 100%)`,
       color:"#fff",boxShadow:"0 18px 50px rgba(3,23,13,0.38),0 0 0 1px rgba(201,168,76,.14)",marginBottom:28,position:"relative"
@@ -13197,7 +13259,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     ];
     const tilts=[-3,2,-1,2,-2,1,0,-1];
     return(
-      <button type="button" onClick={()=>go("daily")} className="rk-daily-entry-v6" aria-label="Reveal today's Rackle">
+      <button type="button" onClick={()=>go("daily")} className="rk-daily-entry-v6" aria-label="Play Today’s Rackle">
         <div className="rk-daily-entry-v6-glow" aria-hidden="true" />
         <div className="rk-daily-entry-v6-kicker"><span className="rk-live-spark"/> Daily Rackle · #{dn}</div>
         <div className="rk-real-tile-row-v6" aria-hidden="true">
@@ -13207,13 +13269,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             </span>
           ))}
         </div>
-        <h2 className="rk-daily-entry-v6-title">Tap here to play today’s rack.</h2>
-        <p className="rk-daily-entry-v6-copy">Same rack. One score. Beat the room.</p>
+        <h2 className="rk-daily-entry-v6-title">Play Today’s Rackle</h2>
+        <p className="rk-daily-entry-v6-copy">One rack. One score. Everyone plays the same Charleston.</p>
         <div className="rk-daily-entry-v6-stats">
           <span>{posted} {posted===1?"player has":"players already"} posted</span>
           <span>{scoreToBeat} is the score to beat</span>
         </div>
-        <span className="rk-daily-entry-v6-cta">Play Daily Rackle →</span>
+        <span className="rk-daily-entry-v6-cta"><span className="rk-live-spark"/> Play Today’s Rackle</span>
       </button>
     );
   };
@@ -13289,21 +13351,19 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   const TomorrowTease=()=> {
     const resetLabel=getTimeUntilMidnightLabel();
-    const cleanHint=String(tomorrowHint).replace(/^Hint:\s*/i,"");
     return(
-      <section aria-label="Tomorrow's Rackle preview" className="rk-tomorrow-card-v11">
+      <section aria-label="Tomorrow's Rackle preview" className="rk-tomorrow-card-v11 rk-tomorrow-mystery-final rk-sweep">
+        <div className="rk-tomorrow-float-tiles" aria-hidden="true"><span>🀇</span><span>🀙</span><span>🀄</span></div>
         <div className="rk-tomorrow-v11-top">
           <div>
             <div className="rk-tomorrow-v11-kicker">Tomorrow’s Rackle</div>
-            <h2 className="rk-tomorrow-v11-title">Next rack opens in {resetLabel}.</h2>
+            <h2 className="rk-tomorrow-v11-title">Tomorrow’s rack unlocks at midnight.</h2>
           </div>
-          <div className="rk-tomorrow-v11-badge">Midnight</div>
+          <div className="rk-tomorrow-v11-badge">{resetLabel}</div>
         </div>
-        <p className="rk-tomorrow-v11-copy">{cleanHint}</p>
+        <p className="rk-tomorrow-v11-copy">A new Charleston arrives tonight.</p>
         <div className="rk-tomorrow-v11-row">
-          <span>New rack</span>
-          <span>Fresh board</span>
-          <span>Streak at stake</span>
+          <span>The club resets at midnight</span>
         </div>
       </section>
     );
@@ -13324,9 +13384,9 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div className="rk-warmup-v6-main">
         <div className="rk-warmup-v6-kicker"><span>🔥</span> 2 minute daily warm-up</div>
         <div className="rk-warmup-v6-title">Improve Your Game</div>
-        <div className="rk-warmup-v6-copy">Practice a fresh rack without touching today’s score.</div>
+        <div className="rk-warmup-v6-copy">Fresh rack. No pressure.</div>
       </div>
-      <span className="rk-warmup-v6-cta">Enter Free Play →</span>
+      <span className="rk-warmup-v6-cta">Play Free Play →</span>
     </button>
   );
 
@@ -13352,7 +13412,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div className="rk-share-score-v6-copybox">
           <div className="rk-share-score-v6-kicker">Share your score</div>
           <h2 className="rk-share-score-v6-title">Your club is waiting.</h2>
-          <p className="rk-share-score-v6-copy">Compare hands with your table. Make today’s score worth chasing.</p>
+          <p className="rk-share-score-v6-copy">Make your table chase today’s score.</p>
           <button onClick={copyShare} className="rk-share-score-v6-btn">{shareCopied?"Copied":"Share My Score →"}</button>
         </div>
         <div className="rk-share-lux-card-v6" aria-hidden="true">
@@ -14278,7 +14338,7 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
         <div style={{fontSize:13,color:C.mut,lineHeight:1.6,marginBottom:24}}>Play today's Daily to start building your week.</div>
         {dDone
           ?<div style={{fontSize:12,color:C.jade,fontWeight:700}}>✓ Today's Daily is done. See you tomorrow!</div>
-          :<button onClick={()=>go("daily")} style={{...S.greenBtn,padding:"13px 32px"}}>Play Today's Daily →</button>
+          :<button onClick={()=>go("daily")} style={{...S.greenBtn,padding:"13px 32px"}}>Play Today’s Rackle</button>
         }
       </div>
     </div>
