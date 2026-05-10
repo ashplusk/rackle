@@ -3019,6 +3019,58 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-tomorrow-mystery-final .rk-tomorrow-v11-title{font-size:20px!important}
 }
 
+
+/* ─── vNext polish patch: Daily Rackle, homepage actions, hand browser ─── */
+.rk-daily-entry-v6{
+  border:1px solid rgba(26,20,16,.10)!important;
+  box-shadow:0 12px 30px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.78)!important;
+  padding:20px 18px 22px!important;
+  gap:12px!important;
+}
+.rk-daily-entry-v6-glow{display:none!important;}
+.rk-daily-entry-v6-kicker{margin-bottom:14px!important;}
+.rk-real-tile-row-v6{margin:0 auto 16px!important;}
+.rk-daily-entry-v6-title{font-size:33px!important;line-height:1.02!important;margin:0 0 9px!important;}
+.rk-daily-entry-v6-copy{margin:0 auto 16px!important;line-height:1.45!important;max-width:27ch!important;}
+.rk-daily-entry-v6-stats{margin:0 0 14px!important;gap:10px!important;}
+.rk-daily-entry-v6-cta{margin-top:0!important;border:1px solid rgba(26,20,16,.10)!important;}
+.rk-warmup-card-v6,.rk-home-improve-card{text-align:left!important;align-items:flex-start!important;}
+.rk-warmup-v6-main{width:100%!important;margin:0!important;text-align:left!important;align-self:flex-start!important;}
+.rk-warmup-v6-kicker,.rk-warmup-v6-title,.rk-warmup-v6-copy{text-align:left!important;margin-left:0!important;margin-right:auto!important;}
+.rk-warmup-card-v6{padding:18px 20px!important;gap:10px!important;justify-content:flex-start!important;}
+.rk-warmup-v6-title,.rk-room-live-v6-title,.rk-share-card div[style*="Challenge Your Club"],.rk-home-improve-card div[style*="Improve Your Game"]{font-size:14px!important;line-height:1.1!important;letter-spacing:-.25px!important;}
+.rk-warmup-v6-copy{line-height:1.36!important;max-width:31ch!important;}
+.rk-warmup-v6-cta{width:100%!important;margin-top:7px!important;min-height:42px!important;}
+.rk-room-live-v6-drop{display:block!important;cursor:pointer;}
+.rk-room-live-v6-drop>summary{list-style:none;cursor:pointer;}
+.rk-room-live-v6-drop>summary::-webkit-details-marker{display:none;}
+.rk-room-live-v6-summary{display:block!important;}
+.rk-room-live-v6-summary .rk-room-live-v6-top{margin-bottom:0!important;}
+.rk-room-live-v6-drop:not([open]) .rk-room-live-v6-list,
+.rk-room-live-v6-drop:not([open]) .rk-room-live-v6-meta,
+.rk-room-live-v6-drop:not([open]) .rk-room-live-v6-cta{display:none!important;}
+.rk-room-live-v6-drop:not([open]){padding-bottom:18px!important;}
+.rk-room-live-v6-drop[open] .rk-room-live-v6-list{margin-top:14px!important;}
+.rk-room-live-v6-title{font-size:18px!important;}
+.rk-room-live-v6-list{gap:8px!important;}
+.rk-room-live-v6-name{font-size:12px!important;}
+.rk-room-live-v6-row-score{font-size:15px!important;}
+.rk-email-title-v8{font-size:23px!important;line-height:1.04!important;letter-spacing:-.55px!important;}
+.rk-email-copy-v8{font-size:12px!important;line-height:1.42!important;}
+.rk-email-btn-v8{font-size:11.5px!important;padding:0 13px!important;}
+.rk-browser-v9-section-grid{position:sticky!important;top:0!important;z-index:20!important;background:linear-gradient(180deg,#F8F4EE 86%,rgba(248,244,238,0))!important;padding-top:8px!important;padding-bottom:10px!important;margin-bottom:6px!important;}
+.rk-browser-v9-section{min-height:78px!important;padding:11px 10px!important;}
+.rk-browser-v9-section strong{font-size:12px!important;line-height:1.1!important;}
+.rk-browser-v9-section em{font-size:10px!important;line-height:1.25!important;}
+.rk-browser-v9-guide{margin-top:18px!important;}
+.rk-hand-card{scroll-margin-top:130px!important;}
+@media(max-width:390px){
+  .rk-daily-entry-v6{padding:18px 15px 20px!important;}
+  .rk-daily-entry-v6-title{font-size:30px!important;}
+  .rk-warmup-v6-title,.rk-room-live-v6-title,.rk-share-card div[style*="Challenge Your Club"],.rk-home-improve-card div[style*="Improve Your Game"]{font-size:13px!important;}
+  .rk-email-title-v8{font-size:21px!important;}
+}
+
 `;
 
 
@@ -13302,7 +13354,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     ];
     const tilts=[-3,2,-1,2,-2,1,0,-1];
     return(
-      <button type="button" onClick={()=>go("daily")} className="rk-daily-entry-v6" aria-label="Play Today’s Rackle">
+      <button type="button" onClick={()=>go("daily")} className="rk-daily-entry-v6" aria-label="Play Daily Rackle">
         <div className="rk-daily-entry-v6-glow" aria-hidden="true" />
         <div className="rk-daily-entry-v6-kicker"><span className="rk-live-spark"/> Daily Rackle · #{dn}</div>
         <div className="rk-real-tile-row-v6" aria-hidden="true">
@@ -13312,13 +13364,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             </span>
           ))}
         </div>
-        <h2 className="rk-daily-entry-v6-title">Play Today’s Rackle</h2>
+        <h2 className="rk-daily-entry-v6-title">Daily Rackle</h2>
         <p className="rk-daily-entry-v6-copy">One rack. One score. Everyone plays the same Charleston.</p>
         <div className="rk-daily-entry-v6-stats">
           <span>{posted} {posted===1?"player has":"players already"} posted</span>
           <span>{scoreToBeat} is the score to beat</span>
         </div>
-        <span className="rk-daily-entry-v6-cta"><span className="rk-live-spark"/> Play Today’s Rackle</span>
+        <span className="rk-daily-entry-v6-cta"><span className="rk-live-spark"/> Play Daily Rackle</span>
       </button>
     );
   };
@@ -13385,7 +13437,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </button>
         <button onClick={showScorecard} className="rk-home-improve-card" style={{width:"100%",borderRadius:14,padding:"13px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left",position:"relative"}}>
           <div className="rk-home-improve-icon" style={{width:39,height:39,borderRadius:12,background:C.jade+"13",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>🎓</div>
-          <div style={{flex:1,position:"relative",zIndex:1}}><div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.12,letterSpacing:-.35}}>Improve Your Game</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Coach view · Better reads · Next rack</div></div>
+          <div style={{flex:1,position:"relative",zIndex:1}}><div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.12,letterSpacing:-.35}}>Improve Your Game</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Free play · More hands · Coach view</div></div>
           <span style={{fontSize:18,color:C.gold,position:"relative",zIndex:1}}>›</span>
         </button>
       </div>
@@ -13427,7 +13479,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div className="rk-warmup-v6-main">
         <div className="rk-warmup-v6-kicker"><span>🔥</span> 2 minute daily warm-up</div>
         <div className="rk-warmup-v6-title">Improve Your Game</div>
-        <div className="rk-warmup-v6-copy">Fresh rack. No pressure.</div>
+        <div className="rk-warmup-v6-copy">Free play. Practice more hands. No pressure.</div>
       </div>
       <span className="rk-warmup-v6-cta">Play Free Play →</span>
     </button>
@@ -13567,7 +13619,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     ];
     const rows=(boardRows.length?boardRows:fallbackRows).slice(0,3);
     return(
-      <section className="rk-room-live-v6" aria-label="Today's rooms">
+      <details className="rk-room-live-v6 rk-room-live-v6-drop" aria-label="Today's rooms">
+        <summary className="rk-room-live-v6-summary">
         <div className="rk-room-live-v6-top">
           <div>
             <div className="rk-room-live-v6-kicker"><span className="rk-live-spark"/> Live club standings</div>
@@ -13576,6 +13629,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           </div>
           <div className="rk-room-live-v6-score"><strong>{leadValue}</strong><span>to beat</span></div>
         </div>
+        </summary>
         <div className="rk-room-live-v6-list">
           {rows.map((e,i)=>{
             const nm=(e?.name||"").trim()||`Player ${i+1}`;
@@ -13595,7 +13649,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <span>{activeClubCode?`${(shownClubRank||clubCount||1)===1?"🏆 ":""}#${shownClubRank||clubCount||1} in your club`:"Club rooms open"}</span>
         </div>
         <button onClick={openBoard} className="rk-room-live-v6-cta">View leaderboard →</button>
-      </section>
+      </details>
     );
   };
 
@@ -15255,76 +15309,7 @@ function HandRenderer({hand, defaultOpen=false}){
     else if(g.isDragon) tileDesc=`${typeInfo.name} of Dragons (matching suit)`;
     else if(g.isWind) tileDesc=cnt===1?`${g.tile} Wind (single)`:`${typeInfo.name} of ${g.tile} Winds`;
     else if(g.isNum&&g.type==="single") tileDesc=`${g.tile}, single tile, no joker${suitName?" ("+suitName+")":""}`;
-    else if(g.isNum) tileDesc=`${typeInfo.name} of ${g.tile}s${suitName?" ("+suitName+")":""}${typeInfo.jokerOk?", jokers ok":", natural only"}
-/* ─── vFinal micro polish: compact warmup, softer signup, quieter titles ─── */
-.rk-warmup-card-v6{
-  justify-content:flex-start!important;
-  gap:10px!important;
-  padding:18px 20px!important;
-}
-.rk-warmup-v6-main{
-  width:100%!important;
-  margin:0!important;
-}
-.rk-warmup-v6-kicker{
-  margin-bottom:8px!important;
-}
-.rk-warmup-v6-title,
-.rk-room-live-v6-title,
-.rk-share-card div[style*="Challenge Your Club"],
-.rk-home-improve-card div[style*="Improve Your Game"]{
-  font-size:14px!important;
-  line-height:1.08!important;
-  letter-spacing:-.25px!important;
-}
-.rk-warmup-v6-title{
-  margin-bottom:5px!important;
-}
-.rk-warmup-v6-copy{
-  margin:0!important;
-  line-height:1.32!important;
-  max-width:28ch!important;
-}
-.rk-warmup-v6-cta{
-  width:100%!important;
-  margin-top:6px!important;
-  min-height:42px!important;
-}
-.rk-email-title-v8{
-  font-size:26px!important;
-  line-height:1!important;
-  opacity:.92!important;
-  letter-spacing:-.65px!important;
-}
-.rk-email-copy-v8{
-  line-height:1.42!important;
-}
-@media(max-width:390px){
-  .rk-warmup-card-v6{
-    padding:17px 16px!important;
-    gap:9px!important;
-  }
-  .rk-warmup-v6-title,
-  .rk-room-live-v6-title,
-  .rk-share-card div[style*="Challenge Your Club"],
-  .rk-home-improve-card div[style*="Improve Your Game"]{
-    font-size:13px!important;
-    line-height:1.1!important;
-  }
-  .rk-warmup-v6-copy{
-    font-size:11.8px!important;
-    line-height:1.32!important;
-  }
-  .rk-warmup-v6-cta{
-    min-height:40px!important;
-    margin-top:5px!important;
-  }
-  .rk-email-title-v8{
-    font-size:24px!important;
-  }
-}
-
-`;
+    else if(g.isNum) tileDesc=`${typeInfo.name} of ${g.tile}s${suitName?" ("+suitName+")":""}${typeInfo.jokerOk?", jokers ok":", natural only"}`;
     return{...g,tileDesc,typeInfo,cardColor:cc};
   });
 
@@ -15391,7 +15376,7 @@ function HandRenderer({hand, defaultOpen=false}){
 
         {/* Plain-English breakdown */}
         <div style={{padding:"10px 14px"}}>
-          <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>WHAT YOU NEED</div>
+          <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>BUILD THIS WITH</div>
           <div style={{display:"flex",flexDirection:"column",gap:5}}>
             {breakdown.map((g,i)=>{
               const cc=g.cardColor;
@@ -15400,8 +15385,8 @@ function HandRenderer({hand, defaultOpen=false}){
                 <div key={i} style={{display:"flex",alignItems:"flex-start",gap:8,padding:"6px 8px",background:C.bg2,borderRadius:8}}>
                   <div style={{width:20,height:20,borderRadius:10,background:dotCol+"20",border:`1px solid ${dotCol}40`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:800,color:dotCol,flexShrink:0,marginTop:1}}>{i+1}</div>
                   <div style={{flex:1}}>
-                    <div style={{fontSize:11,fontWeight:700,color:C.ink,lineHeight:1.3}}>{g.tileDesc}</div>
-                    <div style={{fontSize:10,color:C.mut,lineHeight:1.4,marginTop:1}}>{g.typeInfo.desc}</div>
+                    <div style={{fontSize:11,fontWeight:700,color:C.ink,lineHeight:1.3,wordBreak:"normal"}}>{g.tileDesc}</div>
+                    <div style={{fontSize:10,color:C.mut,lineHeight:1.4,marginTop:1}}>{g.typeInfo.name}{g.typeInfo.jokerOk?" · jokers allowed":" · natural only where noted"}</div>
                   </div>
                 </div>
               );
@@ -15768,6 +15753,7 @@ function HandBrowserScreen({home,setScreen}){
   const sec=activeSec?SECS.find(s=>s.id===activeSec):null;
   const visibleHands=allHands.slice(0,visibleLimit);
   const sectionCounts=SECS.map(s=>({sec:s,count:HAND_CATALOG.filter(h=>h.sec===s.id).length,concealed:HAND_CATALOG.filter(h=>h.sec===s.id&&h.concealed).length}));
+  const jumpToResults=()=>setTimeout(()=>document.getElementById("rk-hand-results")?.scrollIntoView({behavior:"smooth",block:"start"}),60);
 
   useEffect(()=>{setVisibleLimit(6);},[activeSec,search,onlyConcealed]);
 
@@ -15785,7 +15771,7 @@ function HandBrowserScreen({home,setScreen}){
 
       <section className="rk-browser-v9-section-grid" aria-label="Hand sections">
         {sectionCounts.map(({sec:s,count,concealed})=>(
-          <button key={s.id} className={activeSec===s.id?"rk-browser-v9-section active":"rk-browser-v9-section"} onClick={()=>setActiveSec(activeSec===s.id?null:s.id)}>
+          <button key={s.id} className={activeSec===s.id?"rk-browser-v9-section active":"rk-browser-v9-section"} onClick={()=>{setActiveSec(activeSec===s.id?null:s.id); if(activeSec!==s.id)jumpToResults();}}>
             <span className="rk-browser-v9-section-icon">{s.icon}</span>
             <strong>{s.name}</strong>
             <em>{count} hands{concealed?` · ${concealed} concealed`:""}</em>
@@ -15818,7 +15804,7 @@ function HandBrowserScreen({home,setScreen}){
         </div>
       </section>
 
-      <section className="rk-browser-v9-results-head">
+      <section id="rk-hand-results" className="rk-browser-v9-results-head">
         <div>
           <span>{activeSec||search||onlyConcealed?"Results":"Start here"}</span>
           <h2>{activeSec||search||onlyConcealed?`${allHands.length} matching hands`:"Choose a section to browse."}</h2>
