@@ -15212,7 +15212,76 @@ function HandRenderer({hand, defaultOpen=false}){
     else if(g.isDragon) tileDesc=`${typeInfo.name} of Dragons (matching suit)`;
     else if(g.isWind) tileDesc=cnt===1?`${g.tile} Wind (single)`:`${typeInfo.name} of ${g.tile} Winds`;
     else if(g.isNum&&g.type==="single") tileDesc=`${g.tile}, single tile, no joker${suitName?" ("+suitName+")":""}`;
-    else if(g.isNum) tileDesc=`${typeInfo.name} of ${g.tile}s${suitName?" ("+suitName+")":""}${typeInfo.jokerOk?", jokers ok":", natural only"}`;
+    else if(g.isNum) tileDesc=`${typeInfo.name} of ${g.tile}s${suitName?" ("+suitName+")":""}${typeInfo.jokerOk?", jokers ok":", natural only"}
+/* ─── vFinal micro polish: compact warmup, softer signup, quieter titles ─── */
+.rk-warmup-card-v6{
+  justify-content:flex-start!important;
+  gap:10px!important;
+  padding:18px 20px!important;
+}
+.rk-warmup-v6-main{
+  width:100%!important;
+  margin:0!important;
+}
+.rk-warmup-v6-kicker{
+  margin-bottom:8px!important;
+}
+.rk-warmup-v6-title,
+.rk-room-live-v6-title,
+.rk-share-card div[style*="Challenge Your Club"],
+.rk-home-improve-card div[style*="Improve Your Game"]{
+  font-size:15px!important;
+  line-height:1.08!important;
+  letter-spacing:-.28px!important;
+}
+.rk-warmup-v6-title{
+  margin-bottom:5px!important;
+}
+.rk-warmup-v6-copy{
+  margin:0!important;
+  line-height:1.32!important;
+  max-width:28ch!important;
+}
+.rk-warmup-v6-cta{
+  width:100%!important;
+  margin-top:6px!important;
+  min-height:42px!important;
+}
+.rk-email-title-v8{
+  font-size:26px!important;
+  line-height:1!important;
+  opacity:.92!important;
+  letter-spacing:-.65px!important;
+}
+.rk-email-copy-v8{
+  line-height:1.42!important;
+}
+@media(max-width:390px){
+  .rk-warmup-card-v6{
+    padding:17px 16px!important;
+    gap:9px!important;
+  }
+  .rk-warmup-v6-title,
+  .rk-room-live-v6-title,
+  .rk-share-card div[style*="Challenge Your Club"],
+  .rk-home-improve-card div[style*="Improve Your Game"]{
+    font-size:14px!important;
+    line-height:1.1!important;
+  }
+  .rk-warmup-v6-copy{
+    font-size:11.8px!important;
+    line-height:1.32!important;
+  }
+  .rk-warmup-v6-cta{
+    min-height:40px!important;
+    margin-top:5px!important;
+  }
+  .rk-email-title-v8{
+    font-size:24px!important;
+  }
+}
+
+`;
     return{...g,tileDesc,typeInfo,cardColor:cc};
   });
 
