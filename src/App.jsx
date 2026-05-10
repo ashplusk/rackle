@@ -3345,15 +3345,15 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-learn-home-title,
 .rk-email-title-v8{
   font-family:'Fraunces',Georgia,serif!important;
-  font-size:28px!important;
-  line-height:1.02!important;
+  font-size:27px!important;
+  line-height:1.03!important;
   letter-spacing:-.85px!important;
   font-weight:950!important;
 }
 .rk-tomorrow-v11-title,
 .rk-next-rack-title-v11{
   font-family:'Fraunces',Georgia,serif!important;
-  font-size:28px!important;
+  font-size:27px!important;
   line-height:1.04!important;
   letter-spacing:-.8px!important;
   font-weight:950!important;
@@ -3498,6 +3498,15 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-room-live-v6-summary:after{right:19px!important;bottom:20px!important;width:38px!important;height:38px!important;}
   .rk-room-live-v6-copy{font-size:12.7px!important;max-width:22ch!important;}
 }
+
+
+/* v15: Live club standings is no longer a dropdown */
+.rk-room-live-v6-summary:after{content:none!important;display:none!important}
+.rk-dropdown-hint-v12{display:none!important}
+.rk-room-live-v6-summary{cursor:pointer!important}
+.rk-room-live-v6-title{font-size:27px!important}
+.rk-warmup-v6-title,.rk-learn-home-title,.rk-email-title-v8{font-size:27px!important}
+@media(max-width:390px){.rk-room-live-v6-title,.rk-warmup-v6-title,.rk-learn-home-title,.rk-email-title-v8{font-size:23px!important}.rk-tomorrow-v11-title,.rk-next-rack-title-v11{font-size:23px!important}}
 
 `;
 
@@ -14044,37 +14053,18 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     ];
     const rows=(boardRows.length?boardRows:fallbackRows).slice(0,3);
     return(
-      <details className="rk-room-live-v6 rk-room-live-v6-drop" aria-label="Today's rooms">
-        <summary className="rk-room-live-v6-summary">
-        <div className="rk-room-live-v6-top">
-          <div>
-            <div className="rk-room-live-v6-kicker"><span className="rk-live-spark"/> Live club standings <span className="rk-dropdown-hint-v12">Open standings</span></div>
-            <h2 className="rk-room-live-v6-title">Challenge Your Club</h2>
-            <p className="rk-room-live-v6-copy">{roomLine}</p>
+      <section className="rk-room-live-v6" aria-label="Live club standings">
+        <button type="button" onClick={openBoard} className="rk-room-live-v6-summary" style={{width:"100%",textAlign:"left",display:"block",border:0}}>
+          <div className="rk-room-live-v6-top">
+            <div>
+              <div className="rk-room-live-v6-kicker"><span className="rk-live-spark"/> Live club standings</div>
+              <h2 className="rk-room-live-v6-title">Challenge Your Club</h2>
+              <p className="rk-room-live-v6-copy">{roomLine}</p>
+            </div>
+            <div className="rk-room-live-v6-score"><strong>{leadValue}</strong><span>to beat</span></div>
           </div>
-          <div className="rk-room-live-v6-score"><strong>{leadValue}</strong><span>to beat</span></div>
-        </div>
-        </summary>
-        <div className="rk-room-live-v6-list">
-          {rows.map((e,i)=>{
-            const nm=(e?.name||"").trim()||`Player ${i+1}`;
-            const sc=Number.isFinite(Number(e?.iqScore))?Number(e.iqScore):(e?.iqScore||"—");
-            const me=rkEntryMatchesCurrentPlayer?rkEntryMatchesCurrentPlayer(e,currentScore):false;
-            return(
-              <div key={`${nm}-${i}`} className={`rk-room-live-v6-row ${me?"is-you":""}`}>
-                <span className="rk-room-live-v6-rank">#{i+1}</span>
-                <span className="rk-room-live-v6-name">{i===0?`${nm} leads`:nm}</span>
-                <strong className="rk-room-live-v6-row-score">{sc}</strong>
-              </div>
-            );
-          })}
-        </div>
-        <div className="rk-room-live-v6-meta">
-          <span>{globalCount||2} global players</span>
-          <span>{activeClubCode?`${(shownClubRank||clubCount||1)===1?"🏆 ":""}#${shownClubRank||clubCount||1} in your club`:"Club rooms open"}</span>
-        </div>
-        <button onClick={openBoard} className="rk-room-live-v6-cta">View leaderboard →</button>
-      </details>
+        </button>
+      </section>
     );
   };
 
