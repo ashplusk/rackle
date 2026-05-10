@@ -2519,6 +2519,133 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 @media(max-width:599px){.rk-real-tile-wrap-v6:nth-child(n+7){display:none}.rk-real-tile-row-v6{gap:8px}.rk-real-tile-wrap-v6 .rk-mahjong-tile{width:40px!important;height:58px!important}.rk-daily-entry-v6{padding:21px 15px 20px}.rk-daily-entry-v6-title{font-size:24px}.rk-warmup-card-v6{align-items:flex-start;flex-direction:column}.rk-warmup-v6-cta{width:100%}.rk-startup-logo-v4{margin-bottom:16px!important}.rk-startup-subtitle-v4{margin-bottom:16px!important}}
 @media(max-width:380px){.rk-real-tile-row-v6{gap:6px}.rk-real-tile-wrap-v6 .rk-mahjong-tile{width:37px!important;height:54px!important}.rk-daily-entry-v6-stats span{font-size:10.5px}}
 
+
+
+/* ─── vNext compact premium hero copy, Free Play CTA, and Rackle Ritual polish ─── */
+.rk-startup-hero-v4{padding-bottom:14px!important;margin-bottom:8px!important}
+.rk-startup-logo-v4{margin-bottom:16px!important}
+.rk-startup-subtitle-v4{margin-top:0!important;margin-bottom:18px!important;line-height:1.15!important}
+.rk-startup-description-v4{
+  margin:0 auto 4px!important;
+  max-width:29ch!important;
+  color:rgba(26,20,16,.62)!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:16px!important;
+  line-height:1.38!important;
+  font-weight:520!important;
+  letter-spacing:-.18px!important;
+  text-wrap:balance;
+}
+.rk-startup-description-v4 .rk-desc-main,
+.rk-startup-description-v4 .rk-desc-line{
+  display:block!important;
+  margin:0!important;
+  color:rgba(26,20,16,.62)!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:inherit!important;
+  line-height:inherit!important;
+  font-weight:520!important;
+  letter-spacing:-.18px!important;
+}
+.rk-startup-description-v4 .rk-desc-line{color:rgba(26,20,16,.48)!important;margin-top:3px!important}
+.rk-startup-description-v4 em{display:none!important}
+
+.rk-warmup-card-v6{
+  align-items:center!important;
+  padding:23px 22px!important;
+  background:
+    radial-gradient(circle at 88% 20%,rgba(23,107,66,.10),transparent 25%),
+    linear-gradient(145deg,#FFFDF8 0%,#F4EBDC 100%)!important;
+}
+.rk-warmup-v6-kicker{margin-bottom:12px!important;letter-spacing:2.6px!important}
+.rk-warmup-v6-title{
+  max-width:520px!important;
+  font-size:23px!important;
+  line-height:1.16!important;
+  letter-spacing:-.45px!important;
+  margin-bottom:10px!important;
+  text-wrap:balance;
+}
+.rk-warmup-v6-copy{
+  max-width:36ch!important;
+  font-size:13px!important;
+  line-height:1.56!important;
+  font-weight:700!important;
+  color:rgba(26,20,16,.58)!important;
+}
+.rk-warmup-v6-social{margin-top:12px!important;font-size:11.5px!important;color:#A07828!important}
+.rk-warmup-v6-cta{
+  min-height:46px!important;
+  padding:0 18px!important;
+  background:linear-gradient(145deg,#176B42,#0F5432)!important;
+  border:1px solid rgba(255,255,255,.20)!important;
+  color:#FFFDF8!important;
+  box-shadow:0 10px 22px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.20)!important;
+}
+
+.rk-ritual-carousel-v6{
+  margin:22px 0 18px!important;
+  padding:18px 0 2px!important;
+  border-top:1px solid rgba(160,120,40,.16);
+}
+.rk-ritual-head-v6{align-items:flex-start!important;margin-bottom:13px!important}
+.rk-ritual-head-v6 span{display:block;color:#176B42!important;font-size:9px!important;letter-spacing:2.8px!important}
+.rk-ritual-head-v6 strong{font-size:20px!important;max-width:13ch!important;text-wrap:balance;color:#1A1410!important}
+.rk-ritual-track-v6{gap:12px!important;padding:2px 2px 8px!important}
+.rk-ritual-card-v6{
+  position:relative;
+  flex:0 0 76%!important;
+  min-height:170px;
+  padding:18px 17px!important;
+  background:
+    radial-gradient(circle at 85% 10%,rgba(23,107,66,.10),transparent 28%),
+    linear-gradient(145deg,#FFFDF8,#F2E9D9)!important;
+  border:1px solid rgba(26,20,16,.08)!important;
+  box-shadow:0 10px 28px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-ritual-card-v6 i{
+  position:absolute;
+  right:16px;
+  top:15px;
+  width:42px;
+  height:50px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:13px;
+  font-style:normal;
+  font-size:25px;
+  background:linear-gradient(145deg,#FFFDF8,#E9DDC9);
+  border:1px solid rgba(26,20,16,.09);
+  box-shadow:0 6px 14px rgba(26,20,16,.08),inset 0 1px 0 rgba(255,255,255,.86);
+  transform:rotate(2deg);
+}
+.rk-ritual-card-v6 .rk-ritual-num{
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:center;
+  width:34px;
+  height:34px;
+  margin-bottom:28px!important;
+  border-radius:999px;
+  background:rgba(23,107,66,.08);
+  border:1px solid rgba(23,107,66,.10);
+  color:#176B42!important;
+  font-size:10px!important;
+  letter-spacing:1.3px!important;
+}
+.rk-ritual-card-v6 b{font-size:22px!important;line-height:1.02!important;margin-bottom:9px!important;letter-spacing:-.4px!important}
+.rk-ritual-card-v6 p{max-width:20ch;font-size:12.5px!important;line-height:1.48!important;color:rgba(26,20,16,.58)!important}
+.rk-ritual-dots-v6 span:first-child{width:18px!important;background:#176B42!important}
+@media(min-width:760px){.rk-ritual-card-v6{flex-basis:31%!important}.rk-warmup-v6-title{font-size:28px!important}}
+@media(max-width:390px){
+  .rk-startup-description-v4{font-size:14px!important;max-width:27ch!important;line-height:1.36!important}
+  .rk-warmup-card-v6{padding:20px 17px!important;gap:13px!important}
+  .rk-warmup-v6-title{font-size:21px!important;line-height:1.16!important}
+  .rk-warmup-v6-copy{font-size:12.2px!important;line-height:1.5!important}
+  .rk-warmup-v6-cta{min-height:42px!important;padding:0 14px!important;font-size:11.5px!important}
+  .rk-ritual-card-v6{flex-basis:82%!important}
+}
 `;
 
 
@@ -12750,11 +12877,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <h1 className="rk-startup-logo-v4">Rackle</h1>
         <p className="rk-startup-subtitle-v4">The Daily Mahjong Workout</p>
         <p className="rk-startup-description-v4">
-          {dDone?"You showed up today.":"Play one Charleston."}
-          <span className="rk-desc-line">
-            {dDone?"Now make your club chase the score.":"Get your score. Share it with your club."}
-          </span>
-          {!dDone&&<em>2 minutes. Same daily rack for everyone.</em>}
+          <span className="rk-desc-main">{dDone?"You showed up. Make your club chase the score.":"Play one Charleston. Get your score."}</span>
+          <span className="rk-desc-line">{dDone?"Board resets tonight.":"Same daily rack for everyone."}</span>
         </p>
       </div>
     );
@@ -12894,11 +13018,11 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     <button onClick={()=>go("free")} className="rk-warmup-card-v6" aria-label="Start a warm up rack">
       <div className="rk-warmup-v6-main">
         <div className="rk-warmup-v6-kicker"><span>🔥</span> 2 minute daily warm-up</div>
-        <div className="rk-warmup-v6-title">Train your Charleston before tonight’s game.</div>
-        <div className="rk-warmup-v6-copy">Most players miss stronger hands during the first 3 passes.</div>
-        <div className="rk-warmup-v6-social">2,184 players warmed up today</div>
+        <div className="rk-warmup-v6-title">Sharpen your Charleston before tonight’s game.</div>
+        <div className="rk-warmup-v6-copy">Practice a fresh rack, test your read, and keep today’s score untouched.</div>
+        <div className="rk-warmup-v6-social">2,184 players entered Free Play today</div>
       </div>
-      <span className="rk-warmup-v6-cta">Play Today’s Rackle →</span>
+      <span className="rk-warmup-v6-cta">Enter Free Play →</span>
     </button>
   );
 
@@ -12950,13 +13074,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     <section className="rk-ritual-carousel-v6" aria-label="The Rackle ritual">
       <div className="rk-ritual-head-v6">
         <span>The Rackle Ritual</span>
-        <strong>Four taps. One better read.</strong>
+        <strong>Your daily Charleston loop.</strong>
       </div>
       <div className="rk-ritual-track-v6">
-        <article className="rk-ritual-card-v6"><span>01</span><b>Pass tiles</b><p>Read the rack and make your Charleston move.</p></article>
-        <article className="rk-ritual-card-v6"><span>02</span><b>Build direction</b><p>See what your hand is starting to become.</p></article>
-        <article className="rk-ritual-card-v6"><span>03</span><b>Rate your Charleston</b><p>Get a score for your passing quality.</p></article>
-        <article className="rk-ritual-card-v6"><span>04</span><b>Compare with your club</b><p>Climb the board before the room resets.</p></article>
+        <article className="rk-ritual-card-v6"><span className="rk-ritual-num">01</span><i>🀙</i><b>Pass tiles</b><p>Make your Charleston move.</p></article>
+        <article className="rk-ritual-card-v6"><span className="rk-ritual-num">02</span><i>🀇</i><b>Find direction</b><p>See where the rack is pulling.</p></article>
+        <article className="rk-ritual-card-v6"><span className="rk-ritual-num">03</span><i>🀄</i><b>Get your read</b><p>Score the quality of your passes.</p></article>
+        <article className="rk-ritual-card-v6"><span className="rk-ritual-num">04</span><i>🀐</i><b>Chase the room</b><p>Compare with your club board.</p></article>
       </div>
       <div className="rk-ritual-dots-v6" aria-hidden="true"><span/><span/><span/></div>
     </section>
