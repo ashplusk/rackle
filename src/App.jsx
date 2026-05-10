@@ -3071,6 +3071,97 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-email-title-v8{font-size:21px!important;}
 }
 
+
+/* ─── vNext micro polish: tighter hero copy, realistic tiles, daily CTA spacing ─── */
+.rk-startup-description-v4{
+  max-width:32ch!important;
+  margin-top:18px!important;
+  font-size:15px!important;
+  line-height:1.42!important;
+  font-weight:620!important;
+  color:rgba(26,20,16,.54)!important;
+  letter-spacing:.02em!important;
+}
+.rk-startup-description-v4 .rk-desc-main,
+.rk-startup-description-v4 .rk-desc-line{
+  display:block!important;
+  font-size:inherit!important;
+  line-height:1.42!important;
+  font-weight:620!important;
+  color:rgba(26,20,16,.54)!important;
+  margin:0!important;
+}
+.rk-startup-description-v4 .rk-desc-line{margin-top:3px!important;}
+.rk-daily-entry-v6{
+  border:1px solid rgba(26,20,16,.105)!important;
+  padding-top:22px!important;
+  padding-bottom:24px!important;
+}
+.rk-daily-entry-v6-title{
+  font-size:30px!important;
+  line-height:1.02!important;
+  letter-spacing:-.85px!important;
+  margin:2px 0 10px!important;
+}
+.rk-daily-entry-v6-copy{
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:14.5px!important;
+  line-height:1.48!important;
+  font-weight:780!important;
+  letter-spacing:.01em!important;
+  color:rgba(26,20,16,.62)!important;
+  max-width:29ch!important;
+  margin:0 auto 18px!important;
+}
+.rk-daily-entry-v6-stats{margin-bottom:22px!important;}
+.rk-daily-entry-v6-cta{margin-top:4px!important;}
+.rk-real-tile-row-v6{
+  gap:11px!important;
+  margin-bottom:22px!important;
+  perspective:700px!important;
+}
+.rk-real-tile-wrap-v6 .rk-mahjong-tile{
+  border-radius:13px!important;
+  background:
+    radial-gradient(circle at 35% 18%,rgba(255,255,255,.95),transparent 32%),
+    linear-gradient(145deg,#FFFDF8 0%,#F7F0E4 46%,#E9DDC8 100%)!important;
+  border:1px solid rgba(26,20,16,.13)!important;
+  box-shadow:
+    0 12px 18px rgba(26,20,16,.14),
+    0 2px 0 rgba(120,96,64,.12),
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 -3px 7px rgba(120,96,64,.10)!important;
+}
+.rk-real-tile-wrap-v6 .rk-mahjong-tile:before{
+  content:"";
+  position:absolute;
+  inset:4px 5px 6px;
+  border-radius:10px;
+  border:1px solid rgba(26,20,16,.045);
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0));
+  pointer-events:none;
+}
+.rk-real-tile-wrap-v6 .rk-mahjong-tile:after{
+  content:"";
+  position:absolute;
+  left:8px;
+  right:8px;
+  bottom:4px;
+  height:2px;
+  border-radius:999px;
+  background:rgba(26,20,16,.07);
+  pointer-events:none;
+}
+.rk-real-tile-wrap-v6 .rk-mahjong-tile span:first-child{
+  text-shadow:0 1px 0 rgba(255,255,255,.65)!important;
+}
+@media(max-width:390px){
+  .rk-startup-description-v4{font-size:13.5px!important;max-width:30ch!important;}
+  .rk-daily-entry-v6-title{font-size:27px!important;}
+  .rk-daily-entry-v6-copy{font-size:13.5px!important;max-width:28ch!important;}
+  .rk-real-tile-row-v6{gap:8px!important;margin-bottom:20px!important;}
+}
+
 `;
 
 
@@ -13333,7 +13424,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <p className="rk-startup-subtitle-v4">The Daily Mahjong Workout</p>
         <p className="rk-startup-description-v4">
           <span className="rk-desc-main">{dDone?"You posted. Make your club chase it.":"Play one Charleston. Beat the room."}</span>
-          <span className="rk-desc-line">{dDone?"Board resets tonight.":"Same rack for everyone. One score to chase."}</span>
+          <span className="rk-desc-line">{dDone?"Board resets tonight.":"Same rack. One score to chase."}</span>
         </p>
       </div>
     );
@@ -13364,13 +13455,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             </span>
           ))}
         </div>
-        <h2 className="rk-daily-entry-v6-title">Daily Rackle</h2>
-        <p className="rk-daily-entry-v6-copy">One rack. One score. Everyone plays the same Charleston.</p>
+        <h2 className="rk-daily-entry-v6-title">Ready for today’s rack?</h2>
+        <p className="rk-daily-entry-v6-copy">One rack. One score. Same Charleston for everyone.</p>
         <div className="rk-daily-entry-v6-stats">
           <span>{posted} {posted===1?"player has":"players already"} posted</span>
           <span>{scoreToBeat} is the score to beat</span>
         </div>
-        <span className="rk-daily-entry-v6-cta"><span className="rk-live-spark"/> Play Daily Rackle</span>
+        <span className="rk-daily-entry-v6-cta"><span className="rk-live-spark"/> Play today’s Rackle</span>
       </button>
     );
   };
