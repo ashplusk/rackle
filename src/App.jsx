@@ -2921,8 +2921,26 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-tomorrow-v11-copy{position:relative;z-index:1;font-size:12.7px;line-height:1.55;color:rgba(26,20,16,.62);font-weight:750;margin:0 0 14px;max-width:34ch}
 .rk-tomorrow-v11-row{position:relative;z-index:1;display:flex;gap:7px;flex-wrap:wrap}
 .rk-tomorrow-v11-row span{display:inline-flex;border-radius:999px;padding:7px 10px;background:rgba(255,255,255,.46);border:1px solid rgba(160,120,40,.16);color:#8A6820;font-size:10.5px;font-weight:900;line-height:1}
-.rk-share-card div[style*="Challenge Your Club"],.rk-home-improve-card div[style*="Improve Your Game"]{font-family:'Fraunces',Georgia,serif!important;font-size:19px!important;font-weight:900!important;line-height:1.15!important;letter-spacing:-.45px!important}
-@media(max-width:390px){.rk-tomorrow-v11-title,.rk-next-rack-title-v11{font-size:21px}.rk-tomorrow-v11-row span{font-size:10px}.rk-share-card div[style*="Challenge Your Club"],.rk-home-improve-card div[style*="Improve Your Game"]{font-size:18px!important}}
+.rk-share-card div[style*="Challenge Your Club"],.rk-home-improve-card div[style*="Improve Your Game"]{font-family:'Fraunces',Georgia,serif!important;font-size:17px!important;font-weight:900!important;line-height:1.15!important;letter-spacing:-.35px!important}
+@media(max-width:390px){.rk-tomorrow-v11-title,.rk-next-rack-title-v11{font-size:21px}.rk-tomorrow-v11-row span{font-size:10px}.rk-share-card div[style*="Challenge Your Club"],.rk-home-improve-card div[style*="Improve Your Game"]{font-size:16px!important}}
+
+/* ─── v12 HOMEPAGE ORDER + RITUAL + LEARN CLEANUP ─────────────────────── */
+.rk-ritual-v12{margin:26px 0 24px!important}
+.rk-ritual-v12 .rk-ritual-head-v6{padding:0 2px!important;margin-bottom:18px!important}
+.rk-ritual-v12 .rk-ritual-head-v6 strong{font-size:23px!important;max-width:16ch!important;letter-spacing:-.65px!important}
+.rk-ritual-v12 .rk-ritual-head-v6 p{font-size:13px!important;line-height:1.6!important;max-width:34ch!important;color:rgba(26,20,16,.60)!important}
+.rk-ritual-v12 .rk-ritual-track-v6{gap:14px!important;padding:4px 2px 12px!important}
+.rk-ritual-v12 .rk-ritual-card-v6{flex-basis:86%!important;min-height:236px!important;padding:21px 18px 18px!important;border-radius:30px!important;background:radial-gradient(circle at 86% 10%,rgba(255,255,255,.88),transparent 31%),radial-gradient(circle at 12% 94%,rgba(23,107,66,.075),transparent 34%),linear-gradient(145deg,#FFFDF8 0%,#F4ECDE 100%)!important;border:1px solid rgba(160,120,40,.10)!important;box-shadow:0 16px 36px rgba(26,20,16,.065),inset 0 1px 0 rgba(255,255,255,.88)!important}
+.rk-ritual-v12 .rk-ritual-num{margin-bottom:30px!important;background:rgba(160,120,40,.10)!important;border-color:rgba(160,120,40,.16)!important;color:#8A6820!important}
+.rk-ritual-v12 .rk-ritual-card-v6 b{font-size:21px!important;line-height:1.04!important;margin-bottom:10px!important}
+.rk-ritual-v12 .rk-ritual-card-v6 p{font-size:12.6px!important;line-height:1.58!important;color:rgba(26,20,16,.64)!important;max-width:29ch!important}
+.rk-ritual-v12 .rk-ritual-card-v6 em{margin-top:15px!important;padding:9px 11px!important;border-radius:999px!important;background:rgba(23,107,66,.075)!important;border:1px solid rgba(23,107,66,.10)!important;color:#176B42!important;width:fit-content!important;max-width:100%!important}
+.rk-ritual-v12 .rk-ritual-dots-v6{margin-top:4px!important}
+.rk-learn-home-v12 .rk-learn-home-card{gap:12px!important}
+.rk-learn-home-v12 .rk-learn-home-icon{width:34px!important;height:34px!important;min-width:34px!important;border-radius:14px!important;background:rgba(23,107,66,.075)!important;border:1px solid rgba(23,107,66,.10)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.72)!important;color:#176B42!important;font-family:'Fraunces',Georgia,serif!important;font-size:13px!important;font-weight:950!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.rk-learn-home-v12 .rk-learn-home-icon .rk-mahjong-tile{display:none!important}
+@media(min-width:760px){.rk-ritual-v12 .rk-ritual-card-v6{flex-basis:31.5%!important}}
+@media(max-width:390px){.rk-ritual-v12 .rk-ritual-head-v6 strong{font-size:22px!important}.rk-ritual-v12 .rk-ritual-card-v6{flex-basis:88%!important;min-height:244px!important}}
 `;
 
 
@@ -13347,7 +13365,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
 
   const HowItWorks=()=> (
-    <section className="rk-ritual-carousel-v6 rk-ritual-v9 rk-ritual-v10" aria-label="The Rackle ritual">
+    <section className="rk-ritual-carousel-v6 rk-ritual-v9 rk-ritual-v10 rk-ritual-v12" aria-label="The Rackle ritual">
       <div className="rk-ritual-head-v6">
         <span>The Rackle Ritual</span>
         <strong>Your daily Charleston loop.</strong>
@@ -13355,10 +13373,10 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       </div>
       <div className="rk-ritual-track-v6">
         {[
-          {n:"01",title:"Warm up the rack",copy:"Start with the full rack, not a dream hand. Notice pairs, runs, flowers, jokers, and loose tiles before the first pass.",note:"Most players lock in too early."},
-          {n:"02",title:"Read the flow",copy:"Each pass should protect your strongest shape while keeping a second lane alive. The goal is flexibility without drifting.",note:"Good Charleston play keeps options open."},
-          {n:"03",title:"Get your score",copy:"Rackle grades the read, shows the strongest path, and explains what your passes helped or hurt.",note:"Small pass choices change the whole rack."},
-          {n:"04",title:"Chase the room",copy:"Compare your score with your club and the global board. Come back tomorrow to defend the room.",note:"A better pass can move you up fast."},
+          {n:"01",title:"Read the rack",copy:"Start with what the tiles are actually giving you. Spot pairs, near-runs, flowers, jokers, and flexible lanes before the first pass.",note:"Strong players do not chase too early."},
+          {n:"02",title:"Protect the upside",copy:"Pass the tiles that cost you the least. Keep your best path alive while leaving one clean pivot open.",note:"Flexibility wins the Charleston."},
+          {n:"03",title:"Score the decision",copy:"Rackle reviews the shape of your rack, shows the best path, and explains which choices helped or hurt.",note:"One pass can change the whole read."},
+          {n:"04",title:"Defend the room",copy:"Compare your Charleston IQ with your club, chase the daily board, and come back tomorrow for a fresh rack.",note:"Move up one cleaner read at a time."},
         ].map((card)=>(
           <article className="rk-ritual-card-v6" key={card.n}>
             <span className="rk-ritual-num">{card.n}</span>
@@ -13470,7 +13488,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
 
   const Learn=()=> (
-    <section className="rk-learn-home-v8" aria-label="Learn and explore Rackle">
+    <section className="rk-learn-home-v8 rk-learn-home-v12" aria-label="Learn and explore Rackle">
       <div className="rk-learn-home-head">
         <div className="rk-learn-home-kicker"><span className="rk-live-spark"/> Learn + Explore</div>
         <h2 className="rk-learn-home-title">Learn the card faster.</h2>
@@ -13478,12 +13496,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       </div>
       <div className="rk-learn-home-grid">
         {[
-          [{t:"s",s:"bam",n:7},"How to Play","Charleston basics, passing order, and Rackle scoring.",()=>setScreen("howto")],
-          [{t:"s",s:"crak",n:5},"2026 Hand Browser","Scan the card by section before you chase a lane.",()=>setScreen("handbrowser")],
-          [{t:"d",v:"Red"},"Free Play","Practice a fresh rack and keep today’s score untouched.",()=>go("free")],
-        ].map(([tile,title,sub,fn])=>(
+          ["01","How to Play","Charleston basics, passing order, and Rackle scoring.",()=>setScreen("howto")],
+          ["02","2026 Hand Browser","Scan the card by section before you chase a lane.",()=>setScreen("handbrowser")],
+          ["03","Free Play","Practice a fresh rack and keep today’s score untouched.",()=>go("free")],
+        ].map(([mark,title,sub,fn])=>(
           <button key={title} className="rk-learn-home-card" onClick={fn}>
-            <span className="rk-learn-home-icon rk-learn-home-icon-plain"><Ti t={tile} /></span>
+            <span className="rk-learn-home-icon">{mark}</span>
             <span className="rk-learn-home-text"><strong>{title}</strong><span>{sub}</span></span>
             <span className="rk-learn-home-arrow">›</span>
           </button>
@@ -13511,11 +13529,11 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           {!dDone&&<StartDaily/>}
           {dDone&&<CompletedDaily/>}
           {dDone&&<TomorrowTease/>}
-          <PracticeCard/>
           <Community/>
-          <SharePreview/>
+          <PracticeCard/>
           <HowItWorks/>
           <Learn/>
+          <SharePreview/>
           <EmailSignup/>
           <div className="rk-home-desktop-insights"><DesktopInsightDeck/></div>
         </div>
