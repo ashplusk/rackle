@@ -3508,6 +3508,194 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-warmup-v6-title,.rk-learn-home-title,.rk-email-title-v8{font-size:27px!important}
 @media(max-width:390px){.rk-room-live-v6-title,.rk-warmup-v6-title,.rk-learn-home-title,.rk-email-title-v8{font-size:23px!important}.rk-tomorrow-v11-title,.rk-next-rack-title-v11{font-size:23px!important}}
 
+
+/* ─── v15 homepage polish: realistic loose tiles, tomorrow balance, live previews ─── */
+.rk-startup-hero-v4{
+  padding-bottom:6px!important;
+  margin-bottom:2px!important;
+}
+.rk-startup-subtitle-v4{
+  margin-bottom:6px!important;
+}
+.rk-home-landing-flow{
+  gap:13px!important;
+}
+.rk-daily-entry-v6{
+  margin-top:0!important;
+}
+.rk-daily-entry-v6-kicker{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  padding:0!important;
+  min-height:auto!important;
+  margin-bottom:16px!important;
+  letter-spacing:2.4px!important;
+}
+.rk-real-tile-row-v6{
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  gap:10px!important;
+  margin-bottom:20px!important;
+}
+.rk-real-tile-wrap-v6{
+  filter:drop-shadow(0 10px 10px rgba(26,20,16,.10));
+}
+.rk-real-tile-wrap-v6 .rk-mahjong-tile{
+  border-radius:14px 14px 12px 12px!important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,0) 24%),
+    linear-gradient(145deg,#FFFDF8 0%,#F7EEDF 48%,#E6D8BF 100%)!important;
+  border:1px solid rgba(26,20,16,.15)!important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.75),
+    0 3px 0 rgba(159,129,86,.20),
+    0 12px 18px rgba(26,20,16,.12),
+    inset 0 1px 0 rgba(255,255,255,.96),
+    inset 0 -5px 9px rgba(123,96,55,.12)!important;
+}
+.rk-real-tile-wrap-v6 .rk-mahjong-tile span:first-child{
+  transform:translateY(-1px)!important;
+}
+.rk-tomorrow-card-v11{
+  position:relative!important;
+  min-height:196px!important;
+}
+.rk-tomorrow-v11-top{
+  align-items:flex-start!important;
+}
+.rk-tomorrow-v11-copy,
+.rk-tomorrow-v11-row{
+  position:relative!important;
+  z-index:2!important;
+}
+.rk-tomorrow-float-tiles{
+  right:24px!important;
+  bottom:24px!important;
+  opacity:.20!important;
+  transform:scale(1.12) rotate(-6deg)!important;
+}
+.rk-tomorrow-card-v11:after{
+  content:'New rack\A new room';
+  white-space:pre-line;
+  position:absolute;
+  right:22px;
+  top:98px;
+  width:98px;
+  min-height:54px;
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:10px;
+  line-height:1.35;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  font-weight:950;
+  color:rgba(243,212,107,.72);
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(243,212,107,.15);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+  pointer-events:none;
+}
+.rk-room-live-v6{
+  cursor:default!important;
+}
+.rk-room-live-v6-summary{
+  cursor:pointer!important;
+}
+.rk-room-live-v6-summary:after,
+.rk-dropdown-hint-v12{
+  display:none!important;
+  content:none!important;
+}
+.rk-room-live-v6-kicker{
+  padding-right:0!important;
+}
+.rk-room-live-v6-preview-grid{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:0 18px 18px;
+  margin-top:-8px;
+}
+.rk-room-live-v6-preview-card{
+  border-radius:18px;
+  background:rgba(255,255,255,.085);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.09);
+  padding:12px;
+  color:#fff;
+  text-align:left;
+  min-width:0;
+}
+.rk-room-live-v6-preview-card strong{
+  display:block;
+  font-size:8.5px;
+  letter-spacing:1.9px;
+  text-transform:uppercase;
+  color:#F3D46B;
+  margin-bottom:8px;
+}
+.rk-room-live-v6-preview-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:7px 0;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.rk-room-live-v6-preview-row:first-of-type{
+  border-top:0;
+  padding-top:0;
+}
+.rk-room-live-v6-preview-name{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:rgba(255,255,255,.74);
+  font-size:11px;
+  font-weight:850;
+}
+.rk-room-live-v6-preview-score{
+  color:#F3D46B;
+  font-family:'Fraunces',Georgia,serif;
+  font-size:17px;
+  line-height:1;
+  font-weight:950;
+}
+.rk-room-live-v6-preview-link{
+  margin-top:8px;
+  font-size:10.5px;
+  color:rgba(255,255,255,.62);
+  font-weight:850;
+}
+.rk-learn-home-kicker{
+  margin-bottom:8px!important;
+}
+.rk-learn-home-title{
+  margin-top:0!important;
+}
+.rk-learn-home-copy{
+  max-width:30ch!important;
+  line-height:1.45!important;
+}
+@media(max-width:390px){
+  .rk-startup-hero-v4{padding-bottom:2px!important;margin-bottom:0!important}
+  .rk-startup-subtitle-v4{margin-bottom:4px!important}
+  .rk-real-tile-row-v6{gap:7px!important;margin-bottom:18px!important}
+  .rk-tomorrow-card-v11:after{display:none!important}
+  .rk-tomorrow-float-tiles{right:22px!important;bottom:28px!important;opacity:.22!important}
+  .rk-room-live-v6-preview-grid{grid-template-columns:1fr!important;padding:0 15px 16px;margin-top:-6px}
+  .rk-room-live-v6-preview-card{border-radius:16px;padding:11px 12px}
+}
+
 `;
 
 
@@ -14052,6 +14240,20 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       {name:activeClubCode?"Your club board":"Global room",iqScore:globalCount||"—"},
     ];
     const rows=(boardRows.length?boardRows:fallbackRows).slice(0,3);
+    const globalPreviewRows=(globalRows&&globalRows.length?globalRows:fallbackRows).slice(0,3);
+    const clubPreviewRows=(clubRows&&clubRows.length?clubRows:(activeClubCode?fallbackRows:rows)).slice(0,3);
+    const PreviewBoard=({label,items,onClick})=>(
+      <button type="button" onClick={onClick} className="rk-room-live-v6-preview-card">
+        <strong>{label}</strong>
+        {items.map((r,i)=>(
+          <div key={`${label}-${i}-${r.name||'row'}`} className="rk-room-live-v6-preview-row">
+            <span className="rk-room-live-v6-preview-name">#{i+1} {r.name||"Player"}</span>
+            <span className="rk-room-live-v6-preview-score">{r.iqScore||r.score||"—"}</span>
+          </div>
+        ))}
+        <div className="rk-room-live-v6-preview-link">Tap to open →</div>
+      </button>
+    );
     return(
       <section className="rk-room-live-v6" aria-label="Live club standings">
         <button type="button" onClick={openBoard} className="rk-room-live-v6-summary" style={{width:"100%",textAlign:"left",display:"block",border:0}}>
@@ -14064,6 +14266,10 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <div className="rk-room-live-v6-score"><strong>{leadValue}</strong><span>to beat</span></div>
           </div>
         </button>
+        <div className="rk-room-live-v6-preview-grid">
+          <PreviewBoard label="Rackle room" items={globalPreviewRows} onClick={()=>setScreen("globalLeaderboard")} />
+          <PreviewBoard label="Club room" items={clubPreviewRows} onClick={openBoard} />
+        </div>
       </section>
     );
   };
@@ -14073,8 +14279,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     <section className="rk-learn-home-v8 rk-learn-home-v12" aria-label="Learn and explore Rackle">
       <div className="rk-learn-home-head">
         <div className="rk-learn-home-kicker"><span className="rk-live-spark"/> Learn + Explore</div>
-        <h2 className="rk-learn-home-title">Learn + Explore</h2>
-        <p className="rk-learn-home-copy">Useful tools when you want them.</p>
+        <h2 className="rk-learn-home-title">Sharpen your table read</h2>
+        <p className="rk-learn-home-copy">Quick guides, the hand browser, and extra racks when you want more practice.</p>
       </div>
       <div className="rk-learn-home-grid">
         {[
