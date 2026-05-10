@@ -2941,6 +2941,21 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-learn-home-v12 .rk-learn-home-icon .rk-mahjong-tile{display:none!important}
 @media(min-width:760px){.rk-ritual-v12 .rk-ritual-card-v6{flex-basis:31.5%!important}}
 @media(max-width:390px){.rk-ritual-v12 .rk-ritual-head-v6 strong{font-size:22px!important}.rk-ritual-v12 .rk-ritual-card-v6{flex-basis:88%!important;min-height:244px!important}}
+
+
+/* ─── Launch ritual flow polish ─────────────────────────────────────────── */
+.rk-home-landing-flow{display:flex;flex-direction:column;gap:14px}
+.rk-daily-entry-v6{margin:10px 0 10px!important;border:1.5px solid rgba(23,107,66,.24)!important;box-shadow:0 18px 44px rgba(23,107,66,.11),0 0 0 4px rgba(23,107,66,.035),inset 0 1px 0 rgba(255,255,255,.9)!important}
+.rk-daily-entry-v6-title{font-size:26px!important;letter-spacing:-.75px!important;margin-bottom:7px!important}
+.rk-daily-entry-v6-copy{font-size:14.5px!important;font-weight:760!important;margin-bottom:12px!important;color:#176B42!important}
+.rk-daily-entry-v6-stats{margin-bottom:14px!important}.rk-daily-entry-v6-stats span{font-size:10.5px!important;min-height:24px!important;padding:0 9px!important}
+.rk-daily-entry-v6-cta{min-height:50px!important;padding:0 24px!important;font-size:16px!important;box-shadow:0 12px 26px rgba(23,107,66,.22),inset 0 1px 0 rgba(255,255,255,.2)!important}
+.rk-tomorrow-card-v11{background:radial-gradient(circle at 18% 0%,rgba(243,212,107,.20),transparent 34%),linear-gradient(150deg,#21152F 0%,#35204A 45%,#4A2F5F 72%,#160D21 100%)!important;border:1px solid rgba(243,212,107,.30)!important;box-shadow:0 18px 42px rgba(33,21,47,.20),inset 0 1px 0 rgba(255,255,255,.10)!important;color:#FFF8E6!important}
+.rk-tomorrow-v11-kicker,.rk-tomorrow-v11-badge{color:#F3D46B!important}.rk-tomorrow-v11-title{color:#FFF8E6!important;font-size:21px!important}.rk-tomorrow-v11-copy{color:rgba(255,248,230,.74)!important;font-size:12.5px!important;line-height:1.45!important}.rk-tomorrow-v11-row span{background:rgba(255,255,255,.08)!important;border-color:rgba(243,212,107,.18)!important;color:rgba(255,248,230,.72)!important}
+.rk-room-live-v6-title,.rk-warmup-v6-title{font-size:17px!important;line-height:1.12!important;letter-spacing:-.35px!important}.rk-room-live-v6-copy,.rk-warmup-v6-copy,.rk-learn-home-copy{font-size:12px!important;line-height:1.45!important}.rk-warmup-v6-kicker{font-size:9px!important}.rk-warmup-v6-social{display:none!important}
+.rk-learn-home-v12{background:transparent!important;box-shadow:none!important;border-color:rgba(26,20,16,.06)!important}.rk-learn-home-kicker .rk-live-spark{display:none!important}.rk-learn-home-title{font-size:18px!important}.rk-learn-home-icon{background:transparent!important;border:none!important;box-shadow:none!important;width:24px!important;height:auto!important;color:rgba(26,20,16,.42)!important;font-family:'Fraunces',Georgia,serif!important;font-size:13px!important}.rk-learn-home-card{min-height:56px!important;padding:12px 10px!important}.rk-learn-home-text strong{font-size:13px!important}.rk-learn-home-text span{font-size:11px!important}
+.rk-share-score-v6{margin-top:4px!important}.rk-share-score-v6-copy{font-size:12px!important;line-height:1.45!important}.rk-score-action-panel-v8{margin-top:14px!important}.rk-score-link-row-v8{justify-content:center!important}.rk-score-link-row-v8 span{display:none!important}.rk-score-link-row-v8 button:not(:first-child){display:none!important}
+@media(max-width:390px){.rk-daily-entry-v6-title{font-size:24px!important}.rk-tomorrow-v11-title{font-size:20px!important}.rk-room-live-v6-title,.rk-warmup-v6-title{font-size:16px!important}}
 `;
 
 
@@ -9968,8 +9983,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <div style={{display:"flex",alignItems:"center",gap:10,margin:"0 2px 10px",textAlign:"left"}}>
           <span style={{width:38,height:38,borderRadius:14,display:"inline-flex",alignItems:"center",justifyContent:"center",background:"rgba(23,107,66,.08)",border:`1px solid rgba(23,107,66,.10)`,fontSize:18}}>📲</span>
           <span style={{minWidth:0}}>
-            <span style={{display:"block",fontFamily:F.d,fontSize:18,lineHeight:1.04,fontWeight:950,color:C.ink,letterSpacing:-.3}}>Share this score</span>
-            <span style={{display:"block",fontSize:12,lineHeight:1.35,color:C.mut,fontWeight:800,marginTop:4}}>{`Can your table beat ${score} tonight?`}</span>
+            <span style={{display:"block",fontFamily:F.d,fontSize:18,lineHeight:1.04,fontWeight:950,color:C.ink,letterSpacing:-.3}}>Nice score. Share it.</span>
+            <span style={{display:"block",fontSize:12,lineHeight:1.35,color:C.mut,fontWeight:800,marginTop:4}}>{`Make your table chase ${score}.`}</span>
           </span>
         </div>
         <div className="rk-score-share-artifact" aria-label="Share preview">
@@ -9978,7 +9993,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <em>{passEmoji}</em>
           <small>playrackle.com</small>
         </div>
-        <ShareButton text={shareText} label="Share this score" sublabel={affiliatedClubName?`Send it to ${affiliatedClubName}`:"Drop it in your group chat"} variant="viral"/>
+        <ShareButton text={shareText} label="Share your score" sublabel={affiliatedClubName?`Send it to ${affiliatedClubName}`:"Drop it in your group chat"} variant="viral"/>
       </div>
 
       <div className="rk-score-rack-card" style={{borderRadius:22,padding:14,background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid rgba(26,20,16,.075)`,boxShadow:"0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)",marginBottom:12,textAlign:"center"}}>
@@ -9998,13 +10013,9 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       </div>
 
       <div className="rk-score-action-panel-v8" aria-label="Scorecard actions">
-        <button onClick={onCoachMode||onPractice} className="rk-score-primary-next-v8">{onCoachMode?"Open Coach →":"Enter Free Play →"}</button>
+        <button onClick={onCoachMode||onPractice} className="rk-score-primary-next-v8">{onCoachMode?"Open Coach →":"Play again in Free Play →"}</button>
         <div className="rk-score-link-row-v8">
-          <button onClick={()=>setScreen&&setScreen("globalLeaderboard")}>Global board</button>
-          <span>•</span>
-          <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")}>{clubCode?"Club room":"Join club"}</button>
-          <span>•</span>
-          <button onClick={onHome}>Home</button>
+          <button onClick={onHome}>Back to clubhouse</button>
         </div>
       </div>
 
@@ -10043,8 +10054,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       <div className="rk-review-bottom-home rk-next-rack-panel-v11">
         <div className="rk-next-rack-card-v11">
           <div className="rk-next-rack-kicker-v11">Next Daily Rackle</div>
-          <div className="rk-next-rack-title-v11">A new rack drops at midnight.</div>
-          <p className="rk-next-rack-copy-v11">Protect your streak, defend your room, and come back sharper tomorrow.</p>
+          <div className="rk-next-rack-title-v11">Come back tomorrow.</div>
+          <p className="rk-next-rack-copy-v11">A fresh rack drops at midnight. Keep your streak alive.</p>
           <MidnightCountdown dn={dayNum}/>
         </div>
         <button onClick={onHome} className="rk-back-clubhouse-v11">
@@ -13196,13 +13207,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             </span>
           ))}
         </div>
-        <h2 className="rk-daily-entry-v6-title">Today’s rack is waiting</h2>
-        <p className="rk-daily-entry-v6-copy">Play to reveal the Charleston.</p>
+        <h2 className="rk-daily-entry-v6-title">Tap here to play today’s rack.</h2>
+        <p className="rk-daily-entry-v6-copy">Same rack. One score. Beat the room.</p>
         <div className="rk-daily-entry-v6-stats">
           <span>{posted} {posted===1?"player has":"players already"} posted</span>
           <span>{scoreToBeat} is the score to beat</span>
         </div>
-        <span className="rk-daily-entry-v6-cta">Reveal today’s rack →</span>
+        <span className="rk-daily-entry-v6-cta">Play Daily Rackle →</span>
       </button>
     );
   };
@@ -13284,15 +13295,15 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div className="rk-tomorrow-v11-top">
           <div>
             <div className="rk-tomorrow-v11-kicker">Tomorrow’s Rackle</div>
-            <h2 className="rk-tomorrow-v11-title">The next room opens in {resetLabel}.</h2>
+            <h2 className="rk-tomorrow-v11-title">Next rack opens in {resetLabel}.</h2>
           </div>
           <div className="rk-tomorrow-v11-badge">Midnight</div>
         </div>
         <p className="rk-tomorrow-v11-copy">{cleanHint}</p>
         <div className="rk-tomorrow-v11-row">
           <span>New rack</span>
-          <span>Fresh leaderboard</span>
-          <span>Streak on the line</span>
+          <span>Fresh board</span>
+          <span>Streak at stake</span>
         </div>
       </section>
     );
@@ -13312,9 +13323,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     <button onClick={()=>go("free")} className="rk-warmup-card-v6" aria-label="Start a warm up rack">
       <div className="rk-warmup-v6-main">
         <div className="rk-warmup-v6-kicker"><span>🔥</span> 2 minute daily warm-up</div>
-        <div className="rk-warmup-v6-title">Sharpen your Charleston before tonight’s game.</div>
-        <div className="rk-warmup-v6-copy">Practice a fresh rack, test your read, and keep today’s score untouched.</div>
-        <div className="rk-warmup-v6-social">2,184 players entered Free Play today</div>
+        <div className="rk-warmup-v6-title">Improve Your Game</div>
+        <div className="rk-warmup-v6-copy">Practice a fresh rack without touching today’s score.</div>
       </div>
       <span className="rk-warmup-v6-cta">Enter Free Play →</span>
     </button>
@@ -13458,7 +13468,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div className="rk-room-live-v6-top">
           <div>
             <div className="rk-room-live-v6-kicker"><span className="rk-live-spark"/> Live club standings</div>
-            <h2 className="rk-room-live-v6-title">Beat the room.</h2>
+            <h2 className="rk-room-live-v6-title">Challenge Your Club</h2>
             <p className="rk-room-live-v6-copy">{roomLine}</p>
           </div>
           <div className="rk-room-live-v6-score"><strong>{leadValue}</strong><span>to beat</span></div>
@@ -13491,14 +13501,14 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     <section className="rk-learn-home-v8 rk-learn-home-v12" aria-label="Learn and explore Rackle">
       <div className="rk-learn-home-head">
         <div className="rk-learn-home-kicker"><span className="rk-live-spark"/> Learn + Explore</div>
-        <h2 className="rk-learn-home-title">Learn the card faster.</h2>
-        <p className="rk-learn-home-copy">Short guides, clear hand scans, and free play for one better read tomorrow.</p>
+        <h2 className="rk-learn-home-title">Learn + Explore</h2>
+        <p className="rk-learn-home-copy">Useful tools when you want them.</p>
       </div>
       <div className="rk-learn-home-grid">
         {[
-          ["01","How to Play","Charleston basics, passing order, and Rackle scoring.",()=>setScreen("howto")],
-          ["02","2026 Hand Browser","Scan the card by section before you chase a lane.",()=>setScreen("handbrowser")],
-          ["03","Free Play","Practice a fresh rack and keep today’s score untouched.",()=>go("free")],
+          ["01","How to Play","Quick rules and scoring.",()=>setScreen("howto")],
+          ["02","2026 Hand Browser","Find a section faster.",()=>setScreen("handbrowser")],
+          ["03","Free Play","Practice another rack.",()=>go("free")],
         ].map(([mark,title,sub,fn])=>(
           <button key={title} className="rk-learn-home-card" onClick={fn}>
             <span className="rk-learn-home-icon">{mark}</span>
@@ -13507,7 +13517,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           </button>
         ))}
       </div>
-      <div className="rk-learn-home-note">Small reps compound. One cleaner pass tomorrow can move your whole rack.</div>
+
     </section>
   );
 
@@ -13528,10 +13538,9 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div className="rk-home-landing-flow">
           {!dDone&&<StartDaily/>}
           {dDone&&<CompletedDaily/>}
-          {dDone&&<TomorrowTease/>}
+          <TomorrowTease/>
           <Community/>
           <PracticeCard/>
-          <HowItWorks/>
           <Learn/>
           <SharePreview/>
           <EmailSignup/>
