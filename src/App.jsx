@@ -2946,7 +2946,7 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 
 /* ─── Launch ritual flow polish ─────────────────────────────────────────── */
 .rk-home-landing-flow{display:flex;flex-direction:column;gap:14px}
-.rk-daily-entry-v6{margin:10px 0 10px!important;border:1.5px solid rgba(23,107,66,.24)!important;box-shadow:0 18px 44px rgba(23,107,66,.11),0 0 0 4px rgba(23,107,66,.035),inset 0 1px 0 rgba(255,255,255,.9)!important}
+.rk-daily-entry-v6{margin:10px 0 10px!important;border:1px solid rgba(26,20,16,.10)!important;box-shadow:0 16px 36px rgba(26,20,16,.07),inset 0 1px 0 rgba(255,255,255,.88)!important}
 .rk-daily-entry-v6-title{font-size:26px!important;letter-spacing:-.75px!important;margin-bottom:7px!important}
 .rk-daily-entry-v6-copy{font-size:14.5px!important;font-weight:760!important;margin-bottom:12px!important;color:#176B42!important}
 .rk-daily-entry-v6-stats{margin-bottom:14px!important}.rk-daily-entry-v6-stats span{font-size:10.5px!important;min-height:24px!important;padding:0 9px!important}
@@ -2961,7 +2961,7 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 /* ─── FINAL LAUNCH POLISH: one clear ritual loop ───────────────────────── */
 .rk-daily-entry-v6{
   border-radius:32px!important;
-  border:1.5px solid rgba(23,107,66,.34)!important;
+  border:1px solid rgba(26,20,16,.10)!important;
   background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.95),transparent 38%),linear-gradient(145deg,#FFFDF8,#F1E8D8)!important;
 }
 .rk-daily-entry-v6-kicker{color:#176B42!important;font-weight:950!important}
@@ -3017,6 +3017,38 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-daily-entry-v6-title{font-size:26px!important}
   .rk-daily-entry-v6-cta{min-height:54px!important;font-size:16px!important;width:100%!important}
   .rk-tomorrow-mystery-final .rk-tomorrow-v11-title{font-size:20px!important}
+}
+
+
+/* ─── vFinal request: left-align warmup copy + remove green daily border hint ─── */
+.rk-warmup-card-v6{
+  text-align:left!important;
+  align-items:flex-start!important;
+}
+.rk-warmup-v6-main{
+  text-align:left!important;
+  align-self:flex-start!important;
+}
+.rk-warmup-v6-kicker{
+  justify-content:flex-start!important;
+  text-align:left!important;
+  width:100%!important;
+}
+.rk-warmup-v6-title,
+.rk-warmup-v6-copy{
+  text-align:left!important;
+  margin-left:0!important;
+  margin-right:auto!important;
+}
+.rk-daily-entry-v6{
+  border:1px solid rgba(26,20,16,.10)!important;
+  box-shadow:0 16px 36px rgba(26,20,16,.07),inset 0 1px 0 rgba(255,255,255,.88)!important;
+}
+.rk-daily-entry-v6:before{
+  background:radial-gradient(circle at 12% 8%,rgba(160,120,40,.10),transparent 28%),radial-gradient(circle at 88% 20%,rgba(243,212,107,.16),transparent 30%)!important;
+}
+.rk-daily-entry-v6-glow{
+  display:none!important;
 }
 
 `;
@@ -15281,6 +15313,16 @@ function HandRenderer({hand, defaultOpen=false}){
     font-size:24px!important;
   }
 }
+
+
+/* ─── vFinal request override: warmup left alignment + neutral daily card ─── */
+.rk-warmup-card-v6{text-align:left!important;align-items:flex-start!important;}
+.rk-warmup-v6-main{text-align:left!important;align-self:flex-start!important;width:100%!important;margin-left:0!important;margin-right:auto!important;}
+.rk-warmup-v6-kicker{justify-content:flex-start!important;text-align:left!important;width:100%!important;}
+.rk-warmup-v6-title,.rk-warmup-v6-copy{text-align:left!important;margin-left:0!important;margin-right:auto!important;}
+.rk-daily-entry-v6{border:1px solid rgba(26,20,16,.10)!important;box-shadow:0 16px 36px rgba(26,20,16,.07),inset 0 1px 0 rgba(255,255,255,.88)!important;}
+.rk-daily-entry-v6:before{background:radial-gradient(circle at 12% 8%,rgba(160,120,40,.10),transparent 28%),radial-gradient(circle at 88% 20%,rgba(243,212,107,.16),transparent 30%)!important;}
+.rk-daily-entry-v6-glow{display:none!important;}
 
 `;
     return{...g,tileDesc,typeInfo,cardColor:cc};
