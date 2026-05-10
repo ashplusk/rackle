@@ -6402,7 +6402,7 @@ function generateHandPaths(finalRack,sortedSections,chosenSecId){
     } else if(id==="sp"){
       const prs=pairsOf(t=>t.t!=="j");
       anchor=`${prs.length} natural pair${prs.length!==1?"s":""} + ${flowers>=2?`${Math.floor(flowers/2)} flower pair${Math.floor(flowers/2)>1?"s":""}`:""}`;
-      why=[prs.length>=4?`${prs.length} natural pairs, that's strong S&P territory. Protect every pair.`:prs.length>=2?`${prs.length} pairs so far, keep building. S&P needs 6-7 pairs to win.`:"Very few pairs, S&P needs 6-7. Consider whether another section fits better.",jokers>0?`${jokers} joker${jokers>1?"s":""} are dead weight in S&P, you can't pass them and they can't be pairs. Factor this in.`:"No jokers, that's perfect for S&P.",flowers>=2?`${flowers} flowers count as natural pairs here.`:""];
+      why=[prs.length>=4?`${prs.length} natural pairs, that's strong S&P territory. Protect every pair.`:prs.length>=2?`${prs.length} pairs so far, keep building. S&P needs 6-7 pairs to win.`:"Very few pairs, S&P needs 6-7. Consider whether another section fits better.",jokers>0?`${jokers} joker${jokers>1?"s":""} are dead weight in S&P. You cannot pass them in the Charleston and they cannot be used in pairs.`:"No jokers, that's perfect for S&P.",flowers>=2?`${flowers} flowers count as natural pairs here.`:""];
       why=why.filter(Boolean);
       keep=["All natural pairs (never break)","Flowers (count as pairs)"];
       pivot=jokers>0?`With ${jokers} joker${jokers>1?"s":""} stuck in your hand, consider switching, jokers cannot form pairs and cannot be passed.`:"If you can't get to 6 pairs by mid-game, pivot to any section where jokers help.";
@@ -7359,8 +7359,8 @@ function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScor
 
   // Section-specific coach notes
   if(sectionId==="sp"){
-    if(directionScore<20&&passQualityScore<=12)coachNote="S&P is fully concealed, you can't expose tiles. Focus on building pairs and getting rid of jokers and triples early.";
-    else if(passQualityScore<=12)coachNote="You were playing S&P, but passed tiles that would have been good pairs. For S&P: hold pairs, pass jokers, pass triples.";
+    if(directionScore<20&&passQualityScore<=12)coachNote="S&P is fully concealed. Focus on building pairs. If you are dealt jokers, treat them as dead tiles because they cannot be used or passed.";
+    else if(passQualityScore<=12)coachNote="You were playing S&P, but passed tiles that would have been good pairs. For S&P: hold pairs, account for dead jokers, avoid triples.";
     else if(directionScore<20)coachNote="Your rack had too many singles. S&P needs 6+ clean pairs to win, consolidate toward fewer, deeper pairs.";
     else coachNote="S&P is a discipline game. Keep holding pairs, keep releasing jokers, and you'll complete it.";
   } else if(sectionId==="q"){
@@ -8094,6 +8094,7 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   const{level,levelExplanation,tier}=iqScoreLevel(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
   const style=getIQStyle(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
 
+  const exactAudit=rkExactCharlestonAudit({finalRack,startingRack,passedTilesByRound,sectionId,chosenHandObj});
   const dist=iqDistanceToOptimal(finalRack,startingRack,passedTilesByRound,sectionId);
   const tileIns=iqTileInsights(finalRack,startingRack,passedTilesByRound,sectionId);
   const{strengths,weaknesses,coachNote,tryNextTime}=iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScore,brokenPairsCount||0,sectionId);
@@ -8126,6 +8127,8 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
     tileInsights:tileIns,
     passInsights,
     timingInsight,
+    exactAudit,
+    jokerRuleOk:exactAudit?.jokerRuleOk!==false,
     strategicRead,
     commitmentStatus:strategicRead?.commitmentStatus,
     bestDirection:strategicRead?.bestDirection,
@@ -10240,7 +10243,7 @@ function computeExpertRead(finalRack, chosenSec, allSections, passLog, iq){
   } else if(chosenSec==="q"){
     primaryDirection=`Quints, ${jk>=3?"three jokers gives exceptional ceiling":jk>=2?"two jokers means the section is accessible":jk===1?"only one joker, you need a second before fully committing":"no jokers means Quints is unavailable; start planning your exit now"}. ${kongs>=1||pungs>=1?"Natural depth forming alongside jokers, stack it.":"Need 3-4 natural copies of a tile to pair with jokers."}`;
   } else if(chosenSec==="sp"){
-    primaryDirection=`Singles & Pairs, ${jk===0?"correctly joker-free for a concealed hand":jk>0?`${jk} joker${jk>1?"s":""} remaining, pass them, they cannot be used here`:""}. ${pairs>=4?"Strong pair density, this rack is building well for S&P":pairs>=2?"pairs forming, need 6 total for completion":"pair count is low, focus every draw decision on matching tiles"}. No exposures allowed.`;
+    primaryDirection=`Singles & Pairs, ${jk===0?"correctly joker-free for a concealed hand":jk>0?`${jk} joker${jk>1?"s":""} remaining, treat them as dead tiles, they cannot be used or passed`:""}. ${pairs>=4?"Strong pair density, this rack is building well for S&P":pairs>=2?"pairs forming, need 6 total for completion":"pair count is low, focus every draw decision on matching tiles"}. No exposures allowed.`;
   } else {
     primaryDirection=`${chosenName}, ${chosenPct}% structural fit after the Charleston.`;
   }
@@ -10301,7 +10304,7 @@ function computeExpertRead(finalRack, chosenSec, allSections, passLog, iq){
   else if(fl===0&&chosenSec!=="wd"&&chosenSec!=="sp")observations.push(`No Flowers, many winning hands use at least one. This is not critical yet but worth noting.`);
 
   // Pass quality note
-  if(passedJokers>0)observations.push(`Joker${passedJokers>1?"s":""} passed during the Charleston, almost always the wrong move. Jokers are the most flexible tile on the board.`);
+  if(passedJokers>0)observations.push(`Joker${passedJokers>1?"s":""} appeared in the Charleston pass log. That should never happen, so Rackle blocks them from all passes.`);
   if(passRatio>=0.8)observations.push(`Pass execution was strong, the right tiles left the rack on time.`);
   else if(passRatio<=0.4)observations.push(`Pass decisions cost this rack structure, tiles the section needed were allowed to leave.`);
 
@@ -10410,7 +10413,7 @@ function computeMahjongIdentity(iq, chosenSec, passLog, finalRack){
   if(dr>=0.7&&pr<0.5)return{archetype:"The Committed Player",tagline:"Strong direction, but your passes didn't always protect the plan. Two sides of the same coin."};
   if(dr<0.5&&pr>=0.75)return{archetype:"The Careful Passer",tagline:"Disciplined discards, but the section read was still forming. Trust your instincts earlier."};
   if(tmr<=0.4&&dr>=0.7)return{archetype:"The Methodical Planner",tagline:"You took your time and committed to a direction. Slow and intentional, that's a style."};
-  if(passedJokers>0)return{archetype:"The Risk-Taker",tagline:"Passing a joker takes nerve. Sometimes it pays off, was this one of those times?"};
+  if(passedJokers>0)return{archetype:"Rule Check",tagline:"A Joker appeared in the pass log. Rackle now blocks Jokers from every Charleston pass."};
   if(fl>=3&&tr>=0.6)return{archetype:"The Flower Collector",tagline:"Your flowers added real structural support. You recognized their value."};
   if(chosenSec==="sp")return{archetype:"The Pair Builder",tagline:"S&P is the disciplined path. Pairs only, no jokers, all instinct."};
   if(chosenSec==="q")return{archetype:"The High Roller",tagline:"Quints or nothing. You swung for the fence, no shame in that."};
@@ -12103,7 +12106,7 @@ function computeCoachAdvice(hand, passLog, chosenSec, allSections, iq, chosenHan
     const pairCount=pairs+pungs+kongs; // every group is usable
     const passedJk=passedJokers.length;
     advice.rackRead=passedJk>0
-      ?`You passed ${passedJk} Joker${passedJk>1?"s":""}, that's exactly right for Singles & Pairs. Jokers are useless here and you made the correct call. ${pairCount>=3?`You have ${pairCount} paired groups forming, solid structure.`:"Keep building pairs across all values."}`
+      ?`A Joker appeared in the pass log, which should never happen in American Mahjong. Rackle now blocks Jokers from all Charleston passes. For S&P, Jokers are dead tiles, not discard tiles.`
       :jk>0
       ?`You still have ${jk} Joker${jk>1?"s":""} in the rack. S&P is concealed, Jokers cannot be used here. Pass them in your next opportunity.`
       :`Clean rack for S&P, no Jokers cluttering a concealed hand. ${pairCount>=3?`${pairCount} pairs forming, you need 6+ to finish.`:pairCount>=1?`${pairCount} pair${pairCount!==1?"s":""} so far, keep building. You need 7 total slots of pairs and singles.`:"Pairs are still forming, protect any matching tiles you're drawing."}`;
@@ -12111,13 +12114,13 @@ function computeCoachAdvice(hand, passLog, chosenSec, allSections, iq, chosenHan
     advice.altLane="";
     advice.foundation=pairs>=2?[`${pairs} pair${pairs!==1?"s":""} in hand`]:["Building pair structure"];
     if(fl>=1)advice.foundation.push(`${fl} Flower${fl>1?"s":""} (counts toward S&P hands)`);
-    advice.weakness=jk>0?[`${jk} Joker${jk>1?"s":""}, cannot be used in S&P, pass them now`]:pairCount<2?["Fewer than 2 pairs, need to find matching tiles"]:[];
+    advice.weakness=jk>0?[`${jk} Joker${jk>1?"s":""}, cannot be used in S&P and cannot be passed`]:pairCount<2?["Fewer than 2 pairs, need to find matching tiles"]:[];
     advice.keyTile=pairCount<4?`Any tile that pairs with something you already hold, S&P lives and dies on pair density.`:`A sixth pair to lock the hand, you're building toward the finish.`;
   }
 
   // ── PASS READ, honest assessment of the passes ───────────────────────────
   const passReadParts=[];
-  if(passedJokers.length>0)passReadParts.push(`Passing ${passedJokers.length} Joker${passedJokers.length>1?"s":""} ${chosenSec==="sp"?"was the right call for S&P, Jokers can't be used here":"is almost never the right move, Jokers are too flexible to give away"}.`);
+  if(passedJokers.length>0)passReadParts.push(`A Joker appeared in the pass log. That should never happen in the Charleston, so Rackle now blocks Jokers from outgoing and incoming passes.`);
   if(passedFlowers.length>0&&chosenSec!=="wd")passReadParts.push(`${passedFlowers.length} Flower${passedFlowers.length>1?"s":""} went out, Flowers appear in the majority of winning hands across most sections. Hold them unless you're certain they don't fit.`);
   if(iq.passQualityScore>=20)passReadParts.push(`Your passes were disciplined, you gave away the right tiles and protected your section.`);
   else if(iq.passQualityScore<=10)passReadParts.push(`The passes hurt this rack more than they helped, several tiles that this section needed left in the Charleston.`);
@@ -12286,9 +12289,9 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
 
     // Joker handling
     if(passedJokers.length>0){
-      notes.push({icon:"⚠️",text:`You passed ${passedJokers.length} joker${passedJokers.length>1?"s":""}, jokers are almost never worth giving away. They're the most flexible tile on the board.`,type:"warn"});
+      notes.push({icon:"⚠️",text:`A Joker appeared in the pass log. That should never happen in the Charleston, and Rackle now blocks it.`,type:"warn"});
     } else if(jk>=2){
-      notes.push({icon:"✓",text:`${jk} jokers held, that's the right call. Jokers don't get passed unless you have no choice.`,type:"good"});
+      notes.push({icon:"✓",text:`${jk} jokers held, that's correct. Jokers can never be passed in the Charleston.`,type:"good"});
     }
 
     // Flower handling
@@ -12916,7 +12919,7 @@ function CardGuideScreen({home,setScreen}){
     "wd":{tiles:["Winds","Dragons"],note:"Winds in 7 of 8 hands. Dragons in 5 of 8."},
     "aln":{tiles:["One #","×14"],note:"Pick one number value and fill every tile slot with it."},
     "q":{tiles:["🃏🃏","Nat ×3"],note:"Requires 2+ Jokers. 3-4 natural copies of one tile to stack."},
-    "sp":{tiles:["Pairs","No 🃏"],note:"Concealed only. Jokers cannot be used, pass them immediately."},
+    "sp":{tiles:["Pairs","No 🃏"],note:"Concealed only. Jokers cannot be used or passed."},
   };
 
   const goSection=(id)=>{setActiveSec(id);setView("section");window.scrollTo(0,0);};
@@ -15346,7 +15349,7 @@ function Game({mode,home,onDone,settings,setScreen}){
       "wd":(t)=>t.t==="s"&&t.n>4,
       "aln":(t)=>t.t==="s",
       "2026":(t)=>t.t==="s"&&![2,6].includes(t.n),
-      "sp":(t)=>t.t==="j",
+      "sp":(t)=>false,
     };
     const isWeak=weakFor[oppSec]?weakFor[oppSec](t):false;
     // Flowers and high-value tiles are less likely to be passed
@@ -15372,22 +15375,34 @@ function Game({mode,home,onDone,settings,setScreen}){
     return{incoming,newPool};
   };
 
+  const sanitizePassTiles=(tiles=[])=>tiles.filter(t=>t&&t.t!=="j");
+
   const doSwap=(count)=>{
     haptic(40);
-    const pt=sel.map(i=>hand[i]);setPassed(p=>[...p,...pt]);
-    const rem=hand.filter((_,i)=>!sel.includes(i));
+    const legalSel=sel.filter(i=>hand[i]&&hand[i].t!=="j");
+    if(legalSel.length!==sel.length){
+      haptic(80);
+      setJw(true);
+      setTimeout(()=>setJw(false),1800);
+      setSel(legalSel);
+      return;
+    }
+    const pt=sanitizePassTiles(legalSel.map(i=>hand[i]));
+    setPassed(p=>[...p,...pt]);
+    const rem=hand.filter((_,i)=>!legalSel.includes(i));
 
     // Pick incoming tiles from pool. Jokers are excluded by rule.
-    const {incoming,newPool}=getIncomingTiles(count);
-    setPool(newPool);
+    const {incoming,newPool}=getIncomingTiles(pt.length);
+    const safeIncoming=sanitizePassTiles(incoming);
+    setPool((newPool||[]).filter(t=>t&&t.t!=="j"));
 
-    const comb=[...rem,...incoming];const ni=[];for(let i=rem.length;i<comb.length;i++)ni.push(i);
+    const comb=[...rem,...safeIncoming];const ni=[];for(let i=rem.length;i<comb.length;i++)ni.push(i);
     const roundName=cn===1
       ?(pi===0?"Pass Right":pi===1?"Pass Over":"Pass Left (Blind)")
       :(pi===0?"2nd Charleston · Pass Left":pi===1?"2nd Charleston · Pass Over":"2nd Charleston · Pass Right (Blind)");
     const nowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);
     const passEl=nowEl-lastPassElRef.current;lastPassElRef.current=nowEl;
-    setPassLog(pl=>[...pl,{label:roundName,roundName,out:pt,in:incoming,blind:cp.blind,secs:passEl}]);
+    setPassLog(pl=>[...pl,{label:roundName,roundName,out:pt,in:safeIncoming,blind:cp.blind,secs:passEl,ruleChecked:true}]);
     setNewIdx(ni);setHand(comb);setSel([]);
     setTimeout(()=>{setNewIdx([]);setShowHint(false);setHintExp(null);if(pi<2){setPi(p=>p+1);}else{setPhase(cn===1?"askSecond":"askCourtesy");}},600);
   };
@@ -15407,8 +15422,14 @@ function Game({mode,home,onDone,settings,setScreen}){
     const dn=getDayNum();
     const isD=mode==="daily";
 
+    const legalPassLog=(passLog||[]).map(p=>({
+      ...p,
+      out:(p.out||[]).filter(t=>t&&t.t!=="j"),
+      in:(p.in||[]).filter(t=>t&&t.t!=="j"),
+      jokerRuleOk:!(p.out||[]).some(t=>t?.t==="j")&&!(p.in||[]).some(t=>t?.t==="j"),
+    }));
     const iq=calculateCharlestonIQ({
-      startingRack,finalRack:hand,passedTilesByRound:passLog,
+      startingRack,finalRack:hand,passedTilesByRound:legalPassLog,
       totalTime:totalEl,sectionId:chosenSec,chosenHand,
     },getDailySeed(),isD,dn);
     setIqResultBoth(iq);
@@ -15416,7 +15437,7 @@ function Game({mode,home,onDone,settings,setScreen}){
     const result={
       rating:RATS[gi],emoji:REMO[gi],section:`${top.icon} ${top.name}`,sid:top.id,
       score:top.score,time:totalEl,gi,iqScore:iq?iq.totalScore:null,iq,
-      finalRack:hand,startingRack,passLog,chosenSec,chosenHand,allSections:ev(hand),
+      finalRack:hand,startingRack,passLog:legalPassLog,chosenSec,chosenHand,allSections:ev(hand),
     };
     try{onDone(result);}catch(e){}
     window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;
@@ -15501,7 +15522,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           <div style={S.card}><RH hand={hand} onSort={()=>setHand(sortHand(hand))}/>
             <RackSurface>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} dim={t.t==="j"} onClick={()=>cTog(i)} large={large}/>)}</RackSurface></div>
           <div aria-live="polite" style={{textAlign:"center",fontSize:13,color:sel.length>0?C.jade:C.mut,fontWeight:700,margin:"4px 0"}}>{sel.length}/3 selected</div>
-          <button onClick={()=>{haptic(40);if(sel.length<1){setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");return;}const pt=sel.map(i=>hand[i]);setPassed(p=>[...p,...pt]);const rem=hand.filter((_,i)=>!sel.includes(i));const {incoming:inc,newPool}=getIncomingTiles(sel.length);setPool(newPool);setHand([...rem,...inc]);const cpNowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);const cpPassEl=cpNowEl-lastPassElRef.current;lastPassElRef.current=cpNowEl;setPassLog(pl=>[...pl,{label:"Courtesy Pass",roundName:"Courtesy Pass",out:pt,in:inc,blind:false,secs:cpPassEl}]);setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");}} style={{...S.passBtn}}>{sel.length<1?"Skip →":`Pass ${sel.length} across →`}</button>
+          <button onClick={()=>{haptic(40);if(sel.length<1){setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");return;}const legalSel=sel.filter(i=>hand[i]&&hand[i].t!=="j");if(legalSel.length!==sel.length){haptic(80);setJw(true);setTimeout(()=>setJw(false),1800);setSel(legalSel);return;}const pt=sanitizePassTiles(legalSel.map(i=>hand[i]));setPassed(p=>[...p,...pt]);const rem=hand.filter((_,i)=>!legalSel.includes(i));const {incoming:inc,newPool}=getIncomingTiles(pt.length);const safeInc=sanitizePassTiles(inc);setPool((newPool||[]).filter(t=>t&&t.t!=="j"));setHand([...rem,...safeInc]);const cpNowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);const cpPassEl=cpNowEl-lastPassElRef.current;lastPassElRef.current=cpNowEl;setPassLog(pl=>[...pl,{label:"Courtesy Pass",roundName:"Courtesy Pass",out:pt,in:safeInc,blind:false,secs:cpPassEl,ruleChecked:true}]);setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");}} style={{...S.passBtn}}>{sel.length<1?"Skip →":`Pass ${sel.length} across →`}</button>
         </>
       )}
 
@@ -16600,6 +16621,34 @@ function rkEnhancedHandFit(rack,handObj){
   const completed=plan.groupStatus.filter(s=>s.gap<=0).length;
   const groupBonus=Math.min(completed*0.012,0.08);
   return Math.min(1,(plan.held/plan.total)+groupBonus);
+}
+function rkExactCharlestonAudit({finalRack=[],startingRack=[],passedTilesByRound=[],sectionId=null,chosenHandObj=null}={}){
+  const passEvents=(passedTilesByRound||[]);
+  const passedJokers=passEvents.flatMap(p=>[...(p.out||[]),...(p.in||[])]).filter(t=>t&&t.t==="j");
+  const candidateHand=chosenHandObj||rkBestHandForSection(finalRack,sectionId)?.hand||null;
+  const plan=candidateHand?buildCoveragePlan(finalRack,candidateHand,passEvents):null;
+  const groupStatus=(plan?.groupStatus||[]).map(gs=>({
+    label:gs.g?.tile||gs.g?.raw||gs.g?.label||"group",
+    need:gs.need,
+    held:gs.totalHeld,
+    naturalHeld:gs.naturalHeld,
+    jokerHeld:gs.jokerHeld,
+    gap:Math.max(0,gs.gap||0),
+    jokerAllowed:!!gs.jokerAllowed,
+    resolvedSuit:gs.resolvedSuit||null,
+    passedMatching:(gs.passedMatching||[]).map(t=>tLabel(t)),
+  }));
+  return{
+    jokerRuleOk:passedJokers.length===0,
+    passedJokerCount:passedJokers.length,
+    handLabel:candidateHand?.label||null,
+    sectionId:sectionId||candidateHand?.sec||null,
+    exactCoveragePct:plan?.pct||0,
+    held:plan?.held||0,
+    total:plan?.total||0,
+    groupStatus,
+    unresolvedGroups:groupStatus.filter(g=>g.gap>0).slice(0,4),
+  };
 }
 if(typeof HAND_CATALOG!=="undefined"&&!HAND_CATALOG.__rackle2026ResolverInstalled){
   HAND_CATALOG.forEach(h=>{
