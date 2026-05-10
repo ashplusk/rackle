@@ -2726,6 +2726,43 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-ritual-card-v6 p{max-width:22ch!important}
 }
 
+
+/* ─── vNext ALIGN REST OF APP TO HOMEPAGE ─────────────────────────────── */
+.rk-screen-title,.rk-premium-title,.rk-editorial-title,.rk-browser-hero h2,.rk-section-title,.rk-learn-simple-title{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:clamp(24px,7vw,32px)!important;
+  line-height:1.02!important;
+  letter-spacing:-.8px!important;
+  font-weight:950!important;
+}
+.rk-screen-copy,.rk-premium-copy,.rk-editorial-copy{font-size:13px!important;line-height:1.58!important;font-weight:750!important;color:rgba(26,20,16,.62)!important}
+
+/* Premium Learn + Explore block on homepage */
+.rk-learn-home-v8{position:relative;overflow:hidden;margin:24px 0 12px;padding:20px;border-radius:30px;background:radial-gradient(circle at 16% 0%,rgba(255,255,255,.78),transparent 34%),linear-gradient(145deg,#FFFDF8,#F3ECE0);border:1px solid rgba(26,20,16,.075);box-shadow:0 16px 38px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.82)}
+.rk-learn-home-v8:after{content:'🀄';position:absolute;right:-18px;bottom:-32px;font-size:126px;opacity:.035;transform:rotate(-8deg);pointer-events:none}
+.rk-learn-home-head{position:relative;z-index:1;margin-bottom:15px;text-align:left}
+.rk-learn-home-kicker{display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;padding:6px 11px;border-radius:999px;background:rgba(23,107,66,.07);border:1px solid rgba(23,107,66,.10);font-size:9px;letter-spacing:2.2px;text-transform:uppercase;font-weight:950;color:#176B42}
+.rk-learn-home-title{margin:0;font-family:'Fraunces',Georgia,serif;font-size:clamp(28px,8vw,38px);line-height:.98;letter-spacing:-1.1px;font-weight:950;color:#1A1410}
+.rk-learn-home-copy{margin:8px 0 0;max-width:34ch;font-size:13px;line-height:1.55;font-weight:800;color:#6B6157}
+.rk-learn-home-grid{position:relative;z-index:1;display:grid;gap:10px}
+.rk-learn-home-card{width:100%;border:1px solid rgba(26,20,16,.075);border-radius:22px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);box-shadow:0 6px 18px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78);display:flex;align-items:center;gap:13px;padding:14px;text-align:left;cursor:pointer;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;color:#1A1410}
+.rk-learn-home-card:hover{transform:translateY(-1px);border-color:rgba(23,107,66,.16);box-shadow:0 12px 26px rgba(26,20,16,.06),inset 0 1px 0 rgba(255,255,255,.84)}
+.rk-learn-home-card:active{transform:scale(.992)}
+.rk-learn-home-icon{width:48px;height:56px;border-radius:16px;background:linear-gradient(145deg,#FFFDF8,#EFE4D2);border:1px solid rgba(26,20,16,.09);box-shadow:0 7px 16px rgba(26,20,16,.08),inset 0 1px 0 rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px}
+.rk-learn-home-text{min-width:0;flex:1}.rk-learn-home-text strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:18px;line-height:1.05;letter-spacing:-.3px;color:#1A1410;font-weight:950}.rk-learn-home-text span{display:block;margin-top:5px;font-size:12.5px;line-height:1.35;color:#6B6157;font-weight:800}.rk-learn-home-arrow{width:30px;height:30px;border-radius:999px;background:rgba(23,107,66,.07);border:1px solid rgba(23,107,66,.10);display:flex;align-items:center;justify-content:center;color:#176B42;font-size:18px;font-weight:950;flex-shrink:0}
+.rk-learn-home-note{position:relative;z-index:1;margin-top:12px;padding:12px 13px;border-radius:19px;background:rgba(23,107,66,.06);border:1px solid rgba(23,107,66,.09);font-size:12px;line-height:1.42;color:#176B42;font-weight:900;text-align:left}
+
+/* Bottom signup section */
+.rk-email-home-v8{position:relative;overflow:hidden;margin:24px 0 10px;padding:22px 18px 20px;border-radius:30px;background:radial-gradient(circle at 18% 0%,rgba(255,255,255,.16),transparent 34%),linear-gradient(150deg,#062B18,#0D4A2E 58%,#051F11);border:1px solid rgba(243,212,107,.20);box-shadow:0 18px 44px rgba(6,43,24,.18),inset 0 1px 0 rgba(255,255,255,.10);color:#fff;text-align:left}
+.rk-email-home-v8:after{content:'🀄';position:absolute;right:-18px;bottom:-34px;font-size:126px;opacity:.05;transform:rotate(-8deg);pointer-events:none}.rk-email-home-v8>*{position:relative;z-index:1}.rk-email-kicker-v8{display:inline-flex;align-items:center;gap:7px;margin-bottom:12px;padding:6px 11px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);font-size:9px;letter-spacing:2.2px;text-transform:uppercase;font-weight:950;color:#F3D46B}.rk-email-title-v8{margin:0;font-family:'Fraunces',Georgia,serif;font-size:28px;line-height:1.02;letter-spacing:-.8px;font-weight:950;color:#fff}.rk-email-copy-v8{margin:8px 0 15px;font-size:13px;line-height:1.55;color:rgba(255,255,255,.72);font-weight:800;max-width:34ch}.rk-email-form-v8{display:flex;gap:8px}.rk-email-input-v8{flex:1;min-width:0;height:46px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.10);color:#fff;padding:0 14px;font-family:'Nunito','Segoe UI',sans-serif;font-size:13px;font-weight:800;outline:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}.rk-email-input-v8::placeholder{color:rgba(255,255,255,.48)}.rk-email-btn-v8{height:46px;border-radius:999px;border:1px solid rgba(255,255,255,.20);background:linear-gradient(145deg,#F3D46B,#E8C65B);color:#1A1410;padding:0 16px;font-size:12.5px;font-weight:950;cursor:pointer;white-space:nowrap;box-shadow:0 9px 20px rgba(160,120,40,.18),inset 0 1px 0 rgba(255,255,255,.45)}.rk-email-done-v8{padding:14px;border-radius:22px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);text-align:center;color:#fff}.rk-email-error-v8{margin-top:8px;font-size:11px;color:#F3D46B;font-weight:850}
+@media(max-width:390px){.rk-email-form-v8{flex-direction:column}.rk-email-btn-v8,.rk-email-input-v8{width:100%}}
+
+/* Scorecard: replace button rows with one calm action panel */
+.rk-score-action-grid{display:block!important;margin:0 0 14px!important}.rk-score-action-grid button{width:100%!important;margin:0 0 8px!important;min-height:48px!important}.rk-score-action-grid button:nth-child(n+3){display:none!important}
+.rk-score-action-panel-v8{margin:0 0 14px;padding:12px;border-radius:22px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.075);box-shadow:0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)}
+.rk-score-primary-next-v8{width:100%;height:50px;border:none;border-radius:17px;background:linear-gradient(135deg,#176B42,#0F5432);color:#fff;font-family:'Fraunces',Georgia,serif;font-size:15px;font-weight:950;cursor:pointer;box-shadow:0 9px 20px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16)}
+.rk-score-link-row-v8{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:9px;flex-wrap:wrap}.rk-score-link-row-v8 button{border:none;background:transparent;color:#176B42;font-size:11px;font-weight:950;cursor:pointer;padding:6px 7px}.rk-score-link-row-v8 span{color:rgba(26,20,16,.24);font-size:10px}
+
 `;
 
 
@@ -9813,11 +9850,15 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <SortableRack hand={hand}/>
       </div>
 
-      <div className="rk-score-action-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9,marginBottom:12}}>
-        <button onClick={()=>setScreen&&setScreen("globalLeaderboard")} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.jade,cursor:"pointer"}}>Global Board</button>
-        <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>{clubCode?"Club Room":"Join Club"}</button>
-        <button onClick={onPractice} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.jade,cursor:"pointer"}}>Warm Up</button>
-        {onCoachMode?<button onClick={onCoachMode} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>Coach</button>:<button onClick={onHome} className="rk-secondary-btn" style={{borderRadius:16,padding:"13px 10px",border:`1px solid rgba(23,107,66,.13)`,fontSize:12,fontWeight:950,color:C.ink,cursor:"pointer"}}>Home</button>}
+      <div className="rk-score-action-panel-v8" aria-label="Scorecard actions">
+        <button onClick={onCoachMode||onPractice} className="rk-score-primary-next-v8">{onCoachMode?"Open Coach →":"Enter Free Play →"}</button>
+        <div className="rk-score-link-row-v8">
+          <button onClick={()=>setScreen&&setScreen("globalLeaderboard")}>Global board</button>
+          <span>•</span>
+          <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")}>{clubCode?"Club room":"Join club"}</button>
+          <span>•</span>
+          <button onClick={onHome}>Home</button>
+        </div>
       </div>
 
       <button onClick={()=>setShowDetails(v=>!v)} style={{width:"100%",border:`1px solid rgba(26,20,16,.075)`,borderRadius:16,background:"rgba(255,255,255,.55)",padding:"12px 14px",display:"flex",alignItems:"center",justifyContent:"space-between",fontFamily:F.b,cursor:"pointer",marginBottom:showDetails?10:16}}>
@@ -11472,19 +11513,22 @@ function EmailSignup(){
     catch{setErr("Something went wrong. Try again.");}
   };
   return(
-    <div className="rk-email-home" style={{...S.card,background:"linear-gradient(145deg,#FFFFF8,#F4EFE3)",borderColor:C.jade+"25",marginBottom:8,textAlign:"left"}}>
-      <div style={{fontSize:10,color:C.jade,letterSpacing:1.5,fontWeight:800,marginBottom:6,textAlign:"left"}}>STAY IN THE LOOP</div>
-      {done?(<div style={{textAlign:"center",padding:"8px 0"}}><div style={{fontSize:18,marginBottom:4}}>🀄</div><div style={{fontSize:13,fontWeight:700,color:C.jade}}>You're on the list!</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>We'll let you know when we drop updates.</div></div>):(
+    <section className="rk-email-home-v8" aria-label="Sign up for Rackle updates">
+      <div className="rk-email-kicker-v8"><span className="rk-live-spark"/> Clubhouse updates</div>
+      <h2 className="rk-email-title-v8">Bring your table back tomorrow.</h2>
+      {done?(
+        <div className="rk-email-done-v8"><div style={{fontFamily:F.d,fontSize:20,fontWeight:950,marginBottom:4}}>You’re on the list.</div><div style={{fontSize:12,color:"rgba(255,255,255,.72)",fontWeight:800}}>We’ll send new Rackle drops and club updates.</div></div>
+      ):(
         <>
-          <p style={{fontSize:12,color:C.mut,margin:"0 0 10px",lineHeight:1.5,textAlign:"left"}}>Get notified about new features, updates, and more.</p>
-          <div style={{display:"flex",gap:6}}>
-            <input type="email" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} placeholder="your@email.com" aria-label="Email address for updates" style={{flex:1,padding:"10px 12px",borderRadius:10,border:`1.5px solid ${err?C.cinn:C.bdr}`,fontSize:12,fontFamily:F.b,background:"#fff",color:C.ink,outline:"none"}}/>
-            <button onClick={submit} style={{padding:"10px 16px",borderRadius:10,border:"none",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:F.b,whiteSpace:"nowrap"}}>Notify me</button>
+          <p className="rk-email-copy-v8">Get new feature drops, club leaderboard updates, and fresh daily-game ideas.</p>
+          <div className="rk-email-form-v8">
+            <input className="rk-email-input-v8" type="email" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} placeholder="your@email.com" aria-label="Email address for Rackle updates" />
+            <button className="rk-email-btn-v8" onClick={submit}>Join list</button>
           </div>
-          {err&&<div style={{fontSize:11,color:C.cinn,marginTop:5}}>{err}</div>}
+          {err&&<div className="rk-email-error-v8">{err}</div>}
         </>
       )}
-    </div>
+    </section>
   );
 }
 
@@ -13265,21 +13309,26 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
 
   const Learn=()=> (
-    <section className="rk-learn-shell">
-      <div className="rk-learn-simple-title">Improve your next read</div>
-      <div className="rk-learn-simple-grid">
+    <section className="rk-learn-home-v8" aria-label="Learn and explore Rackle">
+      <div className="rk-learn-home-head">
+        <div className="rk-learn-home-kicker"><span className="rk-live-spark"/> Learn + Explore</div>
+        <h2 className="rk-learn-home-title">Sharpen your next Charleston.</h2>
+        <p className="rk-learn-home-copy">Quick guides, hand browsing, and free play built for one better read tomorrow.</p>
+      </div>
+      <div className="rk-learn-home-grid">
         {[
-          ["📖","How to Play","Quick rules and Charleston basics",()=>setScreen("howto")],
-          ["📋","2026 Hand Browser","Scan hands by section",()=>setScreen("handbrowser")],
-          ["🎓","Warm up","Practice without touching today’s score",()=>go("free")],
-        ].map(([icon,title,sub,fn])=>(
-          <button key={title} className="rk-learn-item" onClick={fn}>
-            <span className="rk-learn-icon-simple">{icon}</span>
-            <span style={{flex:1,minWidth:0}}><span className="rk-learn-item-title">{title}</span><span className="rk-learn-item-sub">{sub}</span></span>
-            <span className="rk-learn-arrow-simple">›</span>
+          [{t:"s",s:"bam",n:7},"How to Play","Charleston basics, passing order, and Rackle scoring.",()=>setScreen("howto")],
+          [{t:"s",s:"crak",n:5},"2026 Hand Browser","Scan the card by section before you chase a lane.",()=>setScreen("handbrowser")],
+          [{t:"d",v:"Red"},"Free Play","Practice a fresh rack and keep today’s score untouched.",()=>go("free")],
+        ].map(([tile,title,sub,fn])=>(
+          <button key={title} className="rk-learn-home-card" onClick={fn}>
+            <span className="rk-learn-home-icon"><Ti t={tile} /></span>
+            <span className="rk-learn-home-text"><strong>{title}</strong><span>{sub}</span></span>
+            <span className="rk-learn-home-arrow">›</span>
           </button>
         ))}
       </div>
+      <div className="rk-learn-home-note">Small reps compound. One cleaner pass tomorrow can move your whole rack.</div>
     </section>
   );
 
