@@ -2763,6 +2763,48 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-score-primary-next-v8{width:100%;height:50px;border:none;border-radius:17px;background:linear-gradient(135deg,#176B42,#0F5432);color:#fff;font-family:'Fraunces',Georgia,serif;font-size:15px;font-weight:950;cursor:pointer;box-shadow:0 9px 20px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16)}
 .rk-score-link-row-v8{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:9px;flex-wrap:wrap}.rk-score-link-row-v8 button{border:none;background:transparent;color:#176B42;font-size:11px;font-weight:950;cursor:pointer;padding:6px 7px}.rk-score-link-row-v8 span{color:rgba(26,20,16,.24);font-size:10px}
 
+
+/* ─── v10 polish: ritual tiles, learn, signup, how-to, hand browser ───────── */
+.rk-ritual-v9{margin:22px 0 24px!important}
+.rk-ritual-v9 .rk-ritual-head-v6{display:block!important;text-align:left!important;margin-bottom:18px!important;padding:0 2px!important}
+.rk-ritual-v9 .rk-ritual-head-v6 span{display:block!important;margin-bottom:8px!important}
+.rk-ritual-v9 .rk-ritual-head-v6 strong{display:block!important;text-align:left!important;font-size:22px!important;line-height:1.08!important;max-width:14ch!important;margin-bottom:8px!important}
+.rk-ritual-v9 .rk-ritual-head-v6 p{display:block!important;margin:0!important;max-width:32ch!important;font-size:13px!important;line-height:1.55!important;color:rgba(26,20,16,.58)!important;font-weight:750!important}
+.rk-ritual-v9 .rk-ritual-track-v6{gap:13px!important;padding:4px 2px 10px!important}
+.rk-ritual-v9 .rk-ritual-card-v6{position:relative!important;min-height:205px!important;padding:20px 18px 18px!important;border-radius:26px!important;overflow:hidden!important;background:radial-gradient(circle at 82% 8%,rgba(255,255,255,.82),transparent 32%),linear-gradient(145deg,#FFFDF8,#F3EBDD)!important;border:1px solid rgba(26,20,16,.075)!important;box-shadow:0 12px 30px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.84)!important}
+.rk-ritual-v9 .rk-ritual-card-v6:after{content:"";position:absolute;right:-26px;bottom:-34px;width:130px;height:130px;border-radius:999px;background:radial-gradient(circle,rgba(23,107,66,.07),transparent 68%);pointer-events:none}
+.rk-ritual-v9 .rk-ritual-num{width:42px!important;height:42px!important;border-radius:999px!important;margin:0 0 36px!important;background:rgba(23,107,66,.075)!important;border:1px solid rgba(23,107,66,.10)!important;color:#176B42!important;font-size:12px!important;letter-spacing:1.5px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.rk-ritual-tile-v9{position:absolute!important;top:19px!important;right:20px!important;width:46px!important;height:58px!important;display:flex!important;align-items:center!important;justify-content:center!important;transform:rotate(2deg)!important;z-index:2!important}
+.rk-ritual-v9 .rk-ritual-card-v6:nth-child(2) .rk-ritual-tile-v9{transform:rotate(-2deg)!important}
+.rk-ritual-v9 .rk-ritual-card-v6:nth-child(3) .rk-ritual-tile-v9{transform:rotate(1deg)!important}
+.rk-ritual-v9 .rk-ritual-card-v6:nth-child(4) .rk-ritual-tile-v9{transform:rotate(-1deg)!important}
+.rk-ritual-tile-v9 .rk-mahjong-tile{width:37px!important;height:54px!important;border-radius:12px!important;transform:none!important;box-shadow:0 9px 18px rgba(26,20,16,.10),inset 0 1px 0 rgba(255,255,255,.9)!important;background:linear-gradient(145deg,#FFFDF8,#EFE4D2)!important}
+.rk-ritual-v9 .rk-ritual-card-v6 b{font-size:21px!important;line-height:1.05!important;margin-bottom:8px!important;position:relative!important;z-index:2!important}
+.rk-ritual-v9 .rk-ritual-card-v6 p{font-size:12.5px!important;line-height:1.5!important;max-width:24ch!important;position:relative!important;z-index:2!important}
+.rk-ritual-v9 .rk-ritual-dots-v6{margin-top:8px!important}
+
+.rk-learn-home-title{font-size:22px!important;line-height:1.06!important;letter-spacing:-.55px!important;max-width:16ch!important}
+.rk-learn-home-copy{font-size:12.5px!important;line-height:1.52!important;max-width:32ch!important}
+.rk-learn-home-v8{padding:19px 17px!important;border-radius:28px!important}
+
+.rk-email-home-v8{padding:20px 17px 18px!important;border-radius:28px!important}
+.rk-email-form-v8{display:grid!important;grid-template-columns:1fr!important;gap:10px!important;padding:10px!important;border-radius:24px!important;background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.10)!important}
+.rk-email-input-v8{height:50px!important;border-radius:17px!important;background:rgba(255,255,255,.13)!important;border:1px solid rgba(255,255,255,.18)!important;padding:0 15px!important;font-size:14px!important}
+.rk-email-input-v8:focus{border-color:rgba(243,212,107,.55)!important;box-shadow:0 0 0 3px rgba(243,212,107,.12),inset 0 1px 0 rgba(255,255,255,.14)!important}
+.rk-email-btn-v8{height:50px!important;border-radius:17px!important;width:100%!important;font-family:'Fraunces',Georgia,serif!important;font-size:15px!important;letter-spacing:-.2px!important}
+
+.rk-simple-page-hero,.rk-browser-v9-hero{position:relative;overflow:hidden;text-align:left;padding:22px 18px;border-radius:28px;background:radial-gradient(circle at 18% 0%,rgba(255,255,255,.10),transparent 34%),linear-gradient(150deg,#0B2418 0%,#13452C 52%,#0A1D13 100%);border:1px solid rgba(243,212,107,.20);box-shadow:0 16px 42px rgba(6,43,24,.18),inset 0 1px 0 rgba(255,255,255,.10);color:#fff;margin:0 0 14px}
+.rk-simple-page-hero:after,.rk-browser-v9-hero:after{content:'🀄';position:absolute;right:-16px;bottom:-28px;font-size:112px;opacity:.045;transform:rotate(-8deg)}
+.rk-simple-kicker{position:relative;z-index:1;font-size:9px;letter-spacing:2.6px;text-transform:uppercase;font-weight:950;color:#F3D46B;margin-bottom:10px}
+.rk-simple-page-hero h1,.rk-browser-v9-hero h1{position:relative;z-index:1;margin:0 0 8px;font-family:'Fraunces',Georgia,serif;font-size:28px;line-height:1.02;letter-spacing:-.8px;font-weight:950;color:#fff}
+.rk-simple-page-hero p,.rk-browser-v9-hero p{position:relative;z-index:1;margin:0;max-width:35ch;font-size:13px;line-height:1.6;color:rgba(255,255,255,.72);font-weight:780}
+.rk-simple-steps{display:grid;gap:10px;margin:14px 0 16px}.rk-simple-step{display:flex;gap:12px;padding:14px;border-radius:22px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.075);box-shadow:0 7px 22px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78)}
+.rk-simple-step-num{width:38px;height:38px;border-radius:999px;background:rgba(23,107,66,.075);border:1px solid rgba(23,107,66,.10);color:#176B42;font-size:12px;letter-spacing:1.4px;font-weight:950;display:flex;align-items:center;justify-content:center;flex-shrink:0}.rk-simple-step h2{margin:0 0 4px;font-family:'Fraunces',Georgia,serif;font-size:18px;line-height:1.08;color:#1A1410}.rk-simple-step p{margin:0;font-size:12.5px;line-height:1.55;color:#6B6157;font-weight:750}.rk-simple-section-head{margin:0 0 12px;text-align:left}.rk-simple-section-head span{display:block;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;font-weight:950;color:#176B42;margin-bottom:7px}.rk-simple-section-head h2{margin:0;font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1.06;letter-spacing:-.5px;color:#1A1410}.rk-simple-rule-grid{display:grid;gap:9px}.rk-simple-rule{padding:14px;border-radius:20px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.075);box-shadow:0 5px 16px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.76)}.rk-simple-rule h3{margin:0 0 5px;font-family:'Fraunces',Georgia,serif;font-size:17px;color:#1A1410}.rk-simple-rule p{margin:0;font-size:12px;line-height:1.55;color:#6B6157;font-weight:750}.rk-simple-action-panel{display:grid;gap:9px;margin-top:16px}.rk-simple-action-panel button{min-height:48px;border-radius:999px;border:1px solid rgba(23,107,66,.16);font-weight:950;cursor:pointer}.rk-simple-action-panel button:first-child{background:linear-gradient(135deg,#176B42,#0F5432);color:#fff}.rk-simple-action-panel button:last-child{background:linear-gradient(180deg,#F2EBDD,#E9E0CF);color:#176B42}
+
+.rk-hand-browser-v9 .rk-browser-v9-search-wrap{position:relative;z-index:1;margin-top:14px}.rk-browser-v9-search-wrap input{width:100%;height:48px;border-radius:17px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:#fff;padding:0 14px;font-family:'Nunito','Segoe UI',sans-serif;font-size:13px;font-weight:800;outline:none}.rk-browser-v9-search-wrap input::placeholder{color:rgba(255,255,255,.50)}.rk-browser-v9-section-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 0}.rk-browser-v9-section{min-height:106px;border-radius:22px;border:1px solid rgba(26,20,16,.075);background:linear-gradient(145deg,#FFFDF8,#F7F0E5);box-shadow:0 6px 18px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78);padding:13px 11px;text-align:left;color:#1A1410;cursor:pointer}.rk-browser-v9-section.active{border-color:rgba(23,107,66,.28);background:linear-gradient(145deg,#F4FBF7,#F7F0E5)}.rk-browser-v9-section-icon{display:block;font-size:20px;margin-bottom:8px}.rk-browser-v9-section strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:15px;line-height:1.05;color:#1A1410}.rk-browser-v9-section em{display:block;margin-top:5px;font-style:normal;font-size:10.5px;line-height:1.35;color:#6B6157;font-weight:800}.rk-browser-v9-controls{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}.rk-browser-v9-controls button,.rk-browser-v9-load,.rk-browser-v9-empty button{min-height:40px;padding:0 13px;border-radius:999px;border:1px solid rgba(23,107,66,.13);background:rgba(23,107,66,.07);color:#176B42;font-size:12px;font-weight:950;cursor:pointer}.rk-browser-v9-controls button.active{background:#176B42;color:#fff}.rk-browser-v9-guide{padding:15px;border-radius:24px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.075);box-shadow:0 7px 22px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78);margin-bottom:14px}.rk-browser-v9-dragon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.rk-browser-v9-dragon{padding:10px 7px;border-radius:17px;background:rgba(255,255,255,.72);border:1px solid rgba(26,20,16,.06);text-align:center}.rk-browser-v9-dragon>div{display:flex;justify-content:center;gap:3px;margin-bottom:8px}.rk-browser-v9-dragon .rk-mahjong-tile{width:30px!important;height:43px!important}.rk-browser-v9-dragon strong{display:block;font-size:11px;color:#1A1410}.rk-browser-v9-dragon span{display:block;font-size:10px;color:#6B6157;font-weight:800}.rk-browser-v9-results-head{display:flex;align-items:center;justify-content:space-between;margin:16px 0 10px}.rk-browser-v9-results-head span{font-size:9px;letter-spacing:2.4px;text-transform:uppercase;font-weight:950;color:#176B42}.rk-browser-v9-results-head h2{margin:5px 0 0;font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1.05;color:#1A1410}.rk-browser-v9-empty{text-align:center;padding:20px 16px;border-radius:24px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.075);box-shadow:0 7px 22px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78);margin-bottom:14px}.rk-browser-v9-empty h2{font-family:'Fraunces',Georgia,serif;font-size:21px;line-height:1.08;margin:0 0 7px}.rk-browser-v9-empty p{font-size:13px;line-height:1.55;color:#6B6157;font-weight:750;margin:0 auto 13px;max-width:32ch}.rk-browser-v9-load{width:100%;margin:8px 0 14px;min-height:46px;background:linear-gradient(180deg,#F2EBDD,#E9E0CF)!important}
+@media(min-width:760px){.rk-browser-v9-section-grid{grid-template-columns:repeat(4,1fr)}.rk-simple-action-panel{grid-template-columns:1fr 1fr}.rk-simple-rule-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:390px){.rk-ritual-v9 .rk-ritual-head-v6 strong,.rk-simple-section-head h2,.rk-browser-v9-results-head h2,.rk-learn-home-title{font-size:21px!important}.rk-browser-v9-dragon-grid{grid-template-columns:1fr}.rk-ritual-v9 .rk-ritual-card-v6{flex-basis:84%!important}}
+
 `;
 
 
@@ -13195,17 +13237,26 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
 
   const HowItWorks=()=> (
-    <section className="rk-ritual-carousel-v6" aria-label="The Rackle ritual">
+    <section className="rk-ritual-carousel-v6 rk-ritual-v9" aria-label="The Rackle ritual">
       <div className="rk-ritual-head-v6">
         <span>The Rackle Ritual</span>
         <strong>Your daily Charleston loop.</strong>
-        <p>Pass, read, score, and see where your rack stands.</p>
+        <p>Make one pass. Read the shape. See where you stand.</p>
       </div>
       <div className="rk-ritual-track-v6">
-        <article className="rk-ritual-card-v6"><span className="rk-ritual-num">01</span><span className="rk-ritual-tile-v7"><Ti t={{t:"s",s:"bam",n:7}} large /></span><b>Pass tiles</b><p>Choose three tiles to send away. Keep the groups that give your rack direction.</p></article>
-        <article className="rk-ritual-card-v6"><span className="rk-ritual-num">02</span><span className="rk-ritual-tile-v7"><Ti t={{t:"s",s:"crak",n:5}} large /></span><b>Find direction</b><p>See which section your rack is starting to favor before you lock in too early.</p></article>
-        <article className="rk-ritual-card-v6"><span className="rk-ritual-num">03</span><span className="rk-ritual-tile-v7"><Ti t={{t:"d",v:"Red"}} large /></span><b>Get your read</b><p>Rackle scores your Charleston so you know if your passes helped or hurt.</p></article>
-        <article className="rk-ritual-card-v6"><span className="rk-ritual-num">04</span><span className="rk-ritual-tile-v7"><Ti t={{t:"s",s:"dot",n:9}} large /></span><b>Chase the room</b><p>Compare your score with the global room and your club board.</p></article>
+        {[
+          {n:"01",tile:{t:"s",s:"bam",n:7},title:"Pass tiles",copy:"Pick three tiles to move. Protect pairs, flowers, jokers, and real groups."},
+          {n:"02",tile:{t:"s",s:"crak",n:5},title:"Find direction",copy:"See which card section your rack is leaning toward before you chase too much."},
+          {n:"03",tile:{t:"d",v:"Red"},title:"Get your read",copy:"Rackle grades the Charleston and shows what your passes created."},
+          {n:"04",tile:{t:"s",s:"dot",n:9},title:"Chase the room",copy:"Compare your score with the global room and your club board."},
+        ].map((card)=>(
+          <article className="rk-ritual-card-v6" key={card.n}>
+            <span className="rk-ritual-num">{card.n}</span>
+            <span className="rk-ritual-tile-v9"><Ti t={card.tile} /></span>
+            <b>{card.title}</b>
+            <p>{card.copy}</p>
+          </article>
+        ))}
       </div>
       <div className="rk-ritual-dots-v6" aria-hidden="true"><span/><span/><span/></div>
     </section>
@@ -13312,8 +13363,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     <section className="rk-learn-home-v8" aria-label="Learn and explore Rackle">
       <div className="rk-learn-home-head">
         <div className="rk-learn-home-kicker"><span className="rk-live-spark"/> Learn + Explore</div>
-        <h2 className="rk-learn-home-title">Sharpen your next Charleston.</h2>
-        <p className="rk-learn-home-copy">Quick guides, hand browsing, and free play built for one better read tomorrow.</p>
+        <h2 className="rk-learn-home-title">Learn the card faster.</h2>
+        <p className="rk-learn-home-copy">Short guides, clear hand scans, and free play for one better read tomorrow.</p>
       </div>
       <div className="rk-learn-home-grid">
         {[
@@ -15333,53 +15384,55 @@ function SectionQuizScreen({home,setScreen}){
 // ════════════════════════════════════════════════════════════════════════════
 function HowToPlayScreen({home,setScreen}){
   const steps=[
-    {t:"Read your rack",d:"Look for groups first: pairs, pungs, kongs, Flowers, Dragons, and connected numbers. A run of singles can be interesting, but groups make a hand real."},
-    {t:"Pass with purpose",d:"During the Charleston, pass tiles that do not support your strongest lane. Never pass Jokers. Be careful with 6s, Flowers, and strong pairs."},
-    {t:"Score the final rack",d:"Rackle reviews your last rack against the 2026 card and shows your best path, soft maybes, and what you could watch for next time."},
-    {t:"Learn one thing",d:"The goal is not perfection. The goal is one better read every day, so your table instincts keep improving."},
+    {n:"01",title:"Read the rack",copy:"Look for pairs, groups, flowers, jokers, dragons, and number patterns."},
+    {n:"02",title:"Pass with purpose",copy:"Send tiles that do not support your best lane. Never pass jokers."},
+    {n:"03",title:"Score your Charleston",copy:"Rackle shows whether your passes made the rack stronger or weaker."},
+    {n:"04",title:"Compare the room",copy:"See how your read stacks up against the global board and your club."},
   ];
-  const ruleCards=[
-    ["🃏","Jokers","Can help pungs, kongs, quints, and sextets. Never pairs or singles."],
-    ["🔒","Concealed","You must draw every tile yourself. No calling discards."],
-    ["🐉","Dragons","Bam matches Green. Crak matches Red. Dot matches Soap."],
-    ["🧠","Rackle read","Live means real group strength. Soft maybe means the shape is starting."],
+  const rules=[
+    {title:"Jokers",copy:"Use them in pungs, kongs, quints, and sextets. Not pairs or singles."},
+    {title:"Concealed",copy:"You cannot call discards. You must draw the tiles yourself."},
+    {title:"Dragons",copy:"Bam uses Green. Crak uses Red. Dot uses Soap."},
   ];
   return(
-    <div style={S.pg} className="rk-pg">
+    <div style={S.pg} className="rk-pg rk-how-simple-v9">
       <RackleHeader onBack={home} setScreen={setScreen}/>
-      <div className="rk-browser-hero">
-        <div style={{fontSize:9,letterSpacing:2.6,fontWeight:900,color:"rgba(243,212,107,.86)",marginBottom:8}}>HOW TO PLAY</div>
-        <div style={{fontFamily:F.d,fontSize:28,fontWeight:900,lineHeight:1.02,letterSpacing:-.7,marginBottom:10}}>Your daily Charleston workout</div>
-        <div style={{fontSize:13,lineHeight:1.65,color:"rgba(255,255,255,.72)",maxWidth:360}}>Train the part of American Mahjong that shapes the whole game: what to keep, what to pass, and when a hand is really forming.</div>
-      </div>
-      <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:16}}>
-        {steps.map((x,i)=>(
-          <div key={x.t} className="rk-howto-step">
-            <div className="rk-howto-num">{i+1}</div>
-            <div style={{flex:1}}>
-              <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,letterSpacing:-.25,marginBottom:4}}>{x.t}</div>
-              <div style={{fontSize:13,lineHeight:1.65,color:C.mut}}>{x.d}</div>
+      <section className="rk-simple-page-hero">
+        <div className="rk-simple-kicker">How to Play Rackle</div>
+        <h1>Train the Charleston.</h1>
+        <p>One rack. Three passes. One score that tells you how clean your read was.</p>
+      </section>
+
+      <section className="rk-simple-steps">
+        {steps.map(step=>(
+          <article className="rk-simple-step" key={step.n}>
+            <div className="rk-simple-step-num">{step.n}</div>
+            <div>
+              <h2>{step.title}</h2>
+              <p>{step.copy}</p>
             </div>
-          </div>
+          </article>
         ))}
-      </div>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
-        {ruleCards.map(([icon,title,copy])=>(
-          <div key={title} className="rk-lux-card" style={{padding:14,borderRadius:18}}>
-            <div style={{fontSize:22,marginBottom:7}}>{icon}</div>
-            <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,marginBottom:4}}>{title}</div>
-            <div style={{fontSize:11,lineHeight:1.55,color:C.mut}}>{copy}</div>
-          </div>
-        ))}
-      </div>
-      <div className="rk-lux-card" style={{padding:16,borderRadius:20,marginBottom:16}}>
-        <div style={{fontSize:9,letterSpacing:2,fontWeight:900,color:C.jade,marginBottom:7}}>BEST WAY TO USE RACKLE</div>
-        <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.ink,marginBottom:7}}>Play once. Notice one thing.</div>
-        <div style={{fontSize:13,lineHeight:1.65,color:C.mut}}>After each rack, focus on one coaching note. Did you protect a pair? Did you chase singles too early? Did you pass away your best section? That small feedback loop is the game.</div>
-      </div>
-      <div style={{display:"flex",gap:10}}>
-        <button onClick={()=>setScreen("tutorial")} style={{...S.greenBtn,flex:1}}>Start Tutorial</button>
-        <button onClick={()=>setScreen("handbrowser")} style={{...S.oBtn,flex:1}}>Browse Hands</button>
+      </section>
+
+      <section className="rk-simple-rules">
+        <div className="rk-simple-section-head">
+          <span>Table notes</span>
+          <h2>Three rules to remember.</h2>
+        </div>
+        <div className="rk-simple-rule-grid">
+          {rules.map(rule=>(
+            <article className="rk-simple-rule" key={rule.title}>
+              <h3>{rule.title}</h3>
+              <p>{rule.copy}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <div className="rk-simple-action-panel">
+        <button onClick={()=>setScreen("tutorial")}>Start Tutorial</button>
+        <button onClick={()=>setScreen("handbrowser")}>Browse 2026 Hands</button>
       </div>
       <Footer/>
     </div>
@@ -15393,8 +15446,7 @@ function HandBrowserScreen({home,setScreen}){
   const [activeSec,setActiveSec]=useState(null);
   const [search,setSearch]=useState("");
   const [onlyConcealed,setOnlyConcealed]=useState(false);
-  const [compact,setCompact]=useState(true);
-  const [visibleLimit,setVisibleLimit]=useState(8);
+  const [visibleLimit,setVisibleLimit]=useState(6);
 
   const q=search.trim().toLowerCase();
   const allHands=HAND_CATALOG.filter(h=>{
@@ -15405,90 +15457,84 @@ function HandBrowserScreen({home,setScreen}){
     return matches&&secOk&&concealedOk;
   });
   const sec=activeSec?SECS.find(s=>s.id===activeSec):null;
+  const visibleHands=allHands.slice(0,visibleLimit);
   const sectionCounts=SECS.map(s=>({sec:s,count:HAND_CATALOG.filter(h=>h.sec===s.id).length,concealed:HAND_CATALOG.filter(h=>h.sec===s.id&&h.concealed).length}));
-  const shouldShowHands=!!(activeSec||search||onlyConcealed);
-  const visibleHands=shouldShowHands?allHands.slice(0,visibleLimit):[];
 
-  useEffect(()=>{setVisibleLimit(8);},[activeSec,search,onlyConcealed]);
+  useEffect(()=>{setVisibleLimit(6);},[activeSec,search,onlyConcealed]);
 
   return(
-    <div style={S.pg} className="rk-pg rk-mobile-safe">
+    <div style={S.pg} className="rk-pg rk-mobile-safe rk-hand-browser-v9">
       <RackleHeader onBack={home} setScreen={setScreen}/>
-
-      <div className="rk-browser-hero rk-sweep">
-        <div style={{fontSize:9,letterSpacing:2.8,fontWeight:900,color:"rgba(243,212,107,.86)",marginBottom:8}}>2026 NMJL CARD</div>
-        <div style={{fontFamily:F.d,fontSize:30,fontWeight:900,lineHeight:1.02,letterSpacing:-.8,marginBottom:8}}>{sec?sec.name:"Hand Browser"}</div>
-        <div style={{fontSize:13,lineHeight:1.58,color:"rgba(255,255,255,.74)",maxWidth:360,margin:"0 auto"}}>
-          {sec?`${allHands.length} hands in ${sec.name}. Scan the shape first, then open the details.`:"Pick a section. Search when you know the tile, dragon, or rule."}
+      <section className="rk-browser-v9-hero">
+        <div className="rk-simple-kicker">2026 NMJL Card</div>
+        <h1>{sec?sec.name:"Hand Browser"}</h1>
+        <p>{sec?`${allHands.length} matching hands. Open a hand to study shape, section, and constraints.`:"Pick a section or search for a tile, pattern, dragon, or rule."}</p>
+        <div className="rk-browser-v9-search-wrap">
+          <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search: 2468, dragon, concealed, any 2 suits" />
         </div>
-        <input className="rk-browser-search" value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search 2468, dragons, concealed, any 2 suits…" />
-        <div className="rk-browser-filter-strip" aria-label="Quick filters">
-          {[['All',null],['Consecutive','consecutive'],['2468','2468'],['13579','13579'],['Winds','winds-dragons'],['Concealed',null]].map(([label,id],i)=><button key={label} className={`rk-browser-filter-pill ${(i===0&&!activeSec&&!onlyConcealed)||(id&&activeSec===id)||(label==='Concealed'&&onlyConcealed)?'is-active':''}`} type="button" onClick={()=>{if(label==='All'){setActiveSec(null);setOnlyConcealed(false);setSearch('');}else if(label==='Concealed'){setOnlyConcealed(v=>!v);}else if(id){setActiveSec(activeSec===id?null:id);}}}>{label}</button>)}
+      </section>
+
+      <section className="rk-browser-v9-section-grid" aria-label="Hand sections">
+        {sectionCounts.map(({sec:s,count,concealed})=>(
+          <button key={s.id} className={activeSec===s.id?"rk-browser-v9-section active":"rk-browser-v9-section"} onClick={()=>setActiveSec(activeSec===s.id?null:s.id)}>
+            <span className="rk-browser-v9-section-icon">{s.icon}</span>
+            <strong>{s.name}</strong>
+            <em>{count} hands{concealed?` · ${concealed} concealed`:""}</em>
+          </button>
+        ))}
+      </section>
+
+      <section className="rk-browser-v9-controls">
+        <button className={onlyConcealed?"active":""} onClick={()=>setOnlyConcealed(v=>!v)}>Concealed only</button>
+        {(activeSec||search||onlyConcealed)&&<button onClick={()=>{setActiveSec(null);setSearch("");setOnlyConcealed(false);}}>Clear filters</button>}
+      </section>
+
+      <section className="rk-browser-v9-guide">
+        <div className="rk-simple-section-head">
+          <span>Quick guide</span>
+          <h2>Dragon matching.</h2>
         </div>
-      </div>
-
-      <div className="rk-browser-sticky">
-        <div className="rk-hand-rail">
-          {sectionCounts.map(({sec:s,count,concealed})=>(
-            <button key={s.id} className={activeSec===s.id?"rk-hand-rail-card rk-hand-rail-card-active":"rk-hand-rail-card"} onClick={()=>setActiveSec(activeSec===s.id?null:s.id)}>
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,marginBottom:8}}>
-                <span style={{fontSize:20}}>{s.icon}</span>
-                <span style={{fontSize:10,fontWeight:900,color:s.color,background:s.color+"10",border:`1px solid ${s.color}18`,borderRadius:999,padding:"4px 8px"}}>{count}</span>
-              </div>
-              <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.05}}>{s.name}</div>
-              <div style={{fontSize:10.5,color:C.mut,marginTop:4,lineHeight:1.35}}>{concealed?`${concealed} concealed · `:""}{s.hands||count} options</div>
-            </button>
-          ))}
-        </div>
-        <div className="rk-browser-filter-row">
-          <button className={onlyConcealed?"rk-browser-filter-chip rk-browser-filter-chip-active":"rk-browser-filter-chip"} onClick={()=>setOnlyConcealed(v=>!v)}>🔒 Concealed</button>
-          <button className={!compact?"rk-browser-filter-chip rk-browser-filter-chip-active":"rk-browser-filter-chip"} onClick={()=>setCompact(v=>!v)}>{compact?"Compact cards":"Expanded cards"}</button>
-          {(activeSec||search||onlyConcealed)&&<button className="rk-browser-filter-chip" onClick={()=>{setActiveSec(null);setSearch("");setOnlyConcealed(false);}}>Clear</button>}
-        </div>
-      </div>
-
-      {!shouldShowHands&&(
-        <div className="rk-browser-mode-card">
-          <div style={{fontSize:26,marginBottom:8}}>📋</div>
-          <div style={{fontFamily:F.d,fontSize:21,fontWeight:900,color:C.ink,marginBottom:6}}>Study one section at a time</div>
-          <div style={{fontSize:13,lineHeight:1.6,color:C.mut,maxWidth:330,margin:"0 auto 14px"}}>The card is easier when it feels less like a wall. Start with a section above, then scan the hands like flashcards.</div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
-            <button className="rk-browser-filter-chip" onClick={()=>setActiveSec("cr")}>Start with Runs</button>
-            <button className="rk-browser-filter-chip" onClick={()=>setActiveSec("2468")}>Study 2468</button>
-          </div>
-        </div>
-      )}
-
-      {allHands.length===0&&shouldShowHands&&(
-        <div className="rk-lux-card" style={{padding:22,textAlign:"center",borderRadius:20,color:C.mut}}>No hands found. Try “dragon”, “consecutive”, “any 2 suits”, or a number like “2468”.</div>
-      )}
-
-      {shouldShowHands&&(
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,margin:"10px 0 12px"}}>
-          <div className="rk-hand-count-pill">{allHands.length} matching hands</div>
-          <div style={{fontSize:11,color:C.mut,fontWeight:800}}>Showing {Math.min(visibleLimit,allHands.length)}</div>
-        </div>
-      )}
-
-      {visibleHands.map((hand,i)=>(<HandRenderer key={`${hand.sec}-${hand.label}-${i}`} hand={hand} defaultOpen={!compact&&i<4}/>))}
-      {shouldShowHands&&allHands.length>visibleLimit&&(<button className="rk-browser-load" onClick={()=>setVisibleLimit(v=>v+8)}>Show {Math.min(8,allHands.length-visibleLimit)} more hands →</button>)}
-      {shouldShowHands&&visibleLimit>8&&allHands.length<=visibleLimit&&(<button className="rk-browser-load" onClick={()=>setVisibleLimit(8)}>Collapse list ↑</button>)}
-
-      <div className="rk-lux-card" style={{marginTop:14,padding:16,borderRadius:20,background:"linear-gradient(145deg,#FFFFF8,#F4EFE3)",borderColor:C.gold+"30"}}>
-        <div style={{fontSize:9,color:C.gold,letterSpacing:2,fontWeight:900,marginBottom:10,textAlign:"center"}}>🐉 DRAGON MATCHING GUIDE</div>
-        <div style={{display:"flex",flexDirection:"column",gap:9}}>
+        <div className="rk-browser-v9-dragon-grid">
           {[
-            {suit:"Bam",dragon:"Green Dragon",suitCol:SC.bam,dragonCol:"#1B7D4E",tiles:[{t:"s",s:"bam",n:5},{t:"d",v:"Grn"}]},
-            {suit:"Crak",dragon:"Red Dragon",suitCol:SC.crak,dragonCol:"#B83232",tiles:[{t:"s",s:"crak",n:5},{t:"d",v:"Red"}]},
-            {suit:"Dot",dragon:"Soap / White",suitCol:SC.dot,dragonCol:"#6B6560",tiles:[{t:"s",s:"dot",n:5},{t:"d",v:"Soap"}]},
+            {suit:"Bam",dragon:"Green",tiles:[{t:"s",s:"bam",n:5},{t:"d",v:"Grn"}]},
+            {suit:"Crak",dragon:"Red",tiles:[{t:"s",s:"crak",n:5},{t:"d",v:"Red"}]},
+            {suit:"Dot",dragon:"Soap",tiles:[{t:"s",s:"dot",n:5},{t:"d",v:"Soap"}]},
           ].map(row=>(
-            <div key={row.suit} style={{display:"flex",alignItems:"center",gap:12,padding:"9px 10px",background:"#fff",borderRadius:13,border:`1px solid ${C.bdr}`}}>
-              <div style={{display:"flex",gap:4}}>{row.tiles.map((t,i)=><Ti key={i} t={t} large={false}/>)}</div>
-              <div style={{flex:1}}><span style={{fontSize:12,fontWeight:900,color:row.suitCol}}>{row.suit}</span><span style={{fontSize:11,color:C.mut}}> matches </span><span style={{fontSize:12,fontWeight:900,color:row.dragonCol}}>{row.dragon}</span></div>
+            <div className="rk-browser-v9-dragon" key={row.suit}>
+              <div>{row.tiles.map((t,i)=><Ti key={i} t={t}/>)}</div>
+              <strong>{row.suit}</strong>
+              <span>{row.dragon}</span>
             </div>
           ))}
         </div>
-      </div>
+      </section>
+
+      <section className="rk-browser-v9-results-head">
+        <div>
+          <span>{activeSec||search||onlyConcealed?"Results":"Start here"}</span>
+          <h2>{activeSec||search||onlyConcealed?`${allHands.length} matching hands`:"Choose a section to browse."}</h2>
+        </div>
+      </section>
+
+      {!(activeSec||search||onlyConcealed)&&(
+        <div className="rk-browser-v9-empty">
+          <h2>Make the card feel smaller.</h2>
+          <p>Start with one section. Scan the shape. Then open the hand details when a pattern looks familiar.</p>
+          <button onClick={()=>setActiveSec("cr")}>Start with Consecutive Runs</button>
+        </div>
+      )}
+
+      {(activeSec||search||onlyConcealed)&&allHands.length===0&&(
+        <div className="rk-browser-v9-empty"><h2>No hands found.</h2><p>Try “dragon”, “2468”, “any 2 suits”, “concealed”, or a section name.</p></div>
+      )}
+
+      {(activeSec||search||onlyConcealed)&&visibleHands.map((hand,i)=>(
+        <HandRenderer key={`${hand.sec}-${hand.label}-${i}`} hand={hand} defaultOpen={i<2}/>
+      ))}
+
+      {(activeSec||search||onlyConcealed)&&allHands.length>visibleLimit&&(
+        <button className="rk-browser-v9-load" onClick={()=>setVisibleLimit(v=>v+6)}>Show more hands →</button>
+      )}
       <Footer/>
     </div>
   );
