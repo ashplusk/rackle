@@ -4240,6 +4240,111 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-warmup-v18-cta{width:100%!important}
 }
 
+/* ─── v19: Premium polish for social, learn, and updates ───────────────── */
+.rk-room-live-v19{
+  border-radius:26px!important;
+  padding-bottom:15px!important;
+  border:1px solid rgba(243,212,107,.18)!important;
+  background:linear-gradient(152deg,#062B18 0%,#0B3D25 55%,#041F12 100%)!important;
+  box-shadow:0 16px 40px rgba(6,43,24,.18),inset 0 1px 0 rgba(255,255,255,.09)!important;
+}
+.rk-room-live-v19:before{
+  background:radial-gradient(circle at 18% 10%,rgba(243,212,107,.12),transparent 31%),radial-gradient(circle at 82% 30%,rgba(76,217,135,.12),transparent 27%)!important;
+}
+.rk-room-live-v19 .rk-room-live-v6-summary{padding:18px 18px 12px!important}
+.rk-room-live-v19 .rk-room-live-v6-kicker{font-size:8.5px!important;letter-spacing:2.25px!important;color:rgba(243,212,107,.82)!important;margin-bottom:8px!important}
+.rk-room-live-v19 .rk-room-live-v6-title{font-size:21px!important;line-height:1.03!important;letter-spacing:-.55px!important;margin-bottom:6px!important}
+.rk-room-live-v19 .rk-room-live-v6-copy{font-size:12px!important;line-height:1.38!important;color:rgba(255,255,255,.68)!important;max-width:28ch!important}
+.rk-room-live-v19 .rk-room-live-v6-score{min-width:68px!important;padding:10px 10px!important;border-radius:18px!important;background:rgba(255,255,255,.075)!important;border:1px solid rgba(255,255,255,.12)!important}
+.rk-room-live-v19 .rk-room-live-v6-score strong{font-size:25px!important;color:#F3D46B!important}
+.rk-room-live-v19 .rk-room-live-v17-table{
+  margin:0 14px!important;
+  width:calc(100% - 28px)!important;
+  border-radius:20px!important;
+  padding:13px!important;
+  background:rgba(255,255,255,.075)!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08)!important;
+  transition:transform .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-table:hover{transform:translateY(-1px)!important;background:rgba(255,255,255,.105)!important;border-color:rgba(243,212,107,.22)!important;box-shadow:0 12px 26px rgba(0,0,0,.13),inset 0 1px 0 rgba(255,255,255,.12)!important}
+.rk-room-live-v19 .rk-room-live-v17-table:active{transform:scale(.992)!important}
+.rk-room-live-v19 .rk-room-live-v17-head{gap:10px!important;padding-bottom:10px!important;border-bottom:1px solid rgba(255,255,255,.08)!important}
+.rk-room-live-v19 .rk-room-live-v6-avatar{width:23px!important;height:23px!important;font-size:9px!important;border-color:#0B3D25!important}
+.rk-room-live-v19 .rk-room-live-v17-head-copy strong{font-size:12px!important;color:#fff!important}
+.rk-room-live-v19 .rk-room-live-v17-head-copy span{font-size:10.5px!important;color:rgba(255,255,255,.60)!important}
+.rk-room-live-v19 .rk-room-live-v17-cta{padding:6px 9px!important;border-radius:999px!important;background:rgba(243,212,107,.13)!important;border:1px solid rgba(243,212,107,.20)!important;color:#F3D46B!important;font-size:10px!important;font-weight:950!important}
+.rk-room-live-v19 .rk-room-live-v17-rows{margin-top:8px!important;display:grid!important;gap:5px!important}
+.rk-room-live-v19 .rk-room-live-v17-row{padding:6px 0!important;border:none!important;font-size:11.5px!important;color:rgba(255,255,255,.70)!important}
+.rk-room-live-v19 .rk-room-live-v17-row strong{color:#F3D46B!important;font-size:12px!important}
+.rk-room-live-v19 .rk-room-live-v17-row-you{padding:6px 8px!important;border-radius:12px!important;background:rgba(243,212,107,.10)!important}
+.rk-room-live-v19 .rk-room-live-v17-actions{display:flex!important;gap:8px!important;margin:10px 14px 0!important}
+.rk-room-live-v19 .rk-room-live-v17-actions button{height:38px!important;border-radius:14px!important;font-size:11.5px!important;font-weight:950!important}
+.rk-room-live-v19 .rk-room-live-v17-actions button:first-child{background:#F3D46B!important;color:#062B18!important;border:1px solid rgba(255,255,255,.18)!important}
+.rk-room-live-v19 .rk-room-live-v17-actions button:last-child{background:rgba(255,255,255,.075)!important;color:rgba(255,255,255,.78)!important;border:1px solid rgba(255,255,255,.12)!important}
+
+.rk-learn-home-v19{
+  margin-top:8px!important;
+  padding:12px 0 6px!important;
+}
+.rk-learn-home-v19 .rk-learn-home-v18-head{
+  margin-bottom:14px!important;
+  padding:0 1px 12px!important;
+  border-bottom:1px solid rgba(160,120,40,.18)!important;
+}
+.rk-learn-home-v19 .rk-learn-home-v18-kicker{font-size:8.5px!important;letter-spacing:2.45px!important;color:rgba(23,107,66,.82)!important;margin-bottom:8px!important}
+.rk-learn-home-v19 .rk-learn-home-v18-title{font-size:22px!important;letter-spacing:-.6px!important;margin-bottom:7px!important}
+.rk-learn-home-v19 .rk-learn-home-v18-copy{font-size:12.2px!important;line-height:1.45!important;color:rgba(26,20,16,.56)!important}
+.rk-learn-home-v19 .rk-learn-home-v18-grid{gap:9px!important}
+.rk-learn-home-v19 .rk-learn-home-v18-card{
+  position:relative!important;
+  overflow:hidden!important;
+  min-height:68px!important;
+  padding:13px 12px!important;
+  border-radius:20px!important;
+  background:linear-gradient(145deg,#FFFDF8 0%,#F7F0E5 100%)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 6px 20px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-learn-home-v19 .rk-learn-home-v18-card:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent,rgba(255,255,255,.28),transparent);transform:translateX(-130%);transition:transform .42s ease;pointer-events:none}
+.rk-learn-home-v19 .rk-learn-home-v18-card:hover:after{transform:translateX(130%)}
+.rk-learn-home-v19 .rk-learn-home-v18-card:hover{transform:translateY(-1px)!important;border-color:rgba(23,107,66,.16)!important;box-shadow:0 11px 26px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.84)!important}
+.rk-learn-home-v19 .rk-learn-home-v18-icon{
+  width:35px!important;height:35px!important;min-width:35px!important;
+  border-radius:14px!important;
+  background:linear-gradient(145deg,#FFFDF8,#EEE4D2)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.86),0 4px 12px rgba(26,20,16,.045)!important;
+}
+.rk-learn-home-v19 .rk-learn-home-v18-text strong{font-size:14.5px!important;letter-spacing:-.2px!important}
+.rk-learn-home-v19 .rk-learn-home-v18-text span{font-size:11.5px!important;color:rgba(26,20,16,.55)!important}
+.rk-learn-home-v19 .rk-learn-home-v18-arrow{background:transparent!important;border:none!important;padding:0!important;color:#176B42!important;font-size:11px!important}
+
+.rk-email-home-v19{
+  margin:16px 0 4px!important;
+  padding:20px 0 6px!important;
+  border-top:1px solid rgba(160,120,40,.18)!important;
+}
+.rk-email-home-v19 .rk-email-kicker-v18{font-size:8.5px!important;letter-spacing:2.45px!important;margin-bottom:8px!important}
+.rk-email-home-v19 .rk-email-title-v8{font-size:21px!important;letter-spacing:-.45px!important;margin-bottom:7px!important}
+.rk-email-home-v19 .rk-email-copy-v8{font-size:12.2px!important;line-height:1.45!important;color:rgba(26,20,16,.56)!important;margin-bottom:13px!important}
+.rk-email-home-v19 .rk-email-form-v8{
+  display:grid!important;
+  grid-template-columns:1fr auto!important;
+  align-items:center!important;
+  gap:8px!important;
+  padding:8px!important;
+  background:rgba(255,255,255,.42)!important;
+  border:1px solid rgba(26,20,16,.065)!important;
+  border-radius:18px!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.76)!important;
+}
+.rk-email-home-v19 .rk-email-input-v8{height:38px!important;border-radius:13px!important;background:#FFFDF8!important}
+.rk-email-home-v19 .rk-email-btn-v8{height:38px!important;border-radius:13px!important;padding:0 14px!important;white-space:nowrap!important}
+.rk-email-home-v19 .rk-email-done-v8{padding:14px!important;border-radius:18px!important;background:rgba(23,107,66,.055)!important}
+@media(max-width:390px){.rk-email-home-v19 .rk-email-form-v8{grid-template-columns:1fr!important}.rk-email-home-v19 .rk-email-btn-v8{width:100%!important}}
+
+
 `;
 
 
@@ -13010,14 +13115,14 @@ function EmailSignup(){
     catch{setErr("Something went wrong. Try again.");}
   };
   return(
-    <section className="rk-email-home-v8" aria-label="Sign up for Rackle updates">
+    <section className="rk-email-home-v8 rk-email-home-v19" aria-label="Sign up for Rackle updates">
       <div className="rk-email-kicker-v8 rk-email-kicker-v18">Clubhouse updates</div>
-      <h2 className="rk-email-title-v8">Bring your table back tomorrow.</h2>
+      <h2 className="rk-email-title-v8">Stay close to the table.</h2>
       {done?(
         <div className="rk-email-done-v8"><div style={{fontFamily:F.d,fontSize:20,fontWeight:950,marginBottom:4}}>You’re on the list.</div><div style={{fontSize:12,color:"rgba(255,255,255,.72)",fontWeight:800}}>We’ll send new Rackle drops and club updates.</div></div>
       ):(
         <>
-          <p className="rk-email-copy-v8">Get new feature drops, club leaderboard updates, and fresh daily-game ideas.</p>
+          <p className="rk-email-copy-v8">Get new Rackle drops and club updates when they go live.</p>
           <div className="rk-email-form-v8">
             <input className="rk-email-input-v8" type="email" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} placeholder="your@email.com" aria-label="Email address for Rackle updates" />
             <button className="rk-email-btn-v8" onClick={submit}>Join list</button>
@@ -14806,7 +14911,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const secondaryLabel=activeClubCode?"View global":"View club";
     const secondaryAction=activeClubCode?()=>setScreen("globalLeaderboard"):openBoard;
     return(
-      <section className="rk-room-live-v6 rk-room-live-v17" aria-label="Live club standings">
+      <section className="rk-room-live-v6 rk-room-live-v17 rk-room-live-v19" aria-label="Live club standings">
         <button type="button" onClick={openBoard} className="rk-room-live-v6-summary" style={{width:"100%",textAlign:"left",display:"block",border:0}}>
           <div className="rk-room-live-v6-top">
             <div>
@@ -14824,7 +14929,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               {(firstNames.length?firstNames:[leaderName,"You","Club"]).slice(0,3).map((n,i)=><span key={`${n}-${i}`} className="rk-room-live-v6-avatar">{initials(n)}</span>)}
             </div>
             <div className="rk-room-live-v17-head-copy"><strong>{boardLabel}</strong><span>{socialCopy}</span></div>
-            <span className="rk-room-live-v17-cta">Open →</span>
+            <span className="rk-room-live-v17-cta">Open room →</span>
           </div>
           <div className="rk-room-live-v17-rows">
             {previewRows.map((r,i)=>{
@@ -14840,7 +14945,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </button>
 
         <div className="rk-room-live-v17-actions">
-          <button type="button" onClick={openBoard}>See standings</button>
+          <button type="button" onClick={openBoard}>Open standings</button>
           <button type="button" onClick={secondaryAction}>{secondaryLabel}</button>
         </div>
       </section>
@@ -14849,17 +14954,17 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
 
   const Learn=()=> (
-    <section className="rk-learn-home-v8 rk-learn-home-v12 rk-learn-home-v18" aria-label="Learn and explore Rackle">
+    <section className="rk-learn-home-v8 rk-learn-home-v12 rk-learn-home-v18 rk-learn-home-v19" aria-label="Learn and explore Rackle">
       <div className="rk-learn-home-head rk-learn-home-v18-head">
         <div className="rk-learn-home-kicker rk-learn-home-v18-kicker">Learn + Explore</div>
         <h2 className="rk-learn-home-title rk-learn-home-v18-title">Sharpen your table read</h2>
-        <p className="rk-learn-home-copy rk-learn-home-v18-copy">Three quick ways to learn the card, check a section, or play another rack.</p>
+        <p className="rk-learn-home-copy rk-learn-home-v18-copy">Learn the card, browse the 2026 hands, or take another practice rack.</p>
       </div>
       <div className="rk-learn-home-grid rk-learn-home-v18-grid">
         {[
-          ["01","How to Play","Get the flow before your first rack.",()=>setScreen("howto")],
-          ["02","2026 Hand Browser","Scan sections and hand shapes faster.",()=>setScreen("handbrowser")],
-          ["03","Free Play","Play extra hands outside the Daily.",()=>go("free")],
+          ["01","How to Play","Learn the flow in two minutes.",()=>setScreen("howto")],
+          ["02","2026 Hand Browser","Search sections, patterns, and hands.",()=>setScreen("handbrowser")],
+          ["03","Free Play","Practice without touching today’s score.",()=>go("free")],
         ].map(([mark,title,sub,fn])=>(
           <button key={title} className="rk-learn-home-card rk-learn-home-v18-card" onClick={fn}>
             <span className="rk-learn-home-icon rk-learn-home-v18-icon">{mark}</span>
