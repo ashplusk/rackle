@@ -4610,6 +4610,176 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 `;
 
 
+
+/* ─── vNext SCORECARD ACTION + REVIEW POLISH ───────────────────────────── */
+.rk-room-live-v17-actions{
+  display:grid!important;
+  grid-template-columns:1.35fr .95fr!important;
+  gap:10px!important;
+  margin-top:14px!important;
+}
+.rk-room-live-v17-actions button{
+  min-height:48px!important;
+  border-radius:18px!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:14px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  letter-spacing:-.1px!important;
+  cursor:pointer!important;
+  transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease!important;
+}
+.rk-room-live-v17-actions button:first-child{
+  background:linear-gradient(135deg,#F3D46B 0%,#E7C756 100%)!important;
+  color:#07331E!important;
+  border:1px solid rgba(243,212,107,.35)!important;
+  box-shadow:0 10px 22px rgba(243,212,107,.17),inset 0 1px 0 rgba(255,255,255,.40)!important;
+}
+.rk-room-live-v17-actions button:last-child{
+  background:rgba(255,255,255,.08)!important;
+  color:rgba(255,255,255,.86)!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10)!important;
+}
+.rk-room-live-v17-actions button:active{transform:scale(.985)!important}
+@media(max-width:390px){.rk-room-live-v17-actions{grid-template-columns:1fr!important}.rk-room-live-v17-actions button{min-height:46px!important}}
+
+.rk-score-action-panel-v8{
+  display:grid!important;
+  gap:9px!important;
+  margin:12px 0 16px!important;
+  padding:13px!important;
+  border-radius:24px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F4EFE3)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 9px 26px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-score-primary-next-v8{
+  min-height:50px!important;
+  border-radius:18px!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  background:linear-gradient(135deg,#176B42,#0F5432)!important;
+  color:#fff!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:15px!important;
+  font-weight:950!important;
+  letter-spacing:-.1px!important;
+  box-shadow:0 10px 22px rgba(23,107,66,.18),inset 0 1px 0 rgba(255,255,255,.16)!important;
+  cursor:pointer!important;
+}
+.rk-score-link-row-v8{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}
+.rk-score-link-row-v8 button{
+  min-height:44px!important;
+  border-radius:16px!important;
+  border:1px solid rgba(23,107,66,.12)!important;
+  background:rgba(23,107,66,.055)!important;
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:12.5px!important;
+  font-weight:950!important;
+  cursor:pointer!important;
+}
+.rk-score-action-panel-v8 button:active{transform:scale(.988)!important}
+
+.rk-daily-review-v10{
+  margin:4px 0 17px!important;
+}
+.rk-daily-review-v10-head{
+  border-radius:24px!important;
+  padding:16px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F3EEE3)!important;
+  border-color:rgba(23,107,66,.10)!important;
+}
+.rk-daily-review-v10-head b{
+  min-width:72px!important;
+  text-align:center!important;
+  background:rgba(23,107,66,.075)!important;
+}
+.rk-daily-review-v10-grid{
+  gap:9px!important;
+}
+.rk-daily-review-v10-card{
+  display:grid!important;
+  grid-template-columns:42px 1fr!important;
+  gap:12px!important;
+  align-items:start!important;
+  padding:14px!important;
+  border-radius:20px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;
+}
+.rk-daily-review-v10-card:before{
+  content:attr(data-icon);
+  width:42px;height:42px;border-radius:15px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,#FFFDF8,#EEE4D2);
+  border:1px solid rgba(26,20,16,.08);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.86),0 4px 12px rgba(26,20,16,.045);
+  font-size:18px;
+  line-height:1;
+}
+.rk-daily-review-v10-card span,
+.rk-daily-review-v10-card strong,
+.rk-daily-review-v10-card p{
+  grid-column:2!important;
+}
+.rk-daily-review-v10-card span{font-size:8px!important;letter-spacing:2.1px!important;margin-bottom:4px!important;color:rgba(23,107,66,.78)!important}
+.rk-daily-review-v10-card strong{font-size:17px!important;margin-bottom:5px!important;line-height:1.04!important}
+.rk-daily-review-v10-card p{font-size:12.25px!important;line-height:1.48!important;font-weight:650!important;color:rgba(26,20,16,.63)!important}
+.rk-daily-review-v10-card.primary{
+  background:radial-gradient(circle at top right,rgba(255,255,255,.72),transparent 36%),linear-gradient(145deg,#F6FBF7,#F7F0E5)!important;
+}
+.rk-daily-review-v20-detail{
+  display:grid!important;
+  gap:9px!important;
+  border-radius:22px!important;
+  padding:12px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-daily-review-v20-detail-card{
+  border-radius:17px!important;
+  padding:12px 13px!important;
+  background:rgba(255,255,255,.58)!important;
+  border:1px solid rgba(26,20,16,.055)!important;
+  text-align:left!important;
+}
+.rk-daily-review-v20-detail-card span{
+  display:block!important;
+  font-size:8px!important;
+  letter-spacing:2px!important;
+  text-transform:uppercase!important;
+  color:#176B42!important;
+  font-weight:950!important;
+  margin-bottom:5px!important;
+}
+.rk-daily-review-v20-detail-card p{margin:0!important;font-size:12.25px!important;line-height:1.5!important;color:rgba(26,20,16,.66)!important;font-weight:700!important}
+.rk-daily-review-v20-coach{
+  min-height:46px!important;
+  border-radius:16px!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  background:linear-gradient(135deg,#176B42,#0F5432)!important;
+  color:#fff!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:14px!important;
+  font-weight:950!important;
+  cursor:pointer!important;
+}
+
+/* Make any old rows of scorecard buttons feel like one clean mobile stack */
+.rk-score-shell .rk-score-action-grid{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:8px!important;
+  margin:12px 0!important;
+}
+.rk-score-shell .rk-score-action-grid button{
+  width:100%!important;
+  min-height:46px!important;
+  border-radius:17px!important;
+  font-weight:950!important;
+}
+
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
   app:{fontFamily:F.b,background:C.bg,minHeight:"100vh",color:C.ink,width:"100%",maxWidth:560,borderLeft:`1px solid ${C.bdr}`,borderRight:`1px solid ${C.bdr}`,overflowX:"hidden"},
@@ -11713,7 +11883,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       </div>
 
       <div className="rk-score-action-panel-v8" aria-label="Scorecard actions">
-        <button onClick={onPractice} className="rk-score-primary-next-v8">Play Free Play →</button>
+        <button onClick={onPractice} className="rk-score-primary-next-v8">Practice another rack →</button>
         <div className="rk-score-link-row-v8">
           <button onClick={onHome}>Back to clubhouse</button>
         </div>
@@ -11728,17 +11898,17 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <b>{showDetails?"Hide":"Open"}</b>
         </button>
         <div className="rk-daily-review-v10-grid">
-          <div className="rk-daily-review-v10-card primary">
+          <div className="rk-daily-review-v10-card primary" data-icon="🧭">
             <span>Your read</span>
             <strong>{reviewTone}</strong>
             <p>{reviewCopy}</p>
           </div>
-          <div className="rk-daily-review-v10-card">
+          <div className="rk-daily-review-v10-card" data-icon="🀄">
             <span>Best path</span>
             <strong>{reviewBestPath}</strong>
-            <p>This is the lane Rackle would keep closest after the Charleston.</p>
+            <p>This is the cleanest lane to keep alive after the Charleston.</p>
           </div>
-          <div className="rk-daily-review-v10-card">
+          <div className="rk-daily-review-v10-card" data-icon="🎯">
             <span>Table IQ</span>
             <strong>{tableTag}</strong>
             <p>{pivotCopy}</p>
@@ -11747,11 +11917,11 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         {showDetails&&(
           <div className="rk-daily-review-v20-detail rk-in">
             <div className="rk-daily-review-v20-detail-card">
-              <span>What this means</span>
+              <span>Your takeaway</span>
               <p>{reviewCopy}</p>
             </div>
             <div className="rk-daily-review-v20-detail-card">
-              <span>Best next move</span>
+              <span>Next table move</span>
               <p>{pivotCopy}</p>
             </div>
             {onCoachMode&&<button onClick={onCoachMode} className="rk-daily-review-v20-coach">See the better play →</button>}
@@ -15199,7 +15369,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       : `${globalCount||1} player${(globalCount||1)===1?"":"s"} in today’s Rackle room`;
     const previewRows=(activeClubCode&&clubPreviewRows.length?clubPreviewRows:globalPreviewRows).slice(0,3);
     const boardLabel=activeClubCode?"Club board":"Rackle room";
-    const secondaryLabel=activeClubCode?"View global":"View club";
+    const secondaryLabel=activeClubCode?"Global room →":"Club room →";
     const secondaryAction=activeClubCode?()=>setScreen("globalLeaderboard"):openBoard;
     return(
       <section className="rk-room-live-v6 rk-room-live-v17 rk-room-live-v19" aria-label="Live club standings">
@@ -15236,7 +15406,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </button>
 
         <div className="rk-room-live-v17-actions">
-          <button type="button" onClick={openBoard}>Open standings</button>
+          <button type="button" onClick={openBoard}>{activeClubCode?"Club standings →":"Open standings →"}</button>
           <button type="button" onClick={secondaryAction}>{secondaryLabel}</button>
         </div>
       </section>
