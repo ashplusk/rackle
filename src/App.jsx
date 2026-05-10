@@ -2805,6 +2805,59 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 @media(min-width:760px){.rk-browser-v9-section-grid{grid-template-columns:repeat(4,1fr)}.rk-simple-action-panel{grid-template-columns:1fr 1fr}.rk-simple-rule-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:390px){.rk-ritual-v9 .rk-ritual-head-v6 strong,.rk-simple-section-head h2,.rk-browser-v9-results-head h2,.rk-learn-home-title{font-size:21px!important}.rk-browser-v9-dragon-grid{grid-template-columns:1fr}.rk-ritual-v9 .rk-ritual-card-v6{flex-basis:84%!important}}
 
+
+/* ─── Practice Scorecard vNext: simpler, warmer, more replayable ───────── */
+.rk-practice-v9-shell{padding:0 0 52px!important;background:transparent!important}
+.rk-practice-v9-hero{position:relative;overflow:hidden;border-radius:30px;padding:26px 22px 24px;margin:16px 0 14px;background:radial-gradient(circle at 14% 8%,rgba(255,255,255,.12),transparent 34%),linear-gradient(150deg,#062B18 0%,#0D4A2E 58%,#051F11 100%);border:1px solid rgba(243,212,107,.20);box-shadow:0 18px 46px rgba(6,43,24,.22),inset 0 1px 0 rgba(255,255,255,.10);color:#fff;text-align:left}
+.rk-practice-v9-hero:after{content:'🀄';position:absolute;right:-22px;bottom:-32px;font-size:136px;opacity:.045;transform:rotate(-8deg);pointer-events:none}
+.rk-practice-v9-kicker{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:8px 12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);color:#F3D46B;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:950;line-height:1}
+.rk-practice-v9-score-row{position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-top:22px}
+.rk-practice-v9-score{font-family:'Fraunces',Georgia,serif;font-size:76px;line-height:.88;letter-spacing:-3.6px;font-weight:950;color:#F3D46B;text-shadow:0 12px 26px rgba(0,0,0,.18)}
+.rk-practice-v9-label{font-size:10px;letter-spacing:2.3px;text-transform:uppercase;color:rgba(255,255,255,.52);font-weight:950;margin-top:7px}
+.rk-practice-v9-title{font-family:'Fraunces',Georgia,serif;font-size:28px;line-height:1.02;font-weight:950;letter-spacing:-.8px;color:#fff;margin:0 0 6px;text-align:right}
+.rk-practice-v9-copy{font-size:13px;line-height:1.45;color:rgba(255,255,255,.70);font-weight:750;margin:0;text-align:right;max-width:18ch}
+.rk-practice-v9-actions{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:20px}
+.rk-practice-v9-primary,.rk-practice-v9-secondary{min-height:48px;border-radius:17px;border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;text-decoration:none;cursor:pointer;font-size:13px;font-weight:950;transition:transform .16s ease,box-shadow .16s ease}
+.rk-practice-v9-primary{background:linear-gradient(145deg,#F3D46B,#E2BD4F);color:#1A1410;box-shadow:0 10px 24px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.45);font-family:'Fraunces',Georgia,serif;font-size:15px}
+.rk-practice-v9-secondary{background:rgba(255,255,255,.08);color:#fff}
+.rk-practice-v9-primary:active,.rk-practice-v9-secondary:active{transform:scale(.985)}
+.rk-intuition-v9{position:relative;overflow:hidden;border-radius:24px;padding:18px;margin:0 0 14px;background:linear-gradient(145deg,#FFFDF8,#F6EFE4);border:1px solid rgba(26,20,16,.08);box-shadow:0 10px 28px rgba(26,20,16,.05),inset 0 1px 0 rgba(255,255,255,.80);text-align:left}
+.rk-intuition-v9:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(255,255,255,.64),transparent 34%);pointer-events:none}
+.rk-intuition-v9-head{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:13px}
+.rk-intuition-v9-kicker{font-size:8px;letter-spacing:2.3px;text-transform:uppercase;font-weight:950;color:#176B42;margin-bottom:6px}
+.rk-intuition-v9-title{font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1.04;font-weight:950;letter-spacing:-.55px;color:#1A1410;margin:0}
+.rk-intuition-v9-pill{flex-shrink:0;border-radius:999px;padding:7px 10px;background:rgba(23,107,66,.08);border:1px solid rgba(23,107,66,.12);color:#176B42;font-size:10px;font-weight:950;white-space:nowrap}
+.rk-intuition-v9-main{position:relative;z-index:1;border-radius:20px;padding:15px 14px;margin-bottom:11px;background:rgba(255,255,255,.70);border:1px solid rgba(26,20,16,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.78)}
+.rk-intuition-v9-path{font-size:10px;letter-spacing:1.9px;text-transform:uppercase;color:#A07828;font-weight:950;margin-bottom:6px}
+.rk-intuition-v9-direction{font-family:'Fraunces',Georgia,serif;font-size:24px;line-height:1.04;font-weight:950;letter-spacing:-.7px;color:#1A1410;margin-bottom:7px}
+.rk-intuition-v9-sentence{font-size:13px;line-height:1.55;color:rgba(26,20,16,.72);font-weight:750;margin:0}
+.rk-intuition-v9-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.rk-intuition-v9-mini{border-radius:17px;padding:12px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.76)}
+.rk-intuition-v9-mini span{display:block;font-size:8px;letter-spacing:1.6px;text-transform:uppercase;color:rgba(26,20,16,.45);font-weight:950;margin-bottom:5px}
+.rk-intuition-v9-mini strong{display:block;font-size:13px;line-height:1.25;color:#1A1410;font-weight:950}
+.rk-best-path-v9{position:relative;overflow:hidden;border-radius:22px;padding:15px;margin:10px 0 0;background:linear-gradient(145deg,#F4FBF7,#FFFDF8);border:1px solid rgba(23,107,66,.14);box-shadow:0 8px 22px rgba(23,107,66,.055),inset 0 1px 0 rgba(255,255,255,.80);text-align:left}
+.rk-best-path-v9-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.rk-best-path-v9-kicker{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#176B42;font-weight:950}
+.rk-best-path-v9-chip{border-radius:999px;padding:6px 9px;background:rgba(23,107,66,.08);border:1px solid rgba(23,107,66,.10);color:#176B42;font-size:10px;font-weight:950;white-space:nowrap}
+.rk-best-path-v9-title{font-family:'Fraunces',Georgia,serif;font-size:18px;line-height:1.08;font-weight:950;letter-spacing:-.35px;color:#1A1410;margin-bottom:6px}
+.rk-best-path-v9-copy{font-size:12px;line-height:1.5;color:#6B6157;font-weight:750;margin:0}
+.rk-alt-v9{margin-bottom:8px;text-align:left}
+.rk-alt-v9-empty{border-radius:20px;padding:16px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.07);text-align:center;box-shadow:0 6px 20px rgba(26,20,16,.04)}
+.rk-alt-v9-list{display:grid;gap:9px}
+.rk-alt-v9-row{display:flex;align-items:center;justify-content:space-between;gap:12px;border-radius:18px;padding:13px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.07);box-shadow:0 5px 16px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.76)}
+.rk-alt-v9-left{min-width:0}
+.rk-alt-v9-kicker{font-size:8px;letter-spacing:1.8px;text-transform:uppercase;color:#176B42;font-weight:950;margin-bottom:5px}
+.rk-alt-v9-title{font-family:'Fraunces',Georgia,serif;font-size:16px;line-height:1.08;font-weight:950;color:#1A1410;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+.rk-alt-v9-copy{font-size:11px;line-height:1.35;color:#6B6157;font-weight:750;margin-top:4px}
+.rk-alt-v9-score{flex-shrink:0;text-align:center;border-radius:16px;min-width:58px;padding:9px 8px;background:rgba(23,107,66,.07);border:1px solid rgba(23,107,66,.10);color:#176B42;font-weight:950;font-size:14px}
+.rk-alt-v9-score span{display:block;font-size:7px;letter-spacing:1.2px;text-transform:uppercase;color:rgba(26,20,16,.45);margin-top:3px}
+.rk-practice-v9-bottom-card{margin-top:16px;border-radius:24px;padding:17px;background:linear-gradient(145deg,#FFFDF8,#F5EFE3);border:1px solid rgba(26,20,16,.075);box-shadow:0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78);text-align:center}
+.rk-practice-v9-bottom-title{font-family:'Fraunces',Georgia,serif;font-size:21px;line-height:1.08;font-weight:950;color:#1A1410;margin-bottom:6px}
+.rk-practice-v9-bottom-copy{font-size:12px;line-height:1.5;color:#6B6157;font-weight:750;margin:0 auto 12px;max-width:28ch}
+.rk-practice-v9-bottom-actions{display:grid;grid-template-columns:1.35fr .85fr;gap:9px}
+.rk-practice-v9-bottom-actions button{min-height:48px;border-radius:17px;border:1px solid rgba(23,107,66,.12);font-weight:950;cursor:pointer}
+@media(max-width:390px){.rk-practice-v9-score-row{align-items:flex-start;flex-direction:column}.rk-practice-v9-title,.rk-practice-v9-copy{text-align:left}.rk-practice-v9-score{font-size:68px}.rk-intuition-v9-grid{grid-template-columns:1fr}.rk-practice-v9-actions,.rk-practice-v9-bottom-actions{grid-template-columns:1fr}.rk-alt-v9-title{max-width:185px}}
+
 `;
 
 
@@ -6275,50 +6328,33 @@ function rkEvaluateCharlestonEngine({finalRack,startingRack=[],passedTilesByRoun
 function StrategicCharlestonReadCard({iq}){
   const r=iq?.strategicRead;
   if(!r)return null;
-  const state=r.commitmentState||r.commitmentStatus;
-  const statusColor={"Committed":C.jade,"Leaning":C.gold,"Flexible":"#2460A8","Watching":C.mut,"Resetting":C.cinn,"Strong Commit":C.jade,"Maybe":C.mut,"Bail Out":C.cinn}[state]||C.mut;
-  const shapeColor={"Elite Shape":C.jade,"Strong Shape":C.jade,"Growing Shape":C.gold,"Loose Shape":"#2460A8","Fragile Shape":C.cinn,"Broken Shape":C.cinn}[r.shapeQuality]||C.mut;
+  const state=r.commitmentState||r.commitmentStatus||"Watching";
+  const direction=r.bestDirection||r.liveDirections?.[0]||"Still reading the rack";
+  const shape=r.shapeQuality||"Shape Read";
+  const personality=r.rackPersonality||"Reading Rack";
+  const coach=r.coachingInsight||"Keep the rack flexible until one direction earns the next pass.";
+  const core=r.coreSignal||"Look for the clearest matching group before you commit.";
+  const why=(r.whyTheRackWorked||r.whyItWorks||[]).filter(Boolean)[0]||core;
+  const tension=(r.strategicTension||r.dangerAreas||[]).filter(Boolean)[0]||"Do not chase a hand that needs too many perfect draws.";
   return(
-    <div className="rk-score-card" style={{padding:18,textAlign:"left",marginBottom:12}}>
-      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,marginBottom:13}}>
-        <div style={{minWidth:0}}>
-          <div style={{fontSize:9,letterSpacing:2.2,fontWeight:950,color:C.jade,textTransform:"uppercase",marginBottom:5}}>Mahjong Intuition v2</div>
-          <div style={{fontFamily:F.d,fontSize:20,fontWeight:950,lineHeight:1.08,color:C.ink}}>What your rack is trying to become</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.45,marginTop:5}}>Shape, momentum, timing, and rack personality before a final hand call.</div>
-        </div>
-        <div style={{display:"grid",gap:6,justifyItems:"end",flexShrink:0}}>
-          <div style={{borderRadius:999,padding:"7px 10px",background:shapeColor+"12",border:`1px solid ${shapeColor}22`,color:shapeColor,fontSize:10,fontWeight:950,whiteSpace:"nowrap"}}>{r.shapeQuality||"Shape Read"}</div>
-          <div style={{borderRadius:999,padding:"7px 10px",background:statusColor+"12",border:`1px solid ${statusColor}22`,color:statusColor,fontSize:10,fontWeight:950,whiteSpace:"nowrap"}}>{state}</div>
-        </div>
-      </div>
-
-      <div style={{borderRadius:18,padding:"14px 14px",background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid ${C.gold}1F`,boxShadow:"inset 0 1px 0 rgba(255,255,255,.76)",marginBottom:10}}>
-        <div style={{fontSize:9,letterSpacing:2,fontWeight:950,color:C.gold,textTransform:"uppercase",marginBottom:5}}>Rack Personality</div>
-        <div style={{fontFamily:F.d,fontSize:19,lineHeight:1.08,color:C.ink,fontWeight:950,marginBottom:5}}>{r.rackPersonality||"Watching Rack"}</div>
-        <div style={{fontSize:12,lineHeight:1.5,color:"rgba(26,20,16,.68)",fontWeight:700}}>{r.rackPersonalityCopy||"The rack needs one clearer signal before it deserves a hard commitment."}</div>
-      </div>
-
-      <div style={{borderRadius:18,padding:"13px 14px",background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid ${C.jade}12`,boxShadow:"inset 0 1px 0 rgba(255,255,255,.76)",marginBottom:12}}>
-        <div style={{fontSize:9,letterSpacing:2,fontWeight:950,color:C.jade,textTransform:"uppercase",marginBottom:4}}>Core Signal</div>
-        <div style={{fontSize:13,lineHeight:1.55,color:C.ink,fontWeight:850}}>{r.coreSignal||r.bestDirection}</div>
-      </div>
-
-      <div style={{display:"grid",gap:11}}>
+    <div className="rk-intuition-v9">
+      <div className="rk-intuition-v9-head">
         <div>
-          <div style={{fontSize:10,fontWeight:950,color:C.ink,marginBottom:5}}>Why it had value</div>
-          {(r.whyTheRackWorked||r.whyItWorks||[]).slice(0,3).map((x,i)=><div key={i} style={{fontSize:12,lineHeight:1.55,color:"rgba(26,20,16,.72)",fontWeight:700}}>• {x}</div>)}
+          <div className="rk-intuition-v9-kicker">Mahjong Intuition</div>
+          <h3 className="rk-intuition-v9-title">Your rack read</h3>
         </div>
-        <div>
-          <div style={{fontSize:10,fontWeight:950,color:C.ink,marginBottom:5}}>Strategic tension</div>
-          {(r.strategicTension||r.dangerAreas||[]).slice(0,2).map((x,i)=><div key={i} style={{fontSize:12,lineHeight:1.55,color:"rgba(26,20,16,.68)",fontWeight:650}}>• {x}</div>)}
-        </div>
-        <div>
-          <div style={{fontSize:10,fontWeight:950,color:C.ink,marginBottom:7}}>Live directions</div>
-          <div style={{display:"flex",gap:7,flexWrap:"wrap"}}>
-            {(r.liveDirections||[]).slice(0,4).map((x,i)=><span key={i} className="rk-soft-pill" style={{fontSize:10,padding:"6px 9px"}}>{x}</span>)}
-          </div>
-        </div>
-        <div style={{borderTop:`1px solid ${C.bdr}80`,paddingTop:10,fontSize:13,lineHeight:1.55,color:C.ink,fontWeight:850,textAlign:"center"}}>{r.coachingInsight}</div>
+        <div className="rk-intuition-v9-pill">{state}</div>
+      </div>
+      <div className="rk-intuition-v9-main">
+        <div className="rk-intuition-v9-path">Best direction</div>
+        <div className="rk-intuition-v9-direction">{direction}</div>
+        <p className="rk-intuition-v9-sentence">{coach}</p>
+      </div>
+      <div className="rk-intuition-v9-grid">
+        <div className="rk-intuition-v9-mini"><span>Shape</span><strong>{shape}</strong></div>
+        <div className="rk-intuition-v9-mini"><span>Personality</span><strong>{personality}</strong></div>
+        <div className="rk-intuition-v9-mini"><span>Why it worked</span><strong>{why}</strong></div>
+        <div className="rk-intuition-v9-mini"><span>Watch out</span><strong>{tension}</strong></div>
       </div>
     </div>
   );
@@ -8827,82 +8863,56 @@ function PassesCard({passNarrative}){
 }
 
 function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,primaryCoveragePct}){
-  // Score all hands in the chosen section by honest coverage
   const sectionHands=HAND_CATALOG.filter(h=>h.sec===chosenSec)
-    .map(h=>{const cov=computeHonestCoverage(hand,h);return{...h,coveragePct:cov.pct,credibility:cov.credibility,isCredible:cov.isCredible,variantLabel:cov.variantLabel,labelForDisplay:cov.labelForDisplay,coveragePlan:cov.plan,groupNuance:cov.groupNuance,tone:cov.tone,coachLine:cov.coachLine};})
-    .sort((a,b)=>(b.credibility-a.credibility)||(b.coveragePct-a.coveragePct));
-
-  // Top 3 alternates in the same section (excluding the primary scored hand)
-  const altSectionHands=sectionHands
-    .filter(h=>(h.labelForDisplay||h.variantLabel||h.label)!==resolvedHandLabel&&h.label!==resolvedHandLabel&&h.isCredible!==false&&h.coveragePct>=45)
+    .filter(h=>h.label!==resolvedHandLabel)
+    .map(h=>{const cov=computeHonestCoverage(hand,h);return{...h,coveragePct:cov.pct,coveragePlan:cov,credibility:cov.pct>=55?"Real option":cov.pct>=38?"Thin option":"Long shot"};})
+    .filter(h=>h.coveragePct>=Math.max(28,(primaryCoveragePct||0)-22))
+    .sort((a,b)=>b.coveragePct-a.coveragePct)
     .slice(0,2);
 
-  // Best hand from other sections to reach 4 total alts
-  const remaining=Math.max(0,4-altSectionHands.length);
-  const altSecHands=[];
-  for(const sec of sortedSecs){
-    if(sec.id===chosenSec)continue;
-    if(altSecHands.length>=remaining)break;
-    const best=HAND_CATALOG.filter(h=>h.sec===sec.id)
-      .map(h=>{const cov=computeHonestCoverage(hand,h);return{...h,coveragePct:cov.pct,credibility:cov.credibility,isCredible:cov.isCredible,variantLabel:cov.variantLabel,labelForDisplay:cov.labelForDisplay,coveragePlan:cov.plan,groupNuance:cov.groupNuance,tone:cov.tone,coachLine:cov.coachLine,secObj:sec};})
-      .sort((a,b)=>(b.credibility-a.credibility)||(b.coveragePct-a.coveragePct))[0];
-    if(best&&best.isCredible!==false&&best.coveragePct>=48)altSecHands.push(best);
-  }
+  const altSecHands=(sortedSecs||[])
+    .filter(s=>s.id!==chosenSec)
+    .slice(0,3)
+    .map(s=>{
+      const best=HAND_CATALOG.filter(h=>h.sec===s.id).map(h=>{const cov=computeHonestCoverage(hand,h);return{...h,secObj:SECS.find(x=>x.id===h.sec),coveragePct:cov.pct,coveragePlan:cov,credibility:cov.pct>=55?"Real option":cov.pct>=38?"Thin option":"Long shot"};}).sort((a,b)=>b.coveragePct-a.coveragePct)[0];
+      return best;
+    })
+    .filter(Boolean)
+    .filter(h=>h.coveragePct>=34)
+    .slice(0,1);
 
   const lanes=[
-    ...altSectionHands.map(h=>({handObj:h,secId:chosenSec,secObj:chosenSecObj,kicker:"Same family",copy:"A real alternate, not the main lane."})),
-    ...altSecHands.map(h=>({handObj:h,secId:h.sec,secObj:h.secObj,kicker:"Different read",copy:"Another credible direction this rack showed."})),
-  ];
+    ...sectionHands.map(h=>({handObj:h,secObj:chosenSecObj,kicker:"Same section",copy:"A nearby read, but not as clean as your best path."})),
+    ...altSecHands.map(h=>({handObj:h,secObj:h.secObj,kicker:"Different section",copy:"Worth knowing, but only if the next tiles support it."})),
+  ].slice(0,3);
 
   if(!lanes.length){
     return(
-      <div style={{...S.card,marginBottom:8,padding:"14px 16px",textAlign:"center",background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)"}}>
-        <div style={{fontSize:9,color:C.jade,letterSpacing:2,fontWeight:900,textTransform:"uppercase",marginBottom:5}}>Other Paths</div>
-        <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,marginBottom:4}}>No stronger alternate.</div>
-        <div style={{fontSize:12,color:C.mut,lineHeight:1.55,maxWidth:300,margin:"0 auto"}}>Good read. This rack did not show another credible 2026-card path, so the best lesson is to keep protecting the lane you found.</div>
+      <div className="rk-alt-v9-empty">
+        <div style={{fontSize:8,letterSpacing:2,textTransform:"uppercase",fontWeight:950,color:C.jade,marginBottom:6}}>Other paths</div>
+        <div style={{fontFamily:F.d,fontSize:19,fontWeight:950,color:C.ink,lineHeight:1.08,marginBottom:5}}>No better alternate.</div>
+        <div style={{fontSize:12,color:C.mut,lineHeight:1.5,fontWeight:750}}>This rack had one cleaner lane. Protect it and avoid forcing a weaker read.</div>
       </div>
     );
   }
 
   return(
-    <div style={{marginBottom:8,overflow:"hidden"}}>
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 2px 7px"}}>
-        <div style={{fontSize:10,color:C.mut,fontWeight:800,letterSpacing:0.6}}>Other paths this rack was showing</div>
-        {lanes.length>1&&<div style={{fontSize:10,color:C.jade,fontWeight:800}}>Swipe</div>}
-      </div>
-      <div style={{
-        display:"flex",gap:10,overflowX:"auto",overflowY:"hidden",
-        WebkitOverflowScrolling:"touch",scrollSnapType:"x mandatory",
-        padding:"0 2px 8px",margin:"0 -2px",
-        scrollbarWidth:"none",
-      }}>
-        {lanes.map((lane,i)=>(
-          <div key={`${lane.handObj.labelForDisplay||lane.handObj.variantLabel||lane.handObj.label}-${lane.secId}-${i}`} style={{
-            flex:"0 0 88%",maxWidth:360,scrollSnapAlign:"start",
-            background:"#fff",border:`1px solid ${C.bdr}`,borderRadius:16,
-            boxShadow:"0 2px 10px rgba(0,0,0,0.045)",overflow:"hidden",
-          }}>
-            <div style={{padding:"12px 14px 10px",borderBottom:`1px solid ${C.bdr}`,background:"linear-gradient(145deg,#FFFFFF,#FFFCF7)"}}>
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:5}}>
-                <div style={{fontSize:8,color:lane.secObj?.color||C.mut,letterSpacing:1.7,fontWeight:900,textTransform:"uppercase"}}>
-                  {lane.secObj?.icon} {lane.kicker}
-                </div>
-                <CoverageChip pct={lane.handObj.coveragePct} plan={lane.handObj.coveragePlan} credibility={lane.handObj.credibility}/>
+    <div className="rk-alt-v9">
+      <div className="rk-alt-v9-list">
+        {lanes.map((lane,i)=>{
+          const label=lane.handObj.labelForDisplay||lane.handObj.variantLabel||lane.handObj.label;
+          return(
+            <div className="rk-alt-v9-row" key={`${label}-${i}`}>
+              <div className="rk-alt-v9-left">
+                <div className="rk-alt-v9-kicker">{lane.secObj?.icon} {lane.kicker}</div>
+                <div className="rk-alt-v9-title">{label}</div>
+                <div className="rk-alt-v9-copy">{lane.copy}</div>
               </div>
-              <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.15,letterSpacing:-0.2}}>{lane.handObj.labelForDisplay||lane.handObj.variantLabel||lane.handObj.label}</div>
-              <div style={{fontSize:10.5,color:C.mut,lineHeight:1.45,marginTop:4}}>{lane.copy}</div>
+              <div className="rk-alt-v9-score">{lane.handObj.coveragePct}<span>fit</span></div>
             </div>
-            <div style={{padding:10,overflow:"hidden"}}>
-              <RackVsHandOverlay hand={hand} handObj={lane.handObj} passLog={[]} sectionId={lane.secId} handWasInferred={false} secObj={lane.secObj}/>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
-      {lanes.length>1&&(
-        <div style={{display:"flex",justifyContent:"center",gap:5,marginTop:1}}>
-          {lanes.map((_,i)=><span key={i} style={{width:5,height:5,borderRadius:3,background:i===0?C.jade:C.bdr,display:"block"}}/>) }
-        </div>
-      )}
     </div>
   );
 }
@@ -9933,52 +9943,62 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 // ─── PRACTICE SCORECARD, collapsible sections, matching daily vibe ───────────
 function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHome,onDealAgain}){
   if(!iq)return null;
-  const scoreColor=(v,max)=>v/max>=0.8?C.jade:v/max>=0.55?C.gold:C.cinn;
   const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
   const scoredHandLabel=iq.scoredHandLabel||null;
   const scoredHandObj=scoredHandLabel?HAND_CATALOG.find(h=>h.sec===chosenSec&&h.label===scoredHandLabel):null;
   const sortedSecsP=allSections?[...allSections].sort((a,b)=>b.score-a.score):[];
-
-  const [openSec,setOpenSec]=useState({hand:false,alts:false,score:false,passes:false});
+  const [openSec,setOpenSec]=useState({hand:true,alts:false,passes:false});
   const toggle=(k)=>setOpenSec(s=>({...s,[k]:!s[k]}));
-
-  // Pass quality dots for badge
   const passDots=(iq.passInsights||[]).map(p=>({strong:"🟢",weak:"🔴",mixed:"🟡",neutral:"⚪"}[p.quality]||"⚪")).join("");
+  const styled=withIQStyle(iq);
+  const level=iq.level||styled.level||"Rack read";
+  const score=Math.round(iq.totalScore||iq.rackleIQScore||iq.score||0);
+  const bestLabel=scoredHandObj?.labelForDisplay||scoredHandObj?.variantLabel||scoredHandObj?.label||iq.bestHandLabel||iq.strategicRead?.bestDirection||"Keep reading the rack";
+  const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
 
   return(
-    <div className="rk-score-shell">
-      <div className="rk-editorial-header">
-        <div className="rk-editorial-kicker">Practice</div>
-        <div className="rk-editorial-title">Practice Scorecard</div>
-        <div className="rk-editorial-copy">A fast read on your rack, confidence, and next best move.</div>
-      </div>
-      <div className="rk-score-divider" />
-      {/* IQ Hero */}
-      <div style={{marginBottom:10}}>
-        <IQHero iq={iq} isDaily={false} section={section} totalTime={iq.totalTime||0} chosenSec={chosenSec} allSections={allSections}/>
+    <div className="rk-score-shell rk-practice-v9-shell">
+      <div className="rk-practice-v9-hero">
+        <div className="rk-practice-v9-kicker"><span className="rk-live-spark"/> Practice scorecard</div>
+        <div className="rk-practice-v9-score-row">
+          <div>
+            <div className="rk-practice-v9-score">{score}</div>
+            <div className="rk-practice-v9-label">Charleston IQ</div>
+          </div>
+          <div>
+            <h2 className="rk-practice-v9-title">{level}</h2>
+            <p className="rk-practice-v9-copy">One clearer pass can change the whole rack.</p>
+          </div>
+        </div>
+        <div className="rk-practice-v9-actions">
+          <button className="rk-practice-v9-primary" onClick={onDealAgain}>Play another rack →</button>
+          <button className="rk-practice-v9-secondary" onClick={onHome}>Back to clubhouse</button>
+        </div>
       </div>
 
       <StrategicCharlestonReadCard iq={iq}/>
 
-      {/* YOUR HAND, rack only, closed */}
       <CollapsibleSection label="Your Hand" desc="Final rack · Best path" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
-        {hand&&hand.length>0&&<SortableRack hand={hand}/>}
-        {scoredHandObj&&<HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={null}/>}
+        {hand&&hand.length>0&&<SortableRack hand={hand}/>} 
+        <div className="rk-best-path-v9">
+          <div className="rk-best-path-v9-top">
+            <div className="rk-best-path-v9-kicker">Best path</div>
+            {primPct>0&&<div className="rk-best-path-v9-chip">{primPct}% fit</div>}
+          </div>
+          <div className="rk-best-path-v9-title">{bestLabel}</div>
+          <p className="rk-best-path-v9-copy">This is the cleanest hand direction Rackle found from your final Charleston shape.</p>
+        </div>
+        {scoredHandObj&&<HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={null}/>} 
       </CollapsibleSection>
 
-      {/* OTHER HANDS, closed */}
-      {hand&&hand.length>0&&chosenSec&&(()=>{
-        const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
-        return(
-          <CollapsibleSection label="Other Paths" desc="A few roads you could have taken" icon="🔀" open={openSec.alts} onToggle={()=>toggle("alts")}>
-            <AltHandsCard hand={hand} resolvedHandLabel={scoredHandObj?.label||null} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecsP} primaryCoveragePct={primPct}/>
-          </CollapsibleSection>
-        );
-      })()}
+      {hand&&hand.length>0&&chosenSec&&(
+        <CollapsibleSection label="Other Paths" desc="Only the credible alternates" icon="🔀" open={openSec.alts} onToggle={()=>toggle("alts")}>
+          <AltHandsCard hand={hand} resolvedHandLabel={scoredHandObj?.label||null} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecsP} primaryCoveragePct={primPct}/>
+        </CollapsibleSection>
+      )}
 
-      {/* YOUR PASSES, closed, dots badge */}
       {iq.passInsights&&iq.passInsights.length>0&&(
-        <CollapsibleSection label="Your Passes" desc="The passes that shaped the Charleston" icon="🔄" open={openSec.passes} onToggle={()=>toggle("passes")} badge={passDots||undefined}>
+        <CollapsibleSection label="Your Passes" desc="What helped and what hurt" icon="🔄" open={openSec.passes} onToggle={()=>toggle("passes")} badge={passDots||undefined}>
           <div className="rk-score-card" style={{marginBottom:8,padding:0,overflow:"hidden"}}>
             {iq.passInsights.map((p,i)=>{
               const qBg={strong:"#EDF5F0",weak:"#FEF0F0",mixed:"#FBF3E2",neutral:"#fff"};
@@ -9986,20 +10006,20 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
               const qLabel={strong:"Clean pass",weak:"Risky pass",mixed:"Mixed pass",neutral:"Neutral"};
               return(
                 <div key={i} style={{background:qBg[p.quality]||"#fff",borderTop:i>0?`1px solid ${C.bdr}`:"none"}}>
-                  <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"9px 14px",borderBottom:p.passedTiles?.length?`1px solid ${C.bdr}40`:"none"}}>
-                    <div style={{display:"flex",alignItems:"center",gap:6}}>
-                      <div style={{width:20,height:20,borderRadius:10,background:(qColor[p.quality]||C.mut)+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:900,color:qColor[p.quality]||C.mut,flexShrink:0}}>{i+1}</div>
-                      <span style={{fontSize:11,fontWeight:700,color:C.ink}}>{p.roundName||`Pass ${i+1}`}</span>
+                  <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px",borderBottom:p.passedTiles?.length?`1px solid ${C.bdr}40`:"none"}}>
+                    <div style={{display:"flex",alignItems:"center",gap:7}}>
+                      <div style={{width:22,height:22,borderRadius:999,background:(qColor[p.quality]||C.mut)+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:950,color:qColor[p.quality]||C.mut,flexShrink:0}}>{i+1}</div>
+                      <span style={{fontSize:12,fontWeight:900,color:C.ink}}>{p.roundName||`Pass ${i+1}`}</span>
                     </div>
-                    <span style={{fontSize:9,fontWeight:700,color:qColor[p.quality]||C.mut,background:(qColor[p.quality]||C.mut)+"15",borderRadius:20,padding:"2px 8px"}}>{qLabel[p.quality]||""}</span>
+                    <span style={{fontSize:10,fontWeight:950,color:qColor[p.quality]||C.mut,background:(qColor[p.quality]||C.mut)+"15",borderRadius:999,padding:"4px 9px"}}>{qLabel[p.quality]||""}</span>
                   </div>
                   {p.passedTiles&&p.passedTiles.length>0&&(
-                    <div style={{padding:"7px 14px",borderBottom:`1px solid ${C.bdr}40`}}>
+                    <div style={{padding:"8px 14px",borderBottom:`1px solid ${C.bdr}40`}}>
                       <div style={{display:"flex",flexWrap:"wrap",gap:5}}>{p.passedTiles.map((t,j)=><Ti key={j} t={t}/>)}</div>
                     </div>
                   )}
-                  <div style={{padding:"7px 14px"}}>
-                    <p style={{fontSize:11,color:C.ink,margin:0,lineHeight:1.55}}>{p.insight}</p>
+                  <div style={{padding:"8px 14px 10px"}}>
+                    <p style={{fontSize:12,color:C.ink,margin:0,lineHeight:1.55,fontWeight:700}}>{p.insight}</p>
                   </div>
                 </div>
               );
@@ -10008,27 +10028,13 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
         </CollapsibleSection>
       )}
 
-
-      {/* Actions */}
-      <div style={{display:"flex",gap:8,marginTop:16}}>
-        <button onClick={onHome} style={{
-          flex:1,border:`1px solid ${C.bdr}`,borderRadius:12,
-          background:"transparent",color:C.mut,
-          fontSize:12,fontWeight:700,cursor:"pointer",
-          padding:"11px 0",display:"flex",alignItems:"center",justifyContent:"center",gap:6,
-        }}>
-          <span style={{opacity:0.6}}>←</span> Home
-        </button>
-        <button onClick={onDealAgain} style={{
-          flex:2,padding:"13px 0",
-          background:`linear-gradient(135deg,${C.jade},#0F5535)`,
-          color:"#fff",border:"none",borderRadius:12,
-          fontSize:14,fontFamily:F.d,fontWeight:800,letterSpacing:0.5,
-          cursor:"pointer",boxShadow:`0 4px 16px rgba(27,125,78,0.3)`,
-          display:"flex",alignItems:"center",justifyContent:"center",gap:6,minHeight:48,
-        }}>
-          <span>🀄</span><span>Deal Again</span>
-        </button>
+      <div className="rk-practice-v9-bottom-card">
+        <div className="rk-practice-v9-bottom-title">Run it back?</div>
+        <p className="rk-practice-v9-bottom-copy">Practice another Charleston and see if you can make the next read cleaner.</p>
+        <div className="rk-practice-v9-bottom-actions">
+          <button onClick={onDealAgain} style={{background:`linear-gradient(135deg,${C.jade},#0F5535)`,color:"#fff",boxShadow:`0 8px 18px rgba(23,107,66,.18)`}}>Play another rack</button>
+          <button onClick={onHome} style={{background:"linear-gradient(180deg,#F2EBDD,#E9E0CF)",color:C.ink}}>Home</button>
+        </div>
       </div>
       <Footer/>
     </div>
