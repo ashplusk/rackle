@@ -3324,6 +3324,181 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-browser-v9-section{min-width:122px!important}
   .rk-browser-v9-controls{top:88px!important}
 }
+
+/* ─── v14 homepage title consistency + Challenge Club redesign ───────────── */
+.rk-daily-entry-v6-copy{
+  max-width:304px!important;
+  margin:10px auto 19px!important;
+  color:rgba(26,20,16,.52)!important;
+  font-size:13.6px!important;
+  line-height:1.52!important;
+  font-weight:430!important;
+  letter-spacing:.005em!important;
+  text-wrap:balance!important;
+}
+.rk-daily-entry-v6-copy span{display:block!important;margin-bottom:1px!important;}
+
+/* keep homepage section titles on one visual system */
+.rk-daily-entry-v6-title,
+.rk-room-live-v6-title,
+.rk-warmup-v6-title,
+.rk-learn-home-title,
+.rk-email-title-v8{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:28px!important;
+  line-height:1.02!important;
+  letter-spacing:-.85px!important;
+  font-weight:950!important;
+}
+.rk-tomorrow-v11-title,
+.rk-next-rack-title-v11{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:28px!important;
+  line-height:1.04!important;
+  letter-spacing:-.8px!important;
+  font-weight:950!important;
+}
+
+/* Challenge Your Club card: less cramped, clearer dropdown */
+.rk-room-live-v6{
+  border-radius:30px!important;
+  margin:26px 0 24px!important;
+  overflow:hidden!important;
+  box-shadow:0 18px 44px rgba(6,43,24,.18), inset 0 1px 0 rgba(255,255,255,.10)!important;
+}
+.rk-room-live-v6-summary{
+  padding:24px 22px 25px!important;
+  border-radius:30px!important;
+  background:
+    radial-gradient(circle at 88% 72%,rgba(255,255,255,.10),transparent 34%),
+    linear-gradient(150deg,#052614 0%,#0B4328 54%,#062718 100%)!important;
+}
+.rk-room-live-v6-summary:after{
+  content:'⌄'!important;
+  right:22px!important;
+  top:auto!important;
+  bottom:22px!important;
+  width:42px!important;
+  height:42px!important;
+  background:rgba(255,255,255,.10)!important;
+  border:1px solid rgba(243,212,107,.26)!important;
+  color:#F3D46B!important;
+  font-size:22px!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 8px 18px rgba(0,0,0,.10)!important;
+}
+.rk-room-live-v6-drop[open] .rk-room-live-v6-summary:after{
+  transform:rotate(180deg)!important;
+  background:rgba(243,212,107,.14)!important;
+}
+.rk-room-live-v6-top{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 96px!important;
+  align-items:start!important;
+  gap:18px!important;
+}
+.rk-room-live-v6-kicker{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+  padding-right:0!important;
+  margin-bottom:16px!important;
+  color:#F3D46B!important;
+  font-size:10px!important;
+  letter-spacing:3.4px!important;
+  line-height:1.25!important;
+}
+.rk-dropdown-hint-v12{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin-left:2px!important;
+  padding:5px 8px!important;
+  border-radius:999px!important;
+  background:rgba(255,255,255,.09)!important;
+  border:1px solid rgba(255,255,255,.14)!important;
+  color:rgba(255,255,255,.72)!important;
+  font-size:8px!important;
+  letter-spacing:1.2px!important;
+  font-weight:950!important;
+  white-space:nowrap!important;
+}
+.rk-room-live-v6-title{
+  margin:0 0 11px!important;
+  max-width:12ch!important;
+  color:#fff!important;
+  text-wrap:balance!important;
+}
+.rk-room-live-v6-copy{
+  margin:0!important;
+  max-width:25ch!important;
+  color:rgba(255,255,255,.72)!important;
+  font-size:13.2px!important;
+  line-height:1.5!important;
+  font-weight:700!important;
+}
+.rk-room-live-v6-score{
+  width:96px!important;
+  height:96px!important;
+  border-radius:26px!important;
+  background:rgba(255,255,255,.09)!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+.rk-room-live-v6-score strong{
+  font-size:40px!important;
+  line-height:.85!important;
+  color:#F3D46B!important;
+}
+.rk-room-live-v6-score span{
+  margin-top:9px!important;
+  font-size:9px!important;
+  letter-spacing:2.2px!important;
+  color:rgba(255,255,255,.62)!important;
+}
+.rk-room-live-v6-list{
+  background:linear-gradient(180deg,#FFFDF8,#F5EFE3)!important;
+  padding:15px 14px 4px!important;
+  gap:9px!important;
+}
+.rk-room-live-v6-row{
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.07)!important;
+  border-radius:17px!important;
+  min-height:50px!important;
+  box-shadow:0 4px 13px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.75)!important;
+}
+.rk-room-live-v6-meta{
+  background:#F5EFE3!important;
+  padding:12px 15px 4px!important;
+}
+.rk-room-live-v6-cta{
+  margin:12px 14px 16px!important;
+  min-height:46px!important;
+  border-radius:16px!important;
+}
+
+@media(max-width:390px){
+  .rk-daily-entry-v6-copy{font-size:13.2px!important;max-width:284px!important;}
+  .rk-daily-entry-v6-title,
+  .rk-room-live-v6-title,
+  .rk-warmup-v6-title,
+  .rk-learn-home-title,
+  .rk-email-title-v8,
+  .rk-tomorrow-v11-title,
+  .rk-next-rack-title-v11{font-size:26px!important;}
+  .rk-room-live-v6-summary{padding:22px 20px 24px!important;}
+  .rk-room-live-v6-top{grid-template-columns:minmax(0,1fr) 88px!important;gap:14px!important;}
+  .rk-room-live-v6-score{width:88px!important;height:88px!important;border-radius:24px!important;}
+  .rk-room-live-v6-score strong{font-size:36px!important;}
+  .rk-dropdown-hint-v12{display:none!important;}
+  .rk-room-live-v6-summary:after{right:19px!important;bottom:20px!important;width:38px!important;height:38px!important;}
+  .rk-room-live-v6-copy{font-size:12.7px!important;max-width:22ch!important;}
+}
+
 `;
 
 
@@ -13873,7 +14048,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <summary className="rk-room-live-v6-summary">
         <div className="rk-room-live-v6-top">
           <div>
-            <div className="rk-room-live-v6-kicker"><span className="rk-live-spark"/> Live club standings <span className="rk-dropdown-hint-v12">Tap to open</span></div>
+            <div className="rk-room-live-v6-kicker"><span className="rk-live-spark"/> Live club standings <span className="rk-dropdown-hint-v12">Open standings</span></div>
             <h2 className="rk-room-live-v6-title">Challenge Your Club</h2>
             <p className="rk-room-live-v6-copy">{roomLine}</p>
           </div>
