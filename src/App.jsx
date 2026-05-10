@@ -2858,6 +2858,47 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-practice-v9-bottom-actions button{min-height:48px;border-radius:17px;border:1px solid rgba(23,107,66,.12);font-weight:950;cursor:pointer}
 @media(max-width:390px){.rk-practice-v9-score-row{align-items:flex-start;flex-direction:column}.rk-practice-v9-title,.rk-practice-v9-copy{text-align:left}.rk-practice-v9-score{font-size:68px}.rk-intuition-v9-grid{grid-template-columns:1fr}.rk-practice-v9-actions,.rk-practice-v9-bottom-actions{grid-template-columns:1fr}.rk-alt-v9-title{max-width:185px}}
 
+
+
+/* ─── v10 DAILY LOOP + LEADERBOARD + SCORECARD REVIEW POLISH ───────────── */
+.rk-ritual-v10{margin:24px 0 26px!important}
+.rk-ritual-v10 .rk-ritual-head-v6{margin-bottom:16px!important;text-align:left!important}
+.rk-ritual-v10 .rk-ritual-head-v6 span{font-size:9px!important;letter-spacing:2.7px!important;color:#176B42!important;font-weight:950!important;text-transform:uppercase!important;margin-bottom:8px!important}
+.rk-ritual-v10 .rk-ritual-head-v6 strong{font-family:'Fraunces',Georgia,serif!important;font-size:24px!important;font-weight:950!important;line-height:1.02!important;letter-spacing:-.7px!important;color:#1A1410!important;max-width:15ch!important;text-align:left!important;margin:0 0 8px!important}
+.rk-ritual-v10 .rk-ritual-head-v6 p{font-size:13px!important;line-height:1.55!important;color:rgba(26,20,16,.58)!important;font-weight:750!important;max-width:35ch!important;margin:0!important}
+.rk-ritual-v10 .rk-ritual-track-v6{gap:13px!important;padding:5px 2px 12px!important}
+.rk-ritual-v10 .rk-ritual-card-v6{flex:0 0 84%!important;min-height:228px!important;padding:20px 18px!important;border-radius:28px!important;background:radial-gradient(circle at 85% 10%,rgba(255,255,255,.86),transparent 32%),linear-gradient(145deg,#FFFDF8,#F2E9DA)!important;border:1px solid rgba(26,20,16,.075)!important;box-shadow:0 14px 34px rgba(26,20,16,.06),inset 0 1px 0 rgba(255,255,255,.86)!important;position:relative!important;overflow:hidden!important}
+.rk-ritual-v10 .rk-ritual-card-v6:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(23,107,66,.055),transparent 38%);pointer-events:none}
+.rk-ritual-v10 .rk-ritual-card-v6:after{content:"";position:absolute;right:-34px;bottom:-40px;width:150px;height:150px;border-radius:999px;background:radial-gradient(circle,rgba(160,120,40,.10),transparent 68%);pointer-events:none}
+.rk-ritual-v10 .rk-ritual-num{width:auto!important;height:auto!important;margin:0 0 28px!important;padding:7px 11px!important;border-radius:999px!important;background:rgba(23,107,66,.075)!important;border:1px solid rgba(23,107,66,.10)!important;color:#176B42!important;font-size:10px!important;letter-spacing:1.7px!important;font-weight:950!important;display:inline-flex!important;position:relative!important;z-index:2!important}
+.rk-ritual-v10 .rk-ritual-tile-v9{display:none!important}
+.rk-ritual-v10 .rk-ritual-card-v6 b{position:relative!important;z-index:2!important;font-family:'Fraunces',Georgia,serif!important;font-size:22px!important;line-height:1.04!important;letter-spacing:-.45px!important;margin:0 0 9px!important;color:#1A1410!important}
+.rk-ritual-v10 .rk-ritual-card-v6 p{position:relative!important;z-index:2!important;font-size:12.7px!important;line-height:1.55!important;color:rgba(26,20,16,.62)!important;font-weight:750!important;max-width:28ch!important;margin:0!important}
+.rk-ritual-v10 .rk-ritual-card-v6 em{position:relative!important;z-index:2!important;display:block!important;margin-top:14px!important;font-style:normal!important;color:#176B42!important;font-size:11px!important;line-height:1.35!important;font-weight:950!important}
+.rk-ritual-v10 .rk-ritual-dots-v6{margin-top:3px!important}
+.rk-ritual-v10 .rk-ritual-dots-v6 span:first-child{width:19px!important;background:#176B42!important}
+@media(min-width:760px){.rk-ritual-v10 .rk-ritual-card-v6{flex-basis:31.5%!important}}
+
+.rk-warmup-v6-cta{font-size:13px!important;font-weight:950!important;letter-spacing:-.1px!important;line-height:1!important;font-family:'Fraunces',Georgia,serif!important}
+.rk-room-live-v6-cta{font-size:13px!important;font-weight:950!important;font-family:'Fraunces',Georgia,serif!important}
+
+.rk-learn-home-icon-plain{width:24px!important;height:30px!important;min-width:24px!important;border-radius:8px!important;background:transparent!important;border:none!important;box-shadow:none!important;padding:0!important;overflow:visible!important}
+.rk-learn-home-icon-plain .rk-mahjong-tile{width:22px!important;height:30px!important;min-width:22px!important;border-radius:8px!important;box-shadow:0 3px 8px rgba(26,20,16,.08),inset 0 1px 0 rgba(255,255,255,.9)!important;transform:none!important}
+.rk-learn-home-icon-plain .rk-tile-suit,.rk-learn-home-icon-plain .rk-tile-num{font-size:9px!important}
+
+.rk-daily-review-v10{margin:2px 0 16px;text-align:left}
+.rk-daily-review-v10-head{width:100%;border:1px solid rgba(26,20,16,.075);border-radius:22px;background:linear-gradient(145deg,#FFFDF8,#F2EBDD);box-shadow:0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82);padding:15px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-family:'Nunito','Segoe UI',sans-serif;cursor:pointer;margin-bottom:10px;text-align:left;color:#1A1410}
+.rk-daily-review-v10-head small{display:block;font-size:8px;letter-spacing:2.2px;text-transform:uppercase;font-weight:950;color:#176B42;margin-bottom:5px}
+.rk-daily-review-v10-head strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:20px;line-height:1.04;font-weight:950;letter-spacing:-.5px;color:#1A1410}
+.rk-daily-review-v10-head b{border-radius:999px;padding:7px 11px;background:rgba(23,107,66,.075);border:1px solid rgba(23,107,66,.10);color:#176B42;font-size:11px;font-weight:950;white-space:nowrap}
+.rk-daily-review-v10-grid{display:grid;gap:10px;margin-bottom:10px}
+.rk-daily-review-v10-card{position:relative;overflow:hidden;border-radius:20px;padding:15px 15px 14px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.07);box-shadow:0 6px 18px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78)}
+.rk-daily-review-v10-card.primary{background:radial-gradient(circle at top right,rgba(255,255,255,.72),transparent 38%),linear-gradient(145deg,#F5FBF7,#F7F0E5);border-color:rgba(23,107,66,.12)}
+.rk-daily-review-v10-card span{display:block;font-size:8px;letter-spacing:2px;text-transform:uppercase;font-weight:950;color:rgba(23,107,66,.78);margin-bottom:7px}
+.rk-daily-review-v10-card strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:18px;line-height:1.05;font-weight:950;letter-spacing:-.35px;color:#1A1410;margin-bottom:7px}
+.rk-daily-review-v10-card p{font-size:12.5px;line-height:1.55;color:rgba(26,20,16,.62);font-weight:750;margin:0}
+.rk-daily-review-v10-detail{border-radius:22px;padding:14px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.075);box-shadow:0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78);text-align:center}
+@media(max-width:390px){.rk-ritual-v10 .rk-ritual-head-v6 strong{font-size:22px!important}.rk-ritual-v10 .rk-ritual-card-v6{flex-basis:86%!important;min-height:238px!important}.rk-daily-review-v10-head strong{font-size:19px}}
 `;
 
 
@@ -9809,6 +9850,18 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const viralPrompt=affiliatedClubName?`Can ${affiliatedClubName} beat ${score} before midnight?`:`Can your group beat ${score} before midnight?`;
   const scoredHandLabel=iq.scoredHandLabel||chosenHand||null;
   const scoredHandObj=scoredHandLabel?HAND_CATALOG.find(h=>h.sec===chosenSec&&h.label===scoredHandLabel):null;
+  const topSectionRead=allSections&&allSections.length?[...allSections].sort((a,b)=>(b.score||0)-(a.score||0))[0]:null;
+  const reviewBestPath=scoredHandObj?.labelForDisplay||scoredHandObj?.variantLabel||scoredHandObj?.label||iq.bestHandLabel||topSectionRead?.name||"Keep reading the rack";
+  const reviewTone=score>=75?"Strong read":score>=55?"Playable read":score>=40?"Developing read":"Reset rack";
+  const reviewCopy=score>=75
+    ? "You kept the rack pointed toward a real lane and gave yourself room to compete."
+    : score>=55
+    ? "The rack had life, but one cleaner pass or earlier pivot would have made the path stronger."
+    : score>=40
+    ? "You found pieces of a direction, but the rack needed more shape before committing."
+    : "This rack never fully settled. The right move is to protect structure and avoid forcing a thin lane.";
+  const pivotCopy=iq.strategicRead?.pivotAdvice||iq.coachNotes?.[0]||iq.takeaway||"Look for the first section that gives you natural groups, not just familiar tiles.";
+  const tableTag=score>=75?"Flexible":score>=55?"Alive":score>=40?"Messy":"Thin";
 
   const Metric=({label,value,sub,accent=C.ink,onClick})=>{
     const Tag=onClick?"button":"div";
@@ -9913,15 +9966,37 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </div>
 
-      <button onClick={()=>setShowDetails(v=>!v)} style={{width:"100%",border:`1px solid rgba(26,20,16,.075)`,borderRadius:16,background:"rgba(255,255,255,.55)",padding:"12px 14px",display:"flex",alignItems:"center",justifyContent:"space-between",fontFamily:F.b,cursor:"pointer",marginBottom:showDetails?10:16}}>
-        <span style={{fontSize:12,fontWeight:950,color:C.ink}}>Details</span>
-        <span style={{fontSize:12,color:C.mut,fontWeight:950}}>{showDetails?"⌃":"⌄"}</span>
-      </button>
-      {showDetails&&(
-        <div className="rk-score-card" style={{padding:14,marginBottom:16,textAlign:"center"}}>
-          <HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSec&&SECS.find(s=>s.id===chosenSec)} iq={iq} onCoachMode={onCoachMode}/>
+      <section className="rk-daily-review-v10" aria-label="Charleston review">
+        <button onClick={()=>setShowDetails(v=>!v)} className="rk-daily-review-v10-head">
+          <span>
+            <small>Post-rack analysis</small>
+            <strong>Charleston Review</strong>
+          </span>
+          <b>{showDetails?"Hide":"Open"}</b>
+        </button>
+        <div className="rk-daily-review-v10-grid">
+          <div className="rk-daily-review-v10-card primary">
+            <span>Your read</span>
+            <strong>{reviewTone}</strong>
+            <p>{reviewCopy}</p>
+          </div>
+          <div className="rk-daily-review-v10-card">
+            <span>Best path</span>
+            <strong>{reviewBestPath}</strong>
+            <p>This is the lane Rackle would keep closest after the Charleston.</p>
+          </div>
+          <div className="rk-daily-review-v10-card">
+            <span>Table IQ</span>
+            <strong>{tableTag}</strong>
+            <p>{pivotCopy}</p>
+          </div>
         </div>
-      )}
+        {showDetails&&(
+          <div className="rk-daily-review-v10-detail rk-in">
+            <HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSec&&SECS.find(s=>s.id===chosenSec)} iq={iq} onCoachMode={onCoachMode}/>
+          </div>
+        )}
+      </section>
 
       <div className="rk-review-bottom-home" style={{display:"grid",gap:10}}>
         <div className="rk-tomorrow-mini-hook">Next rack drops at midnight. <span>Keep your streak alive.</span></div>
@@ -13243,24 +13318,24 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
 
   const HowItWorks=()=> (
-    <section className="rk-ritual-carousel-v6 rk-ritual-v9" aria-label="The Rackle ritual">
+    <section className="rk-ritual-carousel-v6 rk-ritual-v9 rk-ritual-v10" aria-label="The Rackle ritual">
       <div className="rk-ritual-head-v6">
         <span>The Rackle Ritual</span>
         <strong>Your daily Charleston loop.</strong>
-        <p>Make one pass. Read the shape. See where you stand.</p>
+        <p>Four small reads. One sharper rack. Build the habit before your next table.</p>
       </div>
       <div className="rk-ritual-track-v6">
         {[
-          {n:"01",tile:{t:"s",s:"bam",n:7},title:"Pass tiles",copy:"Pick three tiles to move. Protect pairs, flowers, jokers, and real groups."},
-          {n:"02",tile:{t:"s",s:"crak",n:5},title:"Find direction",copy:"See which card section your rack is leaning toward before you chase too much."},
-          {n:"03",tile:{t:"d",v:"Red"},title:"Get your read",copy:"Rackle grades the Charleston and shows what your passes created."},
-          {n:"04",tile:{t:"s",s:"dot",n:9},title:"Chase the room",copy:"Compare your score with the global room and your club board."},
+          {n:"01",title:"Warm up the rack",copy:"Start with the full rack, not a dream hand. Notice pairs, runs, flowers, jokers, and loose tiles before the first pass.",note:"Most players lock in too early."},
+          {n:"02",title:"Read the flow",copy:"Each pass should protect your strongest shape while keeping a second lane alive. The goal is flexibility without drifting.",note:"Good Charleston play keeps options open."},
+          {n:"03",title:"Get your score",copy:"Rackle grades the read, shows the strongest path, and explains what your passes helped or hurt.",note:"Small pass choices change the whole rack."},
+          {n:"04",title:"Chase the room",copy:"Compare your score with your club and the global board. Come back tomorrow to defend the room.",note:"A better pass can move you up fast."},
         ].map((card)=>(
           <article className="rk-ritual-card-v6" key={card.n}>
             <span className="rk-ritual-num">{card.n}</span>
-            <span className="rk-ritual-tile-v9"><Ti t={card.tile} /></span>
             <b>{card.title}</b>
             <p>{card.copy}</p>
+            <em>{card.note}</em>
           </article>
         ))}
       </div>
@@ -13357,7 +13432,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </div>
         <div className="rk-room-live-v6-meta">
           <span>{globalCount||2} global players</span>
-          <span>{activeClubCode?`${clubCount||1} in your club`:"Club rooms open"}</span>
+          <span>{activeClubCode?`${(shownClubRank||clubCount||1)===1?"🏆 ":""}#${shownClubRank||clubCount||1} in your club`:"Club rooms open"}</span>
         </div>
         <button onClick={openBoard} className="rk-room-live-v6-cta">View leaderboard →</button>
       </section>
@@ -13379,7 +13454,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           [{t:"d",v:"Red"},"Free Play","Practice a fresh rack and keep today’s score untouched.",()=>go("free")],
         ].map(([tile,title,sub,fn])=>(
           <button key={title} className="rk-learn-home-card" onClick={fn}>
-            <span className="rk-learn-home-icon"><Ti t={tile} /></span>
+            <span className="rk-learn-home-icon rk-learn-home-icon-plain"><Ti t={tile} /></span>
             <span className="rk-learn-home-text"><strong>{title}</strong><span>{sub}</span></span>
             <span className="rk-learn-home-arrow">›</span>
           </button>
