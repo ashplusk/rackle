@@ -3162,6 +3162,85 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-real-tile-row-v6{gap:8px!important;margin-bottom:20px!important;}
 }
 
+/* ─── vNext homepage hierarchy polish: moved hero copy, clearer dropdown, tighter email ─── */
+.rk-startup-description-hidden{display:none!important;}
+.rk-daily-entry-v6-copy{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:3px!important;
+  max-width:34ch!important;
+  margin:0 auto 20px!important;
+  font-size:14px!important;
+  line-height:1.34!important;
+  font-weight:760!important;
+  color:rgba(26,20,16,.58)!important;
+}
+.rk-daily-entry-v6-copy span{display:block!important;}
+.rk-daily-entry-v6-cta{
+  margin-top:8px!important;
+  min-height:56px!important;
+  font-size:17px!important;
+}
+.rk-room-live-v6-summary{position:relative!important;padding-right:34px!important;}
+.rk-room-live-v6-summary:after{
+  content:"⌄";
+  position:absolute;
+  top:22px;
+  right:16px;
+  width:28px;
+  height:28px;
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(243,212,107,.18);
+  color:#F3D46B;
+  font-size:17px;
+  font-weight:950;
+  line-height:1;
+  transition:transform .18s ease,background .18s ease;
+}
+.rk-room-live-v6-drop[open] .rk-room-live-v6-summary:after{transform:rotate(180deg);background:rgba(243,212,107,.11);}
+.rk-dropdown-hint-v12{
+  display:inline-flex!important;
+  margin-left:7px!important;
+  padding:4px 7px!important;
+  border-radius:999px!important;
+  background:rgba(255,255,255,.08)!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  color:rgba(243,212,107,.84)!important;
+  font-size:8px!important;
+  letter-spacing:1.4px!important;
+  font-weight:950!important;
+  vertical-align:middle!important;
+}
+.rk-warmup-v6-title,
+.rk-home-improve-card div[style*="Improve Your Game"]{
+  font-size:21px!important;
+  line-height:1.03!important;
+  letter-spacing:-.65px!important;
+}
+.rk-warmup-v6-copy{font-size:12.5px!important;line-height:1.42!important;}
+.rk-email-home-v8{padding:17px 16px 16px!important;border-radius:24px!important;margin-top:20px!important;}
+.rk-email-kicker-v8{font-size:8px!important;padding:5px 9px!important;margin-bottom:10px!important;}
+.rk-email-title-v8{font-size:21px!important;line-height:1.03!important;}
+.rk-email-copy-v8{font-size:11px!important;line-height:1.35!important;margin:7px 0 11px!important;}
+.rk-email-form-v8{gap:7px!important;padding:8px!important;border-radius:20px!important;}
+.rk-email-input-v8{height:42px!important;border-radius:14px!important;font-size:12.5px!important;padding:0 12px!important;}
+.rk-email-btn-v8{height:42px!important;border-radius:14px!important;font-size:13px!important;padding:0 12px!important;}
+.rk-email-done-v8{padding:11px!important;border-radius:18px!important;}
+@media(max-width:390px){
+  .rk-daily-entry-v6-copy{font-size:13px!important;max-width:31ch!important;margin-bottom:18px!important;}
+  .rk-warmup-v6-title,.rk-home-improve-card div[style*="Improve Your Game"]{font-size:20px!important;}
+  .rk-dropdown-hint-v12{display:none!important;}
+  .rk-room-live-v6-summary{padding-right:30px!important;}
+  .rk-room-live-v6-summary:after{right:12px;top:20px;width:26px;height:26px;}
+  .rk-email-title-v8{font-size:20px!important;}
+  .rk-email-input-v8,.rk-email-btn-v8{height:40px!important;}
+}
+
+
 `;
 
 
@@ -13422,10 +13501,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div className="rk-startup-mark-v4 rk-float">🀄</div>
         <h1 className="rk-startup-logo-v4">Rackle</h1>
         <p className="rk-startup-subtitle-v4">The Daily Mahjong Workout</p>
-        <p className="rk-startup-description-v4">
-          <span className="rk-desc-main">{dDone?"You posted. Make your club chase it.":"Play one Charleston. Beat the room."}</span>
-          <span className="rk-desc-line">{dDone?"Board resets tonight.":"Same rack. One score to chase."}</span>
-        </p>
+        <p className="rk-startup-description-v4 rk-startup-description-hidden" aria-hidden="true"></p>
       </div>
     );
   };
@@ -13456,12 +13532,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           ))}
         </div>
         <h2 className="rk-daily-entry-v6-title">Ready for today’s rack?</h2>
-        <p className="rk-daily-entry-v6-copy">One rack. One score. Same Charleston for everyone.</p>
+        <p className="rk-daily-entry-v6-copy"><span>Play one Charleston. Beat the room.</span><span>Same rack for everyone. One score to chase.</span></p>
         <div className="rk-daily-entry-v6-stats">
           <span>{posted} {posted===1?"player has":"players already"} posted</span>
           <span>{scoreToBeat} is the score to beat</span>
         </div>
-        <span className="rk-daily-entry-v6-cta"><span className="rk-live-spark"/> Play today’s Rackle</span>
+        <span className="rk-daily-entry-v6-cta"><span className="rk-live-spark"/> Play the Daily Rackle</span>
       </button>
     );
   };
@@ -13714,7 +13790,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <summary className="rk-room-live-v6-summary">
         <div className="rk-room-live-v6-top">
           <div>
-            <div className="rk-room-live-v6-kicker"><span className="rk-live-spark"/> Live club standings</div>
+            <div className="rk-room-live-v6-kicker"><span className="rk-live-spark"/> Live club standings <span className="rk-dropdown-hint-v12">Tap to open</span></div>
             <h2 className="rk-room-live-v6-title">Challenge Your Club</h2>
             <p className="rk-room-live-v6-copy">{roomLine}</p>
           </div>
@@ -14526,7 +14602,7 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
         <div style={{fontSize:13,color:C.mut,lineHeight:1.6,marginBottom:24}}>Play today's Daily to start building your week.</div>
         {dDone
           ?<div style={{fontSize:12,color:C.jade,fontWeight:700}}>✓ Today's Daily is done. See you tomorrow!</div>
-          :<button onClick={()=>go("daily")} style={{...S.greenBtn,padding:"13px 32px"}}>Play Today’s Rackle</button>
+          :<button onClick={()=>go("daily")} style={{...S.greenBtn,padding:"13px 32px"}}>Play the Daily Rackle</button>
         }
       </div>
     </div>
