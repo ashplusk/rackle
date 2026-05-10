@@ -2491,40 +2491,33 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 @media(max-width:380px){.rk-hidden-rack-row{gap:7px}.rk-mystery-tile-back{width:40px;height:54px}.rk-hidden-rack-title{font-size:22px}.rk-hidden-rack-social span{font-size:10.5px}}
 
 
-/* ─── vNext HERO + DAILY ENTRY FINAL POLISH ─────────────────────────────── */
-.rk-startup-hero-v4{padding-top:10px!important;padding-bottom:12px!important;margin-bottom:10px!important}
-.rk-startup-mark-v4{margin-bottom:12px!important}
-.rk-startup-logo-v4{margin-bottom:16px!important}
-.rk-startup-subtitle-v4{margin-top:0!important;margin-bottom:18px!important;font-weight:760!important;font-variation-settings:'wght' 760!important}
-.rk-startup-description-v4{margin-top:0!important;line-height:1.55!important;font-weight:700!important;color:rgba(26,20,16,.72)!important}
-.rk-startup-description-v4 .rk-desc-line{margin-top:6px!important;font-weight:780!important;color:rgba(26,20,16,.78)!important}
-.rk-startup-description-v4 em{margin-top:10px!important;font-weight:650!important;color:rgba(26,20,16,.52)!important}
+/* ─── SAFE v6 HOMEPAGE FIXES ───────────────────────────────────────────── */
 .rk-live-ticker-v4{display:none!important}
+.rk-startup-hero-v4{padding-top:12px!important;padding-bottom:16px!important;margin-bottom:10px!important}
+.rk-startup-mark-v4{margin-bottom:12px!important}
+.rk-startup-logo-v4{margin-bottom:18px!important}
+.rk-startup-subtitle-v4{margin-top:0!important;margin-bottom:16px!important;line-height:1.15!important;font-weight:700!important}
+.rk-startup-description-v4{margin-top:0!important;max-width:30ch!important;line-height:1.7!important;font-weight:650!important;color:rgba(26,20,16,.68)!important}
+.rk-startup-description-v4 .rk-desc-line{margin-top:5px!important;line-height:1.7!important;font-weight:650!important;color:rgba(26,20,16,.70)!important}
+.rk-startup-description-v4 em{display:block;margin-top:7px!important;font-size:12.5px!important;line-height:1.45!important;font-style:normal!important;font-weight:620!important;color:rgba(26,20,16,.48)!important}
 
-.rk-daily-entry-v5{width:100%;appearance:none;-webkit-appearance:none;text-align:center;cursor:pointer;color:inherit;display:block;position:relative;overflow:hidden;margin:14px 0 14px;padding:23px 16px 21px;border-radius:30px;background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.92),transparent 40%),linear-gradient(145deg,#FBF6EC 0%,#EFE3D0 100%);border:1px solid rgba(160,120,40,.17);box-shadow:0 16px 36px rgba(26,20,16,.07),inset 0 1px 0 rgba(255,255,255,.88)}
-.rk-daily-entry-v5:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 12% 8%,rgba(23,107,66,.10),transparent 28%),radial-gradient(circle at 88% 20%,rgba(243,212,107,.18),transparent 30%);pointer-events:none}.rk-daily-entry-v5:active{transform:scale(.992)}
-.rk-daily-entry-glow{position:absolute;inset:auto -20% -50% -20%;height:150px;background:radial-gradient(circle,rgba(23,107,66,.10),transparent 68%);pointer-events:none}
-.rk-daily-entry-topline{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;min-height:28px;padding:0 13px;border-radius:999px;background:rgba(255,255,255,.58);border:1px solid rgba(23,107,66,.10);color:#176B42;font-size:10px;letter-spacing:2.1px;text-transform:uppercase;font-weight:950;margin-bottom:17px}
-.rk-real-tile-row{position:relative;z-index:1;display:flex;justify-content:center;gap:9px;margin:0 0 20px}.rk-real-tile-wrap{display:inline-flex;animation:rkMysteryFloat 3.8s ease-in-out infinite}.rk-real-tile-wrap:nth-child(2){animation-delay:.12s}.rk-real-tile-wrap:nth-child(3){animation-delay:.24s}.rk-real-tile-wrap:nth-child(4){animation-delay:.36s}.rk-real-tile-wrap:nth-child(5){animation-delay:.48s}.rk-real-tile-wrap:nth-child(6){animation-delay:.60s}.rk-real-tile-wrap:nth-child(7){animation-delay:.72s}.rk-real-tile-wrap:nth-child(8){animation-delay:.84s}
-.rk-real-tile-wrap .rk-mahjong-tile{box-shadow:0 9px 18px rgba(26,20,16,.11),inset 0 1px 0 rgba(255,255,255,.9)!important;border-radius:12px!important}
-.rk-daily-entry-title{position:relative;z-index:1;font-family:'Fraunces',Georgia,serif;font-size:27px;line-height:1.03;letter-spacing:-.6px;font-weight:900;color:#1A1410;margin:0 0 8px}
-.rk-daily-entry-copy{position:relative;z-index:1;font-family:'Fraunces',Georgia,serif;font-size:16.5px;line-height:1.25;letter-spacing:-.15px;font-weight:760;color:#176B42;margin-bottom:13px}
-.rk-daily-entry-stats{position:relative;z-index:1;display:flex;justify-content:center;flex-wrap:wrap;gap:7px;margin-bottom:16px}.rk-daily-entry-stats span{display:inline-flex;align-items:center;justify-content:center;min-height:27px;padding:0 10px;border-radius:999px;background:rgba(255,255,255,.62);border:1px solid rgba(23,107,66,.10);color:rgba(26,20,16,.62);font-size:11px;font-weight:900;line-height:1}
-.rk-daily-entry-cta{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 20px;border-radius:999px;background:linear-gradient(145deg,#176B42,#0F5432);color:#FFFDF8;font-family:'Fraunces',Georgia,serif;font-size:15px;font-weight:900;letter-spacing:-.1px;box-shadow:0 10px 22px rgba(23,107,66,.18),inset 0 1px 0 rgba(255,255,255,.18)}
-.rk-hidden-rack-entry{display:none!important}
+.rk-daily-entry-v6{width:100%;appearance:none;-webkit-appearance:none;text-align:center;cursor:pointer;color:inherit;display:block;position:relative;overflow:hidden;margin:14px 0 14px;padding:24px 16px 22px;border-radius:30px;background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.94),transparent 40%),linear-gradient(145deg,#FBF6EC 0%,#EFE3D0 100%);border:1px solid rgba(160,120,40,.17);box-shadow:0 16px 36px rgba(26,20,16,.07),inset 0 1px 0 rgba(255,255,255,.88)}
+.rk-daily-entry-v6:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 12% 8%,rgba(23,107,66,.10),transparent 28%),radial-gradient(circle at 88% 20%,rgba(243,212,107,.18),transparent 30%);pointer-events:none}.rk-daily-entry-v6:active{transform:scale(.992)}
+.rk-daily-entry-v6-glow{position:absolute;inset:auto -20% -50% -20%;height:150px;background:radial-gradient(circle,rgba(23,107,66,.10),transparent 68%);pointer-events:none}
+.rk-daily-entry-v6-kicker{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;min-height:28px;padding:0 13px;border-radius:999px;background:rgba(255,255,255,.58);border:1px solid rgba(23,107,66,.10);color:#176B42;font-size:10px;letter-spacing:2.1px;text-transform:uppercase;font-weight:950;margin-bottom:17px}
+.rk-real-tile-row-v6{position:relative;z-index:1;display:flex;justify-content:center;gap:9px;margin:0 0 20px}.rk-real-tile-wrap-v6{display:inline-flex;animation:rkMysteryFloat 3.8s ease-in-out infinite}.rk-real-tile-wrap-v6:nth-child(2){animation-delay:.12s}.rk-real-tile-wrap-v6:nth-child(3){animation-delay:.24s}.rk-real-tile-wrap-v6:nth-child(4){animation-delay:.36s}.rk-real-tile-wrap-v6:nth-child(5){animation-delay:.48s}.rk-real-tile-wrap-v6:nth-child(6){animation-delay:.60s}.rk-real-tile-wrap-v6:nth-child(7){animation-delay:.72s}.rk-real-tile-wrap-v6:nth-child(8){animation-delay:.84s}.rk-real-tile-wrap-v6 .rk-mahjong-tile{box-shadow:0 9px 18px rgba(26,20,16,.11),inset 0 1px 0 rgba(255,255,255,.9)!important;border-radius:12px!important;background:linear-gradient(145deg,#FFFDF8,#EFE4D2)!important}
+.rk-daily-entry-v6-title{position:relative;z-index:1;font-family:'Fraunces',Georgia,serif;font-size:27px;line-height:1.03;letter-spacing:-.6px;font-weight:900;color:#1A1410;margin:0 0 8px}.rk-daily-entry-v6-copy{position:relative;z-index:1;font-family:'Fraunces',Georgia,serif;font-size:16.5px;line-height:1.25;letter-spacing:-.15px;font-weight:760;color:#176B42;margin:0 0 13px}.rk-daily-entry-v6-stats{position:relative;z-index:1;display:flex;justify-content:center;flex-wrap:wrap;gap:7px;margin-bottom:16px}.rk-daily-entry-v6-stats span{display:inline-flex;align-items:center;min-height:26px;padding:0 10px;border-radius:999px;background:rgba(23,107,66,.07);border:1px solid rgba(23,107,66,.10);color:#176B42;font-size:11px;font-weight:900}.rk-daily-entry-v6-cta{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 20px;border-radius:999px;background:linear-gradient(145deg,#176B42,#0F5432);color:#FFFDF8;font-family:'Fraunces',Georgia,serif;font-size:15px;font-weight:900;box-shadow:0 10px 22px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.18)}
 
-.rk-warmup-card-v5{position:relative;overflow:hidden;width:100%;border:1px solid rgba(26,20,16,.08);border-radius:26px;padding:19px 17px;margin:12px 0 14px;background:linear-gradient(145deg,#FFFDF8 0%,#F6ECDC 100%);box-shadow:0 10px 28px rgba(26,20,16,.05),inset 0 1px 0 rgba(255,255,255,.82);display:flex;align-items:center;justify-content:space-between;gap:16px;text-align:left;color:#1A1410;cursor:pointer}.rk-warmup-card-v5:after{content:"";position:absolute;right:-24px;bottom:-34px;width:140px;height:140px;border-radius:999px;background:radial-gradient(circle,rgba(23,107,66,.09),transparent 68%)}.rk-warmup-card-v5:active{transform:scale(.992)}
-.rk-warmup-v5-main{position:relative;z-index:1;min-width:0}.rk-warmup-v5-kicker{font-size:9px;letter-spacing:2.2px;text-transform:uppercase;font-weight:950;color:#176B42;margin-bottom:8px}.rk-warmup-v5-title{font-family:'Fraunces',Georgia,serif;font-size:24px;line-height:1.04;font-weight:900;letter-spacing:-.55px;color:#1A1410;margin-bottom:6px}.rk-warmup-v5-copy{font-size:12.5px;line-height:1.42;color:#6B6157;font-weight:750;max-width:29ch}.rk-warmup-v5-cta{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 14px;border-radius:999px;background:rgba(23,107,66,.08);border:1px solid rgba(23,107,66,.12);color:#176B42;font-size:12px;font-weight:950;white-space:nowrap}
+.rk-warmup-card-v6{position:relative;overflow:hidden;width:100%;border:1px solid rgba(26,20,16,.08);border-radius:26px;padding:19px 17px;margin:12px 0 14px;background:linear-gradient(145deg,#FFFDF8 0%,#F6ECDC 100%);box-shadow:0 10px 28px rgba(26,20,16,.05),inset 0 1px 0 rgba(255,255,255,.82);display:flex;align-items:center;justify-content:space-between;gap:16px;text-align:left;color:#1A1410;cursor:pointer}.rk-warmup-card-v6:after{content:"";position:absolute;right:-24px;bottom:-34px;width:140px;height:140px;border-radius:999px;background:radial-gradient(circle,rgba(23,107,66,.09),transparent 68%)}.rk-warmup-card-v6:active{transform:scale(.992)}.rk-warmup-v6-main{position:relative;z-index:1;min-width:0}.rk-warmup-v6-kicker{display:flex;align-items:center;gap:6px;font-size:9px;letter-spacing:2.2px;text-transform:uppercase;font-weight:950;color:#176B42;margin-bottom:8px}.rk-warmup-v6-title{font-family:'Fraunces',Georgia,serif;font-size:24px;line-height:1.04;font-weight:900;letter-spacing:-.55px;color:#1A1410;margin-bottom:7px}.rk-warmup-v6-copy{font-size:12.5px;line-height:1.42;color:#6B6157;font-weight:750;max-width:31ch}.rk-warmup-v6-social{margin-top:9px;font-size:11px;color:#A07828;font-weight:900}.rk-warmup-v6-cta{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 15px;border-radius:999px;background:rgba(23,107,66,.09);border:1px solid rgba(23,107,66,.13);color:#176B42;font-size:12px;font-weight:950;white-space:nowrap}
 
-.rk-room-live-v5{position:relative;overflow:hidden;border-radius:28px;padding:18px;background:linear-gradient(145deg,#062B18 0%,#0D4A2E 62%,#051F11 100%);border:1px solid rgba(243,212,107,.20);box-shadow:0 16px 42px rgba(6,43,24,.18),inset 0 1px 0 rgba(255,255,255,.10);color:#fff;margin:14px 0}.rk-room-live-v5:after{content:"🀄";position:absolute;right:-14px;bottom:-28px;font-size:110px;opacity:.045;transform:rotate(-8deg)}.rk-room-live-top{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.rk-room-live-kicker{display:flex;align-items:center;gap:7px;color:#F3D46B;font-size:9px;letter-spacing:2.4px;text-transform:uppercase;font-weight:950;margin-bottom:10px}.rk-room-live-title{font-family:'Fraunces',Georgia,serif;font-size:30px;line-height:1;font-weight:900;letter-spacing:-.8px;margin:0 0 8px;color:#fff}.rk-room-live-copy{font-size:13px;line-height:1.45;color:rgba(255,255,255,.72);font-weight:800;margin:0}.rk-room-live-score{flex-shrink:0;min-width:72px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);padding:12px 10px;text-align:center}.rk-room-live-score strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:31px;line-height:.9;color:#F3D46B}.rk-room-live-score span{display:block;margin-top:5px;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.54);font-weight:950}.rk-room-live-marquee{position:relative;z-index:1;display:flex;gap:8px;overflow:auto;scrollbar-width:none;margin:17px -2px 14px;padding:0 2px}.rk-room-live-marquee::-webkit-scrollbar{display:none}.rk-room-live-marquee span{flex:0 0 auto;min-height:30px;padding:0 11px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;color:rgba(255,255,255,.76);font-size:11px;font-weight:900}.rk-room-live-actions{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:9px}.rk-room-live-actions button{border:none;border-radius:16px;min-height:44px;font-family:'Fraunces',Georgia,serif;font-size:13px;font-weight:900;cursor:pointer}.rk-room-live-actions button:first-child{background:#FFFDF8;color:#176B42}.rk-room-live-actions button:last-child{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#fff}
-.rk-rooms-card{display:none!important}
+.rk-room-live-v6{position:relative;overflow:hidden;border-radius:28px;padding:18px;background:linear-gradient(150deg,#0B2418 0%,#13452C 42%,#1C5A39 72%,#0A1D13 100%);border:1px solid rgba(243,212,107,.20);box-shadow:0 16px 42px rgba(6,43,24,.18),inset 0 1px 0 rgba(255,255,255,.10);color:#fff;margin:14px 0}.rk-room-live-v6:after{content:"🀄";position:absolute;right:-14px;bottom:-28px;font-size:110px;opacity:.045;transform:rotate(-8deg)}.rk-room-live-v6-top{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.rk-room-live-v6-kicker{display:flex;align-items:center;gap:7px;color:#F3D46B;font-size:9px;letter-spacing:2.4px;text-transform:uppercase;font-weight:950;margin-bottom:10px}.rk-room-live-v6-title{font-family:'Fraunces',Georgia,serif;font-size:30px;line-height:1;font-weight:900;letter-spacing:-.8px;margin:0 0 8px;color:#fff}.rk-room-live-v6-copy{font-size:13px;line-height:1.45;color:rgba(255,255,255,.72);font-weight:800;margin:0}.rk-room-live-v6-score{flex-shrink:0;min-width:72px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);padding:12px 10px;text-align:center}.rk-room-live-v6-score strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:31px;line-height:.9;color:#F3D46B}.rk-room-live-v6-score span{display:block;margin-top:5px;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.54);font-weight:950}.rk-room-live-v6-list{position:relative;z-index:1;display:grid;gap:8px;margin:16px 0 12px}.rk-room-live-v6-row{display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:9px;border-radius:16px;padding:10px 11px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}.rk-room-live-v6-row.is-you{background:rgba(243,212,107,.12);border-color:rgba(243,212,107,.22)}.rk-room-live-v6-rank{font-size:11px;font-weight:950;color:#F3D46B}.rk-room-live-v6-name{font-size:12px;font-weight:900;color:rgba(255,255,255,.82);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rk-room-live-v6-row-score{font-family:'Fraunces',Georgia,serif;font-size:21px;color:#F3D46B}.rk-room-live-v6-meta{position:relative;z-index:1;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}.rk-room-live-v6-meta span{border-radius:999px;padding:7px 10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);font-size:10.5px;font-weight:900;color:rgba(255,255,255,.72)}.rk-room-live-v6-cta{position:relative;z-index:1;width:100%;border:none;border-radius:17px;min-height:46px;background:#FFFDF8;color:#176B42;font-family:'Fraunces',Georgia,serif;font-size:14px;font-weight:900;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.85)}.rk-rooms-card{display:none!important}
 
-.rk-share-score-v5{position:relative;overflow:hidden;border-radius:28px;padding:18px;background:radial-gradient(circle at 0% 0%,rgba(243,212,107,.18),transparent 34%),linear-gradient(145deg,#FFF7E6 0%,#F3E7D0 100%);border:1px solid rgba(160,120,40,.18);box-shadow:0 12px 30px rgba(160,120,40,.08),inset 0 1px 0 rgba(255,255,255,.84);display:grid;gap:16px;margin:14px 0}.rk-share-score-kicker{font-size:9px;letter-spacing:2.4px;text-transform:uppercase;font-weight:950;color:#A07828;margin-bottom:8px}.rk-share-score-title{font-family:'Fraunces',Georgia,serif;font-size:25px;line-height:1.04;font-weight:900;letter-spacing:-.55px;margin:0 0 8px;color:#1A1410}.rk-share-score-copy{font-size:12.8px;line-height:1.48;color:#6B6157;font-weight:760;margin:0 0 14px}.rk-share-score-btn{width:100%;min-height:44px;border:none;border-radius:999px;background:linear-gradient(145deg,#176B42,#0F5432);color:#FFFDF8;font-family:'Fraunces',Georgia,serif;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 10px 22px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16)}.rk-share-lux-card{border-radius:22px;padding:16px;background:linear-gradient(145deg,#062B18,#0D4A2E 68%,#051F11);border:1px solid rgba(243,212,107,.22);box-shadow:0 12px 28px rgba(6,43,24,.16),inset 0 1px 0 rgba(255,255,255,.10);color:#fff}.rk-share-lux-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.rk-share-lux-top span{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.58);font-weight:950}.rk-share-lux-top strong{font-family:'Fraunces',Georgia,serif;font-size:46px;line-height:.9;color:#F3D46B}.rk-share-lux-status{font-family:'Fraunces',Georgia,serif;font-size:19px;font-weight:900;color:#fff;margin:4px 0 10px}.rk-share-lux-meta{display:flex;gap:7px;flex-wrap:wrap}.rk-share-lux-meta span{border-radius:999px;padding:6px 9px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);font-size:10px;font-weight:900;color:rgba(255,255,255,.74)}.rk-share-lux-tiles{display:flex;gap:5px;margin-top:14px}.rk-share-lux-tiles span{width:24px;height:30px;border-radius:7px;background:#FFFDF8;color:#B02A2A;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',Georgia,serif;font-weight:900;font-size:13px}.rk-share-lux-url{margin-top:10px;font-size:10px;color:rgba(255,255,255,.45);font-weight:900;letter-spacing:.5px}.rk-share-preview-card{display:none!important}
+.rk-share-score-v6{position:relative;overflow:hidden;border-radius:28px;padding:18px;background:radial-gradient(circle at 0% 0%,rgba(243,212,107,.18),transparent 34%),linear-gradient(145deg,#FFF7E6 0%,#F3E7D0 100%);border:1px solid rgba(160,120,40,.18);box-shadow:0 12px 30px rgba(160,120,40,.08),inset 0 1px 0 rgba(255,255,255,.84);display:grid;gap:16px;margin:14px 0}.rk-share-score-v6-kicker{font-size:9px;letter-spacing:2.4px;text-transform:uppercase;font-weight:950;color:#A07828;margin-bottom:8px}.rk-share-score-v6-title{font-family:'Fraunces',Georgia,serif;font-size:25px;line-height:1.04;font-weight:900;letter-spacing:-.55px;margin:0 0 8px;color:#1A1410}.rk-share-score-v6-copy{font-size:12.8px;line-height:1.48;color:#6B6157;font-weight:760;margin:0 0 14px}.rk-share-score-v6-btn{width:100%;min-height:44px;border:none;border-radius:999px;background:linear-gradient(145deg,#176B42,#0F5432);color:#FFFDF8;font-family:'Fraunces',Georgia,serif;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 10px 22px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16)}.rk-share-lux-card-v6{border-radius:22px;padding:16px;background:linear-gradient(145deg,#062B18,#0D4A2E 68%,#051F11);border:1px solid rgba(243,212,107,.22);box-shadow:0 12px 28px rgba(6,43,24,.16),inset 0 1px 0 rgba(255,255,255,.10);color:#fff}.rk-share-lux-v6-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.rk-share-lux-v6-top span{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.58);font-weight:950}.rk-share-lux-v6-top strong{font-family:'Fraunces',Georgia,serif;font-size:46px;line-height:.9;color:#F3D46B}.rk-share-lux-v6-status{font-family:'Fraunces',Georgia,serif;font-size:19px;font-weight:900;color:#fff;margin:4px 0 10px}.rk-share-lux-v6-meta{display:flex;gap:7px;flex-wrap:wrap}.rk-share-lux-v6-meta span{border-radius:999px;padding:6px 9px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);font-size:10px;font-weight:900;color:rgba(255,255,255,.74)}.rk-share-lux-v6-tiles{display:flex;gap:5px;margin-top:14px}.rk-share-lux-v6-tiles span{width:24px;height:30px;border-radius:7px;background:#FFFDF8;color:#B02A2A;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',Georgia,serif;font-weight:900;font-size:13px}.rk-share-lux-v6-url{margin-top:10px;font-size:10px;color:rgba(255,255,255,.45);font-weight:900;letter-spacing:.5px}.rk-share-preview-card{display:none!important}
 
-.rk-ritual-carousel{margin:16px 0}.rk-ritual-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:10px}.rk-ritual-head span{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;font-weight:950;color:#176B42}.rk-ritual-head strong{font-family:'Fraunces',Georgia,serif;font-size:18px;line-height:1.05;color:#1A1410;text-align:right}.rk-ritual-track{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px;scrollbar-width:none}.rk-ritual-track::-webkit-scrollbar{display:none}.rk-ritual-card{flex:0 0 78%;scroll-snap-align:start;border-radius:22px;padding:16px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.075);box-shadow:0 7px 22px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)}.rk-ritual-card span{display:inline-flex;margin-bottom:16px;font-size:10px;letter-spacing:2px;color:#A07828;font-weight:950}.rk-ritual-card b{display:block;font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1.05;color:#1A1410;margin-bottom:7px}.rk-ritual-card p{font-size:12.5px;line-height:1.45;color:#6B6157;font-weight:750;margin:0}.rk-how-strip,.rk-learn-simple-title{display:none!important}
-@media(min-width:760px){.rk-share-score-v5{grid-template-columns:1fr 260px;align-items:center}.rk-ritual-card{flex-basis:31%}}
-@media(max-width:599px){.rk-real-tile-wrap:nth-child(n+7){display:none}.rk-real-tile-row{gap:8px}.rk-real-tile-wrap .rk-mahjong-tile{width:40px!important;height:58px!important}.rk-daily-entry-v5{padding:21px 15px 20px}.rk-daily-entry-title{font-size:24px}.rk-room-live-actions{grid-template-columns:1fr}.rk-warmup-card-v5{align-items:flex-start;flex-direction:column}.rk-warmup-v5-cta{width:100%}.rk-startup-hero-v4{padding-top:8px!important}.rk-startup-logo-v4{margin-bottom:14px!important}.rk-startup-subtitle-v4{margin-bottom:16px!important}}
-@media(max-width:380px){.rk-real-tile-row{gap:6px}.rk-real-tile-wrap .rk-mahjong-tile{width:37px!important;height:54px!important}.rk-daily-entry-stats span{font-size:10.5px}}
+.rk-ritual-carousel-v6{margin:16px 0}.rk-ritual-head-v6{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:10px}.rk-ritual-head-v6 span{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;font-weight:950;color:#176B42}.rk-ritual-head-v6 strong{font-family:'Fraunces',Georgia,serif;font-size:18px;line-height:1.05;color:#1A1410;text-align:right}.rk-ritual-track-v6{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px;scrollbar-width:none}.rk-ritual-track-v6::-webkit-scrollbar{display:none}.rk-ritual-card-v6{flex:0 0 78%;scroll-snap-align:start;border-radius:22px;padding:16px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.075);box-shadow:0 7px 22px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)}.rk-ritual-card-v6 span{display:inline-flex;margin-bottom:16px;font-size:10px;letter-spacing:2px;color:#A07828;font-weight:950}.rk-ritual-card-v6 b{display:block;font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1.05;color:#1A1410;margin-bottom:7px}.rk-ritual-card-v6 p{font-size:12.5px;line-height:1.45;color:#6B6157;font-weight:750;margin:0}.rk-ritual-dots-v6{display:flex;justify-content:center;gap:5px;margin-top:8px}.rk-ritual-dots-v6 span{width:5px;height:5px;border-radius:99px;background:rgba(23,107,66,.24)}.rk-how-strip,.rk-learn-simple-title{display:none!important}
+@media(min-width:760px){.rk-share-score-v6{grid-template-columns:1fr 260px;align-items:center}.rk-ritual-card-v6{flex-basis:31%}}
+@media(max-width:599px){.rk-real-tile-wrap-v6:nth-child(n+7){display:none}.rk-real-tile-row-v6{gap:8px}.rk-real-tile-wrap-v6 .rk-mahjong-tile{width:40px!important;height:58px!important}.rk-daily-entry-v6{padding:21px 15px 20px}.rk-daily-entry-v6-title{font-size:24px}.rk-warmup-card-v6{align-items:flex-start;flex-direction:column}.rk-warmup-v6-cta{width:100%}.rk-startup-logo-v4{margin-bottom:16px!important}.rk-startup-subtitle-v4{margin-bottom:16px!important}}
+@media(max-width:380px){.rk-real-tile-row-v6{gap:6px}.rk-real-tile-wrap-v6 .rk-mahjong-tile{width:37px!important;height:54px!important}.rk-daily-entry-v6-stats span{font-size:10.5px}}
 
 `;
 
@@ -12780,26 +12773,25 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       {t:"s",s:"bam",n:7},
       {t:"d",v:"Grn"},
     ];
+    const tilts=[-3,2,-1,2,-2,1,0,-1];
     return(
-      <button type="button" onClick={()=>go("daily")} className="rk-daily-entry-v5" aria-label="Reveal today's Rackle">
-        <div className="rk-daily-entry-glow" aria-hidden="true" />
-        <div className="rk-daily-entry-topline">
-          <span className="rk-live-spark" /> Daily Rackle · #{dn}
-        </div>
-        <div className="rk-real-tile-row" aria-hidden="true">
+      <button type="button" onClick={()=>go("daily")} className="rk-daily-entry-v6" aria-label="Reveal today's Rackle">
+        <div className="rk-daily-entry-v6-glow" aria-hidden="true" />
+        <div className="rk-daily-entry-v6-kicker"><span className="rk-live-spark"/> Daily Rackle · #{dn}</div>
+        <div className="rk-real-tile-row-v6" aria-hidden="true">
           {previewTiles.map((tile,i)=>(
-            <span key={`${tile.t}-${tile.s||tile.v||"f"}-${i}`} className="rk-real-tile-wrap" style={{transform:`rotate(${[-2,1,-1,2,0,-2,1,-1][i]}deg)`}}>
+            <span key={`${tile.t}-${tile.s||tile.v||"f"}-${i}`} className="rk-real-tile-wrap-v6" style={{transform:`rotate(${tilts[i]}deg)`}}>
               <Ti t={tile} large />
             </span>
           ))}
         </div>
-        <div className="rk-daily-entry-title">Today’s rack is waiting</div>
-        <div className="rk-daily-entry-copy">Play to reveal the Charleston.</div>
-        <div className="rk-daily-entry-stats">
+        <h2 className="rk-daily-entry-v6-title">Today’s rack is waiting</h2>
+        <p className="rk-daily-entry-v6-copy">Play to reveal the Charleston.</p>
+        <div className="rk-daily-entry-v6-stats">
           <span>{posted} {posted===1?"player has":"players already"} posted</span>
           <span>{scoreToBeat} is the score to beat</span>
         </div>
-        <span className="rk-daily-entry-cta">Reveal today’s rack →</span>
+        <span className="rk-daily-entry-v6-cta">Reveal today’s rack →</span>
       </button>
     );
   };
@@ -12899,13 +12891,14 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   );
 
   const PracticeCard=()=> (
-    <button onClick={()=>go("free")} className="rk-warmup-card-v5" aria-label="Start a warm up rack">
-      <div className="rk-warmup-v5-main">
-        <div className="rk-warmup-v5-kicker">Before the board</div>
-        <div className="rk-warmup-v5-title">Take a warm-up rack.</div>
-        <div className="rk-warmup-v5-copy">Practice the Charleston first. No leaderboard. No pressure.</div>
+    <button onClick={()=>go("free")} className="rk-warmup-card-v6" aria-label="Start a warm up rack">
+      <div className="rk-warmup-v6-main">
+        <div className="rk-warmup-v6-kicker"><span>🔥</span> 2 minute daily warm-up</div>
+        <div className="rk-warmup-v6-title">Train your Charleston before tonight’s game.</div>
+        <div className="rk-warmup-v6-copy">Most players miss stronger hands during the first 3 passes.</div>
+        <div className="rk-warmup-v6-social">2,184 players warmed up today</div>
       </div>
-      <span className="rk-warmup-v5-cta">Start practice →</span>
+      <span className="rk-warmup-v6-cta">Play Today’s Rackle →</span>
     </button>
   );
 
@@ -12927,25 +12920,26 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const clubRank=shownClubRank?`#${shownClubRank}`:(club?"#1":"Join a club");
     const status=score>=78?"Table Ready":"Room Ready";
     return(
-      <section className="rk-share-score-v5" aria-label="Share your score preview">
-        <div className="rk-share-score-copybox">
-          <div className="rk-share-score-kicker">Scorecard</div>
-          <h2 className="rk-share-score-title">Make the table chase it.</h2>
-          <p className="rk-share-score-copy">Send your score card to your club chat and get the room moving.</p>
-          <button onClick={copyShare} className="rk-share-score-btn">{shareCopied?"Copied":"Copy share card →"}</button>
+      <section className="rk-share-score-v6" aria-label="Share your score preview">
+        <div className="rk-share-score-v6-copybox">
+          <div className="rk-share-score-v6-kicker">Share your score</div>
+          <h2 className="rk-share-score-v6-title">Your club is waiting.</h2>
+          <p className="rk-share-score-v6-copy">Compare hands with your table. Make today’s score worth chasing.</p>
+          <button onClick={copyShare} className="rk-share-score-v6-btn">{shareCopied?"Copied":"Share My Score →"}</button>
         </div>
-        <div className="rk-share-lux-card" aria-hidden="true">
-          <div className="rk-share-lux-top">
+        <div className="rk-share-lux-card-v6" aria-hidden="true">
+          <div className="rk-share-lux-v6-top">
             <span>Rackle #{dn}</span>
             <strong>{score}</strong>
           </div>
-          <div className="rk-share-lux-status">{status}</div>
-          <div className="rk-share-lux-meta">
+          <div className="rk-share-lux-v6-status">Charleston IQ · {status}</div>
+          <div className="rk-share-lux-v6-meta">
             <span>Global {globalRank}</span>
             <span>Club {clubRank}</span>
+            <span>{streak||0}d streak</span>
           </div>
-          <div className="rk-share-lux-tiles"><span>中</span><span>2</span><span>5</span><span>8</span><span>發</span></div>
-          <div className="rk-share-lux-url">playrackle.com</div>
+          <div className="rk-share-lux-v6-tiles"><span>中</span><span>2</span><span>5</span><span>8</span><span>發</span></div>
+          <div className="rk-share-lux-v6-url">playrackle.com</div>
         </div>
       </section>
     );
@@ -12953,16 +12947,18 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
 
   const HowItWorks=()=> (
-    <section className="rk-ritual-carousel" aria-label="The Rackle ritual">
-      <div className="rk-ritual-head">
+    <section className="rk-ritual-carousel-v6" aria-label="The Rackle ritual">
+      <div className="rk-ritual-head-v6">
         <span>The Rackle Ritual</span>
-        <strong>Swipe through your daily rhythm.</strong>
+        <strong>Four taps. One better read.</strong>
       </div>
-      <div className="rk-ritual-track">
-        <article className="rk-ritual-card"><span>01</span><b>Read the rack</b><p>One Charleston. Same daily rack for everyone.</p></article>
-        <article className="rk-ritual-card"><span>02</span><b>Get your score</b><p>See how sharp your passes were.</p></article>
-        <article className="rk-ritual-card"><span>03</span><b>Beat the room</b><p>Compare with the global board and your club.</p></article>
+      <div className="rk-ritual-track-v6">
+        <article className="rk-ritual-card-v6"><span>01</span><b>Pass tiles</b><p>Read the rack and make your Charleston move.</p></article>
+        <article className="rk-ritual-card-v6"><span>02</span><b>Build direction</b><p>See what your hand is starting to become.</p></article>
+        <article className="rk-ritual-card-v6"><span>03</span><b>Rate your Charleston</b><p>Get a score for your passing quality.</p></article>
+        <article className="rk-ritual-card-v6"><span>04</span><b>Compare with your club</b><p>Climb the board before the room resets.</p></article>
       </div>
+      <div className="rk-ritual-dots-v6" aria-hidden="true"><span/><span/><span/></div>
     </section>
   );
 
@@ -13011,40 +13007,76 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     );
   };
 
-  const Community=()=>{
-    const globalRows=displayHomeGlobalEntries||[];
-    const clubRows=displayHomeClubEntries||[];
-    const globalCount=Number(todayPlayers||globalRows.length||0);
-    const clubCount=Number(homeClubTotal||clubRows.length||0);
-    const leadLabel=topToday||currentScore||78;
-    const pointsBehind=Number.isFinite(Number(leadLabel))&&Number.isFinite(Number(currentScore))?Math.max(0,Number(leadLabel)-Number(currentScore)):null;
-    const roomLine=currentScore?pointsBehind===0?"You own the room right now.":`You’re ${pointsBehind} behind the lead.`:`${leadLabel} is the score to beat.`;
-    const openGlobal=()=>setScreen("leaderboardGlobal");
-    const openClub=()=>activeClubCode?setScreen("leaderboard"):setScreen("clubs");
+  const Community=()=> {
+    const globalRows=rkMergeCurrentScore(homeGlobalEntries,currentScore,iq?.totalTime||dRes?.time||0,streak,activeClubCode);
+    const clubRows=displayHomeClubEntries;
+    const globalCount=Math.max(Number(todayPlayers||0),globalRows.length,currentScore?1:0);
+    const clubCount=Number(clubPlayers||clubRows.length||0);
+    const leadValue=Number(topToday||globalRows[0]?.iqScore||currentScore||78);
     const leader=(globalRows&&globalRows[0])||{};
     const leaderName=(leader.name||currentName||"Top player").trim();
+    const pointsBehind=Number.isFinite(leadValue)&&Number.isFinite(Number(currentScore))?Math.max(0,leadValue-Number(currentScore)):null;
+    const roomLine=currentScore?pointsBehind===0?"You own the room right now.":`You’re ${pointsBehind} points off first.`:`${leadValue} is the score to beat.`;
+    const openBoard=()=>activeClubCode?setScreen("leaderboard"):setScreen("globalLeaderboard");
+    const boardRows=(globalRows&&globalRows.length?globalRows:homeClubEntries&&homeClubEntries.length?homeClubEntries:[]).slice(0,3);
+    const fallbackRows=[
+      {name:leaderName,iqScore:leadValue},
+      {name:currentScore?currentName:"First score gets the room",iqScore:currentScore||"—"},
+      {name:activeClubCode?"Your club board":"Global room",iqScore:globalCount||"—"},
+    ];
+    const rows=(boardRows.length?boardRows:fallbackRows).slice(0,3);
     return(
-      <section className="rk-room-live-v5" aria-label="Today's rooms">
-        <div className="rk-room-live-top">
+      <section className="rk-room-live-v6" aria-label="Today's rooms">
+        <div className="rk-room-live-v6-top">
           <div>
-            <div className="rk-room-live-kicker"><span className="rk-live-spark"/> Today’s room</div>
-            <h2 className="rk-room-live-title">Beat the room.</h2>
-            <p className="rk-room-live-copy">{roomLine}</p>
+            <div className="rk-room-live-v6-kicker"><span className="rk-live-spark"/> Live club standings</div>
+            <h2 className="rk-room-live-v6-title">Beat the room.</h2>
+            <p className="rk-room-live-v6-copy">{roomLine}</p>
           </div>
-          <div className="rk-room-live-score"><strong>{leadLabel}</strong><span>to beat</span></div>
+          <div className="rk-room-live-v6-score"><strong>{leadValue}</strong><span>to beat</span></div>
         </div>
-        <div className="rk-room-live-marquee" aria-hidden="true">
-          <span>{leaderName} leads today</span>
+        <div className="rk-room-live-v6-list">
+          {rows.map((e,i)=>{
+            const nm=(e?.name||"").trim()||`Player ${i+1}`;
+            const sc=Number.isFinite(Number(e?.iqScore))?Number(e.iqScore):(e?.iqScore||"—");
+            const me=rkEntryMatchesCurrentPlayer?rkEntryMatchesCurrentPlayer(e,currentScore):false;
+            return(
+              <div key={`${nm}-${i}`} className={`rk-room-live-v6-row ${me?"is-you":""}`}>
+                <span className="rk-room-live-v6-rank">#{i+1}</span>
+                <span className="rk-room-live-v6-name">{i===0?`${nm} leads`:nm}</span>
+                <strong className="rk-room-live-v6-row-score">{sc}</strong>
+              </div>
+            );
+          })}
+        </div>
+        <div className="rk-room-live-v6-meta">
           <span>{globalCount||2} global players</span>
-          <span>{activeClubCode?`${clubCount||1} in your club`:"Club rooms are open"}</span>
+          <span>{activeClubCode?`${clubCount||1} in your club`:"Club rooms open"}</span>
         </div>
-        <div className="rk-room-live-actions">
-          <button onClick={openGlobal}>Open global board →</button>
-          <button onClick={openClub}>{activeClubCode?"Open club room →":"Find your club →"}</button>
-        </div>
+        <button onClick={openBoard} className="rk-room-live-v6-cta">View leaderboard →</button>
       </section>
     );
   };
+
+
+  const Learn=()=> (
+    <section className="rk-learn-shell">
+      <div className="rk-learn-simple-title">Improve your next read</div>
+      <div className="rk-learn-simple-grid">
+        {[
+          ["📖","How to Play","Quick rules and Charleston basics",()=>setScreen("howto")],
+          ["📋","2026 Hand Browser","Scan hands by section",()=>setScreen("handbrowser")],
+          ["🎓","Warm up","Practice without touching today’s score",()=>go("free")],
+        ].map(([icon,title,sub,fn])=>(
+          <button key={title} className="rk-learn-item" onClick={fn}>
+            <span className="rk-learn-icon-simple">{icon}</span>
+            <span style={{flex:1,minWidth:0}}><span className="rk-learn-item-title">{title}</span><span className="rk-learn-item-sub">{sub}</span></span>
+            <span className="rk-learn-arrow-simple">›</span>
+          </button>
+        ))}
+      </div>
+    </section>
+  );
 
 
 
