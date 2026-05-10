@@ -2646,6 +2646,86 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-warmup-v6-cta{min-height:42px!important;padding:0 14px!important;font-size:11.5px!important}
   .rk-ritual-card-v6{flex-basis:82%!important}
 }
+
+/* ─── v7 typography, section title consistency, ritual game tiles ─────────── */
+.rk-startup-description-v4{
+  max-width:31ch!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:13px!important;
+  line-height:1.42!important;
+  font-weight:750!important;
+  color:rgba(26,20,16,.58)!important;
+  letter-spacing:.02px!important;
+  text-wrap:balance;
+}
+.rk-startup-description-v4 .rk-desc-main,
+.rk-startup-description-v4 .rk-desc-line{
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:inherit!important;
+  line-height:inherit!important;
+  font-weight:750!important;
+  color:rgba(26,20,16,.58)!important;
+  letter-spacing:.02px!important;
+}
+.rk-startup-description-v4 .rk-desc-line{
+  color:rgba(26,20,16,.48)!important;
+  margin-top:2px!important;
+}
+.rk-warmup-v6-title,
+.rk-room-live-v6-title,
+.rk-share-score-v6-title,
+.rk-ritual-head-v6 strong{
+  font-size:24px!important;
+  line-height:1.08!important;
+  letter-spacing:-.55px!important;
+}
+.rk-warmup-v6-title{line-height:1.15!important;max-width:34ch!important}
+.rk-room-live-v6-title{color:#fff!important}
+.rk-ritual-head-v6{
+  display:block!important;
+  text-align:left!important;
+  margin-bottom:14px!important;
+}
+.rk-ritual-head-v6 strong{
+  display:block!important;
+  max-width:none!important;
+  text-align:left!important;
+  margin-top:6px!important;
+  color:#1A1410!important;
+}
+.rk-ritual-head-v6 p{
+  margin:7px 0 0!important;
+  max-width:32ch!important;
+  font-size:12.5px!important;
+  line-height:1.45!important;
+  font-weight:750!important;
+  color:rgba(26,20,16,.56)!important;
+}
+.rk-ritual-card-v6{min-height:190px!important}
+.rk-ritual-tile-v7{
+  position:absolute;
+  right:15px;
+  top:14px;
+  display:block!important;
+  transform:rotate(2deg) scale(.88);
+  transform-origin:top right;
+}
+.rk-ritual-card-v6:nth-child(2) .rk-ritual-tile-v7{transform:rotate(-2deg) scale(.88)}
+.rk-ritual-card-v6:nth-child(3) .rk-ritual-tile-v7{transform:rotate(1deg) scale(.88)}
+.rk-ritual-card-v6:nth-child(4) .rk-ritual-tile-v7{transform:rotate(-1deg) scale(.88)}
+.rk-ritual-card-v6 .rk-ritual-tile-v7 .rk-mahjong-tile{
+  box-shadow:0 8px 16px rgba(26,20,16,.11),inset 0 1px 0 rgba(255,255,255,.9)!important;
+}
+.rk-ritual-card-v6>i{display:none!important}
+.rk-ritual-card-v6 b{font-size:22px!important;line-height:1.05!important}
+.rk-ritual-card-v6 p{max-width:24ch!important;font-size:12.5px!important;line-height:1.46!important}
+@media(max-width:390px){
+  .rk-startup-description-v4{font-size:12.5px!important;max-width:30ch!important}
+  .rk-warmup-v6-title,.rk-room-live-v6-title,.rk-share-score-v6-title,.rk-ritual-head-v6 strong{font-size:22px!important}
+  .rk-ritual-card-v6{min-height:198px!important;flex-basis:84%!important}
+  .rk-ritual-card-v6 p{max-width:22ch!important}
+}
+
 `;
 
 
@@ -12877,8 +12957,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <h1 className="rk-startup-logo-v4">Rackle</h1>
         <p className="rk-startup-subtitle-v4">The Daily Mahjong Workout</p>
         <p className="rk-startup-description-v4">
-          <span className="rk-desc-main">{dDone?"You showed up. Make your club chase the score.":"Play one Charleston. Get your score."}</span>
-          <span className="rk-desc-line">{dDone?"Board resets tonight.":"Same daily rack for everyone."}</span>
+          <span className="rk-desc-main">{dDone?"You posted. Make your club chase it.":"Play one Charleston. Beat the room."}</span>
+          <span className="rk-desc-line">{dDone?"Board resets tonight.":"Same rack for everyone. One score to chase."}</span>
         </p>
       </div>
     );
@@ -13075,12 +13155,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div className="rk-ritual-head-v6">
         <span>The Rackle Ritual</span>
         <strong>Your daily Charleston loop.</strong>
+        <p>Pass, read, score, and see where your rack stands.</p>
       </div>
       <div className="rk-ritual-track-v6">
-        <article className="rk-ritual-card-v6"><span className="rk-ritual-num">01</span><i>🀙</i><b>Pass tiles</b><p>Make your Charleston move.</p></article>
-        <article className="rk-ritual-card-v6"><span className="rk-ritual-num">02</span><i>🀇</i><b>Find direction</b><p>See where the rack is pulling.</p></article>
-        <article className="rk-ritual-card-v6"><span className="rk-ritual-num">03</span><i>🀄</i><b>Get your read</b><p>Score the quality of your passes.</p></article>
-        <article className="rk-ritual-card-v6"><span className="rk-ritual-num">04</span><i>🀐</i><b>Chase the room</b><p>Compare with your club board.</p></article>
+        <article className="rk-ritual-card-v6"><span className="rk-ritual-num">01</span><span className="rk-ritual-tile-v7"><Ti t={{t:"s",s:"bam",n:7}} large /></span><b>Pass tiles</b><p>Choose three tiles to send away. Keep the groups that give your rack direction.</p></article>
+        <article className="rk-ritual-card-v6"><span className="rk-ritual-num">02</span><span className="rk-ritual-tile-v7"><Ti t={{t:"s",s:"crak",n:5}} large /></span><b>Find direction</b><p>See which section your rack is starting to favor before you lock in too early.</p></article>
+        <article className="rk-ritual-card-v6"><span className="rk-ritual-num">03</span><span className="rk-ritual-tile-v7"><Ti t={{t:"d",v:"Red"}} large /></span><b>Get your read</b><p>Rackle scores your Charleston so you know if your passes helped or hurt.</p></article>
+        <article className="rk-ritual-card-v6"><span className="rk-ritual-num">04</span><span className="rk-ritual-tile-v7"><Ti t={{t:"s",s:"dot",n:9}} large /></span><b>Chase the room</b><p>Compare your score with the global room and your club board.</p></article>
       </div>
       <div className="rk-ritual-dots-v6" aria-hidden="true"><span/><span/><span/></div>
     </section>
