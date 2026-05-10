@@ -6777,6 +6777,11 @@ async function rkHydrateSessionFromSupabase(){
 function rkLogout(){rkClearSession();ST.set("profile",null);ST.set("authPlayerId",null);}
 
 function getDailySeed(){const d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();}
+function rkLocalDateKey(value=Date.now()){
+  const d=new Date(value);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+function rkTodayDateKey(){return rkLocalDateKey(Date.now());}
 function getDayNum(){return Math.floor((new Date()-new Date(2026,3,25))/86400000)+1;}
 
 const STREAK_BADGES=[
@@ -6942,12 +6947,17 @@ function rkTimeFromResult(result){return Number(result?.time??result?.totalTime?
 function rkDailyResultToLocal(row){
   if(!row)return null;
   const scorecard=row.scorecard_json&&typeof row.scorecard_json==="object"?row.scorecard_json:{};
+  // Preserve the original play timestamp from the scorecard.
+  // Do not replace it with updated_at, because a stale row can be touched later and look like today's play.
+  const originalTs=Number(scorecard.ts||scorecard.completedTs||0)||new Date(scorecard.completedAt||row.created_at||row.updated_at||Date.now()).getTime();
   const base={
     ...scorecard,
     mode:"daily",
     daySeed:row.day_seed,
     day_seed:row.day_seed,
-    ts:new Date(row.updated_at||row.created_at||Date.now()).getTime(),
+    ts:originalTs,
+    completedDate:scorecard.completedDate||scorecard.rkCompletedDate||rkLocalDateKey(originalTs),
+    rkCompletedDate:scorecard.rkCompletedDate||scorecard.completedDate||rkLocalDateKey(originalTs),
   };
   if(!base.iq)base.iq={};
   if(row.iq_score&&!base.iq.totalScore)base.iq.totalScore=row.iq_score;
@@ -6962,9 +6972,13 @@ function rkIsTodayDailyResult(result){
   if(!result)return false;
   const today=getDailySeed();
   const resultSeed=rkResultDaySeed(result);
-  if(resultSeed)return resultSeed===today;
+  const completedDate=result.completedDate||result.rkCompletedDate||null;
+  const playedToday=completedDate?completedDate===rkTodayDateKey():sameLocalDay(result?.ts||0,Date.now());
+  // A Daily result must match today's seed and today's actual play date.
+  // This prevents yesterday's score from being rehydrated or merged into today's room.
+  if(resultSeed)return resultSeed===today&&playedToday;
   // Legacy fallback for older local results that were saved before daySeed existed.
-  return ST.get("dd",null)===today&&sameLocalDay(result?.ts||0,Date.now());
+  return ST.get("dd",null)===today&&playedToday;
 }
 function rkGetTodayDailyResult(){
   const today=getDailySeed();
@@ -7176,6 +7190,10 @@ function rkCurrentClubCode(){
 }
 function rkEntryMatchesCurrentPlayer(entry,scoreHint=null){
   if(!entry)return false;
+  // Only mark a leaderboard row as "you" when this browser/account has a valid Daily result for today.
+  // Otherwise yesterday's row can make a player look ranked before they have played.
+  const localDailyScore=Number(scoreHint??rkLatestLocalDailyScore()?.iqScore??0);
+  if(!(localDailyScore>0))return false;
   const ids=rkLocalPlayerIds();
   const entryId=String(entry.playerId||entry.player_id||"").trim();
   if(entryId&&ids.includes(entryId))return true;
@@ -7184,8 +7202,6 @@ function rkEntryMatchesCurrentPlayer(entry,scoreHint=null){
   if(currentName&&entryName&&rkNormText(currentName)===rkNormText(entryName))return true;
 
   // Legacy anonymous row fallback: generated player name, same club, same score.
-  // If scoreHint is not provided, use today's latest local Daily score.
-  const localDailyScore=Number(scoreHint??rkLatestLocalDailyScore()?.iqScore??0);
   if(rkLooksGeneratedPlayerName(entryName)&&localDailyScore>0){
     const entryScore=Number(entry.iqScore??entry.iq_score??entry.score??0);
     const entryCode=String(entry.clubCode||entry.club_code||"__global__");
@@ -12435,7 +12451,7 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
   },[score,time,streak]);
   useEffect(()=>{load();},[load]);
 
-  const myRank=rkRankOfCurrent(entries,score)||null;
+  const myRank=score>0?rkRankOfCurrent(entries,score)||null:null;
   const leader=entries[0]||null;
   const myEntry=myRank?entries[myRank-1]:null;
   const activity=rkBuildActivity(entries,"global room",myRank);
@@ -12503,13 +12519,13 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
     <Footer/>
   </div>;
 
-  const myRank=rkRankOfCurrent(entries,score)||null;
+  const myRank=score>0?rkRankOfCurrent(entries,score)||null:null;
   const leader=entries[0]||null;
   const myEntry=myRank?entries[myRank-1]:null;
   const activity=rkBuildActivity(entries,"club room",myRank);
   const inviteText=`Join ${club.name} on Rackle. Same daily Charleston. Private club leaderboard.\nClub code: ${code}\nplayrackle.com`;
   const shareText=shareRoomText({title:`${club.name} · Rackle Day #${dn}`,score,rank:myRank,clubCode:code,clubName:club.name});
-  const posted=entries.some(e=>rkEntryMatchesCurrentPlayer(e,score));
+  const posted=score>0&&entries.some(e=>rkEntryMatchesCurrentPlayer(e,score));
 
   const postScore=async()=>{
     if(!score||!nameInput.trim())return;
@@ -15923,7 +15939,8 @@ export default function Rackle(){
   const onDone=(result)=>{
     // Always stamp the current play mode on completed results.
     // Older builds saved Daily results without `mode`, which made Weekly Recap show 0 dailies.
-    const completedResult={...result,mode,ts:Date.now()};
+    const completedAt=Date.now();
+    const completedResult={...result,mode,ts:completedAt,completedTs:completedAt,completedDate:rkTodayDateKey(),rkCompletedDate:rkTodayDateKey(),completedAt:new Date(completedAt).toISOString()};
     setRounds(r=>{const n=r+1;ST.set("rnd",n);return n;});
     const today=getDailySeed();
     let newStreak=streak;
