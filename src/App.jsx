@@ -4607,8 +4607,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-stats-v21-row{display:flex;align-items:center;gap:12px;padding:12px;border-radius:17px;background:rgba(255,255,255,.58);border:1px solid rgba(26,20,16,.06);margin-top:9px}
 .rk-stats-v21-dot{width:36px;height:36px;border-radius:14px;background:rgba(23,107,66,.08);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 @media(max-width:390px){.rk-stats-v21-grid{grid-template-columns:1fr}.rk-stats-v21-title{font-size:27px}.rk-stats-v21-actions{grid-template-columns:1fr}}
-`;
-
 
 
 /* ─── vNext SCORECARD ACTION + REVIEW POLISH ───────────────────────────── */
@@ -4779,6 +4777,195 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   border-radius:17px!important;
   font-weight:950!important;
 }
+
+/* ─── v26 Screenshot-worthy scorecard polish ───────────────────────────── */
+.rk-scorecard-premium-v26{
+  position:relative!important;
+  padding-bottom:38px!important;
+}
+.rk-scorecard-premium-v26:before{
+  content:'';position:absolute;left:50%;top:4px;transform:translateX(-50%);width:88%;height:220px;
+  background:radial-gradient(circle at 50% 0%,rgba(243,212,107,.18),transparent 62%);
+  pointer-events:none;z-index:0;
+}
+.rk-scorecard-premium-v26>*,.rk-scorecard-premium-v26 .rk-iq-hero{position:relative;z-index:1}
+.rk-scorecard-premium-v26 .rk-scorecard-title-v26{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:7px 13px;border-radius:999px;background:linear-gradient(145deg,#FFFDF8,#F0E6D6);
+  border:1px solid rgba(160,120,40,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.76),0 4px 16px rgba(26,20,16,.035);
+  color:#176B42;font-size:9px;letter-spacing:2.35px;text-transform:uppercase;font-weight:950;margin-bottom:10px;
+}
+.rk-scorecard-premium-v26 .rk-scorecard-heading-v26{
+  font-family:'Fraunces',Georgia,serif;font-size:30px;line-height:1.02;font-weight:950;letter-spacing:-1px;color:#1A1410;margin:0;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero{
+  border-radius:32px!important;
+  padding:31px 22px 24px!important;
+  border:1px solid rgba(243,212,107,.28)!important;
+  box-shadow:0 20px 50px rgba(6,43,24,.28),0 0 0 1px rgba(255,255,255,.06),inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero:before{
+  content:'';position:absolute;inset:10px;border-radius:25px;border:1px solid rgba(243,212,107,.10);pointer-events:none;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero:after{
+  content:'🀄';position:absolute;right:-18px;bottom:-31px;font-size:130px;opacity:.055;transform:rotate(-8deg);pointer-events:none;
+}
+.rk-scorecard-stamp-v26{
+  position:absolute;top:17px;right:17px;width:40px;height:40px;border-radius:15px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,#FFFDF8,#E8DDC9);border:1px solid rgba(243,212,107,.35);
+  color:#B02A2A;font-family:'Fraunces',Georgia,serif;font-size:23px;font-weight:950;
+  box-shadow:0 8px 22px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.82);z-index:3;
+}
+.rk-scorecard-achievements-v26{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:-2px 0 12px;
+}
+.rk-scorecard-achievement-v26{
+  min-height:62px;border-radius:18px;padding:11px 8px;text-align:center;
+  background:linear-gradient(145deg,#FFFDF8,#F6EFE4);border:1px solid rgba(26,20,16,.075);
+  box-shadow:0 6px 18px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78);
+}
+.rk-scorecard-achievement-v26 strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:17px;line-height:1;color:#176B42;font-weight:950;letter-spacing:-.4px;margin-bottom:6px}
+.rk-scorecard-achievement-v26 span{display:block;font-size:7.6px;line-height:1.1;letter-spacing:1.25px;text-transform:uppercase;color:rgba(26,20,16,.48);font-weight:950}
+.rk-scorecard-premium-v26 .rk-score-share-v20{
+  border-radius:26px!important;background:linear-gradient(145deg,#FFFDF8 0%,#F7F0E5 100%)!important;
+  border:1px solid rgba(160,120,40,.13)!important;box-shadow:0 12px 34px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview{
+  background:linear-gradient(150deg,#041F12,#07331E 54%,#0A4328)!important;
+  border-color:rgba(243,212,107,.20)!important;color:#fff!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview strong{font-size:44px!important;color:#F3D46B!important}
+.rk-scorecard-premium-v26 .rk-daily-review-v10{
+  border-radius:28px!important;background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;
+  border:1px solid rgba(160,120,40,.14)!important;box-shadow:0 12px 34px rgba(26,20,16,.05),inset 0 1px 0 rgba(255,255,255,.82)!important;
+  padding:14px!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-head{
+  border-radius:20px!important;background:linear-gradient(145deg,#F8F4EE,#EEE3D1)!important;
+  border:1px solid rgba(26,20,16,.07)!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-grid{display:grid!important;grid-template-columns:1fr!important;gap:9px!important;margin-top:10px!important}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card{
+  display:grid!important;grid-template-columns:42px 1fr!important;column-gap:11px!important;align-items:start!important;text-align:left!important;
+  padding:13px!important;border-radius:19px!important;min-height:auto!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card:before{
+  content:attr(data-icon);width:42px;height:42px;border-radius:15px;display:flex;align-items:center;justify-content:center;grid-row:1/4;
+  background:linear-gradient(145deg,#FFFDF8,#EEE4D2);border:1px solid rgba(26,20,16,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 4px 12px rgba(26,20,16,.05);font-size:18px;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card span,.rk-scorecard-premium-v26 .rk-daily-review-v10-card strong,.rk-scorecard-premium-v26 .rk-daily-review-v10-card p{grid-column:2!important}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card strong{font-size:17px!important;line-height:1.05!important}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card p{font-size:12px!important;line-height:1.45!important}
+.rk-scorecard-premium-v26 .rk-next-rack-panel-v11{margin-top:18px!important}
+@media(max-width:390px){
+  .rk-scorecard-achievements-v26{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .rk-scorecard-premium-v26 .rk-scorecard-heading-v26{font-size:28px}
+}
+
+
+
+/* ─── vNext: Premium live standings action buttons ─────────────────────── */
+.rk-room-live-v17-actions{
+  position:relative!important;
+  z-index:4!important;
+  display:grid!important;
+  grid-template-columns:1.25fr 1fr!important;
+  gap:10px!important;
+  margin:14px 14px 0!important;
+}
+.rk-room-live-v17-actions button{
+  position:relative!important;
+  overflow:hidden!important;
+  min-height:50px!important;
+  border-radius:18px!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:14px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  letter-spacing:-.15px!important;
+  cursor:pointer!important;
+  isolation:isolate!important;
+  transform:translateZ(0)!important;
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,filter .18s ease!important;
+}
+.rk-room-live-v17-actions button:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  opacity:.95;
+  pointer-events:none;
+}
+.rk-room-live-v17-actions button:after{
+  content:"";
+  position:absolute;
+  top:-35%;
+  bottom:-35%;
+  width:44%;
+  left:-55%;
+  background:linear-gradient(105deg,transparent 0%,rgba(255,255,255,.30) 48%,transparent 72%);
+  transform:skewX(-14deg);
+  transition:left .48s ease;
+  pointer-events:none;
+}
+.rk-room-live-v17-actions button:first-child{
+  color:#041F12!important;
+  border:1px solid rgba(255,244,189,.72)!important;
+  background:
+    linear-gradient(135deg,#FFF0A8 0%,#F3D46B 42%,#C99D2F 100%)!important;
+  box-shadow:
+    0 12px 26px rgba(243,212,107,.22),
+    0 0 0 1px rgba(255,255,255,.12),
+    inset 0 1px 0 rgba(255,255,255,.58),
+    inset 0 -1px 0 rgba(80,52,8,.18)!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.36)!important;
+}
+.rk-room-live-v17-actions button:first-child:before{
+  background:
+    radial-gradient(circle at 22% 20%,rgba(255,255,255,.44),transparent 34%),
+    linear-gradient(180deg,rgba(255,255,255,.12),transparent)!important;
+}
+.rk-room-live-v17-actions button:last-child{
+  color:#F8F4EE!important;
+  border:1px solid rgba(243,212,107,.24)!important;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.135),rgba(255,255,255,.055))!important;
+  box-shadow:
+    0 10px 22px rgba(0,0,0,.10),
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 0 0 1px rgba(255,255,255,.035)!important;
+  backdrop-filter:blur(8px)!important;
+}
+.rk-room-live-v17-actions button:last-child:before{
+  background:
+    radial-gradient(circle at 18% 10%,rgba(243,212,107,.13),transparent 32%),
+    linear-gradient(180deg,rgba(255,255,255,.05),transparent)!important;
+}
+.rk-room-live-v17-actions button:hover{
+  transform:translateY(-2px)!important;
+  filter:brightness(1.03)!important;
+}
+.rk-room-live-v17-actions button:hover:after{left:110%!important}
+.rk-room-live-v17-actions button:active{transform:scale(.982)!important}
+.rk-room-live-v17-actions button:first-child:hover{
+  box-shadow:
+    0 16px 32px rgba(243,212,107,.28),
+    0 0 0 1px rgba(255,255,255,.16),
+    inset 0 1px 0 rgba(255,255,255,.66),
+    inset 0 -1px 0 rgba(80,52,8,.18)!important;
+}
+.rk-room-live-v17-actions button:last-child:hover{
+  border-color:rgba(243,212,107,.36)!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.17),rgba(255,255,255,.075))!important;
+  box-shadow:0 14px 28px rgba(0,0,0,.13),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+@media(max-width:390px){
+  .rk-room-live-v17-actions{grid-template-columns:1fr 1fr!important;gap:9px!important;margin:13px 14px 0!important}
+  .rk-room-live-v17-actions button{min-height:48px!important;font-size:13px!important;border-radius:17px!important}
+}
+@media(max-width:340px){.rk-room-live-v17-actions{grid-template-columns:1fr!important}}
+`;
 
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
@@ -11804,14 +11991,16 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   };
 
   return(
-    <div className="rk-score-shell rk-score-ultra-simple" style={{paddingBottom:32}}>
+    <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26" style={{paddingBottom:32}}>
       <div style={{textAlign:"center",margin:"8px 0 16px"}}>
-        <div style={{fontSize:9,letterSpacing:2.4,textTransform:"uppercase",fontWeight:950,color:C.jade,marginBottom:6}}>Daily Rackle #{dayNum}</div>
-        <div style={{fontFamily:F.d,fontSize:28,lineHeight:1.02,fontWeight:950,color:C.ink,letterSpacing:-.8}}>Scorecard</div>
+        <div className="rk-scorecard-title-v26">Daily Rackle #{dayNum}</div>
+        <h1 className="rk-scorecard-heading-v26">Your Rackle Scorecard</h1>
+        <div style={{fontSize:12,lineHeight:1.45,color:C.mut,fontWeight:750,marginTop:6}}>Built for the group chat. Made to defend at the table.</div>
       </div>
 
       <div className="rk-iq-hero rk-sweep" style={{padding:"28px 22px 22px",borderRadius:28,marginBottom:14}}>
         <div className="rk-iq-glow"/>
+        <div className="rk-scorecard-stamp-v26">R</div>
         <div style={{position:"relative",zIndex:2,textAlign:"center"}}>
           <div style={{fontSize:10,letterSpacing:2.8,textTransform:"uppercase",fontWeight:950,color:"rgba(255,255,255,.52)",marginBottom:10}}>Rackle IQ</div>
           <div style={{fontFamily:F.d,fontSize:88,lineHeight:.86,fontWeight:950,letterSpacing:-4,color:"#F3D46B",marginBottom:14}}>{score}</div>
@@ -11823,6 +12012,13 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <div style={{fontSize:14,lineHeight:1.45,color:"rgba(255,255,255,.78)",fontWeight:750,maxWidth:290,margin:"0 auto"}}>{quickRead}</div>
           {rankLine&&<div style={{fontSize:11,lineHeight:1.35,color:"rgba(255,255,255,.58)",fontWeight:800,marginTop:12}}>{rankLine}</div>}
         </div>
+      </div>
+
+      <div className="rk-scorecard-achievements-v26" aria-label="Scorecard highlights">
+        <div className="rk-scorecard-achievement-v26"><strong>#{dayNum}</strong><span>Daily rack</span></div>
+        <div className="rk-scorecard-achievement-v26"><strong>{iq.streak||ST.get("str",0)||0}d</strong><span>Streak</span></div>
+        <div className="rk-scorecard-achievement-v26"><strong>{timeLabel}</strong><span>Time</span></div>
+        <div className="rk-scorecard-achievement-v26"><strong>{clubRank?`#${clubRank}`:globalRank?`#${globalRank}`:"—"}</strong><span>{clubRank?"Club rank":"Global"}</span></div>
       </div>
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:8,marginBottom:12}}>
@@ -15369,7 +15565,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       : `${globalCount||1} player${(globalCount||1)===1?"":"s"} in today’s Rackle room`;
     const previewRows=(activeClubCode&&clubPreviewRows.length?clubPreviewRows:globalPreviewRows).slice(0,3);
     const boardLabel=activeClubCode?"Club board":"Rackle room";
-    const secondaryLabel=activeClubCode?"Global room →":"Club room →";
+    const secondaryLabel=activeClubCode?"View global →":"View club →";
     const secondaryAction=activeClubCode?()=>setScreen("globalLeaderboard"):openBoard;
     return(
       <section className="rk-room-live-v6 rk-room-live-v17 rk-room-live-v19" aria-label="Live club standings">
@@ -15406,7 +15602,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </button>
 
         <div className="rk-room-live-v17-actions">
-          <button type="button" onClick={openBoard}>{activeClubCode?"Club standings →":"Open standings →"}</button>
+          <button type="button" onClick={openBoard}>{"Open standings →"}</button>
           <button type="button" onClick={secondaryAction}>{secondaryLabel}</button>
         </div>
       </section>
