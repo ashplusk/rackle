@@ -2899,6 +2899,30 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-daily-review-v10-card p{font-size:12.5px;line-height:1.55;color:rgba(26,20,16,.62);font-weight:750;margin:0}
 .rk-daily-review-v10-detail{border-radius:22px;padding:14px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.075);box-shadow:0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78);text-align:center}
 @media(max-width:390px){.rk-ritual-v10 .rk-ritual-head-v6 strong{font-size:22px!important}.rk-ritual-v10 .rk-ritual-card-v6{flex-basis:86%!important;min-height:238px!important}.rk-daily-review-v10-head strong{font-size:19px}}
+
+
+/* ─── v11 NEXT RACK + HOMEPAGE POLISH ───────────────────────────────────── */
+.rk-next-rack-panel-v11{margin-top:18px!important;display:grid!important;gap:12px!important}
+.rk-next-rack-card-v11{position:relative;overflow:hidden;border-radius:24px;padding:20px 18px;background:radial-gradient(circle at 88% 6%,rgba(255,255,255,.18),transparent 34%),linear-gradient(150deg,#062B18,#0D4A2E 58%,#051F11);border:1px solid rgba(243,212,107,.20);box-shadow:0 15px 38px rgba(6,43,24,.20),inset 0 1px 0 rgba(255,255,255,.10);color:#fff;text-align:left}
+.rk-next-rack-card-v11:after{content:"";position:absolute;right:-34px;bottom:-44px;width:150px;height:150px;border-radius:999px;background:radial-gradient(circle,rgba(243,212,107,.13),transparent 68%);pointer-events:none}
+.rk-next-rack-kicker-v11{font-size:9px;letter-spacing:2.6px;text-transform:uppercase;font-weight:950;color:#F3D46B;margin-bottom:8px;position:relative;z-index:1}
+.rk-next-rack-title-v11{font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1.04;font-weight:900;letter-spacing:-.55px;color:#fff;margin:0 0 8px;position:relative;z-index:1}
+.rk-next-rack-copy-v11{font-size:12.5px;line-height:1.5;color:rgba(255,255,255,.70);font-weight:750;margin:0 0 14px;max-width:32ch;position:relative;z-index:1}
+.rk-next-rack-card-v11 .rk-midnight-countdown,.rk-next-rack-card-v11 [class*="countdown"]{position:relative;z-index:1}
+.rk-back-clubhouse-v11{width:100%;min-height:50px;border:1px solid rgba(23,107,66,.16);border-radius:18px;background:linear-gradient(145deg,#FFFDF8,#F3EFE6);color:#176B42;font-family:'Fraunces',Georgia,serif;font-size:14px;font-weight:900;letter-spacing:-.15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.rk-back-clubhouse-v11:active{transform:scale(.99)}
+.rk-back-clubhouse-v11 span{font-size:13px;opacity:.75}
+.rk-tomorrow-card-v11{position:relative;overflow:hidden;margin:0 0 20px;border-radius:26px;padding:19px 18px;background:radial-gradient(circle at 88% 4%,rgba(255,255,255,.86),transparent 34%),linear-gradient(145deg,#FFFDF8,#F3EBDD);border:1px solid rgba(26,20,16,.075);box-shadow:0 12px 32px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.86);text-align:left}
+.rk-tomorrow-card-v11:after{content:"";position:absolute;right:-38px;bottom:-44px;width:150px;height:150px;border-radius:999px;background:radial-gradient(circle,rgba(23,107,66,.08),transparent 68%);pointer-events:none}
+.rk-tomorrow-v11-top{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:11px}
+.rk-tomorrow-v11-kicker{font-size:9px;letter-spacing:2.7px;text-transform:uppercase;font-weight:950;color:#176B42;margin-bottom:8px}
+.rk-tomorrow-v11-title{font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1.05;font-weight:900;letter-spacing:-.55px;color:#1A1410;margin:0;max-width:13ch}
+.rk-tomorrow-v11-badge{flex-shrink:0;border-radius:999px;padding:8px 11px;background:rgba(160,120,40,.11);border:1px solid rgba(160,120,40,.18);color:#8A6820;font-size:10px;font-weight:950;letter-spacing:1.2px;text-transform:uppercase}
+.rk-tomorrow-v11-copy{position:relative;z-index:1;font-size:12.7px;line-height:1.55;color:rgba(26,20,16,.62);font-weight:750;margin:0 0 14px;max-width:34ch}
+.rk-tomorrow-v11-row{position:relative;z-index:1;display:flex;gap:7px;flex-wrap:wrap}
+.rk-tomorrow-v11-row span{display:inline-flex;border-radius:999px;padding:7px 10px;background:rgba(23,107,66,.07);border:1px solid rgba(23,107,66,.10);color:#176B42;font-size:10.5px;font-weight:900;line-height:1}
+.rk-share-card div[style*="Challenge Your Club"],.rk-home-improve-card div[style*="Improve Your Game"]{font-family:'Fraunces',Georgia,serif!important;font-size:21px!important;font-weight:900!important;line-height:1.15!important;letter-spacing:-.45px!important}
+@media(max-width:390px){.rk-tomorrow-v11-title,.rk-next-rack-title-v11{font-size:21px}.rk-tomorrow-v11-row span{font-size:10px}.rk-share-card div[style*="Challenge Your Club"],.rk-home-improve-card div[style*="Improve Your Game"]{font-size:20px!important}}
 `;
 
 
@@ -9998,17 +10022,15 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         )}
       </section>
 
-      <div className="rk-review-bottom-home" style={{display:"grid",gap:10}}>
-        <div className="rk-tomorrow-mini-hook">Next rack drops at midnight. <span>Keep your streak alive.</span></div>
-        <MidnightCountdown dn={dayNum}/>
-        <button onClick={onHome} style={{
-          width:"100%",border:`1px solid ${C.bdr}`,borderRadius:16,
-          background:"linear-gradient(180deg,#FFFDF8,#F1E9DB)",color:C.mut,
-          fontSize:13,fontWeight:900,cursor:"pointer",padding:"13px 0",letterSpacing:.2,
-          display:"flex",alignItems:"center",justifyContent:"center",gap:8,
-          boxShadow:"0 5px 16px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.75)"
-        }}>
-          <span style={{fontSize:12,opacity:.65}}>←</span> Back to clubhouse
+      <div className="rk-review-bottom-home rk-next-rack-panel-v11">
+        <div className="rk-next-rack-card-v11">
+          <div className="rk-next-rack-kicker-v11">Next Daily Rackle</div>
+          <div className="rk-next-rack-title-v11">A new rack drops at midnight.</div>
+          <p className="rk-next-rack-copy-v11">Protect your streak, defend your room, and come back sharper tomorrow.</p>
+          <MidnightCountdown dn={dayNum}/>
+        </div>
+        <button onClick={onHome} className="rk-back-clubhouse-v11">
+          <span aria-hidden="true">←</span> Back to clubhouse
         </button>
       </div>
     </div>
@@ -13224,12 +13246,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div style={{padding:16,display:"grid",gap:12}}>
         <button onClick={copyShare} className={`rk-share-card ${shareCopied?"rk-copied-state":""}`} style={{width:"100%",border:`1px solid ${C.gold}25`,background:`linear-gradient(135deg,#FFF9ED,#F7EFE0)`,borderRadius:14,padding:"14px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left",boxShadow:"0 4px 14px rgba(0,0,0,.025)"}}>
           <div className="rk-share-icon" style={{width:48,height:48,borderRadius:14,background:C.gold+"14",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20}}>📲</div>
-          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>{shareCopied?"Copied for your club":"Challenge Your Club"}</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>{shareCopied?"Drop it in your group chat":"Tap to copy · Drop it in your group chat"}</div><div style={{display:"flex",alignItems:"center",gap:8,marginTop:6}}>{clubAvatarCount>0&&<span className="rk-mini-avatars">{Array.from({length:clubAvatarCount}).map((_,i)=><span key={i} className="rk-mini-avatar" style={i%2?{background:C.jade+"44"}:undefined}/>)}</span>}<span style={{fontSize:10.5,color:C.mut,fontWeight:700}}>{clubActivityText}</span></div></div>
+          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:21,fontWeight:900,color:C.ink,lineHeight:1.15,letterSpacing:-.45}}>{shareCopied?"Copied for your club":"Challenge Your Club"}</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>{shareCopied?"Drop it in your group chat":"Tap to copy · Drop it in your group chat"}</div><div style={{display:"flex",alignItems:"center",gap:8,marginTop:6}}>{clubAvatarCount>0&&<span className="rk-mini-avatars">{Array.from({length:clubAvatarCount}).map((_,i)=><span key={i} className="rk-mini-avatar" style={i%2?{background:C.jade+"44"}:undefined}/>)}</span>}<span style={{fontSize:10.5,color:C.mut,fontWeight:700}}>{clubActivityText}</span></div></div>
           <span style={{fontSize:18,color:C.gold}}>›</span>
         </button>
         <button onClick={showScorecard} className="rk-home-improve-card" style={{width:"100%",borderRadius:14,padding:"13px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left",position:"relative"}}>
           <div className="rk-home-improve-icon" style={{width:39,height:39,borderRadius:12,background:C.jade+"13",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>🎓</div>
-          <div style={{flex:1,position:"relative",zIndex:1}}><div style={{fontFamily:F.d,fontSize:15,fontWeight:950,color:C.ink,lineHeight:1.1,letterSpacing:-0.2}}>Improve Your Game</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Coach view · Better reads · Next rack</div></div>
+          <div style={{flex:1,position:"relative",zIndex:1}}><div style={{fontFamily:F.d,fontSize:21,fontWeight:900,color:C.ink,lineHeight:1.15,letterSpacing:-.45}}>Improve Your Game</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Coach view · Better reads · Next rack</div></div>
           <span style={{fontSize:18,color:C.gold,position:"relative",zIndex:1}}>›</span>
         </button>
       </div>
@@ -13238,16 +13260,23 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   const TomorrowTease=()=> {
     const resetLabel=getTimeUntilMidnightLabel();
+    const cleanHint=String(tomorrowHint).replace(/^Hint:\s*/i,"");
     return(
-      <div aria-label="Tomorrow's Rackle preview" className="rk-home-section" style={{width:"100%",margin:"0 0 18px",border:`1px solid rgba(0,0,0,.06)`,background:"linear-gradient(180deg,#FFFDF8 0%,#F6F1E7 100%)",borderRadius:18,padding:"17px 18px",display:"flex",alignItems:"center",gap:14,cursor:"default",textAlign:"left",boxShadow:"0 4px 16px rgba(0,0,0,0.026)",position:"relative",overflow:"hidden"}}>
-        <div aria-hidden style={{position:"absolute",right:-10,bottom:-18,fontSize:72,opacity:0.035,lineHeight:1}}>🀄</div>
-        <div style={{width:42,height:42,borderRadius:14,background:C.jade+"10",border:`1px solid ${C.jade}18`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>✦</div>
-        <div style={{flex:1,minWidth:0,position:"relative"}}>
-          <div style={{fontSize:9,color:C.jade,letterSpacing:2.1,fontWeight:900,marginBottom:5}}>TOMORROW'S RACKLE</div>
-          <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:C.ink,lineHeight:1.1,letterSpacing:-0.2,marginBottom:5}}>New rack in {resetLabel}</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.45}}>{String(tomorrowHint).replace(/^Hint:\s*/i,"")}</div>
+      <section aria-label="Tomorrow's Rackle preview" className="rk-tomorrow-card-v11">
+        <div className="rk-tomorrow-v11-top">
+          <div>
+            <div className="rk-tomorrow-v11-kicker">Tomorrow’s Rackle</div>
+            <h2 className="rk-tomorrow-v11-title">The next room opens in {resetLabel}.</h2>
+          </div>
+          <div className="rk-tomorrow-v11-badge">Midnight</div>
         </div>
-      </div>
+        <p className="rk-tomorrow-v11-copy">{cleanHint}</p>
+        <div className="rk-tomorrow-v11-row">
+          <span>New rack</span>
+          <span>Fresh leaderboard</span>
+          <span>Streak on the line</span>
+        </div>
+      </section>
     );
   };
 
