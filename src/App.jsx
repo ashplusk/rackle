@@ -64,7 +64,7 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .rk-hero-tile{margin-bottom:6px!important}
 .rk-hero-subtitle{margin-top:8px!important;margin-bottom:10px!important;line-height:1.35!important}
 .rk-hero-status{margin-top:10px!important;color:#6B6157!important;font-size:13px!important;line-height:1.45!important}
-.rk-daily-cta{background:linear-gradient(180deg,#F2EBDD 0%,#E9E0CF 100%)!important;border:1px solid rgba(23,107,66,.18)!important;box-shadow:0 3px 10px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.65)!important;border-radius:16px!important;min-height:52px!important;transition:transform .18s ease,box-shadow .18s ease,background .18s ease!important}
+.rk-daily-cta{background:linear-gradient(180deg,#F2EBDD 0%,#E9E0CF 100%)!important;border:1px solid rgba(26,20,16,.10)!important;box-shadow:0 3px 10px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.65)!important;border-radius:16px!important;min-height:52px!important;transition:transform .18s ease,box-shadow .18s ease,background .18s ease!important}
 .rk-daily-cta:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(0,0,0,.07),inset 0 1px 0 rgba(255,255,255,.75)!important}
 .rk-daily-cta:active{transform:scale(.985)}
 .rk-share-card{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease!important;cursor:pointer}
@@ -96,7 +96,7 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-row-card:hover{transform:translateY(-1px);border-color:rgba(23,107,66,.18)!important;box-shadow:0 8px 22px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.85)!important}
 .rk-tile-icon{background:linear-gradient(145deg,#FFFDF8,#EEE4D2)!important;border:1px solid rgba(26,20,16,.08)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 4px 12px rgba(26,20,16,.05)!important}
 .rk-primary-btn{background:linear-gradient(135deg,#176B42,#0F5432)!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:0 8px 18px rgba(23,107,66,.18),inset 0 1px 0 rgba(255,255,255,.18)!important}
-.rk-secondary-btn{background:linear-gradient(180deg,#F2EBDD,#E9E0CF)!important;border:1px solid rgba(23,107,66,.12)!important;box-shadow:0 3px 10px rgba(0,0,0,.035),inset 0 1px 0 rgba(255,255,255,.65)!important}
+.rk-secondary-btn{background:linear-gradient(180deg,#F2EBDD,#E9E0CF)!important;border:1px solid rgba(26,20,16,.10)!important;box-shadow:0 3px 10px rgba(0,0,0,.035),inset 0 1px 0 rgba(255,255,255,.65)!important}
 .rk-soft-input{background:#FFFDF8!important;border:1px solid rgba(26,20,16,.10)!important;border-radius:14px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 2px 8px rgba(26,20,16,.025)!important}
 .rk-section-hairline{height:1px;background:linear-gradient(90deg,transparent,rgba(160,120,40,.38),transparent)}
 .rk-chip-premium{display:inline-flex;align-items:center;gap:5px;border-radius:999px;background:rgba(23,107,66,.07);border:1px solid rgba(23,107,66,.10);padding:5px 10px;color:#176B42;font-size:10px;font-weight:800;line-height:1}
@@ -1945,6 +1945,7 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   margin:0 0 18px!important;
 }
 .rk-daily-divider-row .rk-daily-cta{
+  border-color:rgba(26,20,16,.10)!important;
   min-height:46px!important;
   padding:7px 17px!important;
   border-radius:18px!important;
@@ -2921,8 +2922,8 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-tomorrow-v11-copy{position:relative;z-index:1;font-size:12.7px;line-height:1.55;color:rgba(26,20,16,.62);font-weight:750;margin:0 0 14px;max-width:34ch}
 .rk-tomorrow-v11-row{position:relative;z-index:1;display:flex;gap:7px;flex-wrap:wrap}
 .rk-tomorrow-v11-row span{display:inline-flex;border-radius:999px;padding:7px 10px;background:rgba(255,255,255,.46);border:1px solid rgba(160,120,40,.16);color:#8A6820;font-size:10.5px;font-weight:900;line-height:1}
-.rk-share-card div[style*="Challenge Your Club"],.rk-home-improve-card div[style*="Improve Your Game"]{font-family:'Fraunces',Georgia,serif!important;font-size:17px!important;font-weight:900!important;line-height:1.15!important;letter-spacing:-.35px!important}
-@media(max-width:390px){.rk-tomorrow-v11-title,.rk-next-rack-title-v11{font-size:21px}.rk-tomorrow-v11-row span{font-size:10px}.rk-share-card div[style*="Challenge Your Club"],.rk-home-improve-card div[style*="Improve Your Game"]{font-size:16px!important}}
+.rk-share-card div[style*="Challenge Your Club"],.rk-home-improve-card div[style*="Improve Your Game"]{font-family:'Fraunces',Georgia,serif!important;font-size:14px!important;font-weight:900!important;line-height:1.15!important;letter-spacing:-.35px!important}
+@media(max-width:390px){.rk-tomorrow-v11-title,.rk-next-rack-title-v11{font-size:21px}.rk-tomorrow-v11-row span{font-size:10px}.rk-share-card div[style*="Challenge Your Club"],.rk-home-improve-card div[style*="Improve Your Game"]{font-size:13px!important}}
 
 /* ─── v12 HOMEPAGE ORDER + RITUAL + LEARN CLEANUP ─────────────────────── */
 .rk-ritual-v12{margin:26px 0 24px!important}
@@ -9540,7 +9541,7 @@ function ShareButton({text,label,sublabel,variant="goldpill"}){
         textAlign:"left",boxShadow:variant==="viral"?`0 12px 26px ${v.shadow}, inset 0 1px 0 rgba(255,255,255,.16)`:`0 3px 12px ${v.shadow}`,transition:"opacity 0.15s"}}>
         <div style={{width:variant==="viral"?42:32,height:variant==="viral"?42:32,borderRadius:variant==="viral"?14:8,background:iconBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:variant==="viral"?19:15,flexShrink:0}}>{copied?"✓":"📲"}</div>
         <div style={{flex:1,minWidth:0,display:"flex",flexDirection:"column",gap:2}}>
-          <div style={{fontFamily:F.d,fontSize:variant==="viral"?17:14,fontWeight:900,color:titleColor,lineHeight:1.1,letterSpacing:variant==="viral"?-.25:0}}>{copied?"Copied to clipboard!":label||"Challenge Your Club"}</div>
+          <div style={{fontFamily:F.d,fontSize:variant==="viral"?14:12,fontWeight:900,color:titleColor,lineHeight:1.1,letterSpacing:variant==="viral"?-.2:0}}>{copied?"Copied to clipboard!":label||"Challenge Your Club"}</div>
           <div style={{fontSize:variant==="viral"?12:11,color:subColor,lineHeight:1.35,fontWeight:variant==="viral"?750:400}}>{copied?"Paste it into your group chat":sublabel||"Tap to copy · Drop it in your group chat"}</div>
         </div>
         <span style={{fontSize:14,color:arrowColor,fontWeight:700,flexShrink:0}}>{copied?"":"›"}</span>
@@ -13337,12 +13338,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div style={{padding:16,display:"grid",gap:12}}>
         <button onClick={copyShare} className={`rk-share-card ${shareCopied?"rk-copied-state":""}`} style={{width:"100%",border:`1px solid ${C.gold}25`,background:`linear-gradient(135deg,#FFF9ED,#F7EFE0)`,borderRadius:14,padding:"14px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left",boxShadow:"0 4px 14px rgba(0,0,0,.025)"}}>
           <div className="rk-share-icon" style={{width:48,height:48,borderRadius:14,background:C.gold+"14",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20}}>📲</div>
-          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:C.ink,lineHeight:1.15,letterSpacing:-.45}}>{shareCopied?"Copied for your club":"Challenge Your Club"}</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>{shareCopied?"Drop it in your group chat":"Tap to copy · Drop it in your group chat"}</div><div style={{display:"flex",alignItems:"center",gap:8,marginTop:6}}>{clubAvatarCount>0&&<span className="rk-mini-avatars">{Array.from({length:clubAvatarCount}).map((_,i)=><span key={i} className="rk-mini-avatar" style={i%2?{background:C.jade+"44"}:undefined}/>)}</span>}<span style={{fontSize:10.5,color:C.mut,fontWeight:700}}>{clubActivityText}</span></div></div>
+          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.12,letterSpacing:-.35}}>{shareCopied?"Copied for your club":"Challenge Your Club"}</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>{shareCopied?"Drop it in your group chat":"Tap to copy · Drop it in your group chat"}</div><div style={{display:"flex",alignItems:"center",gap:8,marginTop:6}}>{clubAvatarCount>0&&<span className="rk-mini-avatars">{Array.from({length:clubAvatarCount}).map((_,i)=><span key={i} className="rk-mini-avatar" style={i%2?{background:C.jade+"44"}:undefined}/>)}</span>}<span style={{fontSize:10.5,color:C.mut,fontWeight:700}}>{clubActivityText}</span></div></div>
           <span style={{fontSize:18,color:C.gold}}>›</span>
         </button>
         <button onClick={showScorecard} className="rk-home-improve-card" style={{width:"100%",borderRadius:14,padding:"13px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left",position:"relative"}}>
           <div className="rk-home-improve-icon" style={{width:39,height:39,borderRadius:12,background:C.jade+"13",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>🎓</div>
-          <div style={{flex:1,position:"relative",zIndex:1}}><div style={{fontFamily:F.d,fontSize:19,fontWeight:900,color:C.ink,lineHeight:1.15,letterSpacing:-.45}}>Improve Your Game</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Coach view · Better reads · Next rack</div></div>
+          <div style={{flex:1,position:"relative",zIndex:1}}><div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.12,letterSpacing:-.35}}>Improve Your Game</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Coach view · Better reads · Next rack</div></div>
           <span style={{fontSize:18,color:C.gold,position:"relative",zIndex:1}}>›</span>
         </button>
       </div>
@@ -15230,9 +15231,9 @@ function HandRenderer({hand, defaultOpen=false}){
 .rk-room-live-v6-title,
 .rk-share-card div[style*="Challenge Your Club"],
 .rk-home-improve-card div[style*="Improve Your Game"]{
-  font-size:15px!important;
+  font-size:14px!important;
   line-height:1.08!important;
-  letter-spacing:-.28px!important;
+  letter-spacing:-.25px!important;
 }
 .rk-warmup-v6-title{
   margin-bottom:5px!important;
@@ -15265,7 +15266,7 @@ function HandRenderer({hand, defaultOpen=false}){
   .rk-room-live-v6-title,
   .rk-share-card div[style*="Challenge Your Club"],
   .rk-home-improve-card div[style*="Improve Your Game"]{
-    font-size:14px!important;
+    font-size:13px!important;
     line-height:1.1!important;
   }
   .rk-warmup-v6-copy{
