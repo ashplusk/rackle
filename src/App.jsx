@@ -7675,6 +7675,217 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   .rk-room-score{font-size:34px!important}
   .rk-quiet-score,.rk-room-row-score{font-size:23px!important}
 }
+
+
+/* ─── vNext: style pill spacing + leaderboard/readable table notes ─────── */
+.rk-home-scorecard-v42-style-next,
+.rk-home-scorecard-v41-style.rk-home-scorecard-v42-style-next{
+  margin-left:12px!important;
+  transform:none!important;
+}
+@media(max-width:390px){
+  .rk-home-scorecard-v42-style-next,
+  .rk-home-scorecard-v41-style.rk-home-scorecard-v42-style-next{
+    margin-left:10px!important;
+    transform:none!important;
+  }
+}
+
+/* Style pill should feel clickable later, without changing behavior yet. */
+.rk-home-scorecard-v41-style{
+  cursor:help!important;
+}
+
+/* Leaderboard leader cards: stop gold/white title text on light cards. */
+.rk-quiet-leader > div:nth-child(2) > div:first-child,
+.rk-room-leader div[style*="Today’s"],
+.rk-room-leader div[style*="Club table"],
+.rk-room-leader div[style*="leader"]{
+  color:#1A1410!important;
+  opacity:.82!important;
+  text-shadow:none!important;
+}
+.rk-quiet-leader > div:nth-child(2) > div:nth-child(2),
+.rk-room-leader-name{
+  color:#1A1410!important;
+}
+.rk-quiet-leader > div:nth-child(2) > div:nth-child(3),
+.rk-room-leader-sub{
+  color:#6B6157!important;
+}
+.rk-quiet-leader > div:last-child,
+.rk-room-score{
+  color:#A07828!important;
+}
+
+/* Leaderboard page polish: more like a real leaderboard board. */
+.rk-room-hero{
+  border-radius:30px!important;
+  padding:24px 20px 22px!important;
+  box-shadow:0 18px 44px rgba(6,43,24,.20),inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+.rk-room-title{
+  letter-spacing:-.75px!important;
+  line-height:1.03!important;
+}
+.rk-room-copy{
+  line-height:1.62!important;
+  max-width:35ch!important;
+}
+.rk-room-metric{
+  border-radius:19px!important;
+  padding:14px 10px!important;
+}
+.rk-quiet-leader,
+.rk-room-leader{
+  border-radius:25px!important;
+  padding:17px!important;
+  align-items:center!important;
+  background:
+    radial-gradient(circle at 94% 0%,rgba(243,212,107,.12),transparent 32%),
+    linear-gradient(145deg,#FFFDF8 0%,#F4EBDD 100%)!important;
+  border:1px solid rgba(160,120,40,.18)!important;
+}
+.rk-room-rank-badge,
+.rk-quiet-badge{
+  width:48px!important;
+  height:48px!important;
+  border-radius:17px!important;
+  background:linear-gradient(145deg,#FFF3B8,#E9C65C)!important;
+  border:1px solid rgba(160,120,40,.26)!important;
+  color:#1A1410!important;
+}
+.rk-room-row-list,
+.rk-quiet-row-list{
+  gap:10px!important;
+}
+.rk-room-row,
+.rk-quiet-row{
+  min-height:62px!important;
+  border-radius:20px!important;
+  padding:13px 14px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;
+  border:1px solid rgba(26,20,16,.07)!important;
+  box-shadow:0 5px 18px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-room-row-me,
+.rk-quiet-row-you{
+  background:linear-gradient(145deg,#F2FBF6,#FFFDF8)!important;
+  border-color:rgba(23,107,66,.18)!important;
+}
+.rk-room-row-rank,
+.rk-quiet-rank{
+  width:36px!important;
+  height:36px!important;
+  border-radius:14px!important;
+}
+.rk-room-row-top,
+.rk-quiet-rank-top{
+  background:linear-gradient(145deg,#FFF3B8,#E9C65C)!important;
+  color:#1A1410!important;
+  border:1px solid rgba(160,120,40,.25)!important;
+}
+.rk-room-row-name,
+.rk-quiet-name{
+  font-size:16px!important;
+  line-height:1.12!important;
+}
+.rk-room-row-sub,
+.rk-quiet-sub{
+  font-size:11.5px!important;
+  line-height:1.42!important;
+}
+.rk-room-row-score,
+.rk-quiet-score{
+  font-size:27px!important;
+}
+
+/* Table context replaces vague dot notes. */
+.rk-room-activity-v40{
+  border-radius:25px!important;
+  padding:16px!important;
+  background:
+    radial-gradient(circle at 92% 10%,rgba(23,107,66,.08),transparent 31%),
+    linear-gradient(145deg,#FFFDF8,#F5EFE5)!important;
+  border:1px solid rgba(160,120,40,.13)!important;
+  box-shadow:0 10px 28px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-room-activity-v40:after{
+  content:'context'!important;
+  color:rgba(160,120,40,.065)!important;
+  font-size:28px!important;
+}
+.rk-room-activity-v40-head{
+  align-items:center!important;
+  gap:12px!important;
+  margin-bottom:14px!important;
+}
+.rk-room-activity-v40-icon{
+  width:38px!important;
+  height:38px!important;
+  border-radius:15px!important;
+  background:linear-gradient(145deg,#176B42,#0F5432)!important;
+  color:#fff!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:18px!important;
+  font-weight:950!important;
+  line-height:1!important;
+}
+.rk-room-activity-title{
+  color:#1A1410!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:18px!important;
+  line-height:1.08!important;
+  letter-spacing:-.35px!important;
+  text-transform:none!important;
+  margin-bottom:4px!important;
+}
+.rk-room-activity-v40-head p{
+  color:#6B6157!important;
+  max-width:31ch!important;
+  line-height:1.5!important;
+}
+.rk-room-feed-v40{
+  gap:9px!important;
+}
+.rk-room-feed-item-v40{
+  grid-template-columns:28px minmax(0,1fr)!important;
+  align-items:center!important;
+  min-height:48px!important;
+  padding:10px 12px!important;
+  border-radius:18px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.06)!important;
+}
+.rk-room-feed-item-v40 .rk-room-feed-dot{
+  width:22px!important;
+  height:22px!important;
+  border-radius:10px!important;
+  background:rgba(23,107,66,.08)!important;
+  box-shadow:none!important;
+  position:relative!important;
+}
+.rk-room-feed-item-v40 .rk-room-feed-dot:after{
+  content:'›';
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#176B42;
+  font-size:18px;
+  font-weight:950;
+  line-height:1;
+}
+.rk-room-feed-item-v40 span:last-child{
+  color:#4F4942!important;
+  line-height:1.48!important;
+}
+@media(max-width:390px){
+  .rk-room-leader-name{font-size:19px!important}
+  .rk-room-row-score,.rk-quiet-score{font-size:23px!important}
+  .rk-room-feed-item-v40{grid-template-columns:26px minmax(0,1fr)!important}
+}
 `;
 
 const S={
@@ -17106,10 +17317,10 @@ function RoomActivity({items=[]}){
   const cleanItems=(items&&items.length?items:["First score opens the room.","Post once, then see who you’re chasing.","The board resets at midnight."]).slice(0,4);
   return <section className="rk-room-activity rk-room-activity-v40" aria-label="Live table notes">
     <div className="rk-room-activity-v40-head">
-      <span className="rk-room-activity-v40-icon" aria-hidden="true">•</span>
+      <span className="rk-room-activity-v40-icon" aria-hidden="true">i</span>
       <div>
-        <div className="rk-room-activity-title">Live table notes</div>
-        <p>Small signals from today’s room.</p>
+        <div className="rk-room-activity-title">Table context</div>
+        <p>Quick read on who posted, who leads, and what changed in the room.</p>
       </div>
     </div>
     <div className="rk-room-feed rk-room-feed-v40">
