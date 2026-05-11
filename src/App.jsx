@@ -7295,6 +7295,50 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
 .rk-home-scorecard-v41-share div:nth-child(2){flex:1;min-width:0}.rk-home-scorecard-v41-share strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:15.5px;line-height:1.08;font-weight:950;color:#1A1410}.rk-home-scorecard-v41-share span{display:block;font-size:11.5px;line-height:1.35;color:#6B6157;font-weight:800;margin-top:3px}.rk-home-scorecard-v41-share small{display:block;font-size:10.3px;line-height:1.3;color:rgba(26,20,16,.42);font-weight:850;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rk-home-scorecard-v41-share b{color:#176B42;font-size:17px}
 .rk-home-scorecard-v41-full{width:100%;appearance:none;border:1px solid rgba(23,107,66,.14);border-radius:16px;background:linear-gradient(180deg,#F8F1E4,#EDE2CF);color:#176B42;padding:13px 12px;font-family:'Fraunces',Georgia,serif;font-size:13.5px;font-weight:950;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.72)}
 @media(max-width:390px){.rk-home-scorecard-v41-main{padding:28px 20px 20px}.rk-home-scorecard-v41-score{font-size:78px}.rk-home-scorecard-v41-title{font-size:27px}.rk-home-scorecard-v41-actions{gap:8px}.rk-home-scorecard-v41-actions button{padding:12px 10px;border-radius:16px}.rk-home-scorecard-v41-actions strong{font-size:22px}.rk-home-scorecard-v41-kicker{letter-spacing:2px}}
+
+/* ─── v43: score tick animation + mobile title spacing tune ─────────────── */
+.rk-score-tick-up-v43{
+  animation:rkCountLift .34s ease-out both;
+  font-variant-numeric:tabular-nums;
+}
+.rk-room-live-v6-title,
+.rk-room-live-v19 .rk-room-live-v6-title{
+  font-size:calc(1em - 2px)!important;
+}
+@media(max-width:600px){
+  .rk-room-live-v6-title,
+  .rk-room-live-v19 .rk-room-live-v6-title{
+    font-size:23px!important;
+    line-height:1.03!important;
+    letter-spacing:-.62px!important;
+    white-space:nowrap!important;
+  }
+}
+@media(max-width:390px){
+  .rk-room-live-v6-title,
+  .rk-room-live-v19 .rk-room-live-v6-title{
+    font-size:22px!important;
+  }
+}
+@media(max-width:340px){
+  .rk-room-live-v6-title,
+  .rk-room-live-v19 .rk-room-live-v6-title{
+    font-size:20px!important;
+  }
+}
+.rk-home-scorecard-v41-title{
+  margin-bottom:18px!important;
+  line-height:1.08!important;
+}
+.rk-home-scorecard-v41-style{
+  margin-top:0!important;
+  margin-bottom:17px!important;
+}
+.rk-home-scorecard-v41-copy{
+  white-space:pre-line!important;
+  line-height:1.62!important;
+}
+
 `;
 
 const S={
@@ -14245,6 +14289,25 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   },[]);
 
   const score=Number(iq.totalScore||0);
+  const [animatedScore,setAnimatedScore]=useState(0);
+  useEffect(()=>{
+    const target=Number(score||0);
+    setAnimatedScore(0);
+    if(!target)return;
+    const duration=900;
+    const steps=45;
+    const interval=Math.max(12,Math.round(duration/steps));
+    let step=0;
+    const timer=setInterval(()=>{
+      step+=1;
+      const progress=Math.min(step/steps,1);
+      const eased=1-Math.pow(1-progress,3);
+      const next=Math.round(eased*target);
+      setAnimatedScore(next);
+      if(progress>=1){clearInterval(timer);setAnimatedScore(target);}
+    },interval);
+    return()=>clearInterval(timer);
+  },[score]);
   const time=Number(resultTime||iq.timeSecs||iq.time_secs||iq.totalTime||iq.time||0);
   const timeLabel=time?fT(Math.round(time)):"—";
   const clubCode=getClubCode();
@@ -14334,7 +14397,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <div className="rk-scorecard-stamp-v26">R</div>
         <div style={{position:"relative",zIndex:2,textAlign:"center"}}>
           <div style={{fontSize:10,letterSpacing:2.8,textTransform:"uppercase",fontWeight:950,color:"rgba(255,255,255,.52)",marginBottom:10}}>Rackle IQ</div>
-          <div style={{fontFamily:F.d,fontSize:88,lineHeight:.86,fontWeight:950,letterSpacing:-4,color:"#F3D46B",marginBottom:14}}>{score}</div>
+          <div className="rk-score-tick-up-v43" style={{fontFamily:F.d,fontSize:88,lineHeight:.86,fontWeight:950,letterSpacing:-4,color:"#F3D46B",marginBottom:14}}>{animatedScore}</div>
           <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:7,border:`1px solid rgba(243,212,107,.38)`,background:"rgba(255,255,255,.08)",borderRadius:999,padding:"7px 14px",color:"#F3D46B",fontSize:12,fontWeight:950,marginBottom:14}}>
             <span>{scoreLabel}</span>
             <span style={{opacity:.5}}>·</span>
