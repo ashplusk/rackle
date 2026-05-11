@@ -5160,6 +5160,144 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-room-live-v17-actions button{font-size:12.5px!important;min-height:48px!important}
 }
 
+/* ─── v28: scorecard screenshot polish + standings button refinement ───── */
+.rk-room-live-v19 .rk-room-live-v6-copy{
+  line-height:1.58!important;
+  margin-top:8px!important;
+  max-width:28ch!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-head-copy strong{
+  line-height:1.18!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-head-copy span{
+  line-height:1.42!important;
+  margin-top:2px!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-row{
+  min-height:38px!important;
+  padding-top:9px!important;
+  padding-bottom:9px!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-row span,
+.rk-room-live-v19 .rk-room-live-v17-row strong{
+  line-height:1.22!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-actions{
+  margin-top:17px!important;
+  gap:11px!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-actions button:first-child{
+  position:relative!important;
+  overflow:hidden!important;
+  color:#2B1A06!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.35)!important;
+  border:1px solid rgba(255,246,190,.92)!important;
+  background:linear-gradient(135deg,#FFF8CF 0%,#F3D46B 34%,#D2A33B 68%,#8F6820 100%)!important;
+  box-shadow:0 15px 30px rgba(243,212,107,.30),0 0 0 1px rgba(255,255,255,.10),inset 0 1px 0 rgba(255,255,255,.70),inset 0 -2px 0 rgba(70,45,8,.18)!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-actions button:first-child:after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:linear-gradient(110deg,transparent 0%,rgba(255,255,255,.38) 42%,transparent 62%);
+  transform:translateX(-120%);
+  animation:rkGoldSweep 5.2s ease-in-out infinite;
+  pointer-events:none;
+}
+.rk-room-live-v19 .rk-room-live-v17-actions button:last-child{
+  color:rgba(255,255,255,.92)!important;
+  border:1px solid rgba(255,255,255,.24)!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.18),rgba(255,255,255,.065))!important;
+  backdrop-filter:blur(8px)!important;
+  box-shadow:0 12px 24px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.22),inset 0 0 0 1px rgba(243,212,107,.055)!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-actions button:hover{
+  transform:translateY(-1px)!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-actions button:active{
+  transform:scale(.985)!important;
+}
+
+.rk-learn-home-v19 .rk-learn-home-v18-title,
+.rk-learn-home-v18-title{
+  font-size:21px!important;
+  line-height:1.03!important;
+  letter-spacing:-.65px!important;
+}
+
+.rk-scorecard-premium-v26{
+  padding-top:4px!important;
+}
+.rk-scorecard-premium-v26 .rk-scorecard-title-v26{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+  padding:7px 13px!important;
+  border-radius:999px!important;
+  background:linear-gradient(145deg,rgba(243,212,107,.18),rgba(255,255,255,.08))!important;
+  border:1px solid rgba(243,212,107,.22)!important;
+  color:rgba(243,212,107,.92)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+.rk-scorecard-premium-v26 .rk-scorecard-heading-v26{
+  max-width:9ch!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  font-size:31px!important;
+  line-height:.98!important;
+  letter-spacing:-1.1px!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero{
+  border-radius:32px!important;
+  padding-top:34px!important;
+  padding-bottom:28px!important;
+  background:
+    radial-gradient(circle at 50% 5%,rgba(243,212,107,.18),transparent 34%),
+    radial-gradient(circle at 10% 0%,rgba(255,255,255,.08),transparent 28%),
+    linear-gradient(155deg,#041F12 0%,#07331E 45%,#0D4A2E 78%,#03170D 100%)!important;
+  border:1px solid rgba(243,212,107,.22)!important;
+  box-shadow:0 22px 52px rgba(6,43,24,.26),0 0 0 1px rgba(255,255,255,.045),inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero:before{
+  opacity:.09!important;
+  font-size:138px!important;
+  right:-18px!important;
+  bottom:-34px!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-score{
+  filter:drop-shadow(0 8px 18px rgba(0,0,0,.18))!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-style-pill{
+  margin-top:4px!important;
+  margin-bottom:18px!important;
+  background:rgba(255,255,255,.10)!important;
+  border-color:rgba(243,212,107,.46)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 8px 18px rgba(0,0,0,.10)!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-summary{
+  max-width:29ch!important;
+  line-height:1.62!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20{
+  border-radius:28px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F4EBDD)!important;
+  border:1px solid rgba(160,120,40,.18)!important;
+  box-shadow:0 16px 36px rgba(26,20,16,.06),inset 0 1px 0 rgba(255,255,255,.86)!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10,
+.rk-scorecard-premium-v26 .rk-score-rack-card,
+.rk-scorecard-premium-v26 .rk-score-club-room-v20{
+  border-radius:26px!important;
+  box-shadow:0 12px 30px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+@media(max-width:390px){
+  .rk-learn-home-v19 .rk-learn-home-v18-title,.rk-learn-home-v18-title{font-size:20px!important}
+  .rk-scorecard-premium-v26 .rk-scorecard-heading-v26{font-size:29px!important}
+  .rk-room-live-v19 .rk-room-live-v17-actions{grid-template-columns:1fr!important}
+}
+
+
 `;
 
 const S={
@@ -15811,7 +15949,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </button>
 
         <div className="rk-room-live-v17-actions">
-          <button type="button" onClick={openBoard}>{activeClubCode?`${club?.name||"Club"} standings →`:"Open standings →"}</button>
+          <button type="button" onClick={openBoard}>{activeClubCode?"View Club Standings":"Open standings →"}</button>
           <button type="button" onClick={secondaryAction}>{secondaryLabel}</button>
         </div>
       </section>
