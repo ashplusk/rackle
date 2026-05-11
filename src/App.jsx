@@ -14678,6 +14678,136 @@ function rkCoachingInsight(commitmentState,shapeQuality,struct,top){
   return `Watch one more turn before forcing an idea.`;
 }
 
+
+function rkExpertTileMatchesSection(t,secId){
+  if(!t)return false;
+  if(t.t==="j")return secId!=="sp";
+  if(t.t==="f")return ["2026","2468","369","13579","aln"].includes(secId);
+  if(t.t==="w")return secId==="wd"||secId==="13579"||secId==="2468"||secId==="369";
+  if(t.t==="d")return ["2026","2468","369","13579","wd","aln"].includes(secId);
+  if(t.t!=="s")return false;
+  const n=t.n;
+  if(secId==="2026")return n===2||n===6;
+  if(secId==="2468")return n%2===0;
+  if(secId==="369")return [3,6,9].includes(n);
+  if(secId==="13579")return n%2===1;
+  if(secId==="cr")return true;
+  if(secId==="aln")return true;
+  if(secId==="q")return true;
+  return false;
+}
+function rkExpertRoundLabel(p={}){
+  return p.label||p.roundName||p.name||`pass ${p.round||""}`.trim()||"a pass";
+}
+function rkExpertPassRegretAnalysis({passedTilesByRound=[],sectionId,topSection,struct}){
+  const topId=topSection?.id||sectionId;
+  const out=(passedTilesByRound||[]).flatMap((p,roundIndex)=>(p.out||[]).map(t=>({t,p,roundIndex})));
+  const important=out.filter(x=>rkExpertTileMatchesSection(x.t,topId));
+  const passedLabels=important.map(x=>tLabel(x.t));
+  const byTile={};
+  important.forEach(x=>{const k=tLabel(x.t);byTile[k]=(byTile[k]||0)+1;});
+  const regret=[];
+  Object.entries(byTile).sort((a,b)=>b[1]-a[1]).slice(0,3).forEach(([label,count])=>{
+    const first=important.find(x=>tLabel(x.t)===label);
+    if(count>=2)regret.push(`You passed ${count} ${label} tiles during ${rkExpertRoundLabel(first?.p)}. That made the ${topSection?.name||"best"} lane harder to accelerate.`);
+    else regret.push(`You passed ${label} during ${rkExpertRoundLabel(first?.p)}. It later mattered for the cleanest lane.`);
+  });
+  const weakPassed=out.filter(x=>!rkExpertTileMatchesSection(x.t,topId)&&x.t?.t!=="j");
+  const disciplineWin=weakPassed.length>=5&&important.length===0;
+  const correct=[];
+  if(disciplineWin)correct.push(`Your passes cleared unrelated tiles without cutting into the best lane.`);
+  if(weakPassed.length>=3&&important.length<=1)correct.push(`You reduced rack noise well. That helped the final shape stay readable.`);
+  let penalty=Math.min(24,important.length*5+Math.max(0,Object.values(byTile).filter(c=>c>=2).length*4));
+  if(disciplineWin)penalty=Math.max(0,penalty-5);
+  const score=rkClamp(78-penalty+(disciplineWin?8:0),22,94);
+  return{
+    score,
+    penalty,
+    passedImportant:passedLabels.slice(0,8),
+    regret:regret.slice(0,3),
+    correct:correct.slice(0,2),
+    summary:regret[0]||correct[0]||`Your Charleston did not create an obvious pass regret against the best lane.`
+  };
+}
+function rkExpertDeadnessRisk({struct,topSection,liveDirections}){
+  const topId=topSection?.id;
+  const maxGroup=rkMaxNaturalGroup(struct);
+  const bestSuit=struct.suitEntries?.[0]?.[1]||0;
+  const secondSuit=struct.suitEntries?.[1]?.[1]||0;
+  const thirdSuit=struct.suitEntries?.[2]?.[1]||0;
+  let risk=18;
+  const reasons=[];
+  if(struct.isolated.length>=5){risk+=24;reasons.push(`too many isolated tiles stayed in the rack`);}
+  else if(struct.isolated.length>=3){risk+=12;reasons.push(`several singles still needed support`);}
+  if(struct.pairs.length<2&&maxGroup<3){risk+=14;reasons.push(`not enough duplication yet`);}
+  if(bestSuit<5&&secondSuit>=3&&thirdSuit>=2){risk+=12;reasons.push(`the suits were still split`);}
+  if(struct.honorTotal>=4&&struct.groupedHonor===0){risk+=16;reasons.push(`loose honors looked tempting but were thin`);}
+  if(topId==="wd"&&struct.groupedHonor<2){risk+=12;reasons.push(`winds and dragons still needed more compression`);}
+  if(topId==="aln"&&Number(struct.bestSameNumber?.[1]||0)<3){risk+=12;reasons.push(`Like Numbers lacked a strong number anchor`);}
+  if(topId==="q"&&struct.jokers<2){risk+=18;reasons.push(`Quints was short on joker help`);}
+  if(topId==="sp"&&struct.jokers>0){risk+=18;reasons.push(`jokers cannot help Singles and Pairs`);}
+  if((liveDirections||[]).length>=4){risk+=9;reasons.push(`too many directions were only half-alive`);}
+  return{score:rkClamp(risk,0,100),reasons:reasons.slice(0,4)};
+}
+function rkExpertScoreBand(score){
+  if(score<20)return "Dead rack";
+  if(score<40)return "Weak rack";
+  if(score<55)return "Playable, still fragile";
+  if(score<70)return "Strong Charleston";
+  if(score<85)return "Excellent rack";
+  return "Monster Charleston";
+}
+function rkExpertCharlestonCalibration({struct,sectionReads=[],liveDirections=[],shapeScore=0,tileEfficiency=0,commitmentClarity=0,flexibility=0,growthPotential=0,momentumStrength=0,passedTilesByRound=[],sectionId}){
+  const top=sectionReads[0]||null;
+  const second=sectionReads[1]||null;
+  const topScore=top?.score||0;
+  const gap=top&&second?Math.max(0,top.score-second.score):topScore;
+  const maxGroup=rkMaxNaturalGroup(struct);
+  const bestSuit=struct.suitEntries?.[0]?.[1]||0;
+  const groupedDepth=struct.pairs.length*7+struct.pungs.length*13+struct.kongs.length*18+(struct.bestWindow?.depth||0)*5+(bestSuit>=6?10:bestSuit>=5?6:0);
+  const compression=rkClamp(18+groupedDepth+Math.min(maxGroup*6,22)-struct.isolated.length*7-(struct.honorTotal>=3&&struct.groupedHonor===0?10:0));
+  const acceleration=rkClamp(16+struct.pairs.length*8+struct.pungs.length*13+struct.kongs.length*18+(struct.bestWindow?.depth||0)*4+struct.jokers*5-struct.isolated.length*5-(top?.id==="sp"&&struct.jokers?18:0));
+  const viableNeeds=(top?.needs||[]).length;
+  const viability=rkClamp(topScore*.70+(top?.coverage||0)*.22+gap*.35-viableNeeds*5-(top?.status==="thin"?18:0)-(top?.status==="technically possible"?8:0));
+  const passRead=rkExpertPassRegretAnalysis({passedTilesByRound,sectionId,topSection:top,struct});
+  const deadness=rkExpertDeadnessRisk({struct,topSection:top,liveDirections});
+  const controlledFlex=rkClamp(35+Math.min((liveDirections||[]).length,3)*7+gap*.35+rkCoreOverlap(struct,sectionReads.filter(s=>s.score>=40))*0.45-(liveDirections.length>=4?18:0)-struct.isolated.length*4);
+  const commitment=rkClamp(commitmentClarity*.72+gap*.35+(compression>=62?8:0)-(liveDirections.length>=4?10:0));
+  let raw=viability*.26+compression*.22+acceleration*.18+passRead.score*.14+commitment*.12+controlledFlex*.08-deadness.score*.22;
+  // Conservative calibration. Most real racks should land in the 42-67 range.
+  let score=45+(raw-50)*0.72;
+  if(topScore<38)score=Math.min(score,48);
+  if(topScore<48)score=Math.min(score,55);
+  if(deadness.score>=58)score=Math.min(score,60);
+  if(deadness.score>=70)score=Math.min(score,52);
+  if(liveDirections.length>=4&&gap<10)score=Math.min(score,63);
+  if(compression<48&&acceleration<52)score=Math.min(score,66);
+  if(struct.honorTotal>=7&&struct.groupedHonor<2&&top?.id==="wd")score=Math.min(score,66);
+  if(top?.id==="wd"&&struct.groupedHonor<2)score=Math.min(score,68);
+  if(top?.id==="aln"&&Number(struct.bestSameNumber?.[1]||0)<3)score=Math.min(score,61);
+  if(top?.id==="q"&&struct.jokers<2)score=Math.min(score,50);
+  if(top?.id==="sp"&&struct.jokers>0)score=Math.min(score,48);
+  if(score>78&&(compression<70||acceleration<68||viability<70||deadness.score>34))score=78;
+  if(score>85&&(compression<82||acceleration<78||viability<78||deadness.score>22||passRead.penalty>4))score=84;
+  if(score>92)score=92;
+  score=Math.max(12,Math.min(96,Math.round(score)));
+  const band=rkExpertScoreBand(score);
+  const factors={viability:Math.round(viability),efficiency:Math.round(compression),acceleration:Math.round(acceleration),charlestonDiscipline:Math.round(passRead.score),deadnessRisk:Math.round(deadness.score),commitmentQuality:Math.round(commitment),controlledFlexibility:Math.round(controlledFlex)};
+  const summary=score>=70
+    ?`This rack was dangerous because it was compressing, not just flexible.`
+    :score>=55
+      ?`This rack had a real lane, but it still needed cleaner acceleration before it became premium.`
+      :score>=40
+        ?`This rack was playable, but fragile. It had clues without enough compression yet.`
+        :`This rack needed a reset. Too many tiles were still disconnected after the Charleston.`;
+  const expertNotes=[];
+  if(deadness.reasons[0])expertNotes.push(`Risk: ${deadness.reasons[0]}.`);
+  if(passRead.regret[0])expertNotes.push(passRead.regret[0]);
+  else if(passRead.correct[0])expertNotes.push(passRead.correct[0]);
+  if(top?.needs?.[0])expertNotes.push(`Best lane still needed ${top.needs[0]}.`);
+  return{score,band,factors,summary,expertNotes:expertNotes.slice(0,3),passReview:passRead,deadness,topSection:top?.name||null,topSectionId:top?.id||null};
+}
+
 function rkEvaluateCharlestonEngine({finalRack,startingRack=[],passedTilesByRound=[],sectionId,chosenHand,allSections=[]}){
   const rack=finalRack||[];
   const struct=rkAnalyzeTileStructure(rack);
@@ -14696,7 +14826,10 @@ function rkEvaluateCharlestonEngine({finalRack,startingRack=[],passedTilesByRoun
   const growthPotential=struct.growthPotential;
   const momentumStrength=rkClamp((liveDirections[0]?.score||0)*.36+shapeScore*.24+overlap*.55+(struct.bestWindow?.depth||0)*4+struct.pairs.length*4+struct.pungs.length*8-struct.isolated.length*4);
   const commitmentTiming=rkClamp(commitmentClarity*.70+(liveDirections.length>=3?10:0)-(struct.isolated.length>=5?12:0));
-  const rackleIQScore=rkClamp(shapeScore*.35+tileEfficiency*.25+momentumStrength*.20+commitmentTiming*.10+flexibility*.10);
+  const expertRead=rkExpertCharlestonCalibration({
+    struct,sectionReads,liveDirections,shapeScore,tileEfficiency,commitmentClarity,flexibility,growthPotential,momentumStrength,passedTilesByRound,sectionId
+  });
+  const rackleIQScore=expertRead?.score??rkClamp(shapeScore*.35+tileEfficiency*.25+momentumStrength*.20+commitmentTiming*.10+flexibility*.10);
   const commitmentState=rkCommitmentState(rackleIQScore,shapeScore,commitmentClarity,top,second,liveDirections,struct);
   const rackPersonality=rkRackPersonality(struct,shapeQuality,commitmentState,liveDirections,sectionReads);
   const rackPersonalityCopy=rkRackPersonalityCopy(rackPersonality);
@@ -14704,13 +14837,13 @@ function rkEvaluateCharlestonEngine({finalRack,startingRack=[],passedTilesByRoun
   const coreSignal=rkCoreSignal(struct);
   const whyTheRackWorked=rkWhyShapeWorked(struct,liveDirections,shapeQuality);
   const strategicTension=rkStrategicTension(struct,top,liveDirections);
-  const coachingInsight=rkCoachingInsight(commitmentState,shapeQuality,struct,top);
+  const coachingInsight=expertRead?.summary||rkCoachingInsight(commitmentState,shapeQuality,struct,top);
 
   const bestDirection=liveDirections[0]?.label||top?.name||"Still watching";
-  const directionScore=rkClamp(commitmentClarity*.4,0,40);
-  const tileStrengthScore=rkClamp(tileEfficiency*.25,0,25);
-  const passQualityScore=rkClamp((shapeScore*.55+flexibility*.45)*.25,0,25);
-  const timingScore=rkClamp(growthPotential*.10,0,10);
+  const directionScore=rkClamp((expertRead?.factors?.viability||commitmentClarity)*.4,0,40);
+  const tileStrengthScore=rkClamp((expertRead?.factors?.efficiency||tileEfficiency)*.25,0,25);
+  const passQualityScore=rkClamp((expertRead?.factors?.charlestonDiscipline||((shapeScore*.55+flexibility*.45)))*.25,0,25);
+  const timingScore=rkClamp((expertRead?.factors?.acceleration||growthPotential)*.10,0,10);
   const dominantSuit=struct.strongestSuit?RK_SUIT_NAMES[struct.strongestSuit]:"No clear suit";
 
   const bestPaths=liveDirections.slice(0,4).map(d=>({
@@ -14728,6 +14861,11 @@ function rkEvaluateCharlestonEngine({finalRack,startingRack=[],passedTilesByRoun
     rackPersonality,
     rackPersonalityCopy,
     rackleIQScore,
+    expertRead,
+    expertFactors:expertRead?.factors,
+    passReview:expertRead?.passReview,
+    expertNotes:expertRead?.expertNotes,
+    scoreBand:expertRead?.band,
     shapeQuality,
     commitmentState,
     commitmentStatus:commitmentState,
@@ -14758,6 +14896,8 @@ function rkHumanTableCopy(text=""){
     .replace(/based on your tile distribution/gi,"from the tiles you kept")
     .replace(/your passes suggest/gi,"your passes suggest")
     .replace(/AI/gi,"Rackle")
+    .replace(/analyzer/gi,"table read")
+    .replace(/analysis/gi,"rack review")
     .replace(/clearest lane/gi,"clearest lane")
     .replace(/strongly leaning/gi,"strongly leaning")
     .replace(/you should have/gi,"next time, try to")
@@ -14782,6 +14922,7 @@ function StrategicCharlestonReadCard({iq}){
   const core=rkHumanTableCopy(r.coreSignal||"Look for the clearest matching group before you commit.");
   const why=rkHumanTableCopy((r.whyTheRackWorked||r.whyItWorks||[]).filter(Boolean)[0]||core);
   const tension=rkHumanTableCopy((r.strategicTension||r.dangerAreas||[]).filter(Boolean)[0]||"Do not chase a hand that needs too many perfect draws.");
+  const passLine=rkHumanTableCopy(r.passReview?.regret?.[0]||r.passReview?.correct?.[0]||r.passReview?.summary||"No major pass regret showed up against the cleanest lane.");
   return(
     <div className="rk-intuition-v9">
       <div className="rk-intuition-v9-head">
@@ -14800,6 +14941,7 @@ function StrategicCharlestonReadCard({iq}){
         <div className="rk-intuition-v9-mini"><span>Shape</span><strong>{shape}</strong></div>
         <div className="rk-intuition-v9-mini"><span>Personality</span><strong>{personality}</strong></div>
         <div className="rk-intuition-v9-mini"><span>Why it worked</span><strong>{why}</strong></div>
+        <div className="rk-intuition-v9-mini"><span>Pass review</span><strong>{passLine}</strong></div>
         <div className="rk-intuition-v9-mini"><span>Watch out</span><strong>{tension}</strong></div>
       </div>
     </div>
@@ -14938,7 +15080,7 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
     tileStrengthScore=strategicRead.componentScores.tileStrengthScore;
     passQualityScore=Math.max(0,Math.min(25,Math.round((passQualityScore*0.45)+(strategicRead.componentScores.passQualityScore*0.55))));
     timingScore=strategicRead.componentScores.timingScore;
-    directionExplanation=`${strategicRead.rackPersonality||strategicRead.commitmentStatus}: ${strategicRead.bestDirection}. ${strategicRead.whyItWorks?.[0]||"Whole-rack structure reviewed."}`;
+    directionExplanation=strategicRead.expertRead?.summary||`${strategicRead.rackPersonality||strategicRead.commitmentStatus}: ${strategicRead.bestDirection}. ${strategicRead.whyItWorks?.[0]||"Whole-rack structure reviewed."}`;
   }
 
   const totalScore=strategicRead?.rackleIQScore ?? Math.max(0,Math.min(100,directionScore+tileStrengthScore+passQualityScore+timingScore));
@@ -14983,6 +15125,10 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
     charlestonRuleOk:charlestonRuleAudit?.charlestonRuleOk!==false&&exactAudit?.charlestonRuleOk!==false,
     jokerRuleOk:charlestonRuleAudit?.jokerRuleOk!==false&&exactAudit?.jokerRuleOk!==false,
     strategicRead,
+    expertRead:strategicRead?.expertRead,
+    expertFactors:strategicRead?.expertFactors,
+    passReview:strategicRead?.passReview,
+    expertNotes:strategicRead?.expertNotes,
     commitmentStatus:strategicRead?.commitmentStatus,
     bestDirection:strategicRead?.bestDirection,
     liveSections:strategicRead?.liveSections,
