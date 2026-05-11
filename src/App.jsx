@@ -7680,13 +7680,13 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
 /* ─── vNext: style pill spacing + leaderboard/readable table notes ─────── */
 .rk-home-scorecard-v42-style-next,
 .rk-home-scorecard-v41-style.rk-home-scorecard-v42-style-next{
-  margin-left:12px!important;
+  margin-left:17px!important;
   transform:none!important;
 }
 @media(max-width:390px){
   .rk-home-scorecard-v42-style-next,
   .rk-home-scorecard-v41-style.rk-home-scorecard-v42-style-next{
-    margin-left:10px!important;
+    margin-left:15px!important;
     transform:none!important;
   }
 }
