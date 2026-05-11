@@ -9848,6 +9848,51 @@ html,body,#root{
   .rk-style-glossary-grid-v60{grid-template-columns:1fr}
   .rk-style-glossary-hero-v60 h1{font-size:25px}
 }
+
+
+/* ─── vNext: final mobile homepage spacing tune ─────────────────────────── */
+/* Live Club Standings: add breathing room between kicker and title */
+.rk-room-live-v19 .rk-room-live-v6-kicker{
+  margin-bottom:12px!important;
+  line-height:1.35!important;
+}
+.rk-room-live-v19 .rk-room-live-v6-title{
+  margin-top:0!important;
+  line-height:1.08!important;
+}
+
+/* Header: reduce gap between dynamic pill and Daily Rackle card */
+.rk-startup-hero-v42{
+  margin-bottom:4px!important;
+  padding-bottom:4px!important;
+}
+.rk-startup-pulse-pill-v42,
+.rk-startup-live-note-v34{
+  margin-bottom:2px!important;
+}
+.rk-startup-hero-v42 + .rk-daily-entry-v6,
+.rk-startup-hero-v42 + .rk-daily-entry-v20,
+.rk-startup-hero-v42 + section,
+.rk-startup-hero-v4 + .rk-daily-entry-v6,
+.rk-startup-hero-v4 + .rk-daily-entry-v20{
+  margin-top:6px!important;
+}
+
+/* Free Play Room: soften tile shadow while keeping premium tile feel */
+.rk-freeplay-v40-tile .rk-mahjong-tile,
+.rk-freeplay-v24-rack .rk-mahjong-tile,
+.rk-freeplay-v27 .rk-freeplay-v24-rack span,
+.rk-freeplay-v35-rack .rk-mahjong-tile{
+  box-shadow:0 3px 8px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.88)!important;
+}
+.rk-freeplay-v40-preview{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.74),0 4px 12px rgba(26,20,16,.025)!important;
+}
+
+@media(max-width:390px){
+  .rk-room-live-v19 .rk-room-live-v6-kicker{margin-bottom:10px!important;}
+  .rk-startup-hero-v42{margin-bottom:3px!important;padding-bottom:3px!important;}
+}
 `;
 
 const S={
