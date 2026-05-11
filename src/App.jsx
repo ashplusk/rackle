@@ -10080,6 +10080,375 @@ html,body,#root{
   .rk-email-title-v8{font-size:19px!important}
   .rk-home-scorecard-v41-kicker{font-size:8.5px!important;letter-spacing:1.9px!important}
 }
+
+/* ─── vFinal UX pass: centered scorecard, launch polish, page rhythm ───── */
+/* Homepage scorecard: hard-center score, label, style, title, and copy */
+.rk-home-scorecard-v41-main{
+  text-align:center!important;
+  padding-top:30px!important;
+  padding-bottom:24px!important;
+}
+.rk-home-scorecard-v41-kicker{
+  margin-left:auto!important;
+  margin-right:auto!important;
+  justify-content:center!important;
+  text-align:center!important;
+  width:max-content!important;
+  max-width:calc(100% - 26px)!important;
+}
+.rk-home-scorecard-v41-score-row{
+  display:block!important;
+  width:100%!important;
+  text-align:center!important;
+  margin:24px auto 0!important;
+}
+.rk-home-scorecard-v41-score-row>div{
+  display:block!important;
+  width:100%!important;
+  margin:0 auto!important;
+  text-align:center!important;
+}
+.rk-home-scorecard-v41-score{
+  display:block!important;
+  margin:0 auto!important;
+  text-align:center!important;
+  width:100%!important;
+  padding:0!important;
+  transform:none!important;
+  font-variant-numeric:tabular-nums!important;
+}
+.rk-home-scorecard-v41-score-label{
+  display:block!important;
+  margin:12px auto 0!important;
+  padding:0!important;
+  text-align:center!important;
+  transform:none!important;
+  letter-spacing:5px!important;
+  width:100%!important;
+}
+.rk-home-scorecard-v41-style,
+.rk-home-scorecard-v42-style-next,
+.rk-style-pill-clickable{
+  position:relative!important;
+  display:inline-flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  margin:20px auto 0!important;
+  padding:9px 21px!important;
+  transform:none!important;
+  left:auto!important;
+  right:auto!important;
+  gap:0!important;
+}
+.rk-home-scorecard-v41-style:before,
+.rk-home-scorecard-v41-style:after,
+.rk-home-scorecard-v42-style-next:before,
+.rk-home-scorecard-v42-style-next:after,
+.rk-style-pill-clickable:before,
+.rk-style-pill-clickable:after{
+  display:none!important;
+  content:none!important;
+}
+.rk-home-scorecard-v41-title{
+  margin-top:28px!important;
+  margin-bottom:12px!important;
+  text-align:center!important;
+  line-height:1.06!important;
+}
+.rk-home-scorecard-v41-copy{
+  text-align:center!important;
+  max-width:31ch!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  line-height:1.58!important;
+}
+.rk-home-scorecard-v41-actions{
+  margin-top:28px!important;
+}
+.rk-home-scorecard-v41-actions button{
+  text-align:left!important;
+}
+
+/* Header and first-card rhythm */
+.rk-startup-hero-v4,
+.rk-startup-hero-v42{
+  margin-bottom:12px!important;
+  padding-bottom:12px!important;
+}
+.rk-startup-subtitle-v4{
+  margin-bottom:13px!important;
+}
+.rk-startup-pulse-pill-v42,
+.rk-startup-live-note-v34{
+  margin-top:8px!important;
+  margin-bottom:14px!important;
+}
+.rk-startup-hero-v42 + section,
+.rk-startup-hero-v4 + section,
+.rk-startup-hero-v42 + .rk-daily-entry-v20,
+.rk-startup-hero-v4 + .rk-daily-entry-v20,
+.rk-startup-hero-v42 + .rk-home-scorecard-v41,
+.rk-startup-hero-v4 + .rk-home-scorecard-v41{
+  margin-top:8px!important;
+}
+
+/* Live Club Standings: make kicker/title breathe */
+.rk-room-live-v19 .rk-room-live-v6-kicker,
+.rk-room-live-v6-kicker{
+  margin-bottom:18px!important;
+  padding-bottom:2px!important;
+  line-height:1.4!important;
+}
+.rk-room-live-v19 .rk-room-live-v6-title,
+.rk-room-live-v6-title{
+  margin-top:2px!important;
+  margin-bottom:13px!important;
+  line-height:1.12!important;
+  white-space:nowrap!important;
+}
+.rk-room-live-v19 .rk-room-live-v6-copy,
+.rk-room-live-v6-copy{
+  line-height:1.62!important;
+  max-width:31ch!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-table{
+  margin-top:14px!important;
+}
+.rk-room-live-v17-row span,
+.rk-room-live-v17-row strong{
+  line-height:1.25!important;
+}
+
+/* Global spacing between homepage modules */
+.rk-home-section-lg,
+.rk-daily-entry-v20,
+.rk-tomorrow-card-v11,
+.rk-room-live-v6,
+.rk-freeplay-v24,
+.rk-learn-home-v8,
+.rk-email-home-v8,
+.rk-share-score-v6{
+  margin-bottom:26px!important;
+}
+.rk-freeplay-v24,
+.rk-learn-home-v8,
+.rk-email-home-v8,
+.rk-share-score-v6{
+  box-shadow:0 14px 38px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-learn-home-v8,
+.rk-learn-home-v12,
+.rk-learn-home-v18,
+.rk-learn-home-v19{
+  padding-top:22px!important;
+  padding-bottom:22px!important;
+}
+.rk-learn-home-title,
+.rk-learn-home-v18-title,
+.rk-freeplay-v24 h2,
+.rk-email-title-v8,
+.rk-room-live-v6-title{
+  text-wrap:balance!important;
+}
+.rk-learn-home-v18-title,
+.rk-freeplay-v24 h2,
+.rk-email-title-v8{
+  line-height:1.08!important;
+}
+
+/* Full daily scorecard page: clearer hierarchy, less color noise */
+.rk-scorecard-premium-v26,
+.rk-scorecard-premium-v26.rk-score-shell{
+  background:#F8F4EE!important;
+  background-image:none!important;
+}
+.rk-scorecard-premium-v26:before{
+  display:none!important;
+  content:none!important;
+}
+.rk-scorecard-premium-v26 .rk-scorecard-title-v26{
+  margin-left:auto!important;
+  margin-right:auto!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+.rk-scorecard-premium-v26 .rk-scorecard-heading-v26{
+  text-align:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  line-height:1.04!important;
+}
+.rk-scorecard-premium-v26 > div:first-child > div:last-child{
+  text-align:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  line-height:1.6!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero{
+  background:linear-gradient(155deg,#041F12 0%,#07331E 49%,#0D4A2E 82%,#03170D 100%)!important;
+  border:1px solid rgba(243,212,107,.25)!important;
+  box-shadow:0 20px 48px rgba(6,43,24,.22),inset 0 1px 0 rgba(255,255,255,.12)!important;
+  border-radius:31px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20,
+.rk-scorecard-premium-v26 .rk-score-share-v20,
+.rk-scorecard-premium-v26 .rk-score-rack-card,
+.rk-scorecard-premium-v26 .rk-daily-review-v10{
+  margin-top:18px!important;
+  margin-bottom:18px!important;
+  border-radius:26px!important;
+  line-height:1.6!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20-copy strong,
+.rk-scorecard-premium-v26 .rk-score-share-v20-head strong{
+  line-height:1.16!important;
+  text-wrap:balance!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20-copy small,
+.rk-scorecard-premium-v26 .rk-score-share-v20-head p{
+  line-height:1.58!important;
+}
+
+/* Leaderboard / club room pages: more readable board + social club feel */
+.rk-room-page{
+  background:#F8F4EE!important;
+  padding-bottom:24px!important;
+}
+.rk-room-hero{
+  margin-bottom:18px!important;
+}
+.rk-room-leader{
+  gap:14px!important;
+  align-items:center!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  background:linear-gradient(145deg,#FFFDF8,#F5EFE4)!important;
+  box-shadow:0 10px 28px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-room-leader *{
+  color:#1A1410!important;
+}
+.rk-room-score,
+.rk-room-leader .rk-room-score,
+.rk-room-row-score{
+  color:#A07828!important;
+}
+.rk-room-leader-name,
+.rk-room-you-title,
+.rk-room-row-name{
+  line-height:1.15!important;
+  color:#1A1410!important;
+}
+.rk-room-leader-sub,
+.rk-room-you-copy,
+.rk-room-row-sub{
+  line-height:1.5!important;
+  color:#6B6157!important;
+}
+.rk-room-row-list{
+  display:grid!important;
+  gap:9px!important;
+}
+.rk-room-row{
+  border:1px solid rgba(26,20,16,.065)!important;
+  background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;
+  box-shadow:0 6px 18px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-room-row-you{
+  border-color:rgba(23,107,66,.22)!important;
+  background:linear-gradient(145deg,#F4FBF7,#FFFDF8)!important;
+}
+.rk-room-actions{
+  gap:9px!important;
+  margin-top:16px!important;
+}
+.rk-room-actions .rk-room-btn{
+  min-height:46px!important;
+  border-radius:16px!important;
+}
+.rk-room-activity,
+.rk-room-notes,
+.rk-room-context{
+  border-radius:24px!important;
+  padding:15px!important;
+  line-height:1.55!important;
+}
+
+/* How-to, hand browser, glossary, weekly recap: readable learning pages */
+.rk-howto-v40,
+.rk-handbrowser-v40,
+.rk-style-glossary-page-v60,
+.rk-recap-shell{
+  padding-bottom:30px!important;
+}
+.rk-howto-v40-card,
+.rk-handbrowser-v40-sections,
+.rk-handbrowser-v40-dragon-card,
+.rk-style-glossary-hero-v60,
+.rk-style-glossary-feature-v60,
+.rk-recap-card{
+  margin-bottom:16px!important;
+  border-radius:26px!important;
+  line-height:1.55!important;
+}
+.rk-howto-v40-card-head,
+.rk-handbrowser-v40-card-head,
+.rk-handbrowser-v40-section-head{
+  gap:10px!important;
+  margin-bottom:13px!important;
+}
+.rk-howto-v40-card-head h2,
+.rk-handbrowser-v40-card-head h2,
+.rk-style-glossary-hero-v60 h1{
+  line-height:1.08!important;
+  text-wrap:balance!important;
+}
+.rk-howto-v40-step p,
+.rk-howto-v40-rule p,
+.rk-handbrowser-v40-empty p,
+.rk-handbrowser-v40-section-copy em,
+.rk-style-glossary-feature-v60 p{
+  line-height:1.55!important;
+}
+.rk-style-glossary-grid-v60{
+  gap:9px!important;
+}
+.rk-style-glossary-grid-v60 button{
+  min-height:76px!important;
+}
+.rk-recap-metric-row{
+  gap:9px!important;
+}
+
+/* Footer and bottom spacing cleanup */
+.rk-footer,
+footer{
+  margin-top:16px!important;
+  padding-top:18px!important;
+  padding-bottom:18px!important;
+}
+.rk-pg{
+  padding-bottom:28px!important;
+}
+.rk-pg > *:last-child{
+  margin-bottom:0!important;
+}
+
+@media(max-width:390px){
+  .rk-home-scorecard-v41-main{padding-top:27px!important;padding-bottom:22px!important}
+  .rk-home-scorecard-v41-score-label{letter-spacing:4.2px!important;margin-top:10px!important}
+  .rk-home-scorecard-v41-style{margin-top:18px!important;padding:8px 18px!important}
+  .rk-home-scorecard-v41-title{margin-top:24px!important}
+  .rk-room-live-v19 .rk-room-live-v6-kicker{margin-bottom:16px!important}
+  .rk-room-live-v19 .rk-room-live-v6-title{font-size:22px!important;line-height:1.12!important}
+  .rk-room-leader{gap:12px!important}
+  .rk-scorecard-premium-v26 .rk-iq-hero{border-radius:28px!important}
+}
+
+@media(min-width:700px) and (max-width:1199px){
+  .rk-app{max-width:520px!important;margin-left:auto!important;margin-right:auto!important}
+  .rk-pg{padding-left:28px!important;padding-right:28px!important}
+}
+
 `;
 
 const S={
