@@ -6434,6 +6434,73 @@ html,body,#root,.rk-outer,.rk-app,.rk-pg{
   .rk-room-leader{grid-template-columns:42px minmax(0,1fr) auto!important;gap:10px!important}
   .rk-room-score{font-size:38px!important}
 }
+
+/* ─── v40 DAILY RITUAL PRODUCT OVERHAUL ─────────────────────────────────── */
+.rk-pg{background:#F8F4EE!important;background-image:none!important}
+.rk-startup-hero-v4{margin-bottom:8px!important;padding-bottom:6px!important}
+.rk-startup-live-note-v34{margin-top:8px!important;color:rgba(26,20,16,.58)!important;font-weight:760!important;letter-spacing:.05px!important}
+.rk-home-landing-flow{gap:14px!important}
+.rk-home-scorecard-v30{margin-top:-4px!important;margin-bottom:14px!important}
+.rk-home-scorecard-v30-main{box-shadow:0 18px 48px rgba(6,43,24,.21),inset 0 1px 0 rgba(255,255,255,.10)!important;border-color:rgba(201,168,76,.18)!important}
+.rk-home-scorecard-v30-topline{justify-content:center!important;margin-bottom:9px!important}
+.rk-home-scorecard-v30-kicker{background:rgba(255,255,255,.075)!important;border:1px solid rgba(243,212,107,.24)!important;color:#F3D46B!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.10)!important}
+.rk-home-scorecard-v30-watermark{opacity:.055!important;right:-16px!important;bottom:-28px!important;font-size:118px!important}
+.rk-home-scorecard-v30-bottom{margin-top:10px!important;background:linear-gradient(145deg,#FFFDF8,#F5EEE2)!important;border:1px solid rgba(26,20,16,.075)!important;border-radius:22px!important;padding:10px!important;box-shadow:0 9px 26px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)!important;display:grid!important;gap:8px!important}
+.rk-home-scorecard-v30-share{border-radius:17px!important;background:linear-gradient(145deg,#FFFDF8,#F6F0E4)!important;border:1px solid rgba(201,168,76,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.80)!important}
+.rk-home-scorecard-v30-details{border-radius:17px!important;background:linear-gradient(135deg,#176B42,#0F5432)!important;color:#fff!important;border:1px solid rgba(243,212,107,.20)!important;box-shadow:0 9px 20px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16)!important}
+.rk-emotional-onboarding-v40{margin:12px 0 16px;padding:15px;border-radius:24px;background:linear-gradient(145deg,#FFFDF8,#F6EFE4);border:1px solid rgba(26,20,16,.075);box-shadow:0 10px 30px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)}
+.rk-emotional-onboarding-v40 h2{font-family:'Fraunces',Georgia,serif;margin:0 0 6px;font-size:20px;line-height:1.05;letter-spacing:-.45px;color:#1A1410}
+.rk-emotional-onboarding-v40 p{margin:0 0 12px;font-size:12.5px;line-height:1.5;color:#6B6157;font-weight:760}
+.rk-emotional-onboarding-v40-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rk-emotional-onboarding-v40-actions button{min-height:46px;border-radius:16px;font-size:12px;font-weight:950;cursor:pointer;border:1px solid rgba(26,20,16,.08)}
+.rk-emotional-onboarding-v40-actions button:first-child{background:linear-gradient(135deg,#176B42,#0F5432);color:#fff;border-color:rgba(243,212,107,.18);box-shadow:0 8px 18px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16)}
+.rk-emotional-onboarding-v40-actions button:last-child{background:linear-gradient(180deg,#F2EBDD,#E9E0CF);color:#176B42}
+.rk-tomorrow-card-v11{line-height:1.45!important}
+.rk-tomorrow-v11-title{font-size:21px!important;line-height:1.08!important;letter-spacing:-.45px!important}
+.rk-tomorrow-v11-copy{line-height:1.5!important;font-weight:760!important}
+.rk-room-live-v6-title{line-height:1.16!important;margin-bottom:7px!important}
+.rk-room-live-v6-copy{line-height:1.5!important}
+.rk-room-live-v17-head{align-items:center!important;gap:11px!important;margin-bottom:10px!important}
+.rk-room-live-v17-head-copy strong{display:block!important;line-height:1.15!important;margin-bottom:3px!important}
+.rk-room-live-v17-head-copy span{line-height:1.35!important}
+.rk-room-live-v35-roomlink{display:block!important;margin:8px 0 10px!important;text-align:left!important;color:#176B42!important;font-size:11px!important;font-weight:950!important;letter-spacing:.05px!important;background:rgba(23,107,66,.065)!important;border:1px solid rgba(23,107,66,.10)!important;border-radius:999px!important;padding:7px 11px!important;width:fit-content!important}
+.rk-room-live-v17-actions{gap:8px!important}
+.rk-room-live-v17-actions button{position:relative;overflow:hidden;border-radius:17px!important;padding:13px 10px!important;font-family:'Fraunces',Georgia,serif!important;font-size:13px!important;font-weight:950!important;letter-spacing:-.1px!important;box-shadow:0 10px 22px rgba(23,107,66,.14),inset 0 1px 0 rgba(255,255,255,.18)!important;transition:transform .16s ease,box-shadow .16s ease!important}
+.rk-room-live-v17-actions button:first-child,.rk-room-live-v17-actions button:last-child{background:linear-gradient(135deg,#176B42,#0F5432)!important;color:#fff!important;border:1px solid rgba(243,212,107,.34)!important}
+.rk-room-live-v17-actions button:active{transform:scale(.985)}
+.rk-room-live-v17-actions button:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 0%,rgba(255,255,255,.18) 46%,transparent 62%);transform:translateX(-120%);animation:rkGoldSweep 6.2s ease-in-out infinite;pointer-events:none}
+.rk-freeplay-room-v40{position:relative!important;overflow:hidden!important}
+.rk-freeplay-room-v40 .rk-real-tile-row-v6{justify-content:flex-start!important;margin:10px 0 12px!important;gap:7px!important}
+.rk-freeplay-room-v40 .rk-real-tile-wrap-v6{transform:none!important}
+.rk-practice-rack-lane-v40{text-align:left!important;font-size:11px!important;letter-spacing:.08px!important;color:#176B42!important;font-weight:950!important;margin:6px 0 0!important;line-height:1.35!important}
+.rk-freeplay-steps-v40{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;margin-top:13px!important}
+.rk-freeplay-step-v40{border-radius:16px!important;background:rgba(255,255,255,.68)!important;border:1px solid rgba(23,107,66,.10)!important;padding:10px 8px!important;text-align:left!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important}
+.rk-freeplay-step-v40 b{display:inline-flex!important;width:24px!important;height:24px!important;border-radius:10px!important;align-items:center!important;justify-content:center!important;background:rgba(23,107,66,.10)!important;color:#176B42!important;font-size:12px!important;font-weight:950!important;margin-bottom:7px!important}
+.rk-freeplay-step-v40 span{display:block!important;font-size:10.5px!important;line-height:1.25!important;color:#1A1410!important;font-weight:850!important}
+.rk-learn-home-v8{margin-left:4px!important;margin-right:4px!important}
+.rk-learn-home-title,.rk-learn-home-v18-title{font-size:22px!important;line-height:1.08!important}
+.rk-share-score-v6{background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;border:1px solid rgba(201,168,76,.15)!important;border-radius:24px!important;box-shadow:0 11px 30px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)!important}
+.rk-share-score-v6-title{font-size:20px!important;line-height:1.08!important}
+.rk-share-lux-card-v6{background:radial-gradient(circle at top,rgba(255,255,255,.08),transparent 42%),linear-gradient(155deg,#062B18,#0D4A2E 56%,#051F11)!important;border:1px solid rgba(243,212,107,.22)!important;box-shadow:0 13px 32px rgba(6,43,24,.20),inset 0 1px 0 rgba(255,255,255,.09)!important}
+.rk-score-shell{background:#F8F4EE!important;background-image:none!important;line-height:1.5!important}
+.rk-scorecard-title-v26{background:rgba(23,107,66,.08)!important;color:#176B42!important;border:1px solid rgba(23,107,66,.12)!important}
+.rk-score-emotion-strip-v40{display:grid;grid-template-columns:1fr;gap:9px;margin:0 0 13px}
+.rk-score-emotion-card-v40{border-radius:19px;background:linear-gradient(145deg,#FFFDF8,#F6EFE4);border:1px solid rgba(26,20,16,.075);box-shadow:0 7px 20px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78);padding:13px 14px;text-align:left;display:flex;gap:11px;align-items:flex-start}
+.rk-score-emotion-icon-v40{width:34px;height:34px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:rgba(23,107,66,.08);border:1px solid rgba(23,107,66,.10);font-size:15px;flex-shrink:0}
+.rk-score-emotion-card-v40 small{display:block;font-size:8px;letter-spacing:1.7px;text-transform:uppercase;font-weight:950;color:rgba(26,20,16,.45);margin-bottom:4px}
+.rk-score-emotion-card-v40 strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:15px;line-height:1.12;color:#1A1410;letter-spacing:-.25px;margin-bottom:3px}
+.rk-score-emotion-card-v40 p{margin:0;font-size:12px;line-height:1.45;color:#6B6157;font-weight:740}
+.rk-daily-review-v10-card{padding:14px!important;border-radius:19px!important;line-height:1.45!important}
+.rk-daily-review-v10-card span{margin-left:44px!important;line-height:1.2!important}
+.rk-daily-review-v10-card strong{margin-left:44px!important;line-height:1.18!important;display:block!important}
+.rk-daily-review-v10-card p{margin-left:44px!important;line-height:1.48!important}
+.rk-score-share-v20-icon{opacity:.72!important;background:rgba(23,107,66,.065)!important;border-color:rgba(23,107,66,.08)!important}
+.rk-score-share-v20-badge{background:rgba(243,212,107,.12)!important;color:#8A6820!important;border:1px solid rgba(243,212,107,.20)!important}
+.rk-score-share-v20-preview{background:linear-gradient(145deg,#082F1B,#0D4A2E)!important;border:1px solid rgba(243,212,107,.20)!important;color:#fff!important}
+.rk-score-share-v20-preview p,.rk-score-share-v20-preview em{color:rgba(255,255,255,.70)!important}
+@media(min-width:600px){.rk-score-emotion-strip-v40{grid-template-columns:1fr 1fr}.rk-score-emotion-card-v40:nth-child(3){grid-column:1/-1}}
+@media(max-width:370px){.rk-freeplay-steps-v40{grid-template-columns:1fr!important}.rk-emotional-onboarding-v40-actions{grid-template-columns:1fr}}
+
 `;
 
 const S={
@@ -10068,7 +10135,13 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
     directionExplanation=`${strategicRead.rackPersonality||strategicRead.commitmentStatus}: ${strategicRead.bestDirection}. ${strategicRead.whyItWorks?.[0]||"Whole-rack structure reviewed."}`;
   }
 
-  const totalScore=strategicRead?.rackleIQScore ?? Math.max(0,Math.min(100,directionScore+tileStrengthScore+passQualityScore+timingScore));
+  // Final Rackle IQ is intentionally a Charleston decision score, not merely a hand-closeness score.
+  // Reward expert behaviors: optionality, realistic pivots, intelligent restraint, and avoiding early dead ends.
+  const optionalityBonus=strategicRead?.componentScores?.flexibility>=68?3:strategicRead?.componentScores?.flexibility>=56?2:0;
+  const restraintBonus=strategicRead?.commitmentStatus==="Flexible"&&strategicRead?.liveSections?.length>=2?2:0;
+  const overcommitPenalty=strategicRead?.commitmentStatus==="Committed"&&strategicRead?.componentScores?.shapeQuality<55?-4:0;
+  const baseTotal=strategicRead?.rackleIQScore ?? Math.max(0,Math.min(100,directionScore+tileStrengthScore+passQualityScore+timingScore));
+  const totalScore=rkClamp(Math.round(baseTotal+optionalityBonus+restraintBonus+overcommitPenalty));
   const{level,levelExplanation,tier}=iqScoreLevel(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
   const style=getIQStyle(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
 
@@ -13335,6 +13408,50 @@ function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
 }
 
 
+
+function rkScorePercentile(globalRank,totalPlayers){
+  const rank=Number(globalRank||0), total=Number(totalPlayers||0);
+  if(!rank||!total||total<3)return null;
+  const pct=Math.max(1,Math.round((1-(rank-1)/total)*100));
+  return `Top ${Math.max(1,100-pct+1)}% today`;
+}
+
+function rkEmotionalRackleRead({score=0,globalRank=null,globalTotal=null,clubRank=null,clubName='',bestPath='',sectionName='',streak=0}){
+  const pct=rkScorePercentile(globalRank,globalTotal);
+  const high=score>=85, good=score>=70, alive=score>=55, thin=score<40;
+  return {
+    headline: high
+      ? 'You spotted the rack before it got loud.'
+      : good
+      ? 'You kept the rack alive longer than most players.'
+      : alive
+      ? 'You found a playable lane, but left points on the table.'
+      : thin
+      ? 'Tough rack. The table would have tested everyone.'
+      : 'You had pieces, but the Charleston never fully settled.',
+    percentile: pct || (globalRank?`Global #${globalRank}`:'Room result pending'),
+    eliteInsight: high
+      ? 'Elite players would have protected the pivot, not rushed the obvious hand.'
+      : good
+      ? 'Strong players would like the restraint here. You did not overcommit too early.'
+      : alive
+      ? 'The better read was to keep two paths open one pass longer.'
+      : 'The expert move was survival: protect structure and avoid forcing a thin lane.',
+    bestLine: bestPath || sectionName || 'Best lane still developing',
+    nearMiss: high
+      ? 'Near miss: one sharper pass could have made this a room-leading rack.'
+      : good
+      ? 'Near miss: you were one cleaner pivot from a much stronger score.'
+      : alive
+      ? 'Missed chance: your backup line needed one more protected tile.'
+      : 'Missed chance: the rack needed flexibility before direction.',
+    identity: score>=90?'Section Sniper':score>=80?'Charleston Reader':score>=70?'Table Regular':score>=55?'Card Hunter':'Fresh Rack Mind',
+    clubLine: clubName
+      ? (clubRank?`You’re #${clubRank} in ${clubName}. Make them chase.`:`${clubName} has a score to chase now.`)
+      : 'Drop this in the group chat and make the table chase.'
+  };
+}
+
 function ImproveGameHero({iq,chosenSecObj,bestFitSec,onPractice,onCoachMode,setScreen}){
   if(!iq)return null;
   const sectionName=chosenSecObj?.name||bestFitSec?.name||"your best lane";
@@ -13441,6 +13558,16 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     : "This rack never fully settled. The right move is to protect structure and avoid forcing a thin lane.";
   const pivotCopy=iq.strategicRead?.pivotAdvice||iq.coachNotes?.[0]||iq.takeaway||"Look for the first section that gives you natural groups, not just familiar tiles.";
   const tableTag=score>=75?"Flexible":score>=55?"Alive":score>=40?"Messy":"Thin";
+  const emotionalRead=rkEmotionalRackleRead({
+    score,
+    globalRank,
+    globalTotal,
+    clubRank,
+    clubName:affiliatedClubName,
+    bestPath:reviewBestPath,
+    sectionName:topSectionRead?.name,
+    streak:iq.streak||ST.get("str",0)||0
+  });
 
   const Metric=({label,value,sub,accent=C.ink,onClick})=>{
     const Tag=onClick?"button":"div";
@@ -13478,13 +13605,29 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
             <span style={{opacity:.5}}>·</span>
             <span>{iq.level}</span>
           </div>
-          <div style={{fontSize:14,lineHeight:1.45,color:"rgba(255,255,255,.78)",fontWeight:750,maxWidth:290,margin:"0 auto"}}>{quickRead}</div>
-          {rankLine&&<div style={{fontSize:11,lineHeight:1.35,color:"rgba(255,255,255,.58)",fontWeight:800,marginTop:12}}>{rankLine}</div>}
+          <div style={{fontSize:14,lineHeight:1.48,color:"rgba(255,255,255,.80)",fontWeight:780,maxWidth:292,margin:"0 auto"}}>{emotionalRead.headline}</div>
+          <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:6,border:"1px solid rgba(243,212,107,.28)",background:"rgba(243,212,107,.10)",borderRadius:999,padding:"6px 11px",color:"#F3D46B",fontSize:10.5,fontWeight:950,marginTop:12}}>{emotionalRead.percentile}</div>
+          {rankLine&&<div style={{fontSize:11,lineHeight:1.35,color:"rgba(255,255,255,.58)",fontWeight:800,marginTop:9}}>{rankLine}</div>}
           <div className="rk-scorecard-compact-meta-v32" aria-label="Scorecard details">
             <button type="button" onClick={()=>setScreen&&setScreen("globalLeaderboard")}><span>Global</span><strong>{globalRank?`#${globalRank}`:"—"}</strong></button>
             <button type="button" onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")}><span>Club</span><strong>{clubRank?`#${clubRank}`:"—"}</strong></button>
             <div><span>Time</span><strong>{timeLabel}</strong></div>
           </div>
+        </div>
+      </div>
+
+      <div className="rk-score-emotion-strip-v40" aria-label="Your Charleston story">
+        <div className="rk-score-emotion-card-v40">
+          <span className="rk-score-emotion-icon-v40">🧠</span>
+          <span><small>What elite players saw</small><strong>{emotionalRead.eliteInsight}</strong><p>{emotionalRead.clubLine}</p></span>
+        </div>
+        <div className="rk-score-emotion-card-v40">
+          <span className="rk-score-emotion-icon-v40">🀄</span>
+          <span><small>Strongest line</small><strong>{emotionalRead.bestLine}</strong><p>{emotionalRead.nearMiss}</p></span>
+        </div>
+        <div className="rk-score-emotion-card-v40">
+          <span className="rk-score-emotion-icon-v40">🏷️</span>
+          <span><small>Your table identity</small><strong>{emotionalRead.identity}</strong><p>Come back tomorrow and prove it was not a one-rack read.</p></span>
         </div>
       </div>
 
@@ -13557,12 +13700,12 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <div className="rk-daily-review-v10-card primary" data-icon="🧭">
             <span>Your read</span>
             <strong>{reviewTone}</strong>
-            <p>{reviewCopy}</p>
+            <p>{emotionalRead.headline}</p>
           </div>
           <div className="rk-daily-review-v10-card" data-icon="🀄">
             <span>Best path</span>
             <strong>{reviewBestPath}</strong>
-            <p>This is the cleanest lane to keep alive after the Charleston.</p>
+            <p>{emotionalRead.nearMiss}</p>
           </div>
           <div className="rk-daily-review-v10-card" data-icon="🎯">
             <span>Table read</span>
@@ -16546,6 +16689,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const [leOpen,setLeOpen]=useState(false);
   const [menuOpen,setMenuOpen]=useState(false);
   const [shareCopied,setShareCopied]=useState(false);
+  const [onboarded,setOnboarded]=useState(()=>!!ST.get("rkRitualOnboarded",false));
   const [clubSharesToday,setClubSharesToday]=useState(0);
   const [clubPlayers,setClubPlayers]=useState(null);
   const [homeClubEntries,setHomeClubEntries]=useState([]);
@@ -16699,10 +16843,25 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div className="rk-startup-hero-v4">
         <div className="rk-startup-mark-v4 rk-float">🀄</div>
         <h1 className="rk-startup-logo-v4">Rackle</h1>
-        <p className="rk-startup-subtitle-v4">The Daily Mahjong Workout</p>
-        <div className="rk-startup-live-note-v34">New rack. One room. One score to defend.</div>
+        <p className="rk-startup-subtitle-v4">The Daily Charleston ritual.</p>
+        <div className="rk-startup-live-note-v34">Pass 3 tiles. Protect your best lane. Defend the room.</div>
         <p className="rk-startup-description-v4 rk-startup-description-hidden" aria-hidden="true"></p>
       </div>
+    );
+  };
+
+  const OnboardingPrompt=()=>{
+    if(onboarded||hasPlayedBefore)return null;
+    const done=(path)=>{ST.set("rkRitualOnboarded",path);setOnboarded(true);if(path==="teach")setScreen("howto");};
+    return(
+      <section className="rk-emotional-onboarding-v40" aria-label="Choose your Rackle path">
+        <h2>Your daily Charleston starts here.</h2>
+        <p>Same rack for every player. Pass three tiles, chase the strongest hand, then compare your Charleston IQ.</p>
+        <div className="rk-emotional-onboarding-v40-actions">
+          <button onClick={()=>done("fast")}>I already play</button>
+          <button onClick={()=>done("teach")}>Teach me</button>
+        </div>
+      </section>
     );
   };
 
@@ -16837,10 +16996,10 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const TomorrowTease=()=> {
     const resetLabel=getTimeUntilMidnightLabel();
     const tomorrowSayings=[
-      "Tomorrow is a clean table.",
-      "A new room opens at midnight.",
+      "Tomorrow rewards restraint.",
+      "One hidden section dominates tomorrow.",
+      "Pairs players may thrive tomorrow.",
       "Fresh tiles. Fresh pressure.",
-      "The next rack is waiting.",
       "Midnight resets the room.",
       "New rack. New chase.",
       "Your club board starts fresh.",
@@ -16886,26 +17045,27 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const freePlayTiles=freePlaySequences[freePlaySeed%freePlaySequences.length];
 
   const PracticeCard=()=> (
-    <section className="rk-freeplay-v24 rk-freeplay-v27" aria-label="Free play practice room">
+    <section className="rk-freeplay-v24 rk-freeplay-v27 rk-freeplay-room-v40" aria-label="Free play practice room">
       <div className="rk-freeplay-v24-top">
         <div className="rk-freeplay-v24-copy">
           <div className="rk-freeplay-v24-kicker"><span>🔥</span> Free play room</div>
           <h2>Improve Your Game</h2>
-          <p>Practice another Charleston without touching today’s score. New rack, clean passes, instant readout.</p>
+          <p>Run another Charleston without touching today’s score.</p>
+          <div className="rk-practice-rack-lane-v40">{["Consecutive Run warm-up","Odd number lane","2468 shape check","Winds and Dragons read","Like Numbers pivot","2026 tile pressure"][freePlaySeed%6]}</div>
         </div>
         <div className="rk-freeplay-v27-preview rk-freeplay-v35-preview" aria-label="Example practice rack">
           <div className="rk-freeplay-v35-rack">
-            <RackSurface style={{padding:7,borderRadius:18,gap:6,background:"transparent",border:"none",boxShadow:"none",justifyContent:"flex-end"}}>
+            <RackSurface style={{padding:7,borderRadius:18,gap:6,background:"transparent",border:"none",boxShadow:"none",justifyContent:"flex-start"}}>
               {freePlayTiles.map((tile,i)=><Ti key={`${tL(tile)}-${tS(tile)}-${i}`} t={tile}/>)}
             </RackSurface>
           </div>
         </div>
       </div>
 
-      <div className="rk-freeplay-v24-steps rk-freeplay-v27-steps" aria-label="How Free Play works">
-        <div><strong>1</strong><span><b>Fresh rack</b><small>New tiles every practice.</small></span></div>
-        <div><strong>2</strong><span><b>Make the passes</b><small>Test your Charleston read.</small></span></div>
-        <div><strong>3</strong><span><b>Get coached</b><small>See the lane and next move.</small></span></div>
+      <div className="rk-freeplay-v24-steps rk-freeplay-v27-steps rk-freeplay-steps-v40" aria-label="How Free Play works">
+        <div className="rk-freeplay-step-v40"><b>1</b><span>Fresh rack</span></div>
+        <div className="rk-freeplay-step-v40"><b>2</b><span>Make the passes</span></div>
+        <div className="rk-freeplay-step-v40"><b>3</b><span>Get the read</span></div>
       </div>
 
       <button type="button" onClick={()=>go("free")} className="rk-freeplay-v24-cta">
@@ -16935,8 +17095,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <section className="rk-share-score-v6" aria-label="Share your score preview">
         <div className="rk-share-score-v6-copybox">
           <div className="rk-share-score-v6-kicker">Share your score</div>
-          <h2 className="rk-share-score-v6-title">Your club is waiting.</h2>
-          <p className="rk-share-score-v6-copy">Make your table chase today’s score.</p>
+          <h2 className="rk-share-score-v6-title">Make the table chase.</h2>
+          <p className="rk-share-score-v6-copy">A clean scorecard, one sharp insight, and your club rank in the group chat.</p>
           <button onClick={copyShare} className="rk-share-score-v6-btn">{shareCopied?"Copied":"Share My Score →"}</button>
         </div>
         <div className="rk-share-lux-card-v6" aria-hidden="true">
@@ -17098,8 +17258,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </button>
 
         <div className="rk-room-live-v17-actions">
-          <button type="button" onClick={openBoard}>{activeClubCode?"View Club Standings":"Open standings →"}</button>
-          <button type="button" onClick={secondaryAction}>{secondaryLabel}</button>
+          <button type="button" onClick={openBoard}>{activeClubCode?"View Club Standings":"View Standings"}</button>
+          <button type="button" onClick={secondaryAction}>{activeClubCode?"View Global Room":"Find a Club"}</button>
         </div>
       </section>
     );
@@ -17143,6 +17303,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         )}
         <Menu/>
         <Hero/>
+        <OnboardingPrompt/>
         <div className="rk-home-landing-flow">
           {!dDone&&<StartDaily/>}
           {dDone&&<CompletedDaily/>}
