@@ -4957,6 +4957,127 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-handbrowser-v40-section-grid{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}.rk-handbrowser-v40-section{grid-template-columns:38px minmax(0,1fr) auto!important;padding:11px!important;border-radius:17px!important}.rk-handbrowser-v40-section:after{content:"Open";font-size:10px;font-weight:950;color:#176B42;background:rgba(23,107,66,.07);border:1px solid rgba(23,107,66,.10);border-radius:999px;padding:6px 8px}.rk-handbrowser-v40-section.active:after{color:#F3D46B;background:rgba(255,255,255,.08);border-color:rgba(243,212,107,.25)}.rk-handbrowser-v40-section-copy strong{font-size:15px!important}.rk-handbrowser-v40-section-copy em{font-size:10.5px!important;line-height:1.3!important}
 .rk-handbrowser-v40-section-note{border-radius:21px!important;padding:13px!important;margin-bottom:12px!important}.rk-handbrowser-v40-dragon-card{padding:14px!important}.rk-handbrowser-v40-dragon-grid{grid-template-columns:1fr!important}.rk-handbrowser-v40-dragon{display:grid!important;grid-template-columns:74px minmax(0,1fr)!important;align-items:center!important;gap:9px!important;text-align:left!important;padding:10px!important}.rk-handbrowser-v40-dragon>div{grid-row:1/3;justify-content:flex-start!important;transform:scale(.68)!important;transform-origin:left center!important;height:38px!important;margin:0!important}.rk-handbrowser-v40-dragon strong{font-size:15px!important}.rk-handbrowser-v40-results-head{margin:15px 2px 9px!important}.rk-handbrowser-v40-results-head h2{font-size:20px!important}.rk-handbrowser-v40-empty{border-radius:22px!important;padding:16px!important}.rk-handbrowser-v40-results-list{gap:9px!important}.rk-handbrowser-v40-load{min-height:46px!important}
 @media(max-width:390px){.rk-howto-v40-hero h1,.rk-handbrowser-v40-hero h1{font-size:27px!important}.rk-howto-v40-mini-flow{grid-template-columns:1fr!important}.rk-howto-v40-mini-flow b{display:none!important}.rk-handbrowser-v40-section:after{display:none}.rk-handbrowser-v40-dragon{grid-template-columns:68px minmax(0,1fr)!important}}
+
+
+/* ─── vNext: premium gilt-edge buttons for Live Club Standings ─────────── */
+.rk-room-live-v19 .rk-room-live-v17-actions,
+.rk-room-live-v17-actions{
+  position:relative!important;
+  z-index:4!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:10px!important;
+  margin:16px 16px 0!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-actions button,
+.rk-room-live-v17-actions button{
+  position:relative!important;
+  overflow:hidden!important;
+  min-height:52px!important;
+  height:auto!important;
+  border-radius:18px!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:13.5px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+  letter-spacing:-.2px!important;
+  cursor:pointer!important;
+  isolation:isolate!important;
+  transform:translateZ(0)!important;
+  transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease,filter .16s ease!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-actions button:before,
+.rk-room-live-v17-actions button:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+}
+.rk-room-live-v19 .rk-room-live-v17-actions button:after,
+.rk-room-live-v17-actions button:after{
+  content:"";
+  position:absolute;
+  top:-40%;
+  bottom:-40%;
+  left:-65%;
+  width:46%;
+  background:linear-gradient(105deg,transparent 0%,rgba(255,255,255,.34) 48%,transparent 75%);
+  transform:skewX(-14deg);
+  transition:left .52s ease;
+  pointer-events:none;
+}
+.rk-room-live-v19 .rk-room-live-v17-actions button:first-child,
+.rk-room-live-v17-actions button:first-child{
+  color:#102716!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.38)!important;
+  border:1px solid rgba(255,246,190,.86)!important;
+  background:
+    linear-gradient(135deg,#FFF7C7 0%,#F3D46B 38%,#D7AA42 72%,#9A7424 100%)!important;
+  box-shadow:
+    0 14px 30px rgba(243,212,107,.27),
+    0 0 0 1px rgba(255,255,255,.10),
+    inset 0 1px 0 rgba(255,255,255,.68),
+    inset 0 -2px 0 rgba(80,52,8,.18)!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-actions button:first-child:before,
+.rk-room-live-v17-actions button:first-child:before{
+  background:
+    radial-gradient(circle at 18% 12%,rgba(255,255,255,.44),transparent 32%),
+    linear-gradient(180deg,rgba(255,255,255,.13),transparent 62%)!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-actions button:last-child,
+.rk-room-live-v17-actions button:last-child{
+  color:#F3D46B!important;
+  text-shadow:0 1px 0 rgba(0,0,0,.16)!important;
+  border:1px solid rgba(243,212,107,.46)!important;
+  background:
+    linear-gradient(135deg,#176B42 0%,#0F5432 58%,#062B18 100%)!important;
+  box-shadow:
+    0 14px 30px rgba(6,43,24,.23),
+    0 0 0 1px rgba(255,255,255,.06),
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 0 0 1px rgba(243,212,107,.08)!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-actions button:last-child:before,
+.rk-room-live-v17-actions button:last-child:before{
+  background:
+    radial-gradient(circle at 18% 8%,rgba(243,212,107,.18),transparent 36%),
+    linear-gradient(180deg,rgba(255,255,255,.08),transparent 65%)!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-actions button:hover,
+.rk-room-live-v17-actions button:hover{
+  transform:translateY(-2px)!important;
+  filter:brightness(1.035)!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-actions button:hover:after,
+.rk-room-live-v17-actions button:hover:after{
+  left:115%!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-actions button:active,
+.rk-room-live-v17-actions button:active{
+  transform:scale(.985)!important;
+}
+@media(max-width:390px){
+  .rk-room-live-v19 .rk-room-live-v17-actions,
+  .rk-room-live-v17-actions{
+    grid-template-columns:1fr 1fr!important;
+    gap:9px!important;
+    margin:15px 14px 0!important;
+  }
+  .rk-room-live-v19 .rk-room-live-v17-actions button,
+  .rk-room-live-v17-actions button{
+    min-height:48px!important;
+    border-radius:17px!important;
+    font-size:12.4px!important;
+    padding-left:8px!important;
+    padding-right:8px!important;
+  }
+}
+@media(max-width:340px){
+  .rk-room-live-v19 .rk-room-live-v17-actions,
+  .rk-room-live-v17-actions{grid-template-columns:1fr!important}
+}
 `;
 
 const S={
