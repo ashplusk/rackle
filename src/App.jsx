@@ -10064,6 +10064,22 @@ html,body,#root{
   }
 }
 
+
+
+/* ─── vNext: homepage scorecard label + clubhouse title tune ───────────── */
+.rk-home-scorecard-v41-kicker{
+  letter-spacing:2.3px!important;
+  font-size:9px!important;
+}
+.rk-email-title-v8{
+  font-size:20px!important;
+  line-height:1.08!important;
+  letter-spacing:-.45px!important;
+}
+@media(max-width:390px){
+  .rk-email-title-v8{font-size:19px!important}
+  .rk-home-scorecard-v41-kicker{font-size:8.5px!important;letter-spacing:1.9px!important}
+}
 `;
 
 const S={
@@ -20503,7 +20519,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     <section className="rk-home-scorecard-v41 rk-home-section-lg" aria-label="Your Daily Rackle scorecard">
       <div role="button" tabIndex={0} onClick={showScorecard} onKeyDown={(e)=>{if(e.key==="Enter"||e.key===" ")showScorecard();}} className="rk-home-scorecard-v41-main" aria-label="Open your full scorecard">
         <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
-        <div className="rk-home-scorecard-v41-kicker"><span/> Daily Scorecard · #{dn}</div>
+        <div className="rk-home-scorecard-v41-kicker"><span/> Daily Rackle Scorecard · #{dn}</div>
         <div className="rk-home-scorecard-v41-score-row">
           <div>
             <div className="rk-home-scorecard-v41-score rk-pop">{scoreValue}</div>
