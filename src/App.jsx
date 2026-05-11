@@ -8599,6 +8599,240 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
     padding:26px 28px 64px!important;
   }
 }
+
+
+/* ─── v52: style glossary + scorecard mobile readability ───────────────── */
+.rk-home-scorecard-v41-score-label{
+  margin-left:7px!important;
+  text-align:left!important;
+  display:block!important;
+}
+.rk-style-pill-clickable{
+  gap:7px!important;
+  border:none!important;
+  appearance:none!important;
+  cursor:pointer!important;
+}
+.rk-style-pill-clickable span{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:16px!important;
+  height:16px!important;
+  border-radius:999px!important;
+  background:rgba(243,212,107,.16)!important;
+  border:1px solid rgba(243,212,107,.26)!important;
+  color:#F3D46B!important;
+  font-size:10px!important;
+  line-height:1!important;
+  font-weight:950!important;
+}
+.rk-score-club-room-v20-copy strong{
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  line-height:1.18!important;
+}
+@media(max-width:430px){
+  .rk-score-club-room-v20{
+    display:block!important;
+    padding:15px!important;
+  }
+  .rk-score-club-room-v20-main{
+    align-items:flex-start!important;
+  }
+  .rk-score-club-room-v20-copy strong{
+    font-size:15.5px!important;
+    line-height:1.2!important;
+    max-width:100%!important;
+  }
+  .rk-score-club-room-v20-copy small{
+    line-height:1.45!important;
+  }
+  .rk-score-club-room-v20-side{
+    display:flex!important;
+    flex-direction:row!important;
+    justify-content:space-between!important;
+    align-items:center!important;
+    width:100%!important;
+    margin-top:12px!important;
+  }
+  .rk-score-club-room-v20-side b{
+    white-space:normal!important;
+    font-size:10px!important;
+    line-height:1.2!important;
+  }
+}
+.rk-style-glossary-v52{padding-bottom:50px!important}
+.rk-style-glossary-hero-v52{
+  border-radius:28px;
+  padding:24px 20px;
+  margin:4px 0 14px;
+  background:radial-gradient(circle at 88% 0%,rgba(243,212,107,.16),transparent 34%),linear-gradient(150deg,#041F12,#07331E 58%,#0D4A2E);
+  border:1px solid rgba(243,212,107,.20);
+  box-shadow:0 16px 38px rgba(6,43,24,.18),inset 0 1px 0 rgba(255,255,255,.12);
+  color:#fff;
+  text-align:left;
+}
+.rk-style-glossary-kicker-v52{
+  font-size:9px;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+  font-weight:950;
+  color:#F3D46B;
+  margin-bottom:10px;
+}
+.rk-style-glossary-hero-v52 h1{
+  font-family:'Fraunces',Georgia,serif;
+  font-size:30px;
+  line-height:1.02;
+  letter-spacing:-.8px;
+  margin:0 0 9px;
+  font-weight:950;
+}
+.rk-style-glossary-hero-v52 p{
+  margin:0;
+  color:rgba(255,255,255,.76);
+  font-size:13px;
+  line-height:1.6;
+  font-weight:750;
+  max-width:34ch;
+}
+.rk-style-glossary-feature-v52,
+.rk-style-glossary-detail-v52,
+.rk-style-glossary-list-v52,
+.rk-style-glossary-cta-v52{
+  border-radius:24px;
+  background:linear-gradient(145deg,#FFFDF8,#F5EFE4);
+  border:1px solid rgba(26,20,16,.075);
+  box-shadow:0 9px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82);
+}
+.rk-style-glossary-feature-v52{
+  display:grid;
+  grid-template-columns:58px minmax(0,1fr);
+  gap:14px;
+  align-items:start;
+  padding:17px;
+  margin-bottom:12px;
+}
+.rk-style-glossary-orb-v52{
+  width:58px;
+  height:58px;
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(145deg,#FFF7DA,#F3D46B);
+  border:1px solid rgba(160,120,40,.20);
+  font-size:25px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.80),0 8px 18px rgba(160,120,40,.11);
+}
+.rk-style-glossary-feature-v52 span{
+  display:block;
+  font-size:8px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  font-weight:950;
+  color:#176B42;
+  margin-bottom:6px;
+}
+.rk-style-glossary-feature-v52 h2{
+  font-family:'Fraunces',Georgia,serif;
+  font-size:24px;
+  line-height:1.05;
+  letter-spacing:-.6px;
+  margin:0 0 8px;
+  color:#1A1410;
+}
+.rk-style-glossary-feature-v52 p,
+.rk-style-glossary-detail-v52 p{
+  margin:0;
+  font-size:12.7px;
+  line-height:1.62;
+  color:#6B6157;
+  font-weight:730;
+}
+.rk-style-glossary-detail-v52{
+  display:grid;
+  gap:9px;
+  padding:14px;
+  margin-bottom:12px;
+}
+.rk-style-glossary-detail-v52 div{
+  padding:12px;
+  border-radius:17px;
+  background:rgba(255,255,255,.58);
+  border:1px solid rgba(26,20,16,.055);
+}
+.rk-style-glossary-detail-v52 strong{
+  display:block;
+  font-size:9px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:#A07828;
+  margin-bottom:6px;
+  font-weight:950;
+}
+.rk-style-glossary-list-v52{
+  display:grid;
+  gap:8px;
+  padding:12px;
+  margin-bottom:12px;
+}
+.rk-style-glossary-list-v52 button{
+  display:grid;
+  grid-template-columns:38px minmax(0,1fr);
+  gap:11px;
+  align-items:center;
+  min-height:58px;
+  padding:10px 11px;
+  border-radius:17px;
+  border:1px solid rgba(26,20,16,.06);
+  background:rgba(255,255,255,.62);
+  text-align:left;
+  cursor:pointer;
+}
+.rk-style-glossary-list-v52 button.active{
+  border-color:rgba(23,107,66,.22);
+  background:linear-gradient(145deg,#F2FAF5,#FFFDF8);
+}
+.rk-style-glossary-list-v52 button>span{
+  width:38px;
+  height:38px;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(23,107,66,.08);
+  font-size:18px;
+}
+.rk-style-glossary-list-v52 strong{
+  display:block;
+  font-family:'Fraunces',Georgia,serif;
+  font-size:15px;
+  line-height:1.05;
+  color:#1A1410;
+  font-weight:950;
+}
+.rk-style-glossary-list-v52 small{
+  display:block;
+  margin-top:4px;
+  font-size:11px;
+  line-height:1.32;
+  color:#6B6157;
+  font-weight:760;
+}
+.rk-style-glossary-cta-v52{
+  width:100%;
+  min-height:48px;
+  color:#fff;
+  background:linear-gradient(135deg,#176B42,#0F5432);
+  border-color:rgba(243,212,107,.20);
+  font-family:'Fraunces',Georgia,serif;
+  font-size:14px;
+  font-weight:950;
+  cursor:pointer;
+}
 `;
 
 const S={
@@ -19038,7 +19272,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <div className="rk-home-scorecard-v41-score rk-pop">{scoreValue}</div>
             <div className="rk-home-scorecard-v41-score-label">Rackle IQ</div>
           </div>
-          {iq?.styleName&&<div className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next">{iq.styleName}</div>}
+          {iq?.styleName&&<button type="button" onClick={(e)=>{e.stopPropagation();setScreen("styleGlossary");}} className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next rk-style-pill-clickable" aria-label={`Learn what ${iq.styleName} means`}>{iq.styleName}<span aria-hidden="true">?</span></button>}
         </div>
         <div className="rk-home-scorecard-v41-title">{iq?.level||"Daily complete"}</div>
         <p className="rk-home-scorecard-v41-copy">{levelLine}</p>
@@ -21223,6 +21457,57 @@ function GlossaryScreen({home,setScreen}){
   );
 }
 
+
+// ════════════════════════════════════════════════════════════════════════════
+// STYLE GLOSSARY SCREEN, explains Rackle player styles in plain English
+// ════════════════════════════════════════════════════════════════════════════
+const RACKLE_STYLE_GLOSSARY=[
+  {name:"Flexible",emoji:"🌀",tag:"You kept options alive",meaning:"Flexible means your rack still had more than one believable lane after the Charleston. You were not locked into one hand too early.",tableRead:"A Flexible player protects useful tiles across two or three sections, then lets the next draw or pass decide the lane.",next:"Keep doing this, but look for the moment to narrow the rack before you drift."},
+  {name:"Sharp Player",emoji:"🎯",tag:"Clean read, strong direction",meaning:"Sharp Player means your passes supported the section your rack most naturally wanted. You kept the right tiles and reduced noise.",tableRead:"At the table, this is the player who looks calm after the Charleston because the rack already has a clear plan.",next:"Protect the core shape and avoid over-pivoting."},
+  {name:"Smooth Passer",emoji:"🤝",tag:"Low-risk passes",meaning:"Smooth Passer means you moved tiles that were unlikely to hurt your best path. Your passes cleaned the rack without giving away too much value.",tableRead:"This is the quiet Charleston skill: not flashy, but it keeps the rack playable.",next:"Pair this with a clearer target section after the second pass."},
+  {name:"Table Ready",emoji:"🏛️",tag:"Ready to defend the room",meaning:"Table Ready means the rack had enough structure, direction, and tile strength to hold up against the room.",tableRead:"You are not guaranteed the win, but the Charleston gave you something real to play.",next:"Watch for the first discard or draw that confirms your lane."},
+  {name:"Room Ready",emoji:"🀄",tag:"Solid shape, still forming",meaning:"Room Ready means the rack has a playable base, but still needs a clearer commitment to become dangerous.",tableRead:"You have enough to keep playing, but you are still reading the room rather than driving it.",next:"Pick your best two lanes and stop protecting everything."},
+  {name:"Finding your flow",emoji:"🌊",tag:"Learning rack",meaning:"Finding your flow means the Charleston had some useful pieces, but the rack did not fully click yet.",tableRead:"This is common. The goal is to learn which tiles were protecting a real lane and which ones were just comfortable to hold.",next:"On the next rack, decide earlier what you are no longer protecting."},
+  {name:"Review Rack",emoji:"🔍",tag:"Worth a second look",meaning:"Review Rack means the rack needs a closer read. It may have had a hidden path, but the Charleston did not make that path obvious.",tableRead:"This does not mean you played badly. It means the rack was noisy, thin, or pulled in too many directions.",next:"Use the review to find one tile you should have passed sooner."},
+];
+function StyleGlossaryScreen({home,setScreen}){
+  const [open,setOpen]=useState("Flexible");
+  const current=RACKLE_STYLE_GLOSSARY.find(s=>s.name===open)||RACKLE_STYLE_GLOSSARY[0];
+  return(
+    <div style={S.pg} className="rk-pg rk-style-glossary-v52">
+      <RackleHeader onBack={home} setScreen={setScreen}/>
+      <section className="rk-style-glossary-hero-v52">
+        <div className="rk-style-glossary-kicker-v52">Rackle style guide</div>
+        <h1>What does your style mean?</h1>
+        <p>Every scorecard gets a table personality. It is not a grade. It is a quick read on how your Charleston shaped the rack.</p>
+      </section>
+      <div className="rk-style-glossary-feature-v52">
+        <div className="rk-style-glossary-orb-v52">{current.emoji}</div>
+        <div>
+          <span>{current.tag}</span>
+          <h2>{current.name}</h2>
+          <p>{current.meaning}</p>
+        </div>
+      </div>
+      <div className="rk-style-glossary-detail-v52">
+        <div><strong>Table read</strong><p>{current.tableRead}</p></div>
+        <div><strong>Next move</strong><p>{current.next}</p></div>
+      </div>
+      <div className="rk-style-glossary-list-v52" aria-label="Rackle styles">
+        {RACKLE_STYLE_GLOSSARY.map(style=>{
+          const active=style.name===open;
+          return <button key={style.name} onClick={()=>setOpen(style.name)} className={active?"active":""}>
+            <span>{style.emoji}</span>
+            <div><strong>{style.name}</strong><small>{style.tag}</small></div>
+          </button>;
+        })}
+      </div>
+      <button onClick={()=>setScreen("howto")} className="rk-style-glossary-cta-v52">Learn how Rackle works →</button>
+      <Footer/>
+    </div>
+  );
+}
+
 // ════════════════════════════════════════════════════════════════════════════
 // SECTION QUIZ MODE, show 13 tiles, pick the best section
 // ════════════════════════════════════════════════════════════════════════════
@@ -21808,6 +22093,7 @@ export default function Rackle(){
         {screen==="profile"&&<ProfileScreen home={()=>setScreen("home")} streak={streak} rounds={rounds} dRes={dRes} setScreen={setScreen}/>}
         {screen==="recap"&&<WeeklyRecapScreen home={()=>setScreen("home")} go={go} dDone={dDone} setScreen={setScreen}/>}
         {screen==="glossary"&&<GlossaryScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
+        {screen==="styleGlossary"&&<StyleGlossaryScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
         {screen==="quiz"&&<SectionQuizScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
         {screen==="handbrowser"&&<HandBrowserScreen home={goBack} setScreen={setScreen}/>}
       </>
