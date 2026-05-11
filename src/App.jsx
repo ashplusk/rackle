@@ -7401,6 +7401,66 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
     margin-bottom:15px!important;
   }
 }
+
+
+/* ─── v44: leaderboard text contrast + share emoji reset ───────────────── */
+.rk-room-leader{
+  background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 9px 26px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;
+  color:#1A1410!important;
+}
+.rk-room-leader:after{opacity:.035!important;color:#176B42!important}
+.rk-room-leader-name{
+  color:#1A1410!important;
+  text-shadow:none!important;
+}
+.rk-room-leader-sub{
+  color:rgba(26,20,16,.58)!important;
+  text-shadow:none!important;
+}
+.rk-room-score{
+  color:#A07828!important;
+  text-shadow:none!important;
+}
+.rk-room-leader [style*="rgba(243,212,107"]{
+  color:#A07828!important;
+}
+
+.rk-quiet-leader{
+  background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 9px 26px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;
+  color:#1A1410!important;
+}
+.rk-quiet-leader:after{opacity:.035!important;color:#176B42!important}
+.rk-quiet-leader > div:nth-child(2) > div:first-child{
+  color:#A07828!important;
+  text-shadow:none!important;
+}
+.rk-quiet-leader > div:nth-child(2) > div:nth-child(2){
+  color:#1A1410!important;
+  text-shadow:none!important;
+}
+.rk-quiet-leader > div:nth-child(2) > div:nth-child(3){
+  color:rgba(26,20,16,.58)!important;
+  text-shadow:none!important;
+}
+.rk-quiet-leader > div:last-child{
+  color:#A07828!important;
+  text-shadow:none!important;
+}
+.rk-quiet-badge,
+.rk-room-rank-badge{
+  color:#8A6820!important;
+}
+
+.rk-home-scorecard-v41-share-icon,
+.rk-home-scorecard-v30-share-icon,
+.rk-score-share-v20-icon{
+  font-size:18px!important;
+  filter:none!important;
+}
 `;
 
 const S={
@@ -17846,7 +17906,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
       <div className="rk-home-scorecard-v41-bottom">
         <button onClick={copyShare} className={`rk-home-scorecard-v41-share ${shareCopied?"rk-copied-state":""}`}>
-          <div className="rk-home-scorecard-v41-share-icon">{shareCopied?"✓":"↗"}</div>
+          <div className="rk-home-scorecard-v41-share-icon">{shareCopied?"✓":"📲"}</div>
           <div>
             <strong>{shareCopied?"Copied for your club":"Share your score"}</strong>
             <span>{shareCopied?"Paste it into your group chat":"Drop it in your group chat"}</span>
