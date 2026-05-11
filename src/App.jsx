@@ -4916,6 +4916,28 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   border-radius:8px!important;
 }
 
+
+
+/* ─── v40: How To Play + 2026 Hand Browser UX overhaul ─────────────────── */
+.rk-howto-v40,.rk-handbrowser-v40{padding-bottom:64px!important;background:#F8F4EE!important}
+.rk-howto-v40-hero,.rk-handbrowser-v40-hero{position:relative;overflow:hidden;border-radius:30px;padding:26px 20px 22px;margin:8px 0 16px;background:linear-gradient(150deg,#041F12 0%,#07331E 55%,#0D4A2E 100%);border:1px solid rgba(243,212,107,.20);box-shadow:0 16px 42px rgba(6,43,24,.18),inset 0 1px 0 rgba(255,255,255,.12);color:#fff}
+.rk-howto-v40-hero:after,.rk-handbrowser-v40-hero:after{content:"🀄";position:absolute;right:-24px;bottom:-36px;font-size:132px;opacity:.045;transform:rotate(-8deg);pointer-events:none}
+.rk-howto-v40-kicker,.rk-handbrowser-v40-kicker{font-size:9px;letter-spacing:2.7px;text-transform:uppercase;font-weight:950;color:#F3D46B;margin-bottom:10px}
+.rk-howto-v40-hero h1,.rk-handbrowser-v40-hero h1{font-family:'Fraunces',Georgia,serif;font-size:32px;line-height:1.02;font-weight:950;letter-spacing:-1px;margin:0 0 10px;color:#fff;max-width:10ch}
+.rk-handbrowser-v40-hero h1{max-width:13ch}
+.rk-howto-v40-hero p,.rk-handbrowser-v40-hero p{font-size:13.2px;line-height:1.6;color:rgba(255,255,255,.75);font-weight:760;margin:0;max-width:34ch}
+.rk-howto-v40-mini-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:18px}.rk-howto-v40-mini-flow span{padding:8px 11px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);font-size:11px;font-weight:950;color:#F8F4EE}.rk-howto-v40-mini-flow b{color:#F3D46B;font-weight:950}
+.rk-howto-v40-card,.rk-handbrowser-v40-sections,.rk-handbrowser-v40-dragon-card{border-radius:28px;padding:18px;margin:0 0 15px;background:linear-gradient(145deg,#FFFDF8,#F5EFE4);border:1px solid rgba(26,20,16,.075);box-shadow:0 10px 28px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)}
+.rk-howto-v40-card-head,.rk-handbrowser-v40-card-head,.rk-handbrowser-v40-section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px}.rk-howto-v40-card-head span,.rk-handbrowser-v40-card-head span,.rk-handbrowser-v40-section-head span{font-size:8.5px;letter-spacing:2.2px;text-transform:uppercase;color:#176B42;font-weight:950}.rk-howto-v40-card-head h2,.rk-handbrowser-v40-card-head h2{font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1.04;font-weight:950;letter-spacing:-.55px;margin:0;color:#1A1410}.rk-handbrowser-v40-section-head strong{font-size:11px;color:#6B6157;font-weight:900;text-align:right}
+.rk-howto-v40-steps{display:grid;gap:10px}.rk-howto-v40-step{display:grid;grid-template-columns:42px minmax(0,1fr);gap:13px;padding:14px;border-radius:21px;background:rgba(255,255,255,.62);border:1px solid rgba(26,20,16,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.78)}.rk-howto-v40-num{width:42px;height:42px;border-radius:16px;background:linear-gradient(145deg,#176B42,#0F5432);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',Georgia,serif;font-size:13px;font-weight:950;box-shadow:0 7px 15px rgba(23,107,66,.14),inset 0 1px 0 rgba(255,255,255,.16)}.rk-howto-v40-step em{font-style:normal;font-size:8px;letter-spacing:1.8px;text-transform:uppercase;color:#A07828;font-weight:950}.rk-howto-v40-step h3{font-family:'Fraunces',Georgia,serif;font-size:18px;line-height:1.08;font-weight:950;margin:4px 0 5px;color:#1A1410}.rk-howto-v40-step p,.rk-howto-v40-rule p,.rk-howto-v40-scorecard-preview p{font-size:12.5px;line-height:1.58;color:#6B6157;font-weight:720;margin:0}
+.rk-howto-v40-rule-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.rk-howto-v40-rule{border-radius:20px;padding:14px 11px;background:rgba(255,255,255,.62);border:1px solid rgba(26,20,16,.06);text-align:left}.rk-howto-v40-rule div{width:36px;height:36px;border-radius:14px;background:rgba(23,107,66,.08);border:1px solid rgba(23,107,66,.10);display:flex;align-items:center;justify-content:center;margin-bottom:10px}.rk-howto-v40-rule h3{font-family:'Fraunces',Georgia,serif;font-size:16px;margin:0 0 5px;color:#1A1410}.rk-howto-v40-scorecard-preview{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px;border-radius:28px;background:linear-gradient(150deg,#041F12,#07331E 55%,#0D4A2E);border:1px solid rgba(243,212,107,.20);box-shadow:0 14px 34px rgba(6,43,24,.17),inset 0 1px 0 rgba(255,255,255,.10);color:#fff;margin-bottom:15px}.rk-howto-v40-scorecard-preview span{font-size:8.5px;letter-spacing:2.3px;text-transform:uppercase;color:#F3D46B;font-weight:950}.rk-howto-v40-scorecard-preview h2{font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1.04;margin:5px 0 6px;color:#fff}.rk-howto-v40-scorecard-preview p{color:rgba(255,255,255,.72);max-width:25ch}.rk-howto-v40-score-badge{font-family:'Fraunces',Georgia,serif;font-size:52px;line-height:1;color:#F3D46B;font-weight:950;text-shadow:0 8px 20px rgba(0,0,0,.18)}
+.rk-howto-v40-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}.rk-howto-v40-actions button,.rk-handbrowser-v40-load,.rk-handbrowser-v40-empty button{min-height:48px;border-radius:17px;border:1px solid rgba(23,107,66,.14);font-family:'Fraunces',Georgia,serif;font-size:14px;font-weight:950;cursor:pointer}.rk-howto-v40-actions button:first-child,.rk-handbrowser-v40-empty button{background:linear-gradient(135deg,#176B42,#0F5432);color:#fff;border-color:rgba(243,212,107,.18);box-shadow:0 10px 22px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16)}.rk-howto-v40-actions button:last-child,.rk-handbrowser-v40-load{background:linear-gradient(145deg,#FFFDF8,#F3EBDD);color:#176B42;border-color:rgba(160,120,40,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.78)}
+.rk-handbrowser-v40-search{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;margin-top:17px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:7px}.rk-handbrowser-v40-search input{width:100%;height:42px;border:0;outline:0;background:#FFFDF8;border-radius:13px;padding:0 13px;font-size:13px;font-weight:750;color:#1A1410}.rk-handbrowser-v40-search button{width:38px;height:38px;border-radius:13px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:#fff;font-size:20px;cursor:pointer}.rk-handbrowser-v40-quickbar{display:flex;gap:8px;overflow-x:auto;padding:0 2px 13px;margin-top:-3px;scrollbar-width:none}.rk-handbrowser-v40-quickbar::-webkit-scrollbar{display:none}.rk-handbrowser-v40-quickbar button{white-space:nowrap;border-radius:999px;border:1px solid rgba(26,20,16,.08);background:#FFFDF8;color:#176B42;padding:9px 12px;font-size:11.5px;font-weight:950;box-shadow:0 4px 14px rgba(26,20,16,.035)}.rk-handbrowser-v40-quickbar button.active{background:#176B42;color:#fff}.rk-handbrowser-v40-quickbar button.clear{color:#B02A2A;background:rgba(176,42,42,.07)}
+.rk-handbrowser-v40-section-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.rk-handbrowser-v40-section{display:grid;grid-template-columns:37px minmax(0,1fr);gap:10px;align-items:center;text-align:left;border-radius:19px;border:1px solid rgba(26,20,16,.07);background:rgba(255,255,255,.62);padding:12px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.74)}.rk-handbrowser-v40-section.active{background:linear-gradient(145deg,#176B42,#0F5432);border-color:rgba(243,212,107,.20);box-shadow:0 9px 20px rgba(23,107,66,.14),inset 0 1px 0 rgba(255,255,255,.16)}.rk-handbrowser-v40-section-icon{width:37px;height:37px;border-radius:15px;background:rgba(23,107,66,.08);display:flex;align-items:center;justify-content:center}.rk-handbrowser-v40-section.active .rk-handbrowser-v40-section-icon{background:rgba(255,255,255,.10)}.rk-handbrowser-v40-section-copy strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:14px;line-height:1.05;color:#1A1410;font-weight:950}.rk-handbrowser-v40-section-copy em{display:block;font-style:normal;font-size:10.5px;line-height:1.35;color:#6B6157;font-weight:750;margin-top:4px}.rk-handbrowser-v40-section.active strong{color:#fff}.rk-handbrowser-v40-section.active em{color:rgba(255,255,255,.70)}
+.rk-handbrowser-v40-section-note{border-radius:24px;padding:15px;margin:0 0 15px;background:linear-gradient(145deg,#FFFDF8,#F2EBDD);border:1px solid rgba(160,120,40,.14);box-shadow:0 8px 22px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78)}.rk-handbrowser-v40-section-note div{display:grid;grid-template-columns:38px minmax(0,1fr);column-gap:11px;align-items:start}.rk-handbrowser-v40-section-note span{grid-row:1/3;width:38px;height:38px;border-radius:15px;background:rgba(23,107,66,.08);display:flex;align-items:center;justify-content:center}.rk-handbrowser-v40-section-note strong{font-family:'Fraunces',Georgia,serif;font-size:18px;color:#1A1410;line-height:1.05}.rk-handbrowser-v40-section-note p{font-size:12px;line-height:1.5;color:#6B6157;font-weight:720;margin:5px 0 0}
+.rk-handbrowser-v40-dragon-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.rk-handbrowser-v40-dragon{border-radius:18px;padding:10px;background:rgba(255,255,255,.62);border:1px solid rgba(26,20,16,.06);text-align:center}.rk-handbrowser-v40-dragon>div{display:flex;justify-content:center;gap:4px;transform:scale(.72);height:34px;margin-bottom:8px}.rk-handbrowser-v40-dragon strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:14px;color:#1A1410}.rk-handbrowser-v40-dragon span{display:block;font-size:10.5px;color:#6B6157;font-weight:850;margin-top:3px}.rk-handbrowser-v40-results-head{display:flex;align-items:flex-end;justify-content:space-between;margin:18px 2px 10px}.rk-handbrowser-v40-results-head span{font-size:8.5px;letter-spacing:2.2px;text-transform:uppercase;color:#176B42;font-weight:950}.rk-handbrowser-v40-results-head h2{font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1.04;margin:4px 0 0;color:#1A1410}.rk-handbrowser-v40-empty{border-radius:24px;padding:18px;background:linear-gradient(145deg,#FFFDF8,#F5EFE4);border:1px solid rgba(26,20,16,.075);text-align:left;margin-bottom:15px}.rk-handbrowser-v40-empty h2{font-family:'Fraunces',Georgia,serif;font-size:22px;margin:0 0 6px;color:#1A1410}.rk-handbrowser-v40-empty p{font-size:12.5px;line-height:1.55;color:#6B6157;font-weight:720;margin:0 0 14px}.rk-handbrowser-v40-results-list{display:grid;gap:10px}.rk-handbrowser-v40-load{width:100%;margin:12px 0 22px}
+.rk-handbrowser-v40-results-list .rk-hand-card,.rk-handbrowser-v40-results-list [class*="hand-card"]{border-radius:23px!important;border-color:rgba(26,20,16,.075)!important;box-shadow:0 8px 22px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78)!important}
+@media(max-width:390px){.rk-howto-v40-hero h1,.rk-handbrowser-v40-hero h1{font-size:29px}.rk-howto-v40-rule-grid,.rk-handbrowser-v40-dragon-grid{grid-template-columns:1fr}.rk-howto-v40-actions{grid-template-columns:1fr}.rk-handbrowser-v40-section-grid{grid-template-columns:1fr}.rk-howto-v40-scorecard-preview{align-items:flex-start}.rk-howto-v40-score-badge{font-size:44px}.rk-handbrowser-v40-dragon>div{transform:scale(.82);height:42px}}
 `;
 
 const S={
@@ -17654,45 +17676,57 @@ function SectionQuizScreen({home,setScreen}){
 // ════════════════════════════════════════════════════════════════════════════
 function HowToPlayScreen({home,setScreen}){
   const steps=[
-    {n:"01",title:"Read the rack",copy:"Look for pairs, groups, flowers, jokers, dragons, and number patterns."},
-    {n:"02",title:"Pass with purpose",copy:"Send tiles that do not support your best lane. Never pass jokers."},
-    {n:"03",title:"Score your Charleston",copy:"Rackle shows whether your passes made the rack stronger or weaker."},
-    {n:"04",title:"Compare the room",copy:"See how your read stacks up against the global board and your club."},
+    {n:"01",title:"Read the rack",copy:"Look for pairs, pungs, flowers, jokers, dragons, and section patterns before you pass.",tag:"30 seconds"},
+    {n:"02",title:"Make the Charleston",copy:"Pass tiles that do not support your best lane. Jokers stay in your rack. They are never passed.",tag:"3 passes"},
+    {n:"03",title:"Choose your lane",copy:"After the Charleston, pick the section you were leaning toward. Rackle reads the shape against the 2026 card.",tag:"Your read"},
+    {n:"04",title:"Get your scorecard",copy:"See your score, your strongest path, and how your table read compares with your club.",tag:"Room score"},
   ];
   const rules=[
-    {title:"Jokers",copy:"Use them in pungs, kongs, quints, and sextets. Not pairs or singles."},
-    {title:"Concealed",copy:"You cannot call discards. You must draw the tiles yourself."},
-    {title:"Dragons",copy:"Bam uses Green. Crak uses Red. Dot uses Soap."},
+    {icon:"🃏",title:"Jokers",copy:"Great in groups. Not used in singles or pairs. Never passed in the Charleston."},
+    {icon:"🙈",title:"Concealed hands",copy:"You cannot call discards. You have to build the hand yourself."},
+    {icon:"🐉",title:"Dragons",copy:"Bam uses Green. Crak uses Red. Dot uses Soap."},
   ];
   return(
-    <div style={S.pg} className="rk-pg rk-how-simple-v9">
+    <div style={S.pg} className="rk-pg rk-howto-v40">
       <RackleHeader onBack={home} setScreen={setScreen}/>
-      <section className="rk-simple-page-hero">
-        <div className="rk-simple-kicker">How to Play Rackle</div>
-        <h1>Train the Charleston.</h1>
-        <p>One rack. Three passes. One score that tells you how clean your read was.</p>
-      </section>
 
-      <section className="rk-simple-steps">
-        {steps.map(step=>(
-          <article className="rk-simple-step" key={step.n}>
-            <div className="rk-simple-step-num">{step.n}</div>
-            <div>
-              <h2>{step.title}</h2>
-              <p>{step.copy}</p>
-            </div>
-          </article>
-        ))}
-      </section>
-
-      <section className="rk-simple-rules">
-        <div className="rk-simple-section-head">
-          <span>Table notes</span>
-          <h2>Three rules to remember.</h2>
+      <section className="rk-howto-v40-hero rk-sweep">
+        <div className="rk-howto-v40-kicker">How Rackle works</div>
+        <h1>The Daily Charleston, made simple.</h1>
+        <p>Rackle is a quick way to train your American Mahjong table read. One rack. A real Charleston. One score to chase.</p>
+        <div className="rk-howto-v40-mini-flow" aria-label="Rackle flow">
+          <span>Read</span><b>→</b><span>Pass</span><b>→</b><span>Score</span><b>→</b><span>Compare</span>
         </div>
-        <div className="rk-simple-rule-grid">
+      </section>
+
+      <section className="rk-howto-v40-card">
+        <div className="rk-howto-v40-card-head">
+          <span>Daily ritual</span>
+          <h2>What you do each day</h2>
+        </div>
+        <div className="rk-howto-v40-steps">
+          {steps.map(step=>(
+            <article className="rk-howto-v40-step" key={step.n}>
+              <div className="rk-howto-v40-num">{step.n}</div>
+              <div>
+                <em>{step.tag}</em>
+                <h3>{step.title}</h3>
+                <p>{step.copy}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="rk-howto-v40-card rk-howto-v40-rules-card">
+        <div className="rk-howto-v40-card-head">
+          <span>Table notes</span>
+          <h2>The three rules players ask about first</h2>
+        </div>
+        <div className="rk-howto-v40-rule-grid">
           {rules.map(rule=>(
-            <article className="rk-simple-rule" key={rule.title}>
+            <article className="rk-howto-v40-rule" key={rule.title}>
+              <div>{rule.icon}</div>
               <h3>{rule.title}</h3>
               <p>{rule.copy}</p>
             </article>
@@ -17700,9 +17734,18 @@ function HowToPlayScreen({home,setScreen}){
         </div>
       </section>
 
-      <div className="rk-simple-action-panel">
-        <button onClick={()=>setScreen("tutorial")}>Start Tutorial</button>
-        <button onClick={()=>setScreen("handbrowser")}>Browse 2026 Hands</button>
+      <section className="rk-howto-v40-scorecard-preview">
+        <div>
+          <span>Scorecard preview</span>
+          <h2>Your read gets a score.</h2>
+          <p>Rackle keeps the feedback short: what worked, what lane was strongest, and what to try next time.</p>
+        </div>
+        <div className="rk-howto-v40-score-badge">88</div>
+      </section>
+
+      <div className="rk-howto-v40-actions">
+        <button onClick={()=>setScreen("tutorial")}>Try the tutorial →</button>
+        <button onClick={()=>setScreen("handbrowser")}>Browse 2026 hands</button>
       </div>
       <Footer/>
     </div>
@@ -17730,50 +17773,73 @@ function HandBrowserScreen({home,setScreen}){
   const visibleHands=allHands.slice(0,visibleLimit);
   const sectionCounts=SECS.map(s=>({sec:s,count:HAND_CATALOG.filter(h=>h.sec===s.id).length,concealed:HAND_CATALOG.filter(h=>h.sec===s.id&&h.concealed).length}));
   const jumpToResults=()=>setTimeout(()=>document.getElementById("rk-hand-results")?.scrollIntoView({behavior:"smooth",block:"start"}),60);
+  const pickSection=(id)=>{setActiveSec(activeSec===id?null:id);if(activeSec!==id)jumpToResults();};
+  const quickSearch=(term)=>{setSearch(term);setActiveSec(null);setOnlyConcealed(false);jumpToResults();};
 
   useEffect(()=>{setVisibleLimit(6);},[activeSec,search,onlyConcealed]);
 
   return(
-    <div style={S.pg} className="rk-pg rk-mobile-safe rk-hand-browser-v9">
+    <div style={S.pg} className="rk-pg rk-handbrowser-v40">
       <RackleHeader onBack={home} setScreen={setScreen}/>
-      <section className="rk-browser-v9-hero">
-        <div className="rk-simple-kicker">2026 NMJL Card</div>
+
+      <section className="rk-handbrowser-v40-hero rk-sweep">
+        <div className="rk-handbrowser-v40-kicker">2026 NMJL card</div>
         <h1>{sec?sec.name:"Hand Browser"}</h1>
-        <p>{sec?`${allHands.length} matching hands. Tap a hand to see the tiles, joker rules, and constraints.`:"Pick a section. Tap a hand. See the exact groups you need."}</p>
-        <div className="rk-browser-v9-search-wrap">
-          <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search hands: 2468, dragon, concealed, flowers" />
+        <p>{sec?`${allHands.length} hands in this section. Open any hand to see the shape, constraints, and joker rules.`:"Find hands faster. Pick a section, search a pattern, or filter concealed hands."}</p>
+        <div className="rk-handbrowser-v40-search">
+          <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search: 2468, dragon, flowers, concealed" />
+          {search&&<button onClick={()=>setSearch("")} aria-label="Clear search">×</button>}
         </div>
       </section>
 
-      <section className="rk-browser-v9-section-grid" aria-label="Hand sections">
-        {sectionCounts.map(({sec:s,count,concealed})=>(
-          <button key={s.id} className={activeSec===s.id?"rk-browser-v9-section active":"rk-browser-v9-section"} onClick={()=>{setActiveSec(activeSec===s.id?null:s.id); if(activeSec!==s.id)jumpToResults();}}>
-            <span className="rk-browser-v9-section-icon">{s.icon}</span>
-            <strong>{s.name}</strong>
-            <em>{count} hands{concealed?` · ${concealed} concealed`:""}</em>
-          </button>
-        ))}
-      </section>
-
-      <div className="rk-browser-v13-helper">Tip: sections stay close by. Pick one, then open the first hand to scan the shape.</div>
-
-      <section className="rk-browser-v9-controls">
+      <section className="rk-handbrowser-v40-quickbar" aria-label="Quick filters">
         <button className={onlyConcealed?"active":""} onClick={()=>setOnlyConcealed(v=>!v)}>Concealed only</button>
-        {(activeSec||search||onlyConcealed)&&<button onClick={()=>{setActiveSec(null);setSearch("");setOnlyConcealed(false);}}>Clear filters</button>}
+        <button onClick={()=>quickSearch("dragon")}>Dragons</button>
+        <button onClick={()=>quickSearch("flowers")}>Flowers</button>
+        <button onClick={()=>quickSearch("2026")}>2026</button>
+        {(activeSec||search||onlyConcealed)&&<button className="clear" onClick={()=>{setActiveSec(null);setSearch("");setOnlyConcealed(false);}}>Clear</button>}
       </section>
 
-      <section className="rk-browser-v9-guide">
-        <div className="rk-simple-section-head">
-          <span>Quick guide</span>
-          <h2>Dragon matching.</h2>
+      <section className="rk-handbrowser-v40-sections" aria-label="Card sections">
+        <div className="rk-handbrowser-v40-section-head">
+          <span>Choose a section</span>
+          <strong>{HAND_CATALOG.length} hands on the card</strong>
         </div>
-        <div className="rk-browser-v9-dragon-grid">
+        <div className="rk-handbrowser-v40-section-grid">
+          {sectionCounts.map(({sec:s,count,concealed})=>(
+            <button key={s.id} className={activeSec===s.id?"rk-handbrowser-v40-section active":"rk-handbrowser-v40-section"} onClick={()=>pickSection(s.id)}>
+              <span className="rk-handbrowser-v40-section-icon">{s.icon}</span>
+              <span className="rk-handbrowser-v40-section-copy">
+                <strong>{s.name}</strong>
+                <em>{count} hands{concealed?` · ${concealed} concealed`:""}</em>
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {sec&&(
+        <section className="rk-handbrowser-v40-section-note">
+          <div>
+            <span>{sec.icon}</span>
+            <strong>{sec.name}</strong>
+            <p>{sec.hold||sec.desc}</p>
+          </div>
+        </section>
+      )}
+
+      <section className="rk-handbrowser-v40-dragon-card">
+        <div className="rk-handbrowser-v40-card-head">
+          <span>Quick rule</span>
+          <h2>Dragon matching</h2>
+        </div>
+        <div className="rk-handbrowser-v40-dragon-grid">
           {[
             {suit:"Bam",dragon:"Green",tiles:[{t:"s",s:"bam",n:5},{t:"d",v:"Grn"}]},
             {suit:"Crak",dragon:"Red",tiles:[{t:"s",s:"crak",n:5},{t:"d",v:"Red"}]},
             {suit:"Dot",dragon:"Soap",tiles:[{t:"s",s:"dot",n:5},{t:"d",v:"Soap"}]},
           ].map(row=>(
-            <div className="rk-browser-v9-dragon" key={row.suit}>
+            <div className="rk-handbrowser-v40-dragon" key={row.suit}>
               <div>{row.tiles.map((t,i)=><Ti key={i} t={t}/>)}</div>
               <strong>{row.suit}</strong>
               <span>{row.dragon}</span>
@@ -17782,31 +17848,35 @@ function HandBrowserScreen({home,setScreen}){
         </div>
       </section>
 
-      <section id="rk-hand-results" className="rk-browser-v9-results-head">
+      <section id="rk-hand-results" className="rk-handbrowser-v40-results-head">
         <div>
           <span>{activeSec||search||onlyConcealed?"Results":"Start here"}</span>
-          <h2>{activeSec||search||onlyConcealed?`${allHands.length} matching hands`:"Choose a section above to browse hands."}</h2>
+          <h2>{activeSec||search||onlyConcealed?`${allHands.length} matching hands`:"Pick a section to see the hands."}</h2>
         </div>
       </section>
 
       {!(activeSec||search||onlyConcealed)&&(
-        <div className="rk-browser-v9-empty">
-          <h2>Start with one section.</h2>
-          <p>The card gets easier when you look at one family of hands at a time.</p>
-          <button onClick={()=>setActiveSec("cr")}>Browse Consecutive Runs</button>
+        <div className="rk-handbrowser-v40-empty">
+          <h2>Start with one family.</h2>
+          <p>The card is easier when you browse one section at a time.</p>
+          <button onClick={()=>pickSection("cr")}>Browse Consecutive Runs →</button>
         </div>
       )}
 
       {(activeSec||search||onlyConcealed)&&allHands.length===0&&(
-        <div className="rk-browser-v9-empty"><h2>No hands found.</h2><p>Try “dragon”, “2468”, “any 2 suits”, “concealed”, or a section name.</p></div>
+        <div className="rk-handbrowser-v40-empty"><h2>No hands found.</h2><p>Try “dragon”, “2468”, “any 2 suits”, “concealed”, or a section name.</p></div>
       )}
 
-      {(activeSec||search||onlyConcealed)&&visibleHands.map((hand,i)=>(
-        <HandRenderer key={`${hand.sec}-${hand.label}-${i}`} hand={hand} defaultOpen={i===0}/>
-      ))}
+      {(activeSec||search||onlyConcealed)&&(
+        <section className="rk-handbrowser-v40-results-list">
+          {visibleHands.map((hand,i)=>(
+            <HandRenderer key={`${hand.sec}-${hand.label}-${i}`} hand={hand} defaultOpen={i===0}/>
+          ))}
+        </section>
+      )}
 
       {(activeSec||search||onlyConcealed)&&allHands.length>visibleLimit&&(
-        <button className="rk-browser-v9-load" onClick={()=>setVisibleLimit(v=>v+6)}>Show more hands →</button>
+        <button className="rk-handbrowser-v40-load" onClick={()=>setVisibleLimit(v=>v+6)}>Show more hands →</button>
       )}
       <Footer/>
     </div>
@@ -17856,7 +17926,7 @@ export default function Rackle(){
   const [clubPostToast,setClubPostToast]=useState(null);
   const [showWeeklyNudge,setShowWeeklyNudge]=useState(shouldShowWeeklyRecap);
   const [isHydrated,setIsHydrated]=useState(false);
-  const [appReady,setAppReady]=useState(false);
+  const [appReady,setAppReady]=useState(true);
   const isFirstDaily=!ST.get("hadFirstDaily",false);
 
   // Fetch clubs and hydrate registered profile from Supabase on load.
@@ -17953,14 +18023,6 @@ export default function Rackle(){
   };
 
   const go=(m)=>{setMode(m);setScreen("play");};
-
-  if(!appReady){
-    return(
-      <AppShell>
-        <RackleBootSplash/>
-      </AppShell>
-    );
-  }
 
   return(
     <AppShell>
