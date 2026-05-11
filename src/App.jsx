@@ -9172,6 +9172,123 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   .rk-scorecard-premium-v26 .rk-scorecard-heading-v26{font-size:29px!important}
   .rk-scorecard-premium-v26 .rk-iq-hero{padding:22px 18px 19px!important}
 }
+
+
+/* ─── v56: style pill cleanup, clubhouse simplify, footer gap fix ─────── */
+.rk-style-pill-clickable,
+.rk-home-scorecard-v41-style.rk-style-pill-clickable,
+.rk-home-scorecard-v42-style-next.rk-style-pill-clickable{
+  gap:0!important;
+  padding-right:16px!important;
+  padding-left:16px!important;
+}
+.rk-style-pill-clickable:after{
+  content:none!important;
+  display:none!important;
+  margin:0!important;
+  width:0!important;
+}
+.rk-style-pill-clickable span,
+.rk-home-scorecard-v41-style.rk-style-pill-clickable span{
+  display:none!important;
+}
+.rk-home-scorecard-v41-style.rk-style-pill-clickable:hover{
+  border-color:rgba(243,212,107,.62)!important;
+  background:rgba(255,255,255,.12)!important;
+}
+.rk-email-home-v8.rk-email-home-v19,
+.rk-email-home-v8{
+  position:relative!important;
+  padding:20px 18px 18px!important;
+  border-radius:28px!important;
+  background:
+    radial-gradient(circle at 92% 8%,rgba(23,107,66,.065),transparent 26%),
+    linear-gradient(145deg,#FFFDF8 0%,#F5EFE4 100%)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 10px 28px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;
+  color:#1A1410!important;
+  margin-bottom:18px!important;
+}
+.rk-email-home-v8:after{display:none!important}
+.rk-email-kicker-v8,
+.rk-email-kicker-v18{
+  margin-bottom:12px!important;
+  background:rgba(23,107,66,.075)!important;
+  border:1px solid rgba(23,107,66,.11)!important;
+  color:#176B42!important;
+}
+.rk-email-title-v8{
+  font-size:20px!important;
+  line-height:1.08!important;
+  margin:0 0 12px!important;
+  color:#1A1410!important;
+  letter-spacing:-.42px!important;
+}
+.rk-email-copy-v8,
+.rk-email-copy-v56{
+  margin:0 0 12px!important;
+  max-width:none!important;
+  font-size:12px!important;
+  line-height:1.45!important;
+  color:rgba(26,20,16,.56)!important;
+  font-weight:760!important;
+}
+.rk-email-form-v8{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:8px!important;
+  padding:8px!important;
+  border-radius:20px!important;
+  background:rgba(26,20,16,.035)!important;
+  border:1px solid rgba(26,20,16,.06)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-email-input-v8{
+  height:42px!important;
+  background:#fff!important;
+  color:#1A1410!important;
+  border:1px solid rgba(26,20,16,.08)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.84)!important;
+}
+.rk-email-input-v8::placeholder{color:rgba(26,20,16,.38)!important}
+.rk-email-btn-v8{
+  height:42px!important;
+  border-radius:999px!important;
+  background:linear-gradient(135deg,#176B42,#0F5432)!important;
+  color:#fff!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  box-shadow:0 8px 17px rgba(23,107,66,.15),inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+.rk-email-done-v8{
+  color:#1A1410!important;
+  background:rgba(23,107,66,.06)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+}
+.rk-email-done-v8 div:last-child{color:rgba(26,20,16,.58)!important}
+.rk-footer{
+  margin-bottom:0!important;
+  padding-bottom:22px!important;
+}
+.rk-footer + *{margin-top:0!important}
+.rk-pg{
+  padding-bottom:24px!important;
+}
+.rk-app{
+  overflow:hidden!important;
+}
+.rk-outer{
+  padding-bottom:0!important;
+}
+html,body,#root{
+  min-height:100%!important;
+  background:#F8F4EE!important;
+}
+@media(max-width:390px){
+  .rk-email-home-v8.rk-email-home-v19,.rk-email-home-v8{padding:18px 16px 16px!important}
+  .rk-email-form-v8{grid-template-columns:1fr!important}
+  .rk-email-btn-v8{width:100%!important}
+  .rk-footer{padding-bottom:18px!important}
+}
 `;
 
 const S={
@@ -17984,10 +18101,10 @@ function EmailSignup(){
       <div className="rk-email-kicker-v8 rk-email-kicker-v18">Clubhouse updates</div>
       <h2 className="rk-email-title-v8">Stay close to the table.</h2>
       {done?(
-        <div className="rk-email-done-v8"><div style={{fontFamily:F.d,fontSize:20,fontWeight:950,marginBottom:4}}>You’re on the list.</div><div style={{fontSize:12,color:"rgba(255,255,255,.72)",fontWeight:800}}>We’ll send new Rackle drops and club updates.</div></div>
+        <div className="rk-email-done-v8"><div style={{fontFamily:F.d,fontSize:20,fontWeight:950,marginBottom:4}}>You’re on the list.</div><div style={{fontSize:12,color:"rgba(255,255,255,.72)",fontWeight:800}}>You’ll get Rackle drops and club updates.</div></div>
       ):(
         <>
-          <p className="rk-email-copy-v8">Get new Rackle drops and club updates when they go live.</p>
+          <p className="rk-email-copy-v8 rk-email-copy-v56">Join the Rackle list to get updates.</p>
           <div className="rk-email-form-v8">
             <input className="rk-email-input-v8" type="email" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} placeholder="your@email.com" aria-label="Email address for Rackle updates" />
             <button className="rk-email-btn-v8" onClick={submit}>Join list</button>
