@@ -4965,6 +4965,201 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-room-live-v17-actions button{min-height:48px!important;font-size:13px!important;border-radius:17px!important}
 }
 @media(max-width:340px){.rk-room-live-v17-actions{grid-template-columns:1fr!important}}
+
+/* ─── v27: homepage spacing, free play, standings, share, scorecards ───── */
+.rk-learn-home-v19,
+.rk-learn-home-v18,
+.rk-email-home-v8{
+  margin-left:10px!important;
+  margin-right:10px!important;
+  width:calc(100% - 20px)!important;
+}
+.rk-learn-home-v19,
+.rk-learn-home-v18{
+  padding-left:18px!important;
+  padding-right:18px!important;
+  border-radius:28px!important;
+}
+.rk-email-home-v8{
+  border-radius:28px!important;
+  padding-left:18px!important;
+  padding-right:18px!important;
+}
+
+.rk-freeplay-v27{
+  margin-left:0!important;
+  margin-right:0!important;
+  background:
+    radial-gradient(circle at 88% 12%,rgba(243,212,107,.16),transparent 34%),
+    linear-gradient(145deg,#FFFDF8 0%,#F6EFE4 100%)!important;
+}
+.rk-freeplay-v27 .rk-freeplay-v24-top{
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:14px!important;
+}
+.rk-freeplay-v27-preview{
+  position:relative;
+  z-index:1;
+  display:grid;
+  gap:8px;
+  justify-items:center;
+  padding:11px 10px 10px;
+  border-radius:20px;
+  background:rgba(255,255,255,.58);
+  border:1px solid rgba(26,20,16,.07);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82),0 6px 16px rgba(26,20,16,.04);
+}
+.rk-freeplay-v27-preview-label{
+  font-size:8px;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  font-weight:950;
+  color:rgba(26,20,16,.44);
+  white-space:nowrap;
+}
+.rk-freeplay-v27 .rk-freeplay-v24-rack{
+  display:flex!important;
+  gap:6px!important;
+  padding:0!important;
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+}
+.rk-freeplay-v27 .rk-freeplay-v24-rack span{
+  width:31px!important;
+  height:42px!important;
+  border-radius:10px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:linear-gradient(145deg,#FFFDF8 0%,#F4EBDD 76%,#E7D7BF 100%)!important;
+  border:1px solid rgba(26,20,16,.09)!important;
+  box-shadow:0 7px 13px rgba(26,20,16,.10),inset 0 2px 0 rgba(255,255,255,.92),inset 0 -2px 0 rgba(160,120,40,.10)!important;
+  color:#176B42!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:18px!important;
+  font-weight:950!important;
+}
+.rk-freeplay-v27 .rk-freeplay-v24-rack span:nth-child(2){color:#B02A2A!important;transform:translateY(-2px)}
+.rk-freeplay-v27-steps{
+  grid-template-columns:1fr!important;
+  gap:8px!important;
+  margin-top:15px!important;
+}
+.rk-freeplay-v27-steps div{
+  display:grid!important;
+  grid-template-columns:34px 1fr!important;
+  align-items:center!important;
+  gap:10px!important;
+  min-height:58px!important;
+  text-align:left!important;
+  padding:10px 11px!important;
+  border-radius:18px!important;
+  background:rgba(255,255,255,.70)!important;
+  border:1px solid rgba(26,20,16,.07)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-freeplay-v27-steps strong{
+  width:34px!important;
+  height:34px!important;
+  margin:0!important;
+  border-radius:13px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:linear-gradient(145deg,#176B42,#0F5432)!important;
+  color:#fff!important;
+  box-shadow:0 6px 12px rgba(23,107,66,.14),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+.rk-freeplay-v27-steps span{font-size:12px!important;line-height:1.25!important;color:#6B6157!important;font-weight:760!important}
+.rk-freeplay-v27-steps b{display:block!important;font-size:12.5px!important;line-height:1.1!important;color:#1A1410!important;font-weight:950!important;margin-bottom:3px!important}
+.rk-freeplay-v27-steps small{display:block!important;font-size:11px!important;line-height:1.2!important;color:rgba(26,20,16,.50)!important;font-weight:760!important}
+
+.rk-room-live-v19 .rk-room-live-v6-title{font-size:22px!important;letter-spacing:-.58px!important}
+.rk-room-live-v17-cta{
+  border:1px solid rgba(243,212,107,.22)!important;
+  background:rgba(243,212,107,.10)!important;
+  color:#F3D46B!important;
+  border-radius:999px!important;
+  padding:6px 10px!important;
+  font-weight:950!important;
+}
+.rk-room-live-v17-actions{grid-template-columns:1.32fr 1fr!important;gap:10px!important;margin-top:15px!important}
+.rk-room-live-v17-actions button{
+  min-height:52px!important;
+  border-radius:19px!important;
+  font-size:13.5px!important;
+  letter-spacing:-.25px!important;
+}
+.rk-room-live-v17-actions button:first-child{
+  border:1px solid rgba(255,246,190,.82)!important;
+  background:linear-gradient(135deg,#FFF5BC 0%,#F3D46B 39%,#D2A33B 72%,#A07828 100%)!important;
+  box-shadow:0 14px 30px rgba(243,212,107,.26),0 0 0 1px rgba(255,255,255,.12),inset 0 1px 0 rgba(255,255,255,.62),inset 0 -1px 0 rgba(70,45,8,.18)!important;
+}
+.rk-room-live-v17-actions button:last-child{
+  border:1px solid rgba(255,255,255,.20)!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.06))!important;
+  box-shadow:0 10px 22px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.18),inset 0 0 0 1px rgba(243,212,107,.045)!important;
+}
+
+.rk-share-score-v6{
+  margin-left:0!important;
+  margin-right:0!important;
+  padding:20px!important;
+  border-radius:30px!important;
+  background:
+    radial-gradient(circle at 92% 12%,rgba(23,107,66,.13),transparent 32%),
+    radial-gradient(circle at 0% 0%,rgba(243,212,107,.20),transparent 36%),
+    linear-gradient(145deg,#FFFDF8 0%,#F4EBDD 100%)!important;
+  border:1px solid rgba(160,120,40,.20)!important;
+  box-shadow:0 16px 38px rgba(26,20,16,.07),inset 0 1px 0 rgba(255,255,255,.86)!important;
+}
+.rk-share-score-v6-title{font-size:26px!important;line-height:1.02!important;letter-spacing:-.72px!important}
+.rk-share-score-v6-copy{font-size:12.8px!important;line-height:1.52!important;max-width:32ch!important}
+.rk-share-lux-card-v6{
+  border-radius:24px!important;
+  padding:17px!important;
+  background:
+    radial-gradient(circle at 78% 0%,rgba(243,212,107,.17),transparent 34%),
+    linear-gradient(150deg,#041F12 0%,#07331E 52%,#0D4A2E 78%,#03170D 100%)!important;
+  box-shadow:0 16px 34px rgba(6,43,24,.20),inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+.rk-share-lux-v6-top strong{font-size:52px!important;letter-spacing:-2px!important}
+.rk-share-lux-v6-status{font-size:20px!important;line-height:1.08!important;margin-top:7px!important}
+.rk-share-lux-v6-tiles span{width:27px!important;height:34px!important;border-radius:9px!important;box-shadow:0 6px 12px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.9)!important}
+
+.rk-scorecard-achievements-v26{display:none!important}
+.rk-scorecard-premium-v26{line-height:1.55!important}
+.rk-scorecard-premium-v26 .rk-scorecard-heading-v26{margin-bottom:8px!important;line-height:1.02!important}
+.rk-scorecard-premium-v26 .rk-iq-hero{margin-bottom:18px!important}
+.rk-scorecard-premium-v26 .rk-iq-hero div[style*="font-size:14px"]{line-height:1.6!important}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20,
+.rk-scorecard-premium-v26 .rk-score-share-v20,
+.rk-scorecard-premium-v26 .rk-score-rack-card,
+.rk-scorecard-premium-v26 .rk-daily-review-v10,
+.rk-scorecard-premium-v26 .rk-next-rack-panel-v11{margin-top:16px!important;margin-bottom:16px!important}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card p{line-height:1.58!important}
+.rk-scorecard-premium-v26 .rk-daily-review-v20-detail-card p{line-height:1.6!important}
+.rk-score-action-panel-v8{margin-top:18px!important;margin-bottom:18px!important}
+.rk-score-primary-next-v8{min-height:50px!important;border-radius:18px!important}
+
+.rk-practice-v9-shell{line-height:1.55!important}
+.rk-practice-v9-hero{
+  border-radius:30px!important;
+  background:radial-gradient(circle at 88% 10%,rgba(243,212,107,.16),transparent 34%),linear-gradient(150deg,#041F12,#07331E 54%,#0D4A2E 100%)!important;
+  box-shadow:0 18px 44px rgba(6,43,24,.20),inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+.rk-practice-v9-copy,.rk-best-path-v9-copy,.rk-practice-v9-bottom-copy{line-height:1.55!important}
+.rk-practice-v9-actions button,.rk-practice-v9-bottom-actions button{border-radius:18px!important;min-height:48px!important}
+@media(max-width:390px){
+  .rk-learn-home-v19,.rk-learn-home-v18,.rk-email-home-v8{margin-left:8px!important;margin-right:8px!important;width:calc(100% - 16px)!important}
+  .rk-freeplay-v27 .rk-freeplay-v24-top{grid-template-columns:1fr!important}
+  .rk-freeplay-v27-preview{justify-items:start!important}
+  .rk-room-live-v19 .rk-room-live-v6-title{font-size:24px!important}
+  .rk-room-live-v17-actions button{font-size:12.5px!important;min-height:48px!important}
+}
+
 `;
 
 const S={
@@ -15393,23 +15588,37 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     </div>
   );
 
+  const freePlaySequences=[
+    ["2","5","8"],
+    ["1","3","5"],
+    ["4","6","8"],
+    ["3","6","9"],
+    ["🀇","🀈","🀉"],
+    ["🀙","🀚","🀛"],
+    ["2","0","6"],
+  ];
+  const freePlayTiles=freePlaySequences[Math.abs(Number(dn||0))%freePlaySequences.length];
+
   const PracticeCard=()=> (
-    <section className="rk-freeplay-v24" aria-label="Free play practice room">
+    <section className="rk-freeplay-v24 rk-freeplay-v27" aria-label="Free play practice room">
       <div className="rk-freeplay-v24-top">
         <div className="rk-freeplay-v24-copy">
           <div className="rk-freeplay-v24-kicker"><span>🔥</span> Free play room</div>
           <h2>Improve Your Game</h2>
-          <p>Practice another Charleston whenever you want. Try a section, get a scorecard, and keep today’s Daily Rackle score untouched.</p>
+          <p>Practice another Charleston without touching today’s score. New rack, clean passes, instant readout.</p>
         </div>
-        <div className="rk-freeplay-v24-rack" aria-hidden="true">
-          <span>2</span><span>5</span><span>8</span>
+        <div className="rk-freeplay-v27-preview" aria-hidden="true">
+          <div className="rk-freeplay-v27-preview-label">Practice rack</div>
+          <div className="rk-freeplay-v24-rack">
+            {freePlayTiles.map((tile,i)=><span key={`${tile}-${i}`}>{tile}</span>)}
+          </div>
         </div>
       </div>
 
-      <div className="rk-freeplay-v24-steps" aria-label="How Free Play works">
-        <div><strong>1</strong><span>Get a fresh rack</span></div>
-        <div><strong>2</strong><span>Run the Charleston</span></div>
-        <div><strong>3</strong><span>Review your read</span></div>
+      <div className="rk-freeplay-v24-steps rk-freeplay-v27-steps" aria-label="How Free Play works">
+        <div><strong>1</strong><span><b>Fresh rack</b><small>Deal another Charleston.</small></span></div>
+        <div><strong>2</strong><span><b>Make the passes</b><small>Train your table read.</small></span></div>
+        <div><strong>3</strong><span><b>Get the scorecard</b><small>See what to try next.</small></span></div>
       </div>
 
       <button type="button" onClick={()=>go("free")} className="rk-freeplay-v24-cta">
@@ -15586,7 +15795,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               {(firstNames.length?firstNames:[leaderName,"You","Club"]).slice(0,3).map((n,i)=><span key={`${n}-${i}`} className="rk-room-live-v6-avatar">{initials(n)}</span>)}
             </div>
             <div className="rk-room-live-v17-head-copy"><strong>{boardLabel}</strong><span>{socialCopy}</span></div>
-            <span className="rk-room-live-v17-cta">Open room →</span>
+            <span className="rk-room-live-v17-cta">{activeClubCode?`${club?.name||"Club"} room →`:"Open room →"}</span>
           </div>
           <div className="rk-room-live-v17-rows">
             {previewRows.map((r,i)=>{
@@ -15602,7 +15811,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </button>
 
         <div className="rk-room-live-v17-actions">
-          <button type="button" onClick={openBoard}>{"Open standings →"}</button>
+          <button type="button" onClick={openBoard}>{activeClubCode?`${club?.name||"Club"} standings →`:"Open standings →"}</button>
           <button type="button" onClick={secondaryAction}>{secondaryLabel}</button>
         </div>
       </section>
