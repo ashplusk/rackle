@@ -5671,6 +5671,69 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   .rk-howto-v40-card:first-of-type .rk-howto-v40-steps:before{left:23px!important}
 }
 
+
+/* ─── v42: dynamic header pill + smoother homepage spacing ─────────────── */
+.rk-startup-hero-v42{
+  padding-bottom:8px!important;
+  margin-bottom:10px!important;
+}
+.rk-startup-hero-v42 .rk-startup-logo-v4{
+  margin-bottom:12px!important;
+}
+.rk-startup-hero-v42 .rk-startup-subtitle-v4{
+  margin-top:0!important;
+  margin-bottom:8px!important;
+  line-height:1.12!important;
+}
+.rk-startup-pulse-pill-v42{
+  margin-top:0!important;
+  margin-bottom:0!important;
+  padding:7px 13px!important;
+  font-size:11px!important;
+  letter-spacing:.12px!important;
+  background:linear-gradient(145deg,#FFFDF8 0%,#F4EBDD 100%)!important;
+  border:1px solid rgba(160,120,40,.14)!important;
+  box-shadow:0 6px 16px rgba(26,20,16,.038),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-startup-pulse-pill-v42 span{
+  width:7px!important;
+  height:7px!important;
+  background:#54D989!important;
+  box-shadow:0 0 0 4px rgba(84,217,137,.13),0 0 13px rgba(84,217,137,.30)!important;
+}
+.rk-startup-hero-v42 + .rk-daily-entry-wrap-v37,
+.rk-startup-hero-v42 + section,
+.rk-startup-hero-v42 ~ .rk-daily-entry-wrap-v37{
+  margin-top:14px!important;
+}
+.rk-daily-entry-wrap-v37{
+  margin-top:14px!important;
+}
+.rk-daily-entry-v6,
+.rk-daily-entry-v21,
+.rk-daily-entry-v35{
+  margin-top:0!important;
+}
+@media(max-width:390px){
+  .rk-startup-hero-v42{
+    padding-bottom:7px!important;
+    margin-bottom:9px!important;
+  }
+  .rk-startup-hero-v42 .rk-startup-logo-v4{
+    margin-bottom:10px!important;
+  }
+  .rk-startup-hero-v42 .rk-startup-subtitle-v4{
+    margin-bottom:7px!important;
+  }
+  .rk-startup-pulse-pill-v42{
+    font-size:10.5px!important;
+    padding:7px 12px!important;
+  }
+  .rk-daily-entry-wrap-v37{
+    margin-top:13px!important;
+  }
+}
+
 `;
 
 const S={
@@ -15965,13 +16028,23 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   };
 
   const Hero=()=>{
+    const headerPills=[
+      "Today’s room is open",
+      "Fresh rack is live",
+      "Your table is waiting",
+      "One rack. One room.",
+      "Beat the room today",
+      "Daily Charleston is live",
+      "The club board is open",
+    ];
+    const headerPill=headerPills[Math.floor(Math.random()*headerPills.length)];
     return(
-      <div className="rk-startup-hero-v4">
+      <div className="rk-startup-hero-v4 rk-startup-hero-v42">
         <div className="rk-startup-mark-v4 rk-float">🀄</div>
         <h1 className="rk-startup-logo-v4">Rackle</h1>
         <p className="rk-startup-subtitle-v4">The Daily Mahjong Workout</p>
-        <div className="rk-startup-pulse-pill-v41" aria-label="Today’s Rackle status">
-          <span></span> Today’s room is open
+        <div className="rk-startup-pulse-pill-v41 rk-startup-pulse-pill-v42" aria-label="Today’s Rackle status">
+          <span></span> {headerPill}
         </div>
         <p className="rk-startup-description-v4 rk-startup-description-hidden" aria-hidden="true"></p>
       </div>
