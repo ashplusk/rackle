@@ -7461,6 +7461,25 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   font-size:18px!important;
   filter:none!important;
 }
+
+
+/* ─── vNext: remove streak strip + fix scorecard button hit targets ───── */
+.rk-home-scorecard-v41-streak,
+.rk-home-scorecard-v30-streak,
+.rk-scorecard-achievements-v26,
+.rk-streak-card{
+  display:none!important;
+}
+.rk-home-scorecard-v41-main{
+  appearance:none!important;
+  border:none!important;
+  width:100%!important;
+}
+.rk-home-scorecard-v41-actions button{
+  position:relative!important;
+  z-index:3!important;
+  pointer-events:auto!important;
+}
 `;
 
 const S={
@@ -14530,12 +14549,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </div>
 
-      <div className="rk-scorecard-achievements-v26" aria-label="Scorecard highlights">
-        <div className="rk-scorecard-achievement-v26"><strong>#{dayNum}</strong><span>Daily rack</span></div>
-        <div className="rk-scorecard-achievement-v26"><strong>{iq.streak||ST.get("str",0)||0}d</strong><span>Streak</span></div>
-        <div className="rk-scorecard-achievement-v26"><strong>{timeLabel}</strong><span>Time</span></div>
-        <div className="rk-scorecard-achievement-v26"><strong>{clubRank?`#${clubRank}`:globalRank?`#${globalRank}`:"—"}</strong><span>{clubRank?"Club rank":"Global"}</span></div>
-      </div>
+      {/* vNext: removed achievement strip above room buttons. Global, Club, and Time remain below as tappable scorecard controls. */}
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:8,marginBottom:12}}>
         <Metric label="Global" value={globalRank?`#${globalRank}`:"—"} sub={globalTotal?`of ${globalTotal}`:"loading"} accent={globalRank===1?C.gold:C.jade} onClick={()=>setScreen&&setScreen("globalLeaderboard")}/>
@@ -17710,8 +17724,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const brightScoreColor="#F3D46B";
   const goGlobalRank=(e)=>{
     e?.stopPropagation?.();
-    setScreen("home");
-    setTimeout(()=>document.getElementById("global-leaderboard")?.scrollIntoView({behavior:"smooth",block:"center"}),60);
+    setScreen("globalLeaderboard");
   };
   const goClubRank=(e)=>{
     e?.stopPropagation?.();
@@ -17877,7 +17890,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const clubValue=club?(shownClubRank?`#${shownClubRank}`:(hasClubScore?"live":"club")):"join";
     return(
     <section className="rk-home-scorecard-v41 rk-home-section-lg" aria-label="Your Daily Rackle scorecard">
-      <button type="button" onClick={showScorecard} className="rk-home-scorecard-v41-main" aria-label="Open your full scorecard">
+      <div role="button" tabIndex={0} onClick={showScorecard} onKeyDown={(e)=>{if(e.key==="Enter"||e.key===" ")showScorecard();}} className="rk-home-scorecard-v41-main" aria-label="Open your full scorecard">
         <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
         <div className="rk-home-scorecard-v41-kicker"><span/> Daily Scorecard · #{dn}</div>
         <div className="rk-home-scorecard-v41-score-row">
@@ -17902,7 +17915,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <em>{club?"View club →":"Find club →"}</em>
           </button>
         </div>
-      </button>
+      </div>
 
       <div className="rk-home-scorecard-v41-bottom">
         <button onClick={copyShare} className={`rk-home-scorecard-v41-share ${shareCopied?"rk-copied-state":""}`}>
