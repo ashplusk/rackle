@@ -5890,6 +5890,50 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   }
 }
 
+
+
+/* ─── vNext: Learn + Explore section margin fix ────────────────────────── */
+.rk-learn-home-v8,
+.rk-learn-home-v12,
+.rk-learn-home-v18,
+.rk-learn-home-v19{
+  width:calc(100% - 28px)!important;
+  margin-left:14px!important;
+  margin-right:14px!important;
+}
+.rk-learn-home-v8 .rk-learn-home-head,
+.rk-learn-home-v12 .rk-learn-home-head,
+.rk-learn-home-v18 .rk-learn-home-v18-head,
+.rk-learn-home-v19 .rk-learn-home-v18-head{
+  padding-left:0!important;
+  padding-right:0!important;
+}
+.rk-learn-home-v8,
+.rk-learn-home-v18,
+.rk-learn-home-v19{
+  border-radius:28px!important;
+  overflow:hidden!important;
+}
+@media(max-width:430px){
+  .rk-learn-home-v8,
+  .rk-learn-home-v12,
+  .rk-learn-home-v18,
+  .rk-learn-home-v19{
+    width:calc(100% - 22px)!important;
+    margin-left:11px!important;
+    margin-right:11px!important;
+  }
+}
+@media(max-width:360px){
+  .rk-learn-home-v8,
+  .rk-learn-home-v12,
+  .rk-learn-home-v18,
+  .rk-learn-home-v19{
+    width:calc(100% - 18px)!important;
+    margin-left:9px!important;
+    margin-right:9px!important;
+  }
+}
 `;
 
 const S={
