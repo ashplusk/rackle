@@ -14577,18 +14577,6 @@ function ClubPostToast({toast,onDismiss}){
 }
 
 
-function RackleBootSplash(){
-  return(
-    <div className="rk-boot-splash">
-      <div style={{position:"relative",zIndex:1}}>
-        <div className="rk-boot-tile">🀄</div>
-        <div className="rk-boot-logo">Rackle</div>
-        <div className="rk-boot-copy">Setting the table...</div>
-        <div className="rk-boot-shimmer" />
-      </div>
-    </div>
-  );
-}
 
 function PremiumClubMenu({open,onClose,setScreen,go,showSettings,streak=0,dRes=null}){
   if(!open)return null;
@@ -19408,7 +19396,7 @@ export default function Rackle(){
   const [clubPostToast,setClubPostToast]=useState(null);
   const [showWeeklyNudge,setShowWeeklyNudge]=useState(shouldShowWeeklyRecap);
   const [isHydrated,setIsHydrated]=useState(false);
-  const [appReady,setAppReady]=useState(false);
+  const [appReady,setAppReady]=useState(true);
   const isFirstDaily=!ST.get("hadFirstDaily",false);
 
   // Fetch clubs and hydrate registered profile from Supabase on load.
@@ -19505,14 +19493,6 @@ export default function Rackle(){
   };
 
   const go=(m)=>{setMode(m);setScreen("play");};
-
-  if(!appReady){
-    return(
-      <AppShell>
-        <RackleBootSplash/>
-      </AppShell>
-    );
-  }
 
   return(
     <AppShell>
