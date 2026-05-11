@@ -5215,6 +5215,158 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-freeplay-v40-tile .rk-mahjong-tile{width:31px!important;height:44px!important;min-width:31px!important}
   .rk-learn-home-v8,.rk-learn-home-v12,.rk-learn-home-v18,.rk-learn-home-v19{margin-left:6px!important;margin-right:6px!important;width:calc(100% - 12px)!important}
 }
+
+
+/* ─── v40: unified homepage background, clubhouse pill, leaderboard UX ─── */
+html,body,#root{background:#F8F4EE!important;background-image:none!important;}
+.rk-pg,
+.rk-app,
+.rk-outer,
+.rk-home-responsive-shell,
+.rk-home-main-col,
+.rk-startup-hero-v4{
+  background:#F8F4EE!important;
+  background-image:none!important;
+}
+.rk-startup-hero-v4:before,
+.rk-startup-hero-v4:after,
+.rk-pg:before,
+.rk-pg:after{
+  display:none!important;
+  content:none!important;
+}
+.rk-startup-hero-v4{
+  box-shadow:none!important;
+  border:none!important;
+  margin-bottom:18px!important;
+}
+.rk-startup-subtitle-v4{
+  color:#176B42!important;
+}
+
+/* Clubhouse Updates as a premium pill/card */
+.rk-email-home-v8.rk-email-home-v19,
+.rk-email-home-v8,
+.rk-email-home-v19{
+  display:block!important;
+  position:relative!important;
+  overflow:hidden!important;
+  margin:22px 8px 24px!important;
+  padding:19px 17px 17px!important;
+  border-radius:30px!important;
+  background:
+    radial-gradient(circle at 94% 12%,rgba(23,107,66,.08),transparent 32%),
+    linear-gradient(145deg,#FFFDF8 0%,#F5ECDD 100%)!important;
+  border:1px solid rgba(160,120,40,.16)!important;
+  box-shadow:0 12px 32px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.82)!important;
+  color:#1A1410!important;
+  text-align:left!important;
+}
+.rk-email-home-v8:after,
+.rk-email-home-v19:after{
+  content:'🀄'!important;
+  display:block!important;
+  position:absolute!important;
+  right:-20px!important;
+  bottom:-34px!important;
+  font-size:122px!important;
+  opacity:.035!important;
+  transform:rotate(-8deg)!important;
+  pointer-events:none!important;
+}
+.rk-email-kicker-v8,
+.rk-email-kicker-v18{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  width:auto!important;
+  padding:6px 10px!important;
+  margin-bottom:11px!important;
+  border-radius:999px!important;
+  background:rgba(23,107,66,.065)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  color:#176B42!important;
+  font-size:8.5px!important;
+  letter-spacing:2.2px!important;
+}
+.rk-email-kicker-v8:before,
+.rk-email-kicker-v18:before{
+  content:'';
+  width:7px;height:7px;border-radius:999px;background:#176B42;
+  box-shadow:0 0 0 4px rgba(23,107,66,.08);
+}
+.rk-email-title-v8{font-size:21px!important;line-height:1.06!important;color:#1A1410!important;margin-bottom:8px!important;letter-spacing:-.45px!important;}
+.rk-email-copy-v8{font-size:12.4px!important;line-height:1.5!important;color:rgba(26,20,16,.58)!important;max-width:34ch!important;margin-bottom:14px!important;}
+.rk-email-form-v8{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:8px!important;}
+.rk-email-input-v8{height:40px!important;border-radius:14px!important;background:#FFFDF8!important;border:1px solid rgba(26,20,16,.10)!important;color:#1A1410!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.80)!important;}
+.rk-email-input-v8::placeholder{color:rgba(26,20,16,.36)!important;}
+.rk-email-btn-v8{height:40px!important;border-radius:14px!important;background:linear-gradient(135deg,#176B42,#0F5432)!important;color:#fff!important;border:1px solid rgba(255,255,255,.18)!important;box-shadow:0 8px 18px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16)!important;}
+.rk-email-done-v8{background:rgba(23,107,66,.065)!important;border:1px solid rgba(23,107,66,.10)!important;color:#1A1410!important;}
+.rk-email-done-v8 div{color:#1A1410!important;}
+@media(max-width:390px){.rk-email-form-v8{grid-template-columns:1fr!important}.rk-email-btn-v8{width:100%!important}.rk-email-home-v8.rk-email-home-v19{margin-left:6px!important;margin-right:6px!important}}
+
+/* Leaderboard / Rackle room UX polish */
+.rk-room-page,
+.rk-room-shell{
+  background:#F8F4EE!important;
+}
+.rk-room-hero{
+  border-radius:30px!important;
+  padding:24px 20px 20px!important;
+  margin-bottom:16px!important;
+  background:
+    radial-gradient(circle at 90% 8%,rgba(243,212,107,.14),transparent 33%),
+    linear-gradient(150deg,#041F12 0%,#07331E 54%,#051F11 100%)!important;
+  border:1px solid rgba(243,212,107,.22)!important;
+  box-shadow:0 18px 42px rgba(6,43,24,.20),inset 0 1px 0 rgba(255,255,255,.10)!important;
+}
+.rk-room-title{font-size:30px!important;line-height:1.03!important;letter-spacing:-.75px!important;margin-bottom:9px!important;}
+.rk-room-copy{font-size:13px!important;line-height:1.6!important;color:rgba(255,255,255,.74)!important;max-width:36ch!important;}
+.rk-room-metrics{gap:9px!important;margin-top:16px!important;}
+.rk-room-metric{border-radius:18px!important;background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.13)!important;padding:13px 10px!important;}
+.rk-room-leader,
+.rk-room-you,
+.rk-room-row,
+.rk-invite-card{
+  border-radius:24px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 9px 26px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-room-leader{padding:16px!important;align-items:center!important;}
+.rk-room-leader-name{font-size:23px!important;line-height:1.08!important;}
+.rk-room-leader-sub,.rk-room-you-copy,.rk-room-row-sub{line-height:1.45!important;color:rgba(26,20,16,.58)!important;white-space:normal!important;}
+.rk-room-row-list{display:grid!important;gap:9px!important;margin-bottom:14px!important;}
+.rk-room-row{grid-template-columns:40px minmax(0,1fr) auto!important;gap:11px!important;padding:13px!important;}
+.rk-room-row-rank{background:rgba(23,107,66,.08)!important;color:#176B42!important;border:1px solid rgba(23,107,66,.10)!important;}
+.rk-room-row-top{background:rgba(243,212,107,.20)!important;color:#8A6820!important;border-color:rgba(243,212,107,.24)!important;}
+.rk-room-row-score{font-size:25px!important;text-align:right!important;min-width:42px!important;}
+.rk-room-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:9px!important;padding:12px!important;border-radius:24px!important;background:linear-gradient(145deg,#FFFDF8,#F4ECDD)!important;border:1px solid rgba(26,20,16,.075)!important;box-shadow:0 8px 24px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.80)!important;}
+.rk-room-btn{min-height:46px!important;border-radius:16px!important;font-family:'Fraunces',Georgia,serif!important;font-size:13px!important;font-weight:950!important;}
+.rk-room-btn-primary{background:linear-gradient(135deg,#176B42,#0F5432)!important;border:1px solid rgba(243,212,107,.20)!important;box-shadow:0 10px 22px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16)!important;}
+@media(max-width:390px){.rk-room-actions{grid-template-columns:1fr!important}.rk-room-title{font-size:27px!important}.rk-room-leader{grid-template-columns:42px minmax(0,1fr) auto!important}.rk-room-row{grid-template-columns:36px minmax(0,1fr) auto!important}}
+
+/* Better Live Table Notes */
+.rk-room-activity-v40{
+  position:relative!important;
+  overflow:hidden!important;
+  border-radius:24px!important;
+  padding:15px!important;
+  margin:14px 0!important;
+  background:
+    radial-gradient(circle at 92% 10%,rgba(23,107,66,.09),transparent 34%),
+    linear-gradient(145deg,#FFFDF8,#F5EFE4)!important;
+  border:1px solid rgba(160,120,40,.13)!important;
+  box-shadow:0 10px 28px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-room-activity-v40:after{content:'notes';position:absolute;right:14px;top:12px;font-family:'Fraunces',Georgia,serif;font-size:30px;font-weight:950;letter-spacing:-1px;color:rgba(160,120,40,.07);pointer-events:none;}
+.rk-room-activity-v40-head{display:flex!important;align-items:flex-start!important;gap:11px!important;margin-bottom:12px!important;position:relative;z-index:1;}
+.rk-room-activity-v40-icon{width:34px;height:34px;border-radius:13px;background:linear-gradient(145deg,#176B42,#0F5432);box-shadow:0 7px 16px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.18);color:#4DE08E!important;display:flex;align-items:center;justify-content:center;font-size:24px;line-height:1;flex-shrink:0;}
+.rk-room-activity-title{font-size:8.5px!important;letter-spacing:2.25px!important;text-transform:uppercase!important;font-weight:950!important;color:#176B42!important;margin:0 0 4px!important;}
+.rk-room-activity-v40-head p{margin:0!important;font-size:12px!important;line-height:1.4!important;color:rgba(26,20,16,.55)!important;font-weight:800!important;}
+.rk-room-feed-v40{display:grid!important;gap:8px!important;position:relative;z-index:1;}
+.rk-room-feed-item-v40{display:grid!important;grid-template-columns:10px minmax(0,1fr)!important;gap:9px!important;align-items:start!important;padding:10px 11px!important;border-radius:16px!important;background:rgba(255,255,255,.64)!important;border:1px solid rgba(26,20,16,.055)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.75)!important;font-size:12px!important;line-height:1.45!important;color:rgba(26,20,16,.68)!important;font-weight:800!important;}
+.rk-room-feed-dot{width:8px!important;height:8px!important;margin-top:5px!important;border-radius:999px!important;background:#176B42!important;box-shadow:0 0 0 4px rgba(23,107,66,.08)!important;}
 `;
 
 const S={
@@ -14633,10 +14785,19 @@ function RoomRows({entries=[],scoreHint=null,emptyTitle="No scores yet",emptyCop
   </div>;
 }
 function RoomActivity({items=[]}){
-  return <div className="rk-room-activity">
-    <div className="rk-room-activity-title">Live table notes</div>
-    <div className="rk-room-feed">{items.map((item,i)=><div className="rk-room-feed-item" key={i}><span className="rk-room-feed-dot"/><span>{item}</span></div>)}</div>
-  </div>;
+  const cleanItems=(items&&items.length?items:["First score opens the room.","Post once, then see who you’re chasing.","The board resets at midnight."]).slice(0,4);
+  return <section className="rk-room-activity rk-room-activity-v40" aria-label="Live table notes">
+    <div className="rk-room-activity-v40-head">
+      <span className="rk-room-activity-v40-icon" aria-hidden="true">•</span>
+      <div>
+        <div className="rk-room-activity-title">Live table notes</div>
+        <p>Small signals from today’s room.</p>
+      </div>
+    </div>
+    <div className="rk-room-feed rk-room-feed-v40">
+      {cleanItems.map((item,i)=><div className="rk-room-feed-item rk-room-feed-item-v40" key={i}><span className="rk-room-feed-dot"/><span>{item}</span></div>)}
+    </div>
+  </section>;
 }
 function rkSharePattern(iq){
   const dots=(iq?.passInsights||[]).slice(0,4).map(p=>p.quality==="strong"?"🟩":p.quality==="weak"?"⬜":"🟨").join("");
