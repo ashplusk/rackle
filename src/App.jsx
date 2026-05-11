@@ -9565,6 +9565,289 @@ html,body,#root{
   .rk-scorecard-premium-v26 .rk-score-tick-up-v43,.rk-scorecard-premium-v26 .rk-iq-score{font-size:88px!important}
   .rk-handbrowser-v40-dragon-grid{grid-template-columns:1fr!important}
 }
+
+
+/* ─── v60: global navigation, footer gap, clubhouse, style glossary UX ─── */
+.rk-header-logo-home-v60{
+  -webkit-tap-highlight-color:transparent!important;
+}
+.rk-header-logo-home-v60:active{
+  transform:translateX(-50%) scale(.985)!important;
+}
+.rk-header-logo-home-v60:hover div:first-child{
+  color:#176B42!important;
+}
+.rk-pg{
+  padding-bottom:28px!important;
+}
+.rk-footer{
+  margin-top:12px!important;
+  padding-top:20px!important;
+  padding-bottom:20px!important;
+}
+.rk-footer-inner{
+  padding-bottom:0!important;
+}
+.rk-pg > .rk-footer:last-child{
+  margin-bottom:0!important;
+}
+.rk-email-home-v8.rk-email-home-v19,
+.rk-email-home-v8,
+.rk-email-home-v19{
+  text-align:center!important;
+  padding:19px 17px 17px!important;
+}
+.rk-email-home-v8 .rk-email-kicker-v8,
+.rk-email-kicker-v8{
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.rk-email-title-v8{
+  text-align:center!important;
+  font-size:19px!important;
+  line-height:1.08!important;
+  letter-spacing:-.35px!important;
+  margin:0 auto 7px!important;
+  max-width:24ch!important;
+}
+.rk-email-copy-v8{
+  text-align:center!important;
+  font-size:12px!important;
+  line-height:1.48!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  max-width:29ch!important;
+}
+.rk-email-form-v8{
+  margin-top:12px!important;
+}
+@media(max-width:390px){
+  .rk-footer{padding-bottom:16px!important;margin-top:10px!important}
+  .rk-pg{padding-bottom:22px!important}
+  .rk-email-title-v8{font-size:18px!important}
+}
+
+.rk-style-glossary-v60{
+  --style-card:#FFFDF8;
+}
+.rk-style-glossary-hero-v60{
+  border-radius:28px;
+  padding:22px 18px 20px;
+  background:linear-gradient(150deg,#041F12,#07331E 54%,#0D4A2E 100%);
+  border:1px solid rgba(243,212,107,.18);
+  color:#fff;
+  box-shadow:0 18px 42px rgba(6,43,24,.16),inset 0 1px 0 rgba(255,255,255,.12);
+  margin:0 0 14px;
+  text-align:left;
+}
+.rk-style-glossary-kicker-v60{
+  display:inline-flex;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.13);
+  color:#F3D46B;
+  font-size:8px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  font-weight:950;
+  margin-bottom:12px;
+}
+.rk-style-glossary-hero-v60 h1{
+  font-family:'Fraunces',Georgia,serif;
+  font-size:27px;
+  line-height:1.02;
+  letter-spacing:-.8px;
+  margin:0 0 8px;
+  font-weight:950;
+}
+.rk-style-glossary-hero-v60 p{
+  margin:0;
+  font-size:13px;
+  line-height:1.58;
+  color:rgba(255,255,255,.73);
+  font-weight:760;
+  max-width:38ch;
+}
+.rk-style-glossary-feature-v60{
+  display:grid;
+  grid-template-columns:58px minmax(0,1fr);
+  gap:14px;
+  align-items:center;
+  padding:16px;
+  border-radius:24px;
+  background:linear-gradient(145deg,#FFFDF8,#F5EFE4);
+  border:1px solid rgba(26,20,16,.075);
+  box-shadow:0 10px 28px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82);
+  margin-bottom:11px;
+}
+.rk-style-glossary-orb-v60{
+  width:58px;
+  height:58px;
+  border-radius:21px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(23,107,66,.08);
+  border:1px solid rgba(23,107,66,.10);
+  font-size:26px;
+}
+.rk-style-glossary-feature-copy-v60 span{
+  display:block;
+  font-size:8px;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+  font-weight:950;
+  color:#176B42;
+  margin-bottom:6px;
+}
+.rk-style-glossary-feature-copy-v60 h2{
+  margin:0 0 5px;
+  font-family:'Fraunces',Georgia,serif;
+  font-size:22px;
+  line-height:1.05;
+  letter-spacing:-.5px;
+  color:#1A1410;
+}
+.rk-style-glossary-feature-copy-v60 p{
+  margin:0;
+  color:#6B6157;
+  font-size:12.4px;
+  line-height:1.52;
+  font-weight:720;
+}
+.rk-style-glossary-detail-v60{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+  margin-bottom:12px;
+}
+.rk-style-glossary-detail-v60 div{
+  padding:13px;
+  border-radius:19px;
+  background:rgba(255,255,255,.60);
+  border:1px solid rgba(26,20,16,.065);
+}
+.rk-style-glossary-detail-v60 strong{
+  display:block;
+  font-size:8px;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+  color:#176B42;
+  font-weight:950;
+  margin-bottom:6px;
+}
+.rk-style-glossary-detail-v60 p{
+  margin:0;
+  color:rgba(26,20,16,.68);
+  font-size:12.3px;
+  line-height:1.56;
+  font-weight:720;
+}
+.rk-style-glossary-tabs-v60{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  padding:2px 0 10px;
+  scrollbar-width:none;
+}
+.rk-style-glossary-tabs-v60::-webkit-scrollbar{display:none}
+.rk-style-glossary-tabs-v60 button{
+  flex:0 0 auto;
+  border-radius:999px;
+  border:1px solid rgba(26,20,16,.08);
+  background:#FFFDF8;
+  color:#6B6157;
+  padding:8px 12px;
+  font-size:11px;
+  font-weight:900;
+  cursor:pointer;
+}
+.rk-style-glossary-tabs-v60 button.active{
+  background:#176B42;
+  border-color:#176B42;
+  color:#fff;
+  box-shadow:0 8px 18px rgba(23,107,66,.13),inset 0 1px 0 rgba(255,255,255,.16);
+}
+.rk-style-glossary-count-v60{
+  font-size:10px;
+  color:#6B6157;
+  font-weight:850;
+  margin:0 0 8px 2px;
+}
+.rk-style-glossary-grid-v60{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:12px;
+}
+.rk-style-glossary-grid-v60 button{
+  min-width:0;
+  display:grid;
+  grid-template-columns:30px minmax(0,1fr);
+  gap:8px;
+  align-items:center;
+  text-align:left;
+  border-radius:17px;
+  border:1px solid rgba(26,20,16,.07);
+  background:linear-gradient(145deg,#FFFDF8,#F5EFE4);
+  padding:10px;
+  cursor:pointer;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78);
+}
+.rk-style-glossary-grid-v60 button.active{
+  border-color:rgba(23,107,66,.30);
+  background:linear-gradient(145deg,#F6FBF7,#EEF5F0);
+  box-shadow:0 8px 20px rgba(23,107,66,.08),inset 0 1px 0 rgba(255,255,255,.82);
+}
+.rk-style-glossary-grid-v60 button > span{
+  width:30px;
+  height:30px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(23,107,66,.075);
+  font-size:15px;
+}
+.rk-style-glossary-grid-v60 strong{
+  display:block;
+  color:#1A1410;
+  font-size:12.5px;
+  line-height:1.1;
+  font-weight:950;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.rk-style-glossary-grid-v60 small{
+  display:block;
+  color:#6B6157;
+  font-size:10px;
+  line-height:1.25;
+  margin-top:3px;
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+}
+.rk-style-glossary-cta-v60{
+  width:100%;
+  min-height:46px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);
+  background:linear-gradient(135deg,#176B42,#0F5432);
+  color:#fff;
+  font-family:'Fraunces',Georgia,serif;
+  font-size:14px;
+  font-weight:950;
+  cursor:pointer;
+  box-shadow:0 10px 22px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16);
+}
+@media(max-width:390px){
+  .rk-style-glossary-grid-v60{grid-template-columns:1fr}
+  .rk-style-glossary-hero-v60 h1{font-size:25px}
+}
 `;
 
 const S={
@@ -17839,10 +18122,16 @@ function RackleHeader({onBack,setScreen}){
   return(
     <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",position:"relative",marginBottom:22,paddingTop:12,paddingBottom:14,borderBottom:`1px solid rgba(160,120,40,.16)`}}>
       <button onClick={onBack} style={S.back} aria-label="Back to home">← Back</button>
-      <div style={{textAlign:"center",position:"absolute",left:"50%",transform:"translateX(-50%)"}}>
+      <button
+        type="button"
+        onClick={()=>setScreen?setScreen("home"):onBack?.()}
+        aria-label="Go to Rackle home"
+        className="rk-header-logo-home-v60"
+        style={{textAlign:"center",position:"absolute",left:"50%",transform:"translateX(-50%)",background:"transparent",border:"none",padding:0,cursor:"pointer"}}
+      >
         <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div>
         <div style={{fontFamily:F.d,fontSize:10,color:C.jade,fontWeight:600,fontStyle:"italic",letterSpacing:0.5,marginTop:1}}>The Daily Mahjong Workout.</div>
-      </div>
+      </button>
       <div style={{position:"relative"}}>
         <button onClick={()=>setMenuOpen(o=>!o)} aria-label="Menu"
           style={{background:menuOpen?"linear-gradient(180deg,#F2EBDD,#E9E0CF)":"rgba(23,107,66,.05)",border:`1px solid ${menuOpen?C.bdr:"rgba(23,107,66,.08)"}`,borderRadius:11,padding:"7px 10px",cursor:"pointer",display:"flex",flexDirection:"column",gap:4,alignItems:"center",justifyContent:"center",flexShrink:0,boxShadow:"inset 0 1px 0 rgba(255,255,255,.65)"}}>
@@ -22234,38 +22523,57 @@ const RACKLE_STYLE_GLOSSARY=[
   {name:"Club Contender",emoji:"🏆",tag:"A leaderboard rack",meaning:"Club Contender means your rack and score were strong enough to challenge your club board.",tableRead:"This is the type of rack players want to screenshot.",next:"Share it, then see who can beat it."},
 ];
 function StyleGlossaryScreen({home,setScreen}){
+  const styleCategories=[
+    {id:"all",label:"All styles",match:()=>true},
+    {id:"direction",label:"Direction",match:(s)=>/(Sharp|Captain|Lane|Natural|Reader|Starter|Fit|Pressure|Contender)/i.test(s.name+s.tag)},
+    {id:"passing",label:"Passing",match:(s)=>/(Pass|Danger|Clean|Smooth|Tactician)/i.test(s.name+s.tag)},
+    {id:"shape",label:"Tile shape",match:(s)=>/(Pair|Run|Dragon|Wind|Flower|Soap|Even|Odd|Anchor|Shape)/i.test(s.name+s.tag)},
+    {id:"learning",label:"Learning",match:(s)=>/(Finding|Review|Learner|Climber|Scout|Almost|Late|Gritty|Flow)/i.test(s.name+s.tag)},
+  ];
   const [open,setOpen]=useState("Flexible");
+  const [cat,setCat]=useState("all");
   const current=RACKLE_STYLE_GLOSSARY.find(s=>s.name===open)||RACKLE_STYLE_GLOSSARY[0];
+  const activeCat=styleCategories.find(c=>c.id===cat)||styleCategories[0];
+  const filteredStyles=RACKLE_STYLE_GLOSSARY.filter(activeCat.match);
   return(
-    <div style={S.pg} className="rk-pg rk-style-glossary-v52">
+    <div style={S.pg} className="rk-pg rk-style-glossary-v60">
       <RackleHeader onBack={home} setScreen={setScreen}/>
-      <section className="rk-style-glossary-hero-v52">
-        <div className="rk-style-glossary-kicker-v52">Rackle style guide</div>
-        <h1>What does your style mean?</h1>
-        <p>Every scorecard gets a table personality. It is not a grade. It is a quick read on how your Charleston shaped the rack.</p>
+      <section className="rk-style-glossary-hero-v60">
+        <div className="rk-style-glossary-kicker-v60">Rackle style guide</div>
+        <h1>Find your table personality.</h1>
+        <p>Your style is a quick read on how your Charleston shaped the rack. Tap a style to see what it means and what to try next.</p>
       </section>
-      <div className="rk-style-glossary-feature-v52">
-        <div className="rk-style-glossary-orb-v52">{current.emoji}</div>
-        <div>
+
+      <section className="rk-style-glossary-feature-v60" aria-label={`Current style: ${current.name}`}>
+        <div className="rk-style-glossary-orb-v60">{current.emoji}</div>
+        <div className="rk-style-glossary-feature-copy-v60">
           <span>{current.tag}</span>
           <h2>{current.name}</h2>
           <p>{current.meaning}</p>
         </div>
-      </div>
-      <div className="rk-style-glossary-detail-v52">
+      </section>
+
+      <div className="rk-style-glossary-detail-v60">
         <div><strong>Table read</strong><p>{current.tableRead}</p></div>
         <div><strong>Next move</strong><p>{current.next}</p></div>
       </div>
-      <div className="rk-style-glossary-list-v52" aria-label="Rackle styles">
-        {RACKLE_STYLE_GLOSSARY.map(style=>{
+
+      <div className="rk-style-glossary-tabs-v60" aria-label="Filter Rackle styles">
+        {styleCategories.map(c=><button key={c.id} type="button" onClick={()=>setCat(c.id)} className={cat===c.id?"active":""}>{c.label}</button>)}
+      </div>
+
+      <div className="rk-style-glossary-count-v60">{filteredStyles.length} styles in this room</div>
+      <div className="rk-style-glossary-grid-v60" aria-label="Rackle styles">
+        {filteredStyles.map(style=>{
           const active=style.name===open;
-          return <button key={style.name} onClick={()=>setOpen(style.name)} className={active?"active":""}>
+          return <button key={style.name} type="button" onClick={()=>setOpen(style.name)} className={active?"active":""}>
             <span>{style.emoji}</span>
             <div><strong>{style.name}</strong><small>{style.tag}</small></div>
           </button>;
         })}
       </div>
-      <button onClick={()=>setScreen("howto")} className="rk-style-glossary-cta-v52">Learn how Rackle works →</button>
+
+      <button onClick={()=>setScreen("howto")} className="rk-style-glossary-cta-v60">Learn how Rackle works →</button>
       <Footer/>
     </div>
   );
