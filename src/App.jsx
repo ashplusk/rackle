@@ -5838,6 +5838,58 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   }
 }
 
+
+/* ─── v44: header breathing space refinement ──────────────────────────── */
+.rk-startup-hero-v42{
+  padding-bottom:8px!important;
+  margin-bottom:0!important;
+}
+.rk-startup-hero-v42 .rk-startup-logo-v4{
+  margin-bottom:12px!important;
+}
+.rk-startup-hero-v42 .rk-startup-subtitle-v4{
+  margin-top:0!important;
+  margin-bottom:13px!important;
+  line-height:1.14!important;
+}
+.rk-startup-pulse-pill-v42,
+.rk-startup-pulse-pill-v41{
+  margin-top:2px!important;
+  margin-bottom:0!important;
+}
+.rk-startup-hero-v42 + .rk-daily-entry-wrap-v37,
+.rk-startup-hero-v42 + section,
+.rk-startup-hero-v42 ~ .rk-daily-entry-wrap-v37,
+.rk-daily-entry-wrap-v37{
+  margin-top:14px!important;
+}
+.rk-daily-entry-v6,
+.rk-daily-entry-v21,
+.rk-daily-entry-v35{
+  margin-top:0!important;
+}
+@media(max-width:390px){
+  .rk-startup-hero-v42{
+    padding-bottom:7px!important;
+  }
+  .rk-startup-hero-v42 .rk-startup-logo-v4{
+    margin-bottom:11px!important;
+  }
+  .rk-startup-hero-v42 .rk-startup-subtitle-v4{
+    margin-bottom:12px!important;
+  }
+  .rk-startup-pulse-pill-v42,
+  .rk-startup-pulse-pill-v41{
+    margin-top:1px!important;
+  }
+  .rk-startup-hero-v42 + .rk-daily-entry-wrap-v37,
+  .rk-startup-hero-v42 + section,
+  .rk-startup-hero-v42 ~ .rk-daily-entry-wrap-v37,
+  .rk-daily-entry-wrap-v37{
+    margin-top:13px!important;
+  }
+}
+
 `;
 
 const S={
