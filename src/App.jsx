@@ -18800,3 +18800,43 @@ function AppShell({children}){
     </div>
   );
 }
+
+/* ─── v31: unify scorecard page background hue ────────────────────────────
+   Fixes the three-tone banding at the top of the Daily Rackle scorecard.
+   Keeps the whole page on one warm ivory surface and removes the extra
+   radial yellow wash behind the scorecard header. */
+.rk-scorecard-premium-v26,
+.rk-scorecard-premium-v26.rk-score-shell,
+.rk-pg:has(.rk-scorecard-premium-v26),
+.rk-pg:has(.rk-scorecard-premium-v26) .rk-score-shell{
+  background:#F8F4EE!important;
+  background-image:none!important;
+}
+.rk-scorecard-premium-v26:before{
+  display:none!important;
+  content:none!important;
+}
+.rk-pg:has(.rk-scorecard-premium-v26){
+  box-shadow:none!important;
+}
+.rk-pg:has(.rk-scorecard-premium-v26) > header,
+.rk-pg:has(.rk-scorecard-premium-v26) .rk-header,
+.rk-pg:has(.rk-scorecard-premium-v26) .rk-topbar{
+  background:#F8F4EE!important;
+  background-image:none!important;
+}
+.rk-scorecard-premium-v26 > div:first-child{
+  background:#F8F4EE!important;
+  background-image:none!important;
+  margin-top:10px!important;
+  padding-top:4px!important;
+}
+.rk-scorecard-premium-v26 .rk-scorecard-title-v26{
+  background:linear-gradient(145deg,#FFFDF8 0%,#F2EBDD 100%)!important;
+  border-color:rgba(160,120,40,.26)!important;
+  color:#176B42!important;
+}
+.rk-scorecard-premium-v26 .rk-scorecard-heading-v26,
+.rk-scorecard-premium-v26 > div:first-child > div:last-child{
+  background:transparent!important;
+}
