@@ -6960,6 +6960,141 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   }
 }
 
+
+
+/* ─── vMobileOnly: disable desktop dashboard and keep mobile app view ───── */
+@media(min-width:600px){
+  html,body,#root{
+    background:#F8F4EE!important;
+  }
+  .rk-outer{
+    display:flex!important;
+    justify-content:center!important;
+    align-items:flex-start!important;
+    width:100%!important;
+    min-height:100vh!important;
+    padding:18px 0 36px!important;
+    background:#F8F4EE!important;
+  }
+  .rk-app{
+    width:min(430px,100vw)!important;
+    max-width:430px!important;
+    min-width:0!important;
+    margin:0 auto!important;
+    border-radius:22px!important;
+    overflow:hidden!important;
+    box-shadow:0 18px 60px rgba(26,20,16,.10),0 0 0 1px rgba(26,20,16,.045)!important;
+    background:#F8F4EE!important;
+  }
+  .rk-pg{
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    padding:22px 20px 54px!important;
+    display:block!important;
+    grid-template-columns:none!important;
+    gap:0!important;
+    background:#F8F4EE!important;
+  }
+  .rk-home-page,
+  .rk-home-shell,
+  .rk-home-desktop-layout,
+  .rk-home-dashboard,
+  .rk-desktop-dashboard,
+  .rk-home-main,
+  .rk-home-rail,
+  .rk-home-left,
+  .rk-home-right,
+  .rk-home-section,
+  .rk-home-section-lg{
+    width:100%!important;
+    max-width:100%!important;
+    display:block!important;
+    grid-column:auto!important;
+    grid-row:auto!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+  .rk-desktop-only,
+  .rk-home-desktop-panel,
+  .rk-home-desktop-insights,
+  .rk-desktop-insight-grid,
+  .rk-web-data-card,
+  .rk-desktop-rail,
+  .rk-desktop-masthead,
+  .rk-desktop-nav,
+  .rk-desktop-sidebar,
+  .rk-desktop-status,
+  .rk-desktop-grid-only{
+    display:none!important;
+  }
+  .rk-startup-hero-v4{
+    text-align:center!important;
+    padding:48px 0 22px!important;
+    margin:0 auto 18px!important;
+    display:block!important;
+  }
+  .rk-startup-logo-v4,
+  .rk-logo,
+  .rk-header-logo{
+    font-family:'Fraunces',Georgia,serif!important;
+    font-weight:900!important;
+    color:#1A1410!important;
+    letter-spacing:-2.2px!important;
+  }
+  .rk-startup-logo-v4{
+    font-size:clamp(60px,18vw,76px)!important;
+    line-height:.88!important;
+    margin:0 auto 10px!important;
+  }
+  .rk-startup-subtitle-v4{
+    margin:0 auto 12px!important;
+  }
+  .rk-startup-live-note-v34{
+    margin-top:10px!important;
+    margin-bottom:0!important;
+  }
+  .rk-daily-entry-v6,
+  .rk-daily-entry-v7,
+  .rk-daily-entry-v8,
+  .rk-daily-card,
+  .rk-tomorrow-card-v11,
+  .rk-room-live-v19,
+  .rk-freeplay-v24,
+  .rk-learn-home-v19,
+  .rk-email-home-v8,
+  .rk-share-score-v6{
+    width:100%!important;
+    max-width:100%!important;
+    margin-left:0!important;
+    margin-right:0!important;
+    transform:none!important;
+  }
+  .rk-tomorrow-card-v11,
+  .rk-room-live-v19,
+  .rk-freeplay-v24,
+  .rk-learn-home-v19,
+  .rk-email-home-v8,
+  .rk-share-score-v6{
+    margin-top:22px!important;
+    margin-bottom:22px!important;
+  }
+  .rk-warmup-v6-title,
+  .rk-daily-title,
+  .rk-daily-entry-title{
+    max-width:100%!important;
+    overflow:visible!important;
+    word-break:normal!important;
+  }
+}
+@media(min-width:900px){
+  .rk-outer{padding-top:22px!important}
+  .rk-app{max-width:430px!important;width:430px!important}
+  .rk-pg{padding-left:20px!important;padding-right:20px!important}
+}
+@media(min-width:1200px){
+  .rk-app{max-width:430px!important;width:430px!important}
+}
 `;
 
 const S={
