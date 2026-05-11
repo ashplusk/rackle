@@ -10449,6 +10449,29 @@ footer{
   .rk-pg{padding-left:28px!important;padding-right:28px!important}
 }
 
+
+
+/* ─── V1 launch polish: ruthless homepage, game-board leaderboards, human copy ── */
+.rk-home-landing-flow{gap:18px!important}
+.rk-email-home-v8,.rk-email-home-v19{padding:18px 17px!important;text-align:center!important;border-radius:28px!important;background:linear-gradient(145deg,#FFFDF8,#F5EDE0)!important;border:1px solid rgba(160,120,40,.14)!important;box-shadow:0 12px 30px rgba(26,20,16,.05),inset 0 1px 0 rgba(255,255,255,.82)!important}
+.rk-email-kicker-v8{margin-bottom:10px!important;color:#A07828!important}
+.rk-email-title-v8{font-size:22px!important;line-height:1.06!important;margin-bottom:8px!important;text-align:center!important}
+.rk-email-copy-v8{max-width:28ch!important;margin:0 auto 14px!important;text-align:center!important;line-height:1.45!important}
+.rk-email-form-v8{gap:8px!important}.rk-email-input-v8{min-height:42px!important}.rk-email-btn-v8{min-height:42px!important}
+
+.rk-room-page{background:#F8F4EE!important}.rk-room-hero{margin-bottom:14px!important;border-radius:30px!important}.rk-room-title{line-height:1.02!important}.rk-room-copy{line-height:1.58!important}
+.rk-room-leader-v1{display:grid!important;grid-template-columns:64px minmax(0,1fr) auto!important;align-items:center!important;gap:15px!important;background:linear-gradient(145deg,#FFFDF8,#F5ECDD)!important;border:1px solid rgba(160,120,40,.16)!important;border-radius:26px!important;padding:16px!important;box-shadow:0 12px 28px rgba(26,20,16,.05),inset 0 1px 0 rgba(255,255,255,.82)!important;color:#1A1410!important}.rk-room-leader-v1 *{color:inherit}.rk-room-rank-badge-v1{width:54px!important;height:54px!important;border-radius:18px!important;display:flex!important;align-items:center!important;justify-content:center!important;font-family:'Fraunces',Georgia,serif!important;font-size:24px!important;font-weight:950!important;color:#102716!important;background:linear-gradient(145deg,#FFF6C7,#F3D46B)!important;border:1px solid rgba(160,120,40,.25)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 8px 20px rgba(160,120,40,.12)!important}.rk-room-leader-copy-v1{min-width:0!important}.rk-room-leader-kicker-v1{font-size:8.5px!important;letter-spacing:2px!important;text-transform:uppercase!important;font-weight:950!important;color:#176B42!important;margin-bottom:6px!important}.rk-room-leader-name-v1{font-family:'Fraunces',Georgia,serif!important;font-size:23px!important;line-height:1.05!important;font-weight:950!important;color:#1A1410!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}.rk-room-leader-sub-v1{font-size:12.2px!important;line-height:1.45!important;color:#6B6157!important;font-weight:850!important;margin-top:4px!important}.rk-room-score-v1{font-family:'Fraunces',Georgia,serif!important;font-size:46px!important;line-height:1!important;font-weight:950!important;color:#A07828!important;min-width:55px!important;text-align:right!important}.rk-room-leader-you .rk-room-leader-name-v1{color:#176B42!important}
+.rk-room-board-v1{border-radius:26px!important;background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;border:1px solid rgba(26,20,16,.075)!important;box-shadow:0 10px 28px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;margin-bottom:14px!important;overflow:hidden!important}.rk-room-board-head-v1{padding:16px!important;border-bottom:1px solid rgba(26,20,16,.07)!important;background:rgba(255,255,255,.46)!important}.rk-room-board-head-v1 h2{font-size:24px!important;line-height:1!important;margin:3px 0 0!important;color:#1A1410!important}.rk-room-board-head-v1>span{background:#176B4212!important;color:#176B42!important;border:1px solid #176B4220!important;border-radius:999px!important;padding:7px 10px!important;font-size:10px!important;font-weight:950!important}.rk-room-board-list-v1{padding:10px!important;display:grid!important;gap:8px!important}.rk-room-row-v1{display:grid!important;grid-template-columns:42px minmax(0,1fr) auto!important;gap:11px!important;align-items:center!important;border-radius:18px!important;padding:12px!important;background:#FFFDF8!important;border:1px solid rgba(26,20,16,.055)!important;box-shadow:0 5px 14px rgba(26,20,16,.025)!important}.rk-room-row-me{background:#EDF5F0!important;border-color:rgba(23,107,66,.18)!important}.rk-room-row-rank-v1{width:38px!important;height:38px!important;border-radius:14px!important;display:flex!important;align-items:center!important;justify-content:center!important;font-family:'Fraunces',Georgia,serif!important;font-weight:950!important;background:#F4ECDD!important;color:#6B6157!important}.rk-room-row-top{background:linear-gradient(145deg,#FFF6C7,#F3D46B)!important;color:#102716!important}.rk-room-row-name{font-size:15px!important;line-height:1.12!important;font-weight:950!important;color:#1A1410!important}.rk-room-row-sub{font-size:11px!important;line-height:1.35!important;color:#6B6157!important;white-space:normal!important}.rk-room-row-score-wrap-v1 span{display:block!important;font-size:7.5px!important;letter-spacing:1.3px!important;text-transform:uppercase!important;color:rgba(26,20,16,.42)!important;font-weight:950!important;text-align:right!important;margin-bottom:4px!important}.rk-room-row-score-wrap-v1 .rk-room-row-score{font-size:28px!important;line-height:1!important;color:#A07828!important;text-align:right!important}
+.rk-room-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;border-radius:24px!important;background:linear-gradient(145deg,#FFFDF8,#F4ECDD)!important;border:1px solid rgba(26,20,16,.075)!important;padding:10px!important;box-shadow:0 8px 22px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.82)!important}.rk-room-actions .rk-room-btn-primary{grid-column:1/-1!important}.rk-room-btn{min-height:44px!important;border-radius:15px!important;font-size:12.5px!important;font-family:'Fraunces',Georgia,serif!important;font-weight:950!important}.rk-room-notes-v50{display:none!important}
+
+.rk-scorecard-premium-v26 .rk-scorecard-title-v26{margin-left:auto!important;margin-right:auto!important}.rk-scorecard-premium-v26 .rk-scorecard-heading-v26{text-align:center!important}.rk-daily-review-v10-head small{color:#176B42!important}.rk-daily-review-v10-card p,.rk-score-share-v20 p,.rk-score-club-room-v20-copy small{line-height:1.55!important}.rk-score-share-v20-preview{background:linear-gradient(155deg,#062B18,#0D4A2E 72%,#051F11)!important;border-color:rgba(243,212,107,.24)!important}.rk-score-share-v20-preview em{opacity:.86!important}
+
+.rk-howto-v40-card-head,.rk-handbrowser-v40-card-head,.rk-handbrowser-v40-section-head,.rk-handbrowser-v40-results-head{display:block!important;text-align:left!important}.rk-howto-v40-card-head span,.rk-handbrowser-v40-card-head span,.rk-handbrowser-v40-section-head span,.rk-handbrowser-v40-results-head span{display:block!important;margin-bottom:7px!important}.rk-howto-v40-card-head h2,.rk-handbrowser-v40-card-head h2,.rk-handbrowser-v40-results-head h2{font-size:22px!important;line-height:1.08!important;margin:0!important}.rk-howto-v40-step p,.rk-howto-v40-rule p,.rk-handbrowser-v40-section-note p{line-height:1.52!important}.rk-handbrowser-v40-dragon-card{padding:16px!important}.rk-handbrowser-v40-dragon-grid{gap:8px!important}.rk-handbrowser-v40-dragon strong{font-size:13px!important}.rk-handbrowser-v40-dragon span{font-size:11px!important}.rk-handbrowser-v40-section{align-items:center!important}.rk-handbrowser-v40-section-copy strong{font-size:14px!important;line-height:1.12!important}.rk-handbrowser-v40-section-copy em{font-size:10.5px!important;line-height:1.3!important}.rk-handbrowser-v40-empty{padding:18px!important;border-radius:22px!important}
+
+.rk-recap-locked-card-v1{border-radius:30px!important;background:linear-gradient(145deg,#FFFDF8,#F4ECDD)!important;border:1px solid rgba(160,120,40,.16)!important;box-shadow:0 14px 34px rgba(26,20,16,.06),inset 0 1px 0 rgba(255,255,255,.82)!important;text-align:center!important;padding:30px 20px!important}.rk-recap-locked-icon-v1{font-size:34px!important;margin-bottom:10px!important}.rk-recap-locked-kicker-v1{font-size:9px!important;letter-spacing:2.3px!important;text-transform:uppercase!important;color:#176B42!important;font-weight:950!important;margin-bottom:8px!important}.rk-recap-locked-card-v1 h1{font-family:'Fraunces',Georgia,serif!important;font-size:28px!important;line-height:1.05!important;letter-spacing:-.7px!important;margin:0 0 10px!important}.rk-recap-locked-card-v1 p{font-size:13px!important;line-height:1.55!important;color:#6B6157!important;max-width:32ch!important;margin:0 auto 18px!important;font-weight:750!important}.rk-recap-locked-progress-v1{display:inline-flex!important;align-items:center!important;gap:8px!important;border-radius:999px!important;background:#176B4210!important;border:1px solid #176B4220!important;padding:8px 12px!important;margin-bottom:18px!important}.rk-recap-locked-progress-v1 strong{font-family:'Fraunces',Georgia,serif!important;font-size:20px!important;color:#176B42!important}.rk-recap-locked-progress-v1 span{font-size:12px!important;color:#176B42!important;font-weight:900!important}.rk-recap-locked-card-v1 button{width:100%!important;max-width:280px!important;border:0!important;border-radius:999px!important;background:linear-gradient(135deg,#176B42,#0F5432)!important;color:white!important;min-height:48px!important;font-family:'Fraunces',Georgia,serif!important;font-size:15px!important;font-weight:950!important;box-shadow:0 10px 22px rgba(23,107,66,.16)!important}
+
+.rk-style-glossary-page .rk-style-grid,.rk-style-glossary-grid{gap:9px!important}.rk-style-glossary-page button,.rk-style-glossary-card{border-radius:18px!important}.rk-style-glossary-page p{line-height:1.55!important}
+@media(max-width:430px){.rk-room-leader-v1{grid-template-columns:56px minmax(0,1fr) auto!important;gap:11px!important;padding:14px!important}.rk-room-rank-badge-v1{width:48px!important;height:48px!important;font-size:21px!important}.rk-room-leader-name-v1{font-size:20px!important}.rk-room-score-v1{font-size:38px!important}.rk-room-actions{grid-template-columns:1fr!important}.rk-room-actions .rk-room-btn-primary{grid-column:auto!important}.rk-howto-v40-card-head h2,.rk-handbrowser-v40-card-head h2,.rk-handbrowser-v40-results-head h2{font-size:20px!important}}
 `;
 
 const S={
@@ -17454,10 +17477,9 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     : globalRank?`#${globalRank} on today’s Rackle board`:"";
   const shareText=[
     `🀄 Rackle #${dayNum}`,
-    `${shareName} scored ${score}. Can you beat it before tonight’s reset?`,
+    `${shareName} scored ${score}. Same rack for everyone. Can you beat it?`,
     globalRank?`Global #${globalRank}${globalTotal?` of ${globalTotal}`:""}`:"",
     shareClubLine,
-    `Streak: ${iq.streak||ST.get("str",0)||0}d`,
     passEmoji,
     `playrackle.com`
   ].filter(Boolean).join("\n");
@@ -17468,12 +17490,12 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const reviewBestPath=scoredHandObj?.labelForDisplay||scoredHandObj?.variantLabel||scoredHandObj?.label||iq.bestHandLabel||topSectionRead?.name||"Keep reading the rack";
   const reviewTone=score>=75?"Strong read":score>=55?"Playable read":score>=40?"Developing read":"Reset rack";
   const reviewCopy=score>=75
-    ? "You kept the rack pointed toward a real lane and gave yourself room to compete."
+    ? "You kept a real lane alive and gave yourself room to compete."
     : score>=55
-    ? "The rack had life, but one cleaner pass or earlier pivot would have made the path stronger."
+    ? "The rack had life. One cleaner pass or earlier pivot would have made the lane stronger."
     : score>=40
-    ? "You found pieces of a direction, but the rack needed more shape before committing."
-    : "This rack never fully settled. The right move is to protect structure and avoid forcing a thin lane.";
+    ? "You found pieces of a direction, but the rack needed more shape before locking in."
+    : "This rack never fully settled. Protect structure and avoid forcing a thin lane.";
   const pivotCopy=iq.strategicRead?.pivotAdvice||iq.coachNotes?.[0]||iq.takeaway||"Look for the first section that gives you natural groups, not just familiar tiles.";
   const tableTag=score>=75?"Flexible":score>=55?"Alive":score>=40?"Messy":"Thin";
 
@@ -17499,7 +17521,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       <div style={{textAlign:"center",margin:"8px 0 16px"}}>
         <div className="rk-scorecard-title-v26">Daily Rackle #{dayNum}</div>
         <h1 className="rk-scorecard-heading-v26">Daily Scorecard</h1>
-        <div style={{fontSize:12,lineHeight:1.45,color:C.mut,fontWeight:750,marginTop:6}}>Your Rackle IQ, room rank, and Charleston read.</div>
+        <div style={{fontSize:12,lineHeight:1.45,color:C.mut,fontWeight:750,marginTop:6}}>Your score, your room rank, and one quick table read.</div>
       </div>
 
       <div className="rk-iq-hero rk-sweep" style={{padding:"28px 22px 22px",borderRadius:28,marginBottom:14}}>
@@ -17543,9 +17565,9 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <div className="rk-score-share-v20-head">
           <span className="rk-score-share-v20-icon">📲</span>
           <span>
-            <small>Share your score</small>
+            <small>Group chat ready</small>
             <strong>Send your scorecard to the table.</strong>
-            <p>{clubRank?`You’re #${clubRank} in your club. Make them chase ${score}.`:`Post your ${score} and see who can beat it before midnight.`}</p>
+            <p>{clubRank?`You’re #${clubRank} in your club. Make them chase ${score}.`:`Post your ${score} and let the room chase it before midnight.`}</p>
           </span>
         </div>
         <div className="rk-score-share-v20-preview" aria-label="Share preview">
@@ -17582,24 +17604,24 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       <section className="rk-daily-review-v10" aria-label="Charleston review">
         <button onClick={()=>setShowDetails(v=>!v)} className="rk-daily-review-v10-head">
           <span>
-            <small>Post-rack analysis</small>
+            <small>Table read</small>
             <strong>Your Charleston Read</strong>
           </span>
           <b>{showDetails?"Hide":"Open"}</b>
         </button>
         <div className="rk-daily-review-v10-grid">
           <div className="rk-daily-review-v10-card primary" data-icon="🧭">
-            <span>Your read</span>
+            <span>Your rack read</span>
             <strong>{reviewTone}</strong>
             <p>{reviewCopy}</p>
           </div>
           <div className="rk-daily-review-v10-card" data-icon="🀄">
-            <span>Best path</span>
+            <span>Best lane</span>
             <strong>{reviewBestPath}</strong>
-            <p>This is the cleanest lane to keep alive after the Charleston.</p>
+            <p>This was the cleanest lane to keep alive after the Charleston.</p>
           </div>
           <div className="rk-daily-review-v10-card" data-icon="🎯">
-            <span>Table read</span>
+            <span>Next look</span>
             <strong>{tableTag}</strong>
             <p>{pivotCopy}</p>
           </div>
@@ -18911,7 +18933,7 @@ function Tutorial({onDone,onBack,setScreen}){
 function CardGuideScreen({home,setScreen}){
   const [view,setView]=useState("sections"); // "sections" | "section" | "search"
   const [activeSec,setActiveSec]=useState("2026");
-  const [search,setSearch]=useState("");
+  const [search,setSearch]=useState(""); // kept for compatibility, search UI intentionally hidden for V1
   const [filterConcealed,setFilterConcealed]=useState(false);
   const [filterValue,setFilterValue]=useState(null); // null | 25 | 30 | 35 | 40 | 50+
 
@@ -19264,13 +19286,13 @@ function EmailSignup(){
   };
   return(
     <section className="rk-email-home-v8 rk-email-home-v19" aria-label="Sign up for Rackle updates">
-      <div className="rk-email-kicker-v8 rk-email-kicker-v18">Clubhouse updates</div>
-      <h2 className="rk-email-title-v8">Stay close to the table.</h2>
+      <div className="rk-email-kicker-v8 rk-email-kicker-v18">Rackle list</div>
+      <h2 className="rk-email-title-v8">Clubhouse updates</h2>
       {done?(
         <div className="rk-email-done-v8"><div style={{fontFamily:F.d,fontSize:20,fontWeight:950,marginBottom:4}}>You’re on the list.</div><div style={{fontSize:12,color:"rgba(255,255,255,.72)",fontWeight:800}}>You’ll get Rackle drops and club updates.</div></div>
       ):(
         <>
-          <p className="rk-email-copy-v8 rk-email-copy-v56">Join the Rackle list to get updates.</p>
+          <p className="rk-email-copy-v8 rk-email-copy-v56">Get new racks, club drops, and Mahjong notes.</p>
           <div className="rk-email-form-v8">
             <input className="rk-email-input-v8" type="email" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} placeholder="your@email.com" aria-label="Email address for Rackle updates" />
             <button className="rk-email-btn-v8" onClick={submit}>Join list</button>
@@ -19861,46 +19883,48 @@ function RoomLeader({leader,myEntry,count,label="table"}){
     (gap===0&&rkEntryMatchesCurrentPlayer(leader,leaderScore))
   );
   const isClub=label==="club";
-  const leaderTitle=samePlayer?`You are the ${isClub?"club":"table"} leader`:leader.name;
+  const roomName=isClub?"club":"table";
+  const leaderTitle=samePlayer?`You are the ${roomName} leader`:(leader.name||"Table leader");
   const leaderSub=samePlayer
     ?`Everyone is chasing your ${leaderScore}.`
     :myEntry?`${gap} point${gap===1?"":"s"} ahead of you`:`${count} player${count===1?"":"s"} posted today`;
-  return <div className={`rk-room-leader ${samePlayer?"rk-room-leader-you":""}`}>
-    <div className="rk-room-rank-badge">1</div>
-    <div className="rk-room-leader-copy">
-      <div className="rk-room-leader-kicker">Today’s {label} leader</div>
-      <div className="rk-room-leader-name">{leaderTitle}</div>
-      <div className="rk-room-leader-sub">{leaderSub}</div>
+  return <section className={`rk-room-leader rk-room-leader-v1 ${samePlayer?"rk-room-leader-you":""}`} aria-label={`Today’s ${label} leader`}>
+    <div className="rk-room-rank-badge rk-room-rank-badge-v1">#1</div>
+    <div className="rk-room-leader-copy rk-room-leader-copy-v1">
+      <div className="rk-room-leader-kicker rk-room-leader-kicker-v1">Today’s {label} leader</div>
+      <div className="rk-room-leader-name rk-room-leader-name-v1">{leaderTitle}</div>
+      <div className="rk-room-leader-sub rk-room-leader-sub-v1">{leaderSub}</div>
     </div>
-    <div className="rk-room-score">{leader.iqScore}</div>
-  </div>;
+    <div className="rk-room-score rk-room-score-v1">{leader.iqScore}</div>
+  </section>;
 }
 function RoomRows({entries=[],scoreHint=null,emptyTitle="No scores yet",emptyCopy="Play today’s rack and claim the room."}){
-  if(!entries.length)return <div className="rk-room-board-v50 rk-room-board-empty-v50">
+  if(!entries.length)return <section className="rk-room-board-v50 rk-room-board-empty-v50 rk-room-board-v1">
     <div className="rk-room-board-empty-icon">🀄</div>
     <div className="rk-room-board-empty-title">{emptyTitle}</div>
     <div className="rk-room-board-empty-copy">{emptyCopy}</div>
-  </div>;
-  return <section className="rk-room-board-v50" aria-label="Leaderboard">
-    <div className="rk-room-board-v50-head">
+  </section>;
+  return <section className="rk-room-board-v50 rk-room-board-v1" aria-label="Leaderboard">
+    <div className="rk-room-board-v50-head rk-room-board-head-v1">
       <div>
         <div className="rk-room-board-v50-kicker">Today’s board</div>
         <h2>Leaderboard</h2>
       </div>
       <span>{entries.length} posted</span>
     </div>
-    <div className="rk-room-board-v50-list">
+    <div className="rk-room-board-v50-list rk-room-board-list-v1">
       {entries.slice(0,30).map((e,i)=>{
         const isMe=rkEntryMatchesCurrentPlayer(e,scoreHint);
         const rank=i+1;
-        return <div key={`${e.playerId||e.player_id||e.name}-${i}`} className={`rk-room-row rk-room-row-v50 ${isMe?"rk-room-row-me":""} ${rank<=3?"rk-room-row-podium":""}`}>
-          <div className={`rk-room-row-rank rk-room-row-rank-v50 ${rank<=3?"rk-room-row-top":""}`}>{rank}</div>
-          <div className="rk-room-row-player-v50">
+        const podium=rank===1?"gold":rank===2?"silver":rank===3?"bronze":"";
+        return <div key={`${e.playerId||e.player_id||e.name}-${i}`} className={`rk-room-row rk-room-row-v50 rk-room-row-v1 ${isMe?"rk-room-row-me":""} ${rank<=3?"rk-room-row-podium":""} ${podium?`rk-podium-${podium}`:""}`}>
+          <div className={`rk-room-row-rank rk-room-row-rank-v50 rk-room-row-rank-v1 ${rank<=3?"rk-room-row-top":""}`}>{rank}</div>
+          <div className="rk-room-row-player-v50 rk-room-row-player-v1">
             <div className="rk-room-row-name">{e.name}{isMe?" · you":""}</div>
             <div className="rk-room-row-sub">{rkEntrySub(e)}</div>
           </div>
-          <div className="rk-room-row-score-wrap-v50">
-            <span>IQ</span>
+          <div className="rk-room-row-score-wrap-v50 rk-room-row-score-wrap-v1">
+            <span>Rackle IQ</span>
             <div className={`rk-room-row-score ${rkScoreTone(e.iqScore)}`}>{e.iqScore}</div>
           </div>
         </div>;
@@ -19908,21 +19932,7 @@ function RoomRows({entries=[],scoreHint=null,emptyTitle="No scores yet",emptyCop
     </div>
   </section>;
 }
-function RoomActivity({items=[]}){
-  const cleanItems=(items&&items.length?items:["First score opens the room.","Post once, then see who you’re chasing.","The board resets at midnight."]).slice(0,3);
-  return <details className="rk-room-notes-v50" aria-label="Room notes">
-    <summary>
-      <span>Room notes</span>
-      <b>Open</b>
-    </summary>
-    <div className="rk-room-notes-v50-body">
-      <p>Quick context for today’s board. Open only when you want more detail.</p>
-      <div className="rk-room-feed rk-room-feed-v50">
-        {cleanItems.map((item,i)=><div className="rk-room-feed-item rk-room-feed-item-v50" key={i}><span>{i+1}</span><p>{item}</p></div>)}
-      </div>
-    </div>
-  </details>;
-}
+function RoomActivity(){return null;}
 function rkSharePattern(iq){
   const dots=(iq?.passInsights||[]).slice(0,4).map(p=>p.quality==="strong"?"🟩":p.quality==="weak"?"⬜":"🟨").join("");
   return `🀄${dots||"🟩🟩🟨⬜"}`;
@@ -19971,7 +19981,7 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
     <div className="rk-room-hero">
       <div className="rk-room-kicker">Global room · Day #{dn}</div>
       <h1 className="rk-room-title">Today’s Rackle Room</h1>
-      <p className="rk-room-copy">Every score from today’s rack. Check the lead, find your place, then make the table chase.</p>
+      <p className="rk-room-copy">Same rack for everyone. See who leads, where you sit, and what score your table needs to beat.</p>
       <div className="rk-room-metrics">
         <RoomMetric value={entries.length||"—"} label="players"/>
         <RoomMetric value={leader?.iqScore||"—"} label="score to beat"/>
@@ -19985,12 +19995,11 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
         <div className={`rk-room-row-score ${rkScoreTone(score)}`}>{score}</div>
       </div>}
       <RoomRows entries={entries} scoreHint={score} emptyTitle="Room is open" emptyCopy="First score is on the board once you play. Send it to your table."/>
-      <RoomActivity items={activity}/>
     </>}
     <div className="rk-room-actions">
-      <button className="rk-room-btn rk-room-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(shareText,"Rackle Global Room");setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Share room"}</button>
-      <button className="rk-room-btn" onClick={load}>Refresh board</button>
-      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"Club Room":"Find Club"}</button>
+      <button className="rk-room-btn rk-room-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(shareText,"Rackle Global Room");setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Share the room"}</button>
+      <button className="rk-room-btn" onClick={load}>Refresh</button>
+      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"Club board":"Find club"}</button>
       <button className="rk-room-btn" onClick={home}>Back home</button>
     </div>
     <Footer/>
@@ -20049,7 +20058,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
     <div className="rk-room-hero">
       <div className="rk-room-kicker">Your club · Day #{dn}</div>
       <h1 className="rk-room-title">{club.name}</h1>
-      <p className="rk-room-copy">Your table’s daily score room. Post once, share once, and make the group chat chase.</p>
+      <p className="rk-room-copy">Same daily rack. One club board. See who is leading and who is chasing.</p>
       <div className="rk-room-metrics">
         <RoomMetric value={entries.length||"—"} label="club scores"/>
         <RoomMetric value={leader?.iqScore||"—"} label="score to beat"/>
@@ -20067,7 +20076,6 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
         <div style={{display:"flex",gap:8}}><input value={nameInput} onChange={e=>setNameInput(e.target.value)} placeholder="Your name" style={{flex:1,minWidth:0,border:`1px solid rgba(26,20,16,.10)`,borderRadius:14,padding:"12px 13px",fontFamily:F.b,fontSize:13,background:"#FFFDF8",outline:"none"}}/><button onClick={postScore} disabled={posting||!nameInput.trim()} className="rk-room-btn rk-room-btn-primary" style={{padding:"0 16px"}}>{posting?"…":"Post"}</button></div>
       </div>}
       <RoomRows entries={entries} scoreHint={score} emptyTitle="You’re first in the room" emptyCopy="Send it to your table and make them chase."/>
-      <RoomActivity items={activity}/>
     </>}
     <div className="rk-invite-card">
       <div style={{display:"flex",alignItems:"center",gap:11,textAlign:"left",marginBottom:12}}><div className="rk-room-you-icon">🔑</div><div><div className="rk-room-you-title">Invite the table</div><div className="rk-room-you-copy">Private code: <strong>{code}</strong></div></div></div>
@@ -20078,8 +20086,8 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
     </div>
     <div className="rk-room-actions">
       <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>Global room</button>
-      <button className="rk-room-btn" onClick={load}>Refresh board</button>
-      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("clubs")}>Change Club</button>
+      <button className="rk-room-btn" onClick={load}>Refresh</button>
+      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("clubs")}>Change club</button>
       <button className="rk-room-btn" onClick={home}>Back home</button>
     </div>
     <Footer/>
@@ -21212,7 +21220,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div className="rk-learn-home-grid rk-learn-home-v18-grid">
         {[
           ["01","How to Play","Learn the flow in two minutes.",()=>setScreen("howto")],
-          ["02","2026 Hand Browser","Search sections, patterns, and hands.",()=>setScreen("handbrowser")],
+          ["02","2026 Hand Browser","Browse sections, patterns, and hands.",()=>setScreen("handbrowser")],
           ["03","Free Play","Practice without touching today’s score.",()=>go("free")],
         ].map(([mark,title,sub,fn])=>(
           <button key={title} className="rk-learn-home-card rk-learn-home-v18-card" onClick={fn}>
@@ -21242,11 +21250,11 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div className="rk-home-landing-flow">
           {!hasTodayDaily&&<StartDaily/>}
           {hasTodayDaily&&<CompletedDaily/>}
-          <TomorrowTease/>
           <Community/>
           <PracticeCard/>
           <Learn/>
           <SharePreview/>
+          <TomorrowTease/>
           <EmailSignup/>
           <div className="rk-home-desktop-insights"><DesktopInsightDeck/></div>
         </div>
@@ -21964,6 +21972,20 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
   const weekInProgress=!isSunday;
 
   const {avgIQ,bestEntry,daysPlayed,topSec,delta,weekRounds,dailyH,dailyDaysPlayed}=data;
+  if((dailyDaysPlayed||dailyH?.length||0)<3)return(
+    <div style={S.pg} className="rk-pg rk-recap-shell rk-recap-locked-v1">
+      <RackleHeader onBack={home} setScreen={setScreen}/>
+      <section className="rk-recap-locked-card-v1">
+        <div className="rk-recap-locked-icon-v1">🀄</div>
+        <div className="rk-recap-locked-kicker-v1">Weekly recap</div>
+        <h1>Play 3 Daily Rackles to unlock your weekly read.</h1>
+        <p>Your recap gets better once Rackle has enough daily hands to spot your rhythm, strongest section, and table read.</p>
+        <div className="rk-recap-locked-progress-v1"><strong>{dailyDaysPlayed||dailyH?.length||0}</strong><span>/3 dailies played</span></div>
+        {dDone?<button onClick={home}>Back to clubhouse</button>:<button onClick={()=>go("daily")}>Play today’s Rackle</button>}
+      </section>
+      <Footer/>
+    </div>
+  );
   const lvlTier=getIQTier(avgIQ);
   const lvl={label:lvlTier.level,color:lvlTier.color};
 
@@ -23047,7 +23069,7 @@ const GLOSSARY_TERMS=[
 ];
 
 function GlossaryScreen({home,setScreen}){
-  const [search,setSearch]=useState("");
+  const [search,setSearch]=useState(""); // kept for compatibility, search UI intentionally hidden for V1
   const [open,setOpen]=useState(null);
   const filtered=search.trim()===""?GLOSSARY_TERMS:GLOSSARY_TERMS.filter(t=>t.term.toLowerCase().includes(search.toLowerCase())||t.short.toLowerCase().includes(search.toLowerCase()));
   return(
@@ -23393,8 +23415,8 @@ function HowToPlayScreen({home,setScreen}){
   const steps=[
     {n:"01",title:"Read the rack",copy:"Look for pairs, pungs, flowers, jokers, dragons, and section patterns before you pass.",tag:"30 seconds"},
     {n:"02",title:"Make the Charleston",copy:"Pass tiles that do not support your best lane. Jokers stay in your rack. They are never passed.",tag:"3 passes"},
-    {n:"03",title:"Choose your lane",copy:"After the Charleston, pick the section you were leaning toward. Rackle reads the shape against the 2026 card.",tag:"Your read"},
-    {n:"04",title:"Get your scorecard",copy:"See your score, your strongest path, and how your table read compares with your club.",tag:"Room score"},
+    {n:"03",title:"Choose your lane",copy:"After the Charleston, pick the section you were leaning toward. Rackle shows which lanes your rack was leaning toward against the 2026 card.",tag:"Your read"},
+    {n:"04",title:"Get your scorecard",copy:"See your score, best lane, and where you land in your club room.",tag:"Room score"},
   ];
   const rules=[
     {icon:"🃏",title:"Jokers",copy:"Great in groups. Not used in singles or pairs. Never passed in the Charleston."},
@@ -23408,7 +23430,7 @@ function HowToPlayScreen({home,setScreen}){
       <section className="rk-howto-v40-hero rk-sweep">
         <div className="rk-howto-v40-kicker">How Rackle works</div>
         <h1>Play one Charleston. Get smarter.</h1>
-        <p>Rackle gives everyone the same rack, then scores how well you handled the Charleston.</p>
+        <p>Everyone plays the same rack. You make the Charleston, then compare your read with the room.</p>
         <div className="rk-howto-v40-mini-flow" aria-label="Rackle flow">
           <span>Read</span><b>→</b><span>Pass</span><b>→</b><span>Score</span><b>→</b><span>Compare</span>
         </div>
@@ -23452,8 +23474,8 @@ function HowToPlayScreen({home,setScreen}){
       <section className="rk-howto-v40-scorecard-preview">
         <div>
           <span>Scorecard preview</span>
-          <h2>Your read gets a score.</h2>
-          <p>Rackle keeps the feedback short: what worked, what lane was strongest, and what to try next time.</p>
+          <h2>Your Charleston gets a table read.</h2>
+          <p>Short, plain feedback: what worked, which lane was strongest, and what to try next time.</p>
         </div>
         <div className="rk-howto-v40-score-badge">88</div>
       </section>
@@ -23472,7 +23494,7 @@ function HowToPlayScreen({home,setScreen}){
 // ════════════════════════════════════════════════════════════════════════════
 function HandBrowserScreen({home,setScreen}){
   const [activeSec,setActiveSec]=useState("2026");
-  const [search,setSearch]=useState("");
+  const [search,setSearch]=useState(""); // kept for compatibility, search UI intentionally hidden for V1
   const [onlyConcealed,setOnlyConcealed]=useState(false);
   const [visibleLimit,setVisibleLimit]=useState(6);
 
@@ -23572,7 +23594,7 @@ function HandBrowserScreen({home,setScreen}){
       )}
 
       {(activeSec||search||onlyConcealed)&&allHands.length===0&&(
-        <div className="rk-handbrowser-v40-empty"><h2>No hands found.</h2><p>Try “dragon”, “2468”, “any 2 suits”, “concealed”, or a section name.</p></div>
+        <div className="rk-handbrowser-v40-empty"><h2>No hands found.</h2><p>Pick another section or clear the concealed filter.</p></div>
       )}
 
       {(activeSec||search||onlyConcealed)&&(
