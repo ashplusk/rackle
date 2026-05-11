@@ -13188,7 +13188,7 @@ const IQ_STYLES=[
     key:"flexible",name:"Flexible ♻️",
     notes:[
       "You kept multiple paths alive.",
-      "Strong optionality throughout.",
+      "You kept more than one lane alive.",
       "You adapted well to the rack."
     ]
   },
@@ -13196,8 +13196,8 @@ const IQ_STYLES=[
     key:"disciplined",name:"Disciplined 🎯",
     notes:[
       "You stayed focused on your direction.",
-      "Clean, controlled decision-making.",
-      "You avoided unnecessary pivots."
+      "Clean, controlled table decisions.",
+      "You avoided noisy pivots."
     ]
   },
   {
@@ -14029,6 +14029,25 @@ function rkEvaluateCharlestonEngine({finalRack,startingRack=[],passedTilesByRoun
     topSection:top,chosenSection:sectionReads.find(s=>s.id===sectionId)||top,sectionReads
   };
 }
+function rkHumanTableCopy(text=""){
+  return String(text||"")
+    .replace(/analysis indicates/gi,"your rack shows")
+    .replace(/based on your tile distribution/gi,"from the tiles you kept")
+    .replace(/decision pattern suggests/gi,"your passes suggest")
+    .replace(/AI/gi,"Rackle")
+    .replace(/committed path/gi,"clearest lane")
+    .replace(/fully committed/gi,"strongly leaning")
+    .replace(/you should have/gi,"next time, try to")
+    .replace(/optimal/gi,"cleanest")
+    .replace(/correct call/gi,"good table read")
+    .replace(/incorrect/gi,"hard to support")
+    .trim();
+}
+function rkRuleSafeScorecardLine(iq){
+  if(iq?.jokerRuleOk===false)return "Rule check: a Joker appeared in the pass log. Rackle blocks Joker passes, so replay this rack before sharing.";
+  if(iq?.charlestonRuleOk===false)return "Rule check: one Charleston pass looked off. Replay this rack before sharing.";
+  return null;
+}
 function StrategicCharlestonReadCard({iq}){
   const r=iq?.strategicRead;
   if(!r)return null;
@@ -14036,10 +14055,10 @@ function StrategicCharlestonReadCard({iq}){
   const direction=r.bestDirection||r.liveDirections?.[0]||"Still reading the rack";
   const shape=r.shapeQuality||"Shape Read";
   const personality=r.rackPersonality||"Reading Rack";
-  const coach=r.coachingInsight||"Keep the rack flexible until one direction earns the next pass.";
-  const core=r.coreSignal||"Look for the clearest matching group before you commit.";
-  const why=(r.whyTheRackWorked||r.whyItWorks||[]).filter(Boolean)[0]||core;
-  const tension=(r.strategicTension||r.dangerAreas||[]).filter(Boolean)[0]||"Do not chase a hand that needs too many perfect draws.";
+  const coach=rkHumanTableCopy(r.coachingInsight||"Keep the rack flexible until one direction earns the next pass.");
+  const core=rkHumanTableCopy(r.coreSignal||"Look for the clearest matching group before you commit.");
+  const why=rkHumanTableCopy((r.whyTheRackWorked||r.whyItWorks||[]).filter(Boolean)[0]||core);
+  const tension=rkHumanTableCopy((r.strategicTension||r.dangerAreas||[]).filter(Boolean)[0]||"Do not chase a hand that needs too many perfect draws.");
   return(
     <div className="rk-intuition-v9">
       <div className="rk-intuition-v9-head">
@@ -14065,7 +14084,9 @@ function StrategicCharlestonReadCard({iq}){
 }
 function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   const{startingRack,finalRack,totalTime,sectionId,chosenHand}=gameState;
-  const passedTilesByRound=rkSanitizePassLog(gameState?.passedTilesByRound||[]);
+  const rawPassedTilesByRound=gameState?.passedTilesByRound||[];
+  const charlestonRuleAudit=rkValidateCharlestonPassLog(rawPassedTilesByRound);
+  const passedTilesByRound=rkSanitizePassLog(rawPassedTilesByRound);
   if(!startingRack||!finalRack||!sectionId)return null;
 
   // Resolve the specific chosen hand from the catalog.
@@ -14201,7 +14222,7 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   const{level,levelExplanation,tier}=iqScoreLevel(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
   const style=getIQStyle(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
 
-  const exactAudit=rkExactCharlestonAudit({finalRack,startingRack,passedTilesByRound,sectionId,chosenHandObj});
+  const exactAudit=rkExactCharlestonAudit({finalRack,startingRack,passedTilesByRound:rawPassedTilesByRound,sectionId,chosenHandObj});
   const dist=iqDistanceToOptimal(finalRack,startingRack,passedTilesByRound,sectionId);
   const tileIns=iqTileInsights(finalRack,startingRack,passedTilesByRound,sectionId);
   const{strengths,weaknesses,coachNote,tryNextTime}=iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScore,brokenPairsCount||0,sectionId);
@@ -14235,7 +14256,9 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
     passInsights,
     timingInsight,
     exactAudit,
-    jokerRuleOk:exactAudit?.jokerRuleOk!==false,
+    charlestonRuleAudit,
+    charlestonRuleOk:charlestonRuleAudit?.charlestonRuleOk!==false&&exactAudit?.charlestonRuleOk!==false,
+    jokerRuleOk:charlestonRuleAudit?.jokerRuleOk!==false&&exactAudit?.jokerRuleOk!==false,
     strategicRead,
     commitmentStatus:strategicRead?.commitmentStatus,
     bestDirection:strategicRead?.bestDirection,
@@ -17580,14 +17603,15 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const topSectionRead=allSections&&allSections.length?[...allSections].sort((a,b)=>(b.score||0)-(a.score||0))[0]:null;
   const reviewBestPath=scoredHandObj?.labelForDisplay||scoredHandObj?.variantLabel||scoredHandObj?.label||iq.bestHandLabel||topSectionRead?.name||"Keep reading the rack";
   const reviewTone=score>=75?"Strong read":score>=55?"Playable read":score>=40?"Developing read":"Reset rack";
-  const reviewCopy=score>=75
+  const ruleSafeLine=rkRuleSafeScorecardLine(iq);
+  const reviewCopy=ruleSafeLine||rkHumanTableCopy(score>=75
     ? "You kept a real lane alive and gave yourself room to compete."
     : score>=55
     ? "The rack had life. One cleaner pass or earlier pivot would have made the lane stronger."
     : score>=40
     ? "You found pieces of a direction, but the rack needed more shape before locking in."
-    : "This rack never fully settled. Protect structure and avoid forcing a thin lane.";
-  const pivotCopy=iq.strategicRead?.pivotAdvice||iq.coachNotes?.[0]||iq.takeaway||"Look for the first section that gives you natural groups, not just familiar tiles.";
+    : "This rack never fully settled. Protect structure and avoid forcing a thin lane.");
+  const pivotCopy=rkHumanTableCopy(ruleSafeLine||iq.strategicRead?.pivotAdvice||iq.coachNotes?.[0]||iq.takeaway||"Look for the first section that gives you natural groups, not just familiar tiles.");
   const tableTag=score>=75?"Flexible":score>=55?"Alive":score>=40?"Messy":"Thin";
 
   const Metric=({label,value,sub,accent=C.ink,onClick})=>{
@@ -17709,7 +17733,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <div className="rk-daily-review-v10-card" data-icon="🀄">
             <span>Best lane</span>
             <strong>{reviewBestPath}</strong>
-            <p>This was the lane worth protecting after the Charleston.</p>
+            <p>This was the cleanest lane to keep alive after the Charleston.</p>
           </div>
           <div className="rk-daily-review-v10-card" data-icon="🎯">
             <span>Next look</span>
@@ -17727,7 +17751,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
               <span>Next table move</span>
               <p>{pivotCopy}</p>
             </div>
-            {onCoachMode&&<button onClick={onCoachMode} className="rk-daily-review-v20-coach">See the better play →</button>}
+            {onCoachMode&&<button onClick={onCoachMode} className="rk-daily-review-v20-coach">Review the rack →</button>}
           </div>
         )}
       </section>
@@ -22926,12 +22950,19 @@ function rkExactCharlestonAudit({finalRack=[],startingRack=[],passedTilesByRound
     resolvedSuit:gs.resolvedSuit||null,
     passedMatching:(gs.passedMatching||[]).map(t=>tLabel(t)),
   }));
+  const rackSizeOk=Array.isArray(finalRack)&&finalRack.length===13;
+  const startingRackSizeOk=!startingRack?.length||startingRack.length===13;
+  const ruleIssues=[...(validation.issues||[])];
+  if(!rackSizeOk)ruleIssues.push(`Final rack should have 13 tiles, saw ${finalRack?.length||0}`);
+  if(!startingRackSizeOk)ruleIssues.push(`Starting rack should have 13 tiles, saw ${startingRack?.length||0}`);
   return{
     jokerRuleOk:validation.jokerRuleOk,
-    charlestonRuleOk:validation.charlestonRuleOk,
+    charlestonRuleOk:validation.charlestonRuleOk&&rackSizeOk&&startingRackSizeOk,
+    rackSizeOk,
+    startingRackSizeOk,
     passedJokerCount:validation.passedJokerCount,
     incomingJokerCount:validation.incomingJokerCount,
-    charlestonIssues:validation.issues,
+    charlestonIssues:ruleIssues,
     passRoundAudit:validation.rounds,
     handLabel:candidateHand?.label||null,
     exactVariantLabel:plan?.labelForDisplay||plan?.variantLabel||candidateHand?.label||null,
@@ -22942,6 +22973,16 @@ function rkExactCharlestonAudit({finalRack=[],startingRack=[],passedTilesByRound
     groupStatus,
     unresolvedGroups:groupStatus.filter(g=>g.gap>0).slice(0,4),
   };
+}
+function rkCatalogSanityCheck(){
+  if(typeof HAND_CATALOG==="undefined")return{ok:false,issues:["HAND_CATALOG missing"]};
+  const counts=HAND_CATALOG.reduce((m,h)=>{m[h.sec]=(m[h.sec]||0)+1;return m;},{});
+  const expected={"2026":4,"2468":8,"369":6,"13579":9,"cr":9,"wd":8,"aln":3,"q":3,"sp":6};
+  const issues=[];
+  Object.entries(expected).forEach(([sec,count])=>{if(counts[sec]!==count)issues.push(`${sec}: expected ${count}, saw ${counts[sec]||0}`);});
+  const missingFit=HAND_CATALOG.filter(h=>typeof h.fit!=="function"&&typeof h.legacyFit!=="function").map(h=>h.label);
+  if(missingFit.length)issues.push(`Hands missing fit logic: ${missingFit.join(", ")}`);
+  return{ok:issues.length===0,counts,issues};
 }
 if(typeof HAND_CATALOG!=="undefined"&&!HAND_CATALOG.__rackle2026ResolverInstalled){
   HAND_CATALOG.forEach(h=>{
