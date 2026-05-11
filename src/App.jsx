@@ -10678,6 +10678,298 @@ html,body,#root{background:var(--rk-ivory)!important;}
 /* ─── vNext: rack review cross-reference polish ─────────────────────────── */
 .rk-crossref-tabs button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-rack-review-note{line-height:1.58}
+
+
+/* ─── vDesktop: Native desktop + landscape tablet dashboard ────────────────
+   Mobile remains untouched. These rules only apply to desktop/tablet landscape. */
+@media (min-width: 900px) and (orientation: landscape), (min-width: 1180px){
+  html,body,#root{min-height:100%;background:#F8F4EE!important;}
+  .rk-outer{
+    padding:0!important;
+    min-height:100vh!important;
+    background:
+      radial-gradient(circle at 8% -10%,rgba(243,212,107,.18),transparent 28%),
+      radial-gradient(circle at 92% 2%,rgba(23,107,66,.12),transparent 26%),
+      linear-gradient(180deg,#FFFDF8 0%,#F8F4EE 42%,#EFE7DA 100%)!important;
+  }
+  .rk-app{
+    width:100%!important;
+    max-width:none!important;
+    min-height:100vh!important;
+    margin:0!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    background:transparent!important;
+    overflow:visible!important;
+  }
+  .rk-pg{
+    width:100%!important;
+    max-width:1440px!important;
+    margin:0 auto!important;
+    padding:28px 34px 34px!important;
+    background:transparent!important;
+  }
+
+  /* Shared desktop header rhythm */
+  .rk-pg > div:first-child,
+  .rk-home-ritual-hero{
+    max-width:1440px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+  .rk-home-ritual-hero{
+    display:grid!important;
+    grid-template-columns:minmax(240px,20vw) minmax(0,1fr)!important;
+    align-items:end!important;
+    gap:30px!important;
+    text-align:left!important;
+    padding:18px 0 24px!important;
+    margin-bottom:4px!important;
+    border-bottom:1px solid rgba(26,20,16,.07)!important;
+  }
+  .rk-home-ritual-hero .rk-hero-tile{justify-self:start!important;margin:0 0 6px!important;}
+  .rk-home-ritual-hero .rk-hero-logo{
+    font-size:clamp(56px,5.7vw,92px)!important;
+    line-height:.88!important;
+    letter-spacing:-3px!important;
+    margin:0!important;
+  }
+  .rk-home-ritual-hero .rk-hero-subtitle{
+    margin:10px 0 0!important;
+    font-size:15px!important;
+    letter-spacing:.22em!important;
+  }
+  .rk-home-ritual-hero .rk-hero-status{
+    justify-self:end!important;
+    align-self:center!important;
+    width:min(520px,100%)!important;
+    margin:0!important;
+    padding:14px 18px!important;
+    text-align:left!important;
+    border-radius:24px!important;
+    background:linear-gradient(145deg,#FFFDF8,#F3EBDD)!important;
+    border:1px solid rgba(160,120,40,.16)!important;
+    box-shadow:0 12px 34px rgba(26,20,16,.05),inset 0 1px 0 rgba(255,255,255,.82)!important;
+  }
+  .rk-home-ritual-hero .rk-hero-status p{
+    margin:0!important;
+    color:rgba(26,20,16,.66)!important;
+    font-size:13px!important;
+    line-height:1.48!important;
+  }
+  .rk-home-ritual-hero .rk-hero-status p:first-child{
+    font-family:'Fraunces',Georgia,serif!important;
+    font-size:18px!important;
+    line-height:1.08!important;
+    color:#1A1410!important;
+    font-weight:950!important;
+    letter-spacing:-.35px!important;
+  }
+  .rk-home-ritual-hero .rk-hero-status p + p{margin-top:6px!important;}
+
+  /* Main desktop dashboard: 20% rail + 80% play area */
+  .rk-home-landing-flow{
+    display:grid!important;
+    grid-template-columns:minmax(260px,20%) minmax(0,80%)!important;
+    grid-auto-flow:dense!important;
+    gap:22px 28px!important;
+    align-items:start!important;
+    max-width:1440px!important;
+    width:100%!important;
+    margin:0 auto!important;
+    padding-top:16px!important;
+  }
+  .rk-home-landing-flow > *{min-width:0!important;}
+
+  /* Child order works for both not-played and completed states */
+  .rk-home-landing-flow > :nth-child(1){grid-column:2!important;grid-row:1 / span 2!important;}
+  .rk-home-landing-flow > :nth-child(2){grid-column:1!important;grid-row:1!important;position:sticky!important;top:24px!important;}
+  .rk-home-landing-flow > :nth-child(3){grid-column:2!important;grid-row:3!important;}
+  .rk-home-landing-flow > :nth-child(4){grid-column:2!important;grid-row:4!important;}
+  .rk-home-landing-flow > :nth-child(5){grid-column:2!important;grid-row:5!important;}
+  .rk-home-landing-flow > :nth-child(6){grid-column:1!important;grid-row:2!important;position:sticky!important;top:360px!important;}
+  .rk-home-landing-flow > :nth-child(7){grid-column:1!important;grid-row:3!important;}
+  .rk-home-landing-flow > :nth-child(8){grid-column:1!important;grid-row:4!important;display:block!important;}
+
+  /* Main card proportions */
+  .rk-home-landing-flow > :nth-child(1),
+  .rk-home-landing-flow > :nth-child(3),
+  .rk-home-landing-flow > :nth-child(4),
+  .rk-home-landing-flow > :nth-child(5){
+    border-radius:34px!important;
+  }
+  .rk-daily-v10-card,
+  .rk-daily-card-v19,
+  .rk-home-scorecard-v30,
+  .rk-home-scorecard-v40{
+    min-height:520px!important;
+    border-radius:36px!important;
+    box-shadow:0 24px 60px rgba(26,20,16,.10),inset 0 1px 0 rgba(255,255,255,.86)!important;
+  }
+  .rk-daily-v10-card h2,
+  .rk-daily-card-v19 h2,
+  .rk-home-scorecard-v30-level,
+  .rk-home-scorecard-v40-title{
+    font-size:clamp(32px,3.2vw,54px)!important;
+    line-height:1!important;
+    letter-spacing:-1.2px!important;
+  }
+  .rk-daily-v10-card p,
+  .rk-daily-card-v19 p,
+  .rk-home-scorecard-v30-line,
+  .rk-home-scorecard-v40-copy{
+    font-size:15px!important;
+    line-height:1.62!important;
+    max-width:46ch!important;
+  }
+  .rk-home-scorecard-v30-score,
+  .rk-home-scorecard-v40-score{
+    font-size:clamp(92px,8vw,140px)!important;
+    letter-spacing:-6px!important;
+  }
+  .rk-home-scorecard-v30-actions,
+  .rk-home-scorecard-v40-actions{
+    max-width:620px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+
+  /* Left rail cards should feel like a real app sidebar */
+  .rk-room-live-v6,
+  .rk-room-live-v17,
+  .rk-room-live-v19,
+  .rk-tomorrow-card-v11,
+  .rk-email-home-v8,
+  .rk-email-home-v19,
+  .rk-home-desktop-insights{
+    width:100%!important;
+    margin:0!important;
+    border-radius:28px!important;
+  }
+  .rk-room-live-v6-title,
+  .rk-tomorrow-v11-title,
+  .rk-email-title-v8{
+    font-size:22px!important;
+    line-height:1.08!important;
+    letter-spacing:-.55px!important;
+  }
+  .rk-room-live-v6-copy,
+  .rk-tomorrow-v11-copy,
+  .rk-email-copy-v8{
+    font-size:12.5px!important;
+    line-height:1.55!important;
+  }
+  .rk-room-live-v17-actions{
+    grid-template-columns:1fr!important;
+    gap:9px!important;
+  }
+  .rk-room-live-v17-actions button{min-height:42px!important;font-size:12px!important;border-radius:15px!important;}
+  .rk-room-live-v6-score strong{font-size:34px!important;}
+  .rk-room-live-v17-row{min-height:38px!important;}
+
+  /* Practice, learn, share become desktop product sections */
+  .rk-freeplay-v24,
+  .rk-freeplay-v40,
+  .rk-learn-home-v8,
+  .rk-learn-home-v19,
+  .rk-share-score-v6{
+    padding:28px!important;
+    border-radius:32px!important;
+  }
+  .rk-freeplay-v24-top,
+  .rk-freeplay-v40-top,
+  .rk-share-score-v6{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(340px,.46fr)!important;
+    gap:26px!important;
+    align-items:center!important;
+  }
+  .rk-freeplay-v24 h2,
+  .rk-freeplay-v40 h2,
+  .rk-learn-home-title,
+  .rk-learn-home-v18-title,
+  .rk-share-score-v6-title{
+    font-size:clamp(28px,2.4vw,40px)!important;
+    line-height:1.02!important;
+    letter-spacing:-1px!important;
+  }
+  .rk-freeplay-v24 p,
+  .rk-freeplay-v40 p,
+  .rk-learn-home-copy,
+  .rk-learn-home-v18-copy,
+  .rk-share-score-v6-copy{
+    font-size:14px!important;
+    line-height:1.58!important;
+    max-width:42ch!important;
+  }
+  .rk-freeplay-v24-steps,
+  .rk-freeplay-v40-steps,
+  .rk-learn-home-grid,
+  .rk-learn-home-v18-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:12px!important;
+  }
+  .rk-learn-home-card,
+  .rk-learn-home-v18-card{min-height:96px!important;border-radius:22px!important;}
+
+  /* Desktop insights become rail widgets, not a scattered module */
+  .rk-home-desktop-insights{display:block!important;}
+  .rk-home-desktop-panel{display:grid!important;grid-template-columns:1fr!important;gap:12px!important;margin:0!important;}
+  .rk-home-desktop-wide{grid-column:auto!important;}
+  .rk-web-data-card{border-radius:24px!important;padding:18px!important;}
+  .rk-web-data-title{font-size:18px!important;line-height:1.12!important;}
+  .rk-web-data-copy{font-size:12px!important;line-height:1.5!important;}
+  .rk-web-metric-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .rk-web-metric strong{font-size:22px!important;}
+
+  /* Other pages: feel designed for desktop without changing mobile */
+  .rk-pg:not(:has(.rk-home-landing-flow)){
+    max-width:1120px!important;
+    padding:34px 42px 48px!important;
+  }
+  .rk-pg:not(:has(.rk-home-landing-flow)) .rk-premium-card,
+  .rk-pg:not(:has(.rk-home-landing-flow)) [style*="border-radius: 14px"],
+  .rk-pg:not(:has(.rk-home-landing-flow)) [style*="border-radius:14px"]{
+    border-radius:22px!important;
+  }
+  .rk-score-shell,
+  .rk-stats-v21,
+  .rk-room-page,
+  .rk-hand-browser,
+  .rk-howto-page,
+  .rk-style-glossary{
+    max-width:980px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+  .rk-game-flow-card,
+  .rk-game-flow-shell,
+  .rk-rack-surface{
+    max-width:860px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+
+  /* Navigation/menu on desktop */
+  .rk-menu-panel,
+  .rk-premium-menu{
+    right:0!important;
+    left:auto!important;
+    min-width:320px!important;
+  }
+  footer,.rk-footer{margin-top:26px!important;}
+}
+
+/* Landscape iPad: use desktop shell, but keep proportions controlled */
+@media (min-width: 900px) and (max-width: 1180px) and (orientation: landscape){
+  .rk-pg{padding:24px 26px 30px!important;max-width:1120px!important;}
+  .rk-home-ritual-hero{grid-template-columns:260px minmax(0,1fr)!important;gap:22px!important;}
+  .rk-home-landing-flow{grid-template-columns:270px minmax(0,1fr)!important;gap:18px!important;}
+  .rk-daily-v10-card,.rk-daily-card-v19,.rk-home-scorecard-v30,.rk-home-scorecard-v40{min-height:470px!important;}
+  .rk-freeplay-v24-top,.rk-freeplay-v40-top,.rk-share-score-v6{grid-template-columns:1fr!important;}
+  .rk-freeplay-v24-steps,.rk-freeplay-v40-steps,.rk-learn-home-grid,.rk-learn-home-v18-grid{grid-template-columns:1fr!important;}
+}
 `;
 
 const S={
