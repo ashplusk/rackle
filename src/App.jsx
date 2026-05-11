@@ -5667,6 +5667,46 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-home-scorecard-v30-actions{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}.rk-home-scorecard-v30-room{min-width:0;text-align:left;border:1px solid rgba(243,212,107,.32);border-radius:19px;padding:14px 13px;background:rgba(255,255,255,.085);box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 8px 20px rgba(0,0,0,.08);cursor:pointer;color:#fff;transition:transform .16s ease,border-color .16s ease,background .16s ease}.rk-home-scorecard-v30-room:hover{transform:translateY(-1px);border-color:rgba(243,212,107,.52);background:rgba(255,255,255,.11)}.rk-home-scorecard-v30-room:active{transform:scale(.985)}.rk-home-scorecard-v30-room-label{display:block;font-size:8px;letter-spacing:1.9px;text-transform:uppercase;font-weight:950;color:rgba(255,255,255,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rk-home-scorecard-v30-room strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:28px;line-height:1;margin:10px 0 7px;color:#F3D46B;letter-spacing:-.8px}.rk-home-scorecard-v30-room small{display:block;font-size:11px;line-height:1.2;color:rgba(255,255,255,.76);font-weight:950}.rk-home-scorecard-v30-room-club{background:linear-gradient(145deg,rgba(243,212,107,.16),rgba(255,255,255,.07))}
 .rk-home-scorecard-v30-bottom{padding:14px;display:grid;gap:10px;background:linear-gradient(180deg,#FFFDF8,#F6EFE4)}.rk-home-scorecard-v30-share{width:100%;border:1px solid rgba(160,120,40,.20);background:linear-gradient(145deg,#FFF9ED,#F3E8D3);border-radius:18px;padding:14px;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;box-shadow:0 8px 22px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.72)}.rk-home-scorecard-v30-share-icon{width:44px;height:44px;border-radius:16px;background:rgba(160,120,40,.14);border:1px solid rgba(160,120,40,.16);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}.rk-home-scorecard-v30-share div:nth-child(2){flex:1;min-width:0}.rk-home-scorecard-v30-share strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:16px;line-height:1.05;color:#1A1410;font-weight:950}.rk-home-scorecard-v30-share span{display:block;font-size:11.5px;line-height:1.35;color:#6B6157;font-weight:800;margin-top:4px}.rk-home-scorecard-v30-share em{display:block;font-style:normal;font-size:10.5px;color:rgba(26,20,16,.42);font-weight:850;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rk-home-scorecard-v30-share b{color:#A07828;font-size:17px}.rk-home-scorecard-v30-details{width:100%;border:1px solid rgba(23,107,66,.15);border-radius:17px;background:linear-gradient(180deg,#176B42,#0F5432);color:#fff;padding:14px 12px;font-family:'Fraunces',Georgia,serif;font-size:14px;font-weight:950;cursor:pointer;box-shadow:0 10px 22px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.14)}
 @media(max-width:390px){.rk-home-scorecard-v30-main{padding:23px 15px 18px}.rk-home-scorecard-v30-score{font-size:82px}.rk-home-scorecard-v30-level{font-size:27px}.rk-home-scorecard-v30-actions{gap:8px}.rk-home-scorecard-v30-room{padding:12px 11px;border-radius:17px}.rk-home-scorecard-v30-room strong{font-size:25px}.rk-home-scorecard-v30-kicker{letter-spacing:2.2px}.rk-home-scorecard-v30-brand{padding:7px 11px}}
+/* ─── v31: unify scorecard page background hue ────────────────────────────
+   Fixes the three-tone banding at the top of the Daily Rackle scorecard.
+   Keeps the whole page on one warm ivory surface and removes the extra
+   radial yellow wash behind the scorecard header. */
+.rk-scorecard-premium-v26,
+.rk-scorecard-premium-v26.rk-score-shell,
+.rk-pg:has(.rk-scorecard-premium-v26),
+.rk-pg:has(.rk-scorecard-premium-v26) .rk-score-shell{
+  background:#F8F4EE!important;
+  background-image:none!important;
+}
+.rk-scorecard-premium-v26:before{
+  display:none!important;
+  content:none!important;
+}
+.rk-pg:has(.rk-scorecard-premium-v26){
+  box-shadow:none!important;
+}
+.rk-pg:has(.rk-scorecard-premium-v26) > header,
+.rk-pg:has(.rk-scorecard-premium-v26) .rk-header,
+.rk-pg:has(.rk-scorecard-premium-v26) .rk-topbar{
+  background:#F8F4EE!important;
+  background-image:none!important;
+}
+.rk-scorecard-premium-v26 > div:first-child{
+  background:#F8F4EE!important;
+  background-image:none!important;
+  margin-top:10px!important;
+  padding-top:4px!important;
+}
+.rk-scorecard-premium-v26 .rk-scorecard-title-v26{
+  background:linear-gradient(145deg,#FFFDF8 0%,#F2EBDD 100%)!important;
+  border-color:rgba(160,120,40,.26)!important;
+  color:#176B42!important;
+}
+.rk-scorecard-premium-v26 .rk-scorecard-heading-v26,
+.rk-scorecard-premium-v26 > div:first-child > div:last-child{
+  background:transparent!important;
+}
+
 `;
 
 const S={
@@ -18799,44 +18839,4 @@ function AppShell({children}){
       </div>
     </div>
   );
-}
-
-/* ─── v31: unify scorecard page background hue ────────────────────────────
-   Fixes the three-tone banding at the top of the Daily Rackle scorecard.
-   Keeps the whole page on one warm ivory surface and removes the extra
-   radial yellow wash behind the scorecard header. */
-.rk-scorecard-premium-v26,
-.rk-scorecard-premium-v26.rk-score-shell,
-.rk-pg:has(.rk-scorecard-premium-v26),
-.rk-pg:has(.rk-scorecard-premium-v26) .rk-score-shell{
-  background:#F8F4EE!important;
-  background-image:none!important;
-}
-.rk-scorecard-premium-v26:before{
-  display:none!important;
-  content:none!important;
-}
-.rk-pg:has(.rk-scorecard-premium-v26){
-  box-shadow:none!important;
-}
-.rk-pg:has(.rk-scorecard-premium-v26) > header,
-.rk-pg:has(.rk-scorecard-premium-v26) .rk-header,
-.rk-pg:has(.rk-scorecard-premium-v26) .rk-topbar{
-  background:#F8F4EE!important;
-  background-image:none!important;
-}
-.rk-scorecard-premium-v26 > div:first-child{
-  background:#F8F4EE!important;
-  background-image:none!important;
-  margin-top:10px!important;
-  padding-top:4px!important;
-}
-.rk-scorecard-premium-v26 .rk-scorecard-title-v26{
-  background:linear-gradient(145deg,#FFFDF8 0%,#F2EBDD 100%)!important;
-  border-color:rgba(160,120,40,.26)!important;
-  color:#176B42!important;
-}
-.rk-scorecard-premium-v26 .rk-scorecard-heading-v26,
-.rk-scorecard-premium-v26 > div:first-child > div:last-child{
-  background:transparent!important;
 }
