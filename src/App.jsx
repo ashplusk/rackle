@@ -5707,6 +5707,272 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   background:transparent!important;
 }
 
+/* ─── v32: tighten Daily Rackle scorecard format ─────────────────────────── */
+.rk-scorecard-premium-v26 .rk-iq-hero{
+  margin-bottom:18px!important;
+  padding:26px 20px 20px!important;
+  border-radius:28px!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero .rk-iq-glow{opacity:.72!important}
+.rk-scorecard-compact-meta-v32{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:8px!important;
+  margin:18px auto 0!important;
+  max-width:320px!important;
+}
+.rk-scorecard-compact-meta-v32 button,
+.rk-scorecard-compact-meta-v32 div{
+  appearance:none!important;
+  border:1px solid rgba(243,212,107,.22)!important;
+  border-radius:16px!important;
+  background:rgba(255,255,255,.07)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.11),0 8px 18px rgba(0,0,0,.06)!important;
+  padding:10px 8px!important;
+  min-width:0!important;
+  text-align:center!important;
+  cursor:pointer!important;
+}
+.rk-scorecard-compact-meta-v32 div{cursor:default!important}
+.rk-scorecard-compact-meta-v32 span{
+  display:block!important;
+  font-size:7.5px!important;
+  letter-spacing:1.7px!important;
+  text-transform:uppercase!important;
+  color:rgba(255,255,255,.48)!important;
+  font-weight:950!important;
+  line-height:1!important;
+  margin-bottom:7px!important;
+}
+.rk-scorecard-compact-meta-v32 strong{
+  display:block!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:18px!important;
+  line-height:1!important;
+  color:#F3D46B!important;
+  font-weight:950!important;
+  letter-spacing:-.4px!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20{
+  margin-top:0!important;
+  margin-bottom:16px!important;
+  border-radius:24px!important;
+  padding:16px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20-copy strong{
+  font-size:17px!important;
+  line-height:1.18!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20-copy small{
+  font-size:12px!important;
+  line-height:1.5!important;
+  max-width:30ch!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20{
+  margin-top:0!important;
+  padding:16px!important;
+  border-radius:24px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-head{
+  align-items:flex-start!important;
+  margin-bottom:12px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-head strong{
+  font-size:18px!important;
+  line-height:1.15!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-head p{
+  font-size:12px!important;
+  line-height:1.5!important;
+  max-width:30ch!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  padding:14px!important;
+  min-height:88px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview div{min-width:0!important;text-align:left!important}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview div strong{font-size:44px!important;line-height:.9!important}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview p{margin:0!important;text-align:right!important;font-size:11px!important;line-height:1.35!important;max-width:130px!important}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview em{display:none!important}
+.rk-scorecard-premium-v26 .rk-score-rack-card{
+  margin-top:16px!important;
+  border-radius:24px!important;
+}
+@media(max-width:390px){
+  .rk-scorecard-compact-meta-v32{gap:7px!important;margin-top:16px!important}
+  .rk-scorecard-compact-meta-v32 button,.rk-scorecard-compact-meta-v32 div{padding:9px 6px!important;border-radius:14px!important}
+  .rk-scorecard-compact-meta-v32 strong{font-size:16px!important}
+  .rk-scorecard-premium-v26 .rk-score-share-v20-preview div strong{font-size:38px!important}
+  .rk-scorecard-premium-v26 .rk-score-club-room-v20{display:block!important;text-align:left!important}
+  .rk-scorecard-premium-v26 .rk-score-club-room-v20-side{margin-top:12px!important;justify-content:space-between!important;flex-direction:row!important}
+}
+
+
+
+/* ─── v33: app-wide background unification + scorecard cleanup ─────────────
+   Removes page-level hue banding and restores a cleaner, screenshot-ready
+   homepage scorecard without the inner border. */
+html,body,#root,.rk-outer,.rk-app,.rk-pg{
+  background:#F8F4EE!important;
+  background-image:none!important;
+}
+.rk-pg,.rk-score-shell,.rk-scorecard-premium-v26{
+  background:#F8F4EE!important;
+  background-image:none!important;
+}
+.rk-pg:before,.rk-pg:after,
+.rk-score-shell:before,.rk-score-shell:after,
+.rk-scorecard-premium-v26:before,.rk-scorecard-premium-v26:after{
+  background-image:none!important;
+}
+.rk-pg > header,.rk-header,.rk-topbar{
+  background:#F8F4EE!important;
+  background-image:none!important;
+}
+
+/* Homepage scorecard: revert closer to the cleaner club-card style, but sharper */
+.rk-home-scorecard-v30{
+  border:none!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  border-radius:0!important;
+  overflow:visible!important;
+  margin:0 0 24px!important;
+}
+.rk-home-scorecard-v30-streak{display:none!important}
+.rk-home-scorecard-v30-main{
+  border-radius:30px!important;
+  padding:28px 20px 22px!important;
+  border:1px solid rgba(243,212,107,.18)!important;
+  background:
+    radial-gradient(circle at 50% 10%,rgba(243,212,107,.16),transparent 34%),
+    linear-gradient(150deg,#041F12 0%,#07331E 48%,#0D4A2E 72%,#03170D 100%)!important;
+  box-shadow:0 18px 44px rgba(6,43,24,.20),inset 0 1px 0 rgba(255,255,255,.09)!important;
+}
+.rk-home-scorecard-v30-main:before{display:none!important;content:none!important}
+.rk-home-scorecard-v30-topline{margin-bottom:12px!important}
+.rk-home-scorecard-v30-brand{
+  border:1px solid rgba(243,212,107,.34)!important;
+  background:rgba(255,255,255,.07)!important;
+  color:#F3D46B!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10)!important;
+}
+.rk-home-scorecard-v30-medal{height:auto!important;width:auto!important;margin:4px auto 4px!important}
+.rk-home-scorecard-v30-score{
+  font-size:86px!important;
+  letter-spacing:-4px!important;
+  text-shadow:0 9px 22px rgba(0,0,0,.18)!important;
+}
+.rk-home-scorecard-v30-scoreglow{display:none!important}
+.rk-home-scorecard-v30-level{
+  font-size:30px!important;
+  line-height:1.05!important;
+  margin-top:8px!important;
+}
+.rk-home-scorecard-v30-style{
+  margin:14px auto 12px!important;
+  padding:8px 18px!important;
+  background:rgba(255,255,255,.075)!important;
+  border-color:rgba(243,212,107,.38)!important;
+}
+.rk-home-scorecard-v30-line{
+  font-size:13.5px!important;
+  line-height:1.55!important;
+  color:rgba(255,255,255,.74)!important;
+  max-width:285px!important;
+}
+.rk-home-scorecard-v30-actions{
+  margin-top:20px!important;
+  gap:10px!important;
+}
+.rk-home-scorecard-v30-room{
+  border-radius:18px!important;
+  padding:13px 12px!important;
+  border:1px solid rgba(243,212,107,.30)!important;
+  background:rgba(255,255,255,.075)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 7px 18px rgba(0,0,0,.07)!important;
+}
+.rk-home-scorecard-v30-room-club{
+  background:linear-gradient(145deg,rgba(243,212,107,.15),rgba(255,255,255,.07))!important;
+}
+.rk-home-scorecard-v30-room strong{font-size:25px!important;margin:9px 0 6px!important}
+.rk-home-scorecard-v30-room small{font-size:10.5px!important;line-height:1.25!important}
+.rk-home-scorecard-v30-bottom{
+  margin-top:10px!important;
+  padding:0!important;
+  background:transparent!important;
+}
+.rk-home-scorecard-v30-share{
+  border-radius:22px!important;
+  padding:14px!important;
+  border:1px solid rgba(160,120,40,.16)!important;
+  background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;
+  box-shadow:0 9px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-home-scorecard-v30-details{display:none!important}
+
+/* Daily scorecard: cleaner spacing and less bulky share/room section */
+.rk-scorecard-premium-v26 > div:first-child{
+  background:#F8F4EE!important;
+  margin-top:6px!important;
+  padding-top:0!important;
+}
+.rk-scorecard-premium-v26 .rk-scorecard-title-v26{
+  background:linear-gradient(145deg,#FFFDF8,#F2EBDD)!important;
+  color:#176B42!important;
+  border:1px solid rgba(160,120,40,.22)!important;
+  box-shadow:0 5px 14px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.72)!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero{
+  padding:26px 20px 20px!important;
+  margin-bottom:16px!important;
+  border-radius:28px!important;
+}
+.rk-scorecard-compact-meta-v32{
+  margin-top:16px!important;
+  max-width:330px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20{
+  border-radius:22px!important;
+  padding:15px!important;
+  margin-bottom:14px!important;
+  line-height:1.5!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20-copy strong{line-height:1.18!important}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20-copy small{line-height:1.48!important}
+.rk-scorecard-premium-v26 .rk-score-share-v20{
+  border-radius:22px!important;
+  padding:15px!important;
+  margin-bottom:14px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-head strong{line-height:1.14!important}
+.rk-scorecard-premium-v26 .rk-score-share-v20-head p{line-height:1.48!important}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview{
+  min-height:76px!important;
+  border-radius:18px!important;
+  padding:12px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-rack-card{
+  margin-top:14px!important;
+  border-radius:22px!important;
+}
+
+@media(max-width:390px){
+  .rk-home-scorecard-v30-main{padding:25px 16px 20px!important;border-radius:28px!important}
+  .rk-home-scorecard-v30-score{font-size:78px!important}
+  .rk-home-scorecard-v30-level{font-size:27px!important}
+  .rk-home-scorecard-v30-actions{gap:8px!important}
+  .rk-home-scorecard-v30-room{padding:12px 10px!important}
+  .rk-home-scorecard-v30-room strong{font-size:23px!important}
+  .rk-scorecard-compact-meta-v32{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
+}
 `;
 
 const S={
@@ -12753,22 +13019,13 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           </div>
           <div style={{fontSize:14,lineHeight:1.45,color:"rgba(255,255,255,.78)",fontWeight:750,maxWidth:290,margin:"0 auto"}}>{quickRead}</div>
           {rankLine&&<div style={{fontSize:11,lineHeight:1.35,color:"rgba(255,255,255,.58)",fontWeight:800,marginTop:12}}>{rankLine}</div>}
+          <div className="rk-scorecard-compact-meta-v32" aria-label="Scorecard details">
+            <button type="button" onClick={()=>setScreen&&setScreen("globalLeaderboard")}><span>Global</span><strong>{globalRank?`#${globalRank}`:"—"}</strong></button>
+            <button type="button" onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")}><span>Club</span><strong>{clubRank?`#${clubRank}`:"—"}</strong></button>
+            <div><span>Time</span><strong>{timeLabel}</strong></div>
+          </div>
         </div>
       </div>
-
-      <div className="rk-scorecard-achievements-v26" aria-label="Scorecard highlights">
-        <div className="rk-scorecard-achievement-v26"><strong>#{dayNum}</strong><span>Daily rack</span></div>
-        <div className="rk-scorecard-achievement-v26"><strong>{iq.streak||ST.get("str",0)||0}d</strong><span>Streak</span></div>
-        <div className="rk-scorecard-achievement-v26"><strong>{timeLabel}</strong><span>Time</span></div>
-        <div className="rk-scorecard-achievement-v26"><strong>{clubRank?`#${clubRank}`:globalRank?`#${globalRank}`:"—"}</strong><span>{clubRank?"Club rank":"Global"}</span></div>
-      </div>
-
-      <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:8,marginBottom:12}}>
-        <Metric label="Global" value={globalRank?`#${globalRank}`:"—"} sub={globalTotal?`of ${globalTotal}`:"loading"} accent={globalRank===1?C.gold:C.jade} onClick={()=>setScreen&&setScreen("globalLeaderboard")}/>
-        <Metric label="Club" value={clubRank?`#${clubRank}`:"—"} sub={affiliatedClubName||"join"} accent={clubRank===1?C.gold:C.jade} onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")}/>
-        <Metric label="Time" value={timeLabel} sub={time?"finished":"not tracked"} accent={C.ink}/>
-      </div>
-
 
       <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"globalLeaderboard")} className="rk-score-club-room-v20" style={{width:"100%",appearance:"none",fontFamily:F.b,cursor:"pointer"}}>
         <span className="rk-score-club-room-v20-main">
