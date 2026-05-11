@@ -4364,6 +4364,73 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 @media(max-width:390px){.rk-score-club-room-v20{align-items:flex-start}.rk-score-club-room-v20-side{display:none}.rk-score-share-v20-preview strong{font-size:34px}}
 
 
+
+/* ─── vNext: lighter share badge + cleaner daily scorecard share panel ─── */
+.rk-score-share-v20{
+  background:linear-gradient(145deg,#FFFDF8 0%,#F6EFE3 100%)!important;
+  border:1px solid rgba(160,120,40,.13)!important;
+  box-shadow:0 12px 30px rgba(26,20,16,.05),inset 0 1px 0 rgba(255,255,255,.84)!important;
+}
+.rk-score-share-v20-icon{
+  background:linear-gradient(145deg,#FFFDF8,#F1E8D8)!important;
+  border:1px solid rgba(160,120,40,.14)!important;
+  box-shadow:0 5px 14px rgba(160,120,40,.06),inset 0 1px 0 rgba(255,255,255,.88)!important;
+  opacity:.72!important;
+  filter:saturate(.72) brightness(1.08)!important;
+  font-size:16px!important;
+}
+.rk-score-share-v20-copywrap{display:block;min-width:0}
+.rk-score-share-v20-badge{
+  display:inline-flex;
+  align-items:center;
+  width:fit-content;
+  margin:0 0 7px;
+  padding:5px 9px;
+  border-radius:999px;
+  background:rgba(201,168,76,.11);
+  border:1px solid rgba(201,168,76,.18);
+  color:#8A6820;
+  font-size:9px;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+}
+.rk-score-share-v20-preview{
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 10% 0%,rgba(243,212,107,.14),transparent 34%),
+    linear-gradient(155deg,#062B18,#0D4A2E 62%,#051F11)!important;
+  border:1px solid rgba(243,212,107,.24)!important;
+  box-shadow:0 12px 26px rgba(6,43,24,.14),inset 0 1px 0 rgba(255,255,255,.10)!important;
+}
+.rk-score-share-v20-preview:after{
+  content:'Rackle';
+  position:absolute;
+  right:12px;
+  bottom:10px;
+  font-family:'Fraunces',Georgia,serif;
+  font-size:18px;
+  font-weight:950;
+  color:rgba(243,212,107,.10);
+  letter-spacing:-.6px;
+  pointer-events:none;
+}
+.rk-score-share-v20-preview-top{display:flex!important;align-items:flex-start!important;justify-content:space-between!important;gap:14px!important}
+.rk-score-share-v20-preview-top span{padding-top:4px!important}
+.rk-score-share-v20-preview em{
+  display:block;
+  width:fit-content;
+  margin:8px auto 0;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.11);
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-head{align-items:flex-start!important}
+.rk-scorecard-premium-v26 .rk-score-share-v20-head p{max-width:34ch!important}
+
 /* ─── v21 polish: streak stats, free play, room rows, scorecard countdown ─── */
 .rk-room-live-v17-row{
   display:grid!important;
@@ -13439,15 +13506,16 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
       <div className="rk-score-share-card rk-score-share-v20">
         <div className="rk-score-share-v20-head">
-          <span className="rk-score-share-v20-icon">📲</span>
-          <span>
+          <span className="rk-score-share-v20-icon" aria-hidden="true">📲</span>
+          <span className="rk-score-share-v20-copywrap">
+            <span className="rk-score-share-v20-badge">Group chat ready</span>
             <small>Share your score</small>
             <strong>Send your scorecard to the table.</strong>
             <p>{clubRank?`You’re #${clubRank} in your club. Make them chase ${score}.`:`Post your ${score} and let the room chase it before midnight.`}</p>
           </span>
         </div>
         <div className="rk-score-share-v20-preview" aria-label="Share preview">
-          <div><span>Rackle #{dayNum}</span><strong>{score}</strong></div>
+          <div className="rk-score-share-v20-preview-top"><span>Rackle #{dayNum}</span><strong>{score}</strong></div>
           <p>{globalRank?`Global #${globalRank}`:"Global board"}{clubRank?` · Club #${clubRank}`:""}</p>
           <em>{passEmoji}</em>
         </div>
