@@ -4871,7 +4871,7 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   margin-bottom:22px!important;
 }
 .rk-daily-entry-wrap-v37 .rk-daily-entry-v6{
-  margin-bottom:9px!important;
+  margin-bottom:8px!important;
 }
 .rk-daily-entry-v37-tutorial{
   appearance:none;
@@ -4880,27 +4880,28 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   justify-content:center;
   width:fit-content;
   margin:0 auto 2px;
-  padding:8px 12px;
-  border:1px solid rgba(23,107,66,.10);
-  border-radius:999px;
-  background:rgba(23,107,66,.045);
+  padding:2px 0;
+  border:0;
+  border-radius:0;
+  background:transparent;
   color:#176B42;
   font-family:'Nunito','Segoe UI',sans-serif;
   font-size:12px;
   font-weight:900;
-  line-height:1;
+  line-height:1.35;
   cursor:pointer;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.62);
-  transition:background .16s ease, transform .16s ease, border-color .16s ease;
+  box-shadow:none;
+  text-decoration:none;
+  transition:color .16s ease, transform .16s ease, opacity .16s ease;
 }
 .rk-daily-entry-v37-tutorial:hover{
-  background:rgba(23,107,66,.075);
-  border-color:rgba(23,107,66,.16);
+  color:#0F5432;
+  opacity:.9;
   transform:translateY(-1px);
 }
 .rk-daily-entry-v37-tutorial:active{transform:scale(.985)}
 @media(max-width:390px){
-  .rk-daily-entry-v37-tutorial{font-size:11.5px;padding:8px 11px}
+  .rk-daily-entry-v37-tutorial{font-size:11.5px;padding:2px 0}
 }
 `;
 
@@ -15230,7 +15231,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <span className="rk-daily-entry-v6-cta"><span className="rk-live-spark"/> Play the Daily Rackle</span>
         </button>
         <button type="button" onClick={()=>setScreen("howto")} className="rk-daily-entry-v37-tutorial" aria-label="Learn how the Daily Rackle works">
-          How the Daily Rackle works →
+          New to Rackle? See how it works →
         </button>
       </section>
     );
