@@ -4938,6 +4938,25 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-handbrowser-v40-dragon-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.rk-handbrowser-v40-dragon{border-radius:18px;padding:10px;background:rgba(255,255,255,.62);border:1px solid rgba(26,20,16,.06);text-align:center}.rk-handbrowser-v40-dragon>div{display:flex;justify-content:center;gap:4px;transform:scale(.72);height:34px;margin-bottom:8px}.rk-handbrowser-v40-dragon strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:14px;color:#1A1410}.rk-handbrowser-v40-dragon span{display:block;font-size:10.5px;color:#6B6157;font-weight:850;margin-top:3px}.rk-handbrowser-v40-results-head{display:flex;align-items:flex-end;justify-content:space-between;margin:18px 2px 10px}.rk-handbrowser-v40-results-head span{font-size:8.5px;letter-spacing:2.2px;text-transform:uppercase;color:#176B42;font-weight:950}.rk-handbrowser-v40-results-head h2{font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1.04;margin:4px 0 0;color:#1A1410}.rk-handbrowser-v40-empty{border-radius:24px;padding:18px;background:linear-gradient(145deg,#FFFDF8,#F5EFE4);border:1px solid rgba(26,20,16,.075);text-align:left;margin-bottom:15px}.rk-handbrowser-v40-empty h2{font-family:'Fraunces',Georgia,serif;font-size:22px;margin:0 0 6px;color:#1A1410}.rk-handbrowser-v40-empty p{font-size:12.5px;line-height:1.55;color:#6B6157;font-weight:720;margin:0 0 14px}.rk-handbrowser-v40-results-list{display:grid;gap:10px}.rk-handbrowser-v40-load{width:100%;margin:12px 0 22px}
 .rk-handbrowser-v40-results-list .rk-hand-card,.rk-handbrowser-v40-results-list [class*="hand-card"]{border-radius:23px!important;border-color:rgba(26,20,16,.075)!important;box-shadow:0 8px 22px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78)!important}
 @media(max-width:390px){.rk-howto-v40-hero h1,.rk-handbrowser-v40-hero h1{font-size:29px}.rk-howto-v40-rule-grid,.rk-handbrowser-v40-dragon-grid{grid-template-columns:1fr}.rk-howto-v40-actions{grid-template-columns:1fr}.rk-handbrowser-v40-section-grid{grid-template-columns:1fr}.rk-howto-v40-scorecard-preview{align-items:flex-start}.rk-howto-v40-score-badge{font-size:44px}.rk-handbrowser-v40-dragon>div{transform:scale(.82);height:42px}}
+
+
+/* ─── v41 daily reset + simpler How To / Hand Browser UX ───────────────── */
+.rk-daily-entry-v6-stats span{white-space:normal!important;line-height:1.25!important;text-align:center!important}
+.rk-room-live-v6-score strong:empty:before{content:"—"}
+.rk-room-live-v17-row strong{min-width:30px!important;text-align:right!important}
+.rk-howto-v40-hero,.rk-handbrowser-v40-hero{padding:22px 18px 19px!important;border-radius:26px!important;margin-top:4px!important;margin-bottom:13px!important}
+.rk-howto-v40-hero h1,.rk-handbrowser-v40-hero h1{font-size:28px!important;max-width:11.5ch!important;line-height:1.04!important;margin-bottom:9px!important}
+.rk-handbrowser-v40-hero h1{max-width:13ch!important}.rk-howto-v40-hero p,.rk-handbrowser-v40-hero p{font-size:12.8px!important;line-height:1.55!important;max-width:31ch!important}
+.rk-howto-v40-mini-flow{margin-top:15px!important;display:grid!important;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr!important;gap:6px!important;align-items:center!important}.rk-howto-v40-mini-flow span{min-height:32px!important;padding:0 9px!important;border-radius:12px!important;background:rgba(255,255,255,.08)!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:10.5px!important;font-weight:950!important;color:#F3D46B!important}.rk-howto-v40-mini-flow b{color:rgba(255,255,255,.36)!important;font-size:11px!important}
+.rk-howto-v40-card,.rk-handbrowser-v40-sections,.rk-handbrowser-v40-dragon-card{border-radius:24px!important;padding:15px!important;margin-bottom:12px!important}
+.rk-howto-v40-card-head,.rk-handbrowser-v40-card-head,.rk-handbrowser-v40-section-head{align-items:flex-start!important;margin-bottom:11px!important}.rk-howto-v40-card-head h2,.rk-handbrowser-v40-card-head h2{font-size:20px!important;line-height:1.08!important}.rk-handbrowser-v40-section-head strong{font-size:10.5px!important;line-height:1.25!important}
+.rk-howto-v40-steps{display:grid!important;gap:8px!important}.rk-howto-v40-step{display:grid!important;grid-template-columns:42px minmax(0,1fr)!important;gap:11px!important;padding:12px!important;border-radius:18px!important;background:rgba(255,255,255,.62)!important;border:1px solid rgba(26,20,16,.065)!important}.rk-howto-v40-num{width:42px!important;height:42px!important;border-radius:15px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:rgba(23,107,66,.08)!important;color:#176B42!important;font-family:'Fraunces',Georgia,serif!important;font-size:14px!important;font-weight:950!important}.rk-howto-v40-step em{font-size:8px!important;letter-spacing:1.7px!important;color:#176B42!important;text-transform:uppercase!important;font-weight:950!important;font-style:normal!important}.rk-howto-v40-step h3{font-family:'Fraunces',Georgia,serif!important;font-size:17px!important;line-height:1.05!important;margin:4px 0 5px!important;color:#1A1410!important}.rk-howto-v40-step p{font-size:12px!important;line-height:1.48!important;margin:0!important;color:#6B6157!important;font-weight:720!important}
+.rk-howto-v40-rule-grid{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}.rk-howto-v40-rule{display:grid!important;grid-template-columns:42px minmax(0,1fr)!important;column-gap:11px!important;align-items:start!important;padding:12px!important;border-radius:18px!important;background:rgba(255,255,255,.62)!important;border:1px solid rgba(26,20,16,.065)!important;text-align:left!important}.rk-howto-v40-rule div{grid-row:1/3;width:42px!important;height:42px!important;border-radius:15px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:rgba(23,107,66,.07)!important}.rk-howto-v40-rule h3{font-family:'Fraunces',Georgia,serif!important;font-size:16px!important;line-height:1.05!important;margin:0 0 5px!important}.rk-howto-v40-rule p{font-size:12px!important;line-height:1.5!important;margin:0!important;color:#6B6157!important;font-weight:720!important}
+.rk-howto-v40-scorecard-preview{border-radius:24px!important;padding:16px!important;margin-bottom:12px!important;background:linear-gradient(145deg,#062B18,#0D4A2E)!important;color:#fff!important}.rk-howto-v40-scorecard-preview span{color:#F3D46B!important}.rk-howto-v40-scorecard-preview h2{font-size:22px!important;line-height:1.05!important}.rk-howto-v40-scorecard-preview p{font-size:12.5px!important;line-height:1.5!important;color:rgba(255,255,255,.72)!important}.rk-howto-v40-score-badge{font-size:46px!important;color:#F3D46B!important}
+.rk-handbrowser-v40-search{margin-top:14px!important;border-radius:16px!important;padding:6px!important}.rk-handbrowser-v40-search input{height:40px!important;font-size:12.5px!important}.rk-handbrowser-v40-quickbar{margin:0 0 10px!important;padding-bottom:8px!important}.rk-handbrowser-v40-quickbar button{padding:8px 11px!important;font-size:11px!important}
+.rk-handbrowser-v40-section-grid{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}.rk-handbrowser-v40-section{grid-template-columns:38px minmax(0,1fr) auto!important;padding:11px!important;border-radius:17px!important}.rk-handbrowser-v40-section:after{content:"Open";font-size:10px;font-weight:950;color:#176B42;background:rgba(23,107,66,.07);border:1px solid rgba(23,107,66,.10);border-radius:999px;padding:6px 8px}.rk-handbrowser-v40-section.active:after{color:#F3D46B;background:rgba(255,255,255,.08);border-color:rgba(243,212,107,.25)}.rk-handbrowser-v40-section-copy strong{font-size:15px!important}.rk-handbrowser-v40-section-copy em{font-size:10.5px!important;line-height:1.3!important}
+.rk-handbrowser-v40-section-note{border-radius:21px!important;padding:13px!important;margin-bottom:12px!important}.rk-handbrowser-v40-dragon-card{padding:14px!important}.rk-handbrowser-v40-dragon-grid{grid-template-columns:1fr!important}.rk-handbrowser-v40-dragon{display:grid!important;grid-template-columns:74px minmax(0,1fr)!important;align-items:center!important;gap:9px!important;text-align:left!important;padding:10px!important}.rk-handbrowser-v40-dragon>div{grid-row:1/3;justify-content:flex-start!important;transform:scale(.68)!important;transform-origin:left center!important;height:38px!important;margin:0!important}.rk-handbrowser-v40-dragon strong{font-size:15px!important}.rk-handbrowser-v40-results-head{margin:15px 2px 9px!important}.rk-handbrowser-v40-results-head h2{font-size:20px!important}.rk-handbrowser-v40-empty{border-radius:22px!important;padding:16px!important}.rk-handbrowser-v40-results-list{gap:9px!important}.rk-handbrowser-v40-load{min-height:46px!important}
+@media(max-width:390px){.rk-howto-v40-hero h1,.rk-handbrowser-v40-hero h1{font-size:27px!important}.rk-howto-v40-mini-flow{grid-template-columns:1fr!important}.rk-howto-v40-mini-flow b{display:none!important}.rk-handbrowser-v40-section:after{display:none}.rk-handbrowser-v40-dragon{grid-template-columns:68px minmax(0,1fr)!important}}
 `;
 
 const S={
@@ -13383,7 +13402,7 @@ function Tutorial({onDone,onBack,setScreen}){
 // Plus: search, filter by value/concealed, anchor tile quick-ref.
 function CardGuideScreen({home,setScreen}){
   const [view,setView]=useState("sections"); // "sections" | "section" | "search"
-  const [activeSec,setActiveSec]=useState(null);
+  const [activeSec,setActiveSec]=useState("2026");
   const [search,setSearch]=useState("");
   const [filterConcealed,setFilterConcealed]=useState(false);
   const [filterValue,setFilterValue]=useState(null); // null | 25 | 30 | 35 | 40 | 50+
@@ -15066,7 +15085,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   // while older profiles only have it on the profile object. getClubCode() normalizes both.
   const activeClubCode=getClubCode();
   const club=activeClubCode?CLUBS[activeClubCode]:null;
-  const nudge=shouldShowNudge(dDone);
+  const hasTodayDaily=!!todayDRes;
+  const nudge=shouldShowNudge(hasTodayDaily);
   const [nudgeDismissed,setNudgeDismissed]=useState(ST.get("nudgeDismissed",null)===getDailySeed());
   const [leOpen,setLeOpen]=useState(false);
   const [menuOpen,setMenuOpen]=useState(false);
@@ -15079,7 +15099,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const dismissNudge=()=>{ST.set("nudgeDismissed",getDailySeed());setNudgeDismissed(true);};
 
   useEffect(()=>{
-    fetchDailyStats().then(s=>{if(s&&s.total>=1)setDs(s);});
+    fetchDailyStats().then(s=>setDs(s||{total:0,count:0,topScore:null,max:null,rows:[]}));
     fetchGlobalEntries().then(rows=>{if(rows)setHomeGlobalEntries(rows);}).catch(()=>{});
     const code=activeClubCode||getClubCode();
     if(code){
@@ -15094,12 +15114,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   },[activeClubCode]);
 
   const ydIQ=yd?.iq?.totalScore||null;
-  const todayPlayers=Math.max(ds?.total||0,0);
-  const topToday=Math.max(ds?.topScore||ds?.max||0,dDone?iq?.totalScore||0:0);
+  const todayPlayers=Math.max(Number(ds?.total??homeGlobalEntries.length??0)||0,0);
+  const remoteTopScore=Number(ds?.topScore??ds?.max??homeGlobalEntries?.[0]?.iqScore??0)||0;
+  const topToday=Math.max(remoteTopScore,hasTodayDaily?(Number(iq?.totalScore)||0):0);
   const bestScore=Number.isFinite(Number(bestIQ?.score ?? bestIQ))?Number(bestIQ?.score ?? bestIQ):0;
-  const currentScore=dDone&&Number.isFinite(Number(iq?.totalScore))?Number(iq.totalScore):0;
+  const currentScore=hasTodayDaily&&Number.isFinite(Number(iq?.totalScore))?Number(iq.totalScore):0;
   const currentName=rkCurrentDisplayName();
-  const hasClubScore=!!(club&&dDone&&currentScore>0);
+  const hasClubScore=!!(club&&hasTodayDaily&&currentScore>0);
   const displayHomeClubEntries=club
     ?rkMergeCurrentScore(homeClubEntries,currentScore,iq?.totalTime||todayDRes?.time||0,streak,activeClubCode)
     :[];
@@ -15149,7 +15170,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     club?`${club.name} is active today`:"The club board is active today",
   ].filter(Boolean);
   const socialPresenceLine=club?`${club.name} is active today`:socialPresenceFeed[dn%socialPresenceFeed.length];
-  const hasPlayedBefore=(getHist().length>0)||rounds>0||dDone||streak>0;
+  const hasPlayedBefore=(getHist().length>0)||rounds>0||hasTodayDaily||streak>0;
   const isFirstTime=!hasPlayedBefore;
 
   const levelLine=iq?.totalScore>=90?"Elite read. Your club will notice.":iq?.totalScore>=80?"Strong read. Make them chase it.":iq?.totalScore>=70?"Solid read. One better pass moves you up.":iq?.totalScore>=60?"You're warming up. The next rack is where it clicks.":"Tough rack. Come back sharper tomorrow.";
@@ -15232,8 +15253,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   };
 
   const TodayRackPreview=()=>{
-    const posted=Number(todayPlayers||0)||2;
-    const scoreToBeat=topToday||currentScore||78;
+    const posted=Number(todayPlayers||0)||0;
+    const scoreToBeat=Number(topToday||0)||0;
     const previewTiles=[
       {t:"s",s:"bam",n:2},
       {t:"s",s:"crak",n:5},
@@ -15260,8 +15281,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <h2 className="rk-daily-entry-v6-title">Ready for today’s rack?</h2>
           <p className="rk-daily-entry-v6-copy"><span>Play one Charleston. Beat the room.</span><span>Same rack for everyone. One score to chase.</span></p>
           <div className="rk-daily-entry-v6-stats">
-            <span>{posted} {posted===1?"player has":"players already"} posted</span>
-            <span>{scoreToBeat} is the score to beat</span>
+            <span>{posted===0?"First score gets the room":`${posted} ${posted===1?"player has":"players already"} posted`}</span>
+            <span>{scoreToBeat?`${scoreToBeat} is the score to beat`:"Be the first score to beat"}</span>
           </div>
           <span className="rk-daily-entry-v6-cta"><span className="rk-live-spark"/> Play the Daily Rackle</span>
           <button type="button" onClick={(e)=>{e.stopPropagation();setScreen("howto");}} className="rk-daily-entry-v37-tutorial" aria-label="Learn how the Daily Rackle works">
@@ -15273,7 +15294,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   };
 
   const LiveTicker=()=>{
-    const posted=Number(todayPlayers||0)||2;
+    const posted=Number(todayPlayers||0)||0;
     const updates=[
       "Board resets tonight",
       `${posted} ${posted===1?"player has":"players already"} posted`,
@@ -15281,7 +15302,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       club?.name?`${club.name} is active`:null,
       `Daily Rackle #${dn} is live`,
       streak?`${streak}-day streak on the line`:null,
-      dDone?"Come back tomorrow to keep your streak":"Your table is waiting",
+      hasTodayDaily?"Come back tomorrow to keep your streak":"Your table is waiting",
     ].filter(Boolean);
     const [idx,setIdx]=useState(0);
     useEffect(()=>{
@@ -15483,8 +15504,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <h3 className="rk-web-data-title">Today’s table pressure</h3>
           <p className="rk-web-data-copy">Same Charleston for every player. Your read, rank, and score become the room’s benchmark.</p>
           <div className="rk-web-metric-row" style={{gridTemplateColumns:"repeat(2,minmax(0,1fr))"}}>
-            <div className="rk-web-metric"><strong>{todayScore}</strong><span>Your IQ</span></div>
-            <div className="rk-web-metric"><strong>{topToday}</strong><span>Lead score</span></div>
+            <div className="rk-web-metric"><strong>{todayScore||"—"}</strong><span>Your IQ</span></div>
+            <div className="rk-web-metric"><strong>{topToday||"—"}</strong><span>Lead score</span></div>
           </div>
         </div>
         <div className="rk-web-data-card">
@@ -15512,20 +15533,20 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   };
 
   const Community=()=> {
-    const globalRows=rkMergeCurrentScore(homeGlobalEntries,currentScore,iq?.totalTime||todayDRes?.time||0,streak,activeClubCode);
+    const globalRows=hasTodayDaily?rkMergeCurrentScore(homeGlobalEntries,currentScore,iq?.totalTime||todayDRes?.time||0,streak,activeClubCode):(homeGlobalEntries||[]);
     const clubRows=displayHomeClubEntries;
     const globalCount=Math.max(Number(todayPlayers||0),globalRows.length,currentScore?1:0);
     const clubCount=Number(clubPlayers||clubRows.length||0);
-    const leadValue=Number(topToday||globalRows[0]?.iqScore||currentScore||78);
+    const leadValue=Number(topToday||globalRows[0]?.iqScore||0)||0;
     const leader=(globalRows&&globalRows[0])||{};
-    const leaderName=(leader.name||currentName||"Top player").trim();
+    const leaderName=(leader.name||(leadValue?"Top player":"First score gets the room")).trim();
     const pointsBehind=Number.isFinite(leadValue)&&Number.isFinite(Number(currentScore))?Math.max(0,leadValue-Number(currentScore)):null;
     const roomLine=currentScore?pointsBehind===0?"You’re holding the table today.":`You’re ${pointsBehind} points off first.`:"See who’s posted and chase the room.";
     const openBoard=()=>activeClubCode?setScreen("leaderboard"):setScreen("globalLeaderboard");
     const boardRows=(globalRows&&globalRows.length?globalRows:homeClubEntries&&homeClubEntries.length?homeClubEntries:[]).slice(0,3);
     const fallbackRows=[
-      {name:leaderName,iqScore:leadValue},
-      {name:currentScore?currentName:"First score gets the room",iqScore:currentScore||"—"},
+      {name:leaderName,iqScore:leadValue||"—"},
+      {name:hasTodayDaily&&currentScore?currentName:"First score gets the room",iqScore:hasTodayDaily&&currentScore?currentScore:"—"},
       {name:activeClubCode?"Your club board":"Global room",iqScore:globalCount||"—"},
     ];
     const rows=(boardRows.length?boardRows:fallbackRows).slice(0,3);
@@ -15539,8 +15560,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         : `You’re ${pointsBehind} point${pointsBehind===1?"":"s"} back. Open the room and chase.`
       : "Post your score, then see exactly who you’re chasing.";
     const socialCopy=activeClubCode
-      ? `${clubCount||1} club score${(clubCount||1)===1?"":"s"} live today`
-      : `${globalCount||1} player${(globalCount||1)===1?"":"s"} in today’s Rackle room`;
+      ? clubCount>0?`${clubCount} club score${clubCount===1?"":"s"} live today`:"No club scores yet today"
+      : globalCount>0?`${globalCount} player${globalCount===1?"":"s"} in today’s Rackle room`:"No scores live yet";
     const previewRows=(activeClubCode&&clubPreviewRows.length?clubPreviewRows:globalPreviewRows).slice(0,3);
     const boardLabel=activeClubCode?"Club board":"Rackle room";
     const secondaryLabel=activeClubCode?"Global room →":"Club room →";
@@ -15616,7 +15637,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   return(
     <>
       <div style={{...S.pg,padding:"0 18px 56px"}} className="rk-pg">
-        {nudge&&!nudgeDismissed&&!dDone&&(
+        {nudge&&!nudgeDismissed&&!hasTodayDaily&&(
           <div className="rk-in" style={{display:"flex",alignItems:"center",gap:11,background:`linear-gradient(135deg,${C.jade}12,${C.jade}06)`,border:`1px solid ${C.jade}24`,borderRadius:18,padding:"12px 14px",marginBottom:8,marginTop:10}}>
             <span style={{fontSize:20,flexShrink:0}}>⏰</span>
             <div style={{flex:1}}><div style={{fontSize:13,fontWeight:900,color:C.jade,fontFamily:F.d}}>Don't miss today's Daily</div><div style={{fontSize:11,color:C.mut,marginTop:2}}>Same rack. Every player. Your club board is still moving.</div></div>
@@ -15626,8 +15647,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <Menu/>
         <Hero/>
         <div className="rk-home-landing-flow">
-          {!dDone&&<StartDaily/>}
-          {dDone&&<CompletedDaily/>}
+          {!hasTodayDaily&&<StartDaily/>}
+          {hasTodayDaily&&<CompletedDaily/>}
           <TomorrowTease/>
           <Community/>
           <PracticeCard/>
@@ -17692,8 +17713,8 @@ function HowToPlayScreen({home,setScreen}){
 
       <section className="rk-howto-v40-hero rk-sweep">
         <div className="rk-howto-v40-kicker">How Rackle works</div>
-        <h1>The Daily Charleston, made simple.</h1>
-        <p>Rackle is a quick way to train your American Mahjong table read. One rack. A real Charleston. One score to chase.</p>
+        <h1>Play one Charleston. Get smarter.</h1>
+        <p>Rackle gives everyone the same rack, then scores how well you handled the Charleston.</p>
         <div className="rk-howto-v40-mini-flow" aria-label="Rackle flow">
           <span>Read</span><b>→</b><span>Pass</span><b>→</b><span>Score</span><b>→</b><span>Compare</span>
         </div>
@@ -17756,7 +17777,7 @@ function HowToPlayScreen({home,setScreen}){
 // (replaces/extends CardGuideScreen with per-hand visual rendering)
 // ════════════════════════════════════════════════════════════════════════════
 function HandBrowserScreen({home,setScreen}){
-  const [activeSec,setActiveSec]=useState(null);
+  const [activeSec,setActiveSec]=useState("2026");
   const [search,setSearch]=useState("");
   const [onlyConcealed,setOnlyConcealed]=useState(false);
   const [visibleLimit,setVisibleLimit]=useState(6);
@@ -17785,7 +17806,7 @@ function HandBrowserScreen({home,setScreen}){
       <section className="rk-handbrowser-v40-hero rk-sweep">
         <div className="rk-handbrowser-v40-kicker">2026 NMJL card</div>
         <h1>{sec?sec.name:"Hand Browser"}</h1>
-        <p>{sec?`${allHands.length} hands in this section. Open any hand to see the shape, constraints, and joker rules.`:"Find hands faster. Pick a section, search a pattern, or filter concealed hands."}</p>
+        <p>{sec?`${allHands.length} hands in this section. Tap a hand to see the shape and what matters.`:"Pick a section, search a pattern, or filter concealed hands."}</p>
         <div className="rk-handbrowser-v40-search">
           <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search: 2468, dragon, flowers, concealed" />
           {search&&<button onClick={()=>setSearch("")} aria-label="Clear search">×</button>}
@@ -17850,8 +17871,8 @@ function HandBrowserScreen({home,setScreen}){
 
       <section id="rk-hand-results" className="rk-handbrowser-v40-results-head">
         <div>
-          <span>{activeSec||search||onlyConcealed?"Results":"Start here"}</span>
-          <h2>{activeSec||search||onlyConcealed?`${allHands.length} matching hands`:"Pick a section to see the hands."}</h2>
+          <span>{activeSec||search||onlyConcealed?"Hands":"Start here"}</span>
+          <h2>{activeSec||search||onlyConcealed?`${allHands.length} matching hands`:"Start with the 2026 section."}</h2>
         </div>
       </section>
 
