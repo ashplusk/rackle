@@ -7480,6 +7480,201 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   z-index:3!important;
   pointer-events:auto!important;
 }
+
+
+/* ─── vNext: scorecard spacing + leaderboard UX polish ─────────────────── */
+.rk-home-scorecard-v41-score-row{
+  justify-content:flex-start!important;
+  align-items:center!important;
+  gap:10px!important;
+}
+.rk-home-scorecard-v42-style-next,
+.rk-home-scorecard-v41-style.rk-home-scorecard-v42-style-next{
+  margin:0 0 6px 8px!important;
+  align-self:center!important;
+  transform:translateX(-2px)!important;
+}
+@media(max-width:390px){
+  .rk-home-scorecard-v41-score-row{gap:7px!important}
+  .rk-home-scorecard-v42-style-next,
+  .rk-home-scorecard-v41-style.rk-home-scorecard-v42-style-next{
+    margin-left:6px!important;
+    transform:translateX(-3px)!important;
+  }
+}
+
+.rk-startup-pulse-pill-v41,
+.rk-startup-pulse-pill-v42{
+  margin-bottom:18px!important;
+}
+.rk-startup-hero-v42 + .rk-daily-entry-wrap-v37,
+.rk-startup-hero-v4 + .rk-daily-entry-wrap-v37{
+  margin-top:6px!important;
+}
+@media(max-width:390px){
+  .rk-startup-pulse-pill-v41,
+  .rk-startup-pulse-pill-v42{margin-bottom:16px!important}
+}
+
+/* Hide every legacy duplicate scorecard stat/achievement strip. */
+.rk-scorecard-achievements-v26,
+.rk-scorecard-achievement-v26,
+.rk-scorecard-compact-meta-v32{
+  display:none!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero{
+  margin-bottom:18px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20{
+  margin-top:0!important;
+}
+
+/* Leaderboard leader cards: make text readable and more leaderboard-like. */
+.rk-quiet-leader,
+.rk-room-leader{
+  background:linear-gradient(145deg,#FFFDF8 0%,#F4EBDD 100%)!important;
+  color:#1A1410!important;
+  border:1px solid rgba(160,120,40,.18)!important;
+  box-shadow:0 12px 30px rgba(26,20,16,.06),inset 0 1px 0 rgba(255,255,255,.82)!important;
+  border-radius:24px!important;
+}
+.rk-quiet-leader:after,
+.rk-room-leader:after{
+  color:#176B42!important;
+  opacity:.035!important;
+}
+.rk-quiet-leader > div:nth-child(2) > div:first-child,
+.rk-room-leader div[style*="Today’s"],
+.rk-room-leader div[style*="leader"]{
+  color:#176B42!important;
+}
+.rk-quiet-leader > div:nth-child(2) > div:nth-child(2),
+.rk-room-leader-name{
+  color:#1A1410!important;
+  font-size:22px!important;
+  line-height:1.08!important;
+  letter-spacing:-.45px!important;
+}
+.rk-quiet-leader > div:nth-child(2) > div:nth-child(3),
+.rk-room-leader-sub{
+  color:#6B6157!important;
+  line-height:1.45!important;
+}
+.rk-quiet-leader > div:last-child,
+.rk-room-score{
+  color:#A07828!important;
+  text-shadow:none!important;
+}
+.rk-quiet-badge,
+.rk-room-rank-badge{
+  background:linear-gradient(145deg,#FFF6CE,#ECD477)!important;
+  color:#1A1410!important;
+  border-color:rgba(160,120,40,.28)!important;
+}
+.rk-quiet-row-list,
+.rk-room-row-list{
+  gap:9px!important;
+}
+.rk-quiet-row,
+.rk-room-row{
+  min-height:58px!important;
+  border-radius:18px!important;
+  border-color:rgba(26,20,16,.075)!important;
+  box-shadow:0 5px 16px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-quiet-row-you,
+.rk-room-row-me{
+  background:linear-gradient(145deg,#F1FAF5,#FFFDF8)!important;
+  border-color:rgba(23,107,66,.18)!important;
+}
+.rk-quiet-name,
+.rk-room-row-name{
+  color:#1A1410!important;
+  font-size:15.5px!important;
+  line-height:1.15!important;
+}
+.rk-quiet-sub,
+.rk-room-row-sub{
+  line-height:1.42!important;
+}
+.rk-quiet-score,
+.rk-room-row-score{
+  font-size:26px!important;
+  min-width:42px!important;
+  text-align:right!important;
+}
+
+/* Live table notes: clearer, more useful, less flat. */
+.rk-room-activity-v40{
+  padding:16px!important;
+  border-radius:24px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F3EFE6)!important;
+  border:1px solid rgba(23,107,66,.11)!important;
+  box-shadow:0 10px 26px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-room-activity-v40:after{
+  opacity:.055!important;
+  top:10px!important;
+  right:14px!important;
+}
+.rk-room-activity-v40-head{
+  align-items:center!important;
+  margin-bottom:13px!important;
+}
+.rk-room-activity-v40-icon{
+  background:linear-gradient(145deg,#176B42,#0F5432)!important;
+  color:#62D892!important;
+}
+.rk-room-activity-title{
+  color:#176B42!important;
+  margin-bottom:3px!important;
+}
+.rk-room-activity-v40-head p{
+  color:rgba(26,20,16,.58)!important;
+  line-height:1.45!important;
+}
+.rk-room-feed-v40{
+  gap:9px!important;
+}
+.rk-room-feed-item-v40{
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.055)!important;
+  border-radius:16px!important;
+  padding:10px 11px!important;
+  color:#4F4942!important;
+  box-shadow:0 4px 12px rgba(26,20,16,.025),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-room-feed-dot{
+  background:#176B42!important;
+  box-shadow:0 0 0 5px rgba(23,107,66,.09)!important;
+}
+
+/* Leaderboard page actions feel more like controls than plain buttons. */
+.rk-room-actions{
+  padding:12px!important;
+  border-radius:24px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F3EFE6)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 8px 24px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-room-btn{
+  min-height:46px!important;
+  border-radius:16px!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:13px!important;
+  font-weight:950!important;
+}
+.rk-room-btn-primary{
+  border:1px solid rgba(243,212,107,.22)!important;
+  box-shadow:0 10px 22px rgba(23,107,66,.17),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+@media(max-width:390px){
+  .rk-quiet-leader,
+  .rk-room-leader{border-radius:22px!important;padding:14px!important;gap:10px!important}
+  .rk-room-leader-name{font-size:19px!important}
+  .rk-room-score{font-size:34px!important}
+  .rk-quiet-score,.rk-room-row-score{font-size:23px!important}
+}
 `;
 
 const S={
@@ -14551,12 +14746,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
       {/* vNext: removed achievement strip above room buttons. Global, Club, and Time remain below as tappable scorecard controls. */}
 
-      <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:8,marginBottom:12}}>
-        <Metric label="Global" value={globalRank?`#${globalRank}`:"—"} sub={globalTotal?`of ${globalTotal}`:"loading"} accent={globalRank===1?C.gold:C.jade} onClick={()=>setScreen&&setScreen("globalLeaderboard")}/>
-        <Metric label="Club" value={clubRank?`#${clubRank}`:"—"} sub={affiliatedClubName||"join"} accent={clubRank===1?C.gold:C.jade} onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")}/>
-        <Metric label="Time" value={timeLabel} sub={time?"finished":"not tracked"} accent={C.ink}/>
-      </div>
-
+      {/* vNext: removed duplicate scorecard stat buttons. Club/global access now lives in the room card and homepage scorecard. */}
 
       <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"globalLeaderboard")} className="rk-score-club-room-v20" style={{width:"100%",appearance:"none",fontFamily:F.b,cursor:"pointer"}}>
         <span className="rk-score-club-room-v20-main">
