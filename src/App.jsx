@@ -9289,6 +9289,282 @@ html,body,#root{
   .rk-email-btn-v8{width:100%!important}
   .rk-footer{padding-bottom:18px!important}
 }
+
+
+/* ─── v45: Hand Browser, How To, Daily Scorecard cleanup ───────────────── */
+/* Hand Browser: no search, cleaner controls */
+.rk-handbrowser-v40-search{display:none!important}
+.rk-handbrowser-v40-hero{
+  padding:22px 18px 18px!important;
+  border-radius:28px!important;
+  margin-bottom:14px!important;
+}
+.rk-handbrowser-v40-hero h1{
+  font-size:30px!important;
+  line-height:1.04!important;
+  letter-spacing:-.9px!important;
+  margin-bottom:8px!important;
+}
+.rk-handbrowser-v40-hero p{
+  font-size:13px!important;
+  line-height:1.55!important;
+  max-width:34ch!important;
+}
+.rk-handbrowser-v45-quickbar,
+.rk-handbrowser-v40-quickbar{
+  display:flex!important;
+  gap:8px!important;
+  margin:0 0 14px!important;
+  padding:0!important;
+  overflow:visible!important;
+}
+.rk-handbrowser-v40-quickbar button{
+  min-height:38px!important;
+  border-radius:999px!important;
+  padding:8px 12px!important;
+  font-size:11.5px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  white-space:nowrap!important;
+}
+.rk-handbrowser-v40-section-head,
+.rk-handbrowser-v40-card-head,
+.rk-howto-v40-card-head{
+  display:block!important;
+  text-align:left!important;
+  margin-bottom:14px!important;
+}
+.rk-handbrowser-v40-section-head span,
+.rk-handbrowser-v40-card-head span,
+.rk-howto-v40-card-head span{
+  display:block!important;
+  font-size:8px!important;
+  letter-spacing:2.15px!important;
+  text-transform:uppercase!important;
+  color:#176B42!important;
+  font-weight:950!important;
+  margin-bottom:7px!important;
+  line-height:1.1!important;
+}
+.rk-handbrowser-v40-section-head strong,
+.rk-handbrowser-v40-card-head h2,
+.rk-howto-v40-card-head h2{
+  display:block!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:19px!important;
+  line-height:1.12!important;
+  letter-spacing:-.45px!important;
+  color:#1A1410!important;
+  font-weight:950!important;
+  margin:0!important;
+}
+.rk-handbrowser-v40-dragon-card{
+  padding:16px!important;
+  border-radius:24px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 8px 22px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-handbrowser-v40-dragon-grid{
+  gap:8px!important;
+}
+.rk-handbrowser-v40-dragon{
+  padding:10px 8px!important;
+  border-radius:18px!important;
+  text-align:center!important;
+}
+.rk-handbrowser-v40-dragon strong{
+  font-size:13px!important;
+  line-height:1.1!important;
+  margin-top:7px!important;
+}
+.rk-handbrowser-v40-dragon span{
+  font-size:11px!important;
+  line-height:1.2!important;
+}
+.rk-handbrowser-v40-section-grid{
+  gap:9px!important;
+}
+.rk-handbrowser-v40-section{
+  min-height:62px!important;
+  padding:12px!important;
+  border-radius:20px!important;
+}
+.rk-handbrowser-v40-section-copy strong{font-size:14.5px!important;line-height:1.15!important}
+.rk-handbrowser-v40-section-copy em{font-size:11px!important;line-height:1.35!important}
+.rk-handbrowser-v40-results-head h2{font-size:21px!important;line-height:1.12!important}
+
+/* How To: consistent section heads */
+.rk-howto-v40-hero h1{
+  font-size:31px!important;
+  line-height:1.04!important;
+}
+.rk-howto-v40-hero p{
+  font-size:13.5px!important;
+  line-height:1.6!important;
+}
+.rk-howto-v40-card{
+  padding:17px!important;
+  border-radius:26px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.80)!important;
+}
+.rk-howto-v40-steps{gap:10px!important}
+.rk-howto-v40-step{
+  align-items:flex-start!important;
+  gap:12px!important;
+  padding:13px!important;
+  border-radius:20px!important;
+}
+.rk-howto-v40-step h3{font-size:16px!important;line-height:1.14!important;margin-bottom:5px!important}
+.rk-howto-v40-step p{font-size:12.5px!important;line-height:1.55!important}
+.rk-howto-v40-rule-grid{gap:9px!important}
+.rk-howto-v40-rule{
+  padding:13px!important;
+  border-radius:20px!important;
+}
+.rk-howto-v40-rule h3{font-size:15.5px!important;line-height:1.14!important;margin:8px 0 5px!important}
+.rk-howto-v40-rule p{font-size:12px!important;line-height:1.5!important}
+
+/* Daily Scorecard: centered header, unified background, cleaner hero */
+.rk-pg:has(.rk-scorecard-premium-v26),
+.rk-scorecard-premium-v26,
+.rk-scorecard-premium-v26.rk-score-shell{
+  background:#F8F4EE!important;
+  background-image:none!important;
+}
+.rk-scorecard-premium-v26{
+  padding-left:10px!important;
+  padding-right:10px!important;
+  line-height:1.62!important;
+}
+.rk-scorecard-premium-v26:before{display:none!important;content:none!important}
+.rk-scorecard-premium-v26 > div:first-child{
+  text-align:center!important;
+  margin:8px auto 18px!important;
+  padding:0 10px!important;
+  background:transparent!important;
+}
+.rk-scorecard-premium-v26 .rk-scorecard-title-v26{
+  margin-left:auto!important;
+  margin-right:auto!important;
+  background:linear-gradient(145deg,#FFFDF8,#F1E7D7)!important;
+  border:1px solid rgba(160,120,40,.26)!important;
+  color:#176B42!important;
+  box-shadow:0 6px 16px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.86)!important;
+}
+.rk-scorecard-premium-v26 .rk-scorecard-heading-v26{
+  margin:10px auto 8px!important;
+  text-align:center!important;
+  max-width:11ch!important;
+  line-height:1.03!important;
+}
+.rk-scorecard-premium-v26 > div:first-child > div:last-child{
+  margin-left:auto!important;
+  margin-right:auto!important;
+  max-width:32ch!important;
+  text-align:center!important;
+  line-height:1.58!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero{
+  width:100%!important;
+  margin:0 auto 18px!important;
+  padding:34px 22px 28px!important;
+  border-radius:30px!important;
+  background:
+    linear-gradient(150deg,#062B18 0%,#0D4A2E 56%,#051F11 100%)!important;
+  background-size:auto!important;
+  animation:none!important;
+  border:1px solid rgba(243,212,107,.28)!important;
+  box-shadow:0 18px 46px rgba(6,43,24,.24),inset 0 1px 0 rgba(255,255,255,.12),0 0 0 1px rgba(243,212,107,.06)!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero:before{
+  border-color:rgba(243,212,107,.13)!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero:after,
+.rk-scorecard-premium-v26 .rk-iq-hero .rk-iq-glow,
+.rk-scorecard-premium-v26 .rk-scorecard-stamp-v26{
+  display:none!important;
+}
+.rk-scorecard-premium-v26 .rk-score-tick-up-v43,
+.rk-scorecard-premium-v26 .rk-iq-score{
+  font-size:96px!important;
+  line-height:.88!important;
+  color:#F3D46B!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-style-pill{
+  margin-top:16px!important;
+  margin-bottom:16px!important;
+  border-color:rgba(243,212,107,.38)!important;
+  background:rgba(255,255,255,.08)!important;
+  color:#F4E7BE!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-summary{
+  max-width:34ch!important;
+  line-height:1.64!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20{
+  padding:17px!important;
+  border-radius:26px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F4EBDD)!important;
+  border:1px solid rgba(160,120,40,.14)!important;
+  box-shadow:0 10px 26px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.84)!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20-copy strong{
+  font-size:18px!important;
+  line-height:1.2!important;
+  color:#1A1410!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20-copy small{
+  font-size:12px!important;
+  line-height:1.55!important;
+  color:rgba(26,20,16,.58)!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20{
+  padding:17px!important;
+  border-radius:26px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;
+  border:1px solid rgba(160,120,40,.14)!important;
+  box-shadow:0 10px 28px rgba(26,20,16,.05),inset 0 1px 0 rgba(255,255,255,.84)!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-head{
+  align-items:flex-start!important;
+  gap:12px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-head strong{
+  font-size:19px!important;
+  line-height:1.16!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-head p{
+  font-size:12.5px!important;
+  line-height:1.55!important;
+  max-width:34ch!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview{
+  min-height:102px!important;
+  padding:15px!important;
+  border-radius:22px!important;
+  background:
+    linear-gradient(150deg,#062B18 0%,#0D4A2E 62%,#051F11 100%)!important;
+  border:1px solid rgba(243,212,107,.22)!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview strong{
+  font-size:48px!important;
+  line-height:.92!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview p{
+  color:rgba(255,255,255,.78)!important;
+  line-height:1.4!important;
+}
+@media(max-width:390px){
+  .rk-scorecard-premium-v26{padding-left:8px!important;padding-right:8px!important}
+  .rk-scorecard-premium-v26 .rk-iq-hero{padding:30px 18px 24px!important;border-radius:28px!important}
+  .rk-scorecard-premium-v26 .rk-score-tick-up-v43,.rk-scorecard-premium-v26 .rk-iq-score{font-size:88px!important}
+  .rk-handbrowser-v40-dragon-grid{grid-template-columns:1fr!important}
+}
 `;
 
 const S={
@@ -22305,19 +22581,12 @@ function HandBrowserScreen({home,setScreen}){
       <section className="rk-handbrowser-v40-hero rk-sweep">
         <div className="rk-handbrowser-v40-kicker">2026 NMJL card</div>
         <h1>{sec?sec.name:"Hand Browser"}</h1>
-        <p>{sec?`${allHands.length} hands in this section. Tap a hand to see the shape and what matters.`:"Pick a section, search a pattern, or filter concealed hands."}</p>
-        <div className="rk-handbrowser-v40-search">
-          <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search: 2468, dragon, flowers, concealed" />
-          {search&&<button onClick={()=>setSearch("")} aria-label="Clear search">×</button>}
-        </div>
+        <p>{sec?`${allHands.length} hands in this section. Tap a hand to see the shape and what matters.`:"Pick a section to browse the card without needing to search."}</p>
       </section>
 
-      <section className="rk-handbrowser-v40-quickbar" aria-label="Quick filters">
+      <section className="rk-handbrowser-v40-quickbar rk-handbrowser-v45-quickbar" aria-label="Card filters">
         <button className={onlyConcealed?"active":""} onClick={()=>setOnlyConcealed(v=>!v)}>Concealed only</button>
-        <button onClick={()=>quickSearch("dragon")}>Dragons</button>
-        <button onClick={()=>quickSearch("flowers")}>Flowers</button>
-        <button onClick={()=>quickSearch("2026")}>2026</button>
-        {(activeSec||search||onlyConcealed)&&<button className="clear" onClick={()=>{setActiveSec(null);setSearch("");setOnlyConcealed(false);}}>Clear</button>}
+        <button className="clear" onClick={()=>{setActiveSec(null);setSearch("");setOnlyConcealed(false);}}>Show all sections</button>
       </section>
 
       <section className="rk-handbrowser-v40-sections" aria-label="Card sections">
@@ -22370,8 +22639,8 @@ function HandBrowserScreen({home,setScreen}){
 
       <section id="rk-hand-results" className="rk-handbrowser-v40-results-head">
         <div>
-          <span>{activeSec||search||onlyConcealed?"Hands":"Start here"}</span>
-          <h2>{activeSec||search||onlyConcealed?`${allHands.length} matching hands`:"Start with the 2026 section."}</h2>
+          <span>{activeSec||onlyConcealed?"Hands":"Start here"}</span>
+          <h2>{activeSec||onlyConcealed?`${allHands.length} hands to review`:"Start with the 2026 section."}</h2>
         </div>
       </section>
 
