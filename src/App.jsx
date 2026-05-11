@@ -6139,6 +6139,233 @@ html,body,#root,.rk-outer,.rk-app,.rk-pg{
   .rk-freeplay-v35-preview{min-width:0!important;width:100%!important;justify-items:start!important}
   .rk-freeplay-v35-rack .rk-rack-surface{justify-content:flex-start!important}
 }
+
+
+/* ─── v36: share score, free play, learn margins, Rackle room polish ───── */
+.rk-home-scorecard-v30-level{
+  margin-top:8px!important;
+  margin-bottom:11px!important;
+  line-height:1.14!important;
+}
+.rk-home-scorecard-v30-style{
+  margin-top:0!important;
+  margin-bottom:12px!important;
+}
+.rk-home-scorecard-v30-line{
+  margin-top:2px!important;
+  line-height:1.5!important;
+}
+.rk-home-scorecard-v30-bottom{
+  margin-top:11px!important;
+  padding:12px!important;
+  border-radius:22px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F4ECDD)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 8px 22px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.80)!important;
+  display:grid!important;
+  gap:9px!important;
+}
+.rk-home-scorecard-v30-share{
+  margin:0!important;
+  border-radius:18px!important;
+  background:linear-gradient(145deg,#0D4A2E,#062B18)!important;
+  border:1px solid rgba(243,212,107,.18)!important;
+  color:#fff!important;
+}
+.rk-home-scorecard-v30-share strong{color:#fff!important;line-height:1.12!important}
+.rk-home-scorecard-v30-share span{color:rgba(255,255,255,.72)!important;line-height:1.35!important}
+.rk-home-scorecard-v30-share em{color:#F3D46B!important;line-height:1.3!important}
+.rk-home-scorecard-v30-share b{color:#F3D46B!important}
+.rk-home-scorecard-v30-share-icon{
+  background:rgba(255,255,255,.10)!important;
+  border:1px solid rgba(243,212,107,.22)!important;
+  color:#F3D46B!important;
+}
+.rk-home-scorecard-v30-details{
+  margin:0!important;
+  border-radius:16px!important;
+  min-height:44px!important;
+  background:linear-gradient(180deg,#F8F1E4,#EDE2CF)!important;
+  border:1px solid rgba(160,120,40,.18)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72)!important;
+  color:#176B42!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-weight:950!important;
+}
+.rk-share-score-v6{
+  border-radius:28px!important;
+  padding:18px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F5EFE4)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 10px 28px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.80)!important;
+}
+.rk-share-score-v6-title{
+  font-size:20px!important;
+  line-height:1.08!important;
+  letter-spacing:-.45px!important;
+  margin-bottom:7px!important;
+}
+.rk-share-score-v6-copy{line-height:1.45!important;max-width:28ch!important}
+.rk-share-score-v6-btn{
+  min-height:44px!important;
+  border-radius:999px!important;
+  background:linear-gradient(135deg,#176B42,#0F5432)!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  box-shadow:0 9px 20px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+.rk-share-lux-card-v6{
+  border-radius:22px!important;
+  box-shadow:0 14px 30px rgba(6,43,24,.18),inset 0 1px 0 rgba(255,255,255,.10)!important;
+}
+.rk-freeplay-v27-preview-label,
+.rk-freeplay-v35-preview [class*="label"],
+.rk-freeplay-v35-preview small{
+  text-align:left!important;
+  align-self:flex-start!important;
+}
+.rk-freeplay-v35-preview{
+  justify-items:start!important;
+  align-items:start!important;
+}
+.rk-freeplay-v35-rack .rk-rack-surface{
+  justify-content:flex-start!important;
+}
+.rk-freeplay-v27-steps div strong,
+.rk-freeplay-v24-steps strong{
+  background:linear-gradient(145deg,#176B42,#0F5432)!important;
+  color:#fff!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  box-shadow:0 6px 13px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+.rk-freeplay-v27-steps div{
+  border-color:rgba(23,107,66,.10)!important;
+}
+.rk-learn-home-v8,
+.rk-learn-home-v12,
+.rk-learn-home-v18,
+.rk-learn-home-v19{
+  margin-left:4px!important;
+  margin-right:4px!important;
+  padding-left:14px!important;
+  padding-right:14px!important;
+}
+@media(max-width:430px){
+  .rk-learn-home-v8,.rk-learn-home-v12,.rk-learn-home-v18,.rk-learn-home-v19{
+    margin-left:2px!important;
+    margin-right:2px!important;
+    padding-left:13px!important;
+    padding-right:13px!important;
+  }
+}
+.rk-room-page{
+  background:linear-gradient(180deg,#F8F4EE 0%,#F8F4EE 100%)!important;
+}
+.rk-room-hero{
+  padding:24px 20px 20px!important;
+  border-radius:28px!important;
+  margin-bottom:16px!important;
+}
+.rk-room-kicker{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  width:auto!important;
+  padding:7px 11px!important;
+  border-radius:999px!important;
+  background:rgba(255,255,255,.08)!important;
+  border:1px solid rgba(243,212,107,.18)!important;
+  margin-bottom:12px!important;
+}
+.rk-room-title{
+  font-size:30px!important;
+  line-height:1.02!important;
+  margin-bottom:10px!important;
+}
+.rk-room-copy{
+  font-size:13px!important;
+  line-height:1.62!important;
+  max-width:36ch!important;
+  color:rgba(255,255,255,.76)!important;
+  margin-bottom:18px!important;
+}
+.rk-room-metrics{gap:9px!important}
+.rk-room-metric{
+  border-radius:19px!important;
+  padding:14px 10px!important;
+  background:rgba(255,255,255,.09)!important;
+}
+.rk-room-metric strong{font-size:25px!important;margin-bottom:7px!important}
+.rk-room-metric span{line-height:1.2!important;color:rgba(255,255,255,.62)!important}
+.rk-room-leader{
+  border-radius:24px!important;
+  padding:16px!important;
+  margin-bottom:14px!important;
+  grid-template-columns:auto minmax(0,1fr) auto!important;
+}
+.rk-room-leader-name{font-size:23px!important;line-height:1.08!important;margin-bottom:3px!important}
+.rk-room-leader-sub{font-size:12px!important;line-height:1.45!important;white-space:normal!important}
+.rk-room-score{font-size:45px!important}
+.rk-room-you{
+  border-radius:23px!important;
+  padding:15px!important;
+  margin-bottom:14px!important;
+  align-items:center!important;
+}
+.rk-room-you-title{font-size:18px!important;line-height:1.12!important}
+.rk-room-you-copy{font-size:12.2px!important;line-height:1.48!important}
+.rk-room-row-list{gap:9px!important;margin-bottom:14px!important}
+.rk-room-row{
+  grid-template-columns:40px minmax(0,1fr) auto!important;
+  gap:11px!important;
+  padding:13px!important;
+  border-radius:19px!important;
+}
+.rk-room-row-name{font-size:15.5px!important;line-height:1.12!important}
+.rk-room-row-sub{font-size:11px!important;line-height:1.4!important;white-space:normal!important}
+.rk-room-row-score{font-size:25px!important;text-align:right!important;min-width:42px!important}
+.rk-room-activity{
+  border-radius:23px!important;
+  padding:15px!important;
+  margin-bottom:14px!important;
+}
+.rk-room-activity-title{margin-bottom:12px!important}
+.rk-room-feed{gap:9px!important}
+.rk-room-feed-item{font-size:12.2px!important;line-height:1.5!important}
+.rk-room-actions{
+  grid-template-columns:1fr 1fr!important;
+  gap:9px!important;
+  padding:12px!important;
+  border-radius:24px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F3EFE6)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 8px 24px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-room-btn{
+  min-height:46px!important;
+  border-radius:16px!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:13px!important;
+  letter-spacing:-.1px!important;
+}
+.rk-room-btn-primary{
+  background:linear-gradient(135deg,#176B42,#0F5432)!important;
+  border:1px solid rgba(243,212,107,.20)!important;
+  box-shadow:0 10px 22px rgba(23,107,66,.17),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+.rk-invite-card{
+  border-radius:24px!important;
+  padding:16px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F5EFE4)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.80)!important;
+  margin-bottom:14px!important;
+}
+@media(max-width:390px){
+  .rk-room-title{font-size:27px!important}
+  .rk-room-actions{grid-template-columns:1fr!important}
+  .rk-room-leader{grid-template-columns:42px minmax(0,1fr) auto!important;gap:10px!important}
+  .rk-room-score{font-size:38px!important}
+}
 `;
 
 const S={
@@ -15618,10 +15845,10 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
       <RoomActivity items={activity}/>
     </>}
     <div className="rk-room-actions">
-      <button className="rk-room-btn rk-room-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(shareText,"Rackle Global Room");setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Share room"}</button>
-      <button className="rk-room-btn" onClick={load}>Refresh</button>
-      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"Club Room":"Find Club"}</button>
-      <button className="rk-room-btn" onClick={home}>Home</button>
+      <button className="rk-room-btn rk-room-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(shareText,"Rackle Global Room");setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Share the room"}</button>
+      <button className="rk-room-btn" onClick={load}>Refresh scores</button>
+      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"Club room":"Find a club"}</button>
+      <button className="rk-room-btn" onClick={home}>Back home</button>
     </div>
     <Footer/>
   </div>;
@@ -15707,10 +15934,10 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
       </div>
     </div>
     <div className="rk-room-actions">
-      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>Global Room</button>
-      <button className="rk-room-btn" onClick={load}>Refresh</button>
-      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("clubs")}>Change Club</button>
-      <button className="rk-room-btn" onClick={home}>Home</button>
+      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>Global room</button>
+      <button className="rk-room-btn" onClick={load}>Refresh scores</button>
+      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("clubs")}>Change club</button>
+      <button className="rk-room-btn" onClick={home}>Back home</button>
     </div>
     <Footer/>
   </div>;
