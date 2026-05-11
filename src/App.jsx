@@ -8979,6 +8979,199 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   .rk-room-page > .rk-room-actions{grid-template-columns:1fr!important}
   .rk-room-page > .rk-room-actions .rk-room-btn:first-child{grid-column:auto!important}
 }
+
+
+/* ─── vNext: Learn arrows, Clubhouse card, Daily Scorecard overhaul ─────── */
+.rk-learn-home-v18-arrow,
+.rk-learn-home-arrow{
+  width:34px!important;
+  height:34px!important;
+  min-width:34px!important;
+  border-radius:999px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0!important;
+  background:linear-gradient(145deg,#176B42,#0F5432)!important;
+  color:#F3D46B!important;
+  border:1px solid rgba(243,212,107,.28)!important;
+  box-shadow:0 8px 18px rgba(23,107,66,.14),inset 0 1px 0 rgba(255,255,255,.18)!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:19px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+}
+.rk-learn-home-v18-card:hover .rk-learn-home-v18-arrow,
+.rk-learn-home-card:hover .rk-learn-home-arrow{
+  transform:translateX(2px)!important;
+  filter:brightness(1.04)!important;
+}
+.rk-learn-home-v18-card,
+.rk-learn-home-card{
+  cursor:pointer!important;
+}
+
+.rk-email-home-v8,
+.rk-email-home-v19{
+  position:relative!important;
+  overflow:hidden!important;
+  padding:22px 18px 18px!important;
+  border-radius:30px!important;
+  background:
+    radial-gradient(circle at 92% 6%,rgba(243,212,107,.13),transparent 32%),
+    linear-gradient(145deg,#FFFDF8 0%,#F5EDE0 100%)!important;
+  border:1px solid rgba(160,120,40,.16)!important;
+  box-shadow:0 14px 36px rgba(26,20,16,.06),inset 0 1px 0 rgba(255,255,255,.84)!important;
+}
+.rk-email-home-v8:before,
+.rk-email-home-v19:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.46),transparent 34%);
+  pointer-events:none;
+}
+.rk-email-home-v8 > *,
+.rk-email-home-v19 > *{
+  position:relative!important;
+  z-index:1!important;
+}
+.rk-email-kicker-v8,
+.rk-email-kicker-v18{
+  width:fit-content!important;
+  margin-bottom:11px!important;
+  padding:6px 10px!important;
+  border-radius:999px!important;
+  background:rgba(23,107,66,.07)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  color:#176B42!important;
+}
+.rk-email-title-v8{
+  font-size:21px!important;
+  line-height:1.08!important;
+  letter-spacing:-.55px!important;
+  margin:0 0 8px!important;
+}
+.rk-email-copy-v8{
+  font-size:12.8px!important;
+  line-height:1.55!important;
+  color:rgba(26,20,16,.62)!important;
+  max-width:30ch!important;
+  margin-bottom:14px!important;
+}
+.rk-email-form-v8{
+  gap:8px!important;
+}
+.rk-email-input-v8{
+  min-height:46px!important;
+  border-radius:16px!important;
+  background:rgba(255,255,255,.72)!important;
+  border:1px solid rgba(26,20,16,.08)!important;
+}
+.rk-email-btn-v8{
+  min-height:46px!important;
+  border-radius:16px!important;
+  background:linear-gradient(135deg,#176B42,#0F5432)!important;
+  border:1px solid rgba(243,212,107,.18)!important;
+  box-shadow:0 10px 22px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+
+.rk-scorecard-premium-v26{
+  padding-left:16px!important;
+  padding-right:16px!important;
+}
+.rk-scorecard-premium-v26 > div:first-child{
+  text-align:left!important;
+  margin:6px 0 16px!important;
+}
+.rk-scorecard-premium-v26 .rk-scorecard-title-v26{
+  margin:0 0 10px!important;
+  color:#176B42!important;
+  background:linear-gradient(145deg,#FFFDF8,#F2EBDD)!important;
+  border:1px solid rgba(160,120,40,.18)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78),0 5px 14px rgba(26,20,16,.035)!important;
+}
+.rk-scorecard-premium-v26 .rk-scorecard-heading-v26{
+  margin:0 0 6px!important;
+  max-width:none!important;
+  text-align:left!important;
+  font-size:31px!important;
+  line-height:1.02!important;
+  letter-spacing:-1px!important;
+}
+.rk-scorecard-premium-v26 > div:first-child > div:last-child{
+  margin:0!important;
+  max-width:34ch!important;
+  text-align:left!important;
+  font-size:12.8px!important;
+  line-height:1.56!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero{
+  position:relative!important;
+  padding:24px 20px 20px!important;
+  border-radius:30px!important;
+  margin-bottom:16px!important;
+  background:
+    radial-gradient(circle at 90% 10%,rgba(243,212,107,.16),transparent 34%),
+    linear-gradient(150deg,#041F12 0%,#07331E 52%,#0D4A2E 82%,#03170D 100%)!important;
+  border:1px solid rgba(243,212,107,.24)!important;
+  box-shadow:0 18px 44px rgba(6,43,24,.22),inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero .rk-scorecard-stamp-v26{
+  display:none!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero > div[style*="text-align"]{
+  text-align:left!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero div[style*="Rackle IQ"],
+.rk-scorecard-premium-v26 .rk-iq-hero div[style*="letter-spacing:2.8"]{
+  text-align:left!important;
+  margin-bottom:8px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-tick-up-v43,
+.rk-scorecard-premium-v26 .rk-iq-hero div[style*="font-size:88"]{
+  text-align:left!important;
+  margin-bottom:16px!important;
+  filter:drop-shadow(0 8px 18px rgba(0,0,0,.16))!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero div[style*="inline-flex"]{
+  margin-bottom:14px!important;
+}
+.rk-scorecard-premium-v26 .rk-iq-hero div[style*="maxWidth:290"],
+.rk-scorecard-premium-v26 .rk-iq-hero div[style*="max-width:290"]{
+  margin-left:0!important;
+  margin-right:0!important;
+  max-width:34ch!important;
+  line-height:1.6!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20,
+.rk-scorecard-premium-v26 .rk-score-share-v20,
+.rk-scorecard-premium-v26 .rk-score-rack-card,
+.rk-scorecard-premium-v26 .rk-daily-review-v10,
+.rk-scorecard-premium-v26 .rk-next-rack-panel-v11{
+  border-radius:26px!important;
+  margin-bottom:16px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20{
+  padding:17px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F5EBDD)!important;
+  border:1px solid rgba(160,120,40,.15)!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-head strong{
+  font-size:20px!important;
+  line-height:1.12!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card{
+  border-radius:20px!important;
+}
+@media(max-width:390px){
+  .rk-email-title-v8{font-size:20px!important}
+  .rk-scorecard-premium-v26{padding-left:14px!important;padding-right:14px!important}
+  .rk-scorecard-premium-v26 .rk-scorecard-heading-v26{font-size:29px!important}
+  .rk-scorecard-premium-v26 .rk-iq-hero{padding:22px 18px 19px!important}
+}
 `;
 
 const S={
@@ -16028,8 +16221,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26" style={{paddingBottom:32}}>
       <div style={{textAlign:"center",margin:"8px 0 16px"}}>
         <div className="rk-scorecard-title-v26">Daily Rackle #{dayNum}</div>
-        <h1 className="rk-scorecard-heading-v26">Your Rackle Scorecard</h1>
-        <div style={{fontSize:12,lineHeight:1.45,color:C.mut,fontWeight:750,marginTop:6}}>Built for the group chat. Made to defend at the table.</div>
+        <h1 className="rk-scorecard-heading-v26">Daily Scorecard</h1>
+        <div style={{fontSize:12,lineHeight:1.45,color:C.mut,fontWeight:750,marginTop:6}}>Your Rackle IQ, room rank, and Charleston read.</div>
       </div>
 
       <div className="rk-iq-hero rk-sweep" style={{padding:"28px 22px 22px",borderRadius:28,marginBottom:14}}>
@@ -16074,7 +16267,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <span className="rk-score-share-v20-icon">📲</span>
           <span>
             <small>Share your score</small>
-            <strong>Send this to the table.</strong>
+            <strong>Send your scorecard to the table.</strong>
             <p>{clubRank?`You’re #${clubRank} in your club. Make them chase ${score}.`:`Post your ${score} and see who can beat it before midnight.`}</p>
           </span>
         </div>
@@ -16113,7 +16306,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <button onClick={()=>setShowDetails(v=>!v)} className="rk-daily-review-v10-head">
           <span>
             <small>Post-rack analysis</small>
-            <strong>Charleston Review</strong>
+            <strong>Your Charleston Read</strong>
           </span>
           <b>{showDetails?"Hide":"Open"}</b>
         </button>
@@ -16129,7 +16322,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
             <p>This is the cleanest lane to keep alive after the Charleston.</p>
           </div>
           <div className="rk-daily-review-v10-card" data-icon="🎯">
-            <span>Table IQ</span>
+            <span>Table read</span>
             <strong>{tableTag}</strong>
             <p>{pivotCopy}</p>
           </div>
@@ -19732,7 +19925,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <button key={title} className="rk-learn-home-card rk-learn-home-v18-card" onClick={fn}>
             <span className="rk-learn-home-icon rk-learn-home-v18-icon">{mark}</span>
             <span className="rk-learn-home-text rk-learn-home-v18-text"><strong>{title}</strong><span>{sub}</span></span>
-            <span className="rk-learn-home-arrow rk-learn-home-v18-arrow">Open</span>
+            <span className="rk-learn-home-arrow rk-learn-home-v18-arrow" aria-hidden="true">→</span>
           </button>
         ))}
       </div>
