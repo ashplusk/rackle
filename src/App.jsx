@@ -6019,6 +6019,96 @@ html,body,#root,.rk-outer,.rk-app,.rk-pg{
   .rk-freeplay-v24-top{align-items:stretch!important}
 }
 
+
+
+/* ─── v35: final homepage scorecard + standings polish ─────────────────── */
+.rk-home-scorecard-v30{
+  margin-top:-8px!important;
+  margin-bottom:22px!important;
+}
+.rk-home-scorecard-v30-brand,
+.rk-home-scorecard-v34-watermark{
+  display:none!important;
+}
+.rk-home-scorecard-v30-topline{
+  justify-content:center!important;
+  text-align:center!important;
+  margin-bottom:12px!important;
+}
+.rk-home-scorecard-v30-kicker{
+  margin:0 auto!important;
+}
+.rk-home-scorecard-v30-bottom{
+  margin-top:10px!important;
+  padding:12px!important;
+  border-radius:24px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F4EADB)!important;
+  border:1px solid rgba(160,120,40,.14)!important;
+  box-shadow:0 10px 28px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)!important;
+  display:grid!important;
+  gap:9px!important;
+}
+.rk-home-scorecard-v30-share{
+  background:linear-gradient(145deg,#FFFDF8,#F7EFDF)!important;
+  border-color:rgba(160,120,40,.16)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-home-scorecard-v30-details{
+  background:linear-gradient(135deg,#176B42,#0F5432)!important;
+  border:1px solid rgba(243,212,107,.20)!important;
+  box-shadow:0 10px 22px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+.rk-tomorrow-v11-row span{
+  white-space:normal!important;
+  text-align:left!important;
+  letter-spacing:.1px!important;
+}
+.rk-room-live-v35-head{
+  align-items:center!important;
+  gap:12px!important;
+  padding-bottom:0!important;
+  border-bottom:none!important;
+  margin-bottom:8px!important;
+}
+.rk-room-live-v35-head .rk-room-live-v6-avatars{
+  flex-shrink:0!important;
+}
+.rk-room-live-v35-head .rk-room-live-v17-head-copy{
+  gap:4px!important;
+}
+.rk-room-live-v35-head .rk-room-live-v17-head-copy strong{
+  font-size:15px!important;
+  line-height:1.08!important;
+}
+.rk-room-live-v35-head .rk-room-live-v17-head-copy span{
+  font-size:11px!important;
+  line-height:1.35!important;
+  white-space:normal!important;
+}
+.rk-room-live-v35-roomlink{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  min-height:38px!important;
+  margin:8px 0 10px!important;
+  border-radius:15px!important;
+  background:linear-gradient(145deg,rgba(243,212,107,.18),rgba(255,255,255,.07))!important;
+  border:1px solid rgba(243,212,107,.24)!important;
+  color:#F3D46B!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:13px!important;
+  font-weight:950!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+.rk-room-live-v19 .rk-room-live-v17-rows{
+  margin-top:8px!important;
+}
+@media(max-width:390px){
+  .rk-home-scorecard-v30{margin-top:-5px!important}
+  .rk-home-scorecard-v30-bottom{border-radius:22px!important}
+  .rk-room-live-v35-roomlink{font-size:12.5px!important;min-height:36px!important}
+}
 `;
 
 const S={
@@ -16389,8 +16479,6 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div className="rk-home-scorecard-v30-topline">
           <span className="rk-home-scorecard-v30-kicker">Daily Rackle · #{dn}</span>
         </div>
-        <span className="rk-home-scorecard-v30-brand rk-home-scorecard-v34-watermark">Rackle</span>
-
         <div className="rk-home-scorecard-v30-medal">
           <div className="rk-home-scorecard-v30-score rk-pop">{scoreValue}</div>
           <div className="rk-home-scorecard-v30-scoreglow" aria-hidden="true" />
@@ -16435,6 +16523,16 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   const TomorrowTease=()=> {
     const resetLabel=getTimeUntilMidnightLabel();
+    const tomorrowSayings=[
+      "Tomorrow is a clean table.",
+      "A new room opens at midnight.",
+      "Fresh tiles. Fresh pressure.",
+      "The next rack is waiting.",
+      "Midnight resets the room.",
+      "New rack. New chase.",
+      "Your club board starts fresh.",
+    ];
+    const tomorrowLine=tomorrowSayings[Math.floor(Math.random()*tomorrowSayings.length)];
     return(
       <section aria-label="Tomorrow's Rackle preview" className="rk-tomorrow-card-v11 rk-tomorrow-mystery-final rk-sweep">
         <div className="rk-tomorrow-float-tiles" aria-hidden="true"><span>🀇</span><span>🀙</span><span>🀄</span></div>
@@ -16447,7 +16545,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </div>
         <p className="rk-tomorrow-v11-copy">Come back fresh. Your club board starts again.</p>
         <div className="rk-tomorrow-v11-row">
-          <span>Tomorrow is a clean table</span>
+          <span>{tomorrowLine}</span>
         </div>
       </section>
     );
@@ -16669,13 +16767,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </button>
 
         <button type="button" onClick={openBoard} className="rk-room-live-v17-table">
-          <div className="rk-room-live-v17-head">
+          <div className="rk-room-live-v17-head rk-room-live-v35-head">
             <div className="rk-room-live-v6-avatars" aria-hidden="true">
               {(firstNames.length?firstNames:[leaderName,"You","Club"]).slice(0,3).map((n,i)=><span key={`${n}-${i}`} className="rk-room-live-v6-avatar">{initials(n)}</span>)}
             </div>
             <div className="rk-room-live-v17-head-copy"><strong>{boardLabel}</strong><span>{socialCopy}</span></div>
-            <span className="rk-room-live-v17-cta">{activeClubCode?`${club?.name||"Club"} room →`:"Open room →"}</span>
           </div>
+          <div className="rk-room-live-v35-roomlink">{activeClubCode?`${club?.name||"Club"} room →`:"Open room →"}</div>
           <div className="rk-room-live-v17-rows">
             {previewRows.map((r,i)=>{
               const isYou=(r.name||"").toLowerCase().includes((currentName||"__never__").toLowerCase()) && !!currentScore;
