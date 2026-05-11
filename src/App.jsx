@@ -11031,6 +11031,261 @@ html,body,#root{background:var(--rk-ivory)!important;}
   .rk-daily-scorecard-homeclone-v45-score-row,
   .rk-practice-homeclone-v45-score-row{gap:12px!important}
 }
+
+
+/* ─── v46: center Daily scorecard score + clearer Club Room / Share panels ─ */
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-main,
+.rk-practice-homeclone-v45 .rk-home-scorecard-v41-main{
+  text-align:center!important;
+}
+.rk-daily-scorecard-homeclone-v45-score-row,
+.rk-practice-homeclone-v45-score-row{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:0!important;
+  text-align:center!important;
+  width:100%!important;
+}
+.rk-daily-scorecard-homeclone-v45-score-row>div,
+.rk-practice-homeclone-v45-score-row>div{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  text-align:center!important;
+  margin:0 auto!important;
+}
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score,
+.rk-practice-homeclone-v45 .rk-home-scorecard-v41-score{
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:center!important;
+  width:100%!important;
+  letter-spacing:-4.2px!important;
+}
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score-label,
+.rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-label{
+  margin-left:0!important;
+  margin-right:0!important;
+  text-align:center!important;
+  width:100%!important;
+  letter-spacing:3.2px!important;
+}
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-style,
+.rk-practice-homeclone-v45 .rk-home-scorecard-v41-style{
+  margin:16px auto 0!important;
+  align-self:center!important;
+  transform:none!important;
+}
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-title,
+.rk-practice-homeclone-v45 .rk-home-scorecard-v41-title{
+  margin-top:25px!important;
+  text-align:center!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20{
+  position:relative!important;
+  overflow:hidden!important;
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:13px!important;
+  width:100%!important;
+  padding:17px!important;
+  border-radius:28px!important;
+  text-align:left!important;
+  background:
+    radial-gradient(circle at 95% 0%,rgba(23,107,66,.10),transparent 32%),
+    linear-gradient(145deg,#FFFDF8 0%,#F4EBDD 100%)!important;
+  border:1px solid rgba(160,120,40,.16)!important;
+  box-shadow:0 12px 30px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.86)!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20-main{
+  display:grid!important;
+  grid-template-columns:48px minmax(0,1fr)!important;
+  gap:13px!important;
+  align-items:start!important;
+  width:100%!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20-icon{
+  width:48px!important;
+  height:48px!important;
+  border-radius:18px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:linear-gradient(145deg,#176B42,#0F5432)!important;
+  color:#fff!important;
+  box-shadow:0 9px 20px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20-kicker{
+  display:inline-flex!important;
+  width:fit-content!important;
+  margin:0 0 6px!important;
+  padding:5px 9px!important;
+  border-radius:999px!important;
+  background:rgba(23,107,66,.07)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  color:#176B42!important;
+  font-size:8px!important;
+  letter-spacing:1.8px!important;
+  text-transform:uppercase!important;
+  font-weight:950!important;
+  line-height:1!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20-copy strong{
+  display:block!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:18px!important;
+  line-height:1.18!important;
+  letter-spacing:-.45px!important;
+  color:#1A1410!important;
+  white-space:normal!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20-copy small{
+  display:block!important;
+  margin-top:7px!important;
+  font-size:12px!important;
+  line-height:1.55!important;
+  color:rgba(26,20,16,.62)!important;
+  font-weight:750!important;
+  white-space:normal!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20-side{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  width:100%!important;
+  gap:10px!important;
+  padding-top:2px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-club-room-v20-side b{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:38px!important;
+  padding:8px 13px!important;
+  border-radius:999px!important;
+  background:linear-gradient(135deg,#176B42,#0F5432)!important;
+  border:1px solid rgba(243,212,107,.22)!important;
+  color:#fff!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:13px!important;
+  font-weight:950!important;
+  box-shadow:0 8px 18px rgba(23,107,66,.14),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20{
+  position:relative!important;
+  overflow:hidden!important;
+  padding:17px!important;
+  border-radius:28px!important;
+  background:
+    radial-gradient(circle at 98% 5%,rgba(243,212,107,.13),transparent 32%),
+    linear-gradient(145deg,#FFFDF8 0%,#F5EBDD 100%)!important;
+  border:1px solid rgba(160,120,40,.17)!important;
+  box-shadow:0 12px 30px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.86)!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-head{
+  display:grid!important;
+  grid-template-columns:48px minmax(0,1fr)!important;
+  gap:13px!important;
+  align-items:start!important;
+  margin-bottom:14px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-icon{
+  width:48px!important;
+  height:48px!important;
+  border-radius:18px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F0E4D0)!important;
+  border:1px solid rgba(160,120,40,.16)!important;
+  box-shadow:0 7px 17px rgba(160,120,40,.08),inset 0 1px 0 rgba(255,255,255,.88)!important;
+  opacity:.86!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-head small{
+  display:inline-flex!important;
+  width:fit-content!important;
+  margin:0 0 6px!important;
+  padding:5px 9px!important;
+  border-radius:999px!important;
+  background:rgba(23,107,66,.07)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  color:#176B42!important;
+  line-height:1!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-head strong{
+  display:block!important;
+  font-size:18px!important;
+  line-height:1.18!important;
+  letter-spacing:-.42px!important;
+  color:#1A1410!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-head p{
+  margin-top:7px!important;
+  font-size:12px!important;
+  line-height:1.55!important;
+  color:rgba(26,20,16,.62)!important;
+  font-weight:750!important;
+  max-width:34ch!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview{
+  display:grid!important;
+  grid-template-columns:1fr auto!important;
+  align-items:center!important;
+  gap:12px!important;
+  min-height:92px!important;
+  padding:15px!important;
+  border-radius:22px!important;
+  text-align:left!important;
+  background:linear-gradient(150deg,#062B18 0%,#0D4A2E 62%,#051F11 100%)!important;
+  border:1px solid rgba(243,212,107,.24)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 10px 22px rgba(6,43,24,.12)!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview div{
+  display:block!important;
+  min-width:0!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview span{
+  display:block!important;
+  margin-bottom:5px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview strong{
+  display:block!important;
+  font-size:44px!important;
+  line-height:.9!important;
+  color:#F3D46B!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview p{
+  grid-column:2!important;
+  grid-row:1!important;
+  margin:0!important;
+  text-align:right!important;
+  font-size:11px!important;
+  line-height:1.4!important;
+  color:rgba(255,255,255,.76)!important;
+  max-width:120px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20-preview em{
+  grid-column:1 / -1!important;
+  display:block!important;
+  margin-top:8px!important;
+  padding-top:9px!important;
+  border-top:1px solid rgba(255,255,255,.10)!important;
+  font-size:13px!important;
+  color:rgba(255,255,255,.72)!important;
+  letter-spacing:1.2px!important;
+}
+.rk-scorecard-premium-v26 .rk-score-share-v20 .rk-share-button{
+  margin-top:12px!important;
+}
+@media(max-width:390px){
+  .rk-scorecard-premium-v26 .rk-score-club-room-v20-main,
+  .rk-scorecard-premium-v26 .rk-score-share-v20-head{grid-template-columns:44px minmax(0,1fr)!important;gap:12px!important}
+  .rk-scorecard-premium-v26 .rk-score-club-room-v20-icon,
+  .rk-scorecard-premium-v26 .rk-score-share-v20-icon{width:44px!important;height:44px!important;border-radius:16px!important}
+  .rk-scorecard-premium-v26 .rk-score-share-v20-preview{grid-template-columns:1fr!important;text-align:center!important}
+  .rk-scorecard-premium-v26 .rk-score-share-v20-preview p{grid-column:1!important;grid-row:auto!important;text-align:center!important;max-width:100%!important;margin-top:6px!important}
+}
 `;
 
 const S={
@@ -18039,7 +18294,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const roomLabel=roomCount===1?"1 player played today":`${roomCount||1} players played today`;
   const clubShortName=affiliatedClubName?affiliatedClubName.replace(/\s+Mahjong Club$/i,""):"";
   const clubRoomLabel=affiliatedClubName?`${clubShortName||affiliatedClubName} room is live`:"Today’s room is live";
-  const clubRoomSub=clubCode?`Tap to see who posted, who leads, and where your ${score} sits.`:`Tap to see today’s Rackle board.`;
+  const clubRoomSub=clubCode?`Open the club room to see the board, posted scores, and where your ${score} sits.`:`Open today’s Rackle room and see the board.`;
   const socialAvatarCount=Math.min(3,Math.max(1,roomCount||clubTotal||1));
 
   const passEmoji=rkSharePattern(iq);
@@ -18149,7 +18404,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <span className="rk-score-avatar-stack" aria-hidden="true">
             {Array.from({length:socialAvatarCount}).map((_,i)=><span key={i} className="rk-score-avatar-dot" style={i%2?{background:"linear-gradient(145deg,#176B42,#DDEBDF)"}:undefined}/>) }
           </span>
-          <b>Open →</b>
+          <b>Open room →</b>
         </span>
       </button>
 
@@ -18158,8 +18413,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <span className="rk-score-share-v20-icon">📲</span>
           <span>
             <small>Group chat ready</small>
-            <strong>Send your scorecard to the table.</strong>
-            <p>{clubRank?`You’re #${clubRank} in your club. Make them chase ${score}.`:`Post your ${score} and let the room chase it before midnight.`}</p>
+            <strong>Send today’s Rackle to the group chat.</strong>
+            <p>{clubRank?`You’re #${clubRank} in your club. Let the table chase ${score}.`:`Post ${score} and see who can beat the same rack.`}</p>
           </span>
         </div>
         <div className="rk-score-share-v20-preview" aria-label="Share preview">
