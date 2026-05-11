@@ -7339,6 +7339,68 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   line-height:1.62!important;
 }
 
+
+
+/* ─── v42: homepage scorecard, remove streak bar + style beside score ───── */
+.rk-home-scorecard-v41-streak{
+  display:none!important;
+}
+.rk-home-scorecard-v41{
+  overflow:hidden!important;
+}
+.rk-home-scorecard-v41-main{
+  border-radius:30px 30px 0 0!important;
+}
+.rk-home-scorecard-v41-score-row{
+  align-items:center!important;
+  gap:18px!important;
+  margin-top:8px!important;
+  margin-bottom:0!important;
+}
+.rk-home-scorecard-v41-score-label{
+  margin-top:10px!important;
+}
+.rk-home-scorecard-v42-style-next,
+.rk-home-scorecard-v41-style.rk-home-scorecard-v42-style-next{
+  margin:0 0 6px auto!important;
+  align-self:center!important;
+  flex-shrink:0!important;
+  max-width:128px!important;
+  min-height:38px!important;
+  padding:9px 16px!important;
+  border-radius:999px!important;
+  background:rgba(255,255,255,.09)!important;
+  border:1px solid rgba(243,212,107,.46)!important;
+  color:#F4E7BE!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 8px 18px rgba(0,0,0,.07)!important;
+  font-size:12.5px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  white-space:nowrap!important;
+}
+.rk-home-scorecard-v41-title{
+  margin-top:30px!important;
+  margin-bottom:16px!important;
+  line-height:1.08!important;
+}
+.rk-home-scorecard-v41-copy{
+  margin-top:0!important;
+  line-height:1.62!important;
+}
+@media(max-width:390px){
+  .rk-home-scorecard-v41-score-row{gap:12px!important}
+  .rk-home-scorecard-v42-style-next,
+  .rk-home-scorecard-v41-style.rk-home-scorecard-v42-style-next{
+    max-width:112px!important;
+    min-height:35px!important;
+    padding:8px 13px!important;
+    font-size:11.5px!important;
+  }
+  .rk-home-scorecard-v41-title{
+    margin-top:26px!important;
+    margin-bottom:15px!important;
+  }
+}
 `;
 
 const S={
@@ -17755,14 +17817,6 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const clubValue=club?(shownClubRank?`#${shownClubRank}`:(hasClubScore?"live":"club")):"join";
     return(
     <section className="rk-home-scorecard-v41 rk-home-section-lg" aria-label="Your Daily Rackle scorecard">
-      {streak>0&&(
-        <button onClick={()=>setScreen("stats")} className="rk-home-scorecard-v41-streak" aria-label="View streak stats">
-          <span>🔥</span>
-          <strong>{streakTitle}</strong>
-          <em>{streakSub}</em>
-        </button>
-      )}
-
       <button type="button" onClick={showScorecard} className="rk-home-scorecard-v41-main" aria-label="Open your full scorecard">
         <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
         <div className="rk-home-scorecard-v41-kicker"><span/> Daily Scorecard · #{dn}</div>
@@ -17771,9 +17825,9 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <div className="rk-home-scorecard-v41-score rk-pop">{scoreValue}</div>
             <div className="rk-home-scorecard-v41-score-label">Rackle IQ</div>
           </div>
+          {iq?.styleName&&<div className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next">{iq.styleName}</div>}
         </div>
         <div className="rk-home-scorecard-v41-title">{iq?.level||"Daily complete"}</div>
-        {iq?.styleName&&<div className="rk-home-scorecard-v41-style">{iq.styleName}</div>}
         <p className="rk-home-scorecard-v41-copy">{levelLine}</p>
 
         <div className="rk-home-scorecard-v41-actions" aria-label="Scorecard rooms">
