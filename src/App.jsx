@@ -6235,18 +6235,19 @@ html,body,#root,.rk-outer,.rk-app,.rk-pg{
 .rk-home-scorecard-v30-share{
   margin:0!important;
   border-radius:18px!important;
-  background:linear-gradient(145deg,#0D4A2E,#062B18)!important;
-  border:1px solid rgba(243,212,107,.18)!important;
-  color:#fff!important;
+  background:linear-gradient(145deg,#FFFDF8,#F4E8D2)!important;
+  border:1px solid rgba(160,120,40,.20)!important;
+  color:#1A1410!important;
+  box-shadow:0 8px 22px rgba(160,120,40,.07),inset 0 1px 0 rgba(255,255,255,.78)!important;
 }
-.rk-home-scorecard-v30-share strong{color:#fff!important;line-height:1.12!important}
-.rk-home-scorecard-v30-share span{color:rgba(255,255,255,.72)!important;line-height:1.35!important}
-.rk-home-scorecard-v30-share em{color:#F3D46B!important;line-height:1.3!important}
-.rk-home-scorecard-v30-share b{color:#F3D46B!important}
+.rk-home-scorecard-v30-share strong{color:#1A1410!important;line-height:1.12!important}
+.rk-home-scorecard-v30-share span{color:#6B6157!important;line-height:1.35!important}
+.rk-home-scorecard-v30-share em{color:rgba(26,20,16,.46)!important;line-height:1.3!important}
+.rk-home-scorecard-v30-share b{color:#176B42!important}
 .rk-home-scorecard-v30-share-icon{
-  background:rgba(255,255,255,.10)!important;
-  border:1px solid rgba(243,212,107,.22)!important;
-  color:#F3D46B!important;
+  background:rgba(23,107,66,.07)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  color:#176B42!important;
 }
 .rk-home-scorecard-v30-details{
   margin:0!important;
@@ -13509,7 +13510,6 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <span className="rk-score-share-v20-icon" aria-hidden="true">📲</span>
           <span className="rk-score-share-v20-copywrap">
             <span className="rk-score-share-v20-badge">Group chat ready</span>
-            <small>Share your score</small>
             <strong>Send your scorecard to the table.</strong>
             <p>{clubRank?`You’re #${clubRank} in your club. Make them chase ${score}.`:`Post your ${score} and let the room chase it before midnight.`}</p>
           </span>
