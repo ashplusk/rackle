@@ -5078,6 +5078,143 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-room-live-v19 .rk-room-live-v17-actions,
   .rk-room-live-v17-actions{grid-template-columns:1fr!important}
 }
+
+
+/* ─── v40: smaller standings buttons, random free play rack, learn margin ── */
+.rk-room-live-v17-actions,
+.rk-room-live-v19 .rk-room-live-v17-actions{
+  gap:8px!important;
+  margin-top:12px!important;
+}
+.rk-room-live-v17-actions button,
+.rk-room-live-v19 .rk-room-live-v17-actions button{
+  min-height:42px!important;
+  height:42px!important;
+  border-radius:16px!important;
+  font-size:12px!important;
+  padding:0 14px!important;
+  letter-spacing:-.12px!important;
+}
+.rk-room-live-v17-actions button:first-child,
+.rk-room-live-v19 .rk-room-live-v17-actions button:first-child{
+  box-shadow:0 10px 20px rgba(243,212,107,.20),inset 0 1px 0 rgba(255,255,255,.56)!important;
+}
+.rk-room-live-v17-actions button:last-child,
+.rk-room-live-v19 .rk-room-live-v17-actions button:last-child{
+  box-shadow:0 10px 20px rgba(6,43,24,.16),inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+
+.rk-freeplay-v40{
+  padding:22px 20px 20px!important;
+}
+.rk-freeplay-v40-top{
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:15px!important;
+}
+.rk-freeplay-v40-copy p{
+  max-width:31ch!important;
+  line-height:1.5!important;
+}
+.rk-freeplay-v40-preview{
+  min-width:178px!important;
+  padding:11px 10px!important;
+  border-radius:22px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.68),rgba(246,239,228,.70))!important;
+  border:1px solid rgba(160,120,40,.13)!important;
+  box-shadow:0 9px 22px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-freeplay-v40-tiles{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  flex-wrap:nowrap!important;
+}
+.rk-freeplay-v40-tile{
+  display:block!important;
+  animation:rkFlip .42s ease both!important;
+}
+.rk-freeplay-v40-tile:nth-child(2){animation-delay:.05s!important}
+.rk-freeplay-v40-tile:nth-child(3){animation-delay:.1s!important}
+.rk-freeplay-v40-tile:nth-child(4){animation-delay:.15s!important}
+.rk-freeplay-v40-tile:nth-child(5){animation-delay:.2s!important}
+.rk-freeplay-v40-tile .rk-mahjong-tile{
+  width:32px!important;
+  height:46px!important;
+  min-width:32px!important;
+  border-radius:10px!important;
+  box-shadow:0 7px 14px rgba(26,20,16,.10),inset 0 1px 0 rgba(255,255,255,.90)!important;
+}
+.rk-freeplay-v40-tile .rk-mahjong-tile span:first-child{
+  font-size:15px!important;
+}
+.rk-freeplay-v40-tile .rk-mahjong-tile span:nth-child(2){
+  font-size:6.5px!important;
+  letter-spacing:.35px!important;
+}
+.rk-freeplay-v40-steps{
+  gap:9px!important;
+  margin:17px 0 15px!important;
+}
+.rk-freeplay-v40-steps div{
+  display:grid!important;
+  grid-template-columns:34px 1fr!important;
+  align-items:center!important;
+  gap:10px!important;
+  min-height:58px!important;
+  padding:10px 11px!important;
+  text-align:left!important;
+  border-radius:18px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  box-shadow:0 5px 16px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.80)!important;
+}
+.rk-freeplay-v40-steps strong{
+  width:34px!important;
+  height:34px!important;
+  margin:0!important;
+  border-radius:13px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:linear-gradient(145deg,#176B42,#0F5432)!important;
+  color:#fff!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  box-shadow:0 6px 13px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+.rk-freeplay-v40-steps b{
+  display:block!important;
+  font-size:12.5px!important;
+  line-height:1.1!important;
+  color:#1A1410!important;
+  font-weight:950!important;
+  margin-bottom:3px!important;
+}
+.rk-freeplay-v40-steps small{
+  display:block!important;
+  font-size:11px!important;
+  line-height:1.25!important;
+  color:rgba(26,20,16,.54)!important;
+  font-weight:760!important;
+}
+.rk-learn-home-v8,
+.rk-learn-home-v12,
+.rk-learn-home-v18,
+.rk-learn-home-v19{
+  margin-left:8px!important;
+  margin-right:8px!important;
+  width:calc(100% - 16px)!important;
+}
+@media(max-width:390px){
+  .rk-room-live-v17-actions button,
+  .rk-room-live-v19 .rk-room-live-v17-actions button{height:40px!important;min-height:40px!important;font-size:11.5px!important;padding:0 10px!important}
+  .rk-freeplay-v40-top{grid-template-columns:1fr!important}
+  .rk-freeplay-v40-preview{min-width:0!important;width:100%!important}
+  .rk-freeplay-v40-tiles{justify-content:flex-start!important;overflow:hidden!important}
+  .rk-freeplay-v40-tile .rk-mahjong-tile{width:31px!important;height:44px!important;min-width:31px!important}
+  .rk-learn-home-v8,.rk-learn-home-v12,.rk-learn-home-v18,.rk-learn-home-v19{margin-left:6px!important;margin-right:6px!important;width:calc(100% - 12px)!important}
+}
 `;
 
 const S={
@@ -15513,23 +15650,39 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     </div>
   );
 
+  const freePlayPracticeRacks=[
+    [{t:"s",s:"bam",n:2},{t:"s",s:"crak",n:4},{t:"s",s:"dot",n:6},{t:"s",s:"bam",n:8},{t:"d",v:"Grn"}],
+    [{t:"s",s:"crak",n:1},{t:"s",s:"bam",n:3},{t:"s",s:"dot",n:5},{t:"s",s:"crak",n:7},{t:"s",s:"bam",n:9}],
+    [{t:"s",s:"dot",n:3},{t:"s",s:"dot",n:3},{t:"s",s:"bam",n:6},{t:"s",s:"bam",n:6},{t:"d",v:"Soap"}],
+    [{t:"f"},{t:"s",s:"crak",n:2},{t:"s",s:"bam",n:0},{t:"s",s:"dot",n:2},{t:"s",s:"crak",n:6}],
+    [{t:"w",v:"N"},{t:"w",v:"E"},{t:"w",v:"W"},{t:"d",v:"Red"},{t:"d",v:"Grn"}],
+    [{t:"s",s:"bam",n:4},{t:"s",s:"bam",n:5},{t:"s",s:"bam",n:6},{t:"s",s:"crak",n:7},{t:"s",s:"dot",n:8}],
+  ];
+  const freePlayPracticeRack=freePlayPracticeRacks[Math.floor(Math.random()*freePlayPracticeRacks.length)];
+
   const PracticeCard=()=> (
-    <section className="rk-freeplay-v24" aria-label="Free play practice room">
-      <div className="rk-freeplay-v24-top">
-        <div className="rk-freeplay-v24-copy">
+    <section className="rk-freeplay-v24 rk-freeplay-v40" aria-label="Free play practice room">
+      <div className="rk-freeplay-v24-top rk-freeplay-v40-top">
+        <div className="rk-freeplay-v24-copy rk-freeplay-v40-copy">
           <div className="rk-freeplay-v24-kicker"><span>🔥</span> Free play room</div>
           <h2>Improve Your Game</h2>
-          <p>Practice another Charleston whenever you want. Try a section, get a scorecard, and keep today’s Daily Rackle score untouched.</p>
+          <p>Practice another Charleston whenever you want. New rack, clean passes, instant readout.</p>
         </div>
-        <div className="rk-freeplay-v24-rack" aria-hidden="true">
-          <span>2</span><span>5</span><span>8</span>
+        <div className="rk-freeplay-v40-preview" aria-hidden="true">
+          <div className="rk-freeplay-v40-tiles">
+            {freePlayPracticeRack.map((tile,i)=>(
+              <span key={`${tile.t}-${tile.s||tile.v||"tile"}-${tile.n||i}-${i}`} className="rk-freeplay-v40-tile">
+                <Ti t={tile} large />
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="rk-freeplay-v24-steps" aria-label="How Free Play works">
-        <div><strong>1</strong><span>Get a fresh rack</span></div>
-        <div><strong>2</strong><span>Run the Charleston</span></div>
-        <div><strong>3</strong><span>Review your read</span></div>
+      <div className="rk-freeplay-v24-steps rk-freeplay-v40-steps" aria-label="How Free Play works">
+        <div><strong>1</strong><span><b>Fresh rack</b><small>Try a new table read.</small></span></div>
+        <div><strong>2</strong><span><b>Make the passes</b><small>Practice the Charleston.</small></span></div>
+        <div><strong>3</strong><span><b>See your score</b><small>Get a quick coach note.</small></span></div>
       </div>
 
       <button type="button" onClick={()=>go("free")} className="rk-freeplay-v24-cta">
