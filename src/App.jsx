@@ -10036,6 +10036,34 @@ html,body,#root{
   }
   .rk-home-scorecard-v41-title{margin-top:19px!important}
 }
+
+/* ─── vNext: true-center homepage style pill ───────────────────────────── */
+.rk-home-scorecard-v41-style.rk-style-pill-clickable:after,
+.rk-home-scorecard-v42-style-next.rk-style-pill-clickable:after,
+.rk-style-pill-clickable:after{
+  content:none!important;
+  display:none!important;
+  margin:0!important;
+  width:0!important;
+}
+.rk-home-scorecard-v41-style,
+.rk-home-scorecard-v42-style-next,
+.rk-home-scorecard-v41-style.rk-home-scorecard-v42-style-next{
+  margin-left:auto!important;
+  margin-right:auto!important;
+  padding-left:18px!important;
+  padding-right:18px!important;
+  transform:translate(-4px,2px)!important;
+  text-align:center!important;
+}
+@media(max-width:390px){
+  .rk-home-scorecard-v41-style,
+  .rk-home-scorecard-v42-style-next,
+  .rk-home-scorecard-v41-style.rk-home-scorecard-v42-style-next{
+    transform:translate(-4px,2px)!important;
+  }
+}
+
 `;
 
 const S={
