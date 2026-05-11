@@ -8118,6 +8118,281 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   .rk-room-score{font-size:34px!important;min-width:48px!important;}
   .rk-room-row{grid-template-columns:38px minmax(0,1fr) 52px!important;gap:10px!important;}
 }
+
+
+/* ─── v50: simpler leaderboard UX + collapsible room notes ─────────────── */
+.rk-room-page{
+  background:#F8F4EE!important;
+}
+.rk-room-leader{
+  grid-template-columns:54px minmax(0,1fr) auto!important;
+  gap:15px!important;
+  align-items:center!important;
+  border-radius:26px!important;
+  padding:16px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F3EBDD)!important;
+  border:1px solid rgba(26,20,16,.08)!important;
+  box-shadow:0 12px 30px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.80)!important;
+}
+.rk-room-rank-badge{
+  width:48px!important;
+  height:48px!important;
+  border-radius:18px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex-shrink:0!important;
+  background:linear-gradient(145deg,#FFF8D8,#F3D46B)!important;
+  border:1px solid rgba(160,120,40,.22)!important;
+  color:#1A1410!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:24px!important;
+  font-weight:950!important;
+  box-shadow:0 8px 18px rgba(160,120,40,.12),inset 0 1px 0 rgba(255,255,255,.76)!important;
+}
+.rk-room-leader-copy{min-width:0!important;padding-left:2px!important}
+.rk-room-leader-kicker{
+  color:#1A1410!important;
+  opacity:.72!important;
+  font-size:8.5px!important;
+  letter-spacing:2px!important;
+  line-height:1.1!important;
+  margin-bottom:7px!important;
+}
+.rk-room-leader-name{
+  color:#1A1410!important;
+  font-size:22px!important;
+  line-height:1.08!important;
+  letter-spacing:-.55px!important;
+  margin-bottom:5px!important;
+}
+.rk-room-leader-sub{
+  color:rgba(26,20,16,.62)!important;
+  font-size:12px!important;
+  line-height:1.45!important;
+}
+.rk-room-score{
+  color:#A07828!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:44px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  letter-spacing:-1.2px!important;
+  min-width:54px!important;
+  text-align:right!important;
+}
+.rk-room-board-v50{
+  margin:0 0 14px!important;
+  padding:14px!important;
+  border-radius:26px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F5EFE4)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 10px 28px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-room-board-v50-head{
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  padding:2px 2px 12px!important;
+  border-bottom:1px solid rgba(26,20,16,.07)!important;
+  margin-bottom:10px!important;
+}
+.rk-room-board-v50-kicker{
+  font-size:8px!important;
+  letter-spacing:2.1px!important;
+  text-transform:uppercase!important;
+  color:#176B42!important;
+  font-weight:950!important;
+  line-height:1!important;
+  margin-bottom:6px!important;
+}
+.rk-room-board-v50 h2{
+  margin:0!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:22px!important;
+  line-height:1.05!important;
+  letter-spacing:-.55px!important;
+  color:#1A1410!important;
+}
+.rk-room-board-v50-head>span{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:28px!important;
+  padding:7px 10px!important;
+  border-radius:999px!important;
+  background:rgba(23,107,66,.07)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  color:#176B42!important;
+  font-size:10px!important;
+  font-weight:950!important;
+  white-space:nowrap!important;
+}
+.rk-room-board-v50-list{display:grid!important;gap:8px!important}
+.rk-room-row-v50{
+  display:grid!important;
+  grid-template-columns:42px minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:11px!important;
+  padding:12px!important;
+  border-radius:18px!important;
+  background:rgba(255,255,255,.62)!important;
+  border:1px solid rgba(26,20,16,.055)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72)!important;
+}
+.rk-room-row-v50.rk-room-row-podium{
+  background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;
+  border-color:rgba(160,120,40,.16)!important;
+}
+.rk-room-row-v50.rk-room-row-me{
+  background:linear-gradient(145deg,#F2FBF5,#FFFDF8)!important;
+  border-color:rgba(23,107,66,.20)!important;
+  box-shadow:0 8px 18px rgba(23,107,66,.055),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-room-row-rank-v50{
+  width:38px!important;
+  height:38px!important;
+  border-radius:14px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:rgba(26,20,16,.055)!important;
+  color:#1A1410!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:16px!important;
+  font-weight:950!important;
+}
+.rk-room-row-rank-v50.rk-room-row-top{
+  background:linear-gradient(145deg,#FFF4C6,#F3D46B)!important;
+  border:1px solid rgba(160,120,40,.16)!important;
+}
+.rk-room-row-player-v50{min-width:0!important;text-align:left!important}
+.rk-room-row-name{
+  color:#1A1410!important;
+  font-size:15px!important;
+  line-height:1.12!important;
+  font-weight:950!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.rk-room-row-sub{
+  color:rgba(26,20,16,.52)!important;
+  font-size:11px!important;
+  line-height:1.35!important;
+  margin-top:4px!important;
+}
+.rk-room-row-score-wrap-v50{
+  min-width:50px!important;
+  text-align:right!important;
+}
+.rk-room-row-score-wrap-v50 span{
+  display:block!important;
+  font-size:7px!important;
+  letter-spacing:1.5px!important;
+  text-transform:uppercase!important;
+  color:rgba(26,20,16,.36)!important;
+  font-weight:950!important;
+  line-height:1!important;
+  margin-bottom:5px!important;
+}
+.rk-room-row-score{
+  color:#A07828!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:25px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  letter-spacing:-.7px!important;
+}
+.rk-room-board-empty-v50{text-align:center!important;padding:26px 20px!important}
+.rk-room-board-empty-icon{font-size:28px!important;margin-bottom:8px!important}
+.rk-room-board-empty-title{font-family:'Fraunces',Georgia,serif!important;font-size:20px!important;font-weight:950!important;color:#1A1410!important;margin-bottom:6px!important;line-height:1.1!important}
+.rk-room-board-empty-copy{font-size:12.5px!important;line-height:1.55!important;color:#6B6157!important;font-weight:750!important;max-width:30ch!important;margin:0 auto!important}
+.rk-room-notes-v50{
+  margin:0 0 14px!important;
+  border-radius:22px!important;
+  background:rgba(255,255,255,.58)!important;
+  border:1px solid rgba(26,20,16,.07)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.76)!important;
+  overflow:hidden!important;
+}
+.rk-room-notes-v50 summary{
+  list-style:none!important;
+  cursor:pointer!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  padding:13px 14px!important;
+  color:#1A1410!important;
+}
+.rk-room-notes-v50 summary::-webkit-details-marker{display:none!important}
+.rk-room-notes-v50 summary span{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:17px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  color:#1A1410!important;
+}
+.rk-room-notes-v50 summary b{
+  border-radius:999px!important;
+  padding:6px 9px!important;
+  background:rgba(23,107,66,.07)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  color:#176B42!important;
+  font-size:10px!important;
+  line-height:1!important;
+}
+.rk-room-notes-v50[open] summary b{font-size:0!important}
+.rk-room-notes-v50[open] summary b:after{content:'Close';font-size:10px!important}
+.rk-room-notes-v50-body{padding:0 14px 14px!important}
+.rk-room-notes-v50-body p{
+  margin:0 0 10px!important;
+  color:#6B6157!important;
+  font-size:12px!important;
+  line-height:1.5!important;
+  font-weight:750!important;
+}
+.rk-room-feed-v50{display:grid!important;gap:7px!important}
+.rk-room-feed-item-v50{
+  display:grid!important;
+  grid-template-columns:24px minmax(0,1fr)!important;
+  gap:9px!important;
+  align-items:start!important;
+  padding:10px!important;
+  border-radius:15px!important;
+  background:rgba(255,255,255,.64)!important;
+  border:1px solid rgba(26,20,16,.055)!important;
+}
+.rk-room-feed-item-v50 span{
+  width:24px!important;
+  height:24px!important;
+  border-radius:10px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:rgba(23,107,66,.08)!important;
+  color:#176B42!important;
+  font-size:10px!important;
+  font-weight:950!important;
+}
+.rk-room-feed-item-v50 p{
+  margin:0!important;
+  font-size:12px!important;
+  line-height:1.45!important;
+  color:rgba(26,20,16,.66)!important;
+  font-weight:750!important;
+}
+@media(max-width:390px){
+  .rk-room-leader{grid-template-columns:48px minmax(0,1fr) auto!important;gap:12px!important;padding:14px!important}
+  .rk-room-rank-badge{width:44px!important;height:44px!important;font-size:22px!important}
+  .rk-room-leader-name{font-size:20px!important}
+  .rk-room-score{font-size:38px!important;min-width:44px!important}
+  .rk-room-row-v50{grid-template-columns:38px minmax(0,1fr) auto!important;gap:9px!important;padding:11px!important}
+  .rk-room-row-rank-v50{width:34px!important;height:34px!important;border-radius:13px!important}
+  .rk-room-row-score{font-size:23px!important}
+}
 `;
 
 const S={
@@ -15396,7 +15671,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
         <p className="rk-practice-v9-bottom-copy">Practice another Charleston and see if you can make the next read cleaner.</p>
         <div className="rk-practice-v9-bottom-actions">
           <button onClick={onDealAgain} style={{background:`linear-gradient(135deg,${C.jade},#0F5535)`,color:"#fff",boxShadow:`0 8px 18px rgba(23,107,66,.18)`}}>Play another rack</button>
-          <button onClick={onHome} style={{background:"linear-gradient(180deg,#F2EBDD,#E9E0CF)",color:C.ink}}>Home</button>
+          <button onClick={onHome} style={{background:"linear-gradient(180deg,#F2EBDD,#E9E0CF)",color:C.ink}}>Back home</button>
         </div>
       </div>
       <Footer/>
@@ -17539,39 +17814,52 @@ function RoomLeader({leader,myEntry,count,label="table"}){
   </div>;
 }
 function RoomRows({entries=[],scoreHint=null,emptyTitle="No scores yet",emptyCopy="Play today’s rack and claim the room."}){
-  if(!entries.length)return <div className="rk-premium-card" style={{padding:24,textAlign:"center",marginBottom:12}}>
-    <div style={{fontSize:30,marginBottom:8}}>🀄</div>
-    <div style={{fontFamily:F.d,fontSize:20,fontWeight:950,color:C.ink,marginBottom:5}}>{emptyTitle}</div>
-    <div style={{fontSize:13,color:C.mut,lineHeight:1.55}}>{emptyCopy}</div>
+  if(!entries.length)return <div className="rk-room-board-v50 rk-room-board-empty-v50">
+    <div className="rk-room-board-empty-icon">🀄</div>
+    <div className="rk-room-board-empty-title">{emptyTitle}</div>
+    <div className="rk-room-board-empty-copy">{emptyCopy}</div>
   </div>;
-  return <div className="rk-room-row-list">
-    {entries.slice(0,30).map((e,i)=>{
-      const isMe=rkEntryMatchesCurrentPlayer(e,scoreHint);
-      return <div key={`${e.playerId||e.player_id||e.name}-${i}`} className={`rk-room-row ${isMe?"rk-room-row-me":""}`}>
-        <div className={`rk-room-row-rank ${i<3?"rk-room-row-top":""}`}>{i+1}</div>
-        <div style={{minWidth:0}}>
-          <div className="rk-room-row-name">{e.name}{isMe?" · you":""}</div>
-          <div className="rk-room-row-sub">{rkEntrySub(e)}</div>
-        </div>
-        <div className={`rk-room-row-score ${rkScoreTone(e.iqScore)}`}>{e.iqScore}</div>
-      </div>;
-    })}
-  </div>;
-}
-function RoomActivity({items=[]}){
-  const cleanItems=(items&&items.length?items:["First score opens the room.","Post once, then see who you’re chasing.","The board resets at midnight."]).slice(0,4);
-  return <section className="rk-room-activity rk-room-activity-v40" aria-label="Live table notes">
-    <div className="rk-room-activity-v40-head">
-      <span className="rk-room-activity-v40-icon" aria-hidden="true">i</span>
+  return <section className="rk-room-board-v50" aria-label="Leaderboard">
+    <div className="rk-room-board-v50-head">
       <div>
-        <div className="rk-room-activity-title">Table context</div>
-        <p>Quick read on who posted, who leads, and what changed in the room.</p>
+        <div className="rk-room-board-v50-kicker">Today’s board</div>
+        <h2>Leaderboard</h2>
       </div>
+      <span>{entries.length} posted</span>
     </div>
-    <div className="rk-room-feed rk-room-feed-v40">
-      {cleanItems.map((item,i)=><div className="rk-room-feed-item rk-room-feed-item-v40" key={i}><span className="rk-room-feed-dot"/><span>{item}</span></div>)}
+    <div className="rk-room-board-v50-list">
+      {entries.slice(0,30).map((e,i)=>{
+        const isMe=rkEntryMatchesCurrentPlayer(e,scoreHint);
+        const rank=i+1;
+        return <div key={`${e.playerId||e.player_id||e.name}-${i}`} className={`rk-room-row rk-room-row-v50 ${isMe?"rk-room-row-me":""} ${rank<=3?"rk-room-row-podium":""}`}>
+          <div className={`rk-room-row-rank rk-room-row-rank-v50 ${rank<=3?"rk-room-row-top":""}`}>{rank}</div>
+          <div className="rk-room-row-player-v50">
+            <div className="rk-room-row-name">{e.name}{isMe?" · you":""}</div>
+            <div className="rk-room-row-sub">{rkEntrySub(e)}</div>
+          </div>
+          <div className="rk-room-row-score-wrap-v50">
+            <span>IQ</span>
+            <div className={`rk-room-row-score ${rkScoreTone(e.iqScore)}`}>{e.iqScore}</div>
+          </div>
+        </div>;
+      })}
     </div>
   </section>;
+}
+function RoomActivity({items=[]}){
+  const cleanItems=(items&&items.length?items:["First score opens the room.","Post once, then see who you’re chasing.","The board resets at midnight."]).slice(0,3);
+  return <details className="rk-room-notes-v50" aria-label="Room notes">
+    <summary>
+      <span>Room notes</span>
+      <b>Open</b>
+    </summary>
+    <div className="rk-room-notes-v50-body">
+      <p>Quick context for today’s board. Open only when you want more detail.</p>
+      <div className="rk-room-feed rk-room-feed-v50">
+        {cleanItems.map((item,i)=><div className="rk-room-feed-item rk-room-feed-item-v50" key={i}><span>{i+1}</span><p>{item}</p></div>)}
+      </div>
+    </div>
+  </details>;
 }
 function rkSharePattern(iq){
   const dots=(iq?.passInsights||[]).slice(0,4).map(p=>p.quality==="strong"?"🟩":p.quality==="weak"?"⬜":"🟨").join("");
@@ -17639,9 +17927,9 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
     </>}
     <div className="rk-room-actions">
       <button className="rk-room-btn rk-room-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(shareText,"Rackle Global Room");setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Share room"}</button>
-      <button className="rk-room-btn" onClick={load}>Refresh</button>
+      <button className="rk-room-btn" onClick={load}>Refresh board</button>
       <button className="rk-room-btn" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"Club Room":"Find Club"}</button>
-      <button className="rk-room-btn" onClick={home}>Home</button>
+      <button className="rk-room-btn" onClick={home}>Back home</button>
     </div>
     <Footer/>
   </div>;
@@ -17727,10 +18015,10 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
       </div>
     </div>
     <div className="rk-room-actions">
-      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>Global Room</button>
-      <button className="rk-room-btn" onClick={load}>Refresh</button>
+      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>Global room</button>
+      <button className="rk-room-btn" onClick={load}>Refresh board</button>
       <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("clubs")}>Change Club</button>
-      <button className="rk-room-btn" onClick={home}>Home</button>
+      <button className="rk-room-btn" onClick={home}>Back home</button>
     </div>
     <Footer/>
   </div>;
@@ -20824,7 +21112,7 @@ function SectionQuizScreen({home,setScreen}){
       </div>
       <div style={{display:"flex",gap:8}}>
         <button onClick={startGame} style={{...S.greenBtn,flex:2}}>Play Again →</button>
-        <button onClick={home} style={{...S.oBtn,flex:1}}>Home</button>
+        <button onClick={home} style={{...S.oBtn,flex:1}}>Back home</button>
       </div>
       <Footer/>
     </div>
