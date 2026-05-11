@@ -10012,6 +10012,30 @@ html,body,#root{
   .rk-home-scorecard-v41-score{font-size:72px!important}
   .rk-home-scorecard-v41-style,.rk-home-scorecard-v42-style-next{margin-top:12px!important}
 }
+
+
+/* ─── vNext: lower centered style pill under Rackle IQ ─────────────────── */
+.rk-home-scorecard-v41-style,
+.rk-home-scorecard-v42-style-next,
+.rk-home-scorecard-v41-style.rk-home-scorecard-v42-style-next{
+  margin-top:18px!important;
+  margin-bottom:2px!important;
+  transform:translateY(2px)!important;
+  align-self:center!important;
+  justify-self:center!important;
+}
+.rk-home-scorecard-v41-title{
+  margin-top:20px!important;
+}
+@media(max-width:390px){
+  .rk-home-scorecard-v41-style,
+  .rk-home-scorecard-v42-style-next,
+  .rk-home-scorecard-v41-style.rk-home-scorecard-v42-style-next{
+    margin-top:17px!important;
+    transform:translateY(2px)!important;
+  }
+  .rk-home-scorecard-v41-title{margin-top:19px!important}
+}
 `;
 
 const S={
