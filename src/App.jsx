@@ -9893,6 +9893,125 @@ html,body,#root{
   .rk-room-live-v19 .rk-room-live-v6-kicker{margin-bottom:10px!important;}
   .rk-startup-hero-v42{margin-bottom:3px!important;padding-bottom:3px!important;}
 }
+
+
+/* ─── vFinal: centered home scorecard + cleaner header/club board rhythm ─── */
+.rk-startup-hero-v4{
+  padding-bottom:10px!important;
+  margin-bottom:8px!important;
+}
+.rk-startup-mark-v4{
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+  width:auto!important;
+  height:auto!important;
+  margin-bottom:10px!important;
+  font-size:28px!important;
+  filter:drop-shadow(0 5px 10px rgba(26,20,16,.08));
+}
+.rk-startup-subtitle-v4{
+  margin-bottom:13px!important;
+}
+.rk-startup-pulse-pill-v41,
+.rk-startup-pulse-pill-v42,
+.rk-startup-live-note-v34{
+  margin-top:0!important;
+  margin-bottom:14px!important;
+}
+.rk-home-landing-flow{
+  padding-top:0!important;
+}
+.rk-daily-entry-wrap-v37,
+.rk-home-scorecard-v41{
+  margin-top:0!important;
+}
+.rk-home-scorecard-v41-main{
+  text-align:center!important;
+  padding-left:18px!important;
+  padding-right:18px!important;
+}
+.rk-home-scorecard-v41-kicker{
+  width:max-content!important;
+  max-width:100%!important;
+  margin:0 auto 17px!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+.rk-home-scorecard-v41-score-row{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:0!important;
+  text-align:center!important;
+  margin:0 auto 15px!important;
+}
+.rk-home-scorecard-v41-score-row>div{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+}
+.rk-home-scorecard-v41-score{
+  text-align:center!important;
+  margin:0 auto!important;
+  letter-spacing:-3px!important;
+}
+.rk-home-scorecard-v41-score-label{
+  text-align:center!important;
+  margin:6px auto 0!important;
+  padding-left:0!important;
+  width:100%!important;
+}
+.rk-home-scorecard-v41-style,
+.rk-home-scorecard-v42-style-next{
+  position:static!important;
+  display:inline-flex!important;
+  margin:13px auto 0!important;
+  transform:none!important;
+  align-self:center!important;
+  justify-self:center!important;
+}
+.rk-home-scorecard-v41-title{
+  text-align:center!important;
+  margin:17px auto 9px!important;
+  line-height:1.18!important;
+}
+.rk-home-scorecard-v41-copy{
+  text-align:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  line-height:1.55!important;
+  max-width:28ch!important;
+}
+.rk-room-live-v6-kicker{
+  margin-bottom:12px!important;
+  line-height:1.35!important;
+}
+.rk-room-live-v6-title{
+  margin-top:0!important;
+}
+.rk-room-live-v17-head-copy strong{
+  max-width:100%!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+}
+.rk-room-live-v17-cta{
+  margin-top:8px!important;
+}
+.rk-tomorrow-v11-row span{
+  white-space:normal!important;
+}
+@media(max-width:390px){
+  .rk-startup-mark-v4{font-size:25px!important;margin-bottom:9px!important}
+  .rk-startup-subtitle-v4{margin-bottom:12px!important}
+  .rk-startup-pulse-pill-v41,.rk-startup-pulse-pill-v42,.rk-startup-live-note-v34{margin-bottom:13px!important}
+  .rk-home-scorecard-v41-score{font-size:72px!important}
+  .rk-home-scorecard-v41-style,.rk-home-scorecard-v42-style-next{margin-top:12px!important}
+}
 `;
 
 const S={
@@ -20375,6 +20494,16 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   const TomorrowTease=()=> {
     const resetLabel=getTimeUntilMidnightLabel();
+    const tomorrowSayings=[
+      "Tomorrow is a clean table.",
+      "A new room opens at midnight.",
+      "Fresh tiles. Fresh pressure.",
+      "The next rack is waiting.",
+      "Midnight resets the room.",
+      "New rack. New chase.",
+      "Your club board starts fresh.",
+    ];
+    const tomorrowLine=tomorrowSayings[Math.floor(Math.random()*tomorrowSayings.length)];
     return(
       <section aria-label="Tomorrow's Rackle preview" className="rk-tomorrow-card-v11 rk-tomorrow-mystery-final rk-sweep">
         <div className="rk-tomorrow-float-tiles" aria-hidden="true"><span>🀇</span><span>🀙</span><span>🀄</span></div>
@@ -20387,7 +20516,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </div>
         <p className="rk-tomorrow-v11-copy">A new Charleston arrives tonight.</p>
         <div className="rk-tomorrow-v11-row">
-          <span>The club resets at midnight</span>
+          <span>{tomorrowLine}</span>
         </div>
       </section>
     );
@@ -20590,7 +20719,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       ? clubCount>0?`${clubCount} club score${clubCount===1?"":"s"} live today`:"No club scores yet today"
       : globalCount>0?`${globalCount} player${globalCount===1?"":"s"} in today’s Rackle room`:"No scores live yet";
     const previewRows=(activeClubCode&&clubPreviewRows.length?clubPreviewRows:globalPreviewRows).slice(0,3);
-    const boardLabel=activeClubCode?"Club board":"Rackle room";
+    const boardLabel=activeClubCode?(club?.name||"Club board"):"Rackle room";
     const secondaryLabel=activeClubCode?"Global room →":"Club room →";
     const secondaryAction=activeClubCode?()=>setScreen("globalLeaderboard"):openBoard;
     return(
