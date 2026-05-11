@@ -10674,6 +10674,10 @@ html,body,#root{background:var(--rk-ivory)!important;}
   .rk-home-scorecard-v30-actions{gap:8px!important;}
   .rk-room-leader,.rk-leader-card{grid-template-columns:48px minmax(0,1fr)!important;}
 }
+
+/* ─── vNext: rack review cross-reference polish ─────────────────────────── */
+.rk-crossref-tabs button{font-family:'Nunito','Segoe UI',sans-serif}
+.rk-rack-review-note{line-height:1.58}
 `;
 
 const S={
@@ -16672,9 +16676,9 @@ function StartingDealCard({startingRack,chosenHandObj}){
     <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden"}}>
       <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"11px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
         <div>
-          <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>YOUR STARTING DEAL</div>
+          <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>STARTING DEAL</div>
           <div style={{fontSize:12,fontWeight:700,color:C.ink,marginTop:1}}>
-            What you were originally dealt
+            What you were dealt before the Charleston
             {startCoverage!=null&&<span style={{fontSize:11,fontWeight:400,color:C.mut}}> · {startCoverage}% coverage before passing</span>}
           </div>
         </div>
@@ -17934,8 +17938,9 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
       </CollapsibleSection>
 
       {hand&&hand.length>0&&chosenSec&&(
-        <CollapsibleSection label="Other Paths" desc="Only the credible alternates" icon="🔀" open={openSec.alts} onToggle={()=>toggle("alts")}>
+        <CollapsibleSection label="Best-fit Hands" desc="Cross-check your final rack" icon="🔀" open={openSec.alts} onToggle={()=>toggle("alts")}>
           <AltHandsCard hand={hand} resolvedHandLabel={scoredHandObj?.label||null} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecsP} primaryCoveragePct={primPct}/>
+          <FinalHandCrossReference hand={hand} startingRack={[]} chosenHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecsP} handWasInferred={true}/>
         </CollapsibleSection>
       )}
 
@@ -18495,6 +18500,89 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
 
 
 // ─── COACH MODE SCREEN, narrative-first deep analysis ───────────────────────
+
+function FinalHandCrossReference({hand,startingRack,chosenHandObj,chosenSec,chosenSecObj,sortedSecs,handWasInferred}){
+  const [tab,setTab]=useState("best");
+  if(!hand||!hand.length)return null;
+  const scored=[];
+  HAND_CATALOG.forEach(h=>{
+    const cov=computeHonestCoverage(hand,h);
+    scored.push({...h,coveragePct:cov.pct,coveragePlan:cov,secObj:SECS.find(s=>s.id===h.sec)});
+  });
+  scored.sort((a,b)=>b.coveragePct-a.coveragePct);
+  const chosenLabel=chosenHandObj?.label||null;
+  const chosenCoverage=chosenHandObj?computeHonestCoverage(hand,chosenHandObj):null;
+  const rows=[
+    ...(chosenHandObj?[{...chosenHandObj,coveragePct:chosenCoverage?.pct||0,coveragePlan:chosenCoverage,secObj:chosenSecObj,chosen:true}]:[]),
+    ...scored.filter(h=>h.label!==chosenLabel).slice(0,4)
+  ].slice(0,5);
+  const best=rows[0];
+  const bestLabel=best?.labelForDisplay||best?.variantLabel||best?.label||"Best-fit hand";
+  const bestPlan=chosenHandObj?buildCoveragePlan(hand,chosenHandObj,[]):best?buildCoveragePlan(hand,best,[]):null;
+  const hasStarting=startingRack&&startingRack.length>0;
+  const TabButton=({id,children})=>(
+    <button onClick={()=>setTab(id)} style={{flex:1,border:"none",borderBottom:`2px solid ${tab===id?C.jade:"transparent"}`,background:tab===id?C.jade+"08":"transparent",padding:"10px 6px",fontSize:10.5,fontWeight:900,color:tab===id?C.jade:C.mut,cursor:"pointer"}}>{children}</button>
+  );
+  return(
+    <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden",borderColor:C.jade+"22"}}>
+      <div style={{padding:"12px 14px",background:"linear-gradient(145deg,#FFFDF8,#F5EFE4)",borderBottom:`1px solid ${C.bdr}`}}>
+        <div style={{fontSize:8,color:C.jade,letterSpacing:2.2,fontWeight:900,textTransform:"uppercase",marginBottom:5}}>Final rack cross-check</div>
+        <div style={{fontFamily:F.d,fontSize:16,fontWeight:950,color:C.ink,lineHeight:1.12,letterSpacing:-.2}}>Best-fit hands and hand shapes</div>
+        <p style={{fontSize:11.5,color:C.mut,lineHeight:1.55,margin:"7px 0 0"}}>This is not saying you were locked into one final hand. It shows how your post-Charleston rack lines up with the hand shapes Rackle is reading.</p>
+      </div>
+      <div style={{display:"flex",borderBottom:`1px solid ${C.bdr}`}}>
+        <TabButton id="best">Best fits</TabButton>
+        <TabButton id="rack">Starting / final</TabButton>
+        <TabButton id="shape">Hand shape</TabButton>
+      </div>
+      {tab==="best"&&<div className="rk-in" style={{padding:"10px 12px"}}>
+        {rows.map((h,i)=>{
+          const label=h.labelForDisplay||h.variantLabel||h.label;
+          const tone=coverageTone(h.coveragePct||0);
+          const isChosen=h.chosen;
+          return(
+            <div key={`${label}-${i}`} style={{display:"grid",gridTemplateColumns:"34px minmax(0,1fr) auto",gap:10,alignItems:"center",padding:"10px 0",borderBottom:i<rows.length-1?`1px solid ${C.bdr}`:"none"}}>
+              <div style={{width:34,height:34,borderRadius:12,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.d,fontWeight:950,fontSize:14,color:isChosen?"#fff":C.jade,background:isChosen?C.jade:C.jade+"10",border:`1px solid ${C.jade}20`}}>{isChosen?"★":i+1}</div>
+              <div style={{minWidth:0}}>
+                <div style={{fontSize:8,color:isChosen?C.jade:C.mut,letterSpacing:1.7,textTransform:"uppercase",fontWeight:950,marginBottom:3}}>{isChosen?handWasInferred?"Inferred best hand":"Your target / best read":`${h.secObj?.icon||""} ${h.secObj?.name||"Section"}`}</div>
+                <div style={{fontSize:12.5,fontWeight:900,color:C.ink,lineHeight:1.28,whiteSpace:"normal"}}>{label}</div>
+              </div>
+              <div style={{justifySelf:"end",textAlign:"right"}}>
+                <div style={{fontFamily:F.d,fontSize:17,fontWeight:950,color:tone.color,lineHeight:1}}>{h.coveragePct||0}%</div>
+                <div style={{fontSize:8,color:C.mut,fontWeight:900,letterSpacing:1,textTransform:"uppercase"}}>fit</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>}
+      {tab==="rack"&&<div className="rk-in" style={{padding:"12px 14px"}}>
+        <div style={{marginBottom:14}}>
+          <div style={{fontSize:8,color:C.jade,letterSpacing:1.8,textTransform:"uppercase",fontWeight:950,marginBottom:7}}>Final rack</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.45,marginBottom:8}}>Your rack after the Charleston. This is the rack used for the best-fit reads above.</div>
+          <SortableRack hand={hand}/>
+        </div>
+        <div>
+          <div style={{fontSize:8,color:C.gold,letterSpacing:1.8,textTransform:"uppercase",fontWeight:950,marginBottom:7}}>Starting deal</div>
+          {hasStarting?<>
+            <div style={{fontSize:11,color:C.mut,lineHeight:1.45,marginBottom:8}}>The 13 tiles you were dealt before any Charleston passes.</div>
+            <SortableRack hand={startingRack}/>
+          </>:<div style={{fontSize:11,color:C.mut,lineHeight:1.5,background:C.bg2,borderRadius:10,padding:"10px 12px"}}>Starting deal is not available for this saved scorecard.</div>}
+        </div>
+      </div>}
+      {tab==="shape"&&<div className="rk-in" style={{padding:"12px 14px"}}>
+        {bestPlan?<>
+          <div style={{fontSize:8,color:C.jade,letterSpacing:1.8,textTransform:"uppercase",fontWeight:950,marginBottom:6}}>Hand shape being checked</div>
+          <div style={{fontSize:12.5,fontWeight:900,color:C.ink,lineHeight:1.3,marginBottom:10}}>{bestLabel}</div>
+          <div style={{display:"flex",gap:7,flexWrap:"wrap",alignItems:"flex-end",marginBottom:10}}>
+            {bestPlan.groups.map((g,i)=><HandGroupChips key={i} group={g} cardColor={bestPlan.cardColors?.[i]}/>) }
+          </div>
+          <div style={{fontSize:11.5,color:C.mut,lineHeight:1.55,background:C.bg2,borderRadius:12,padding:"10px 12px"}}>Use this tab to compare the suggested hand shape with the tiles you actually ended the Charleston with. If the shape feels wrong, use the best-fit tab as a second opinion, not a command.</div>
+        </>:<div style={{fontSize:11,color:C.mut,lineHeight:1.5}}>No hand shape available for this rack.</div>}
+      </div>}
+    </div>
+  );
+}
+
 function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onBack,setScreen}){
   const [sfOpen,setSfOpen]=useState(false);
   if(!iq)return null;
@@ -18630,8 +18718,8 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
 
       {/* Header */}
       <div style={{marginBottom:14,marginTop:4,textAlign:"center"}}>
-        <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:2}}>Table Talk</div>
-        <div style={{fontSize:11,color:C.mut}}>Day #{dayNum} · {chosenSecObj?.name||section}</div>
+        <div style={{fontFamily:F.d,fontSize:21,fontWeight:950,color:C.ink,letterSpacing:-0.5,marginBottom:5}}>Rack Review</div>
+        <div style={{fontSize:11.5,color:C.mut,lineHeight:1.5,maxWidth:300,margin:"0 auto"}}>Your Charleston read, best-fit hands, starting deal, and final rack.</div>
       </div>
 
       {/* ① VERDICT */}
@@ -18672,9 +18760,19 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
           secObj={chosenSecObj}
         />
       )}
+      <FinalHandCrossReference
+        hand={hand}
+        startingRack={startingRack}
+        chosenHandObj={chosenHandObj}
+        chosenSec={chosenSec}
+        chosenSecObj={chosenSecObj}
+        sortedSecs={sortedSecs}
+        handWasInferred={iq.handWasInferred}
+      />
 
-      {/* ③ YOUR STARTING DEAL */}
-      <SectionDivider label="PASS ANALYSIS"/>
+      {/* ③ RACK ANALYSIS */}
+      <SectionDivider label="RACK ANALYSIS"/>
+      <RackViewer hand={hand} startingRack={startingRack}/>
       <StartingDealCard startingRack={startingRack} chosenHandObj={chosenHandObj}/>
 
       {/* ④ YOUR PASSES */}
