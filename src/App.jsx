@@ -6927,6 +6927,39 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   .rk-home-landing-flow > :nth-child(7){grid-column:2!important;grid-row:5!important;}
   .rk-home-landing-flow > :nth-child(8){grid-column:1 / -1!important;grid-row:6!important;}
 }
+
+/* ─── vFinal: force Rackle logo to Fraunces 900 Black ───────────────────── */
+.rk-startup-logo,
+.rk-startup-logo-v4,
+.rk-startup-hero-v42 .rk-startup-logo-v4,
+.rk-header-logo,
+.rk-logo,
+[class*="logo"][class*="startup"]{
+  font-family:'Fraunces', Georgia, serif!important;
+  font-weight:900!important;
+  font-variation-settings:'wght' 900!important;
+  color:#1A1410!important;
+  letter-spacing:-2.7px!important;
+  -webkit-font-smoothing:antialiased!important;
+  text-rendering:geometricPrecision!important;
+}
+@media(min-width:900px){
+  .rk-startup-logo-v4,
+  .rk-startup-hero-v42 .rk-startup-logo-v4{
+    font-size:clamp(76px,6.2vw,112px)!important;
+    line-height:.86!important;
+    letter-spacing:-3.8px!important;
+  }
+}
+@media(max-width:430px){
+  .rk-startup-logo-v4,
+  .rk-startup-hero-v42 .rk-startup-logo-v4{
+    font-size:52px!important;
+    line-height:.9!important;
+    letter-spacing:-2.2px!important;
+  }
+}
+
 `;
 
 const S={
