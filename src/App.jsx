@@ -10472,6 +10472,97 @@ footer{
 
 .rk-style-glossary-page .rk-style-grid,.rk-style-glossary-grid{gap:9px!important}.rk-style-glossary-page button,.rk-style-glossary-card{border-radius:18px!important}.rk-style-glossary-page p{line-height:1.55!important}
 @media(max-width:430px){.rk-room-leader-v1{grid-template-columns:56px minmax(0,1fr) auto!important;gap:11px!important;padding:14px!important}.rk-room-rank-badge-v1{width:48px!important;height:48px!important;font-size:21px!important}.rk-room-leader-name-v1{font-size:20px!important}.rk-room-score-v1{font-size:38px!important}.rk-room-actions{grid-template-columns:1fr!important}.rk-room-actions .rk-room-btn-primary{grid-column:auto!important}.rk-howto-v40-card-head h2,.rk-handbrowser-v40-card-head h2,.rk-handbrowser-v40-results-head h2{font-size:20px!important}}
+
+/* ─── vFinal: prelaunch social-game polish and UX clarity ───────────────── */
+.rk-home-scorecard-v41-main{
+  text-align:center!important;
+  border:1px solid rgba(243,212,107,.22)!important;
+  box-shadow:0 18px 44px rgba(6,43,24,.20),inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+.rk-home-scorecard-v41-score-row{
+  justify-content:center!important;
+  text-align:center!important;
+  gap:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+}
+.rk-home-scorecard-v41-score{margin-left:0!important;margin-right:0!important;text-align:center!important}
+.rk-home-scorecard-v41-score-label{margin-left:0!important;text-align:center!important;letter-spacing:2.3px!important}
+.rk-home-scorecard-v41-style{
+  margin:16px auto 0!important;
+  transform:none!important;
+  width:max-content!important;
+  justify-content:center!important;
+  padding:8px 16px!important;
+}
+.rk-home-scorecard-v41-title{margin-top:19px!important;line-height:1.12!important;text-align:center!important}
+.rk-home-scorecard-v41-copy{white-space:pre-line!important;text-align:center!important;line-height:1.58!important;margin-left:auto!important;margin-right:auto!important}
+.rk-home-scorecard-v41-actions button{
+  border-radius:18px!important;
+  min-height:76px!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.11),0 7px 18px rgba(0,0,0,.08)!important;
+}
+.rk-home-scorecard-v41-bottom{border-radius:24px!important;background:linear-gradient(145deg,#FFFDF8,#F3EADC)!important;border:1px solid rgba(160,120,40,.14)!important;box-shadow:0 10px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important}
+.rk-home-scorecard-v41-share{background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;border:1px solid rgba(23,107,66,.12)!important;color:#1A1410!important}
+.rk-home-scorecard-v41-share strong{color:#1A1410!important}.rk-home-scorecard-v41-share span{color:#6B6157!important}.rk-home-scorecard-v41-share small{color:rgba(26,20,16,.44)!important}.rk-home-scorecard-v41-share b{color:#176B42!important}
+.rk-home-scorecard-v41-full{background:linear-gradient(135deg,#176B42,#0F5432)!important;color:#fff!important;border:1px solid rgba(243,212,107,.22)!important;box-shadow:0 10px 22px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16)!important}
+
+/* Scorecard page: make it feel like a card you want to share, not a report. */
+.rk-scorecard-premium-v26 .rk-iq-hero{
+  background:linear-gradient(155deg,#062B18 0%,#0D4A2E 68%,#051F11 100%)!important;
+  border:1px solid rgba(243,212,107,.26)!important;
+  box-shadow:0 18px 46px rgba(6,43,24,.22),inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+.rk-scorecard-premium-v26 .rk-scorecard-title-v26{margin-bottom:11px!important}
+.rk-scorecard-premium-v26 .rk-iq-style-pill,
+.rk-scorecard-premium-v26 .rk-style-pill-clickable{cursor:pointer!important}
+.rk-daily-review-v10{border-radius:28px!important;background:linear-gradient(145deg,#FFFDF8,#F5EDE0)!important;border:1px solid rgba(160,120,40,.12)!important;box-shadow:0 12px 30px rgba(26,20,16,.05),inset 0 1px 0 rgba(255,255,255,.82)!important}
+.rk-daily-review-v10-head{border-radius:20px!important;text-align:left!important}
+.rk-daily-review-v10-card{border-radius:20px!important;background:#FFFDF8!important;border:1px solid rgba(26,20,16,.06)!important}
+.rk-daily-review-v10-card p{line-height:1.64!important;color:rgba(26,20,16,.68)!important}
+.rk-score-share-v20{border-radius:26px!important;background:linear-gradient(145deg,#FFFDF8,#F5EDE0)!important;border:1px solid rgba(160,120,40,.14)!important}
+.rk-score-share-v20-badge{background:rgba(23,107,66,.08)!important;border-color:rgba(23,107,66,.14)!important;color:#176B42!important}
+.rk-score-share-v20-preview{border-radius:22px!important}
+
+/* Leaderboards: keep the page about status, rank, and chase. */
+.rk-room-hero{box-shadow:0 18px 42px rgba(6,43,24,.18),inset 0 1px 0 rgba(255,255,255,.12)!important}
+.rk-room-leader-v1{margin-top:12px!important;margin-bottom:14px!important}
+.rk-room-leader-kicker-v1{color:#1A1410!important;opacity:.74!important}
+.rk-room-leader-name-v1{color:#1A1410!important;line-height:1.12!important}
+.rk-room-leader-sub-v1{line-height:1.55!important}
+.rk-room-score-v1{color:#A07828!important}
+.rk-room-board-v1{border-radius:28px!important;overflow:hidden!important;background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important}
+.rk-room-board-head-v1{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important}
+.rk-room-board-head-v1 h2{font-size:25px!important;letter-spacing:-.6px!important}
+.rk-room-row-v1{min-height:64px!important;transition:transform .14s ease,box-shadow .14s ease!important}
+.rk-room-row-v1:active{transform:scale(.992)!important}
+.rk-room-row-top{background:linear-gradient(145deg,#FFF8D3,#F3D46B)!important;color:#102716!important}
+.rk-room-row-name{font-size:15.5px!important;line-height:1.18!important}.rk-room-row-sub{line-height:1.42!important}
+.rk-room-row-score-wrap-v1 .rk-room-row-score{font-size:29px!important}
+.rk-room-actions{margin-top:14px!important}
+.rk-room-notes-v50{display:none!important}
+
+/* Learning and browser pages: simple cards, readable rhythm. */
+.rk-howto-v40-card,.rk-handbrowser-v40-card,.rk-style-glossary-card,.rk-recap-locked-card-v1{line-height:1.58!important}
+.rk-howto-v40-card-head h2,.rk-handbrowser-v40-card-head h2{font-size:21px!important;letter-spacing:-.35px!important}
+.rk-howto-v40-step,.rk-howto-v40-rule,.rk-handbrowser-v40-section,.rk-handbrowser-v40-dragon{border-radius:18px!important}
+.rk-handbrowser-v40-section-copy strong{line-height:1.18!important}.rk-handbrowser-v40-section-copy em{line-height:1.38!important}
+
+/* Weekly recap unlock should feel intentional, not empty. */
+.rk-recap-locked-card-v1{margin-top:10px!important;margin-bottom:14px!important}.rk-recap-locked-card-v1 p{line-height:1.6!important}
+
+/* Social club finish: reduce dead space and make page bottoms feel intentional. */
+.rk-pg{padding-bottom:28px!important}.rk-footer,.rk-page-footer{margin-top:18px!important;padding-bottom:8px!important}.rk-email-home-v8,.rk-email-home-v19{margin-top:4px!important}
+@media(max-width:390px){
+  .rk-home-scorecard-v41-actions{grid-template-columns:1fr 1fr!important;gap:8px!important}
+  .rk-home-scorecard-v41-actions button{min-height:70px!important;padding:11px 9px!important}
+  .rk-home-scorecard-v41-style{margin-top:14px!important}
+  .rk-room-leader-v1{grid-template-columns:56px minmax(0,1fr) auto!important;gap:12px!important;padding:14px!important}
+  .rk-room-rank-badge-v1{width:48px!important;height:48px!important;font-size:21px!important}
+  .rk-room-score-v1{font-size:40px!important;min-width:48px!important}
+}
+
 `;
 
 const S={
@@ -13954,7 +14045,7 @@ function StrategicCharlestonReadCard({iq}){
       <div className="rk-intuition-v9-head">
         <div>
           <div className="rk-intuition-v9-kicker">Mahjong Intuition</div>
-          <h3 className="rk-intuition-v9-title">Your rack read</h3>
+          <h3 className="rk-intuition-v9-title">Your table read</h3>
         </div>
         <div className="rk-intuition-v9-pill">{state}</div>
       </div>
@@ -17618,7 +17709,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <div className="rk-daily-review-v10-card" data-icon="🀄">
             <span>Best lane</span>
             <strong>{reviewBestPath}</strong>
-            <p>This was the cleanest lane to keep alive after the Charleston.</p>
+            <p>This was the lane worth protecting after the Charleston.</p>
           </div>
           <div className="rk-daily-review-v10-card" data-icon="🎯">
             <span>Next look</span>
@@ -20890,7 +20981,9 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   const CompletedDaily=()=> {
     const scoreValue=iq?.totalScore||dRes?.rating||"✓";
-    const globalValue=`#${Math.min(todayPlayers,Math.max(1,todayPlayers-1))}`;
+    const globalRowsForScore=rkMergeCurrentScore(homeGlobalEntries,currentScore,iq?.totalTime||todayDRes?.time||0,streak,activeClubCode);
+    const globalRankForScore=currentScore?rkRankOfCurrent(globalRowsForScore,currentScore):null;
+    const globalValue=globalRankForScore?`#${globalRankForScore}`:"—";
     const clubValue=club?(shownClubRank?`#${shownClubRank}`:(hasClubScore?"live":"club")):"join";
     return(
     <section className="rk-home-scorecard-v41 rk-home-section-lg" aria-label="Your Daily Rackle scorecard">
@@ -21022,7 +21115,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const items=[
       currentScore?`${currentName} posted ${currentScore}`:null,
       topToday?`Beat ${topToday} before the board resets`:null,
-      `${todayPlayers||2} players played today`,
+      todayPlayers?`${todayPlayers} players played today`:"First score gets the room",
       club?`${club.name} is live`:"Club rooms are live",
       ydIQ?`Yesterday: ${ydIQ}. Today’s room is open.`:null,
       "Board resets tonight",
@@ -21031,16 +21124,17 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   };
 
   const SharePreview=()=>{
-    const score=currentScore||topToday||78;
-    const globalRank=currentScore?`#${Math.max(1,rkRankOfCurrent([],currentScore)||1)}`:"#1";
-    const clubRank=shownClubRank?`#${shownClubRank}`:(club?"#1":"Join a club");
-    const status=score>=78?"Table Ready":"Room Ready";
+    const score=currentScore||topToday||"—";
+    const globalRowsForShare=currentScore?rkMergeCurrentScore(homeGlobalEntries,currentScore,iq?.totalTime||todayDRes?.time||0,streak,activeClubCode):[];
+    const globalRank=currentScore?`#${Math.max(1,rkRankOfCurrent(globalRowsForShare,currentScore)||1)}`:"—";
+    const clubRank=shownClubRank?`#${shownClubRank}`:(club&&currentScore?"#1":"Join a club");
+    const status=Number(score)>=78?"Table Ready":Number(score)>0?"Room Ready":"Daily Rackle";
     return(
       <section className="rk-share-score-v6" aria-label="Share your score preview">
         <div className="rk-share-score-v6-copybox">
           <div className="rk-share-score-v6-kicker">Share your score</div>
-          <h2 className="rk-share-score-v6-title">Your club is waiting.</h2>
-          <p className="rk-share-score-v6-copy">Make your table chase today’s score.</p>
+          <h2 className="rk-share-score-v6-title">Can your table beat it?</h2>
+          <p className="rk-share-score-v6-copy">Share today’s Rackle and let your club chase the same rack.</p>
           <button onClick={copyShare} className="rk-share-score-v6-btn">{shareCopied?"Copied":"Share My Score →"}</button>
         </div>
         <div className="rk-share-lux-card-v6" aria-hidden="true">
@@ -21048,7 +21142,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <span>Rackle #{dn}</span>
             <strong>{score}</strong>
           </div>
-          <div className="rk-share-lux-v6-status">Charleston IQ · {status}</div>
+          <div className="rk-share-lux-v6-status">Rackle IQ · {status}</div>
           <div className="rk-share-lux-v6-meta">
             <span>Global {globalRank}</span>
             <span>Club {clubRank}</span>
@@ -21073,7 +21167,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         {[
           {n:"01",title:"Read the rack",copy:"Start with what the tiles are actually giving you. Spot pairs, near-runs, flowers, jokers, and flexible lanes before the first pass.",note:"Strong players do not chase too early."},
           {n:"02",title:"Protect the upside",copy:"Pass the tiles that cost you the least. Keep your best path alive while leaving one clean pivot open.",note:"Flexibility wins the Charleston."},
-          {n:"03",title:"Score the decision",copy:"Rackle reviews the shape of your rack, shows the best path, and explains which choices helped or hurt.",note:"One pass can change the whole read."},
+          {n:"03",title:"Get your read",copy:"Rackle shows your cleanest lane, your table read, and one move to watch next time.",note:"One pass can change the whole read."},
           {n:"04",title:"Defend the room",copy:"Compare your Charleston IQ with your club, chase the daily board, and come back tomorrow for a fresh rack.",note:"Move up one cleaner read at a time."},
         ].map((card)=>(
           <article className="rk-ritual-card-v6" key={card.n}>
