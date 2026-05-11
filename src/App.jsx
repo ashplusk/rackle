@@ -7886,6 +7886,238 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   .rk-room-row-score,.rk-quiet-score{font-size:23px!important}
   .rk-room-feed-item-v40{grid-template-columns:26px minmax(0,1fr)!important}
 }
+
+
+/* ─── vNext: iPad-safe layout + leaderboard UX overhaul ───────────────── */
+@media (min-width:768px) and (max-width:1180px){
+  html,body,#root{background:#F8F4EE!important;}
+  .rk-outer{
+    padding:22px 0!important;
+    min-height:100vh!important;
+    display:flex!important;
+    justify-content:center!important;
+  }
+  .rk-app{
+    width:min(100%,560px)!important;
+    max-width:560px!important;
+    min-height:calc(100vh - 44px)!important;
+    border-radius:28px!important;
+    overflow:hidden!important;
+    box-shadow:0 18px 70px rgba(26,20,16,.12),0 0 0 1px rgba(26,20,16,.06)!important;
+    border:1px solid rgba(26,20,16,.06)!important;
+    background:#F8F4EE!important;
+  }
+  .rk-pg{padding:26px 28px 58px!important;}
+  .rk-game-shell,.rk-score-shell{max-width:520px!important;margin-left:auto!important;margin-right:auto!important;}
+}
+@media (min-width:900px) and (max-width:1180px) and (orientation:landscape){
+  .rk-app{width:600px!important;max-width:600px!important;}
+  .rk-pg{padding-left:34px!important;padding-right:34px!important;}
+}
+
+.rk-room-page{
+  background:#F8F4EE!important;
+}
+.rk-room-hero{
+  border-radius:30px!important;
+  padding:25px 20px 21px!important;
+  margin-bottom:16px!important;
+  background:
+    radial-gradient(circle at 90% 8%,rgba(243,212,107,.16),transparent 34%),
+    linear-gradient(150deg,#041F12 0%,#07331E 52%,#0D4A2E 78%,#03170D 100%)!important;
+  box-shadow:0 18px 44px rgba(6,43,24,.18),inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+.rk-room-title{line-height:1.02!important;margin-bottom:10px!important;}
+.rk-room-copy{line-height:1.62!important;max-width:36ch!important;}
+.rk-room-metrics{gap:9px!important;}
+.rk-room-metric{border-radius:20px!important;background:rgba(255,255,255,.09)!important;border:1px solid rgba(255,255,255,.10)!important;}
+.rk-room-metric strong{font-size:25px!important;}
+.rk-room-metric span{line-height:1.2!important;}
+
+.rk-room-leader{
+  display:grid!important;
+  grid-template-columns:56px minmax(0,1fr) auto!important;
+  column-gap:16px!important;
+  align-items:center!important;
+  padding:16px!important;
+  border-radius:26px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F4EBDD)!important;
+  border:1px solid rgba(160,120,40,.18)!important;
+  box-shadow:0 13px 32px rgba(26,20,16,.07),inset 0 1px 0 rgba(255,255,255,.82)!important;
+  color:#1A1410!important;
+  overflow:hidden!important;
+}
+.rk-room-leader:after{opacity:.022!important;color:#176B42!important;}
+.rk-room-rank-badge{
+  width:52px!important;
+  height:52px!important;
+  border-radius:18px!important;
+  margin-right:4px!important;
+  background:linear-gradient(145deg,#F3D46B,#FFF4C6)!important;
+  color:#1A1410!important;
+  border:1px solid rgba(160,120,40,.24)!important;
+  box-shadow:0 8px 18px rgba(160,120,40,.12),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-room-leader-copy{min-width:0!important;position:relative!important;z-index:1!important;}
+.rk-room-leader-kicker,
+.rk-quiet-leader-kicker{
+  font-size:9px!important;
+  letter-spacing:2.15px!important;
+  text-transform:uppercase!important;
+  font-weight:950!important;
+  color:#1A1410!important;
+  margin-bottom:7px!important;
+  line-height:1.1!important;
+}
+.rk-room-leader-name{
+  color:#1A1410!important;
+  font-size:23px!important;
+  line-height:1.08!important;
+  letter-spacing:-.6px!important;
+}
+.rk-room-leader-sub{
+  color:rgba(26,20,16,.62)!important;
+  line-height:1.45!important;
+  white-space:normal!important;
+  margin-top:5px!important;
+}
+.rk-room-score{
+  color:#A07828!important;
+  min-width:54px!important;
+  text-align:right!important;
+}
+.rk-room-leader-you{
+  border-color:rgba(23,107,66,.22)!important;
+  background:linear-gradient(145deg,#FFFDF8 0%,#EDF5F0 100%)!important;
+}
+.rk-room-leader-you .rk-room-rank-badge{background:linear-gradient(145deg,#176B42,#0F5432)!important;color:#fff!important;border-color:rgba(255,255,255,.18)!important;}
+.rk-room-leader-you .rk-room-score{color:#176B42!important;}
+
+.rk-room-you{
+  border-radius:24px!important;
+  padding:15px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F5EFE4)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 10px 28px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-room-you-title{font-size:18px!important;line-height:1.15!important;}
+.rk-room-you-copy{line-height:1.5!important;color:rgba(26,20,16,.60)!important;}
+.rk-room-row-list{
+  display:grid!important;
+  gap:8px!important;
+  margin:14px 0!important;
+}
+.rk-room-row{
+  grid-template-columns:42px minmax(0,1fr) 58px!important;
+  gap:12px!important;
+  padding:12px 13px!important;
+  border-radius:20px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;
+  border:1px solid rgba(26,20,16,.065)!important;
+  box-shadow:0 6px 18px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-room-row-me{
+  border-color:rgba(23,107,66,.24)!important;
+  background:linear-gradient(145deg,#FFFDF8,#EDF5F0)!important;
+}
+.rk-room-row-rank{
+  width:38px!important;
+  height:38px!important;
+  border-radius:14px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:rgba(26,20,16,.055)!important;
+  color:#1A1410!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-weight:950!important;
+}
+.rk-room-row-top{background:rgba(243,212,107,.22)!important;color:#1A1410!important;}
+.rk-room-row-name{color:#1A1410!important;font-size:15.5px!important;line-height:1.15!important;}
+.rk-room-row-sub{font-size:11px!important;line-height:1.4!important;color:rgba(26,20,16,.52)!important;white-space:normal!important;}
+.rk-room-row-score{font-size:25px!important;text-align:right!important;min-width:54px!important;}
+
+.rk-room-activity-v40{
+  border-radius:24px!important;
+  padding:16px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F4EBDD)!important;
+  border:1px solid rgba(160,120,40,.14)!important;
+  box-shadow:0 10px 28px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.80)!important;
+}
+.rk-room-activity-v40-head{
+  display:grid!important;
+  grid-template-columns:40px minmax(0,1fr)!important;
+  gap:12px!important;
+  align-items:start!important;
+  margin-bottom:13px!important;
+}
+.rk-room-activity-v40-icon{
+  width:40px!important;
+  height:40px!important;
+  border-radius:15px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:rgba(23,107,66,.08)!important;
+  color:#176B42!important;
+  border:1px solid rgba(23,107,66,.12)!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-weight:950!important;
+}
+.rk-room-activity-title{font-size:18px!important;line-height:1.12!important;color:#1A1410!important;margin-bottom:4px!important;}
+.rk-room-activity-v40-head p{font-size:12.2px!important;line-height:1.5!important;color:rgba(26,20,16,.60)!important;margin:0!important;}
+.rk-room-feed-v40{display:grid!important;gap:8px!important;}
+.rk-room-feed-item-v40{
+  display:grid!important;
+  grid-template-columns:22px minmax(0,1fr)!important;
+  gap:9px!important;
+  align-items:start!important;
+  padding:10px 11px!important;
+  border-radius:16px!important;
+  background:rgba(255,255,255,.58)!important;
+  border:1px solid rgba(26,20,16,.055)!important;
+  font-size:12.3px!important;
+  line-height:1.5!important;
+  color:#1A1410!important;
+}
+.rk-room-feed-dot{
+  width:22px!important;
+  height:22px!important;
+  border-radius:999px!important;
+  margin-top:0!important;
+  background:rgba(23,107,66,.10)!important;
+  border:1px solid rgba(23,107,66,.12)!important;
+  position:relative!important;
+}
+.rk-room-feed-dot:after{
+  content:'i';
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#176B42;
+  font-size:11px;
+  font-family:'Fraunces',Georgia,serif;
+  font-weight:950;
+}
+.rk-room-actions{
+  gap:9px!important;
+  border-radius:24px!important;
+  padding:12px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F4EBDD)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 8px 24px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-room-btn{border-radius:17px!important;min-height:46px!important;font-family:'Fraunces',Georgia,serif!important;font-weight:950!important;}
+.rk-room-btn-primary{background:linear-gradient(135deg,#176B42,#0F5432)!important;border:1px solid rgba(243,212,107,.22)!important;color:#fff!important;}
+@media(max-width:390px){
+  .rk-room-leader{grid-template-columns:50px minmax(0,1fr) auto!important;gap:12px!important;padding:14px!important;}
+  .rk-room-rank-badge{width:46px!important;height:46px!important;border-radius:16px!important;}
+  .rk-room-leader-name{font-size:20px!important;}
+  .rk-room-score{font-size:34px!important;min-width:48px!important;}
+  .rk-room-row{grid-template-columns:38px minmax(0,1fr) 52px!important;gap:10px!important;}
+}
 `;
 
 const S={
@@ -16945,7 +17177,7 @@ function GlobalLeaderboardPill({setScreen}){
             {leader&&<div className="rk-quiet-leader">
               <div className="rk-quiet-badge">1</div>
               <div style={{flex:1,minWidth:0,position:"relative",zIndex:1}}>
-                <div style={{fontSize:9,letterSpacing:2.2,textTransform:"uppercase",fontWeight:950,color:"rgba(243,212,107,.86)",marginBottom:5}}>Today’s table leader</div>
+                <div className="rk-quiet-leader-kicker">Today’s table leader</div>
                 <div style={{fontFamily:F.d,fontSize:20,fontWeight:950,lineHeight:1.05,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{leader.name}</div>
                 <div style={{fontSize:12,color:"rgba(255,255,255,.72)",marginTop:3}}>{myEntry?`${gap} points ahead of you`:liveCopy}</div>
               </div>
@@ -17282,13 +17514,26 @@ function RoomMetric({value,label}){
 }
 function RoomLeader({leader,myEntry,count,label="table"}){
   if(!leader)return null;
-  const gap=myEntry?Math.max(0,(Number(leader.iqScore)||0)-(Number(myEntry.iqScore)||0)):null;
-  return <div className="rk-room-leader">
+  const leaderScore=Number(leader.iqScore)||0;
+  const myScore=Number(myEntry?.iqScore)||0;
+  const gap=myEntry?Math.max(0,leaderScore-myScore):null;
+  const samePlayer=!!myEntry&&(
+    (leader.playerId&&myEntry.playerId&&leader.playerId===myEntry.playerId)||
+    (leader.player_id&&myEntry.player_id&&leader.player_id===myEntry.player_id)||
+    (leader.name&&myEntry.name&&leader.name===myEntry.name&&leaderScore===myScore)||
+    (gap===0&&rkEntryMatchesCurrentPlayer(leader,leaderScore))
+  );
+  const isClub=label==="club";
+  const leaderTitle=samePlayer?`You are the ${isClub?"club":"table"} leader`:leader.name;
+  const leaderSub=samePlayer
+    ?`Everyone is chasing your ${leaderScore}.`
+    :myEntry?`${gap} point${gap===1?"":"s"} ahead of you`:`${count} player${count===1?"":"s"} posted today`;
+  return <div className={`rk-room-leader ${samePlayer?"rk-room-leader-you":""}`}>
     <div className="rk-room-rank-badge">1</div>
-    <div style={{minWidth:0,position:"relative",zIndex:1}}>
-      <div style={{fontSize:9,letterSpacing:2.2,textTransform:"uppercase",fontWeight:950,color:"rgba(243,212,107,.86)",marginBottom:5}}>Today’s {label} leader</div>
-      <div className="rk-room-leader-name">{leader.name}</div>
-      <div className="rk-room-leader-sub">{myEntry?`${gap} points ahead of you`:`${count} player${count===1?"":"s"} posted today`}</div>
+    <div className="rk-room-leader-copy">
+      <div className="rk-room-leader-kicker">Today’s {label} leader</div>
+      <div className="rk-room-leader-name">{leaderTitle}</div>
+      <div className="rk-room-leader-sub">{leaderSub}</div>
     </div>
     <div className="rk-room-score">{leader.iqScore}</div>
   </div>;
@@ -17386,7 +17631,7 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
     {loading?<div className="rk-premium-card" style={{padding:28,textAlign:"center",marginBottom:12}}>Loading the room…</div>:<>
       <RoomLeader leader={leader} myEntry={myEntry} count={entries.length} label="table"/>
       {score>0&&<div className="rk-room-you">
-        <div className="rk-room-you-main"><div className="rk-room-you-icon">🎯</div><div style={{minWidth:0}}><div className="rk-room-you-title">You are {myRank?`#${myRank}`:"on the board"}</div><div className="rk-room-you-copy">{leader&&myEntry&&myRank!==1?`Beat ${leader.iqScore} to take the room.`:myRank===1?"You own today’s rack.":"Play the Daily to rank."}</div></div></div>
+        <div className="rk-room-you-main"><div className="rk-room-you-icon">🎯</div><div style={{minWidth:0}}><div className="rk-room-you-title">{myRank===1?"You are #1":`You are ${myRank?`#${myRank}`:"on the board"}`}</div><div className="rk-room-you-copy">{leader&&myEntry&&myRank!==1?`Beat ${leader.iqScore} to take the room.`:myRank===1?"You own today’s rack. Everyone is chasing you.":"Play the Daily to rank."}</div></div></div>
         <div className={`rk-room-row-score ${rkScoreTone(score)}`}>{score}</div>
       </div>}
       <RoomRows entries={entries} scoreHint={score} emptyTitle="Room is open" emptyCopy="First score is on the board once you play. Send it to your table."/>
@@ -17464,7 +17709,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
     {loading?<div className="rk-premium-card" style={{padding:28,textAlign:"center",marginBottom:12}}>Loading club room…</div>:<>
       <RoomLeader leader={leader} myEntry={myEntry} count={entries.length} label="club"/>
       {score>0&&<div className="rk-room-you">
-        <div className="rk-room-you-main"><div className="rk-room-you-icon">🏛️</div><div style={{minWidth:0}}><div className="rk-room-you-title">{posted?`You are ${myRank?`#${myRank}`:"posted"}`:"Post today’s score"}</div><div className="rk-room-you-copy">{posted?myRank===1?"You lead the club today.":`Chase ${leader?.iqScore||score} before midnight.`:"Add your score to the club board."}</div></div></div>
+        <div className="rk-room-you-main"><div className="rk-room-you-icon">🏛️</div><div style={{minWidth:0}}><div className="rk-room-you-title">{posted?myRank===1?"You are #1":"You are on the board":"Post today’s score"}</div><div className="rk-room-you-copy">{posted?myRank===1?"You lead the club today. Everyone is chasing you.":`Chase ${leader?.iqScore||score} before midnight.`:"Add your score to the club board."}</div></div></div>
         <div className={`rk-room-row-score ${rkScoreTone(score)}`}>{score}</div>
       </div>}
       {score>0&&!posted&&<div className="rk-invite-card">
