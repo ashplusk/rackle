@@ -5504,6 +5504,159 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-scorecard-premium-v26 .rk-daily-review-v10-card{padding-left:54px!important}
 }
 
+
+/* ─── v29: scorecard review layout + homepage polish ───────────────────── */
+.rk-scorecard-premium-v26 .rk-scorecard-title-v26{
+  color:#176B42!important;
+  background:linear-gradient(145deg,#FFFDF8 0%,#F1E7D7 100%)!important;
+  border:1px solid rgba(160,120,40,.28)!important;
+  box-shadow:0 6px 18px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;
+  text-shadow:none!important;
+  letter-spacing:2.5px!important;
+}
+.rk-scorecard-premium-v26 .rk-scorecard-title-v26::before{
+  content:"";
+  width:7px;height:7px;border-radius:999px;
+  background:#176B42;
+  box-shadow:0 0 0 4px rgba(23,107,66,.09);
+}
+.rk-scorecard-premium-v26 .rk-scorecard-heading-v26{
+  line-height:1.05!important;
+  margin-top:8px!important;
+}
+
+.rk-scorecard-premium-v26 .rk-daily-review-v10{
+  padding:14px!important;
+  border-radius:30px!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-head{
+  display:flex!important;
+  align-items:center!important;
+  padding:17px 16px!important;
+  margin-bottom:12px!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-grid{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:12px!important;
+  margin-top:10px!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card{
+  display:grid!important;
+  grid-template-columns:48px minmax(0,1fr)!important;
+  grid-template-rows:auto auto auto!important;
+  column-gap:13px!important;
+  row-gap:0!important;
+  align-items:start!important;
+  padding:15px!important;
+  padding-left:15px!important;
+  border-radius:22px!important;
+  min-height:auto!important;
+  text-align:left!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card:before{
+  grid-column:1!important;
+  grid-row:1 / span 3!important;
+  position:static!important;
+  width:48px!important;
+  height:48px!important;
+  border-radius:17px!important;
+  margin:0!important;
+  transform:none!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card span,
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card strong,
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card p{
+  grid-column:2!important;
+  margin-left:0!important;
+  padding-left:0!important;
+  max-width:100%!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card span{
+  font-size:8px!important;
+  line-height:1.2!important;
+  margin-bottom:6px!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card strong{
+  font-size:18px!important;
+  line-height:1.12!important;
+  margin-bottom:8px!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card p{
+  font-size:12.6px!important;
+  line-height:1.62!important;
+  font-weight:700!important;
+  color:rgba(26,20,16,.66)!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v20-detail{
+  gap:10px!important;
+  padding:13px!important;
+  border-radius:24px!important;
+}
+
+.rk-room-live-v19 .rk-room-live-v6-title{
+  font-size:25px!important;
+  line-height:1.12!important;
+  letter-spacing:-.72px!important;
+  margin-bottom:10px!important;
+}
+.rk-room-live-v19 .rk-room-live-v6-copy{
+  line-height:1.62!important;
+  margin-top:10px!important;
+}
+.rk-room-live-v17-actions{
+  grid-template-columns:1fr 1fr!important;
+  gap:10px!important;
+}
+.rk-room-live-v17-actions button:first-child{
+  color:#102716!important;
+  border:1px solid rgba(255,246,190,.86)!important;
+  background:linear-gradient(135deg,#FFF6C7 0%,#F3D46B 42%,#D7AB43 74%,#A07828 100%)!important;
+  box-shadow:0 14px 28px rgba(243,212,107,.27),inset 0 1px 0 rgba(255,255,255,.64),inset 0 -1px 0 rgba(70,45,8,.18)!important;
+}
+.rk-room-live-v17-actions button:last-child{
+  color:#F3D46B!important;
+  border:1px solid rgba(243,212,107,.48)!important;
+  background:linear-gradient(135deg,#176B42 0%,#0F5432 62%,#07331E 100%)!important;
+  box-shadow:0 14px 28px rgba(6,43,24,.22),inset 0 1px 0 rgba(255,255,255,.18),inset 0 0 0 1px rgba(243,212,107,.08)!important;
+}
+.rk-room-live-v17-actions button:last-child:after{
+  content:"";
+  position:absolute;inset:0;
+  background:linear-gradient(110deg,transparent,rgba(255,255,255,.12),transparent);
+  transform:translateX(-130%);
+  animation:rkGoldSweep 5.8s ease-in-out infinite;
+  pointer-events:none;
+}
+
+.rk-learn-home-v19,.rk-learn-home-v18{
+  margin-left:4px!important;
+  margin-right:4px!important;
+  width:calc(100% - 8px)!important;
+}
+.rk-email-home-v8,.rk-email-home-v19{
+  margin-left:8px!important;
+  margin-right:8px!important;
+  width:calc(100% - 16px)!important;
+  border-radius:30px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;
+  border:1px solid rgba(160,120,40,.14)!important;
+  box-shadow:0 12px 30px rgba(26,20,16,.05),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+@media(max-width:390px){
+  .rk-scorecard-premium-v26 .rk-daily-review-v10-card{
+    grid-template-columns:44px minmax(0,1fr)!important;
+    column-gap:12px!important;
+    padding:14px!important;
+    padding-left:14px!important;
+  }
+  .rk-scorecard-premium-v26 .rk-daily-review-v10-card:before{width:44px!important;height:44px!important;border-radius:16px!important}
+  .rk-room-live-v19 .rk-room-live-v6-title{font-size:25px!important;line-height:1.14!important}
+  .rk-room-live-v17-actions button{font-size:12.2px!important;min-height:50px!important;padding-left:8px!important;padding-right:8px!important}
+  .rk-learn-home-v19,.rk-learn-home-v18{margin-left:4px!important;margin-right:4px!important;width:calc(100% - 8px)!important}
+  .rk-email-home-v8,.rk-email-home-v19{margin-left:8px!important;margin-right:8px!important;width:calc(100% - 16px)!important}
+}
+
 `;
 
 const S={
@@ -16118,7 +16271,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       : `${globalCount||1} player${(globalCount||1)===1?"":"s"} in today’s Rackle room`;
     const previewRows=(activeClubCode&&clubPreviewRows.length?clubPreviewRows:globalPreviewRows).slice(0,3);
     const boardLabel=activeClubCode?"Club board":"Rackle room";
-    const secondaryLabel=activeClubCode?"View global →":"View club →";
+    const secondaryLabel=activeClubCode?"View Global":"View Club";
     const secondaryAction=activeClubCode?()=>setScreen("globalLeaderboard"):openBoard;
     return(
       <section className="rk-room-live-v6 rk-room-live-v17 rk-room-live-v19" aria-label="Live club standings">
