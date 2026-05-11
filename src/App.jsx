@@ -4871,7 +4871,7 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   margin-bottom:22px!important;
 }
 .rk-daily-entry-wrap-v37 .rk-daily-entry-v6{
-  margin-bottom:8px!important;
+  margin-bottom:0!important;
 }
 .rk-daily-entry-v37-tutorial{
   appearance:none;
@@ -4879,7 +4879,7 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   align-items:center;
   justify-content:center;
   width:fit-content;
-  margin:0 auto 2px;
+  margin:10px auto 0;
   padding:2px 0;
   border:0;
   border-radius:0;
@@ -4903,6 +4903,19 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 @media(max-width:390px){
   .rk-daily-entry-v37-tutorial{font-size:11.5px;padding:2px 0}
 }
+/* v38: keep tutorial link inside Daily Rackle card */
+.rk-daily-entry-v6 .rk-daily-entry-v37-tutorial{
+  position:relative!important;
+  z-index:2!important;
+  margin-top:10px!important;
+  margin-bottom:0!important;
+}
+.rk-daily-entry-v6 .rk-daily-entry-v37-tutorial:focus-visible{
+  outline:2px solid rgba(23,107,66,.55)!important;
+  outline-offset:3px!important;
+  border-radius:8px!important;
+}
+
 `;
 
 const S={
@@ -15212,7 +15225,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const tilts=[-3,2,-1,2,-2,1,0,-1];
     return(
       <section className="rk-daily-entry-wrap-v37" aria-label="Daily Rackle entry">
-        <button type="button" onClick={()=>go("daily")} className="rk-daily-entry-v6" aria-label="Play Daily Rackle">
+        <div role="button" tabIndex={0} onClick={()=>go("daily")} onKeyDown={(e)=>{if(e.key==="Enter"||e.key===" ")go("daily");}} className="rk-daily-entry-v6" aria-label="Play Daily Rackle">
           <div className="rk-daily-entry-v6-glow" aria-hidden="true" />
           <div className="rk-daily-entry-v6-kicker"><span className="rk-live-spark"/> Daily Rackle · #{dn}</div>
           <div className="rk-real-tile-row-v6" aria-hidden="true">
@@ -15229,10 +15242,10 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <span>{scoreToBeat} is the score to beat</span>
           </div>
           <span className="rk-daily-entry-v6-cta"><span className="rk-live-spark"/> Play the Daily Rackle</span>
-        </button>
-        <button type="button" onClick={()=>setScreen("howto")} className="rk-daily-entry-v37-tutorial" aria-label="Learn how the Daily Rackle works">
-          New to Rackle? See how it works →
-        </button>
+          <button type="button" onClick={(e)=>{e.stopPropagation();setScreen("howto");}} className="rk-daily-entry-v37-tutorial" aria-label="Learn how the Daily Rackle works">
+            New to Rackle? See how it works →
+          </button>
+        </div>
       </section>
     );
   };
