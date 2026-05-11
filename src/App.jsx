@@ -5734,6 +5734,110 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   }
 }
 
+
+/* ─── v43: stable header pill spacing + unified Learn/Explore surface ─── */
+.rk-startup-hero-v42{
+  padding-bottom:4px!important;
+  margin-bottom:0!important;
+}
+.rk-startup-hero-v42 .rk-startup-logo-v4{
+  margin-bottom:11px!important;
+}
+.rk-startup-hero-v42 .rk-startup-subtitle-v4{
+  margin-top:0!important;
+  margin-bottom:9px!important;
+  line-height:1.12!important;
+}
+.rk-startup-pulse-pill-v42{
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+.rk-startup-hero-v42 + .rk-daily-entry-wrap-v37,
+.rk-startup-hero-v42 + section,
+.rk-startup-hero-v42 ~ .rk-daily-entry-wrap-v37,
+.rk-daily-entry-wrap-v37{
+  margin-top:12px!important;
+}
+.rk-daily-entry-v6,
+.rk-daily-entry-v21,
+.rk-daily-entry-v35{
+  margin-top:0!important;
+}
+
+/* Learn + Explore: remove split hue/radial wash and keep one clean surface */
+.rk-learn-home-v8,
+.rk-learn-home-v12,
+.rk-learn-home-v18,
+.rk-learn-home-v19{
+  position:relative!important;
+  overflow:hidden!important;
+  background:#F8F4EE!important;
+  background-image:none!important;
+  border:1px solid rgba(26,20,16,.055)!important;
+  box-shadow:0 10px 28px rgba(26,20,16,.035)!important;
+}
+.rk-learn-home-v8:before,
+.rk-learn-home-v8:after,
+.rk-learn-home-v12:before,
+.rk-learn-home-v12:after,
+.rk-learn-home-v18:before,
+.rk-learn-home-v18:after,
+.rk-learn-home-v19:before,
+.rk-learn-home-v19:after{
+  display:none!important;
+  content:none!important;
+  background:none!important;
+}
+.rk-learn-home-v19 .rk-learn-home-v18-head,
+.rk-learn-home-v18-head{
+  background:transparent!important;
+  border-bottom:1px solid rgba(26,20,16,.055)!important;
+  padding-bottom:14px!important;
+  margin-bottom:14px!important;
+}
+.rk-learn-home-v19 .rk-learn-home-v18-card,
+.rk-learn-home-v18-card,
+.rk-learn-home-card{
+  background:#FFFDF8!important;
+  background-image:none!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 6px 18px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.84)!important;
+}
+.rk-learn-home-v19 .rk-learn-home-v18-card:before,
+.rk-learn-home-v19 .rk-learn-home-v18-card:after,
+.rk-learn-home-v18-card:before,
+.rk-learn-home-v18-card:after,
+.rk-learn-home-card:before,
+.rk-learn-home-card:after{
+  display:none!important;
+  content:none!important;
+}
+.rk-learn-home-v19 .rk-learn-home-v18-icon,
+.rk-learn-home-v18-icon,
+.rk-learn-home-icon{
+  background:rgba(23,107,66,.065)!important;
+  border-color:rgba(23,107,66,.10)!important;
+  color:#176B42!important;
+}
+@media(max-width:390px){
+  .rk-startup-hero-v42{
+    padding-bottom:3px!important;
+    margin-bottom:0!important;
+  }
+  .rk-startup-hero-v42 .rk-startup-subtitle-v4{
+    margin-bottom:8px!important;
+  }
+  .rk-startup-hero-v42 + .rk-daily-entry-wrap-v37,
+  .rk-startup-hero-v42 + section,
+  .rk-startup-hero-v42 ~ .rk-daily-entry-wrap-v37,
+  .rk-daily-entry-wrap-v37{
+    margin-top:11px!important;
+  }
+  .rk-learn-home-v8,.rk-learn-home-v12,.rk-learn-home-v18,.rk-learn-home-v19{
+    background:#F8F4EE!important;
+  }
+}
+
 `;
 
 const S={
@@ -16037,7 +16141,11 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       "Daily Charleston is live",
       "The club board is open",
     ];
-    const headerPill=headerPills[Math.floor(Math.random()*headerPills.length)];
+    const headerPillRef=useRef(null);
+    if(!headerPillRef.current){
+      headerPillRef.current=headerPills[Math.floor(Math.random()*headerPills.length)];
+    }
+    const headerPill=headerPillRef.current;
     return(
       <div className="rk-startup-hero-v4 rk-startup-hero-v42">
         <div className="rk-startup-mark-v4 rk-float">🀄</div>
