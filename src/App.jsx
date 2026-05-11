@@ -5934,6 +5934,50 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
     margin-right:9px!important;
   }
 }
+
+
+/* ─── vNext: Learn + Explore inner breathing room fix ───────────────────── */
+.rk-learn-home-v8,
+.rk-learn-home-v12,
+.rk-learn-home-v18,
+.rk-learn-home-v19{
+  margin-left:0!important;
+  margin-right:0!important;
+  width:100%!important;
+  padding-left:22px!important;
+  padding-right:22px!important;
+}
+.rk-learn-home-head,
+.rk-learn-home-v18-head{
+  padding-left:2px!important;
+  padding-right:2px!important;
+}
+.rk-learn-home-grid,
+.rk-learn-home-v18-grid{
+  width:100%!important;
+}
+.rk-learn-home-card,
+.rk-learn-home-v18-card{
+  padding-left:16px!important;
+  padding-right:16px!important;
+}
+@media(max-width:430px){
+  .rk-learn-home-v8,
+  .rk-learn-home-v12,
+  .rk-learn-home-v18,
+  .rk-learn-home-v19{
+    margin-left:0!important;
+    margin-right:0!important;
+    width:100%!important;
+    padding-left:18px!important;
+    padding-right:18px!important;
+  }
+  .rk-learn-home-card,
+  .rk-learn-home-v18-card{
+    padding-left:14px!important;
+    padding-right:14px!important;
+  }
+}
 `;
 
 const S={
