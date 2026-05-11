@@ -6112,6 +6112,310 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   .rk-freeplay-v24 h2{font-size:25px!important;}
   .rk-room-live-v19 .rk-room-live-v6-title{white-space:nowrap!important;}
 }
+
+
+/* ─── vDesktop Native: true desktop homepage + premium page polish ─────── */
+@media(min-width:1024px){
+  html,body,#root{
+    background:
+      radial-gradient(circle at 18% 0%,rgba(23,107,66,.055),transparent 32%),
+      radial-gradient(circle at 88% 12%,rgba(201,168,76,.10),transparent 30%),
+      #F8F4EE!important;
+  }
+  .rk-app{
+    max-width:none!important;
+    width:100%!important;
+    min-height:100vh!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    background:transparent!important;
+  }
+  .rk-pg{
+    max-width:1280px!important;
+    width:100%!important;
+    margin:0 auto!important;
+    padding:20px 34px 74px!important;
+    background:transparent!important;
+  }
+  .rk-pg > div:first-child{
+    max-width:1240px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+  .rk-home-ritual-hero,
+  .rk-startup-hero-v4{
+    max-width:820px!important;
+    margin:4px auto 28px!important;
+    padding-top:20px!important;
+    padding-bottom:18px!important;
+    text-align:center!important;
+  }
+  .rk-home-ritual-hero .rk-hero-logo,
+  .rk-startup-logo-v4{
+    font-size:64px!important;
+    line-height:.92!important;
+    letter-spacing:-2px!important;
+  }
+  .rk-home-ritual-hero .rk-hero-subtitle,
+  .rk-startup-subtitle-v4{
+    font-size:21px!important;
+    line-height:1.1!important;
+    margin-top:12px!important;
+    margin-bottom:16px!important;
+  }
+  .rk-home-ritual-hero .rk-hero-status,
+  .rk-startup-live-note-v34{
+    margin-top:0!important;
+    transform:translateY(0)!important;
+  }
+
+  .rk-home-landing-flow{
+    max-width:1240px!important;
+    width:100%!important;
+    margin:0 auto!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 390px!important;
+    grid-template-rows:auto auto auto auto auto!important;
+    gap:22px!important;
+    align-items:start!important;
+  }
+  .rk-home-landing-flow > *{
+    min-width:0!important;
+    margin-top:0!important;
+    margin-bottom:0!important;
+  }
+  .rk-home-landing-flow > :nth-child(1){grid-column:1!important;grid-row:1 / span 2!important;align-self:stretch!important;}
+  .rk-home-landing-flow > :nth-child(2){grid-column:2!important;grid-row:1!important;}
+  .rk-home-landing-flow > :nth-child(3){grid-column:2!important;grid-row:2!important;}
+  .rk-home-landing-flow > :nth-child(4){grid-column:1!important;grid-row:3!important;}
+  .rk-home-landing-flow > :nth-child(5){grid-column:1!important;grid-row:4!important;}
+  .rk-home-landing-flow > :nth-child(6){grid-column:2!important;grid-row:3!important;}
+  .rk-home-landing-flow > :nth-child(7){grid-column:2!important;grid-row:4!important;}
+  .rk-home-landing-flow > :nth-child(8){grid-column:1 / -1!important;grid-row:5!important;}
+
+  /* Main daily feature should feel like a desktop hero card */
+  .rk-daily-entry-v6,
+  .rk-daily-entry-v11,
+  .rk-daily-entry-v24,
+  .rk-home-scorecard-v30{
+    height:100%!important;
+    min-height:520px!important;
+    border-radius:34px!important;
+    box-shadow:0 24px 64px rgba(26,20,16,.10),inset 0 1px 0 rgba(255,255,255,.84)!important;
+  }
+  .rk-daily-entry-v6,
+  .rk-daily-entry-v11,
+  .rk-daily-entry-v24{
+    padding:42px 44px 38px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+  }
+  .rk-daily-entry-v6 .rk-daily-entry-title,
+  .rk-daily-entry-v11 .rk-daily-entry-title,
+  .rk-daily-entry-v24 h2,
+  .rk-daily-title-v24,
+  .rk-home-scorecard-v30-level{
+    font-size:44px!important;
+    line-height:.98!important;
+    letter-spacing:-1.5px!important;
+  }
+  .rk-daily-entry-v6 .rk-daily-entry-copy,
+  .rk-daily-entry-v11 .rk-daily-entry-copy,
+  .rk-daily-entry-v24 p{
+    max-width:560px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+    font-size:18px!important;
+    line-height:1.55!important;
+  }
+  .rk-daily-entry-v24 .rk-preview-tile,
+  .rk-daily-entry-v6 .rk-preview-tile{
+    transform:scale(1.08)!important;
+  }
+  .rk-daily-entry-v24 button,
+  .rk-daily-entry-v6 button,
+  .rk-daily-entry-v11 button{
+    max-width:540px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+
+  /* Right rail cards */
+  .rk-tomorrow-card-v11,
+  .rk-room-live-v6,
+  .rk-share-score-v6,
+  .rk-email-home-v8,
+  .rk-email-home-v19{
+    border-radius:28px!important;
+    box-shadow:0 16px 42px rgba(26,20,16,.075),inset 0 1px 0 rgba(255,255,255,.78)!important;
+  }
+  .rk-tomorrow-card-v11{
+    min-height:252px!important;
+    padding:24px!important;
+  }
+  .rk-tomorrow-v11-title{
+    font-size:31px!important;
+    line-height:1.02!important;
+    max-width:11ch!important;
+  }
+  .rk-room-live-v6{
+    padding:24px!important;
+  }
+  .rk-room-live-v6-top{
+    align-items:flex-start!important;
+    gap:18px!important;
+  }
+  .rk-room-live-v6-title{
+    font-size:30px!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    letter-spacing:-.9px!important;
+  }
+  .rk-room-live-v6-copy{
+    font-size:13px!important;
+    line-height:1.55!important;
+    max-width:28ch!important;
+  }
+  .rk-room-live-v17-table{
+    margin-top:16px!important;
+  }
+  .rk-room-live-v17-actions button{
+    min-height:48px!important;
+  }
+
+  /* Desktop practice + learn feel like product cards, not stretched mobile blocks */
+  .rk-freeplay-v24,
+  .rk-freeplay-v27,
+  .rk-freeplay-v35{
+    min-height:260px!important;
+    border-radius:30px!important;
+    padding:26px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(300px,.8fr)!important;
+    gap:24px!important;
+    align-items:center!important;
+  }
+  .rk-freeplay-v24-top{
+    display:block!important;
+  }
+  .rk-freeplay-v24 h2,
+  .rk-freeplay-v27 h2,
+  .rk-freeplay-v35 h2{
+    font-size:34px!important;
+    line-height:1!important;
+    max-width:12ch!important;
+  }
+  .rk-freeplay-v24 p,
+  .rk-freeplay-v27 p,
+  .rk-freeplay-v35 p{
+    max-width:36ch!important;
+    font-size:14px!important;
+    line-height:1.55!important;
+  }
+  .rk-freeplay-v27-preview,
+  .rk-freeplay-v35-preview{
+    justify-self:end!important;
+    width:100%!important;
+    max-width:360px!important;
+  }
+  .rk-freeplay-v24-steps,
+  .rk-freeplay-v27-steps,
+  .rk-freeplay-v35-steps{
+    grid-column:1 / -1!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:12px!important;
+  }
+  .rk-freeplay-v24-cta,
+  .rk-freeplay-v27 .rk-freeplay-v24-cta,
+  .rk-freeplay-v35 .rk-freeplay-v24-cta{
+    grid-column:1 / -1!important;
+    max-width:360px!important;
+    justify-self:start!important;
+  }
+
+  .rk-learn-home-v8,
+  .rk-learn-home-v12,
+  .rk-learn-home-v18,
+  .rk-learn-home-v19{
+    border-radius:30px!important;
+    padding:28px!important;
+    box-shadow:0 16px 42px rgba(26,20,16,.07),inset 0 1px 0 rgba(255,255,255,.80)!important;
+  }
+  .rk-learn-home-v18-title,
+  .rk-learn-home-title{
+    font-size:34px!important;
+    line-height:1!important;
+    max-width:none!important;
+  }
+  .rk-learn-home-v18-copy,
+  .rk-learn-home-copy{
+    max-width:520px!important;
+    font-size:14px!important;
+    line-height:1.55!important;
+  }
+  .rk-learn-home-v18-grid,
+  .rk-learn-home-grid{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:12px!important;
+  }
+  .rk-learn-home-v18-card,
+  .rk-learn-home-card{
+    min-height:132px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    justify-content:space-between!important;
+    gap:14px!important;
+  }
+  .rk-learn-home-v18-arrow,
+  .rk-learn-home-arrow{
+    align-self:flex-start!important;
+  }
+
+  .rk-share-score-v6{
+    padding:22px!important;
+  }
+  .rk-share-score-v6-title{font-size:24px!important;line-height:1.02!important;}
+  .rk-email-home-v8,.rk-email-home-v19{padding:22px!important;}
+  .rk-email-title-v8{font-size:24px!important;line-height:1.05!important;}
+  .rk-home-desktop-insights{
+    display:block!important;
+    margin-top:0!important;
+  }
+  .rk-web-data-card,
+  .rk-home-desktop-card{
+    border-radius:30px!important;
+    box-shadow:0 16px 44px rgba(26,20,16,.075),inset 0 1px 0 rgba(255,255,255,.80)!important;
+  }
+}
+
+@media(min-width:1280px){
+  .rk-pg{max-width:1380px!important;padding-left:46px!important;padding-right:46px!important;}
+  .rk-home-landing-flow{max-width:1320px!important;grid-template-columns:minmax(0,1fr) 430px!important;gap:28px!important;}
+  .rk-daily-entry-v6,.rk-daily-entry-v11,.rk-daily-entry-v24,.rk-home-scorecard-v30{min-height:570px!important;}
+}
+
+@media(min-width:1024px) and (max-width:1120px){
+  .rk-home-landing-flow{grid-template-columns:minmax(0,1fr) 350px!important;gap:18px!important;}
+  .rk-room-live-v6-title{font-size:26px!important;}
+  .rk-freeplay-v24,.rk-freeplay-v27,.rk-freeplay-v35{grid-template-columns:1fr!important;}
+}
+
+/* In-game large-screen polish foundation */
+@media(min-width:1024px){
+  .rk-game-shell,
+  .rk-pg:has(.rk-rack-surface){
+    max-width:1180px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+  .rk-pg:has(.rk-rack-surface) .rk-rack-surface{
+    justify-content:center!important;
+  }
+}
 `;
 
 const S={
