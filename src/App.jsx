@@ -6109,6 +6109,36 @@ html,body,#root,.rk-outer,.rk-app,.rk-pg{
   .rk-home-scorecard-v30-bottom{border-radius:22px!important}
   .rk-room-live-v35-roomlink{font-size:12.5px!important;min-height:36px!important}
 }
+
+
+/* ─── v36 Free Play final polish ───────────────────────────────────────── */
+.rk-freeplay-v35-preview{
+  min-width:188px!important;
+  padding:8px!important;
+  border-radius:22px!important;
+  background:linear-gradient(145deg,rgba(255,253,248,.88),rgba(246,239,228,.72))!important;
+  border:1px solid rgba(23,107,66,.09)!important;
+  box-shadow:0 8px 22px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.86)!important;
+}
+.rk-freeplay-v35-rack .rk-rack-surface{
+  width:auto!important;
+  min-width:0!important;
+}
+.rk-freeplay-v35-rack .rk-mahjong-tile{
+  width:34px!important;
+  height:50px!important;
+  border-radius:10px!important;
+  box-shadow:0 6px 13px rgba(26,20,16,.10),inset 0 1px 0 rgba(255,255,255,.9),inset 0 -2px 0 rgba(160,120,40,.10)!important;
+}
+.rk-freeplay-v35-rack .rk-mahjong-tile span:first-child{font-size:15px!important}
+.rk-freeplay-v35-rack .rk-mahjong-tile span:nth-child(2){font-size:6.5px!important}
+.rk-freeplay-v27 .rk-freeplay-v24-top{align-items:center!important}
+.rk-freeplay-v27-steps div{border-color:rgba(23,107,66,.10)!important;background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important}
+.rk-freeplay-v27-steps div strong{background:linear-gradient(145deg,#176B42,#0F5432)!important;border:1px solid rgba(255,255,255,.18)!important;color:#fff!important;box-shadow:0 6px 13px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.18)!important}
+@media(max-width:390px){
+  .rk-freeplay-v35-preview{min-width:0!important;width:100%!important;justify-items:start!important}
+  .rk-freeplay-v35-rack .rk-rack-surface{justify-content:flex-start!important}
+}
 `;
 
 const S={
@@ -16562,18 +16592,15 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   );
 
   const freePlaySequences=[
-    ["2","5","8"],
-    ["1","3","5"],
-    ["4","6","8"],
-    ["3","6","9"],
-    ["🀇","🀈","🀉"],
-    ["🀙","🀚","🀛"],
-    ["2","0","6"],
+    [{t:"s",s:"bam",n:2},{t:"s",s:"bam",n:4},{t:"s",s:"bam",n:6},{t:"s",s:"bam",n:8}],
+    [{t:"s",s:"crak",n:1},{t:"s",s:"crak",n:3},{t:"s",s:"crak",n:5},{t:"s",s:"crak",n:7},{t:"s",s:"crak",n:9}],
+    [{t:"s",s:"dot",n:3},{t:"s",s:"dot",n:4},{t:"s",s:"dot",n:5},{t:"s",s:"dot",n:6}],
+    [{t:"w",v:"N"},{t:"w",v:"E"},{t:"w",v:"W"},{t:"d",v:"Soap"}],
+    [{t:"f"},{t:"s",s:"bam",n:2},{t:"d",v:"Soap"},{t:"s",s:"dot",n:6}],
+    [{t:"s",s:"crak",n:5},{t:"s",s:"bam",n:5},{t:"s",s:"dot",n:5},{t:"j"}],
   ];
   const freePlaySeed=Math.floor(Math.random()*freePlaySequences.length);
   const freePlayTiles=freePlaySequences[freePlaySeed%freePlaySequences.length];
-  const freePlayHints=["Consecutive Run warm-up","2468 shape drill","Odd-number lane","Winds + Dragons read","Flexible first pass","Pairs into pungs"];
-  const freePlayHint=freePlayHints[freePlaySeed%freePlayHints.length];
 
   const PracticeCard=()=> (
     <section className="rk-freeplay-v24 rk-freeplay-v27" aria-label="Free play practice room">
@@ -16583,11 +16610,11 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <h2>Improve Your Game</h2>
           <p>Practice another Charleston without touching today’s score. New rack, clean passes, instant readout.</p>
         </div>
-        <div className="rk-freeplay-v27-preview" aria-hidden="true">
-          <div className="rk-freeplay-v27-preview-label">Practice rack</div>
-          <div className="rk-freeplay-v34-hint">{freePlayHint}</div>
-          <div className="rk-freeplay-v24-rack">
-            {freePlayTiles.map((tile,i)=><span key={`${tile}-${i}`}>{tile}</span>)}
+        <div className="rk-freeplay-v27-preview rk-freeplay-v35-preview" aria-label="Example practice rack">
+          <div className="rk-freeplay-v35-rack">
+            <RackSurface style={{padding:7,borderRadius:18,gap:6,background:"transparent",border:"none",boxShadow:"none",justifyContent:"flex-end"}}>
+              {freePlayTiles.map((tile,i)=><Ti key={`${tL(tile)}-${tS(tile)}-${i}`} t={tile}/>)}
+            </RackSurface>
           </div>
         </div>
       </div>
