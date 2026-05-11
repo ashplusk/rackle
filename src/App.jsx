@@ -10563,6 +10563,117 @@ footer{
   .rk-room-score-v1{font-size:40px!important;min-width:48px!important}
 }
 
+
+
+/* ─── vFinal launch audit pass: clarity, social club polish, V1 readiness ── */
+:root{
+  --rk-ivory:#F8F4EE;
+  --rk-ivory-2:#F3EEE4;
+  --rk-ink:#1A1410;
+  --rk-muted:#6B6157;
+  --rk-jade:#176B42;
+  --rk-jade-dark:#062B18;
+  --rk-gilt:#C9A84C;
+}
+html,body,#root{background:var(--rk-ivory)!important;}
+.rk-pg,.rk-app{background:var(--rk-ivory)!important;}
+.rk-pg{padding-bottom:28px!important;}
+.rk-footer,.rk-bottom-footer{margin-top:12px!important;padding-bottom:8px!important;}
+
+/* Homepage: make the daily/social loop read instantly */
+.rk-startup-hero-v4{margin-bottom:10px!important;}
+.rk-startup-logo-v4{font-family:'Fraunces',Georgia,serif!important;font-weight:900!important;color:#1A1410!important;letter-spacing:-1.8px!important;}
+.rk-startup-subtitle-v4{line-height:1.15!important;margin-bottom:12px!important;}
+.rk-startup-live-note-v34,.rk-startup-live-note-v40{margin-top:8px!important;margin-bottom:12px!important;}
+.rk-daily-entry-v6,.rk-daily-entry-v11,.rk-daily-card,.rk-home-scorecard-v30{margin-top:8px!important;margin-bottom:18px!important;}
+.rk-home-scorecard-v30-main{text-align:center!important;}
+.rk-home-scorecard-v30-topline,.rk-home-scorecard-v30-medal,.rk-home-scorecard-v30-rule{margin-left:auto!important;margin-right:auto!important;}
+.rk-home-scorecard-v30-score{display:block!important;text-align:center!important;margin-left:auto!important;margin-right:auto!important;}
+.rk-home-scorecard-v30-medal{justify-content:center!important;}
+.rk-home-scorecard-v30 [class*="iq"],.rk-home-scorecard-v30 .rk-home-scorecard-v30-line,.rk-home-scorecard-v30-level,.rk-home-scorecard-v30-style{margin-left:auto!important;margin-right:auto!important;text-align:center!important;}
+.rk-home-scorecard-v30-style{transform:none!important;left:auto!important;right:auto!important;justify-self:center!important;align-self:center!important;}
+.rk-home-scorecard-v30-actions{gap:10px!important;}
+.rk-home-scorecard-v30-room{border-color:rgba(243,212,107,.30)!important;}
+.rk-home-scorecard-v30-share,.rk-share-card{transition:transform .16s ease,box-shadow .16s ease,filter .16s ease!important;}
+.rk-home-scorecard-v30-share:active,.rk-share-card:active{transform:scale(.986)!important;}
+
+/* Live Club Standings: give the heading room and make the board feel social */
+.rk-room-live-v6,.rk-room-live-v17,.rk-room-live-v19{margin-top:16px!important;margin-bottom:20px!important;}
+.rk-room-live-v6-kicker{margin-bottom:14px!important;line-height:1.35!important;}
+.rk-room-live-v6-title,.rk-room-live-v19 .rk-room-live-v6-title{margin-top:6px!important;margin-bottom:14px!important;line-height:1.12!important;}
+.rk-room-live-v6-copy,.rk-room-live-v17-head-copy span{line-height:1.58!important;}
+.rk-room-live-v17-head,.rk-room-live-v35-head{margin-bottom:12px!important;}
+.rk-room-live-v17-table,.rk-room-live-v6-list{margin-top:14px!important;}
+.rk-room-live-v17-actions{margin-top:15px!important;}
+
+/* Leaderboard rooms: simplify into a real board */
+.rk-room-page,.rk-leaderboard-page,.rk-global-leaderboard-page{background:var(--rk-ivory)!important;}
+.rk-room-hero,.rk-leaderboard-hero{border-radius:30px!important;padding:24px 20px 22px!important;margin-bottom:16px!important;}
+.rk-room-title,.rk-leaderboard-title{font-size:30px!important;line-height:1.04!important;letter-spacing:-.9px!important;}
+.rk-room-copy,.rk-leaderboard-copy{font-size:13px!important;line-height:1.62!important;max-width:36ch!important;}
+.rk-room-leader,.rk-leader-card{border-radius:26px!important;padding:16px!important;display:grid!important;grid-template-columns:54px minmax(0,1fr) auto!important;gap:13px!important;align-items:center!important;background:linear-gradient(145deg,#FFFDF8,#F5EFE4)!important;border:1px solid rgba(26,20,16,.08)!important;box-shadow:0 9px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;}
+.rk-room-leader *,.rk-leader-card *{color:inherit;}
+.rk-room-leader-name,.rk-leader-name,.rk-leader-card strong{color:var(--rk-ink)!important;line-height:1.14!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;}
+.rk-room-leader-sub,.rk-leader-sub,.rk-leader-card small{color:rgba(26,20,16,.58)!important;line-height:1.45!important;white-space:normal!important;}
+.rk-room-score,.rk-leader-score{color:#A07828!important;font-family:'Fraunces',Georgia,serif!important;}
+.rk-room-row,.rk-leader-row{border-radius:19px!important;padding:13px!important;background:#FFFDF8!important;border:1px solid rgba(26,20,16,.07)!important;box-shadow:0 5px 16px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78)!important;}
+.rk-room-row.is-you,.rk-leader-row.is-you{background:linear-gradient(145deg,#F7F3E9,#FFFDF8)!important;border-color:rgba(23,107,66,.20)!important;box-shadow:0 7px 18px rgba(23,107,66,.055),inset 0 1px 0 rgba(255,255,255,.82)!important;}
+.rk-room-row-name,.rk-leader-row-name{font-size:15px!important;line-height:1.15!important;color:var(--rk-ink)!important;}
+.rk-room-row-sub,.rk-leader-row-sub{font-size:11.5px!important;line-height:1.42!important;color:rgba(26,20,16,.55)!important;}
+.rk-room-actions,.rk-leader-actions{border-radius:24px!important;padding:12px!important;background:linear-gradient(145deg,#FFFDF8,#F3EFE6)!important;border:1px solid rgba(26,20,16,.075)!important;box-shadow:0 8px 22px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78)!important;}
+.rk-room-btn,.rk-leader-btn{min-height:46px!important;border-radius:16px!important;font-family:'Fraunces',Georgia,serif!important;font-weight:950!important;}
+
+/* Daily scorecard: achievement first, coaching second, no AI-report tone */
+.rk-scorecard-premium-v26,.rk-score-shell{background:var(--rk-ivory)!important;}
+.rk-scorecard-premium-v26:before{display:none!important;}
+.rk-scorecard-premium-v26 .rk-scorecard-title-v26{margin-left:auto!important;margin-right:auto!important;text-align:center!important;}
+.rk-scorecard-premium-v26 .rk-scorecard-heading-v26{text-align:center!important;line-height:1.05!important;margin-bottom:8px!important;}
+.rk-scorecard-premium-v26 .rk-iq-hero{border-radius:32px!important;background:linear-gradient(155deg,#041F12 0%,#07331E 52%,#0D4A2E 78%,#03170D 100%)!important;border:1px solid rgba(243,212,107,.28)!important;box-shadow:0 18px 44px rgba(6,43,24,.22),inset 0 1px 0 rgba(255,255,255,.12)!important;}
+.rk-scorecard-premium-v26 .rk-iq-hero:after{display:none!important;}
+.rk-score-share-v20,.rk-score-club-room-v20,.rk-score-rack-card,.rk-daily-review-v10{border-radius:26px!important;background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;border:1px solid rgba(26,20,16,.075)!important;box-shadow:0 10px 26px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.80)!important;}
+.rk-daily-review-v10-head strong{line-height:1.16!important;}
+.rk-daily-review-v10-card strong{line-height:1.18!important;}
+.rk-daily-review-v10-card p{line-height:1.62!important;color:rgba(26,20,16,.66)!important;}
+.rk-daily-review-v20-detail-card p{line-height:1.65!important;}
+
+/* Learning pages: keep them simple and scan-friendly */
+.rk-howto-v40,.rk-handbrowser-v40,.rk-style-glossary,.rk-styles-page{background:var(--rk-ivory)!important;padding-bottom:36px!important;}
+.rk-howto-v40-hero,.rk-handbrowser-v40-hero,.rk-style-hero{border-radius:30px!important;margin-top:6px!important;margin-bottom:16px!important;}
+.rk-howto-v40-hero h1,.rk-handbrowser-v40-hero h1,.rk-style-hero h1{line-height:1.05!important;}
+.rk-howto-v40-card,.rk-handbrowser-v40-sections,.rk-handbrowser-v40-dragon-card,.rk-style-card{border-radius:26px!important;background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;border:1px solid rgba(26,20,16,.075)!important;box-shadow:0 8px 22px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.80)!important;}
+.rk-handbrowser-v40-search{display:none!important;}
+.rk-handbrowser-v40-quickbar{margin-top:4px!important;}
+.rk-handbrowser-v40-section:after{content:'›'!important;display:flex!important;align-items:center!important;justify-content:center!important;width:30px!important;height:30px!important;padding:0!important;border-radius:999px!important;background:#176B42!important;color:#F3D46B!important;border:1px solid rgba(243,212,107,.22)!important;font-size:18px!important;line-height:1!important;}
+.rk-howto-v40-card-head,.rk-handbrowser-v40-card-head{display:block!important;text-align:left!important;}
+.rk-howto-v40-card-head span,.rk-handbrowser-v40-card-head span{display:block!important;margin-bottom:7px!important;}
+.rk-howto-v40-card-head h2,.rk-handbrowser-v40-card-head h2{line-height:1.1!important;margin:0!important;}
+
+/* Weekly recap: intentional unlock state */
+.rk-weekly,.rk-weekly-page,.rk-recap-page{background:var(--rk-ivory)!important;}
+.rk-weekly-empty,.rk-recap-empty{border-radius:26px!important;background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;border:1px solid rgba(26,20,16,.075)!important;box-shadow:0 8px 22px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.80)!important;}
+
+/* Style glossary: make style identity feel social and playful */
+.rk-style-pill,.rk-home-scorecard-v30-style{cursor:pointer!important;}
+.rk-style-pill:active,.rk-home-scorecard-v30-style:active{transform:scale(.985)!important;}
+.rk-style-grid,.rk-style-list{gap:10px!important;}
+.rk-style-option,.rk-style-card,.rk-style-tile{border-radius:22px!important;background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;border:1px solid rgba(26,20,16,.075)!important;box-shadow:0 7px 20px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.80)!important;}
+
+/* Clubhouse updates: simple V1 capture */
+.rk-email-home-v8,.rk-email-home-v19{border-radius:28px!important;background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;border:1px solid rgba(26,20,16,.075)!important;box-shadow:0 9px 24px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.82)!important;text-align:center!important;}
+.rk-email-title-v8,.rk-email-title-v19{font-size:20px!important;line-height:1.1!important;text-align:center!important;}
+.rk-email-copy-v8,.rk-email-copy-v19{line-height:1.48!important;text-align:center!important;max-width:32ch!important;margin-left:auto!important;margin-right:auto!important;}
+
+/* Tablet safety: keep polished mobile shell until desktop is rebuilt */
+@media(min-width:768px) and (max-width:1180px){
+  .rk-outer{padding:28px 0!important;background:var(--rk-ivory)!important;}
+  .rk-app{width:min(100%,560px)!important;max-width:560px!important;margin:0 auto!important;border-radius:28px!important;overflow:hidden!important;box-shadow:0 16px 70px rgba(26,20,16,.12),0 0 0 1px rgba(26,20,16,.06)!important;}
+  .rk-pg{padding-left:24px!important;padding-right:24px!important;}
+}
+@media(max-width:390px){
+  .rk-room-live-v6-title,.rk-room-live-v19 .rk-room-live-v6-title{line-height:1.16!important;margin-bottom:13px!important;}
+  .rk-home-scorecard-v30-actions{gap:8px!important;}
+  .rk-room-leader,.rk-leader-card{grid-template-columns:48px minmax(0,1fr)!important;}
+}
 `;
 
 const S={
@@ -12597,7 +12708,7 @@ function iqDirection(finalRack,sectionId,chosenHandObj){
     const flBonus=fl>=2?2:fl>=1?1:0;
     // Normalized: 7 honors (committed W&D rack) now reliably scores 28-32 before penalties
     directionScore=Math.min(40,Math.max(2,windScore+dragonScore+windGroupBonus+numKongBonus+jkBonus+flBonus-(badNums*4)));
-    directionExplanation=honors>=10?`${winds} Winds + ${dragons} Dragons, a deep honor rack. W&D is your lane.`:honors>=8?`${honors} honor tiles is a committed W&D foundation. Keep passing number tiles.`:honors>=6?`${honors} honors, solid start. W&D needs 7+ to fully commit; keep drawing winds.`:honors>=4?`${honors} honors is a start, but W&D needs 7+. Pass all 5-9 tiles aggressively.`:`Only ${honors} honor tiles. Pass all number tiles and wait for winds.`;
+    directionExplanation=honors>=10?`${winds} Winds + ${dragons} Dragons, a deep honor rack. W&D is your lane.`:honors>=8?`${honors} honor tiles is a strong W&D foundation. Keep passing number tiles.`:honors>=6?`${honors} honors, solid start. W&D needs 7+ to fully commit; keep drawing winds.`:honors>=4?`${honors} honors is a start, but W&D needs 7+. Pass all 5-9 tiles aggressively.`:`Only ${honors} honor tiles. Pass all number tiles and wait for winds.`;
 
   } else if(sectionId==="aln"){
     // ALN: all 3 hands are kongs of one number + flowers/dragons. Concentration is everything.
@@ -12714,7 +12825,7 @@ function iqDirection(finalRack,sectionId,chosenHandObj){
     const flBonus=fl>=2?2:fl>=1?1:0;
     const offPenalty=(evens*3)+(ew*2);
     directionScore=Math.min(40,Math.max(2,densScore+fiveBonus+threeBonus+divBonus+nsBonus+flBonus-offPenalty));
-    directionExplanation=totalOdds>=8?`${totalOdds} odd tiles, a committed 13579 rack.`:totalOdds>=5?`${totalOdds} odd tiles. Focus on 5s and 3s, they appear in every hand.`:totalOdds>=3?`${totalOdds} odds, pass all even tiles immediately.`:`Only ${totalOdds} odd tiles. 13579 needs 8+ odds to be competitive.`;
+    directionExplanation=totalOdds>=8?`${totalOdds} odd tiles, a strong 13579 rack.`:totalOdds>=5?`${totalOdds} odd tiles. Focus on 5s and 3s, they appear in every hand.`:totalOdds>=3?`${totalOdds} odds, pass all even tiles immediately.`:`Only ${totalOdds} odd tiles. 13579 needs 8+ odds to be competitive.`;
   }
 
   return{directionScore:Math.max(0,Math.min(40,Math.round(directionScore))),directionExplanation};
@@ -13179,7 +13290,7 @@ const IQ_STYLES=[
   {
     key:"aggressive",name:"Aggressive ⚡",
     notes:[
-      "You chased upside and committed early.",
+      "You chased upside and locked in early.",
       "Bold passing with high reward potential.",
       "You pushed the rack forward aggressively."
     ]
@@ -14031,12 +14142,12 @@ function rkEvaluateCharlestonEngine({finalRack,startingRack=[],passedTilesByRoun
 }
 function rkHumanTableCopy(text=""){
   return String(text||"")
-    .replace(/analysis indicates/gi,"your rack shows")
+    .replace(/your rack shows/gi,"your rack shows")
     .replace(/based on your tile distribution/gi,"from the tiles you kept")
-    .replace(/decision pattern suggests/gi,"your passes suggest")
+    .replace(/your passes suggest/gi,"your passes suggest")
     .replace(/AI/gi,"Rackle")
-    .replace(/committed path/gi,"clearest lane")
-    .replace(/fully committed/gi,"strongly leaning")
+    .replace(/clearest lane/gi,"clearest lane")
+    .replace(/strongly leaning/gi,"strongly leaning")
     .replace(/you should have/gi,"next time, try to")
     .replace(/optimal/gi,"cleanest")
     .replace(/correct call/gi,"good table read")
@@ -14193,7 +14304,7 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
   const sectionDominanceCap={"wd":2.0,"aln":2.0,"q":1.8,"sp":2.2}[sectionId]||3.5;
   if(chosenScore>=0.08&&chosenScore>=bestOther*sectionDifficultyThreshold){
     directionScore=Math.min(40,directionScore+3);
-    directionExplanation+=" Your rack clearly committed to this section, that's decisive.";
+    directionExplanation+=" Your rack was clearly leaning this way, that's a strong table read.";
   } else if(chosenScore>=0.05&&chosenScore>=bestOther*Math.min(sectionDominanceCap,sectionDifficultyThreshold*0.85)){
     directionScore=Math.min(40,directionScore+1);
   } else if(chosenScore>=0.2&&chosenScore>=bestOther*2.5){
@@ -16453,7 +16564,7 @@ function computeExpertRead(finalRack, chosenSec, allSections, passLog, iq){
 
   // Signal 2: flexibility signal
   if(flexibility==="High"&&commitment==="Low")signals.push(`strong optionality across ${strongPaths} live section paths`);
-  else if(flexibility==="Low"&&commitment==="High")signals.push(`a rack that's committed early, the upside is speed, the risk is deadness if key tiles don't arrive`);
+  else if(flexibility==="Low"&&commitment==="High")signals.push(`a rack that's locked in early, the upside is speed, the risk is deadness if key tiles don't arrive`);
   else if(pivotPotential==="Strong")signals.push(`real pivot options still available if the primary direction stalls`);
 
   // Signal 3: joker signal
@@ -18210,7 +18321,7 @@ function computeCoachAdvice(hand, passLog, chosenSec, allSections, iq, chosenHan
     const strongWinds=Object.entries(wc).filter(([,c])=>c>=2).map(([v,c])=>`${c}× ${v}`);
     const strongDrags=Object.entries(dc).filter(([,c])=>c>=2).map(([v,c])=>`${c}× ${v==="Soap"?"Soap":v==="Red"?"Red Dragon":"Green Dragon"}`);
     advice.rackRead=honorTotal>=8
-      ?`Deep honor rack, ${windTiles.length} Winds and ${dragTiles.length} Dragons gives you ${honorTotal} honor tiles total. ${strongWinds.length>0?`You have pairs of ${strongWinds.join(" and ")}, that's real structure.`:""} W&D is your committed path.`
+      ?`Deep honor rack, ${windTiles.length} Winds and ${dragTiles.length} Dragons gives you ${honorTotal} honor tiles total. ${strongWinds.length>0?`You have pairs of ${strongWinds.join(" and ")}, that's real structure.`:""} W&D is your clearest lane.`
       :honorTotal>=5
       ?`${honorTotal} honor tiles, a credible W&D foundation. You need 9-10 to really commit. Pass all numbers 5 and above immediately and wait for more winds.`
       :`Only ${honorTotal} honor tiles. W&D is a high-commitment section, you need winds and dragons, nothing else. Pass every number tile aggressively.`;
@@ -18243,7 +18354,7 @@ function computeCoachAdvice(hand, passLog, chosenSec, allSections, iq, chosenHan
       ?`Two Jokers, the entry requirement for Quints. Now concentrate on one tile value: you need 3-4 natural copies to pair with your Jokers for a pung or kong.`
       :jk===1
       ?`Only one Joker. Quints needs at least two, without a second Joker arriving, this section is unreachable. Consider having an exit plan.`
-      :`No Jokers. Quints is genuinely not available without at least two. If you're committed to this section, you need two Jokers to arrive, that's the entry ticket.`;
+      :`No Jokers. Quints is genuinely not available without at least two. If you keep this section alive, you need two Jokers to arrive, that's the entry ticket.`;
     advice.primaryLane=jk>=2?`Stack your deepest tile value, get 3-4 naturals of one tile plus your Jokers. That becomes your quint group. Pass everything else.`:"Wait for a second Joker before committing fully. Until then, keep your options open.";
     advice.altLane="";
     advice.foundation=jk>=2?[`${jk} Jokers (required)`]:[];
@@ -21432,7 +21543,7 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen,go}){
       </div>
 
       <section className="rk-stats-v21-card">
-        <h3>What this means</h3>
+        <h3>Table read</h3>
         <p>{hist.length?`You’ve played ${dailyHist.length} daily rack${dailyHist.length===1?'':'s'} and ${practiceHist.length} practice rack${practiceHist.length===1?'':'s'}. Your daily average is ${dailyAvg}.`:"Play today’s Daily Rackle to start your form report."}</p>
         <div className="rk-stats-v21-row">
           <div className="rk-stats-v21-dot">🎯</div>
