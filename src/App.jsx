@@ -5978,6 +5978,140 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
     padding-right:14px!important;
   }
 }
+
+
+/* ─── vFinal: homepage title consistency, section rhythm, desktop layout polish ─── */
+.rk-learn-home-v19,
+.rk-learn-home-v18{
+  margin-top:22px!important;
+  margin-bottom:22px!important;
+  padding-top:22px!important;
+  padding-bottom:22px!important;
+}
+.rk-learn-home-v19 .rk-learn-home-v18-title,
+.rk-learn-home-v18-title,
+.rk-room-live-v19 .rk-room-live-v6-title,
+.rk-email-home-v8 .rk-email-title-v8,
+.rk-email-title-v8,
+.rk-freeplay-v24 h2{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:27px!important;
+  line-height:1.02!important;
+  letter-spacing:-.8px!important;
+  font-weight:950!important;
+}
+.rk-room-live-v19 .rk-room-live-v6-title{
+  white-space:nowrap!important;
+  max-width:none!important;
+  overflow:visible!important;
+  text-wrap:nowrap!important;
+}
+.rk-room-live-v19 .rk-room-live-v6-copy{max-width:36ch!important;line-height:1.56!important}
+.rk-email-home-v8 .rk-email-title-v8,
+.rk-email-title-v8{margin-bottom:9px!important}
+.rk-email-copy-v8{line-height:1.55!important;max-width:34ch!important}
+.rk-learn-home-v18-copy{line-height:1.55!important;max-width:36ch!important}
+
+/* Lift visual quality across homepage cards */
+.rk-daily-entry-v6,
+.rk-daily-entry-v21,
+.rk-daily-entry-v35,
+.rk-room-live-v19,
+.rk-freeplay-v24,
+.rk-learn-home-v19,
+.rk-email-home-v8,
+.rk-tomorrow-card-v11{
+  border-color:rgba(26,20,16,.085)!important;
+  box-shadow:0 18px 48px rgba(26,20,16,.07),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-daily-entry-v6,
+.rk-daily-entry-v21,
+.rk-daily-entry-v35,
+.rk-freeplay-v24,
+.rk-learn-home-v19,
+.rk-email-home-v8{
+  background:
+    radial-gradient(circle at 88% 8%,rgba(255,255,255,.48),transparent 34%),
+    linear-gradient(145deg,#FFFDF8 0%,#F7F0E5 100%)!important;
+}
+.rk-room-live-v19{
+  background:
+    radial-gradient(circle at 88% 10%,rgba(243,212,107,.10),transparent 34%),
+    linear-gradient(150deg,#041F12 0%,#07331E 58%,#062B18 100%)!important;
+}
+.rk-tomorrow-card-v11{
+  box-shadow:0 18px 48px rgba(40,20,55,.16),inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+.rk-freeplay-v24-cta,
+.rk-daily-entry-v6-cta,
+.rk-daily-entry-v21-cta,
+.rk-daily-entry-v35-cta{
+  box-shadow:0 12px 28px rgba(23,107,66,.18),inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+.rk-freeplay-v24-cta:hover,
+.rk-daily-entry-v6-cta:hover,
+.rk-daily-entry-v21-cta:hover,
+.rk-daily-entry-v35-cta:hover{
+  filter:brightness(1.04)!important;
+}
+
+/* Larger screen / desktop website feel */
+@media(min-width:960px){
+  html,body,#root{background:#F8F4EE!important;}
+  .rk-outer{padding:0!important;background:linear-gradient(180deg,#F8F4EE 0%,#F3EBDC 100%)!important;}
+  .rk-app{width:100%!important;max-width:none!important;min-height:100vh!important;margin:0!important;border-radius:0!important;border:none!important;box-shadow:none!important;background:#F8F4EE!important;}
+  .rk-pg{max-width:1320px!important;margin:0 auto!important;padding:34px 54px 0!important;background:transparent!important;}
+  .rk-home-landing-flow{
+    display:grid!important;
+    grid-template-columns:minmax(0,1.06fr) minmax(360px,.94fr)!important;
+    gap:30px!important;
+    align-items:start!important;
+    max-width:1280px!important;
+    margin:0 auto!important;
+  }
+  .rk-home-landing-flow > *{min-width:0!important;}
+  .rk-home-landing-flow > :nth-child(1){grid-column:1!important;grid-row:1!important;}
+  .rk-home-landing-flow > :nth-child(2){grid-column:2!important;grid-row:1!important;position:sticky;top:24px;}
+  .rk-home-landing-flow > :nth-child(3){grid-column:2!important;grid-row:2!important;}
+  .rk-home-landing-flow > :nth-child(4){grid-column:1!important;grid-row:2!important;}
+  .rk-home-landing-flow > :nth-child(5){grid-column:1!important;grid-row:3!important;}
+  .rk-home-landing-flow > :nth-child(6){grid-column:2!important;grid-row:3!important;}
+  .rk-home-landing-flow > :nth-child(7){grid-column:2!important;grid-row:4!important;}
+  .rk-home-landing-flow > :nth-child(8){grid-column:1 / -1!important;grid-row:5!important;}
+  .rk-startup-hero-v4{max-width:760px!important;margin:0 auto 24px!important;padding-top:20px!important;}
+  .rk-startup-logo-v4{font-size:clamp(62px,5vw,82px)!important;line-height:.88!important;}
+  .rk-startup-subtitle-v4{font-size:22px!important;line-height:1.2!important;}
+  .rk-startup-pulse-pill-v41,
+  .rk-startup-pulse-pill-v42{margin-top:16px!important;margin-bottom:0!important;}
+  .rk-daily-entry-v6-title,.rk-daily-entry-v21-title,.rk-daily-entry-v35-title{font-size:clamp(46px,4.2vw,68px)!important;line-height:.94!important;}
+  .rk-daily-entry-v6-copy,.rk-daily-entry-v21-copy,.rk-daily-entry-v35-copy{font-size:18px!important;line-height:1.55!important;}
+  .rk-daily-entry-v6,.rk-daily-entry-v21,.rk-daily-entry-v35{padding:42px 38px!important;border-radius:34px!important;}
+  .rk-room-live-v19,.rk-freeplay-v24,.rk-learn-home-v19,.rk-email-home-v8,.rk-tomorrow-card-v11{border-radius:32px!important;}
+  .rk-freeplay-v24{padding:28px!important;}
+  .rk-learn-home-v19{padding:28px!important;}
+  .rk-email-home-v8{padding:28px!important;}
+  .rk-room-live-v19 .rk-room-live-v6-title,
+  .rk-freeplay-v24 h2,
+  .rk-learn-home-v18-title,
+  .rk-email-title-v8{font-size:29px!important;}
+  .rk-footer{width:100vw!important;margin-left:calc(50% - 50vw)!important;margin-right:calc(50% - 50vw)!important;}
+}
+@media(min-width:1200px){
+  .rk-home-landing-flow{grid-template-columns:minmax(0,1.12fr) 430px!important;gap:38px!important;}
+  .rk-pg{padding-left:68px!important;padding-right:68px!important;}
+}
+@media(max-width:959px){
+  .rk-home-landing-flow{display:flex!important;flex-direction:column!important;}
+}
+@media(max-width:430px){
+  .rk-learn-home-v19,.rk-learn-home-v18{margin-top:18px!important;margin-bottom:18px!important;padding-top:20px!important;padding-bottom:20px!important;}
+  .rk-learn-home-v19 .rk-learn-home-v18-title,
+  .rk-learn-home-v18-title,
+  .rk-room-live-v19 .rk-room-live-v6-title,
+  .rk-email-title-v8,
+  .rk-freeplay-v24 h2{font-size:25px!important;}
+  .rk-room-live-v19 .rk-room-live-v6-title{white-space:nowrap!important;}
+}
 `;
 
 const S={
