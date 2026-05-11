@@ -5657,6 +5657,16 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-email-home-v8,.rk-email-home-v19{margin-left:8px!important;margin-right:8px!important;width:calc(100% - 16px)!important}
 }
 
+
+
+/* ─── v30 HOMEPAGE SCORECARD: screenshot-worthy club card ───────────────── */
+.rk-home-scorecard-v30{position:relative;margin:0 0 26px;border-radius:30px;overflow:hidden;background:linear-gradient(145deg,#FFFDF8,#F5EBDD);border:1px solid rgba(26,20,16,.08);box-shadow:0 18px 46px rgba(26,20,16,.10),inset 0 1px 0 rgba(255,255,255,.82)}
+.rk-home-scorecard-v30-streak{width:100%;border:0;border-bottom:1px solid rgba(160,120,40,.16);background:linear-gradient(180deg,#FFF9EA,#F7EFE0);padding:11px 15px;display:flex;align-items:center;gap:9px;text-align:left;cursor:pointer;color:#1A1410}.rk-home-scorecard-v30-streak span{width:28px;height:28px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(176,42,42,.10);border:1px solid rgba(176,42,42,.12);flex-shrink:0}.rk-home-scorecard-v30-streak strong{font-family:'Fraunces',Georgia,serif;font-size:13px;line-height:1;font-weight:950;color:#B02A2A}.rk-home-scorecard-v30-streak em{font-style:normal;font-size:10.5px;line-height:1.25;color:#6B6157;font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rk-home-scorecard-v30-main{position:relative;overflow:hidden;cursor:pointer;padding:26px 18px 20px;text-align:center;background:radial-gradient(circle at 50% 8%,rgba(243,212,107,.17),transparent 32%),linear-gradient(150deg,#041F12 0%,#07331E 46%,#0D4A2E 72%,#03170D 100%);color:#fff}.rk-home-scorecard-v30-main:before{content:"";position:absolute;inset:12px;border-radius:24px;border:1px solid rgba(243,212,107,.17);pointer-events:none}.rk-home-scorecard-v30-watermark{position:absolute;right:-12px;bottom:-26px;font-size:128px;opacity:.045;transform:rotate(-8deg);pointer-events:none}.rk-home-scorecard-v30-topline{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}.rk-home-scorecard-v30-kicker{font-size:9px;letter-spacing:2.9px;text-transform:uppercase;font-weight:950;color:rgba(255,255,255,.55);line-height:1.2}.rk-home-scorecard-v30-brand{font-family:'Fraunces',Georgia,serif;font-size:13px;font-weight:950;color:#F3D46B;border:1px solid rgba(243,212,107,.32);background:rgba(255,255,255,.07);border-radius:999px;padding:7px 13px;line-height:1;box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
+.rk-home-scorecard-v30-medal{position:relative;z-index:1;width:150px;height:124px;margin:0 auto 6px;display:flex;align-items:center;justify-content:center}.rk-home-scorecard-v30-score{position:relative;z-index:2;font-family:'Fraunces',Georgia,serif;font-size:92px;line-height:.9;font-weight:950;letter-spacing:-5px;color:#F3D46B;text-shadow:0 9px 22px rgba(0,0,0,.18)}.rk-home-scorecard-v30-scoreglow{position:absolute;inset:0;border-radius:999px;background:radial-gradient(circle,rgba(243,212,107,.24),transparent 66%);filter:blur(2px)}.rk-home-scorecard-v30-rule{position:relative;z-index:1;width:62px;height:2px;border-radius:999px;margin:4px auto 15px;background:linear-gradient(90deg,transparent,#F3D46B,transparent)}.rk-home-scorecard-v30-level{position:relative;z-index:1;margin:0;font-family:'Fraunces',Georgia,serif;font-size:30px;line-height:1.05;font-weight:950;letter-spacing:-.8px;color:#fff}.rk-home-scorecard-v30-style{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;margin:16px auto 14px;border:1px solid rgba(243,212,107,.42);background:rgba(255,255,255,.07);color:#F4E7BE;border-radius:999px;padding:9px 20px;font-size:13px;font-weight:950;box-shadow:inset 0 1px 0 rgba(255,255,255,.10);backdrop-filter:blur(10px)}.rk-home-scorecard-v30-line{position:relative;z-index:1;margin:0 auto;max-width:280px;color:rgba(255,255,255,.74);font-size:14px;line-height:1.55;font-weight:800}
+.rk-home-scorecard-v30-actions{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}.rk-home-scorecard-v30-room{min-width:0;text-align:left;border:1px solid rgba(243,212,107,.32);border-radius:19px;padding:14px 13px;background:rgba(255,255,255,.085);box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 8px 20px rgba(0,0,0,.08);cursor:pointer;color:#fff;transition:transform .16s ease,border-color .16s ease,background .16s ease}.rk-home-scorecard-v30-room:hover{transform:translateY(-1px);border-color:rgba(243,212,107,.52);background:rgba(255,255,255,.11)}.rk-home-scorecard-v30-room:active{transform:scale(.985)}.rk-home-scorecard-v30-room-label{display:block;font-size:8px;letter-spacing:1.9px;text-transform:uppercase;font-weight:950;color:rgba(255,255,255,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rk-home-scorecard-v30-room strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:28px;line-height:1;margin:10px 0 7px;color:#F3D46B;letter-spacing:-.8px}.rk-home-scorecard-v30-room small{display:block;font-size:11px;line-height:1.2;color:rgba(255,255,255,.76);font-weight:950}.rk-home-scorecard-v30-room-club{background:linear-gradient(145deg,rgba(243,212,107,.16),rgba(255,255,255,.07))}
+.rk-home-scorecard-v30-bottom{padding:14px;display:grid;gap:10px;background:linear-gradient(180deg,#FFFDF8,#F6EFE4)}.rk-home-scorecard-v30-share{width:100%;border:1px solid rgba(160,120,40,.20);background:linear-gradient(145deg,#FFF9ED,#F3E8D3);border-radius:18px;padding:14px;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;box-shadow:0 8px 22px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.72)}.rk-home-scorecard-v30-share-icon{width:44px;height:44px;border-radius:16px;background:rgba(160,120,40,.14);border:1px solid rgba(160,120,40,.16);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}.rk-home-scorecard-v30-share div:nth-child(2){flex:1;min-width:0}.rk-home-scorecard-v30-share strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:16px;line-height:1.05;color:#1A1410;font-weight:950}.rk-home-scorecard-v30-share span{display:block;font-size:11.5px;line-height:1.35;color:#6B6157;font-weight:800;margin-top:4px}.rk-home-scorecard-v30-share em{display:block;font-style:normal;font-size:10.5px;color:rgba(26,20,16,.42);font-weight:850;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rk-home-scorecard-v30-share b{color:#A07828;font-size:17px}.rk-home-scorecard-v30-details{width:100%;border:1px solid rgba(23,107,66,.15);border-radius:17px;background:linear-gradient(180deg,#176B42,#0F5432);color:#fff;padding:14px 12px;font-family:'Fraunces',Georgia,serif;font-size:14px;font-weight:950;cursor:pointer;box-shadow:0 10px 22px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.14)}
+@media(max-width:390px){.rk-home-scorecard-v30-main{padding:23px 15px 18px}.rk-home-scorecard-v30-score{font-size:82px}.rk-home-scorecard-v30-level{font-size:27px}.rk-home-scorecard-v30-actions{gap:8px}.rk-home-scorecard-v30-room{padding:12px 11px;border-radius:17px}.rk-home-scorecard-v30-room strong{font-size:25px}.rk-home-scorecard-v30-kicker{letter-spacing:2.2px}.rk-home-scorecard-v30-brand{padding:7px 11px}}
 `;
 
 const S={
@@ -16014,46 +16024,69 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   const StartDaily=()=> <TodayRackPreview/>;
 
-  const CompletedDaily=()=> (
-    <div className="rk-home-section-lg" style={{borderRadius:24,overflow:"hidden",marginBottom:24,background:"#fff",boxShadow:"0 10px 32px rgba(0,0,0,0.08)",border:`1px solid ${C.bdr}`}}>
-      <div className="rk-streak-card" style={{padding:"10px 14px",display:"flex",alignItems:"center",gap:10,background:"linear-gradient(180deg,#FFFDF8 0%,#F7F1E7 100%)",borderBottom:`1px solid ${C.jade}10`}}>
-        <div style={{width:31,height:31,borderRadius:11,background:C.gold+"16",border:`1px solid ${C.gold}28`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>🔥</div>
-        <div className="rk-streak-copy" style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:12,fontWeight:900,color:C.ink,lineHeight:1.25,letterSpacing:-0.1}}>{streakTitle}</div>
-          <div style={{fontSize:10.5,color:C.jade,marginTop:2,lineHeight:1.3,fontStyle:"italic",fontWeight:750}}>{streakSub}</div>
-        </div>
-      </div>
-      <div role="button" tabIndex={0} onClick={showScorecard} onKeyDown={(e)=>{if(e.key==="Enter"||e.key===" ")showScorecard();}} style={{width:"100%",border:"none",background:`linear-gradient(150deg,${C.hero1},${C.hero2} 58%,${C.hero3})`,cursor:"pointer",padding:"30px 20px 24px",textAlign:"center",position:"relative",overflow:"hidden"}}>
-        <div aria-hidden style={{position:"absolute",right:-12,bottom:-20,fontSize:116,opacity:0.04}}>🀄</div>
-        <div style={{fontSize:10,color:"rgba(255,255,255,0.45)",letterSpacing:3.5,fontWeight:900,marginBottom:12}}>DAILY RACKLE · #{dn}</div>
-        <div className="rk-pop" style={{fontFamily:F.d,fontSize:76,fontWeight:900,color:brightScoreColor,letterSpacing:-3.6,lineHeight:0.92}}>{iq?.totalScore||dRes?.rating||"✓"}</div>
-        <div style={{width:56,height:2,background:`linear-gradient(90deg,transparent,${brightScoreColor},transparent)`,margin:"18px auto 16px",borderRadius:2}}/>
-        <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:"#fff",lineHeight:1.08,marginBottom:iq?.styleName?14:12}}>{iq?.level||"Daily complete"}</div>
-        {iq?.styleName&&<div style={{display:"inline-flex",alignItems:"center",gap:5,border:`1px solid ${brightScoreColor}66`,background:"rgba(255,255,255,.08)",borderRadius:999,padding:"7px 14px",fontSize:11,fontWeight:900,color:"#EED89B",backdropFilter:"blur(10px)",marginBottom:16}}>{iq.styleName}</div>}
-        <div style={{fontSize:13,color:"rgba(255,255,255,0.76)",lineHeight:1.5,maxWidth:280,margin:"0 auto"}}>{levelLine}</div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:24,textAlign:"left"}}>
-          <button onClick={goGlobalRank} style={{border:"none",padding:0,background:"transparent",cursor:"pointer",textAlign:"left"}} aria-label="View global leaderboard">
-            <MiniStat value={`#${Math.min(todayPlayers,Math.max(1,todayPlayers-1))}`} label="GLOBAL RANK" accent={brightScoreColor}/>
-          </button>
-          <button onClick={goClubRank} style={{border:"none",padding:0,background:"transparent",cursor:"pointer",textAlign:"left"}} aria-label={club?"View club leaderboard":"Browse club directory"}>
-            <MiniStat value={club?(shownClubRank?`#${shownClubRank}`:(hasClubScore?"live":"club")):"join"} label="CLUB RANK" accent={shownClubRank===1?brightScoreColor:undefined}/>
-          </button>
-        </div>
-      </div>
-      <div style={{padding:16,display:"grid",gap:12}}>
-        <button onClick={copyShare} className={`rk-share-card ${shareCopied?"rk-copied-state":""}`} style={{width:"100%",border:`1px solid ${C.gold}25`,background:`linear-gradient(135deg,#FFF9ED,#F7EFE0)`,borderRadius:14,padding:"14px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left",boxShadow:"0 4px 14px rgba(0,0,0,.025)"}}>
-          <div className="rk-share-icon" style={{width:48,height:48,borderRadius:14,background:C.gold+"14",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20}}>📲</div>
-          <div style={{flex:1}}><div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.12,letterSpacing:-.35}}>{shareCopied?"Copied for your club":"Challenge Your Club"}</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>{shareCopied?"Drop it in your group chat":"Tap to copy · Drop it in your group chat"}</div><div style={{display:"flex",alignItems:"center",gap:8,marginTop:6}}>{clubAvatarCount>0&&<span className="rk-mini-avatars">{Array.from({length:clubAvatarCount}).map((_,i)=><span key={i} className="rk-mini-avatar" style={i%2?{background:C.jade+"44"}:undefined}/>)}</span>}<span style={{fontSize:10.5,color:C.mut,fontWeight:700}}>{clubActivityText}</span></div></div>
-          <span style={{fontSize:18,color:C.gold}}>›</span>
+  const CompletedDaily=()=> {
+    const scoreValue=iq?.totalScore||dRes?.rating||"✓";
+    const globalRank=`#${Math.min(todayPlayers,Math.max(1,todayPlayers-1))}`;
+    const clubRank=club?(shownClubRank?`#${shownClubRank}`:(hasClubScore?"live":"club")):"join";
+    const clubButtonLabel=club?"View Club":"Join Club";
+    return(
+    <div className="rk-home-scorecard-v30 rk-home-section-lg">
+      {streak>0&&(
+        <button onClick={()=>setScreen("stats")} className="rk-home-scorecard-v30-streak" aria-label="View streak stats">
+          <span>🔥</span>
+          <strong>{streak}d streak</strong>
+          <em>{streakTitle}</em>
         </button>
-        <button onClick={showScorecard} className="rk-home-improve-card" style={{width:"100%",borderRadius:14,padding:"13px 14px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",textAlign:"left",position:"relative"}}>
-          <div className="rk-home-improve-icon" style={{width:39,height:39,borderRadius:12,background:C.jade+"13",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>🎓</div>
-          <div style={{flex:1,position:"relative",zIndex:1}}><div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.12,letterSpacing:-.35}}>Improve Your Game</div><div style={{fontSize:11,color:C.mut,marginTop:3}}>Free play · More hands · Coach view</div></div>
-          <span style={{fontSize:18,color:C.gold,position:"relative",zIndex:1}}>›</span>
+      )}
+
+      <div role="button" tabIndex={0} onClick={showScorecard} onKeyDown={(e)=>{if(e.key==="Enter"||e.key===" ")showScorecard();}} className="rk-home-scorecard-v30-main" aria-label="Open your Rackle scorecard">
+        <div className="rk-home-scorecard-v30-watermark" aria-hidden="true">🀄</div>
+        <div className="rk-home-scorecard-v30-topline">
+          <span className="rk-home-scorecard-v30-kicker">Daily Rackle · #{dn}</span>
+          <span className="rk-home-scorecard-v30-brand">Rackle</span>
+        </div>
+
+        <div className="rk-home-scorecard-v30-medal">
+          <div className="rk-home-scorecard-v30-score rk-pop">{scoreValue}</div>
+          <div className="rk-home-scorecard-v30-scoreglow" aria-hidden="true" />
+        </div>
+
+        <div className="rk-home-scorecard-v30-rule" />
+        <h2 className="rk-home-scorecard-v30-level">{iq?.level||"Daily complete"}</h2>
+        {iq?.styleName&&<div className="rk-home-scorecard-v30-style">{iq.styleName}</div>}
+        <p className="rk-home-scorecard-v30-line">{levelLine}</p>
+
+        <div className="rk-home-scorecard-v30-actions">
+          <button onClick={goGlobalRank} className="rk-home-scorecard-v30-room" aria-label="View global leaderboard">
+            <span className="rk-home-scorecard-v30-room-label">Global room</span>
+            <strong>{globalRank}</strong>
+            <small>View global →</small>
+          </button>
+          <button onClick={goClubRank} className="rk-home-scorecard-v30-room rk-home-scorecard-v30-room-club" aria-label={club?"View club leaderboard":"Browse club directory"}>
+            <span className="rk-home-scorecard-v30-room-label">{club?.name||"Club room"}</span>
+            <strong>{clubRank}</strong>
+            <small>{clubButtonLabel} →</small>
+          </button>
+        </div>
+      </div>
+
+      <div className="rk-home-scorecard-v30-bottom">
+        <button onClick={copyShare} className={`rk-share-card rk-home-scorecard-v30-share ${shareCopied?"rk-copied-state":""}`}>
+          <div className="rk-home-scorecard-v30-share-icon">{shareCopied?"✓":"📲"}</div>
+          <div>
+            <strong>{shareCopied?"Copied for your club":"Share your score"}</strong>
+            <span>{shareCopied?"Paste it into your group chat":"Send the scorecard to your table"}</span>
+            <em>{clubActivityText}</em>
+          </div>
+          <b>→</b>
+        </button>
+        <button onClick={showScorecard} className="rk-home-scorecard-v30-details">
+          Open full scorecard →
         </button>
       </div>
     </div>
   );
+  };
 
   const TomorrowTease=()=> {
     const resetLabel=getTimeUntilMidnightLabel();
