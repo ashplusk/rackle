@@ -10970,6 +10970,67 @@ html,body,#root{background:var(--rk-ivory)!important;}
   .rk-freeplay-v24-top,.rk-freeplay-v40-top,.rk-share-score-v6{grid-template-columns:1fr!important;}
   .rk-freeplay-v24-steps,.rk-freeplay-v40-steps,.rk-learn-home-grid,.rk-learn-home-v18-grid{grid-template-columns:1fr!important;}
 }
+
+
+/* ─── v45: Daily + Practice scorecards match homepage scorecard style ─── */
+.rk-daily-scorecard-homeclone-v45,
+.rk-practice-homeclone-v45{
+  margin:8px 0 16px!important;
+}
+.rk-daily-scorecard-homeclone-v45-main,
+.rk-practice-homeclone-v45-main{
+  border-radius:30px!important;
+  padding:30px 22px 22px!important;
+  min-height:auto!important;
+}
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-kicker,
+.rk-practice-homeclone-v45 .rk-home-scorecard-v41-kicker{
+  margin-bottom:18px!important;
+}
+.rk-daily-scorecard-homeclone-v45-score-row,
+.rk-practice-homeclone-v45-score-row{
+  align-items:flex-end!important;
+  gap:18px!important;
+}
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score,
+.rk-practice-homeclone-v45 .rk-home-scorecard-v41-score{
+  font-size:88px!important;
+  line-height:.88!important;
+}
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score-label,
+.rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-label{
+  margin-left:2px!important;
+}
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-style,
+.rk-practice-homeclone-v45 .rk-home-scorecard-v41-style{
+  margin:0 0 10px!important;
+  white-space:nowrap!important;
+}
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-title,
+.rk-practice-homeclone-v45 .rk-home-scorecard-v41-title{
+  margin-top:27px!important;
+  margin-bottom:12px!important;
+}
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-copy,
+.rk-practice-homeclone-v45 .rk-home-scorecard-v41-copy{
+  white-space:normal!important;
+  max-width:29ch!important;
+}
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-actions,
+.rk-practice-homeclone-v45 .rk-home-scorecard-v41-actions{
+  margin-top:22px!important;
+}
+.rk-daily-scorecard-homeclone-v45 + .rk-score-club-room-v20{
+  margin-top:2px!important;
+}
+@media(max-width:390px){
+  .rk-daily-scorecard-homeclone-v45-main,
+  .rk-practice-homeclone-v45-main{padding:28px 20px 20px!important;border-radius:28px!important}
+  .rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score,
+  .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score{font-size:78px!important}
+  .rk-daily-scorecard-homeclone-v45-score-row,
+  .rk-practice-homeclone-v45-score-row{gap:12px!important}
+}
 `;
 
 const S={
@@ -18040,31 +18101,40 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
   return(
     <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26" style={{paddingBottom:32}}>
-      <div style={{textAlign:"center",margin:"8px 0 16px"}}>
-        <div className="rk-scorecard-title-v26">Daily Rackle #{dayNum}</div>
-        <h1 className="rk-scorecard-heading-v26">Daily Scorecard</h1>
-        <div style={{fontSize:12,lineHeight:1.45,color:C.mut,fontWeight:750,marginTop:6}}>Your score, your room rank, and one quick table read.</div>
-      </div>
-
-      <div className="rk-iq-hero rk-sweep" style={{padding:"28px 22px 22px",borderRadius:28,marginBottom:14}}>
-        <div className="rk-iq-glow"/>
-        <div className="rk-scorecard-stamp-v26">R</div>
-        <div style={{position:"relative",zIndex:2,textAlign:"center"}}>
-          <div style={{fontSize:10,letterSpacing:2.8,textTransform:"uppercase",fontWeight:950,color:"rgba(255,255,255,.52)",marginBottom:10}}>Rackle IQ</div>
-          <div className="rk-score-tick-up-v43" style={{fontFamily:F.d,fontSize:88,lineHeight:.86,fontWeight:950,letterSpacing:-4,color:"#F3D46B",marginBottom:14}}>{animatedScore}</div>
-          <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:7,border:`1px solid rgba(243,212,107,.38)`,background:"rgba(255,255,255,.08)",borderRadius:999,padding:"7px 14px",color:"#F3D46B",fontSize:12,fontWeight:950,marginBottom:14}}>
-            <span>{scoreLabel}</span>
-            <span style={{opacity:.5}}>·</span>
-            <span>{iq.level}</span>
+      <section className="rk-daily-scorecard-homeclone-v45 rk-home-scorecard-v41" aria-label="Daily Rackle scorecard">
+        <div className="rk-home-scorecard-v41-main rk-daily-scorecard-homeclone-v45-main">
+          <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
+          <div className="rk-home-scorecard-v41-kicker"><span/> Daily Rackle Scorecard · #{dayNum}</div>
+          <div className="rk-home-scorecard-v41-score-row rk-daily-scorecard-homeclone-v45-score-row">
+            <div>
+              <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43">{animatedScore}</div>
+              <div className="rk-home-scorecard-v41-score-label">Rackle IQ</div>
+            </div>
+            {(iq.styleName||scoreLabel)&&(
+              <button type="button" onClick={()=>setScreen&&setScreen("styleGlossary")} className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next rk-style-pill-clickable" aria-label={`Learn what ${iq.styleName||scoreLabel} means`}>
+                {iq.styleName||scoreLabel}
+              </button>
+            )}
           </div>
-          <div style={{fontSize:14,lineHeight:1.45,color:"rgba(255,255,255,.78)",fontWeight:750,maxWidth:290,margin:"0 auto"}}>{quickRead}</div>
-          {rankLine&&<div style={{fontSize:11,lineHeight:1.35,color:"rgba(255,255,255,.58)",fontWeight:800,marginTop:12}}>{rankLine}</div>}
+          <div className="rk-home-scorecard-v41-title">{iq.level||scoreLabel}</div>
+          <p className="rk-home-scorecard-v41-copy">{quickRead}</p>
+
+          <div className="rk-home-scorecard-v41-actions" aria-label="Scorecard rooms">
+            <button type="button" onClick={()=>setScreen&&setScreen("globalLeaderboard")} aria-label="View global leaderboard">
+              <span>Global room</span>
+              <strong>{globalRank?`#${globalRank}`:"—"}</strong>
+              <em>View global →</em>
+            </button>
+            <button type="button" onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")} aria-label={clubCode?"View club leaderboard":"Find a club"}>
+              <span>{affiliatedClubName||"Club room"}</span>
+              <strong>{clubRank?`#${clubRank}`:(clubCode?"live":"join")}</strong>
+              <em>{clubCode?"View club →":"Find club →"}</em>
+            </button>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* vNext: removed achievement strip above room buttons. Global, Club, and Time remain below as tappable scorecard controls. */}
-
-      {/* vNext: removed duplicate scorecard stat buttons. Club/global access now lives in the room card and homepage scorecard. */}
+      {/* v45: Daily scorecard now uses the same achievement-card format as the homepage scorecard. */}
 
       <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"globalLeaderboard")} className="rk-score-club-room-v20" style={{width:"100%",appearance:"none",fontFamily:F.b,cursor:"pointer"}}>
         <span className="rk-score-club-room-v20-main">
@@ -18196,23 +18266,33 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
 
   return(
     <div className="rk-score-shell rk-practice-v9-shell">
-      <div className="rk-practice-v9-hero">
-        <div className="rk-practice-v9-kicker"><span className="rk-live-spark"/> Practice scorecard</div>
-        <div className="rk-practice-v9-score-row">
-          <div>
-            <div className="rk-practice-v9-score">{score}</div>
-            <div className="rk-practice-v9-label">Charleston IQ</div>
+      <section className="rk-practice-homeclone-v45 rk-home-scorecard-v41" aria-label="Practice Rackle scorecard">
+        <div className="rk-home-scorecard-v41-main rk-practice-homeclone-v45-main">
+          <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
+          <div className="rk-home-scorecard-v41-kicker"><span/> Practice Rackle Scorecard</div>
+          <div className="rk-home-scorecard-v41-score-row rk-practice-homeclone-v45-score-row">
+            <div>
+              <div className="rk-home-scorecard-v41-score">{score}</div>
+              <div className="rk-home-scorecard-v41-score-label">Rackle IQ</div>
+            </div>
+            {styled?.styleName&&<div className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next">{styled.styleName}</div>}
           </div>
-          <div>
-            <h2 className="rk-practice-v9-title">{level}</h2>
-            <p className="rk-practice-v9-copy">One clearer pass can change the whole rack.</p>
+          <div className="rk-home-scorecard-v41-title">{level}</div>
+          <p className="rk-home-scorecard-v41-copy">One clearer pass can change the whole rack.</p>
+          <div className="rk-home-scorecard-v41-actions rk-practice-homeclone-v45-actions">
+            <button type="button" onClick={onDealAgain}>
+              <span>Practice room</span>
+              <strong>Again</strong>
+              <em>Play another rack →</em>
+            </button>
+            <button type="button" onClick={onHome}>
+              <span>Clubhouse</span>
+              <strong>Home</strong>
+              <em>Back to Rackle →</em>
+            </button>
           </div>
         </div>
-        <div className="rk-practice-v9-actions">
-          <button className="rk-practice-v9-primary" onClick={onDealAgain}>Play another rack →</button>
-          <button className="rk-practice-v9-secondary" onClick={onHome}>Back to clubhouse</button>
-        </div>
-      </div>
+      </section>
 
       <StrategicCharlestonReadCard iq={iq}/>
 
