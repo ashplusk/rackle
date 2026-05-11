@@ -5367,6 +5367,310 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
 .rk-room-feed-v40{display:grid!important;gap:8px!important;position:relative;z-index:1;}
 .rk-room-feed-item-v40{display:grid!important;grid-template-columns:10px minmax(0,1fr)!important;gap:9px!important;align-items:start!important;padding:10px 11px!important;border-radius:16px!important;background:rgba(255,255,255,.64)!important;border:1px solid rgba(26,20,16,.055)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.75)!important;font-size:12px!important;line-height:1.45!important;color:rgba(26,20,16,.68)!important;font-weight:800!important;}
 .rk-room-feed-dot{width:8px!important;height:8px!important;margin-top:5px!important;border-radius:999px!important;background:#176B42!important;box-shadow:0 0 0 4px rgba(23,107,66,.08)!important;}
+
+/* ─── vNext: homepage premium spacing polish ───────────────────────────── */
+.rk-email-home-v8.rk-email-home-v19{
+  position:relative!important;
+  overflow:hidden!important;
+  margin-top:24px!important;
+  margin-bottom:28px!important;
+  padding:22px 20px 20px!important;
+  border-radius:30px!important;
+  background:
+    radial-gradient(circle at 88% 18%,rgba(243,212,107,.16),transparent 32%),
+    linear-gradient(145deg,#FFFDF8 0%,#F5EFE4 100%)!important;
+  border:1px solid rgba(160,120,40,.16)!important;
+  box-shadow:0 14px 38px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.84)!important;
+}
+.rk-email-home-v8.rk-email-home-v19:after{
+  content:'🀄';
+  position:absolute;
+  right:-10px;
+  bottom:-22px;
+  font-size:92px;
+  opacity:.035;
+  transform:rotate(-7deg);
+  pointer-events:none;
+}
+.rk-email-kicker-v8.rk-email-kicker-v18{
+  display:inline-flex!important;
+  align-items:center!important;
+  width:auto!important;
+  margin:0 0 14px!important;
+  padding:7px 12px!important;
+  border-radius:999px!important;
+  background:rgba(23,107,66,.07)!important;
+  border:1px solid rgba(23,107,66,.11)!important;
+  color:#176B42!important;
+  letter-spacing:2.2px!important;
+  line-height:1!important;
+}
+.rk-email-title-v8{
+  margin-top:0!important;
+  margin-bottom:9px!important;
+  font-size:24px!important;
+  line-height:1.06!important;
+  letter-spacing:-.55px!important;
+}
+.rk-email-copy-v8{
+  margin-top:0!important;
+  margin-bottom:16px!important;
+  line-height:1.52!important;
+  max-width:34ch!important;
+}
+.rk-email-form-v8{
+  position:relative!important;
+  z-index:1!important;
+  gap:9px!important;
+}
+.rk-email-input-v8{
+  min-height:46px!important;
+  border-radius:16px!important;
+  background:rgba(255,255,255,.72)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-email-btn-v8{
+  min-height:46px!important;
+  border-radius:16px!important;
+  background:linear-gradient(135deg,#176B42,#0F5432)!important;
+  border:1px solid rgba(243,212,107,.20)!important;
+  box-shadow:0 9px 20px rgba(23,107,66,.15),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+
+/* tighten and elevate homepage flow */
+.rk-startup-hero-v4{
+  padding-bottom:10px!important;
+  margin-bottom:12px!important;
+}
+.rk-startup-subtitle-v4{
+  margin-bottom:5px!important;
+}
+.rk-daily-entry-v6,
+.rk-daily-entry-v21,
+.rk-daily-entry-v35{
+  margin-top:12px!important;
+  box-shadow:0 18px 48px rgba(26,20,16,.08),inset 0 1px 0 rgba(255,255,255,.86)!important;
+}
+.rk-daily-entry-v6:before,
+.rk-daily-entry-v21:before,
+.rk-daily-entry-v35:before{
+  opacity:.72!important;
+}
+.rk-daily-entry-v6 h2,
+.rk-daily-entry-v21 h2,
+.rk-daily-entry-v35 h2{
+  letter-spacing:-.9px!important;
+}
+.rk-daily-entry-v6 p,
+.rk-daily-entry-v21 p,
+.rk-daily-entry-v35 p{
+  line-height:1.5!important;
+}
+
+/* make section cards feel consistently premium */
+.rk-tomorrow-card-v11,
+.rk-room-live-v19,
+.rk-freeplay-v24,
+.rk-learn-home-v19,
+.rk-email-home-v19{
+  transform:translateZ(0);
+}
+.rk-room-live-v19,
+.rk-freeplay-v24,
+.rk-learn-home-v19{
+  box-shadow:0 16px 42px rgba(26,20,16,.065),inset 0 1px 0 rgba(255,255,255,.08)!important;
+}
+.rk-tomorrow-card-v11{
+  box-shadow:0 16px 42px rgba(40,20,55,.14),inset 0 1px 0 rgba(255,255,255,.10)!important;
+}
+.rk-room-live-v19 .rk-room-live-v6-title,
+.rk-freeplay-v24 h2,
+.rk-learn-home-v18-title{
+  text-wrap:balance;
+}
+.rk-room-live-v19 .rk-room-live-v6-copy,
+.rk-freeplay-v24 p,
+.rk-learn-home-v18-copy{
+  line-height:1.52!important;
+}
+
+/* small interaction polish */
+.rk-room-live-v17-actions button,
+.rk-freeplay-v24-cta,
+.rk-daily-entry-v6 button,
+.rk-daily-entry-v21 button,
+.rk-daily-entry-v35 button{
+  transition:transform .16s ease,box-shadow .16s ease,filter .16s ease!important;
+}
+.rk-room-live-v17-actions button:hover,
+.rk-freeplay-v24-cta:hover,
+.rk-daily-entry-v6 button:hover,
+.rk-daily-entry-v21 button:hover,
+.rk-daily-entry-v35 button:hover{
+  transform:translateY(-1px)!important;
+  filter:brightness(1.02)!important;
+}
+.rk-room-live-v17-actions button:active,
+.rk-freeplay-v24-cta:active,
+.rk-daily-entry-v6 button:active,
+.rk-daily-entry-v21 button:active,
+.rk-daily-entry-v35 button:active{
+  transform:scale(.988)!important;
+}
+
+@media(max-width:390px){
+  .rk-email-home-v8.rk-email-home-v19{
+    margin-top:22px!important;
+    padding:20px 18px 18px!important;
+    border-radius:28px!important;
+  }
+  .rk-email-title-v8{font-size:23px!important;line-height:1.08!important}
+  .rk-email-form-v8{grid-template-columns:1fr!important}
+  .rk-email-btn-v8{width:100%!important}
+}
+
+
+/* ─── v41: homepage header pulse + How To Play daily ritual polish ─────── */
+.rk-startup-hero-v4{
+  padding-bottom:14px!important;
+  margin-bottom:16px!important;
+}
+.rk-startup-subtitle-v4{
+  margin-bottom:10px!important;
+}
+.rk-startup-pulse-pill-v41{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin:2px auto 0;
+  padding:8px 14px;
+  border-radius:999px;
+  background:linear-gradient(145deg,#FFFDF8 0%,#F3EBDD 100%);
+  border:1px solid rgba(160,120,40,.16);
+  box-shadow:0 8px 20px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82);
+  color:#176B42;
+  font-size:11.5px;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:.2px;
+}
+.rk-startup-pulse-pill-v41 span{
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:#54D989;
+  box-shadow:0 0 0 5px rgba(84,217,137,.14),0 0 16px rgba(84,217,137,.32);
+}
+.rk-howto-v40-card:first-of-type{
+  position:relative!important;
+  overflow:hidden!important;
+  padding:18px!important;
+  border-radius:28px!important;
+  background:
+    radial-gradient(circle at 92% 4%,rgba(23,107,66,.08),transparent 32%),
+    linear-gradient(145deg,#FFFDF8 0%,#F5EFE4 100%)!important;
+  border:1px solid rgba(160,120,40,.14)!important;
+  box-shadow:0 14px 34px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-howto-v40-card:first-of-type .rk-howto-v40-card-head{
+  display:block!important;
+  margin-bottom:16px!important;
+  padding-bottom:12px!important;
+  border-bottom:1px solid rgba(26,20,16,.065)!important;
+}
+.rk-howto-v40-card:first-of-type .rk-howto-v40-card-head span{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  width:fit-content!important;
+  margin-bottom:9px!important;
+  padding:6px 10px!important;
+  border-radius:999px!important;
+  background:rgba(23,107,66,.07)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  color:#176B42!important;
+  font-size:8px!important;
+  letter-spacing:2px!important;
+  line-height:1!important;
+}
+.rk-howto-v40-card:first-of-type .rk-howto-v40-card-head span:before{
+  content:"";
+  width:7px;
+  height:7px;
+  border-radius:999px;
+  background:#176B42;
+  box-shadow:0 0 0 4px rgba(23,107,66,.08);
+}
+.rk-howto-v40-card:first-of-type .rk-howto-v40-card-head h2{
+  font-size:25px!important;
+  line-height:1.04!important;
+  letter-spacing:-.75px!important;
+  max-width:12ch!important;
+}
+.rk-howto-v40-card:first-of-type .rk-howto-v40-steps{
+  position:relative!important;
+  gap:9px!important;
+}
+.rk-howto-v40-card:first-of-type .rk-howto-v40-steps:before{
+  content:"";
+  position:absolute;
+  left:25px;
+  top:24px;
+  bottom:24px;
+  width:1px;
+  background:linear-gradient(180deg,rgba(23,107,66,.0),rgba(23,107,66,.22),rgba(23,107,66,.0));
+  pointer-events:none;
+}
+.rk-howto-v40-card:first-of-type .rk-howto-v40-step{
+  position:relative!important;
+  grid-template-columns:50px minmax(0,1fr)!important;
+  gap:12px!important;
+  padding:13px 13px 13px 12px!important;
+  border-radius:20px!important;
+  background:rgba(255,255,255,.72)!important;
+  border:1px solid rgba(26,20,16,.06)!important;
+  box-shadow:0 6px 16px rgba(26,20,16,.025),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-howto-v40-card:first-of-type .rk-howto-v40-num{
+  position:relative!important;
+  z-index:2!important;
+  width:42px!important;
+  height:42px!important;
+  border-radius:15px!important;
+  background:linear-gradient(145deg,#176B42,#0F5432)!important;
+  color:#fff!important;
+  box-shadow:0 7px 15px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+.rk-howto-v40-card:first-of-type .rk-howto-v40-step em{
+  display:inline-flex!important;
+  margin-bottom:5px!important;
+  padding:4px 7px!important;
+  border-radius:999px!important;
+  background:rgba(160,120,40,.08)!important;
+  color:#A07828!important;
+  font-size:7.5px!important;
+  line-height:1!important;
+}
+.rk-howto-v40-card:first-of-type .rk-howto-v40-step h3{
+  font-size:18px!important;
+  line-height:1.12!important;
+  margin:0 0 6px!important;
+}
+.rk-howto-v40-card:first-of-type .rk-howto-v40-step p{
+  font-size:12.3px!important;
+  line-height:1.58!important;
+  color:rgba(26,20,16,.62)!important;
+}
+@media(max-width:390px){
+  .rk-startup-pulse-pill-v41{font-size:10.8px;padding:7px 12px;margin-top:1px}
+  .rk-howto-v40-card:first-of-type{padding:16px!important;border-radius:26px!important}
+  .rk-howto-v40-card:first-of-type .rk-howto-v40-card-head h2{font-size:23px!important;max-width:13ch!important}
+  .rk-howto-v40-card:first-of-type .rk-howto-v40-step{grid-template-columns:46px minmax(0,1fr)!important;padding:12px!important}
+  .rk-howto-v40-card:first-of-type .rk-howto-v40-steps:before{left:23px!important}
+}
+
 `;
 
 const S={
@@ -15666,6 +15970,9 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div className="rk-startup-mark-v4 rk-float">🀄</div>
         <h1 className="rk-startup-logo-v4">Rackle</h1>
         <p className="rk-startup-subtitle-v4">The Daily Mahjong Workout</p>
+        <div className="rk-startup-pulse-pill-v41" aria-label="Today’s Rackle status">
+          <span></span> Today’s room is open
+        </div>
         <p className="rk-startup-description-v4 rk-startup-description-hidden" aria-hidden="true"></p>
       </div>
     );
