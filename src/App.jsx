@@ -8393,6 +8393,212 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   .rk-room-row-rank-v50{width:34px!important;height:34px!important;border-radius:13px!important}
   .rk-room-row-score{font-size:23px!important}
 }
+
+
+/* ─── vTablet Hard Reset: polished iPad portrait + landscape shell ────────
+   Keep tablet layouts stable for now. Do not use desktop rails or dashboards
+   on iPad until the desktop experience is rebuilt separately. */
+@media (min-width:768px) and (max-width:1180px){
+  html,
+  body,
+  #root{
+    width:100%!important;
+    min-height:100%!important;
+    overflow-x:hidden!important;
+    background:
+      radial-gradient(circle at 50% -140px,rgba(255,253,248,.92) 0%,rgba(248,244,238,.92) 38%,rgba(237,231,218,.72) 100%),
+      #F8F4EE!important;
+  }
+  .rk-outer{
+    width:100%!important;
+    min-height:100vh!important;
+    padding:26px 0 34px!important;
+    display:flex!important;
+    justify-content:center!important;
+    align-items:flex-start!important;
+    background:transparent!important;
+  }
+  .rk-app{
+    width:min(500px,calc(100vw - 64px))!important;
+    max-width:500px!important;
+    min-width:0!important;
+    min-height:calc(100vh - 60px)!important;
+    margin:0 auto!important;
+    border-radius:32px!important;
+    overflow:hidden!important;
+    border:1px solid rgba(26,20,16,.075)!important;
+    background:#F8F4EE!important;
+    box-shadow:
+      0 24px 80px rgba(26,20,16,.16),
+      0 0 0 1px rgba(255,255,255,.72) inset!important;
+  }
+  .rk-pg{
+    width:100%!important;
+    max-width:500px!important;
+    margin:0 auto!important;
+    padding:24px 26px 64px!important;
+    background:#F8F4EE!important;
+  }
+
+  /* Kill all desktop/grid experiments on iPad. */
+  .rk-home-landing-flow,
+  .rk-home-main-col,
+  .rk-home-side-rail,
+  .rk-desktop-main,
+  .rk-desktop-rail,
+  .rk-desktop-grid,
+  .rk-home-dashboard,
+  .rk-home-grid,
+  .rk-home-desktop-grid,
+  .rk-desktop-layout,
+  .rk-desktop-shell{
+    display:flex!important;
+    flex-direction:column!important;
+    width:100%!important;
+    max-width:100%!important;
+    grid-template-columns:1fr!important;
+    gap:0!important;
+  }
+  .rk-home-side-rail,
+  .rk-desktop-rail,
+  .rk-home-landing-flow > *,
+  .rk-home-main-col > *,
+  .rk-home-grid > *{
+    position:static!important;
+    top:auto!important;
+    grid-column:auto!important;
+    grid-row:auto!important;
+    width:100%!important;
+    max-width:100%!important;
+  }
+
+  /* Tablet spacing should feel roomy without becoming desktop. */
+  .rk-startup-hero-v4,
+  .rk-startup-hero-v42,
+  .rk-home-ritual-hero{
+    width:100%!important;
+    max-width:100%!important;
+    margin:0 auto 20px!important;
+    padding:18px 12px 12px!important;
+    text-align:center!important;
+  }
+  .rk-startup-logo-v4,
+  .rk-startup-hero-v42 .rk-startup-logo-v4,
+  .rk-home-ritual-hero .rk-hero-logo{
+    font-family:'Fraunces',Georgia,serif!important;
+    font-weight:900!important;
+    font-variation-settings:'wght' 900!important;
+    color:#1A1410!important;
+    font-size:clamp(58px,8vw,76px)!important;
+    line-height:.9!important;
+    letter-spacing:-2.8px!important;
+    text-shadow:none!important;
+  }
+  .rk-startup-subtitle-v4{font-size:18px!important;line-height:1.2!important;margin-top:8px!important;margin-bottom:13px!important;}
+  .rk-startup-pulse-pill-v41,
+  .rk-startup-pulse-pill-v42,
+  .rk-startup-live-note-v34{
+    margin-top:12px!important;
+    margin-bottom:8px!important;
+  }
+
+  .rk-daily-entry-v6,
+  .rk-daily-entry-v21,
+  .rk-daily-entry-v35,
+  .rk-home-scorecard-v30,
+  .rk-tomorrow-card-v11,
+  .rk-room-live-v19,
+  .rk-freeplay-v24,
+  .rk-freeplay-v27,
+  .rk-freeplay-v35,
+  .rk-learn-home-v8,
+  .rk-learn-home-v12,
+  .rk-learn-home-v18,
+  .rk-learn-home-v19,
+  .rk-share-score-v6,
+  .rk-email-home-v8,
+  .rk-email-home-v19,
+  .rk-score-shell,
+  .rk-game-shell,
+  .rk-room-page,
+  .rk-howto-v40,
+  .rk-browser-v40{
+    width:100%!important;
+    max-width:100%!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+  .rk-daily-entry-v6,
+  .rk-daily-entry-v21,
+  .rk-daily-entry-v35,
+  .rk-home-scorecard-v30,
+  .rk-tomorrow-card-v11,
+  .rk-room-live-v19,
+  .rk-freeplay-v24,
+  .rk-learn-home-v19,
+  .rk-share-score-v6,
+  .rk-email-home-v8,
+  .rk-email-home-v19{
+    border-radius:30px!important;
+    box-shadow:0 18px 48px rgba(26,20,16,.075),inset 0 1px 0 rgba(255,255,255,.82)!important;
+  }
+
+  /* Game and score pages should not stretch or split. */
+  .rk-game-shell,
+  .rk-score-shell,
+  .rk-scorecard-premium-v26,
+  .rk-practice-v9-shell{
+    max-width:448px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+  .rk-rack,
+  .rk-rack-wrap,
+  .rk-tile-row{
+    max-width:100%!important;
+  }
+}
+
+@media (min-width:900px) and (max-width:1180px) and (orientation:landscape){
+  .rk-outer{
+    padding:22px 0!important;
+  }
+  .rk-app{
+    width:min(520px,calc(100vw - 80px))!important;
+    max-width:520px!important;
+    min-height:calc(100vh - 44px)!important;
+    border-radius:30px!important;
+  }
+  .rk-pg{
+    max-width:520px!important;
+    padding:22px 28px 58px!important;
+  }
+  .rk-startup-hero-v4,
+  .rk-startup-hero-v42{
+    padding-top:12px!important;
+    margin-bottom:18px!important;
+  }
+  .rk-startup-logo-v4,
+  .rk-startup-hero-v42 .rk-startup-logo-v4{
+    font-size:64px!important;
+  }
+  .rk-daily-entry-v6,
+  .rk-daily-entry-v21,
+  .rk-daily-entry-v35{
+    padding-top:30px!important;
+    padding-bottom:28px!important;
+  }
+}
+
+@media (min-width:768px) and (max-width:899px) and (orientation:portrait){
+  .rk-app{
+    width:min(500px,calc(100vw - 56px))!important;
+    max-width:500px!important;
+  }
+  .rk-pg{
+    padding:26px 28px 64px!important;
+  }
+}
 `;
 
 const S={
