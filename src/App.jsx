@@ -8833,6 +8833,152 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   font-weight:950;
   cursor:pointer;
 }
+
+
+/* ─── v54: style glossary expansion + leaderboard action polish ───────── */
+.rk-home-scorecard-v42-style-next,
+.rk-home-scorecard-v41-style.rk-home-scorecard-v42-style-next{
+  margin-left:22px!important;
+  transform:translateY(-2px)!important;
+}
+@media(max-width:390px){
+  .rk-home-scorecard-v42-style-next,
+  .rk-home-scorecard-v41-style.rk-home-scorecard-v42-style-next{
+    margin-left:20px!important;
+    transform:translateY(-2px)!important;
+  }
+}
+.rk-style-pill-clickable{cursor:pointer!important}
+.rk-style-pill-clickable:after{content:'Learn style';font-size:8px;letter-spacing:1.1px;text-transform:uppercase;margin-left:8px;opacity:.62;color:inherit;font-weight:950}
+@media(max-width:390px){.rk-style-pill-clickable:after{content:'';margin-left:0}}
+
+.rk-room-leader{
+  grid-template-columns:56px minmax(0,1fr) auto!important;
+  gap:14px!important;
+  align-items:center!important;
+}
+.rk-room-leader-copy{min-width:0!important;overflow:visible!important}
+.rk-room-leader-kicker{
+  color:#1A1410!important;
+  opacity:.72!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  line-height:1.2!important;
+}
+.rk-room-leader-name{
+  color:#1A1410!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  line-height:1.16!important;
+  max-width:100%!important;
+  font-size:21px!important;
+}
+.rk-room-leader-sub{
+  color:#6B6157!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  line-height:1.42!important;
+}
+.rk-room-leader-you .rk-room-leader-kicker{color:#176B42!important;opacity:1!important}
+.rk-room-leader-you .rk-room-leader-name{color:#176B42!important}
+.rk-room-rank-badge{
+  margin-right:2px!important;
+  flex-shrink:0!important;
+}
+.rk-room-score{
+  justify-self:end!important;
+  min-width:46px!important;
+  text-align:right!important;
+  color:#A07828!important;
+}
+.rk-room-page > .rk-room-actions{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:9px!important;
+  padding:12px!important;
+  border-radius:24px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F3EFE6)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 8px 24px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-room-page > .rk-room-actions .rk-room-btn{
+  width:100%!important;
+  min-height:46px!important;
+  border-radius:16px!important;
+  font-size:12.5px!important;
+  line-height:1.1!important;
+}
+.rk-room-page > .rk-room-actions .rk-room-btn:first-child{
+  grid-column:1 / -1!important;
+  background:linear-gradient(135deg,#176B42,#0F5432)!important;
+  color:#fff!important;
+  border:1px solid rgba(243,212,107,.22)!important;
+  box-shadow:0 10px 22px rgba(23,107,66,.17),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+.rk-room-page > .rk-room-actions .rk-room-btn:last-child{
+  background:#FFFDF8!important;
+  color:#6B6157!important;
+}
+.rk-room-notes-v50{
+  margin-top:12px!important;
+  border-radius:22px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 7px 20px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-room-notes-v50 summary{
+  padding:14px 15px!important;
+  list-style:none!important;
+  cursor:pointer!important;
+}
+.rk-room-notes-v50 summary::-webkit-details-marker{display:none!important}
+.rk-room-notes-v50 summary span{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:16px!important;
+  font-weight:950!important;
+  color:#1A1410!important;
+}
+.rk-room-notes-v50 summary b{
+  background:rgba(23,107,66,.08)!important;
+  color:#176B42!important;
+  border:1px solid rgba(23,107,66,.12)!important;
+  border-radius:999px!important;
+  padding:6px 10px!important;
+  font-size:11px!important;
+}
+.rk-room-notes-v50-body{padding:0 15px 15px!important}
+.rk-room-notes-v50-body p{
+  margin:0 0 10px!important;
+  color:#6B6157!important;
+  font-size:12px!important;
+  line-height:1.5!important;
+}
+.rk-room-feed-item-v50{
+  display:grid!important;
+  grid-template-columns:24px 1fr!important;
+  gap:9px!important;
+  align-items:start!important;
+  padding:10px!important;
+  border-radius:15px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.055)!important;
+}
+.rk-room-feed-item-v50 span{
+  width:24px!important;height:24px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  border-radius:10px!important;background:rgba(23,107,66,.08)!important;color:#176B42!important;font-weight:950!important;font-size:11px!important;
+}
+.rk-room-feed-item-v50 p{margin:0!important;color:#4F4942!important;font-size:12px!important;line-height:1.45!important}
+@media(max-width:390px){
+  .rk-room-leader{grid-template-columns:50px minmax(0,1fr) auto!important;gap:11px!important;padding:14px!important}
+  .rk-room-leader-name{font-size:18px!important;line-height:1.18!important}
+  .rk-room-score{font-size:32px!important;min-width:38px!important}
+  .rk-room-page > .rk-room-actions{grid-template-columns:1fr!important}
+  .rk-room-page > .rk-room-actions .rk-room-btn:first-child{grid-column:auto!important}
+}
 `;
 
 const S={
@@ -19272,7 +19418,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <div className="rk-home-scorecard-v41-score rk-pop">{scoreValue}</div>
             <div className="rk-home-scorecard-v41-score-label">Rackle IQ</div>
           </div>
-          {iq?.styleName&&<button type="button" onClick={(e)=>{e.stopPropagation();setScreen("styleGlossary");}} className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next rk-style-pill-clickable" aria-label={`Learn what ${iq.styleName} means`}>{iq.styleName}<span aria-hidden="true">?</span></button>}
+          {iq?.styleName&&<button type="button" onClick={(e)=>{e.stopPropagation();setScreen("styleGlossary");}} className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next rk-style-pill-clickable" aria-label={`Learn what ${iq.styleName} means`}>{iq.styleName}</button>}
         </div>
         <div className="rk-home-scorecard-v41-title">{iq?.level||"Daily complete"}</div>
         <p className="rk-home-scorecard-v41-copy">{levelLine}</p>
@@ -21469,6 +21615,37 @@ const RACKLE_STYLE_GLOSSARY=[
   {name:"Room Ready",emoji:"🀄",tag:"Solid shape, still forming",meaning:"Room Ready means the rack has a playable base, but still needs a clearer commitment to become dangerous.",tableRead:"You have enough to keep playing, but you are still reading the room rather than driving it.",next:"Pick your best two lanes and stop protecting everything."},
   {name:"Finding your flow",emoji:"🌊",tag:"Learning rack",meaning:"Finding your flow means the Charleston had some useful pieces, but the rack did not fully click yet.",tableRead:"This is common. The goal is to learn which tiles were protecting a real lane and which ones were just comfortable to hold.",next:"On the next rack, decide earlier what you are no longer protecting."},
   {name:"Review Rack",emoji:"🔍",tag:"Worth a second look",meaning:"Review Rack means the rack needs a closer read. It may have had a hidden path, but the Charleston did not make that path obvious.",tableRead:"This does not mean you played badly. It means the rack was noisy, thin, or pulled in too many directions.",next:"Use the review to find one tile you should have passed sooner."},
+  {name:"Calm Collector",emoji:"🌿",tag:"You kept the rack quiet",meaning:"Calm Collector means you protected useful structure without chasing every shiny tile.",tableRead:"At the table, this style feels patient. You are waiting for the rack to tell you where it wants to go.",next:"Look for the first moment where patience should become commitment."},
+  {name:"Jade Reader",emoji:"💚",tag:"Clean section instincts",meaning:"Jade Reader means your rack had a natural section pull and you mostly followed it.",tableRead:"You saw the shape early enough to avoid unnecessary noise.",next:"Name your top two sections before the second pass."},
+  {name:"Tile Tactician",emoji:"♟️",tag:"Small choices mattered",meaning:"Tile Tactician means your Charleston decisions were built on useful micro-reads.",tableRead:"You were not just keeping pretty tiles. You were protecting useful groups.",next:"Keep asking which tile protects the most possible hands."},
+  {name:"Pair Protector",emoji:"👯",tag:"You respected pairs",meaning:"Pair Protector means you held fragile pair structure instead of breaking it too early.",tableRead:"This is especially useful for Singles and Pairs, Quints, and awkward early racks.",next:"Watch which pairs are actually valuable and which are just comfortable."},
+  {name:"Run Builder",emoji:"🏃",tag:"Consecutive shape forming",meaning:"Run Builder means your rack showed connected numbers that could turn into Consecutive Run pressure.",tableRead:"You were building momentum across neighboring values.",next:"Pick the suit family that gives you the most complete groups."},
+  {name:"Even Engine",emoji:"⚙️",tag:"2468 shape showed up",meaning:"Even Engine means your rack had enough even-number structure to keep 2468 alive.",tableRead:"The rack wanted clean numerical discipline more than broad flexibility.",next:"Stop protecting odd tiles once the even lane becomes real."},
+  {name:"Odd Spark",emoji:"✨",tag:"Odd lane potential",meaning:"Odd Spark means 13579 had enough signal to stay in the conversation.",tableRead:"The rack had odd-number momentum, but still needed a clearer anchor.",next:"Protect pairs and repeated values before chasing loose odds."},
+  {name:"Dragon Watcher",emoji:"🐉",tag:"Dragons mattered",meaning:"Dragon Watcher means dragons were part of the rack’s real path, not just decoration.",tableRead:"You needed to understand matching dragons, soaps, and suit relationships.",next:"Check whether the dragon supports the hand or is just taking space."},
+  {name:"Wind Reader",emoji:"🌬️",tag:"Winds were live",meaning:"Wind Reader means your rack had winds worth respecting after the Charleston.",tableRead:"This style often appears when Winds and Dragons has a real opening.",next:"Do not hold scattered winds unless the section is truly forming."},
+  {name:"Flower Keeper",emoji:"🌸",tag:"Flowers stayed useful",meaning:"Flower Keeper means flowers helped preserve a real hand path.",tableRead:"You did not treat flowers as automatic keeps. They were connected to a lane.",next:"Keep flowers when they complete structure, not because they feel safe."},
+  {name:"Soap Saver",emoji:"🧼",tag:"Soap had meaning",meaning:"Soap Saver means zero/soap was important to the read.",tableRead:"This often shows up in 2026 hands or dragon-sensitive shapes.",next:"Know when soap is zero and when it is a dragon."},
+  {name:"Pivot Player",emoji:"↪️",tag:"You stayed ready to switch",meaning:"Pivot Player means the rack had a second path worth keeping alive.",tableRead:"You avoided locking too early, which can save awkward racks.",next:"Choose the pivot point instead of drifting forever."},
+  {name:"Clean Passer",emoji:"🧹",tag:"You removed the noise",meaning:"Clean Passer means your passes helped the rack become easier to read.",tableRead:"The best Charleston passes often make the next decision obvious.",next:"Keep passing tiles that do not protect your top two lanes."},
+  {name:"Danger Dodger",emoji:"🛡️",tag:"You avoided risky gifts",meaning:"Danger Dodger means your passed tiles were unlikely to strengthen someone else too much.",tableRead:"You kept the table safe while still improving your rack.",next:"Be careful with pairs, flowers, and hot tiles late in the Charleston."},
+  {name:"Room Chaser",emoji:"🏁",tag:"You had a score to chase",meaning:"Room Chaser means your rack was playable but needed sharper commitment to threaten the room.",tableRead:"You were in the hunt, but not yet driving the table.",next:"Find the one section you would defend if challenged."},
+  {name:"Board Climber",emoji:"📈",tag:"Solid improvement rack",meaning:"Board Climber means the rack was not perfect, but your decisions moved it in the right direction.",tableRead:"This is the style of a learner getting better at the Charleston.",next:"Review one pass and ask if it made the rack cleaner."},
+  {name:"Quiet Threat",emoji:"🤫",tag:"Better than it looked",meaning:"Quiet Threat means your rack had hidden strength that was not loud at first glance.",tableRead:"The rack may not look flashy, but it has a real path if you stay disciplined.",next:"Protect the hidden core and avoid chasing side quests."},
+  {name:"Table Captain",emoji:"🧭",tag:"Clear command of the rack",meaning:"Table Captain means your Charleston had direction and confidence.",tableRead:"You were making choices, not just reacting to tiles.",next:"Stay alert for when the table gives you permission to push."},
+  {name:"Lane Finder",emoji:"🛣️",tag:"You found the right road",meaning:"Lane Finder means the rack started noisy but your choices revealed a playable lane.",tableRead:"This is a good learning style because it shows decision-making under uncertainty.",next:"Once the lane appears, stop carrying unrelated tiles."},
+  {name:"Shape Shifter",emoji:"🧩",tag:"Multiple shapes stayed alive",meaning:"Shape Shifter means your rack could still become several different structures.",tableRead:"Useful, but only if you know when to narrow.",next:"Name the two shapes. Drop the third."},
+  {name:"Early Anchor",emoji:"⚓",tag:"One group held the rack",meaning:"Early Anchor means one pair, pung, kong, or key tile group gave the rack direction.",tableRead:"Good Charleston players notice anchors early and build around them.",next:"Do not sacrifice the anchor unless a better one appears."},
+  {name:"Late Bloomer",emoji:"🌱",tag:"The rack needed time",meaning:"Late Bloomer means the rack did not fully show itself during the Charleston.",tableRead:"Some racks need the first few draws before the path becomes obvious.",next:"Keep the rack flexible, but do not hold everything."},
+  {name:"Fast Starter",emoji:"⚡",tag:"Strong early direction",meaning:"Fast Starter means the rack had an early section signal and you leaned into it.",tableRead:"This is great when the signal is real and dangerous when it is emotional.",next:"Confirm the lane with tile count, not just gut feel."},
+  {name:"Careful Climber",emoji:"🪜",tag:"Small gains, better shape",meaning:"Careful Climber means each pass made the rack slightly cleaner.",tableRead:"This is often how strong Charleston play feels in real life.",next:"Look for the one pass that creates the biggest jump."},
+  {name:"Gritty Rack",emoji:"💪",tag:"Tough but playable",meaning:"Gritty Rack means the rack was not beautiful, but it still had fight.",tableRead:"You had to work harder to find value.",next:"Do not force a perfect hand. Find the most realistic one."},
+  {name:"Almost There",emoji:"👀",tag:"Close to clicking",meaning:"Almost There means the rack had a path but missed one or two key tiles.",tableRead:"This is the kind of rack where one draw can change the whole room.",next:"Protect the tiles that make the biggest upgrade possible."},
+  {name:"Section Scout",emoji:"🔭",tag:"You explored the card",meaning:"Section Scout means the rack had clues across several NMJL sections.",tableRead:"You were reading the card, not just your favorite hand.",next:"Exploration is good early. Commitment wins later."},
+  {name:"Natural Fit",emoji:"👌",tag:"The rack wanted that lane",meaning:"Natural Fit means the final section recommendation matched the tile structure cleanly.",tableRead:"The rack and the card were speaking the same language.",next:"Trust the fit, but keep watching for exposure and discard signals."},
+  {name:"Table Learner",emoji:"📚",tag:"Useful practice rack",meaning:"Table Learner means the rack taught you something specific about passing or section choice.",tableRead:"This is exactly what Rackle is for: one sharper read at a time.",next:"Take one lesson into the next rack."},
+  {name:"Pressure Ready",emoji:"🔥",tag:"Good enough to defend",meaning:"Pressure Ready means your rack had enough shape to be compared in the room.",tableRead:"You may not be the leader, but your Charleston held up.",next:"Find the quickest path from playable to dangerous."},
+  {name:"Club Contender",emoji:"🏆",tag:"A leaderboard rack",meaning:"Club Contender means your rack and score were strong enough to challenge your club board.",tableRead:"This is the type of rack players want to screenshot.",next:"Share it, then see who can beat it."},
 ];
 function StyleGlossaryScreen({home,setScreen}){
   const [open,setOpen]=useState("Flexible");
