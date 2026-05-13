@@ -976,56 +976,74 @@
   }
 }
 
-/* ─── Desktop / tablet center rail widening + stacked homepage correction ─── */
+/* ─── V1 desktop/tablet final polish: spacing, section rhythm, leaderboard readability ─── */
 @media (min-width:768px){
-  .rk-dash-shell{
+  html,body,#root{background:#F8F4EE!important;}
+  .rk-outer{background:#F8F4EE!important;}
+  .rk-dash-shell{background:#F8F4EE!important;}
+
+  /* Wider center rail so desktop/tablet copy does not collapse. */
+  .rk-dash-shell .rk-app,
+  .rk-dash-shell.has-dashboard .rk-app{
+    width:620px!important;
+    max-width:620px!important;
+    flex-basis:620px!important;
+    flex-shrink:0!important;
     background:#F8F4EE!important;
   }
-  .rk-dash-shell.has-dashboard .rk-app,
-  .rk-dash-shell .rk-app{
-    width:500px!important;
-    max-width:500px!important;
-    flex-basis:500px!important;
-    flex-shrink:0!important;
-    overflow-x:hidden!important;
+
+  /* Slightly tighter gap between the live status pill and the first scorecard. */
+  .rk-social-presence-wrap{
+    margin-top:6px!important;
+    margin-bottom:22.5px!important;
+  }
+  .rk-home-scorecard-v41.rk-home-section-lg,
+  .rk-home-landing-flow > .rk-home-scorecard-v41.rk-home-section-lg{
+    margin-top:12.5px!important;
   }
 
-  /* The middle app rail should behave like a single premium page, not a mosaic. */
-  .rk-home-landing-flow,
-  .rk-home-main-col,
-  .rk-home-side-col,
-  .rk-home-desktop-panel,
-  .rk-home-desktop-insights{
-    display:flex!important;
-    flex-direction:column!important;
-    grid-template-columns:1fr!important;
-    grid-auto-flow:row!important;
-    align-items:stretch!important;
-    width:100%!important;
-    max-width:100%!important;
-    gap:18px!important;
+  /* Live club standings: less outer padding, stronger title. */
+  .rk-room-live-v6,
+  .rk-room-live-v17,
+  .rk-room-live-v19{
+    padding:17px!important;
+    margin-top:15px!important;
+    margin-left:0!important;
+    margin-right:0!important;
   }
-  .rk-home-landing-flow > *,
-  .rk-home-main-col > *,
-  .rk-home-side-col > *{
-    width:100%!important;
-    max-width:100%!important;
-    min-width:0!important;
-    flex:0 0 auto!important;
-    box-sizing:border-box!important;
+  .rk-room-live-v6-summary{
+    padding:0!important;
+  }
+  .rk-room-live-v6-top{
+    gap:16px!important;
+    align-items:flex-start!important;
+  }
+  .rk-room-live-v6-title,
+  .rk-freeplay-v24 h2,
+  .rk-freeplay-v27 h2,
+  .rk-freeplay-v35 h2,
+  .rk-freeplay-v40 h2{
+    font-size:26px!important;
+    line-height:1.05!important;
+    letter-spacing:-.5px!important;
+    white-space:nowrap!important;
+  }
+  .rk-room-live-v6-copy{
+    font-size:13px!important;
+    line-height:1.5!important;
+    max-width:34ch!important;
   }
 
-  /* Free Play should read top-to-bottom in the app rail. */
+  /* Free Play: title, description, tiles, and each step should read in clean rows. */
   .rk-freeplay-v24,
   .rk-freeplay-v27,
   .rk-freeplay-v35,
   .rk-freeplay-v40{
     display:flex!important;
     flex-direction:column!important;
-    gap:16px!important;
-    width:100%!important;
-    max-width:100%!important;
-    overflow:hidden!important;
+    align-items:stretch!important;
+    gap:14px!important;
+    padding:22px!important;
   }
   .rk-freeplay-v24-top,
   .rk-freeplay-v35-top,
@@ -1040,54 +1058,53 @@
   .rk-freeplay-v35-copy,
   .rk-freeplay-v40-copy{
     width:100%!important;
-    max-width:none!important;
-    min-width:0!important;
     text-align:left!important;
+    max-width:100%!important;
   }
   .rk-freeplay-v24-copy p,
   .rk-freeplay-v35-copy p,
   .rk-freeplay-v40-copy p{
-    max-width:34ch!important;
-    word-break:normal!important;
-    overflow-wrap:normal!important;
+    max-width:none!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
   }
   .rk-freeplay-v40-preview,
   .rk-freeplay-v40-tiles{
     width:100%!important;
     max-width:100%!important;
-    justify-content:center!important;
-    position:relative!important;
-    left:auto!important;
-    right:auto!important;
+    justify-content:flex-start!important;
+    align-items:center!important;
+    margin:0!important;
     transform:none!important;
   }
   .rk-freeplay-v24-steps,
   .rk-freeplay-v35-steps,
   .rk-freeplay-v40-steps{
-    display:flex!important;
-    flex-direction:column!important;
+    display:grid!important;
     grid-template-columns:1fr!important;
-    gap:10px!important;
+    gap:9px!important;
     width:100%!important;
   }
   .rk-freeplay-v24-steps > div,
   .rk-freeplay-v35-steps > div,
   .rk-freeplay-v40-steps > div{
     display:flex!important;
-    flex-direction:row!important;
     align-items:center!important;
+    justify-content:flex-start!important;
     gap:12px!important;
     width:100%!important;
-    min-width:0!important;
+    min-height:54px!important;
     text-align:left!important;
   }
   .rk-freeplay-v24-steps span,
   .rk-freeplay-v35-steps span,
   .rk-freeplay-v40-steps span{
-    min-width:0!important;
     display:flex!important;
-    flex-direction:column!important;
-    align-items:flex-start!important;
+    align-items:baseline!important;
+    gap:10px!important;
+    min-width:0!important;
+    width:100%!important;
   }
   .rk-freeplay-v24-steps b,
   .rk-freeplay-v35-steps b,
@@ -1095,429 +1112,161 @@
   .rk-freeplay-v24-steps small,
   .rk-freeplay-v35-steps small,
   .rk-freeplay-v40-steps small{
-    white-space:normal!important;
-    word-break:normal!important;
-    overflow-wrap:normal!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
   }
 
-  /* Learn + Explore can use three cards, but the cards must not squeeze text into word columns. */
-  .rk-learn-home-v8,
-  .rk-learn-home-v12,
-  .rk-learn-home-v18,
-  .rk-learn-home-v19{
-    width:100%!important;
-    max-width:100%!important;
+  /* Learn + Explore: keep the intro on one line and cards readable. */
+  .rk-learn-home-copy,
+  .rk-learn-home-v18-copy{
+    white-space:nowrap!important;
     overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    max-width:100%!important;
   }
   .rk-learn-home-grid,
   .rk-learn-home-v18-grid{
     display:grid!important;
     grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    gap:10px!important;
-    width:100%!important;
+    gap:12px!important;
   }
   .rk-learn-home-card,
   .rk-learn-home-v18-card{
     min-width:0!important;
-    width:100%!important;
-    text-align:left!important;
-  }
-  .rk-learn-home-text,
-  .rk-learn-home-v18-text{
-    min-width:0!important;
-    max-width:100%!important;
-  }
-  .rk-learn-home-text strong,
-  .rk-learn-home-v18-text strong{
-    white-space:normal!important;
-    word-break:normal!important;
-    overflow-wrap:normal!important;
-    line-height:1.12!important;
-  }
-  .rk-learn-home-text span,
-  .rk-learn-home-v18-text span{
-    white-space:normal!important;
-    word-break:normal!important;
-    overflow-wrap:normal!important;
-    line-height:1.4!important;
   }
 
-  /* Share block should be a clean stacked social card, fully contained. */
+  /* Share section: badge larger, CTA smaller, no full-width button. */
   .rk-share-score-v6{
     display:flex!important;
     flex-direction:column!important;
-    align-items:stretch!important;
-    gap:14px!important;
-    overflow:hidden!important;
+    align-items:flex-start!important;
+    gap:16px!important;
+    padding:22px!important;
   }
   .rk-share-score-v6-copybox{
     width:100%!important;
-    max-width:100%!important;
     text-align:left!important;
-    display:flex!important;
-    flex-direction:column!important;
-    align-items:flex-start!important;
   }
   .rk-share-score-v6-title{
-    max-width:20ch!important;
-    white-space:normal!important;
-    word-break:normal!important;
-    overflow-wrap:normal!important;
+    font-size:26px!important;
+    line-height:1.05!important;
+    max-width:15ch!important;
   }
   .rk-share-score-v6-copy{
-    max-width:32ch!important;
-    white-space:normal!important;
-    word-break:normal!important;
-    overflow-wrap:normal!important;
+    max-width:42ch!important;
+    line-height:1.5!important;
+  }
+  .rk-share-score-v6-btn{
+    width:auto!important;
+    min-width:190px!important;
+    max-width:260px!important;
+    padding-left:22px!important;
+    padding-right:22px!important;
+    align-self:flex-start!important;
   }
   .rk-share-lux-card-v6{
-    align-self:center!important;
-    width:100%!important;
-    max-width:390px!important;
-    margin:0 auto!important;
-  }
-}
-
-@media (min-width:1024px){
-  .rk-dash-shell.has-dashboard .rk-app,
-  .rk-dash-shell .rk-app{
-    width:540px!important;
-    max-width:540px!important;
-    flex-basis:540px!important;
-  }
-  .rk-dash-shell{
-    max-width:1440px!important;
-  }
-}
-
-@media (min-width:1320px){
-  .rk-dash-shell.has-dashboard .rk-app,
-  .rk-dash-shell .rk-app{
-    width:560px!important;
-    max-width:560px!important;
-    flex-basis:560px!important;
-  }
-}
-
-@media (max-width:767px){
-  /* Keep the existing mobile experience untouched. */
-}
-
-
-/* ─── FINAL DESKTOP / HEADER POLISH PASS ─────────────────────────────────── */
-/* Keep mobile untouched. These rules apply only where the dashboard shell exists. */
-
-/* Homepage brand: Fraunces 900, black, slightly lighter tagline. */
-.rk-startup-logo-v4,
-.rk-startup-hero-v42 .rk-startup-logo-v4{
-  font-family:'Fraunces',Georgia,serif!important;
-  font-weight:900!important;
-  color:#1A1410!important;
-  letter-spacing:-2px!important;
-}
-.rk-startup-subtitle-v4,
-.rk-startup-hero-v42 .rk-startup-subtitle-v4{
-  font-family:'Fraunces',Georgia,serif!important;
-  font-weight:700!important;
-  color:#176B42!important;
-  letter-spacing:0!important;
-}
-
-/* Top header controls: streak left, menu right. */
-.rk-home-topbar-v110{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:space-between!important;
-  width:100%!important;
-}
-.rk-home-topbar-v110 .rk-home-menu-plain-v101{
-  margin-left:auto!important;
-  flex-shrink:0!important;
-}
-
-/* Dashboard sidebars stay visible on non-home pages too because dashProps is always passed. */
-.rk-dash-shell.has-dashboard .rk-dash-left,
-.rk-dash-shell.has-dashboard .rk-dash-right{
-  min-width:0!important;
-}
-
-/* Live Club Standings: more room, stronger title, cleaner spacing. */
-.rk-room-live-v6,
-.rk-room-live-v17,
-.rk-room-live-v19{
-  padding:22px!important;
-  margin-top:18px!important;
-  margin-bottom:18px!important;
-}
-.rk-room-live-v6-summary{
-  padding:0!important;
-}
-.rk-room-live-v6-kicker{
-  margin-bottom:12px!important;
-  white-space:nowrap!important;
-}
-.rk-room-live-v6-title{
-  font-size:28px!important;
-  line-height:1.05!important;
-  letter-spacing:-0.5px!important;
-  margin:0 0 10px!important;
-}
-.rk-room-live-v6-copy{
-  max-width:30ch!important;
-  line-height:1.55!important;
-}
-.rk-room-live-v17-table{
-  margin-top:16px!important;
-}
-
-/* Free Play: keep content readable and left aligned in the wider rail. */
-.rk-freeplay-v40-preview,
-.rk-freeplay-v40-tiles{
-  justify-content:flex-start!important;
-  margin-left:0!important;
-}
-.rk-freeplay-v24-copy,
-.rk-freeplay-v35-copy,
-.rk-freeplay-v40-copy{
-  text-align:left!important;
-}
-.rk-freeplay-v24-copy p,
-.rk-freeplay-v35-copy p,
-.rk-freeplay-v40-copy p{
-  max-width:44ch!important;
-}
-
-/* Tomorrow card should breathe less at the bottom. */
-.rk-tomorrow-card-v11,
-.rk-tomorrow-mystery-final{
-  margin-bottom:12px!important;
-}
-.rk-tomorrow-v11-title{
-  font-size:24px!important;
-  line-height:1.08!important;
-}
-
-/* Tablet and desktop center rail: bigger, but still a single app rail. */
-@media(min-width:768px){
-  .rk-dash-shell.has-dashboard .rk-app,
-  .rk-dash-shell .rk-app{
-    width:560px!important;
-    max-width:560px!important;
-    flex-basis:560px!important;
-    flex-shrink:0!important;
-  }
-}
-@media(min-width:1024px){
-  .rk-dash-shell{
-    max-width:1540px!important;
-  }
-  .rk-dash-shell.has-dashboard .rk-app,
-  .rk-dash-shell .rk-app{
-    width:620px!important;
-    max-width:620px!important;
-    flex-basis:620px!important;
-  }
-}
-@media(min-width:1320px){
-  .rk-dash-shell{
-    max-width:1680px!important;
-    gap:32px!important;
-  }
-  .rk-dash-shell.has-dashboard .rk-app,
-  .rk-dash-shell .rk-app{
-    width:640px!important;
-    max-width:640px!important;
-    flex-basis:640px!important;
-  }
-  .rk-dash-shell.has-dashboard .rk-dash-left{width:250px!important;}
-  .rk-dash-shell.has-dashboard .rk-dash-right{width:310px!important;}
-}
-
-/* Keep home sections full-width and stacked inside the center rail. */
-@media(min-width:768px){
-  .rk-home-landing-flow{
-    display:flex!important;
-    flex-direction:column!important;
-    align-items:stretch!important;
-    gap:18px!important;
-  }
-  .rk-home-landing-flow > *{
     width:100%!important;
     max-width:100%!important;
-    min-width:0!important;
-  }
-}
-
-/* Mobile guardrails: do not widen or desktop-ify small screens. */
-@media(max-width:767px){
-  .rk-dash-shell.has-dashboard .rk-dash-left,
-  .rk-dash-shell.has-dashboard .rk-dash-right{display:none!important;}
-  .rk-dash-shell.has-dashboard .rk-app,
-  .rk-dash-shell .rk-app{
-    width:100%!important;
-    max-width:100%!important;
-    flex-basis:auto!important;
-  }
-}
-
-/* ─── Final desktop/tablet polish: scorecard centering, live club, footer ─── */
-.rk-startup-logo-v4,
-.rk-startup-hero-v42 .rk-startup-logo-v4,
-.rk-header-brand-title-v75{
-  font-family:'Fraunces', Georgia, serif!important;
-  font-weight:900!important;
-  color:#1A1410!important;
-  text-shadow:none!important;
-}
-.rk-startup-subtitle-v4,
-.rk-startup-hero-v42 .rk-startup-subtitle-v4{
-  font-weight:700!important;
-  opacity:.92!important;
-  letter-spacing:-.15px!important;
-}
-@media(min-width:768px){
-  .rk-startup-logo-v4,
-  .rk-startup-hero-v42 .rk-startup-logo-v4{font-size:58px!important;line-height:.92!important;letter-spacing:-2.2px!important;}
-  .rk-startup-subtitle-v4,
-  .rk-startup-hero-v42 .rk-startup-subtitle-v4{font-size:17px!important;line-height:1.18!important;margin-top:7px!important;margin-bottom:12px!important;}
-}
-
-@media(min-width:768px){
-  /* Keep the completed daily scorecard centered inside the wider desktop rail. */
-  .rk-home-scorecard-v41,
-  .rk-daily-scorecard-homeclone-v45,
-  .rk-practice-homeclone-v45{
-    width:min(100%,600px)!important;
-    max-width:600px!important;
-    margin-left:auto!important;
-    margin-right:auto!important;
-  }
-  .rk-home-scorecard-v41-main,
-  .rk-home-scorecard-v41-bottom{
-    width:100%!important;
-    margin-left:auto!important;
-    margin-right:auto!important;
+    min-height:176px!important;
+    align-self:stretch!important;
+    margin-top:0!important;
   }
 
-  /* Live Club Standings should feel full, readable, and less inset. */
-  .rk-room-live-v6,
-  .rk-room-live-v17,
-  .rk-room-live-v19{
-    width:100%!important;
-    max-width:100%!important;
-    margin:18px 0 22px!important;
-    padding:20px 18px!important;
-    box-sizing:border-box!important;
+  /* Tomorrow card: reduce the heavy bottom feel. */
+  .rk-tomorrow-card-v11,
+  .rk-tomorrow-mystery-final{
+    padding-bottom:18px!important;
+    margin-bottom:10px!important;
+    min-height:auto!important;
   }
-  .rk-room-live-v6-summary{
-    padding:0!important;
-    margin:0 0 14px!important;
+  .rk-tomorrow-v11-copy{
+    margin-bottom:10px!important;
   }
-  .rk-room-live-v6-top{
-    gap:16px!important;
-    align-items:flex-start!important;
-  }
-  .rk-room-live-v6-title{
-    font-size:30px!important;
-    line-height:1.04!important;
-    letter-spacing:-.7px!important;
+  .rk-tomorrow-v11-row{
     margin-top:8px!important;
-    margin-bottom:9px!important;
-    max-width:100%!important;
-  }
-  .rk-room-live-v6-kicker{margin-bottom:8px!important;}
-  .rk-room-live-v6-copy{
-    font-size:14px!important;
-    line-height:1.5!important;
-    max-width:34ch!important;
-  }
-  .rk-room-live-v17-table{
-    width:100%!important;
-    margin:0!important;
-    padding:16px!important;
   }
 
-  /* Free Play: left-align the preview tile row and keep copy readable. */
-  .rk-freeplay-v40-preview,
-  .rk-freeplay-v40-tiles,
-  .rk-freeplay-v24-top{
-    justify-content:flex-start!important;
-    text-align:left!important;
-  }
-  .rk-freeplay-v40-tiles{
-    margin-left:0!important;
-    margin-right:auto!important;
-  }
-  .rk-freeplay-v24-copy,
-  .rk-freeplay-v40-copy{
-    text-align:left!important;
-    align-items:flex-start!important;
-  }
-  .rk-freeplay-v24-copy h2,
-  .rk-freeplay-v40-copy h2{
-    font-size:30px!important;
-    line-height:1.04!important;
-    letter-spacing:-.65px!important;
-  }
-
-  /* Rackle list should read like a normal left-aligned card. */
+  /* Rackle List / Clubhouse Updates should be left-aligned and compact. */
+  .rk-email-home,
   .rk-email-home-v8,
   .rk-email-home-v19{
     text-align:left!important;
     align-items:flex-start!important;
+    padding:22px!important;
   }
+  .rk-email-kicker-v8,
+  .rk-email-title-v8,
+  .rk-email-home h2,
   .rk-email-home-v8 h2,
-  .rk-email-title-v8{
-    text-align:left!important;
-    font-size:24px!important;
-    line-height:1.08!important;
-  }
+  .rk-email-home-v19 h2,
+  .rk-email-home p,
   .rk-email-home-v8 p,
   .rk-email-home-v19 p{
     text-align:left!important;
-    max-width:36ch!important;
   }
-
-  /* Footer should feel like the bottom of Rackle, not a mismatched band. */
-  .rk-footer{
-    width:100%!important;
-    margin:32px 0 0!important;
-    padding:30px 24px 38px!important;
-    background:#F8F4EE!important;
-    border-top:1px solid rgba(26,20,16,.08)!important;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.65)!important;
-  }
-  .rk-footer-inner{
-    width:100%!important;
+  .rk-email-home p,
+  .rk-email-home-v8 p,
+  .rk-email-home-v19 p{
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
     max-width:100%!important;
-    margin:0 auto!important;
-    padding:0!important;
+  }
+
+  /* Leaderboard hero: smaller, cleaner, less overpowering. */
+  .rk-room-leader-name-v60{
+    font-size:26px!important;
+    line-height:1.05!important;
+    letter-spacing:-.6px!important;
+  }
+  .rk-room-score-v60{
+    font-size:40px!important;
+    line-height:.92!important;
+    letter-spacing:-.8px!important;
+  }
+  .rk-room-leader-sub-v60{
+    font-family:'Nunito','Segoe UI',sans-serif!important;
+    font-size:13px!important;
+    line-height:1.5!important;
+    font-weight:700!important;
+    color:#6B6157!important;
+  }
+
+  /* Small lift across desktop/tablet surfaces. */
+  .rk-pg{background:#F8F4EE!important;}
+  .rk-lux-card,
+  .rk-row-card,
+  .rk-premium-card,
+  .rk-learn-home-v8,
+  .rk-share-score-v6,
+  .rk-email-home,
+  .rk-tomorrow-card-v11{
+    box-shadow:0 10px 30px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;
   }
 }
 
-@media(min-width:1024px){
-  /* Give the main column a little more breathing room without crowding the side rails. */
-  .rk-dash-shell.has-dashboard .rk-app,
-  .rk-dash-shell .rk-app{
-    width:clamp(660px,44vw,720px)!important;
-    max-width:720px!important;
-    flex:0 0 auto!important;
-  }
-  .rk-dash-left{width:240px!important;}
-  .rk-dash-right{width:296px!important;}
-}
-
-@media(min-width:1320px){
-  .rk-dash-shell.has-dashboard .rk-app,
-  .rk-dash-shell .rk-app{
-    width:720px!important;
-    max-width:720px!important;
+@media (min-width:1024px){
+  .rk-dash-shell.has-dashboard .rk-app{
+    width:680px!important;
+    max-width:680px!important;
+    flex-basis:680px!important;
   }
 }
 
-@media(max-width:767px){
-  .rk-startup-logo-v4,
-  .rk-startup-hero-v42 .rk-startup-logo-v4{font-weight:900!important;color:#1A1410!important;}
-  .rk-startup-subtitle-v4,
-  .rk-startup-hero-v42 .rk-startup-subtitle-v4{font-weight:700!important;opacity:.92!important;}
+@media (min-width:1320px){
+  .rk-dash-shell.has-dashboard .rk-app{
+    width:700px!important;
+    max-width:700px!important;
+    flex-basis:700px!important;
+  }
+}
+
+@media (min-width:768px) and (max-width:1023px){
+  .rk-dash-shell .rk-app,
+  .rk-dash-shell.has-dashboard .rk-app{
+    width:min(680px,calc(100vw - 40px))!important;
+    max-width:min(680px,calc(100vw - 40px))!important;
+    flex-basis:min(680px,calc(100vw - 40px))!important;
+  }
 }
