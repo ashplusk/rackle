@@ -10642,10 +10642,10 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <span style={{fontSize:9,color:C.gold,marginLeft:1}}>›</span>
           </button>
         ):<div/>}
-        <button onClick={()=>setMenuOpen(o=>!o)} aria-label="Menu" style={{width:42,height:42,background:menuOpen?"linear-gradient(180deg,#F2EBDD,#E9E0CF)":"rgba(23,107,66,.06)",border:`1px solid ${menuOpen?C.bdr:"rgba(23,107,66,.10)"}`,borderRadius:15,cursor:"pointer",display:"flex",flexDirection:"column",gap:4,alignItems:"center",justifyContent:"center",boxShadow:"inset 0 1px 0 rgba(255,255,255,.66),0 4px 14px rgba(26,20,16,.035)"}}>
-          <span style={{display:"block",width:17,height:1.7,background:C.ink,borderRadius:2}}/>
-          <span style={{display:"block",width:17,height:1.7,background:C.ink,borderRadius:2}}/>
-          <span style={{display:"block",width:17,height:1.7,background:C.ink,borderRadius:2}}/>
+        <button onClick={()=>setMenuOpen(o=>!o)} aria-label="Menu" className={`rk-home-menu-plain-v101${menuOpen?" is-open":""}`}>
+          <span/>
+          <span/>
+          <span/>
         </button>
         <PremiumClubMenu open={menuOpen} onClose={()=>setMenuOpen(false)} setScreen={setScreen} go={go} showSettings={showSettings} streak={streak} dRes={dRes}/>
       </div>
