@@ -7450,6 +7450,10 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
             <p>{pivotCopy}</p>
           </div>
         </div>
+        <div className="rk-daily-review-v92-actions">
+          <button type="button" onClick={()=>setShowDetails(v=>!v)} className="rk-daily-review-v92-secondary">{showDetails?"Hide details":"See quick details"}</button>
+          {onCoachMode&&<button type="button" onClick={onCoachMode} className="rk-daily-review-v92-primary">Full rack review →</button>}
+        </div>
         {showDetails&&(
           <div className="rk-daily-review-v20-detail rk-in">
             <div className="rk-daily-review-v20-detail-card">
@@ -8124,6 +8128,50 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
 
 // ─── COACH MODE SCREEN, narrative-first deep analysis ───────────────────────
 
+
+function FinalHandReadCard({hand,chosenHandObj,chosenSecObj,handWasInferred}){
+  if(!hand||!hand.length)return null;
+  let best=null;
+  if(chosenHandObj){
+    const cov=computeHonestCoverage(hand,chosenHandObj);
+    best={...chosenHandObj,coveragePct:cov?.pct||0,coveragePlan:cov,secObj:chosenSecObj,chosen:true};
+  }else{
+    const scored=[];
+    HAND_CATALOG.forEach(h=>{
+      const cov=computeHonestCoverage(hand,h);
+      scored.push({...h,coveragePct:cov.pct,coveragePlan:cov,secObj:SECS.find(s=>s.id===h.sec)});
+    });
+    scored.sort((a,b)=>b.coveragePct-a.coveragePct);
+    best=scored[0]||null;
+  }
+  if(!best)return null;
+  const label=best.labelForDisplay||best.variantLabel||best.label||"Best-fit hand";
+  const secName=best.secObj?.name||chosenSecObj?.name||"Best-fit section";
+  const secIcon=best.secObj?.icon||chosenSecObj?.icon||"🀄";
+  const source=best.chosen&&!handWasInferred?"Player target":"Rackle read";
+  return(
+    <div className="rk-final-hand-mini-v92" aria-label="Final hand read">
+      <div className="rk-final-hand-mini-v92-head">
+        <div>
+          <span>{source}</span>
+          <strong>Final hand read</strong>
+        </div>
+        <b>{best.coveragePct||0}% fit</b>
+      </div>
+      <div className="rk-final-hand-mini-v92-body">
+        <em>{secIcon}</em>
+        <div>
+          <small>{secName}</small>
+          <p>{label}</p>
+        </div>
+      </div>
+      <div className="rk-final-hand-mini-v92-note">
+        Compare this final hand read against your rack below. It is a cross-check, not a command.
+      </div>
+    </div>
+  );
+}
+
 function FinalHandCrossReference({hand,startingRack,chosenHandObj,chosenSec,chosenSecObj,sortedSecs,handWasInferred}){
   const [tab,setTab]=useState("best");
   if(!hand||!hand.length)return null;
@@ -8151,20 +8199,8 @@ function FinalHandCrossReference({hand,startingRack,chosenHandObj,chosenSec,chos
       <div style={{padding:"12px 14px",background:"linear-gradient(145deg,#FFFDF8,#F5EFE4)",borderBottom:`1px solid ${C.bdr}`}}>
         <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:900,textTransform:"uppercase",marginBottom:5}}>Final rack cross-check</div>
         <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.12,letterSpacing:-.2}}>Final hand, best fits, and hand shapes</div>
-        <p style={{fontSize:11.5,color:C.mut,lineHeight:1.55,margin:"7px 0 0"}}>Start with the final hand read, then cross-check your final rack against the best-fit hands Rackle is seeing.</p>
+        <p style={{fontSize:11.5,color:C.mut,lineHeight:1.55,margin:"7px 0 0"}}>Use this to compare your final rack against the best-fit hands and shapes Rackle is seeing.</p>
       </div>
-      {best&&(
-        <div className="rk-final-hand-read-v91">
-          <div className="rk-final-hand-read-v91-top">
-            <div>
-              <span>Final hand read</span>
-              <strong>{bestLabel}</strong>
-            </div>
-            <b>{best.coveragePct||0}% fit</b>
-          </div>
-          <p>{best.chosen&&!handWasInferred?"This is the final hand target connected to your rack review. Use the tabs below to compare your final rack against the suggested hand shape.":"Rackle inferred this as the cleanest final-hand shape from your post-Charleston rack. Use it as a cross-check, not a command."}</p>
-        </div>
-      )}
       <div style={{display:"flex",borderBottom:`1px solid ${C.bdr}`}}>
         <TabButton id="best">Best fits</TabButton>
         <TabButton id="rack">Starting / final</TabButton>
@@ -8376,6 +8412,8 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
       {/* ①½ COACH ADVICE */}
       <SectionDivider label="COACH ADVICE"/>
       <CoachAdvice hand={hand} passLog={passLog} chosenSec={chosenSec} allSections={allSections} iq={iq} chosenHandObj={chosenHandObj}/>
+
+      <FinalHandReadCard hand={hand} chosenHandObj={chosenHandObj} chosenSecObj={chosenSecObj} handWasInferred={iq.handWasInferred}/>
 
       {/* ② RACK VS HAND */}
       {chosenHandObj&&<SectionDivider label="YOUR RACK VS THE HAND"/>}
