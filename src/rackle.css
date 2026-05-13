@@ -387,3 +387,72 @@
   .rk-score-social-room,.rk-score-action-grid,.rk-home-score-cta{margin-top:10px!important;}
   .rk-floating-tile,.rk-floating-mahjong{transform:scale(.88)!important;right:16px!important;bottom:16px!important;}
 }
+
+
+/* ─── v102: header breathing + unmistakable die-cut sticker outline ─── */
+.rk-startup-subtitle-v4,
+.rk-startup-hero-v42 .rk-startup-subtitle-v4{
+  margin-bottom:10.5px!important;
+}
+.rk-startup-pulse-pill-v41,
+.rk-startup-pulse-pill-v42{
+  margin-top:1px!important;
+}
+
+/* Make the style badge read as a true sticker with a visible white cut-line. */
+.rk-home-scorecard-v41-style,
+.rk-iq-style-pill,
+.rk-style-pill-clickable{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:visible!important;
+  border:3.5px solid #FFFDF8!important;
+  outline:2px solid rgba(255,255,255,.96)!important;
+  outline-offset:2px!important;
+  box-shadow:
+    0 0 0 6px #FFFDF8,
+    0 0 0 7px rgba(26,20,16,.045),
+    0 12px 26px rgba(26,20,16,.20),
+    0 2px 0 rgba(255,255,255,.50) inset,
+    0 -2px 0 rgba(120,80,16,.10) inset!important;
+  filter:drop-shadow(0 5px 8px rgba(26,20,16,.14))!important;
+}
+.rk-home-scorecard-v41-style:before,
+.rk-iq-style-pill:before,
+.rk-style-pill-clickable:before{
+  content:""!important;
+  position:absolute!important;
+  inset:-9px!important;
+  border-radius:999px!important;
+  background:#FFFDF8!important;
+  z-index:-2!important;
+  box-shadow:
+    0 8px 16px rgba(26,20,16,.14),
+    0 0 0 1px rgba(160,120,40,.08)!important;
+}
+.rk-home-scorecard-v41-style:after,
+.rk-iq-style-pill:after,
+.rk-style-pill-clickable:after{
+  z-index:1!important;
+  right:7px!important;
+  bottom:-4px!important;
+  border:2px solid #FFFDF8!important;
+}
+.rk-home-scorecard-v41-style > *,
+.rk-iq-style-pill > *,
+.rk-style-pill-clickable > *{
+  position:relative!important;
+  z-index:2!important;
+}
+
+@media(max-width:390px){
+  .rk-startup-subtitle-v4,
+  .rk-startup-hero-v42 .rk-startup-subtitle-v4{margin-bottom:9.5px!important;}
+}
+
+@media (orientation: landscape) and (max-height: 520px) and (pointer: coarse){
+  .rk-startup-subtitle-v4,
+  .rk-startup-hero-v42 .rk-startup-subtitle-v4{margin-bottom:7px!important;}
+  .rk-startup-pulse-pill-v41,
+  .rk-startup-pulse-pill-v42{margin-top:7px!important;}
+}
