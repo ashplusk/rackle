@@ -7479,6 +7479,24 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
   const styled=withIQStyle(iq);
   const level=iq.level||styled.level||"Rack read";
   const score=Math.round(iq.totalScore||iq.rackleIQScore||iq.score||0);
+  const [animatedScore,setAnimatedScore]=useState(0);
+  useEffect(()=>{
+    const target=Number(score||0);
+    setAnimatedScore(0);
+    if(!target)return;
+    const duration=860;
+    const steps=43;
+    const interval=Math.max(12,Math.round(duration/steps));
+    let step=0;
+    const timer=setInterval(()=>{
+      step+=1;
+      const progress=Math.min(step/steps,1);
+      const eased=1-Math.pow(1-progress,3);
+      setAnimatedScore(Math.round(eased*target));
+      if(progress>=1){clearInterval(timer);setAnimatedScore(target);}
+    },interval);
+    return()=>clearInterval(timer);
+  },[score]);
   const bestLabel=scoredHandObj?.labelForDisplay||scoredHandObj?.variantLabel||scoredHandObj?.label||iq.bestHandLabel||iq.strategicRead?.bestDirection||"Keep reading the rack";
   const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
 
@@ -7490,7 +7508,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
           <div className="rk-home-scorecard-v41-kicker"><span/> Practice Rackle Scorecard</div>
           <div className="rk-home-scorecard-v41-score-row rk-practice-homeclone-v45-score-row">
             <div>
-              <div className="rk-home-scorecard-v41-score">{score}</div>
+              <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43">{animatedScore}</div>
               <div className="rk-home-scorecard-v41-score-label">Rackle IQ</div>
             </div>
             {styled?.styleName&&<div className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next">{styled.styleName}</div>}
@@ -9841,10 +9859,10 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
     </div>
     {loading?<div className="rk-premium-card" style={{padding:28,textAlign:"center",marginBottom:12}}>Loading the room…</div>:<>
       <RoomLeader leader={leader} myEntry={myEntry} count={entries.length} label="table"/>
-      <RoomMyPosition myRank={myRank} score={score} leader={leader} count={entries.length} clubName="Global room"/>
+      {myRank!==1&&<RoomMyPosition myRank={myRank} score={score} leader={leader} count={entries.length} clubName="Global room"/>}
       <RoomRows entries={entries} scoreHint={score} emptyTitle="Room is open" emptyCopy="First score is on the board once you play. Send it to your table."/>
     </>}
-    <div className="rk-room-actions">
+    <div className="rk-room-actions rk-room-actions-simple-v91">
       <button className="rk-room-btn rk-room-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(shareText,"Rackle Global Room");setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Share room"}</button>
       <button className="rk-room-btn" onClick={load}>↻ Refresh board</button>
       <button className="rk-room-btn" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"🏛 Club board":"🏛 Find club"}</button>
@@ -9915,7 +9933,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
     </div>
     {loading?<div className="rk-premium-card" style={{padding:28,textAlign:"center",marginBottom:12}}>Loading club room…</div>:<>
       <RoomLeader leader={leader} myEntry={myEntry} count={entries.length} label="club"/>
-      <RoomMyPosition myRank={posted?myRank:null} score={score} leader={leader} count={entries.length} clubName={club.name}/>
+      {!(posted&&myRank===1)&&<RoomMyPosition myRank={posted?myRank:null} score={score} leader={leader} count={entries.length} clubName={club.name}/>}
       {score>0&&!posted&&<div className="rk-invite-card">
         <div style={{fontSize:9,letterSpacing:2.2,textTransform:"uppercase",fontWeight:950,color:C.jade,marginBottom:8}}>Name on board</div>
         <div style={{display:"flex",gap:8}}><input value={nameInput} onChange={e=>setNameInput(e.target.value)} placeholder="Your name" style={{flex:1,minWidth:0,border:`1px solid rgba(26,20,16,.10)`,borderRadius:14,padding:"12px 13px",fontFamily:F.b,fontSize:13,background:"#FFFDF8",outline:"none"}}/><button onClick={postScore} disabled={posting||!nameInput.trim()} className="rk-room-btn rk-room-btn-primary" style={{padding:"0 16px"}}>{posting?"…":"Post"}</button></div>
@@ -9929,7 +9947,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
         <button className="rk-room-btn" onClick={async()=>{const ok=await rkCopyOrShare(shareText,club.name);setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>Share score</button>
       </div>
     </div>
-    <div className="rk-room-actions">
+    <div className="rk-room-actions rk-room-actions-simple-v91">
       <button className="rk-room-btn rk-room-btn-primary" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>View global room</button>
       <button className="rk-room-btn" onClick={load}>↻ Refresh board</button>
       <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("clubs")}>🏛 Change club</button>
@@ -13018,6 +13036,13 @@ function StyleGlossaryScreen({home,setScreen}){
   const current=RACKLE_STYLE_GLOSSARY.find(s=>s.name===open)||RACKLE_STYLE_GLOSSARY[0];
   const activeCat=styleCategories.find(c=>c.id===cat)||styleCategories[0];
   const filteredStyles=RACKLE_STYLE_GLOSSARY.filter(activeCat.match);
+  const quickPicks=[
+    {label:"Kept options alive",style:"Flexible"},
+    {label:"Found a lane",style:"Sharp Player"},
+    {label:"Protected pairs",style:"Pair Protector"},
+    {label:"Had Winds / Dragons",style:"Dragon Watcher"},
+    {label:"Still reading",style:"Finding Your Flow"},
+  ];
   return(
     <div style={S.pg} className="rk-pg rk-style-glossary-v60">
       <RackleHeader onBack={home} setScreen={setScreen}/>
@@ -13040,6 +13065,14 @@ function StyleGlossaryScreen({home,setScreen}){
         <div><strong>Table read</strong><p>{current.tableRead}</p></div>
         <div><strong>Next move</strong><p>{current.next}</p></div>
       </div>
+
+      <section className="rk-style-finder-v91" aria-label="Style finder">
+        <div className="rk-style-finder-kicker-v91">Style finder</div>
+        <h2>What did your rack feel like?</h2>
+        <div className="rk-style-finder-grid-v91">
+          {quickPicks.map(p=><button key={p.label} type="button" onClick={()=>setOpen(p.style)}>{p.label}<span>→</span></button>)}
+        </div>
+      </section>
 
       <div className="rk-style-glossary-tabs-v60" aria-label="Filter Rackle styles">
         {styleCategories.map(c=><button key={c.id} type="button" onClick={()=>setCat(c.id)} className={cat===c.id?"active":""}>{c.label}</button>)}
