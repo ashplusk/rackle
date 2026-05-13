@@ -11811,6 +11811,224 @@ body.rk-card-reference-open{overflow:hidden!important}
   .rk-howto-v42-flow-step{min-height:auto!important;padding:11px!important}
 }
 
+
+/* ─── vNext: leaderboard leader card + position fix ─── */
+.rk-room-leader-v60{
+  position:relative!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:14px!important;
+  min-height:0!important;
+  padding:18px!important;
+  margin:14px 0 12px!important;
+  border-radius:28px!important;
+  background:
+    radial-gradient(circle at 92% 14%,rgba(243,212,107,.12),transparent 36%),
+    linear-gradient(145deg,#FFFDF8 0%,#F7F0E5 100%)!important;
+  border:1px solid rgba(26,20,16,.085)!important;
+  box-shadow:0 14px 34px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.86)!important;
+  overflow:hidden!important;
+}
+.rk-room-leader-v60:after{
+  content:'leader';
+  position:absolute;
+  right:18px;
+  bottom:4px;
+  font-family:'Fraunces',Georgia,serif;
+  font-weight:950;
+  font-size:56px;
+  line-height:1;
+  color:rgba(176,133,35,.035);
+  pointer-events:none;
+}
+.rk-room-leader-main-v60{
+  display:grid!important;
+  grid-template-columns:58px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:14px!important;
+  min-width:0!important;
+}
+.rk-room-rank-badge-v60{
+  width:58px!important;
+  height:58px!important;
+  border-radius:21px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex-shrink:0!important;
+  color:#FFFDF8!important;
+  background:linear-gradient(145deg,#176B42 0%,#07341F 100%)!important;
+  border:1px solid rgba(243,212,107,.24)!important;
+  box-shadow:0 12px 26px rgba(6,43,24,.16),inset 0 1px 0 rgba(255,255,255,.16)!important;
+  font-family:'Inter',system-ui,sans-serif!important;
+  font-weight:950!important;
+  font-size:22px!important;
+  letter-spacing:-.4px!important;
+}
+.rk-room-leader-copy-v60{
+  min-width:0!important;
+  display:block!important;
+}
+.rk-room-leader-kicker-v60{
+  color:#176B42!important;
+  font-family:'Inter',system-ui,sans-serif!important;
+  font-size:9.5px!important;
+  font-weight:950!important;
+  letter-spacing:2.1px!important;
+  line-height:1.15!important;
+  text-transform:uppercase!important;
+  margin:0 0 7px!important;
+}
+.rk-room-leader-name-v60{
+  color:#176B42!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:30px!important;
+  font-weight:950!important;
+  letter-spacing:-.9px!important;
+  line-height:1.02!important;
+  margin:0!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+  hyphens:none!important;
+  max-width:100%!important;
+}
+.rk-room-leader-sub-v60{
+  color:#6B6157!important;
+  font-family:'Inter',system-ui,sans-serif!important;
+  font-size:15px!important;
+  font-weight:850!important;
+  line-height:1.35!important;
+  margin-top:7px!important;
+  max-width:100%!important;
+}
+.rk-room-score-wrap-v60{
+  position:relative!important;
+  z-index:2!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-end!important;
+  justify-content:center!important;
+  min-width:74px!important;
+  gap:2px!important;
+}
+.rk-room-score-v60{
+  color:#B08523!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:48px!important;
+  font-weight:950!important;
+  line-height:.9!important;
+  letter-spacing:-1px!important;
+}
+.rk-room-score-wrap-v60 span{
+  color:#6B6157!important;
+  font-family:'Inter',system-ui,sans-serif!important;
+  font-size:8.5px!important;
+  font-weight:950!important;
+  letter-spacing:1.7px!important;
+  line-height:1!important;
+  text-transform:uppercase!important;
+  white-space:nowrap!important;
+}
+.rk-room-position-v60{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:14px!important;
+  margin:0 0 12px!important;
+  padding:14px 16px!important;
+  border-radius:24px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  box-shadow:0 8px 22px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-room-position-kicker-v60{
+  color:#176B42!important;
+  font-family:'Inter',system-ui,sans-serif!important;
+  font-size:9px!important;
+  line-height:1.1!important;
+  font-weight:950!important;
+  letter-spacing:2px!important;
+  text-transform:uppercase!important;
+  margin-bottom:5px!important;
+}
+.rk-room-position-title-v60{
+  color:#1A1410!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:22px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+  letter-spacing:-.45px!important;
+}
+.rk-room-position-copy-v60{
+  color:#6B6157!important;
+  font-family:'Inter',system-ui,sans-serif!important;
+  font-size:13px!important;
+  line-height:1.35!important;
+  font-weight:800!important;
+  margin-top:4px!important;
+}
+.rk-room-position-meta-v60{
+  min-width:72px!important;
+  border-radius:20px!important;
+  padding:10px 11px!important;
+  text-align:center!important;
+  background:rgba(23,107,66,.06)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+}
+.rk-room-position-meta-v60 strong{
+  display:block!important;
+  color:#B08523!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:28px!important;
+  line-height:.95!important;
+  font-weight:950!important;
+}
+.rk-room-position-meta-v60 span{
+  display:block!important;
+  margin-top:5px!important;
+  color:#6B6157!important;
+  font-family:'Inter',system-ui,sans-serif!important;
+  font-size:9px!important;
+  font-weight:950!important;
+  letter-spacing:.4px!important;
+  white-space:nowrap!important;
+}
+.rk-room-board-v60{
+  margin-top:12px!important;
+}
+.rk-room-board-head-v60 h2{
+  color:#1A1410!important;
+}
+@media(max-width:430px){
+  .rk-room-leader-v60{
+    grid-template-columns:minmax(0,1fr) auto!important;
+    padding:16px!important;
+    gap:10px!important;
+    border-radius:26px!important;
+  }
+  .rk-room-leader-main-v60{
+    grid-template-columns:50px minmax(0,1fr)!important;
+    gap:11px!important;
+  }
+  .rk-room-rank-badge-v60{width:50px!important;height:50px!important;border-radius:18px!important;font-size:19px!important;}
+  .rk-room-leader-name-v60{font-size:24px!important;line-height:1.02!important;letter-spacing:-.65px!important;}
+  .rk-room-leader-sub-v60{font-size:13.5px!important;line-height:1.3!important;}
+  .rk-room-score-wrap-v60{min-width:52px!important;}
+  .rk-room-score-v60{font-size:38px!important;}
+  .rk-room-score-wrap-v60 span{font-size:7.5px!important;letter-spacing:1.2px!important;}
+  .rk-room-position-v60{padding:13px!important;border-radius:22px!important;align-items:flex-start!important;}
+  .rk-room-position-title-v60{font-size:19px!important;}
+  .rk-room-position-copy-v60{font-size:12.5px!important;}
+  .rk-room-position-meta-v60{min-width:58px!important;padding:9px 8px!important;}
+  .rk-room-position-meta-v60 strong{font-size:24px!important;}
+}
+@media(max-width:360px){
+  .rk-room-leader-v60{grid-template-columns:1fr!important;}
+  .rk-room-score-wrap-v60{align-items:flex-start!important;margin-left:61px!important;margin-top:2px!important;}
+  .rk-room-score-v60{font-size:34px!important;}
+}
+
 `;
 
 const S={
@@ -21607,9 +21825,9 @@ function RoomLeader({leader,myEntry,count,label="table"}){
   const isClub=label==="club";
   const roomName=isClub?"club":"table";
   const leaderName=leader.name||"Table leader";
-  const leaderTitle=samePlayer?`You own today’s ${roomName}`:leaderName;
+  const leaderTitle=samePlayer?`Top of the ${roomName}`:leaderName;
   const leaderSub=samePlayer
-    ?`${leaderScore} is the score to chase.`
+    ?`Everyone is chasing your ${leaderScore}.`
     :myEntry?`You’re ${gap} point${gap===1?"":"s"} back.`:`${count} score${count===1?"":"s"} posted today.`;
   return <section className={`rk-room-leader rk-room-leader-v60 ${samePlayer?"rk-room-leader-you":""}`} aria-label={`Today’s ${label} leader`}>
     <div className="rk-room-leader-main-v60">
