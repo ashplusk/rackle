@@ -11811,17 +11811,6 @@ body.rk-card-reference-open{overflow:hidden!important}
   .rk-howto-v42-flow-step{min-height:auto!important;padding:11px!important}
 }
 
-
-/* Style sticker badges: scorecard collectibles */
-.rk-style-sticker-row-v80{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:13px auto 18px;max-width:320px}
-.rk-style-sticker-v80{appearance:none;border:1px solid rgba(243,212,107,.28);background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.055));border-radius:999px;padding:7px 10px;display:inline-flex;align-items:center;gap:6px;color:#F3D46B;font-family:'Nunito','Segoe UI',sans-serif;font-size:10.5px;font-weight:950;line-height:1;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 7px 18px rgba(0,0,0,.10);backdrop-filter:blur(10px);cursor:pointer;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
-.rk-style-sticker-v80:hover{transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 10px 22px rgba(0,0,0,.14);border-color:rgba(243,212,107,.42)}
-.rk-style-sticker-v80 .rk-style-sticker-emoji-v80{width:21px;height:21px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.10);font-size:12px;line-height:1;flex-shrink:0}
-.rk-style-sticker-v80 .rk-style-sticker-count-v80{color:rgba(255,255,255,.70);font-size:9px;font-weight:950;margin-left:1px}
-.rk-style-sticker-current-v80{background:linear-gradient(145deg,rgba(243,212,107,.20),rgba(255,255,255,.08));border-color:rgba(243,212,107,.50)}
-.rk-profile-sticker-card-v80{border-radius:24px;padding:18px 16px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5 68%,#F1E6CF);border:1px solid rgba(26,20,16,.075);box-shadow:0 10px 28px rgba(26,20,16,.05),inset 0 1px 0 rgba(255,255,255,.82);margin-bottom:12px;overflow:hidden;position:relative}.rk-profile-sticker-card-v80:before{content:'';position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:999px;background:radial-gradient(circle,rgba(23,107,66,.08),transparent 66%);pointer-events:none}.rk-profile-sticker-head-v80{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:13px}.rk-profile-sticker-head-v80 span{display:block;font-size:9px;letter-spacing:2.4px;text-transform:uppercase;color:#176B42;font-weight:950;margin-bottom:6px}.rk-profile-sticker-head-v80 strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1.02;color:#1A1410;font-weight:950;letter-spacing:-.5px}.rk-profile-sticker-head-v80 p{margin:7px 0 0;font-size:12px;line-height:1.45;color:#6B6157;font-weight:760}.rk-profile-sticker-grid-v80{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.rk-profile-sticker-tile-v80{appearance:none;border:1px solid rgba(160,120,40,.16);background:linear-gradient(145deg,#fffaf0,#efe3c7);border-radius:18px;min-height:74px;padding:9px 6px;text-align:center;box-shadow:0 8px 20px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.8);cursor:pointer;position:relative;overflow:hidden}.rk-profile-sticker-tile-v80:after{content:'';position:absolute;inset:5px;border-radius:14px;border:1px dashed rgba(160,120,40,.12);pointer-events:none}.rk-profile-sticker-tile-v80 em{display:block;font-style:normal;font-size:20px;line-height:1;margin-bottom:6px}.rk-profile-sticker-tile-v80 strong{display:block;font-size:9.5px;line-height:1.08;color:#1A1410;font-weight:950;letter-spacing:-.1px}.rk-profile-sticker-tile-v80 span{display:inline-flex;margin-top:6px;min-width:22px;height:18px;border-radius:999px;align-items:center;justify-content:center;background:rgba(23,107,66,.08);color:#176B42;font-size:9px;font-weight:950}.rk-profile-sticker-empty-v80{border-radius:18px;border:1px dashed rgba(23,107,66,.18);background:rgba(23,107,66,.045);padding:14px;text-align:center;color:#6B6157;font-size:12px;line-height:1.45;font-weight:760}
-@media(max-width:390px){.rk-profile-sticker-grid-v80{grid-template-columns:repeat(3,1fr)}.rk-style-sticker-row-v80{gap:6px}.rk-style-sticker-v80{font-size:10px;padding:7px 9px}.rk-profile-sticker-head-v80 strong{font-size:20px}}
-
 `;
 
 const S={
@@ -14947,6 +14936,88 @@ function rkBestHandForSection(rack,secId){
   }).sort((a,b)=>(b.credibility-a.credibility)||(b.pct-a.pct))[0];
 }
 
+
+// ─── Expert Charleston v2: shape-first fit and coaching helpers ─────────────
+function rkExpertTilePassengerCount(rack=[],secId){
+  return (rack||[]).filter(t=>t&&t.t!=="j"&&!rkExpertTileMatchesSection(t,secId)).length;
+}
+function rkExpertSectionShapeBoost(struct,secId){
+  const nc=struct.sameNumberCounts||{};
+  const maxGroup=rkMaxNaturalGroup(struct);
+  if(secId==="cr")return (struct.bestWindow?.depth||0)*5+(struct.connectedSequences?.length||0)*5;
+  if(secId==="2468")return Math.min(28,(nc[2]||0)*3+(nc[4]||0)*3+(nc[6]||0)*4+(nc[8]||0)*3+struct.pairs.length*3);
+  if(secId==="369")return Math.min(28,(nc[3]||0)*4+(nc[6]||0)*5+(nc[9]||0)*4+struct.pairs.length*2);
+  if(secId==="13579")return Math.min(24,(nc[1]||0)*2+(nc[3]||0)*3+(nc[5]||0)*4+(nc[7]||0)*3+(nc[9]||0)*2+struct.pairs.length*2);
+  if(secId==="2026")return Math.min(26,(nc[2]||0)*5+(nc[6]||0)*5+struct.dragons.filter(t=>t.v==="Soap").length*4);
+  if(secId==="wd")return Math.min(26,struct.groupedHonor*9+Math.max(0,struct.honorTotal-3)*3);
+  if(secId==="aln")return Math.min(30,Number(struct.bestSameNumber?.[1]||0)*8+struct.pairs.length*3);
+  if(secId==="q")return Math.min(30,struct.jokers*8+maxGroup*7);
+  if(secId==="sp")return Math.min(30,struct.pairs.length*9-(struct.jokers?14:0));
+  return 0;
+}
+function rkExpertSectionPassengerNote(passengerCount,secName){
+  if(passengerCount>=6)return `Too many passengers are diluting ${secName}.`;
+  if(passengerCount>=4)return `Several tiles still do not help ${secName} accelerate.`;
+  if(passengerCount>=2)return `A couple of tiles are still riding along without doing enough.`;
+  return "";
+}
+function rkExpertSectionWhy(score,secId,struct,support=[],needs=[]){
+  const main=support?.[0]||"one small structural clue";
+  if(score>=72)return `${main} gave this lane real compression.`;
+  if(score>=56)return `${main} kept this lane alive, but it still needed more depth.`;
+  if(score>=40)return `${main} was useful, but the shape was still fragile.`;
+  return needs?.[0]?`This needed ${needs[0]} before it deserved trust.`:`This was more theoretical than dangerous.`;
+}
+function rkExpertCalibrateFitPercent(score,struct,secId,rankIndex=0,topScore=null){
+  let calibrated=score;
+  const passengerCount=0; // kept for future display; section score already has passenger penalty
+  if(rankIndex>0&&topScore!=null){
+    const drop=[0,12,21,31,40,48][Math.min(rankIndex,5)]||52;
+    calibrated=Math.min(calibrated,topScore-drop);
+  }
+  if(rankIndex>=2)calibrated=Math.min(calibrated,54);
+  if(rankIndex>=3)calibrated=Math.min(calibrated,44);
+  if(struct?.isolated?.length>=5)calibrated=Math.min(calibrated,rankIndex===0?62:45);
+  if((struct?.honorTotal||0)>=4&&(struct?.groupedHonor||0)===0&&secId==="wd")calibrated=Math.min(calibrated,58);
+  return rkClamp(Math.round(calibrated),0,92);
+}
+function rkOpinionatedSectionReads(reads=[],struct){
+  const sorted=[...(reads||[])].sort((a,b)=>b.score-a.score);
+  const topScore=sorted[0]?.score||0;
+  return sorted.map((r,i)=>{
+    const score=rkExpertCalibrateFitPercent(r.score,struct,r.id,i,topScore);
+    const status=score>=70?"dominant lane":score>=55?"live backup":score>=40?"fragile idea":score>=20?"thin path":"not enough shape";
+    const confidence=score>=72?"High":score>=56?"Medium":score>=40?"Low":"Very low";
+    return {...r,score,status,confidence,fitPct:score,coachLine:rkExpertSectionWhy(score,r.id,struct,r.support,r.needs)};
+  });
+}
+function rkExpertPassengerTiles(rack=[],secId){
+  return (rack||[])
+    .filter(t=>t&&t.t!=="j"&&!rkExpertTileMatchesSection(t,secId))
+    .map(t=>tLabel(t))
+    .filter(Boolean)
+    .slice(0,5);
+}
+function rkHumanExpertSummary({score,struct,top,deadness,passRead,compression,acceleration,gap}){
+  const topName=top?.name||"the best lane";
+  const bestWindow=struct.bestWindow?`${RK_SUIT_NAMES[struct.bestWindow.suit]} ${struct.bestWindow.nums[0]}-${struct.bestWindow.nums[2]}`:null;
+  if(score>=82)return bestWindow?`Monster rack. The ${bestWindow} window was compressed, fast, and hard to ignore.`:`Monster rack. The shape was compressed, efficient, and already dangerous.`;
+  if(score>=70)return `Excellent Charleston. ${topName} was not just possible, it was accelerating.`;
+  if(score>=60)return `Strong rack, but not automatic. ${topName} had shape, while a few passengers still slowed it down.`;
+  if(score>=50)return `Playable read. ${topName} stayed alive, but it needed cleaner compression before it became scary.`;
+  if(score>=40)return `Still alive, but fragile. The rack had clues without enough depth yet.`;
+  if(deadness?.reasons?.[0])return `Thin rack. ${deadness.reasons[0]} kept it from accelerating.`;
+  return `Drifting rack. Too much shape was still theoretical after the Charleston.`;
+}
+function rkExpertTimingLine({struct,top,score,liveDirections=[]}){
+  if(struct.bestWindow?.depth>=5)return `The read rewarded noticing the ${RK_SUIT_NAMES[struct.bestWindow.suit]} ${struct.bestWindow.nums[0]}-${struct.bestWindow.nums[2]} compression early.`;
+  if((liveDirections||[]).length>=4)return `This rack punished over-reading. Several branches looked alive, but most were only passengers.`;
+  if(struct.isolated?.length>=5)return `This rack needed faster cleanup. Too many singles survived the Charleston.`;
+  if(top?.id==="wd")return `Winds and Dragons needed patience, but not blind loyalty. Thin honors can look stronger than they are.`;
+  if(score>=70)return `The right tempo was commitment: protect the engine and clear the rest.`;
+  return `The read came down to timing the pivot, not keeping every option alive.`;
+}
+
 function rkEvaluateSection(struct,rack,sec){
   const secId=sec.id;
   const best=rkBestHandForSection(rack,secId);
@@ -14967,6 +15038,14 @@ function rkEvaluateSection(struct,rack,sec){
   if(secId==="q")support.push(`${struct.jokers} jokers · deepest natural group ${Math.max(0,...Object.values(struct.counts||{}))}`);
   if(secId==="sp")support.push(`${struct.pairs.length} natural pairs · ${struct.jokers} jokers`);
 
+  // Shape-first realism: fit is not just tile overlap. Reward compression and punish passengers.
+  const passengerCount=rkExpertTilePassengerCount(rack,secId);
+  const shapeBoost=rkExpertSectionShapeBoost(struct,secId);
+  const passengerPenalty=passengerCount>=6?24:passengerCount>=5?18:passengerCount>=4?13:passengerCount>=3?8:passengerCount>=2?4:0;
+  realism=realism+shapeBoost*.42-passengerPenalty;
+  const passengerNote=rkExpertSectionPassengerNote(passengerCount,RK_SEC_NAMES[secId]||sec.name||secId);
+  if(passengerNote)reasons.push(passengerNote);
+
   // Human realism caps. These prevent fake optimism from raw technical coverage.
   if(secId==="q"&&struct.jokers<2&&Math.max(0,...Object.values(struct.counts||{}))<3){realism=Math.min(realism,34);needs.push("at least two jokers or real natural depth");}
   if(secId==="wd"&&struct.honorTotal<5&&struct.groupedHonor===0){realism=Math.min(realism,38);needs.push("more honors before this is real");}
@@ -14981,11 +15060,13 @@ function rkEvaluateSection(struct,rack,sec){
   if(best?.cov?.groupNuance)reasons.push(best.cov.groupNuance);
   if(best?.cov?.plan?.needed?.length)needs.push(...best.cov.plan.needed.slice(0,2));
 
-  const status=realism>=68?"realistically playable":realism>=48?"alive":realism>=34?"technically possible":"thin";
+  realism=rkClamp(realism,0,92);
+  const status=realism>=70?"dominant lane":realism>=55?"live backup":realism>=40?"fragile idea":realism>=20?"thin path":"not enough shape";
   const confidence=realism>=74?"High":realism>=56?"Medium":realism>=40?"Low":"Very low";
   return{
-    id:secId,name:RK_SEC_NAMES[secId]||sec.name||secId,icon:sec.icon||"",score:rkClamp(realism),coverage,signal,status,confidence,
-    bestHand:best?.hand||null,bestCoverage:best?.cov||null,support:support.filter(Boolean),needs:[...new Set(needs.filter(Boolean))],reasons
+    id:secId,name:RK_SEC_NAMES[secId]||sec.name||secId,icon:sec.icon||"",score:Math.round(realism),coverage,signal,status,confidence,
+    bestHand:best?.hand||null,bestCoverage:best?.cov||null,support:support.filter(Boolean),needs:[...new Set(needs.filter(Boolean))],reasons,
+    passengerCount,shapeBoost,passengerTiles:rkExpertPassengerTiles(rack,secId),coachLine:rkExpertSectionWhy(realism,secId,struct,support,needs)
   };
 }
 
@@ -15329,25 +15410,23 @@ function rkExpertCharlestonCalibration({struct,sectionReads=[],liveDirections=[]
   score=Math.max(12,Math.min(96,Math.round(score)));
   const band=rkExpertScoreBand(score);
   const factors={viability:Math.round(viability),efficiency:Math.round(compression),acceleration:Math.round(acceleration),charlestonDiscipline:Math.round(passRead.score),deadnessRisk:Math.round(deadness.score),commitmentQuality:Math.round(commitment),controlledFlexibility:Math.round(controlledFlex)};
-  const summary=score>=70
-    ?`This rack was dangerous because it was compressing, not just flexible.`
-    :score>=55
-      ?`This rack had a real lane, but it still needed cleaner acceleration before it became premium.`
-      :score>=40
-        ?`This rack was playable, but fragile. It had clues without enough compression yet.`
-        :`This rack needed a reset. Too many tiles were still disconnected after the Charleston.`;
+  const summary=rkHumanExpertSummary({score,struct,top,deadness,passRead,compression,acceleration,gap});
   const expertNotes=[];
+  if(top?.coachLine)expertNotes.push(top.coachLine);
+  if(top?.passengerTiles?.length)expertNotes.push(`Passengers: ${top.passengerTiles.slice(0,3).join(", ")} were not doing enough for ${top.name}.`);
   if(deadness.reasons[0])expertNotes.push(`Risk: ${deadness.reasons[0]}.`);
   if(passRead.regret[0])expertNotes.push(passRead.regret[0]);
   else if(passRead.correct[0])expertNotes.push(passRead.correct[0]);
-  if(top?.needs?.[0])expertNotes.push(`Best lane still needed ${top.needs[0]}.`);
-  return{score,band,factors,summary,expertNotes:expertNotes.slice(0,3),passReview:passRead,deadness,topSection:top?.name||null,topSectionId:top?.id||null};
+  if(top?.needs?.[0])expertNotes.push(`Still needed: ${top.needs[0]}.`);
+  const timingLine=rkExpertTimingLine({struct,top,score,liveDirections});
+  return{score,band,factors,summary,expertNotes:expertNotes.slice(0,4),passReview:passRead,deadness,topSection:top?.name||null,topSectionId:top?.id||null,timingLine,passengerTiles:top?.passengerTiles||[],topCoachLine:top?.coachLine||""};
 }
 
 function rkEvaluateCharlestonEngine({finalRack,startingRack=[],passedTilesByRound=[],sectionId,chosenHand,allSections=[]}){
   const rack=finalRack||[];
   const struct=rkAnalyzeTileStructure(rack);
-  const sectionReads=(SECS||[]).map(sec=>rkEvaluateSection(struct,rack,sec)).sort((a,b)=>b.score-a.score);
+  let sectionReads=(SECS||[]).map(sec=>rkEvaluateSection(struct,rack,sec)).sort((a,b)=>b.score-a.score);
+  sectionReads=rkOpinionatedSectionReads(sectionReads,struct);
   const top=sectionReads[0]||null;
   const second=sectionReads[1]||null;
   const liveSections=sectionReads.filter(s=>s.score>=40&&s.status!=="thin");
@@ -16918,81 +16997,6 @@ function Avatar({url,initial,size=56,fontSize=22,border="2px solid rgba(255,255,
   );
 }
 
-
-// ─── STYLE STICKER BADGES ──────────────────────────────────────────────────
-function rkCleanStyleName(raw=""){
-  return String(raw||"")
-    .replace(/[?]/g,"")
-    .replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu,"")
-    .replace(/\ufe0f/g,"")
-    .replace(/\s+/g," ")
-    .trim();
-}
-function rkStyleEntry(raw=""){
-  const clean=rkCleanStyleName(raw);
-  const low=clean.toLowerCase();
-  const list=(typeof RACKLE_STYLE_GLOSSARY!=="undefined"&&Array.isArray(RACKLE_STYLE_GLOSSARY))?RACKLE_STYLE_GLOSSARY:[];
-  return list.find(s=>s.name.toLowerCase()===low)||list.find(s=>low&&s.name.toLowerCase().includes(low))||null;
-}
-function rkStyleBadge(raw=""){
-  const clean=rkCleanStyleName(raw)||"Table Reader";
-  const entry=rkStyleEntry(clean);
-  const emoji=entry?.emoji||(/flex/i.test(clean)?"♻️":/sharp/i.test(clean)?"🎯":/flow/i.test(clean)?"〰️":/dragon/i.test(clean)?"🐉":/wind/i.test(clean)?"🌬️":"🀄");
-  return{key:clean.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,""),name:clean,emoji,tag:entry?.tag||"Rackle style"};
-}
-function rkGetStyleBadges(){
-  const rows=ST.get("styleBadges",[]);
-  return Array.isArray(rows)?rows.filter(b=>b&&b.key&&b.name):[];
-}
-function rkCollectStyleBadge(raw,score=0,mode="daily",dayNum=null){
-  const badge=rkStyleBadge(raw);
-  if(!badge.key)return rkGetStyleBadges();
-  const now=Date.now();
-  const stamp=`${mode}:${dayNum||getDailySeed?.()||"practice"}`;
-  const rows=rkGetStyleBadges();
-  const idx=rows.findIndex(b=>b.key===badge.key);
-  if(idx>=0){
-    const prev=rows[idx];
-    rows[idx]={...prev,...badge,count:Number(prev.count||0)+(prev.lastStamp===stamp?0:1),lastScore:Number(score||prev.lastScore||0),lastSeen:now,lastStamp:stamp};
-  }else{
-    rows.unshift({...badge,count:1,lastScore:Number(score||0),lastSeen:now,lastStamp:stamp});
-  }
-  rows.sort((a,b)=>(Number(b.count||0)-Number(a.count||0))||(Number(b.lastSeen||0)-Number(a.lastSeen||0)));
-  ST.set("styleBadges",rows.slice(0,60));
-  return rows;
-}
-function rkTopStyleBadges(limit=5,currentRaw=null){
-  const rows=rkGetStyleBadges();
-  const current=currentRaw?rkStyleBadge(currentRaw):null;
-  const merged=current&&current.key&&!rows.some(b=>b.key===current.key)?[{...current,count:1,lastScore:0,lastSeen:Date.now(),isCurrent:true},...rows]:rows.map(b=>current&&b.key===current.key?{...b,isCurrent:true}:b);
-  return merged.slice(0,limit);
-}
-function StyleStickerRow({currentStyle,setScreen,limit=5}){
-  const badges=rkTopStyleBadges(limit,currentStyle);
-  if(!badges.length)return null;
-  return <div className="rk-style-sticker-row-v80" aria-label="Collected Rackle style stickers">
-    {badges.map(b=><button key={b.key} type="button" onClick={()=>setScreen&&setScreen("styleGlossary")} className={`rk-style-sticker-v80 ${b.isCurrent?"rk-style-sticker-current-v80":""}`} aria-label={`Open style guide for ${b.name}`}>
-      <span className="rk-style-sticker-emoji-v80">{b.emoji}</span>
-      <span>{b.name}</span>
-      {Number(b.count)>1&&<span className="rk-style-sticker-count-v80">×{b.count}</span>}
-    </button>)}
-  </div>;
-}
-function ProfileStyleStickers({setScreen}){
-  const badges=rkTopStyleBadges(5);
-  return <section className="rk-profile-sticker-card-v80" aria-label="Collected Rackle style stickers">
-    <div className="rk-profile-sticker-head-v80">
-      <div><span>Style stickers</span><strong>Your rack identity</strong><p>Each scorecard adds a style sticker. Collect the reads that show up most at your table.</p></div>
-      <button type="button" onClick={()=>setScreen&&setScreen("styleGlossary")} style={{appearance:"none",border:"1px solid rgba(23,107,66,.13)",background:"rgba(23,107,66,.07)",color:C.jade,borderRadius:999,padding:"9px 12px",fontSize:11,fontWeight:950,cursor:"pointer",whiteSpace:"nowrap"}}>Guide →</button>
-    </div>
-    {badges.length?<div className="rk-profile-sticker-grid-v80">
-      {badges.map(b=><button key={b.key} type="button" onClick={()=>setScreen&&setScreen("styleGlossary")} className="rk-profile-sticker-tile-v80">
-        <em>{b.emoji}</em><strong>{b.name}</strong><span>×{Number(b.count||1)}</span>
-      </button>)}
-    </div>:<div className="rk-profile-sticker-empty-v80">Play today’s Rackle to earn your first style sticker.</div>}
-  </section>;
-}
-
 function ProfileScreen({home,streak,rounds,dRes,setScreen}){
   const existingProfile=getProfile();
   const hasProfile=!!(existingProfile&&existingProfile.nickname);
@@ -17368,8 +17372,6 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
         </div>}
         {favSection&&<div style={{marginTop:8,fontSize:10,color:"rgba(255,255,255,0.4)"}}>Recent favourite: <span style={{color:"rgba(255,255,255,0.7)",fontWeight:600}}>{favSection}</span></div>}
       </div>
-
-      <ProfileStyleStickers setScreen={setScreen}/>
 
       {hist.length>0&&<div style={{...S.card,marginBottom:12}}>
         <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>YOUR STATS AT A GLANCE</div>
@@ -19066,7 +19068,6 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     return "Tough rack. Shake it off tomorrow.";
   })();
   const scoreLabel=score>=85?"Excellent":score>=70?"Strong":score>=55?"Playable":score>=40?"Scrappy":"Tough";
-  useEffect(()=>{rkCollectStyleBadge(iq.styleName||scoreLabel,score,"daily",dayNum);},[iq?.styleName,score,dayNum]);
   const scoreAccent=score>=85?C.gold:score>=70?C.jade:score>=55?"#2460A8":score>=40?C.gold:C.cinn;
   const shareName=(playerName||"I").trim();
   const shareClubLine=affiliatedClubName
@@ -19096,6 +19097,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     : "This rack never fully settled. Protect structure and avoid forcing a thin lane.");
   const pivotCopy=rkHumanTableCopy(ruleSafeLine||iq.strategicRead?.pivotAdvice||iq.coachNotes?.[0]||iq.takeaway||"Look for the first section that gives you natural groups, not just familiar tiles.");
   const tableTag=score>=75?"Flexible":score>=55?"Alive":score>=40?"Messy":"Thin";
+  const shapeLine=rkHumanTableCopy(iq.expertRead?.topCoachLine||iq.strategicRead?.topCoachLine||iq.expertNotes?.[0]||reviewCopy);
+  const passLine=rkHumanTableCopy(iq.passReview?.regret?.[0]||iq.passReview?.correct?.[0]||iq.passReview?.summary||"No major pass regret showed up against the cleanest lane.");
 
   const Metric=({label,value,sub,accent=C.ink,onClick})=>{
     const Tag=onClick?"button":"div";
@@ -19133,7 +19136,6 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           </div>
           <div className="rk-home-scorecard-v41-title">{iq.level||scoreLabel}</div>
           <p className="rk-home-scorecard-v41-copy">{quickRead}</p>
-          <StyleStickerRow currentStyle={iq.styleName||scoreLabel} setScreen={setScreen}/>
 
           <div className="rk-home-scorecard-v41-actions" aria-label="Scorecard rooms">
             <button type="button" onClick={()=>setScreen&&setScreen("globalLeaderboard")} aria-label="View global leaderboard">
@@ -19237,8 +19239,12 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         {showDetails&&(
           <div className="rk-daily-review-v20-detail rk-in">
             <div className="rk-daily-review-v20-detail-card">
-              <span>Your takeaway</span>
-              <p>{reviewCopy}</p>
+              <span>Shape read</span>
+              <p>{shapeLine||reviewCopy}</p>
+            </div>
+            <div className="rk-daily-review-v20-detail-card">
+              <span>Pass read</span>
+              <p>{passLine||"No major pass regret showed up against the cleanest lane."}</p>
             </div>
             <div className="rk-daily-review-v20-detail-card">
               <span>Next table move</span>
@@ -19265,7 +19271,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 }
 
 // ─── PRACTICE SCORECARD, collapsible sections, matching daily vibe ───────────
-function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHome,onDealAgain,setScreen}){
+function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHome,onDealAgain}){
   if(!iq)return null;
   const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
   const scoredHandLabel=iq.scoredHandLabel||null;
@@ -19277,7 +19283,6 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
   const styled=withIQStyle(iq);
   const level=iq.level||styled.level||"Rack read";
   const score=Math.round(iq.totalScore||iq.rackleIQScore||iq.score||0);
-  useEffect(()=>{rkCollectStyleBadge(styled?.styleName||level,score,"practice",Date.now());},[styled?.styleName,level,score]);
   const bestLabel=scoredHandObj?.labelForDisplay||scoredHandObj?.variantLabel||scoredHandObj?.label||iq.bestHandLabel||iq.strategicRead?.bestDirection||"Keep reading the rack";
   const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
 
@@ -19296,7 +19301,6 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
           </div>
           <div className="rk-home-scorecard-v41-title">{level}</div>
           <p className="rk-home-scorecard-v41-copy">One clearer pass can change the whole rack.</p>
-          <StyleStickerRow currentStyle={styled?.styleName||level} setScreen={setScreen}/>
           <div className="rk-home-scorecard-v41-actions rk-practice-homeclone-v45-actions">
             <button type="button" onClick={onDealAgain}>
               <span>Practice room</span>
@@ -20261,7 +20265,7 @@ function IQScorecard({iq,hand,startingRack,passLog,isDaily,dayNum,section,chosen
     <CoachModeScreen iq={iq} hand={hand} startingRack={startingRack} passLog={passLog} dayNum={dayNum} section={section} chosenSec={chosenSec} chosenHand={chosenHand} allSections={allSections} onBack={exitCoach} setScreen={setScreen}/>
   );
   if(isDaily)return <DailyIQScorecard iq={iq} hand={hand} startingRack={startingRack} passLog={passLog} dayNum={dayNum} section={section} chosenSec={chosenSec} chosenHand={chosenHand} allSections={allSections} onHome={onHome} onPractice={onPractice} onCoachMode={enterCoach} resultTime={iq?.timeSecs||iq?.time_secs||iq?.totalTime||0}/>;
-  return <PracticeIQScorecard iq={iq} hand={hand} passLog={passLog} section={section} chosenSec={chosenSec} allSections={allSections} onHome={onHome} onDealAgain={onDealAgain} setScreen={setScreen}/>;
+  return <PracticeIQScorecard iq={iq} hand={hand} passLog={passLog} section={section} chosenSec={chosenSec} allSections={allSections} onHome={onHome} onDealAgain={onDealAgain}/>;
 }
 
 // ─── STANDALONE SCORECARD SCREEN ─────────────────────────────────────────────
@@ -24933,7 +24937,7 @@ function StyleGlossaryScreen({home,setScreen}){
       <section className="rk-style-glossary-hero-v60">
         <div className="rk-style-glossary-kicker-v60">Rackle style guide</div>
         <h1>Find your table personality.</h1>
-        <p>Your style is a quick read on how your Charleston shaped the rack. Each scorecard adds a sticker to your profile, so you can see the table personality you keep earning.</p>
+        <p>Your style is a quick read on how your Charleston shaped the rack. Tap a style to see what it means and what to try next.</p>
       </section>
 
       <section className="rk-style-glossary-feature-v60" aria-label={`Current style: ${current.name}`}>
