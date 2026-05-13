@@ -536,3 +536,184 @@
 .rk-dash-cta-primary:active{transform:scale(0.98);}
 .rk-dash-text-link{border:none;background:none;font-family:'Nunito','Segoe UI',sans-serif;font-size:11px;font-weight:900;color:#176B42;cursor:pointer;padding:0;letter-spacing:0;opacity:0.82;transition:opacity 0.12s ease;}
 .rk-dash-text-link:hover{opacity:1;}
+
+/* ─── Desktop/tablet home layout correction pass ───────────────────────────
+   Keeps mobile portrait unchanged. Fixes desktop/tablet background consistency,
+   places Daily Rackle on its own row, and lays remaining home sections in a
+   clean two-column rhythm instead of staggered columns. */
+@media (min-width:768px){
+  html,body,#root,.rk-outer,.rk-dash-shell{
+    background:#F8F4EE!important;
+  }
+  .rk-outer{
+    background:#F8F4EE!important;
+    padding:0!important;
+  }
+  .rk-dash-shell{
+    background:#F8F4EE!important;
+    padding:22px 16px 0!important;
+  }
+  .rk-app{
+    width:min(100%,760px)!important;
+    max-width:760px!important;
+    background:#F8F4EE!important;
+    border:1px solid rgba(26,20,16,.07)!important;
+    border-radius:24px!important;
+    box-shadow:0 12px 46px rgba(26,20,16,.10), inset 0 1px 0 rgba(255,255,255,.72)!important;
+    margin:0!important;
+    overflow:hidden!important;
+  }
+  .rk-pg{
+    background:#F8F4EE!important;
+    padding:22px 28px 0!important;
+  }
+  .rk-startup-hero{
+    padding-top:14px!important;
+    padding-bottom:18px!important;
+  }
+  .rk-startup-logo{
+    font-size:42px!important;
+    line-height:.94!important;
+    margin-bottom:9px!important;
+  }
+  .rk-startup-subtitle{
+    font-size:14px!important;
+    line-height:1.35!important;
+    margin-bottom:12px!important;
+  }
+  .rk-startup-pulse-pill-v41,
+  .rk-startup-pulse-pill-v42{
+    margin-top:10px!important;
+  }
+  .rk-home-landing-flow{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:20px!important;
+    max-width:100%!important;
+    width:100%!important;
+    margin:0 auto!important;
+    align-items:start!important;
+  }
+  .rk-home-landing-flow > *{
+    min-width:0!important;
+    width:100%!important;
+    margin-top:0!important;
+    margin-bottom:0!important;
+  }
+  .rk-home-landing-flow > :first-child{
+    grid-column:1 / -1!important;
+    justify-self:center!important;
+    max-width:560px!important;
+    width:100%!important;
+    margin-top:0!important;
+    margin-bottom:2px!important;
+  }
+  .rk-home-landing-flow > .rk-daily-entry-wrap-v37{
+    grid-column:1 / -1!important;
+    justify-self:center!important;
+    max-width:560px!important;
+  }
+  .rk-home-landing-flow > .rk-home-scorecard-v41.rk-home-section-lg{
+    grid-column:1 / -1!important;
+    justify-self:center!important;
+    max-width:560px!important;
+  }
+  .rk-room-live-v6,
+  .rk-freeplay-v24,
+  .rk-learn-home-v8,
+  .rk-share-score-v6,
+  .rk-tomorrow-card-v11,
+  .rk-email-home,
+  .rk-clubhouse-v2{
+    height:100%!important;
+  }
+  .rk-room-live-v6-title,
+  .rk-freeplay-v24 h2,
+  .rk-learn-home-title,
+  .rk-share-score-v6-title,
+  .rk-tomorrow-v11-title,
+  .rk-email-home h2,
+  .rk-clubhouse-v2-title,
+  .rk-clubhouse-v3-title,
+  .rk-clubhouse-v4-title{
+    font-size:24px!important;
+    line-height:1.05!important;
+    letter-spacing:-.5px!important;
+  }
+  .rk-daily-entry-v6-title{
+    font-size:34px!important;
+    line-height:1.02!important;
+  }
+  .rk-room-live-v6-copy,
+  .rk-freeplay-v24-copy,
+  .rk-learn-home-copy,
+  .rk-share-score-v6-copy,
+  .rk-tomorrow-v11-copy,
+  .rk-email-home p{
+    font-size:12px!important;
+    line-height:1.5!important;
+  }
+  .rk-footer{
+    width:100%!important;
+    max-width:100%!important;
+    margin:26px 0 0!important;
+    padding:28px 18px 46px!important;
+    background:linear-gradient(180deg,rgba(255,255,255,0),rgba(237,231,218,.58))!important;
+    box-sizing:border-box!important;
+    border-top:1px solid rgba(26,20,16,.06)!important;
+  }
+  .rk-footer-inner{
+    width:100%!important;
+    max-width:620px!important;
+    margin:0 auto!important;
+    padding:0!important;
+    box-sizing:border-box!important;
+  }
+}
+
+@media (min-width:1024px){
+  .rk-dash-shell{
+    gap:22px!important;
+    padding:28px 24px 0!important;
+  }
+  .rk-dash-shell.has-dashboard .rk-app{
+    width:min(680px,calc(100vw - 360px))!important;
+    max-width:680px!important;
+  }
+  .rk-dash-right{
+    background:transparent!important;
+  }
+}
+
+@media (min-width:1320px){
+  .rk-dash-shell{
+    gap:24px!important;
+    padding:30px 24px 0!important;
+  }
+  .rk-dash-shell.has-dashboard .rk-app{
+    width:min(700px,calc(100vw - 640px))!important;
+    max-width:700px!important;
+  }
+}
+
+@media (min-width:1500px){
+  .rk-dash-shell.has-dashboard .rk-app{
+    width:760px!important;
+    max-width:760px!important;
+  }
+}
+
+@media (min-width:768px) and (max-width:920px){
+  .rk-home-landing-flow{
+    grid-template-columns:1fr!important;
+  }
+  .rk-home-landing-flow > :first-child,
+  .rk-home-landing-flow > .rk-daily-entry-wrap-v37,
+  .rk-home-landing-flow > .rk-home-scorecard-v41.rk-home-section-lg{
+    max-width:560px!important;
+  }
+  .rk-app{
+    width:min(100%,680px)!important;
+    max-width:680px!important;
+  }
+}
