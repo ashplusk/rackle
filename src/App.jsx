@@ -10652,7 +10652,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const hasPlayedBefore=(getHist().length>0)||rounds>0||hasTodayDaily||streak>0;
   const isFirstTime=!hasPlayedBefore;
 
-  const levelLine=iq?.totalScore>=90?"Elite read. Your club will notice.":iq?.totalScore>=80?"Strong read. Make them chase it.":iq?.totalScore>=70?"Solid read. One better pass moves you up.":iq?.totalScore>=60?"You're warming up.\nThe next rack is where it clicks.":"Tough rack. Come back sharper tomorrow.";
+  const levelLine=iq?.totalScore>=90?"Elite read. Your club will notice.":iq?.totalScore>=80?"Strong read. Make them chase it.":iq?.totalScore>=70?"Solid read. One better pass moves you up.":iq?.totalScore>=60?"You're warming up.\nThe next rack is where it clicks.":"Tough rack.\nCome back sharper tomorrow.";
   const brightScoreColor="#F3D46B";
   const goGlobalRank=(e)=>{
     e?.stopPropagation?.();
@@ -10729,11 +10729,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       "Daily Charleston is live",
       "The club board is open",
     ];
-    const headerPillRef=useRef(null);
-    if(!headerPillRef.current){
-      headerPillRef.current=headerPills[Math.floor(Math.random()*headerPills.length)];
-    }
-    const headerPill=headerPillRef.current;
+    const headerPill=headerPills[Math.abs(Number(dn)||0)%headerPills.length];
     return(
       <div className="rk-startup-hero-v4 rk-startup-hero-v42">
         <div className="rk-startup-mark-v4 rk-float">🀄</div>

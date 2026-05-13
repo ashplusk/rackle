@@ -1756,3 +1756,133 @@
   color:#6B6157!important;
   font-weight:700!important;
 }
+
+
+/* ─── vNext mobile/home final spacing tune ─────────────────────────────── */
+/* Header: lighter Daily Mahjong Workout and clearer breathing before the live pill. */
+.rk-startup-subtitle-v4,
+.rk-startup-hero-v42 .rk-startup-subtitle-v4{
+  font-weight:400!important;
+  opacity:.78!important;
+  letter-spacing:.05px!important;
+  margin-bottom:14px!important;
+}
+.rk-startup-pulse-pill-v41,
+.rk-startup-pulse-pill-v42{
+  margin-top:4px!important;
+  margin-bottom:7px!important;
+}
+@media(max-width:390px){
+  .rk-startup-subtitle-v4,
+  .rk-startup-hero-v42 .rk-startup-subtitle-v4{margin-bottom:13px!important;}
+  .rk-startup-pulse-pill-v41,
+  .rk-startup-pulse-pill-v42{margin-top:4px!important;}
+}
+@media (orientation: landscape) and (max-height:520px) and (pointer:coarse){
+  .rk-startup-subtitle-v4,
+  .rk-startup-hero-v42 .rk-startup-subtitle-v4{margin-bottom:10px!important;}
+  .rk-startup-pulse-pill-v41,
+  .rk-startup-pulse-pill-v42{margin-top:3px!important;margin-bottom:6px!important;}
+}
+
+/* Homepage scorecard sticker breathing room. */
+.rk-home-scorecard-v41-style{
+  margin-top:15px!important;
+  margin-bottom:19px!important;
+}
+.rk-score-shell .rk-iq-style-pill,
+.rk-practice-homeclone-v45 .rk-iq-style-pill{
+  margin-top:15px!important;
+  margin-bottom:19px!important;
+}
+
+/* Homepage scorecard summary line breaks for lower scores. */
+.rk-home-scorecard-v41-summary,
+.rk-home-scorecard-v41-subcopy,
+.rk-home-scorecard-v41-desc{
+  white-space:pre-line!important;
+}
+
+/* Live Club Standings: match Free Play section width and stop title/score collision. */
+@media(max-width:767px){
+  .rk-room-live-v6,
+  .rk-room-live-v17,
+  .rk-room-live-v19{
+    margin-left:0!important;
+    margin-right:0!important;
+    width:100%!important;
+    padding-left:10px!important;
+    padding-right:10px!important;
+  }
+  .rk-room-live-v6-summary,
+  .rk-room-live-v17-table{
+    padding-left:0!important;
+    padding-right:0!important;
+  }
+  .rk-room-live-v6-top{
+    grid-template-columns:minmax(0,1fr) 50px!important;
+    gap:8px!important;
+  }
+  .rk-room-live-v6-title{
+    max-width:100%!important;
+    font-size:20px!important;
+    line-height:1.08!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+  .rk-room-live-v6-score{
+    min-width:50px!important;
+    width:50px!important;
+  }
+  .rk-room-live-v6-score strong{font-size:24px!important;}
+}
+@media(max-width:360px){
+  .rk-room-live-v6-title{font-size:19px!important;}
+  .rk-room-live-v6-score{min-width:46px!important;width:46px!important;}
+}
+
+/* Scorecard Tomorrow's Rackle countdown pill: transparent backing with readable white text. */
+.rk-next-rack-panel-v11 .rk-next-rack-kicker-v11,
+.rk-next-rack-card-v11 .rk-next-rack-kicker-v11,
+.rk-score-shell .rk-next-rack-kicker-v11{
+  background:transparent!important;
+  color:#FFFDF8!important;
+  border:1px solid rgba(255,255,255,.52)!important;
+  box-shadow:none!important;
+  text-shadow:0 1px 2px rgba(0,0,0,.22)!important;
+}
+
+/* Rackle List / Clubhouse Updates: centered, clean, one-line description on mobile. */
+.rk-email-home,
+.rk-email-home-v8,
+.rk-email-home-v19{
+  text-align:center!important;
+  align-items:center!important;
+}
+.rk-email-kicker-v8,
+.rk-email-kicker-v18,
+.rk-email-title-v8,
+.rk-email-home h2,
+.rk-email-home-v8 h2,
+.rk-email-home-v19 h2,
+.rk-email-copy-v8,
+.rk-email-copy-v56,
+.rk-email-home p,
+.rk-email-home-v8 p,
+.rk-email-home-v19 p{
+  text-align:center!important;
+  align-self:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.rk-email-copy-v8,
+.rk-email-copy-v56,
+.rk-email-home p,
+.rk-email-home-v8 p,
+.rk-email-home-v19 p{
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  max-width:100%!important;
+}
