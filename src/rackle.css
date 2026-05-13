@@ -975,3 +975,230 @@
     flex-basis:430px!important;
   }
 }
+
+/* ─── Desktop / tablet center rail widening + stacked homepage correction ─── */
+@media (min-width:768px){
+  .rk-dash-shell{
+    background:#F8F4EE!important;
+  }
+  .rk-dash-shell.has-dashboard .rk-app,
+  .rk-dash-shell .rk-app{
+    width:500px!important;
+    max-width:500px!important;
+    flex-basis:500px!important;
+    flex-shrink:0!important;
+    overflow-x:hidden!important;
+  }
+
+  /* The middle app rail should behave like a single premium page, not a mosaic. */
+  .rk-home-landing-flow,
+  .rk-home-main-col,
+  .rk-home-side-col,
+  .rk-home-desktop-panel,
+  .rk-home-desktop-insights{
+    display:flex!important;
+    flex-direction:column!important;
+    grid-template-columns:1fr!important;
+    grid-auto-flow:row!important;
+    align-items:stretch!important;
+    width:100%!important;
+    max-width:100%!important;
+    gap:18px!important;
+  }
+  .rk-home-landing-flow > *,
+  .rk-home-main-col > *,
+  .rk-home-side-col > *{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    flex:0 0 auto!important;
+    box-sizing:border-box!important;
+  }
+
+  /* Free Play should read top-to-bottom in the app rail. */
+  .rk-freeplay-v24,
+  .rk-freeplay-v27,
+  .rk-freeplay-v35,
+  .rk-freeplay-v40{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:16px!important;
+    width:100%!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+  }
+  .rk-freeplay-v24-top,
+  .rk-freeplay-v35-top,
+  .rk-freeplay-v40-top{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    gap:14px!important;
+    width:100%!important;
+  }
+  .rk-freeplay-v24-copy,
+  .rk-freeplay-v35-copy,
+  .rk-freeplay-v40-copy{
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    text-align:left!important;
+  }
+  .rk-freeplay-v24-copy p,
+  .rk-freeplay-v35-copy p,
+  .rk-freeplay-v40-copy p{
+    max-width:34ch!important;
+    word-break:normal!important;
+    overflow-wrap:normal!important;
+  }
+  .rk-freeplay-v40-preview,
+  .rk-freeplay-v40-tiles{
+    width:100%!important;
+    max-width:100%!important;
+    justify-content:center!important;
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    transform:none!important;
+  }
+  .rk-freeplay-v24-steps,
+  .rk-freeplay-v35-steps,
+  .rk-freeplay-v40-steps{
+    display:flex!important;
+    flex-direction:column!important;
+    grid-template-columns:1fr!important;
+    gap:10px!important;
+    width:100%!important;
+  }
+  .rk-freeplay-v24-steps > div,
+  .rk-freeplay-v35-steps > div,
+  .rk-freeplay-v40-steps > div{
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    gap:12px!important;
+    width:100%!important;
+    min-width:0!important;
+    text-align:left!important;
+  }
+  .rk-freeplay-v24-steps span,
+  .rk-freeplay-v35-steps span,
+  .rk-freeplay-v40-steps span{
+    min-width:0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+  }
+  .rk-freeplay-v24-steps b,
+  .rk-freeplay-v35-steps b,
+  .rk-freeplay-v40-steps b,
+  .rk-freeplay-v24-steps small,
+  .rk-freeplay-v35-steps small,
+  .rk-freeplay-v40-steps small{
+    white-space:normal!important;
+    word-break:normal!important;
+    overflow-wrap:normal!important;
+  }
+
+  /* Learn + Explore can use three cards, but the cards must not squeeze text into word columns. */
+  .rk-learn-home-v8,
+  .rk-learn-home-v12,
+  .rk-learn-home-v18,
+  .rk-learn-home-v19{
+    width:100%!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+  }
+  .rk-learn-home-grid,
+  .rk-learn-home-v18-grid{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:10px!important;
+    width:100%!important;
+  }
+  .rk-learn-home-card,
+  .rk-learn-home-v18-card{
+    min-width:0!important;
+    width:100%!important;
+    text-align:left!important;
+  }
+  .rk-learn-home-text,
+  .rk-learn-home-v18-text{
+    min-width:0!important;
+    max-width:100%!important;
+  }
+  .rk-learn-home-text strong,
+  .rk-learn-home-v18-text strong{
+    white-space:normal!important;
+    word-break:normal!important;
+    overflow-wrap:normal!important;
+    line-height:1.12!important;
+  }
+  .rk-learn-home-text span,
+  .rk-learn-home-v18-text span{
+    white-space:normal!important;
+    word-break:normal!important;
+    overflow-wrap:normal!important;
+    line-height:1.4!important;
+  }
+
+  /* Share block should be a clean stacked social card, fully contained. */
+  .rk-share-score-v6{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:14px!important;
+    overflow:hidden!important;
+  }
+  .rk-share-score-v6-copybox{
+    width:100%!important;
+    max-width:100%!important;
+    text-align:left!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+  }
+  .rk-share-score-v6-title{
+    max-width:20ch!important;
+    white-space:normal!important;
+    word-break:normal!important;
+    overflow-wrap:normal!important;
+  }
+  .rk-share-score-v6-copy{
+    max-width:32ch!important;
+    white-space:normal!important;
+    word-break:normal!important;
+    overflow-wrap:normal!important;
+  }
+  .rk-share-lux-card-v6{
+    align-self:center!important;
+    width:100%!important;
+    max-width:390px!important;
+    margin:0 auto!important;
+  }
+}
+
+@media (min-width:1024px){
+  .rk-dash-shell.has-dashboard .rk-app,
+  .rk-dash-shell .rk-app{
+    width:540px!important;
+    max-width:540px!important;
+    flex-basis:540px!important;
+  }
+  .rk-dash-shell{
+    max-width:1440px!important;
+  }
+}
+
+@media (min-width:1320px){
+  .rk-dash-shell.has-dashboard .rk-app,
+  .rk-dash-shell .rk-app{
+    width:560px!important;
+    max-width:560px!important;
+    flex-basis:560px!important;
+  }
+}
+
+@media (max-width:767px){
+  /* Keep the existing mobile experience untouched. */
+}
