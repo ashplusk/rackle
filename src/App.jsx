@@ -8142,29 +8142,30 @@ function FinalHandReadCard({hand,chosenHandObj,chosenSecObj,handWasInferred}){
     scored.sort((a,b)=>b.coveragePct-a.coveragePct);
     best=scored[0]||null;
   }
-  if(!best)return null;
-  const label=best.labelForDisplay||best.variantLabel||best.label||"Best-fit hand";
-  const secName=best.secObj?.name||chosenSecObj?.name||"Best-fit section";
-  const secIcon=best.secObj?.icon||chosenSecObj?.icon||"🀄";
-  const source=best.chosen&&!handWasInferred?"Player final hand":"Rackle inferred hand";
+  const label=best?.labelForDisplay||best?.variantLabel||best?.label||"Best-fit hand";
+  const secName=best?.secObj?.name||chosenSecObj?.name||"Best-fit section";
+  const source=best?.chosen&&!handWasInferred?"Selected target":"Best-fit read";
   return(
-    <div className="rk-final-hand-mini-v92" aria-label="Final hand">
+    <div className="rk-final-hand-mini-v92 rk-final-rack-actual-v101" aria-label="Final hand after Charleston">
       <div className="rk-final-hand-mini-v92-head">
         <div>
-          <span>{source}</span>
-          <strong>Final hand</strong>
+          <span>Your actual rack</span>
+          <strong>Final hand after Charleston</strong>
         </div>
-        <b>{best.coveragePct||0}% fit</b>
+        {best&&<b>{best.coveragePct||0}% fit</b>}
       </div>
-      <div className="rk-final-hand-mini-v92-body">
-        <em>{secIcon}</em>
-        <div>
-          <small>{secName}</small>
+      <div className="rk-final-rack-actual-v101-rack">
+        <SortableRack hand={hand}/>
+      </div>
+      {best&&(
+        <div className="rk-final-rack-actual-v101-note">
+          <span>{source}</span>
+          <strong>{secName}</strong>
           <p>{label}</p>
         </div>
-      </div>
+      )}
       <div className="rk-final-hand-mini-v92-note">
-        This is the hand used for your rack cross-check below.
+        This is the rack you ended the Charleston with. Use it against the hand read below.
       </div>
     </div>
   );

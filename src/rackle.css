@@ -1670,3 +1670,89 @@
 .rk-final-hand-mini-v92-note{
   font-size:11px!important;
 }
+
+
+/* ─── FINAL MOBILE POLISH: live club margins, Rackle list centering, actual final rack ─── */
+.rk-room-live-v6,
+.rk-room-live-v17,
+.rk-room-live-v19{
+  margin-left:0!important;
+  margin-right:0!important;
+  padding-left:13px!important;
+  padding-right:13px!important;
+}
+@media(max-width:599px){
+  .rk-room-live-v6,
+  .rk-room-live-v17,
+  .rk-room-live-v19{
+    margin-left:-1px!important;
+    margin-right:-1px!important;
+    padding-left:12px!important;
+    padding-right:12px!important;
+  }
+  .rk-room-live-v6-summary{padding-left:0!important;padding-right:0!important;}
+  .rk-room-live-v6-title{max-width:calc(100% - 56px)!important;}
+}
+.rk-email-home-v8,
+.rk-email-home-v19{
+  text-align:center!important;
+  align-items:center!important;
+}
+.rk-email-kicker-v8,
+.rk-email-kicker-v18,
+.rk-email-title-v8,
+.rk-email-home-v8 h2,
+.rk-email-copy-v8,
+.rk-email-copy-v56,
+.rk-email-home-v8 p{
+  text-align:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.rk-email-copy-v8,
+.rk-email-copy-v56,
+.rk-email-home-v8 p{
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  max-width:100%!important;
+}
+.rk-final-rack-actual-v101 .rk-final-hand-mini-v92-head strong{line-height:1.12!important;}
+.rk-final-rack-actual-v101-rack{
+  margin:12px 0 10px!important;
+  padding:10px 8px!important;
+  border-radius:14px!important;
+  background:rgba(255,253,248,.72)!important;
+  border:1px solid rgba(26,20,16,.07)!important;
+  overflow-x:auto!important;
+}
+.rk-final-rack-actual-v101-note{
+  display:grid!important;
+  gap:3px!important;
+  margin:8px 0 9px!important;
+  padding:10px 11px!important;
+  border-radius:13px!important;
+  background:rgba(23,107,66,.06)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  text-align:left!important;
+}
+.rk-final-rack-actual-v101-note span{
+  font-size:8px!important;
+  letter-spacing:1.8px!important;
+  text-transform:uppercase!important;
+  font-weight:900!important;
+  color:#176B42!important;
+}
+.rk-final-rack-actual-v101-note strong{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:13px!important;
+  line-height:1.12!important;
+  color:#1A1410!important;
+}
+.rk-final-rack-actual-v101-note p{
+  margin:0!important;
+  font-size:11.5px!important;
+  line-height:1.4!important;
+  color:#6B6157!important;
+  font-weight:700!important;
+}
