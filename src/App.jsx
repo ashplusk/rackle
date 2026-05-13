@@ -11286,6 +11286,542 @@ html,body,#root{background:var(--rk-ivory)!important;}
   .rk-scorecard-premium-v26 .rk-score-share-v20-preview{grid-template-columns:1fr!important;text-align:center!important}
   .rk-scorecard-premium-v26 .rk-score-share-v20-preview p{grid-column:1!important;grid-row:auto!important;text-align:center!important;max-width:100%!important;margin-top:6px!important}
 }
+
+
+/* ─── quick hand browser overlay: resume current Rackle state ───────────── */
+body.rk-card-reference-open{overflow:hidden!important}
+.rk-card-reference-overlay{position:fixed;inset:0;z-index:140;display:flex;align-items:flex-end;justify-content:center;pointer-events:auto}
+.rk-card-reference-backdrop{position:absolute;inset:0;background:rgba(6,18,12,.38);backdrop-filter:blur(7px)}
+.rk-card-reference-sheet{position:relative;z-index:1;width:100%;max-width:560px;max-height:92vh;overflow:auto;-webkit-overflow-scrolling:touch;background:#F8F4EE;border-radius:28px 28px 0 0;box-shadow:0 -20px 60px rgba(6,18,12,.28),inset 0 1px 0 rgba(255,255,255,.78);border:1px solid rgba(160,120,40,.16);border-bottom:0}
+.rk-card-reference-sheet .rk-pg{min-height:auto!important;padding-bottom:26px!important}
+.rk-card-reference-sheet .rk-footer{display:none!important}
+.rk-card-reference-sheet .rk-handbrowser-v40{padding-top:16px!important}
+.rk-card-reference-sheet .rk-handbrowser-v40-hero{margin-top:0!important}
+@media(min-width:700px){.rk-card-reference-overlay{align-items:center;padding:28px}.rk-card-reference-sheet{border-radius:30px;max-height:88vh;border-bottom:1px solid rgba(160,120,40,.16)}}
+
+
+/* ─── v75: global header polish across all pages ─────────────────────── */
+.rk-page-header-v75{
+  position:relative!important;
+  display:grid!important;
+  grid-template-columns:auto 1fr auto!important;
+  align-items:center!important;
+  gap:12px!important;
+  min-height:72px!important;
+  margin:0 0 22px!important;
+  padding:12px 0 14px!important;
+  border-bottom:1px solid rgba(160,120,40,.14)!important;
+  background:transparent!important;
+}
+.rk-header-back-v75,
+.rk-header-menu-btn-v75{
+  width:auto!important;
+  min-width:54px!important;
+  height:44px!important;
+  border-radius:999px!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  background:linear-gradient(145deg,rgba(255,253,248,.90),rgba(242,238,229,.82))!important;
+  box-shadow:0 6px 18px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)!important;
+  color:#176B42!important;
+  cursor:pointer!important;
+  -webkit-tap-highlight-color:transparent!important;
+}
+.rk-header-back-v75{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  padding:0 15px!important;
+  font-size:13px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  letter-spacing:-.1px!important;
+}
+.rk-header-back-v75 span{
+  font-size:14px!important;
+  transform:translateY(-.5px)!important;
+}
+.rk-header-back-v75 strong{
+  font:inherit!important;
+  color:inherit!important;
+}
+.rk-header-brand-v75{
+  position:relative!important;
+  left:auto!important;
+  transform:none!important;
+  justify-self:center!important;
+  width:max-content!important;
+  max-width:54vw!important;
+  background:transparent!important;
+  border:0!important;
+  padding:0!important;
+  text-align:center!important;
+  cursor:pointer!important;
+  -webkit-tap-highlight-color:transparent!important;
+}
+.rk-header-brand-title-v75{
+  display:block!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:26px!important;
+  line-height:.92!important;
+  font-weight:900!important;
+  color:#1A1410!important;
+  letter-spacing:-.9px!important;
+  text-rendering:geometricPrecision!important;
+  -webkit-font-smoothing:antialiased!important;
+}
+.rk-header-brand-tag-v75{
+  display:block!important;
+  margin-top:5px!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:11.5px!important;
+  line-height:1.05!important;
+  font-weight:650!important;
+  font-style:italic!important;
+  color:#176B42!important;
+  letter-spacing:.22px!important;
+  white-space:nowrap!important;
+}
+.rk-header-logo-home-v60:hover .rk-header-brand-title-v75{
+  color:#176B42!important;
+}
+.rk-header-logo-home-v60:active{
+  transform:scale(.985)!important;
+}
+.rk-header-menu-wrap-v75{
+  position:relative!important;
+  justify-self:end!important;
+}
+.rk-header-menu-btn-v75{
+  min-width:44px!important;
+  width:44px!important;
+  padding:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:5px!important;
+}
+.rk-header-menu-btn-v75 span{
+  display:block!important;
+  width:18px!important;
+  height:1.8px!important;
+  border-radius:999px!important;
+  background:#1A1410!important;
+  transition:transform .16s ease,opacity .16s ease!important;
+}
+.rk-header-menu-btn-v75.is-open span:nth-child(1){transform:translateY(6.8px) rotate(45deg)!important}
+.rk-header-menu-btn-v75.is-open span:nth-child(2){opacity:0!important}
+.rk-header-menu-btn-v75.is-open span:nth-child(3){transform:translateY(-6.8px) rotate(-45deg)!important}
+.rk-header-menu-v75{
+  position:absolute!important;
+  top:calc(100% + 9px)!important;
+  right:0!important;
+  z-index:80!important;
+  min-width:184px!important;
+  max-width:210px!important;
+  border-radius:20px!important;
+  overflow:hidden!important;
+  background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;
+  border:1px solid rgba(26,20,16,.10)!important;
+  box-shadow:0 18px 48px rgba(26,20,16,.14),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-header-menu-profile-v75,
+.rk-header-menu-join-v75,
+.rk-header-menu-item-v75{
+  width:100%!important;
+  border:0!important;
+  border-bottom:1px solid rgba(26,20,16,.07)!important;
+  background:transparent!important;
+  cursor:pointer!important;
+  text-align:left!important;
+  color:#1A1410!important;
+}
+.rk-header-menu-profile-v75{
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  padding:13px 14px!important;
+}
+.rk-header-menu-avatar-v75{
+  width:32px!important;
+  height:32px!important;
+  border-radius:14px!important;
+  background:linear-gradient(145deg,#F7F0E5,#E8F2EC)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  color:#176B42!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:14px!important;
+  font-weight:950!important;
+  flex-shrink:0!important;
+}
+.rk-header-menu-name-v75{font-size:13px!important;font-weight:950!important;line-height:1.15!important;color:#1A1410!important}
+.rk-header-menu-sub-v75{font-size:10.5px!important;font-weight:750!important;line-height:1.25!important;color:#6B6157!important;margin-top:3px!important}
+.rk-header-menu-join-v75,
+.rk-header-menu-item-v75{
+  padding:13px 14px!important;
+  font-size:13px!important;
+  font-weight:900!important;
+}
+.rk-header-menu-join-v75{color:#176B42!important;background:rgba(23,107,66,.045)!important}
+.rk-header-menu-item-v75{border-bottom:0!important}
+@media(max-width:390px){
+  .rk-page-header-v75{gap:8px!important;min-height:66px!important;margin-bottom:18px!important;padding-top:10px!important;padding-bottom:12px!important}
+  .rk-header-back-v75{min-width:48px!important;height:40px!important;padding:0 12px!important;font-size:12px!important}
+  .rk-header-menu-btn-v75{width:40px!important;height:40px!important;min-width:40px!important}
+  .rk-header-brand-title-v75{font-size:23px!important;letter-spacing:-.7px!important}
+  .rk-header-brand-tag-v75{font-size:10.2px!important;margin-top:4px!important}
+}
+@media(max-width:350px){
+  .rk-header-back-v75 strong{display:none!important}
+  .rk-header-back-v75{min-width:40px!important;width:40px!important;padding:0!important}
+  .rk-header-brand-v75{max-width:58vw!important}
+  .rk-header-brand-title-v75{font-size:21px!important}
+  .rk-header-brand-tag-v75{font-size:9.5px!important;letter-spacing:.05px!important}
+}
+
+
+/* ─── v1: leaderboard action hub polish ─── */
+.rk-room-page > .rk-room-actions{
+  position:relative!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:10px!important;
+  margin:18px 0 18px!important;
+  padding:14px!important;
+  border-radius:28px!important;
+  background:
+    radial-gradient(circle at 16% 0%,rgba(34,139,88,.08),transparent 34%),
+    linear-gradient(145deg,#FFFDF8 0%,#F4EBDC 100%)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 16px 38px rgba(26,20,16,.065),inset 0 1px 0 rgba(255,255,255,.86)!important;
+}
+.rk-room-page > .rk-room-actions:before{
+  content:'Room actions';
+  grid-column:1/-1;
+  display:block;
+  margin:0 2px 2px;
+  color:#176B42;
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:9.5px;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:2.4px;
+  text-transform:uppercase;
+}
+.rk-room-page > .rk-room-actions .rk-room-btn{
+  min-height:50px!important;
+  border-radius:18px!important;
+  padding:0 14px!important;
+  background:rgba(255,253,248,.76)!important;
+  border:1px solid rgba(23,107,66,.11)!important;
+  color:#176B42!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:15px!important;
+  font-weight:950!important;
+  letter-spacing:-.15px!important;
+  box-shadow:0 8px 18px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.9)!important;
+}
+.rk-room-page > .rk-room-actions .rk-room-btn:hover,
+.rk-room-page > .rk-room-actions .rk-room-btn:focus-visible{
+  transform:translateY(-1px);
+  border-color:rgba(23,107,66,.20)!important;
+  box-shadow:0 12px 24px rgba(26,20,16,.06),inset 0 1px 0 rgba(255,255,255,.95)!important;
+}
+.rk-room-page > .rk-room-actions .rk-room-btn-primary,
+.rk-room-page > .rk-room-actions .rk-room-btn:first-child{
+  grid-column:1/-1!important;
+  min-height:58px!important;
+  background:
+    linear-gradient(145deg,#0D5A37 0%,#07341F 100%)!important;
+  border:1px solid rgba(243,212,107,.26)!important;
+  color:#FFFDF8!important;
+  box-shadow:0 16px 30px rgba(6,43,24,.18),inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+.rk-room-page > .rk-room-actions .rk-room-btn-primary:after,
+.rk-room-page > .rk-room-actions .rk-room-btn:first-child:after{
+  content:' →';
+  color:#F3D46B;
+  font-family:'Inter',system-ui,sans-serif;
+  font-weight:950;
+}
+.rk-room-page > .rk-room-actions .rk-room-btn:last-child{
+  color:#6B6157!important;
+  background:rgba(255,255,255,.52)!important;
+}
+@media(max-width:430px){
+  .rk-room-page > .rk-room-actions{
+    grid-template-columns:1fr!important;
+    gap:9px!important;
+    padding:13px!important;
+    margin-top:16px!important;
+  }
+  .rk-room-page > .rk-room-actions .rk-room-btn,
+  .rk-room-page > .rk-room-actions .rk-room-btn-primary,
+  .rk-room-page > .rk-room-actions .rk-room-btn:first-child{
+    grid-column:auto!important;
+    min-height:48px!important;
+    font-size:14.5px!important;
+  }
+  .rk-room-page > .rk-room-actions .rk-room-btn-primary,
+  .rk-room-page > .rk-room-actions .rk-room-btn:first-child{
+    min-height:54px!important;
+  }
+}
+
+
+/* ─── vNext: Free Play practice steps, clearer copy + polished rail ─── */
+.rk-freeplay-v40-steps{
+  position:relative!important;
+  display:grid!important;
+  gap:10px!important;
+  margin:18px 0 16px!important;
+}
+.rk-freeplay-v40-steps:before{
+  content:'';
+  position:absolute;
+  left:27px;
+  top:22px;
+  bottom:22px;
+  width:1px;
+  background:linear-gradient(to bottom,rgba(23,107,66,.18),rgba(201,168,76,.26),rgba(23,107,66,.18));
+  z-index:0;
+}
+.rk-freeplay-v40-steps div{
+  position:relative!important;
+  z-index:1!important;
+  grid-template-columns:38px 1fr!important;
+  min-height:64px!important;
+  padding:12px 13px!important;
+  gap:12px!important;
+  border-radius:20px!important;
+  background:
+    radial-gradient(circle at 8% 10%,rgba(23,107,66,.045),transparent 38%),
+    linear-gradient(145deg,#FFFDF9,#F8F1E6)!important;
+  border:1px solid rgba(23,107,66,.105)!important;
+  box-shadow:0 7px 18px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.88)!important;
+}
+.rk-freeplay-v40-steps strong{
+  width:38px!important;
+  height:38px!important;
+  border-radius:15px!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:15px!important;
+  font-weight:950!important;
+  background:linear-gradient(145deg,#176B42,#07562F)!important;
+  color:#F5E19C!important;
+  border:1px solid rgba(243,212,107,.18)!important;
+  box-shadow:0 7px 15px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+.rk-freeplay-v40-steps b{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:15px!important;
+  line-height:1.08!important;
+  letter-spacing:-.25px!important;
+  color:#1A1410!important;
+  margin-bottom:5px!important;
+}
+.rk-freeplay-v40-steps small{
+  font-size:12.25px!important;
+  line-height:1.35!important;
+  color:rgba(26,20,16,.56)!important;
+  font-weight:740!important;
+  max-width:27ch!important;
+}
+@media(max-width:390px){
+  .rk-freeplay-v40-steps div{grid-template-columns:35px 1fr!important;padding:11px 12px!important;gap:10px!important;min-height:62px!important}
+  .rk-freeplay-v40-steps strong{width:35px!important;height:35px!important;font-size:14px!important}
+  .rk-freeplay-v40-steps b{font-size:14px!important}
+  .rk-freeplay-v40-steps small{font-size:11.8px!important}
+}
+
+
+
+/* v1 rack review polish: compact coach cards, less report-like */
+.rk-scorecard-premium-v26 .rk-daily-review-v10,
+.rk-daily-review-v10{
+  padding:14px!important;
+  margin:8px 0 16px!important;
+  border-radius:26px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;
+  border:1px solid rgba(160,120,40,.12)!important;
+  box-shadow:0 10px 28px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-head,
+.rk-daily-review-v10-head{
+  padding:14px 14px!important;
+  margin-bottom:11px!important;
+  border-radius:20px!important;
+  background:linear-gradient(145deg,#F8F4EE,#EFE5D7)!important;
+  border:1px solid rgba(160,120,40,.13)!important;
+  box-shadow:none!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-head small,
+.rk-daily-review-v10-head small{
+  font-size:8px!important;
+  letter-spacing:2.25px!important;
+  margin-bottom:6px!important;
+  color:#176B42!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-head strong,
+.rk-daily-review-v10-head strong{
+  font-size:20px!important;
+  line-height:1.08!important;
+  letter-spacing:-.45px!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-head b,
+.rk-daily-review-v10-head b{
+  min-width:74px!important;
+  text-align:center!important;
+  padding:9px 14px!important;
+  background:rgba(23,107,66,.08)!important;
+  border:1px solid rgba(23,107,66,.13)!important;
+  color:#176B42!important;
+  font-size:11px!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-grid,
+.rk-daily-review-v10-grid{
+  gap:9px!important;
+  margin:0!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card,
+.rk-daily-review-v10-card{
+  display:grid!important;
+  grid-template-columns:54px 1fr!important;
+  column-gap:13px!important;
+  align-items:center!important;
+  min-height:104px!important;
+  padding:14px 15px!important;
+  border-radius:21px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.065)!important;
+  box-shadow:0 6px 18px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card.primary,
+.rk-daily-review-v10-card.primary{
+  background:linear-gradient(145deg,#FFFFFF,#F5FAF6)!important;
+  border-color:rgba(23,107,66,.12)!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card:before,
+.rk-daily-review-v10-card:before{
+  content:attr(data-icon)!important;
+  grid-row:1 / span 3!important;
+  width:48px!important;
+  height:48px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:17px!important;
+  background:linear-gradient(145deg,#F8F4EE,#EFE5D7)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 5px 14px rgba(26,20,16,.04)!important;
+  font-size:22px!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card span,
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card strong,
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card p,
+.rk-daily-review-v10-card span,
+.rk-daily-review-v10-card strong,
+.rk-daily-review-v10-card p{
+  grid-column:2!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card span,
+.rk-daily-review-v10-card span{
+  font-size:8px!important;
+  letter-spacing:2.15px!important;
+  color:rgba(23,107,66,.78)!important;
+  margin:0 0 5px!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card strong,
+.rk-daily-review-v10-card strong{
+  font-size:17px!important;
+  line-height:1.12!important;
+  margin:0 0 6px!important;
+  color:#1A1410!important;
+}
+.rk-scorecard-premium-v26 .rk-daily-review-v10-card p,
+.rk-daily-review-v10-card p{
+  font-size:12.25px!important;
+  line-height:1.52!important;
+  font-weight:700!important;
+  color:rgba(26,20,16,.64)!important;
+  margin:0!important;
+  max-width:38ch!important;
+}
+.rk-daily-review-v20-detail{
+  margin-top:10px!important;
+  border-radius:21px!important;
+  background:#FFFDF8!important;
+}
+@media(max-width:390px){
+  .rk-scorecard-premium-v26 .rk-daily-review-v10-card,
+  .rk-daily-review-v10-card{grid-template-columns:48px 1fr!important;column-gap:11px!important;padding:13px!important;min-height:100px!important}
+  .rk-scorecard-premium-v26 .rk-daily-review-v10-card:before,
+  .rk-daily-review-v10-card:before{width:44px!important;height:44px!important;font-size:20px!important}
+  .rk-scorecard-premium-v26 .rk-daily-review-v10-head strong,
+  .rk-daily-review-v10-head strong{font-size:19px!important}
+}
+
+/* v42: How Rackle Works hero flow polish */
+.rk-howto-v42-flow{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:9px!important;
+  margin-top:20px!important;
+}
+.rk-howto-v42-flow-step{
+  min-height:76px!important;
+  border-radius:18px!important;
+  padding:11px 12px 10px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.095),rgba(255,255,255,.045))!important;
+  border:1px solid rgba(243,212,107,.18)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-start!important;
+  gap:3px!important;
+}
+.rk-howto-v42-flow-step b{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:13px!important;
+  line-height:1!important;
+  color:#F3D46B!important;
+  letter-spacing:.4px!important;
+  font-weight:950!important;
+}
+.rk-howto-v42-flow-step strong{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:17px!important;
+  line-height:1.05!important;
+  color:#fff!important;
+  letter-spacing:-.25px!important;
+  font-weight:950!important;
+}
+.rk-howto-v42-flow-step span{
+  font-size:11.4px!important;
+  line-height:1.34!important;
+  color:rgba(255,255,255,.68)!important;
+  font-weight:760!important;
+  max-width:18ch!important;
+}
+@media(max-width:390px){
+  .rk-howto-v42-flow{grid-template-columns:1fr!important;gap:8px!important;margin-top:16px!important}
+  .rk-howto-v42-flow-step{min-height:auto!important;padding:11px!important}
+}
+
+
+/* Style sticker badges: scorecard collectibles */
+.rk-style-sticker-row-v80{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:13px auto 18px;max-width:320px}
+.rk-style-sticker-v80{appearance:none;border:1px solid rgba(243,212,107,.28);background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.055));border-radius:999px;padding:7px 10px;display:inline-flex;align-items:center;gap:6px;color:#F3D46B;font-family:'Nunito','Segoe UI',sans-serif;font-size:10.5px;font-weight:950;line-height:1;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 7px 18px rgba(0,0,0,.10);backdrop-filter:blur(10px);cursor:pointer;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.rk-style-sticker-v80:hover{transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 10px 22px rgba(0,0,0,.14);border-color:rgba(243,212,107,.42)}
+.rk-style-sticker-v80 .rk-style-sticker-emoji-v80{width:21px;height:21px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.10);font-size:12px;line-height:1;flex-shrink:0}
+.rk-style-sticker-v80 .rk-style-sticker-count-v80{color:rgba(255,255,255,.70);font-size:9px;font-weight:950;margin-left:1px}
+.rk-style-sticker-current-v80{background:linear-gradient(145deg,rgba(243,212,107,.20),rgba(255,255,255,.08));border-color:rgba(243,212,107,.50)}
+.rk-profile-sticker-card-v80{border-radius:24px;padding:18px 16px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5 68%,#F1E6CF);border:1px solid rgba(26,20,16,.075);box-shadow:0 10px 28px rgba(26,20,16,.05),inset 0 1px 0 rgba(255,255,255,.82);margin-bottom:12px;overflow:hidden;position:relative}.rk-profile-sticker-card-v80:before{content:'';position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:999px;background:radial-gradient(circle,rgba(23,107,66,.08),transparent 66%);pointer-events:none}.rk-profile-sticker-head-v80{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:13px}.rk-profile-sticker-head-v80 span{display:block;font-size:9px;letter-spacing:2.4px;text-transform:uppercase;color:#176B42;font-weight:950;margin-bottom:6px}.rk-profile-sticker-head-v80 strong{display:block;font-family:'Fraunces',Georgia,serif;font-size:22px;line-height:1.02;color:#1A1410;font-weight:950;letter-spacing:-.5px}.rk-profile-sticker-head-v80 p{margin:7px 0 0;font-size:12px;line-height:1.45;color:#6B6157;font-weight:760}.rk-profile-sticker-grid-v80{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.rk-profile-sticker-tile-v80{appearance:none;border:1px solid rgba(160,120,40,.16);background:linear-gradient(145deg,#fffaf0,#efe3c7);border-radius:18px;min-height:74px;padding:9px 6px;text-align:center;box-shadow:0 8px 20px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.8);cursor:pointer;position:relative;overflow:hidden}.rk-profile-sticker-tile-v80:after{content:'';position:absolute;inset:5px;border-radius:14px;border:1px dashed rgba(160,120,40,.12);pointer-events:none}.rk-profile-sticker-tile-v80 em{display:block;font-style:normal;font-size:20px;line-height:1;margin-bottom:6px}.rk-profile-sticker-tile-v80 strong{display:block;font-size:9.5px;line-height:1.08;color:#1A1410;font-weight:950;letter-spacing:-.1px}.rk-profile-sticker-tile-v80 span{display:inline-flex;margin-top:6px;min-width:22px;height:18px;border-radius:999px;align-items:center;justify-content:center;background:rgba(23,107,66,.08);color:#176B42;font-size:9px;font-weight:950}.rk-profile-sticker-empty-v80{border-radius:18px;border:1px dashed rgba(23,107,66,.18);background:rgba(23,107,66,.045);padding:14px;text-align:center;color:#6B6157;font-size:12px;line-height:1.45;font-weight:760}
+@media(max-width:390px){.rk-profile-sticker-grid-v80{grid-template-columns:repeat(3,1fr)}.rk-style-sticker-row-v80{gap:6px}.rk-style-sticker-v80{font-size:10px;padding:7px 9px}.rk-profile-sticker-head-v80 strong{font-size:20px}}
+
 `;
 
 const S={
@@ -16382,6 +16918,81 @@ function Avatar({url,initial,size=56,fontSize=22,border="2px solid rgba(255,255,
   );
 }
 
+
+// ─── STYLE STICKER BADGES ──────────────────────────────────────────────────
+function rkCleanStyleName(raw=""){
+  return String(raw||"")
+    .replace(/[?]/g,"")
+    .replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu,"")
+    .replace(/\ufe0f/g,"")
+    .replace(/\s+/g," ")
+    .trim();
+}
+function rkStyleEntry(raw=""){
+  const clean=rkCleanStyleName(raw);
+  const low=clean.toLowerCase();
+  const list=(typeof RACKLE_STYLE_GLOSSARY!=="undefined"&&Array.isArray(RACKLE_STYLE_GLOSSARY))?RACKLE_STYLE_GLOSSARY:[];
+  return list.find(s=>s.name.toLowerCase()===low)||list.find(s=>low&&s.name.toLowerCase().includes(low))||null;
+}
+function rkStyleBadge(raw=""){
+  const clean=rkCleanStyleName(raw)||"Table Reader";
+  const entry=rkStyleEntry(clean);
+  const emoji=entry?.emoji||(/flex/i.test(clean)?"♻️":/sharp/i.test(clean)?"🎯":/flow/i.test(clean)?"〰️":/dragon/i.test(clean)?"🐉":/wind/i.test(clean)?"🌬️":"🀄");
+  return{key:clean.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,""),name:clean,emoji,tag:entry?.tag||"Rackle style"};
+}
+function rkGetStyleBadges(){
+  const rows=ST.get("styleBadges",[]);
+  return Array.isArray(rows)?rows.filter(b=>b&&b.key&&b.name):[];
+}
+function rkCollectStyleBadge(raw,score=0,mode="daily",dayNum=null){
+  const badge=rkStyleBadge(raw);
+  if(!badge.key)return rkGetStyleBadges();
+  const now=Date.now();
+  const stamp=`${mode}:${dayNum||getDailySeed?.()||"practice"}`;
+  const rows=rkGetStyleBadges();
+  const idx=rows.findIndex(b=>b.key===badge.key);
+  if(idx>=0){
+    const prev=rows[idx];
+    rows[idx]={...prev,...badge,count:Number(prev.count||0)+(prev.lastStamp===stamp?0:1),lastScore:Number(score||prev.lastScore||0),lastSeen:now,lastStamp:stamp};
+  }else{
+    rows.unshift({...badge,count:1,lastScore:Number(score||0),lastSeen:now,lastStamp:stamp});
+  }
+  rows.sort((a,b)=>(Number(b.count||0)-Number(a.count||0))||(Number(b.lastSeen||0)-Number(a.lastSeen||0)));
+  ST.set("styleBadges",rows.slice(0,60));
+  return rows;
+}
+function rkTopStyleBadges(limit=5,currentRaw=null){
+  const rows=rkGetStyleBadges();
+  const current=currentRaw?rkStyleBadge(currentRaw):null;
+  const merged=current&&current.key&&!rows.some(b=>b.key===current.key)?[{...current,count:1,lastScore:0,lastSeen:Date.now(),isCurrent:true},...rows]:rows.map(b=>current&&b.key===current.key?{...b,isCurrent:true}:b);
+  return merged.slice(0,limit);
+}
+function StyleStickerRow({currentStyle,setScreen,limit=5}){
+  const badges=rkTopStyleBadges(limit,currentStyle);
+  if(!badges.length)return null;
+  return <div className="rk-style-sticker-row-v80" aria-label="Collected Rackle style stickers">
+    {badges.map(b=><button key={b.key} type="button" onClick={()=>setScreen&&setScreen("styleGlossary")} className={`rk-style-sticker-v80 ${b.isCurrent?"rk-style-sticker-current-v80":""}`} aria-label={`Open style guide for ${b.name}`}>
+      <span className="rk-style-sticker-emoji-v80">{b.emoji}</span>
+      <span>{b.name}</span>
+      {Number(b.count)>1&&<span className="rk-style-sticker-count-v80">×{b.count}</span>}
+    </button>)}
+  </div>;
+}
+function ProfileStyleStickers({setScreen}){
+  const badges=rkTopStyleBadges(5);
+  return <section className="rk-profile-sticker-card-v80" aria-label="Collected Rackle style stickers">
+    <div className="rk-profile-sticker-head-v80">
+      <div><span>Style stickers</span><strong>Your rack identity</strong><p>Each scorecard adds a style sticker. Collect the reads that show up most at your table.</p></div>
+      <button type="button" onClick={()=>setScreen&&setScreen("styleGlossary")} style={{appearance:"none",border:"1px solid rgba(23,107,66,.13)",background:"rgba(23,107,66,.07)",color:C.jade,borderRadius:999,padding:"9px 12px",fontSize:11,fontWeight:950,cursor:"pointer",whiteSpace:"nowrap"}}>Guide →</button>
+    </div>
+    {badges.length?<div className="rk-profile-sticker-grid-v80">
+      {badges.map(b=><button key={b.key} type="button" onClick={()=>setScreen&&setScreen("styleGlossary")} className="rk-profile-sticker-tile-v80">
+        <em>{b.emoji}</em><strong>{b.name}</strong><span>×{Number(b.count||1)}</span>
+      </button>)}
+    </div>:<div className="rk-profile-sticker-empty-v80">Play today’s Rackle to earn your first style sticker.</div>}
+  </section>;
+}
+
 function ProfileScreen({home,streak,rounds,dRes,setScreen}){
   const existingProfile=getProfile();
   const hasProfile=!!(existingProfile&&existingProfile.nickname);
@@ -16757,6 +17368,8 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
         </div>}
         {favSection&&<div style={{marginTop:8,fontSize:10,color:"rgba(255,255,255,0.4)"}}>Recent favourite: <span style={{color:"rgba(255,255,255,0.7)",fontWeight:600}}>{favSection}</span></div>}
       </div>
+
+      <ProfileStyleStickers setScreen={setScreen}/>
 
       {hist.length>0&&<div style={{...S.card,marginBottom:12}}>
         <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>YOUR STATS AT A GLANCE</div>
@@ -18453,6 +19066,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     return "Tough rack. Shake it off tomorrow.";
   })();
   const scoreLabel=score>=85?"Excellent":score>=70?"Strong":score>=55?"Playable":score>=40?"Scrappy":"Tough";
+  useEffect(()=>{rkCollectStyleBadge(iq.styleName||scoreLabel,score,"daily",dayNum);},[iq?.styleName,score,dayNum]);
   const scoreAccent=score>=85?C.gold:score>=70?C.jade:score>=55?"#2460A8":score>=40?C.gold:C.cinn;
   const shareName=(playerName||"I").trim();
   const shareClubLine=affiliatedClubName
@@ -18519,6 +19133,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           </div>
           <div className="rk-home-scorecard-v41-title">{iq.level||scoreLabel}</div>
           <p className="rk-home-scorecard-v41-copy">{quickRead}</p>
+          <StyleStickerRow currentStyle={iq.styleName||scoreLabel} setScreen={setScreen}/>
 
           <div className="rk-home-scorecard-v41-actions" aria-label="Scorecard rooms">
             <button type="button" onClick={()=>setScreen&&setScreen("globalLeaderboard")} aria-label="View global leaderboard">
@@ -18597,24 +19212,24 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       <section className="rk-daily-review-v10" aria-label="Charleston review">
         <button onClick={()=>setShowDetails(v=>!v)} className="rk-daily-review-v10-head">
           <span>
-            <small>Table read</small>
-            <strong>Your Charleston Read</strong>
+            <small>Rack review</small>
+            <strong>Your table read</strong>
           </span>
-          <b>{showDetails?"Hide":"Open"}</b>
+          <b>{showDetails?"Hide":"Details"}</b>
         </button>
         <div className="rk-daily-review-v10-grid">
           <div className="rk-daily-review-v10-card primary" data-icon="🧭">
-            <span>Your rack read</span>
+            <span>Your read</span>
             <strong>{reviewTone}</strong>
             <p>{reviewCopy}</p>
           </div>
           <div className="rk-daily-review-v10-card" data-icon="🀄">
             <span>Best lane</span>
             <strong>{reviewBestPath}</strong>
-            <p>This was the cleanest lane to keep alive after the Charleston.</p>
+            <p>The best lane your final rack is pointing toward right now.</p>
           </div>
           <div className="rk-daily-review-v10-card" data-icon="🎯">
-            <span>Next look</span>
+            <span>Next move</span>
             <strong>{tableTag}</strong>
             <p>{pivotCopy}</p>
           </div>
@@ -18650,7 +19265,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 }
 
 // ─── PRACTICE SCORECARD, collapsible sections, matching daily vibe ───────────
-function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHome,onDealAgain}){
+function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHome,onDealAgain,setScreen}){
   if(!iq)return null;
   const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
   const scoredHandLabel=iq.scoredHandLabel||null;
@@ -18662,6 +19277,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
   const styled=withIQStyle(iq);
   const level=iq.level||styled.level||"Rack read";
   const score=Math.round(iq.totalScore||iq.rackleIQScore||iq.score||0);
+  useEffect(()=>{rkCollectStyleBadge(styled?.styleName||level,score,"practice",Date.now());},[styled?.styleName,level,score]);
   const bestLabel=scoredHandObj?.labelForDisplay||scoredHandObj?.variantLabel||scoredHandObj?.label||iq.bestHandLabel||iq.strategicRead?.bestDirection||"Keep reading the rack";
   const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
 
@@ -18680,6 +19296,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
           </div>
           <div className="rk-home-scorecard-v41-title">{level}</div>
           <p className="rk-home-scorecard-v41-copy">One clearer pass can change the whole rack.</p>
+          <StyleStickerRow currentStyle={styled?.styleName||level} setScreen={setScreen}/>
           <div className="rk-home-scorecard-v41-actions rk-practice-homeclone-v45-actions">
             <button type="button" onClick={onDealAgain}>
               <span>Practice room</span>
@@ -19644,7 +20261,7 @@ function IQScorecard({iq,hand,startingRack,passLog,isDaily,dayNum,section,chosen
     <CoachModeScreen iq={iq} hand={hand} startingRack={startingRack} passLog={passLog} dayNum={dayNum} section={section} chosenSec={chosenSec} chosenHand={chosenHand} allSections={allSections} onBack={exitCoach} setScreen={setScreen}/>
   );
   if(isDaily)return <DailyIQScorecard iq={iq} hand={hand} startingRack={startingRack} passLog={passLog} dayNum={dayNum} section={section} chosenSec={chosenSec} chosenHand={chosenHand} allSections={allSections} onHome={onHome} onPractice={onPractice} onCoachMode={enterCoach} resultTime={iq?.timeSecs||iq?.time_secs||iq?.totalTime||0}/>;
-  return <PracticeIQScorecard iq={iq} hand={hand} passLog={passLog} section={section} chosenSec={chosenSec} allSections={allSections} onHome={onHome} onDealAgain={onDealAgain}/>;
+  return <PracticeIQScorecard iq={iq} hand={hand} passLog={passLog} section={section} chosenSec={chosenSec} allSections={allSections} onHome={onHome} onDealAgain={onDealAgain} setScreen={setScreen}/>;
 }
 
 // ─── STANDALONE SCORECARD SCREEN ─────────────────────────────────────────────
@@ -19839,46 +20456,50 @@ function RackleHeader({onBack,setScreen}){
   const [menuOpen,setMenuOpen]=useState(false);
   const profile=getProfile();
   const hasProfile=!!(profile&&profile.nickname);
+  const goHome=()=>setScreen?setScreen("home"):onBack?.();
   return(
-    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",position:"relative",marginBottom:22,paddingTop:12,paddingBottom:14,borderBottom:`1px solid rgba(160,120,40,.16)`}}>
-      <button onClick={onBack} style={S.back} aria-label="Back to home">← Back</button>
+    <header className="rk-page-header-v75" role="banner">
+      <button onClick={onBack} className="rk-header-back-v75" aria-label="Back">
+        <span aria-hidden="true">←</span>
+        <strong>Back</strong>
+      </button>
+
       <button
         type="button"
-        onClick={()=>setScreen?setScreen("home"):onBack?.()}
+        onClick={goHome}
         aria-label="Go to Rackle home"
-        className="rk-header-logo-home-v60"
-        style={{textAlign:"center",position:"absolute",left:"50%",transform:"translateX(-50%)",background:"transparent",border:"none",padding:0,cursor:"pointer"}}
+        className="rk-header-logo-home-v60 rk-header-brand-v75"
       >
-        <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div>
-        <div style={{fontFamily:F.d,fontSize:10,color:C.jade,fontWeight:600,fontStyle:"italic",letterSpacing:0.5,marginTop:1}}>The Daily Mahjong Workout.</div>
+        <span className="rk-header-brand-title-v75">Rackle</span>
+        <span className="rk-header-brand-tag-v75">The Daily Mahjong Workout.</span>
       </button>
-      <div style={{position:"relative"}}>
-        <button onClick={()=>setMenuOpen(o=>!o)} aria-label="Menu"
-          style={{background:menuOpen?"linear-gradient(180deg,#F2EBDD,#E9E0CF)":"rgba(23,107,66,.05)",border:`1px solid ${menuOpen?C.bdr:"rgba(23,107,66,.08)"}`,borderRadius:11,padding:"7px 10px",cursor:"pointer",display:"flex",flexDirection:"column",gap:4,alignItems:"center",justifyContent:"center",flexShrink:0,boxShadow:"inset 0 1px 0 rgba(255,255,255,.65)"}}>
-          <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
-          <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
-          <span style={{display:"block",width:16,height:1.5,background:C.ink,borderRadius:1}}/>
+
+      <div className="rk-header-menu-wrap-v75">
+        <button onClick={()=>setMenuOpen(o=>!o)} aria-label={menuOpen?"Close menu":"Open menu"} className={`rk-header-menu-btn-v75${menuOpen?" is-open":""}`}>
+          <span/>
+          <span/>
+          <span/>
         </button>
         {menuOpen&&(
-          <div className="rk-in rk-menu-surface" style={{position:"absolute",top:"100%",right:0,zIndex:50,background:"linear-gradient(145deg,#FFFDF8,#F6EFE4)",border:`1px solid rgba(26,20,16,.10)`,borderRadius:16,boxShadow:"0 16px 44px rgba(26,20,16,.13),inset 0 1px 0 rgba(255,255,255,.76)",minWidth:152,maxWidth:180,marginTop:8,overflow:"hidden"}}>
+          <div className="rk-in rk-menu-surface rk-header-menu-v75">
             {hasProfile?(
-              <button onClick={()=>{setMenuOpen(false);setScreen&&setScreen("profile");}} style={{width:"100%",display:"flex",alignItems:"center",gap:10,padding:"12px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left",borderBottom:`1px solid ${C.bdr}`}}>
-                <div style={{width:28,height:28,borderRadius:14,background:C.jade+"18",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:C.jade,flexShrink:0}}>
+              <button onClick={()=>{setMenuOpen(false);setScreen&&setScreen("profile");}} className="rk-header-menu-profile-v75">
+                <div className="rk-header-menu-avatar-v75">
                   {(profile.nickname||"?").charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <div style={{fontSize:13,fontWeight:700,color:C.ink,lineHeight:1.2}}>{profile.nickname.split(" ")[0]}</div>
-                  <div style={{fontSize:10,color:C.mut}}>View profile</div>
+                  <div className="rk-header-menu-name-v75">{profile.nickname.split(" ")[0]}</div>
+                  <div className="rk-header-menu-sub-v75">View profile</div>
                 </div>
               </button>
             ):(
-              <button onClick={()=>{setMenuOpen(false);setScreen&&setScreen("profile");}} style={{width:"100%",padding:"12px 14px",background:C.jade+"08",border:"none",cursor:"pointer",textAlign:"left",fontSize:13,fontWeight:700,color:C.jade,borderBottom:`1px solid ${C.bdr}`}}>Join Rackle →</button>
+              <button onClick={()=>{setMenuOpen(false);setScreen&&setScreen("profile");}} className="rk-header-menu-join-v75">Join Rackle →</button>
             )}
-            <button onClick={()=>{setMenuOpen(false);setScreen&&setScreen("settings");}} style={{width:"100%",padding:"12px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left",fontSize:13,fontWeight:600,color:C.ink}}>⚙ Settings</button>
+            <button onClick={()=>{setMenuOpen(false);setScreen&&setScreen("settings");}} className="rk-header-menu-item-v75">Settings</button>
           </div>
         )}
       </div>
-    </div>
+    </header>
   );
 }
 
@@ -20981,47 +21602,74 @@ function RoomLeader({leader,myEntry,count,label="table"}){
   );
   const isClub=label==="club";
   const roomName=isClub?"club":"table";
-  const leaderTitle=samePlayer?`You are the ${roomName} leader`:(leader.name||"Table leader");
+  const leaderName=leader.name||"Table leader";
+  const leaderTitle=samePlayer?`You own today’s ${roomName}`:leaderName;
   const leaderSub=samePlayer
-    ?`Everyone is chasing your ${leaderScore}.`
-    :myEntry?`${gap} point${gap===1?"":"s"} ahead of you`:`${count} player${count===1?"":"s"} posted today`;
-  return <section className={`rk-room-leader rk-room-leader-v1 ${samePlayer?"rk-room-leader-you":""}`} aria-label={`Today’s ${label} leader`}>
-    <div className="rk-room-rank-badge rk-room-rank-badge-v1">#1</div>
-    <div className="rk-room-leader-copy rk-room-leader-copy-v1">
-      <div className="rk-room-leader-kicker rk-room-leader-kicker-v1">Today’s {label} leader</div>
-      <div className="rk-room-leader-name rk-room-leader-name-v1">{leaderTitle}</div>
-      <div className="rk-room-leader-sub rk-room-leader-sub-v1">{leaderSub}</div>
+    ?`${leaderScore} is the score to chase.`
+    :myEntry?`You’re ${gap} point${gap===1?"":"s"} back.`:`${count} score${count===1?"":"s"} posted today.`;
+  return <section className={`rk-room-leader rk-room-leader-v60 ${samePlayer?"rk-room-leader-you":""}`} aria-label={`Today’s ${label} leader`}>
+    <div className="rk-room-leader-main-v60">
+      <div className="rk-room-rank-badge rk-room-rank-badge-v60">#1</div>
+      <div className="rk-room-leader-copy rk-room-leader-copy-v60">
+        <div className="rk-room-leader-kicker rk-room-leader-kicker-v60">Today’s {label} leader</div>
+        <div className="rk-room-leader-name rk-room-leader-name-v60">{leaderTitle}</div>
+        <div className="rk-room-leader-sub rk-room-leader-sub-v60">{leaderSub}</div>
+      </div>
     </div>
-    <div className="rk-room-score rk-room-score-v1">{leader.iqScore}</div>
+    <div className="rk-room-score-wrap-v60">
+      <div className="rk-room-score rk-room-score-v60">{leaderScore}</div>
+      <span>Rackle IQ</span>
+    </div>
+  </section>;
+}
+function RoomMyPosition({myRank,score,leader,count,clubName="the room"}){
+  if(!score)return null;
+  const leaderScore=Number(leader?.iqScore)||0;
+  const gap=myRank&&myRank>1?Math.max(0,leaderScore-score):0;
+  const title=myRank===1?"Top of the table":myRank?`You are #${myRank}`:"You are on the board";
+  const copy=myRank===1
+    ?`Everyone is chasing your ${score}.`
+    :myRank?`${gap} point${gap===1?"":"s"} behind today’s leader.`:`Play the Daily to claim your spot.`;
+  return <section className="rk-room-position-v60" aria-label="Your position">
+    <div>
+      <div className="rk-room-position-kicker-v60">Your position</div>
+      <div className="rk-room-position-title-v60">{title}</div>
+      <div className="rk-room-position-copy-v60">{copy}</div>
+    </div>
+    <div className="rk-room-position-meta-v60">
+      <strong>{myRank?`#${myRank}`:"—"}</strong>
+      <span>{count||0} posted</span>
+    </div>
   </section>;
 }
 function RoomRows({entries=[],scoreHint=null,emptyTitle="No scores yet",emptyCopy="Play today’s rack and claim the room."}){
-  if(!entries.length)return <section className="rk-room-board-v50 rk-room-board-empty-v50 rk-room-board-v1">
+  if(!entries.length)return <section className="rk-room-board-v50 rk-room-board-empty-v50 rk-room-board-v1 rk-room-board-v60">
     <div className="rk-room-board-empty-icon">🀄</div>
     <div className="rk-room-board-empty-title">{emptyTitle}</div>
     <div className="rk-room-board-empty-copy">{emptyCopy}</div>
   </section>;
-  return <section className="rk-room-board-v50 rk-room-board-v1" aria-label="Leaderboard">
-    <div className="rk-room-board-v50-head rk-room-board-head-v1">
+  return <section className="rk-room-board-v50 rk-room-board-v1 rk-room-board-v60" aria-label="Leaderboard">
+    <div className="rk-room-board-v50-head rk-room-board-head-v1 rk-room-board-head-v60">
       <div>
-        <div className="rk-room-board-v50-kicker">Today’s board</div>
+        <div className="rk-room-board-v50-kicker rk-room-board-kicker-v60">Today’s board</div>
         <h2>Leaderboard</h2>
       </div>
       <span>{entries.length} posted</span>
     </div>
-    <div className="rk-room-board-v50-list rk-room-board-list-v1">
+    <div className="rk-room-board-table-head-v60" aria-hidden="true"><span>Rank</span><span>Player</span><span>Score</span></div>
+    <div className="rk-room-board-v50-list rk-room-board-list-v1 rk-room-board-list-v60">
       {entries.slice(0,30).map((e,i)=>{
         const isMe=rkEntryMatchesCurrentPlayer(e,scoreHint);
         const rank=i+1;
         const podium=rank===1?"gold":rank===2?"silver":rank===3?"bronze":"";
-        return <div key={`${e.playerId||e.player_id||e.name}-${i}`} className={`rk-room-row rk-room-row-v50 rk-room-row-v1 ${isMe?"rk-room-row-me":""} ${rank<=3?"rk-room-row-podium":""} ${podium?`rk-podium-${podium}`:""}`}>
-          <div className={`rk-room-row-rank rk-room-row-rank-v50 rk-room-row-rank-v1 ${rank<=3?"rk-room-row-top":""}`}>{rank}</div>
-          <div className="rk-room-row-player-v50 rk-room-row-player-v1">
+        return <div key={`${e.playerId||e.player_id||e.name}-${i}`} className={`rk-room-row rk-room-row-v50 rk-room-row-v1 rk-room-row-v60 ${isMe?"rk-room-row-me":""} ${rank<=3?"rk-room-row-podium":""} ${podium?`rk-podium-${podium}`:""}`}>
+          <div className={`rk-room-row-rank rk-room-row-rank-v50 rk-room-row-rank-v1 rk-room-row-rank-v60 ${rank<=3?"rk-room-row-top":""}`}>{rank}</div>
+          <div className="rk-room-row-player-v50 rk-room-row-player-v1 rk-room-row-player-v60">
             <div className="rk-room-row-name">{e.name}{isMe?" · you":""}</div>
             <div className="rk-room-row-sub">{rkEntrySub(e)}</div>
           </div>
-          <div className="rk-room-row-score-wrap-v50 rk-room-row-score-wrap-v1">
-            <span>Rackle IQ</span>
+          <div className="rk-room-row-score-wrap-v50 rk-room-row-score-wrap-v1 rk-room-row-score-wrap-v60">
+            <span>IQ</span>
             <div className={`rk-room-row-score ${rkScoreTone(e.iqScore)}`}>{e.iqScore}</div>
           </div>
         </div>;
@@ -21087,17 +21735,14 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
     </div>
     {loading?<div className="rk-premium-card" style={{padding:28,textAlign:"center",marginBottom:12}}>Loading the room…</div>:<>
       <RoomLeader leader={leader} myEntry={myEntry} count={entries.length} label="table"/>
-      {score>0&&<div className="rk-room-you">
-        <div className="rk-room-you-main"><div className="rk-room-you-icon">🎯</div><div style={{minWidth:0}}><div className="rk-room-you-title">{myRank===1?"You are #1":`You are ${myRank?`#${myRank}`:"on the board"}`}</div><div className="rk-room-you-copy">{leader&&myEntry&&myRank!==1?`Beat ${leader.iqScore} to take the room.`:myRank===1?"You own today’s rack. Everyone is chasing you.":"Play the Daily to rank."}</div></div></div>
-        <div className={`rk-room-row-score ${rkScoreTone(score)}`}>{score}</div>
-      </div>}
+      <RoomMyPosition myRank={myRank} score={score} leader={leader} count={entries.length} clubName="Global room"/>
       <RoomRows entries={entries} scoreHint={score} emptyTitle="Room is open" emptyCopy="First score is on the board once you play. Send it to your table."/>
     </>}
     <div className="rk-room-actions">
-      <button className="rk-room-btn rk-room-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(shareText,"Rackle Global Room");setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Share the room"}</button>
-      <button className="rk-room-btn" onClick={load}>Refresh</button>
-      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"Club board":"Find club"}</button>
-      <button className="rk-room-btn" onClick={home}>Back home</button>
+      <button className="rk-room-btn rk-room-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(shareText,"Rackle Global Room");setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Share room"}</button>
+      <button className="rk-room-btn" onClick={load}>↻ Refresh board</button>
+      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"🏛 Club board":"🏛 Find club"}</button>
+      <button className="rk-room-btn" onClick={home}>← Back home</button>
     </div>
     <Footer/>
   </div>;
@@ -21164,10 +21809,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
     </div>
     {loading?<div className="rk-premium-card" style={{padding:28,textAlign:"center",marginBottom:12}}>Loading club room…</div>:<>
       <RoomLeader leader={leader} myEntry={myEntry} count={entries.length} label="club"/>
-      {score>0&&<div className="rk-room-you">
-        <div className="rk-room-you-main"><div className="rk-room-you-icon">🏛️</div><div style={{minWidth:0}}><div className="rk-room-you-title">{posted?myRank===1?"You are #1":"You are on the board":"Post today’s score"}</div><div className="rk-room-you-copy">{posted?myRank===1?"You lead the club today. Everyone is chasing you.":`Chase ${leader?.iqScore||score} before midnight.`:"Add your score to the club board."}</div></div></div>
-        <div className={`rk-room-row-score ${rkScoreTone(score)}`}>{score}</div>
-      </div>}
+      <RoomMyPosition myRank={posted?myRank:null} score={score} leader={leader} count={entries.length} clubName={club.name}/>
       {score>0&&!posted&&<div className="rk-invite-card">
         <div style={{fontSize:9,letterSpacing:2.2,textTransform:"uppercase",fontWeight:950,color:C.jade,marginBottom:8}}>Name on board</div>
         <div style={{display:"flex",gap:8}}><input value={nameInput} onChange={e=>setNameInput(e.target.value)} placeholder="Your name" style={{flex:1,minWidth:0,border:`1px solid rgba(26,20,16,.10)`,borderRadius:14,padding:"12px 13px",fontFamily:F.b,fontSize:13,background:"#FFFDF8",outline:"none"}}/><button onClick={postScore} disabled={posting||!nameInput.trim()} className="rk-room-btn rk-room-btn-primary" style={{padding:"0 16px"}}>{posting?"…":"Post"}</button></div>
@@ -21182,10 +21824,10 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
       </div>
     </div>
     <div className="rk-room-actions">
-      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>Global room</button>
-      <button className="rk-room-btn" onClick={load}>Refresh</button>
-      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("clubs")}>Change club</button>
-      <button className="rk-room-btn" onClick={home}>Back home</button>
+      <button className="rk-room-btn rk-room-btn-primary" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>View global room</button>
+      <button className="rk-room-btn" onClick={load}>↻ Refresh board</button>
+      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("clubs")}>🏛 Change club</button>
+      <button className="rk-room-btn" onClick={home}>← Back home</button>
     </div>
     <Footer/>
   </div>;
@@ -22106,9 +22748,9 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       </div>
 
       <div className="rk-freeplay-v24-steps rk-freeplay-v40-steps" aria-label="How Free Play works">
-        <div><strong>1</strong><span><b>Fresh rack</b><small>Try a new table read.</small></span></div>
-        <div><strong>2</strong><span><b>Make the passes</b><small>Practice the Charleston.</small></span></div>
-        <div><strong>3</strong><span><b>See your score</b><small>Get a quick coach note.</small></span></div>
+        <div><strong>1</strong><span><b>Fresh rack</b><small>Start a new Charleston warm-up.</small></span></div>
+        <div><strong>2</strong><span><b>Choose your passes</b><small>Practice what to keep, pass, and protect.</small></span></div>
+        <div><strong>3</strong><span><b>Read the table</b><small>Get your Rackle IQ and best lane.</small></span></div>
       </div>
 
       <button type="button" onClick={()=>go("free")} className="rk-freeplay-v24-cta">
@@ -24291,7 +24933,7 @@ function StyleGlossaryScreen({home,setScreen}){
       <section className="rk-style-glossary-hero-v60">
         <div className="rk-style-glossary-kicker-v60">Rackle style guide</div>
         <h1>Find your table personality.</h1>
-        <p>Your style is a quick read on how your Charleston shaped the rack. Tap a style to see what it means and what to try next.</p>
+        <p>Your style is a quick read on how your Charleston shaped the rack. Each scorecard adds a sticker to your profile, so you can see the table personality you keep earning.</p>
       </section>
 
       <section className="rk-style-glossary-feature-v60" aria-label={`Current style: ${current.name}`}>
@@ -24548,8 +25190,19 @@ function HowToPlayScreen({home,setScreen}){
         <div className="rk-howto-v40-kicker">How Rackle works</div>
         <h1>Play one Charleston. Get smarter.</h1>
         <p>Everyone plays the same rack. You make the Charleston, then compare your read with the room.</p>
-        <div className="rk-howto-v40-mini-flow" aria-label="Rackle flow">
-          <span>Read</span><b>→</b><span>Pass</span><b>→</b><span>Score</span><b>→</b><span>Compare</span>
+        <div className="rk-howto-v42-flow" aria-label="Rackle flow">
+          {[
+            {n:"01",title:"Read",copy:"Find the strongest lane."},
+            {n:"02",title:"Pass",copy:"Clear what does not help."},
+            {n:"03",title:"Score",copy:"Get your Rackle IQ."},
+            {n:"04",title:"Compare",copy:"See where you sit in the room."},
+          ].map(item=>(
+            <div className="rk-howto-v42-flow-step" key={item.n}>
+              <b>{item.n}</b>
+              <strong>{item.title}</strong>
+              <span>{item.copy}</span>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -24734,15 +25387,21 @@ function HandBrowserScreen({home,setScreen}){
 // PERSISTENT QUICK-CARD BUTTON, floating tab always visible during live game
 // (rendered inside AppShell so it overlays every screen)
 // ════════════════════════════════════════════════════════════════════════════
-function QuickCardButton({setScreen,screen,goBack}){
+function QuickCardButton({setScreen,screen,goBack,openHandBrowserOverlay,closeHandBrowserOverlay,handBrowserOverlayOpen}){
   const showOn=["home","play","stats","scorecard","lookup","handbrowser","howto","glossary","quiz"];
   if(!showOn.includes(screen))return null;
+  const isOpen=handBrowserOverlayOpen||screen==="handbrowser";
+  const handleClick=()=>{
+    if(handBrowserOverlayOpen){closeHandBrowserOverlay?.();return;}
+    if(screen==="handbrowser"){goBack?.();return;}
+    openHandBrowserOverlay?openHandBrowserOverlay():setScreen("handbrowser");
+  };
   return(
-    <div style={{position:"fixed",bottom:20,right:16,zIndex:80}}>
-      <button onClick={()=>screen==="handbrowser"?goBack():setScreen("handbrowser")}
-        aria-label="Quick card reference"
-        style={{width:48,height:48,borderRadius:24,background:screen==="handbrowser"?C.jade:"linear-gradient(135deg,#0F2016,#1B3A28)",border:`2px solid ${C.jade}50`,boxShadow:"0 4px 16px rgba(0,0,0,0.25)",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",transition:"all 0.2s"}}>
-        <span style={{fontSize:22}}>{screen==="handbrowser"?"✕":"🀄"}</span>
+    <div style={{position:"fixed",bottom:20,right:16,zIndex:handBrowserOverlayOpen?160:80}}>
+      <button onClick={handleClick}
+        aria-label={isOpen?"Close card reference":"Open card reference"}
+        style={{width:48,height:48,borderRadius:24,background:isOpen?C.jade:"linear-gradient(135deg,#0F2016,#1B3A28)",border:`2px solid ${C.jade}50`,boxShadow:"0 4px 16px rgba(0,0,0,0.25)",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",transition:"all 0.2s"}}>
+        <span style={{fontSize:22}}>{isOpen?"✕":"🀄"}</span>
       </button>
     </div>
   );
@@ -24751,8 +25410,10 @@ function QuickCardButton({setScreen,screen,goBack}){
 // ─── APP ROOT ──────────────────────────────────────────────────────────────────
 export default function Rackle(){
   const [screen,setScreenRaw]=useState("home");
+  const [handBrowserOverlayOpen,setHandBrowserOverlayOpen]=useState(false);
   const prevScreenRef=useRef("home");
   const setScreen=(s)=>{
+    setHandBrowserOverlayOpen(false);
     window.scrollTo(0,0);
     document.documentElement.scrollTop=0;
     document.body.scrollTop=0;
@@ -24760,6 +25421,15 @@ export default function Rackle(){
     setScreenRaw(s);
   };
   const goBack=()=>setScreen(prevScreenRef.current||"home");
+  const openHandBrowserOverlay=()=>{
+    prevScreenRef.current=screen;
+    setHandBrowserOverlayOpen(true);
+  };
+  const closeHandBrowserOverlay=()=>setHandBrowserOverlayOpen(false);
+  useEffect(()=>{
+    document.body.classList.toggle("rk-card-reference-open",handBrowserOverlayOpen);
+    return()=>document.body.classList.remove("rk-card-reference-open");
+  },[handBrowserOverlayOpen]);
   const [mode,setMode]=useState("free");
   const [streak,setStreak]=useState(ST.get("str",0));
   const [rounds,setRounds]=useState(ST.get("rnd",0));
@@ -24892,7 +25562,15 @@ export default function Rackle(){
         </div>
       )}
       <>
-        <QuickCardButton setScreen={setScreen} screen={screen} goBack={goBack}/>
+        <QuickCardButton setScreen={setScreen} screen={screen} goBack={goBack} openHandBrowserOverlay={openHandBrowserOverlay} closeHandBrowserOverlay={closeHandBrowserOverlay} handBrowserOverlayOpen={handBrowserOverlayOpen}/>
+        {handBrowserOverlayOpen&&screen!=="handbrowser"&&(
+          <div className="rk-card-reference-overlay" role="dialog" aria-modal="true" aria-label="2026 hand browser">
+            <div className="rk-card-reference-backdrop" onClick={closeHandBrowserOverlay} aria-hidden="true"/>
+            <div className="rk-card-reference-sheet">
+              <HandBrowserScreen home={closeHandBrowserOverlay} setScreen={(next)=>{closeHandBrowserOverlay();setScreen(next);}}/>
+            </div>
+          </div>
+        )}
         {screen==="home"&&<Home {...{streak,rounds,dDone,dRes,showHelp,setShowHelp,go,settings,setScreen}} showStats={()=>setScreen("stats")} showSettings={()=>setScreen("settings")} showTutorial={()=>setScreen("tutorial")} showCardGuide={()=>setScreen("cardguide")} showScorecard={()=>setScreen("scorecard")}/>}
         {screen==="tutorial"&&<Tutorial onDone={()=>{ST.set("tutDone",true);setScreen("home");}} onBack={()=>setScreen("home")} setScreen={setScreen}/>}
         {screen==="cardguide"&&<CardGuideScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
