@@ -456,3 +456,34 @@
   .rk-startup-pulse-pill-v41,
   .rk-startup-pulse-pill-v42{margin-top:7px!important;}
 }
+
+
+/* ─── v103: homepage header micro-breathing + smaller logo test ─── */
+.rk-startup-logo-v4,
+.rk-startup-hero-v42 .rk-startup-logo-v4{
+  font-size:clamp(50px,11.9vw,76px)!important;
+}
+.rk-startup-subtitle-v4,
+.rk-startup-hero-v42 .rk-startup-subtitle-v4{
+  margin-bottom:12px!important;
+}
+.rk-startup-pulse-pill-v41,
+.rk-startup-pulse-pill-v42,
+.rk-startup-live-note-v34{
+  margin-top:2px!important;
+}
+@media(max-width:390px){
+  .rk-startup-logo-v4,
+  .rk-startup-hero-v42 .rk-startup-logo-v4{font-size:42px!important;}
+  .rk-startup-subtitle-v4,
+  .rk-startup-hero-v42 .rk-startup-subtitle-v4{margin-bottom:11px!important;}
+}
+@media (orientation: landscape) and (max-height: 520px) and (pointer: coarse){
+  .rk-startup-logo-v4,
+  .rk-startup-hero-v42 .rk-startup-logo-v4{font-size:40px!important;}
+  .rk-startup-subtitle-v4,
+  .rk-startup-hero-v42 .rk-startup-subtitle-v4{margin-bottom:8.5px!important;}
+  .rk-startup-pulse-pill-v41,
+  .rk-startup-pulse-pill-v42,
+  .rk-startup-live-note-v34{margin-top:7px!important;}
+}
