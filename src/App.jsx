@@ -7476,7 +7476,6 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       <div className="rk-review-bottom-home rk-next-rack-panel-v11">
         <div className="rk-next-rack-card-v11">
           <div className="rk-next-rack-kicker-v11">Tomorrow’s Rackle</div>
-          <div className="rk-next-rack-title-v11">Tomorrow’s Charleston unlocks at midnight.</div>
           <p className="rk-next-rack-copy-v11">Come back tomorrow and defend your spot.</p>
           <MidnightCountdown dn={dayNum}/>
         </div>

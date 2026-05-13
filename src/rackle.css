@@ -1499,3 +1499,45 @@
 .rk-daily-review-v92-primary{background:linear-gradient(135deg,#176B42,#0F5432)!important;border:1px solid rgba(255,255,255,.16)!important;color:#FFFDF8!important;box-shadow:0 8px 18px rgba(23,107,66,.16),inset 0 1px 0 rgba(255,255,255,.16)!important;}
 @media(max-width:360px){.rk-daily-review-v92-actions{grid-template-columns:1fr!important}.rk-final-hand-mini-v92-head{flex-direction:column!important}.rk-final-hand-mini-v92-head b{align-self:flex-start!important}}
 .rk-next-rack-kicker-v11,.rk-tomorrow-v11-kicker{color:#1A1410!important;background:rgba(255,253,248,.78)!important;border-color:rgba(26,20,16,.10)!important;}
+
+
+/* ─── vNext scorecard margin + Tomorrow Rackle readability fix ─── */
+@media(max-width:599px){
+  .rk-pg .rk-score-shell{
+    margin-left:-4px!important;
+    margin-right:-4px!important;
+    width:calc(100% + 8px)!important;
+  }
+}
+.rk-next-rack-title-v11{
+  display:none!important;
+}
+.rk-next-rack-kicker-v11{
+  display:inline-flex!important;
+  align-items:center!important;
+  width:fit-content!important;
+  color:#fff!important;
+  background:transparent!important;
+  border:1px solid rgba(255,255,255,.72)!important;
+  box-shadow:none!important;
+  padding:6px 11px!important;
+  border-radius:999px!important;
+  font-size:8px!important;
+  line-height:1!important;
+  letter-spacing:2px!important;
+  text-transform:uppercase!important;
+  font-weight:900!important;
+  margin-bottom:12px!important;
+}
+.rk-next-rack-card-v11{
+  color:#fff!important;
+}
+.rk-next-rack-copy-v11{
+  color:rgba(255,255,255,.78)!important;
+}
+.rk-next-rack-card-v11 .rk-midnight-countdown,
+.rk-next-rack-card-v11 [class*="countdown"],
+.rk-next-rack-card-v11 .rk-midnight-countdown *,
+.rk-next-rack-card-v11 [class*="countdown"] *{
+  color:#fff!important;
+}
