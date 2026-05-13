@@ -107,3 +107,108 @@
   .rk-page-header-v75 .rk-header-menu-wrap-v75{width:38px!important;min-width:38px!important}
   .rk-page-header-v75 .rk-header-brand-v75{max-width:calc(100% - 96px)!important}
 }
+
+/* ─── vNext: style sticker peel animation + collectible sticker feel ───── */
+@keyframes rkStickerDropIn{
+  0%{opacity:0;transform:translateY(7px) rotate(-6deg) scale(.82);filter:drop-shadow(0 0 0 rgba(160,120,40,0))}
+  58%{opacity:1;transform:translateY(-2px) rotate(1.5deg) scale(1.06)}
+  100%{opacity:1;transform:translateY(0) rotate(-1deg) scale(1);filter:drop-shadow(0 8px 12px rgba(160,120,40,.14))}
+}
+@keyframes rkStickerCornerPeel{
+  0%,72%,100%{transform:rotate(8deg) translate(0,0) scale(1);filter:brightness(1)}
+  82%{transform:rotate(13deg) translate(-1px,1px) scale(1.06);filter:brightness(1.08)}
+  90%{transform:rotate(6deg) translate(0,0) scale(.98);filter:brightness(1)}
+}
+@keyframes rkStickerSheen{
+  0%,68%{transform:translateX(-135%) skewX(-18deg);opacity:0}
+  76%{opacity:.42}
+  92%,100%{transform:translateX(135%) skewX(-18deg);opacity:0}
+}
+@keyframes rkStickerMicroWiggle{
+  0%,100%{transform:translateY(0) rotate(-1deg)}
+  50%{transform:translateY(-1px) rotate(-.25deg)}
+}
+.rk-home-scorecard-v41-style,
+.rk-iq-style-pill,
+.rk-style-pill-clickable{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:visible!important;
+  border:1.5px solid rgba(243,212,107,.64)!important;
+  background:
+    radial-gradient(circle at 18% 18%,rgba(255,255,255,.78),transparent 25%),
+    linear-gradient(145deg,#FFF8D8 0%,#F7DD7B 48%,#D4A837 100%)!important;
+  color:#12351F!important;
+  box-shadow:
+    0 9px 18px rgba(160,120,40,.18),
+    0 1px 0 rgba(255,255,255,.45) inset,
+    0 -2px 0 rgba(120,80,16,.09) inset!important;
+  transform:rotate(-1deg)!important;
+  animation:rkStickerDropIn .58s cubic-bezier(.2,.9,.25,1.25) both, rkStickerMicroWiggle 5.5s ease-in-out 1.3s infinite!important;
+  will-change:transform;
+}
+.rk-home-scorecard-v41-style:before,
+.rk-iq-style-pill:before,
+.rk-style-pill-clickable:before{
+  content:""!important;
+  position:absolute!important;
+  inset:-5px!important;
+  z-index:-1!important;
+  border-radius:999px!important;
+  background:#FFFDF8!important;
+  border:1px dashed rgba(160,120,40,.38)!important;
+  box-shadow:0 4px 10px rgba(26,20,16,.055)!important;
+  pointer-events:none!important;
+  opacity:1!important;
+}
+.rk-home-scorecard-v41-style:after,
+.rk-iq-style-pill:after,
+.rk-style-pill-clickable:after{
+  content:""!important;
+  position:absolute!important;
+  right:-4px!important;
+  top:-5px!important;
+  width:15px!important;
+  height:15px!important;
+  z-index:3!important;
+  background:
+    linear-gradient(135deg,#FFFDF8 0 42%,rgba(160,120,40,.34) 45%,rgba(160,120,40,.10) 100%)!important;
+  border-radius:1px 10px 1px 8px!important;
+  box-shadow:-2px 2px 5px rgba(26,20,16,.12)!important;
+  transform-origin:100% 0!important;
+  transform:rotate(8deg)!important;
+  pointer-events:none!important;
+  animation:rkStickerCornerPeel 4.8s ease-in-out 1s infinite!important;
+}
+.rk-home-scorecard-v41-style span,
+.rk-iq-style-pill span,
+.rk-style-pill-clickable span{position:relative;z-index:2}
+.rk-home-scorecard-v41-style .rk-sticker-sheen,
+.rk-iq-style-pill .rk-sticker-sheen,
+.rk-style-pill-clickable .rk-sticker-sheen{display:none}
+.rk-home-scorecard-v41-style:hover,
+.rk-iq-style-pill:hover,
+.rk-style-pill-clickable:hover{
+  transform:rotate(0deg) translateY(-2px) scale(1.015)!important;
+  box-shadow:
+    0 12px 24px rgba(160,120,40,.22),
+    0 1px 0 rgba(255,255,255,.55) inset,
+    0 -2px 0 rgba(120,80,16,.08) inset!important;
+}
+.rk-home-scorecard-v41-style:active,
+.rk-iq-style-pill:active,
+.rk-style-pill-clickable:active{
+  transform:rotate(-.5deg) scale(.97)!important;
+}
+.rk-home-scorecard-v41-style{padding-left:16px!important;padding-right:16px!important}
+.rk-iq-style-pill{padding-left:16px!important;padding-right:16px!important}
+.rk-home-scorecard-v41-style::marker,
+.rk-iq-style-pill::marker{display:none!important}
+@media(prefers-reduced-motion:reduce){
+  .rk-home-scorecard-v41-style,
+  .rk-iq-style-pill,
+  .rk-style-pill-clickable{animation:none!important;transform:none!important}
+  .rk-home-scorecard-v41-style:after,
+  .rk-iq-style-pill:after,
+  .rk-style-pill-clickable:after{animation:none!important}
+}
