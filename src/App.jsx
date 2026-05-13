@@ -1,8 +1,9 @@
 import { Analytics } from '@vercel/analytics/react';
 import { useState, useEffect, useRef, useCallback } from "react";
-// RACKLE, Daily Charleston + Practice. The Daily Mahjong Workout. 2026 NMJL. v93.1
-// vNext: App-wide premium club styling applied across homepage, game, scorecards, guides, settings, profile, and leaderboards
-// v2.0, Full Rackle Score Scoring Engine, IQScorecard, ScorecardScreen
+
+// Rackle V1 · Founding Club Beta
+// Daily Charleston + Practice · 2026 NMJL · App shell, scoring, scorecards, leaderboards, and learning pages.
+
 
 // DESIGN
 const C={bg:"#F8F4EE",bg2:"#EDE7DA",ink:"#1A1410",mut:"#6B6157",jade:"#176B42",gold:"#A07828",cinn:"#B02A2A",bdr:"#DDD6C8",
@@ -77,7 +78,6 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .rk-mini-avatar{width:18px;height:18px;border-radius:50%;border:2px solid #F8F4EE;margin-left:-6px;background:#D9D2C5}
 
 
-
 .rk-mahjong-tile:hover{transform:translateY(-2px)!important;box-shadow:0 7px 14px rgba(26,20,16,.10),inset 0 1px 0 rgba(255,255,255,.9)!important}
 .rk-rack-surface:before{content:"";position:absolute}
 button{font-family:'Nunito','Segoe UI',sans-serif}
@@ -103,13 +103,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-table-talk{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:10px 12px;color:rgba(255,255,255,.78);font-size:11px;line-height:1.45}
 .rk-menu-surface{background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;border:1px solid rgba(26,20,16,.10)!important;box-shadow:0 16px 44px rgba(26,20,16,.13),inset 0 1px 0 rgba(255,255,255,.76)!important}
 .rk-modal-surface{background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;border:1px solid rgba(26,20,16,.09)!important;box-shadow:0 22px 70px rgba(26,20,16,.14),inset 0 1px 0 rgba(255,255,255,.75)!important}
-
-
-
-
-
-
-
 
 
 /* ─── vNext CLUBHOUSE HOMEPAGE OVERHAUL ─────────────────────────────────── */
@@ -284,7 +277,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-soft-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:rgba(23,107,66,.06);border:1px solid rgba(23,107,66,.08);color:#176B42;font-size:11px;font-weight:800}.rk-soft-pill-muted{background:rgba(26,20,16,.045);border:1px solid rgba(26,20,16,.05);color:rgba(26,20,16,.58)}
 
 
-
 /* ─── SCORECARD HOMEPAGE MATCH OVERRIDES ───────────────────────────────── */
 .rk-score-shell{padding:0 18px 52px;text-align:center}
 .rk-score-shell .rk-editorial-header{align-items:center;text-align:center;margin-top:24px;margin-bottom:18px}
@@ -303,7 +295,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-style-card .rk-style-icon{width:44px!important;height:44px!important;border-radius:14px!important}
 .rk-rank-grid-card{text-align:center!important}
 .rk-rank-grid-card div{justify-content:center}
-
 
 
 /* ─── SCORECARD NESTING + HOMEPAGE SCORE COLOR FIX ───────────────────────── */
@@ -332,7 +323,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 }
 
 
-
 /* ─── LEARN + HAND BROWSER POLISH ───────────────────────────────────────── */
 .rk-learn-shell{margin-top:24px;margin-bottom:10px}
 .rk-learn-head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(145deg,#FFFDF8,#F3EFE6)!important;border:1px solid rgba(23,107,66,.13)!important;border-radius:18px!important;cursor:pointer;padding:14px 15px;text-align:left;box-shadow:0 7px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.8)!important}
@@ -355,7 +345,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-hand-card-open{border-color:rgba(23,107,66,.18);box-shadow:0 9px 26px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.8)}
 .rk-howto-step{display:flex;gap:13px;padding:15px;border-radius:18px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.07);box-shadow:0 4px 16px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.76)}
 .rk-howto-num{width:34px;height:34px;border-radius:14px;background:rgba(23,107,66,.08);border:1px solid rgba(23,107,66,.10);display:flex;align-items:center;justify-content:center;color:#176B42;font-weight:900;flex-shrink:0}
-
 
 
 /* ─── vNext MOBILE PREMIUM POLISH: learning, leaderboards, stats, tutorial ── */
@@ -417,7 +406,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-tutorial-choice strong{font-family:'Fraunces',Georgia,serif;color:#1A1410;font-size:14px}.rk-tutorial-choice span{font-size:12px;color:#6B6157;line-height:1.45}
 
 
-
 /* ─── vNext DROPDOWN CONNECTIONS + HAND BROWSER + WEEKLY RECAP ───────────── */
 .rk-clubhouse-stack{margin-bottom:18px;border:1px solid rgba(26,20,16,.08);border-radius:22px;overflow:hidden;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);box-shadow:0 10px 30px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)}
 .rk-clubhouse-stack .rk-leaderboard-card{border-radius:0!important;margin:0!important;box-shadow:none!important;border-left:none!important;border-right:none!important;border-top:none!important;background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important}
@@ -468,9 +456,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-browser-mode-card{border-radius:21px;padding:16px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(23,107,66,.10);box-shadow:0 8px 24px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.78);text-align:center;margin:12px 0}
 .rk-browser-filter-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;margin:8px 0 10px;-webkit-overflow-scrolling:touch}.rk-browser-filter-row::-webkit-scrollbar{display:none}
 .rk-browser-filter-chip{white-space:nowrap;border-radius:999px;border:1px solid rgba(26,20,16,.08);background:linear-gradient(180deg,#FFFDF8,#F1E9DB);color:#6B6157;padding:8px 11px;font-size:11px;font-weight:900;cursor:pointer}.rk-browser-filter-chip-active{color:#176B42!important;border-color:rgba(23,107,66,.28)!important;background:rgba(23,107,66,.08)!important}
-
-
-
 
 
 /* ─── vNext CLUBHOUSE CONNECTION + ORGANIZER SCAN CARD ───────────────────── */
@@ -528,7 +513,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   color:#1A1410;
   font-weight:850;
 }
-
 
 
 /* ─── vNext HOMEPAGE BREATHING ROOM + DARKER CLUB GREEN ─────────────────── */
@@ -647,7 +631,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 @media(max-width:390px){.rk-review-rank-row{gap:8px}.rk-review-rank-card{padding:14px 8px}.rk-review-rank-value{font-size:27px}.rk-review-style-title{font-size:22px}.rk-review-share-preview{font-size:11px}}
 
 
-
 /* ─── vNext QUIET SOCIAL LEADERBOARDS + SIGNUP RETURN ───────────────────── */
 .rk-quiet-board{position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.078);box-shadow:0 12px 32px rgba(26,20,16,.046),inset 0 1px 0 rgba(255,255,255,.82)}
 .rk-quiet-board:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(255,255,255,.64),transparent 34%);pointer-events:none}
@@ -680,11 +663,9 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 @media(max-width:390px){.rk-quiet-title{font-size:20px}.rk-quiet-board-head{padding:16px 14px}.rk-quiet-pill-row{gap:6px}.rk-quiet-pill{font-size:10.5px;padding:6px 9px}.rk-quiet-leader{padding:13px}.rk-quiet-row{grid-template-columns:30px minmax(0,1fr) auto;padding:10px}.rk-quiet-score{font-size:22px}}
 
 
-
 /* ─── vNext CLOSED LEADERBOARDS + SIGNUP ALIGNMENT ───────────────────────── */
 .rk-email-home{text-align:left!important}
 .rk-email-home p{text-align:left!important;margin-left:0!important;margin-right:0!important}
-.rk-email-home input{text-align:left!important}
 .rk-quiet-board{border-radius:24px!important;background:linear-gradient(145deg,#FFFDF8 0%,#F6EFE4 100%)!important;border:1px solid rgba(26,20,16,.075)!important;box-shadow:0 10px 28px rgba(26,20,16,.042),inset 0 1px 0 rgba(255,255,255,.82)!important}
 .rk-quiet-board-head{padding:15px 15px!important;align-items:center!important;background:linear-gradient(145deg,#FFFDF8 0%,#F7F0E5 100%)!important;min-height:104px}
 .rk-quiet-board-head:active{transform:scale(.995)}
@@ -1433,9 +1414,7 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-quiet-leader{margin-bottom:16px!important;padding:18px!important;}
 .rk-quiet-row-list{gap:12px!important;}
 .rk-quiet-row{padding:15px 16px!important;gap:14px!important;}
-.rk-quiet-name{line-height:1.18!important;}
 .rk-quiet-sub{line-height:1.4!important;margin-top:6px!important;}
-.rk-quiet-chevron{font-size:0!important;}
 .rk-quiet-chevron > .rk-chevron-mark{margin:auto!important;}
 
 
@@ -1505,8 +1484,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
     margin:0 0 22px!important;
     max-width:760px!important;
   }
-  .rk-daily-hero-title br{display:none!important;}
-  .rk-daily-hero-title span{display:block!important;}
   .rk-daily-hero-subcopy{
     font-size:18px!important;
     line-height:1.52!important;
@@ -1553,8 +1530,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-daily-hero-card .rk-play-button-premium{width:112px!important;height:112px!important;}
   .rk-daily-hero-card .rk-play-triangle{border-top-width:17px!important;border-bottom-width:17px!important;border-left-width:27px!important;}
 }
-
-
 
 
 /* ─── vNext HERO SPACING + SOCIAL RETENTION POLISH ───────────────────────── */
@@ -1838,11 +1813,9 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 @media(max-width:390px){
   .rk-quiet-board-head{padding:14px 13px!important}
   .rk-quiet-title{font-size:17px!important}
-  .rk-quiet-preview-pill{font-size:9.5px!important;padding:5px 7px!important}
   .rk-learn-item-title{font-size:14px!important}
   .rk-learn-item-sub{font-size:10.5px!important}
 }
-
 
 
 /* ─── vNext CLUBHOUSE v3: premium social moat ───────────────────────────── */
@@ -1974,7 +1947,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-home-ritual-hero .rk-hero-logo{font-size:48px!important;}
   .rk-daily-divider-row{margin-bottom:20px!important;}
 }
-
 
 
 /* ─── vNext CLUBHOUSE v4: country club score rooms ─────────────────────── */
@@ -2119,7 +2091,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-score-share-artifact>div{display:flex;align-items:center;justify-content:space-between;gap:10px}.rk-score-share-artifact strong{font-family:'Fraunces',Georgia,serif;color:#F3D46B;font-size:17px}.rk-score-share-artifact div span{font-family:'Fraunces',Georgia,serif;font-size:34px;line-height:1;color:#F3D46B;font-weight:950}.rk-score-share-artifact p{margin:7px 0 5px;font-size:11px;line-height:1.35;color:rgba(255,255,255,.72);font-weight:850}.rk-score-share-artifact em{display:block;font-style:normal;font-size:18px;letter-spacing:1px}.rk-score-share-artifact small{display:block;margin-top:5px;color:rgba(255,255,255,.54);font-weight:850}
 .rk-tomorrow-mini-hook{border-radius:16px;padding:12px 13px;background:linear-gradient(145deg,#FFFDF8,#F7F0E5);border:1px solid rgba(26,20,16,.07);box-shadow:0 4px 14px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.76);font-size:12px;line-height:1.4;color:#1A1410;font-weight:900;text-align:center}.rk-tomorrow-mini-hook span{display:block;color:#6B6157;font-size:11px;font-weight:800;margin-top:2px}
 .rk-score-ultra-simple .rk-score-rack-card{margin-top:10px}.rk-score-ultra-simple .rk-score-card{box-shadow:0 5px 16px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.76)!important}
-
 
 
 /* ─── vNext APP LOOP OPTIMIZATION: play → score → share → return ───────── */
@@ -2452,7 +2423,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   text-transform:none!important;
   color:rgba(23,107,66,.92)!important;
 }
-.rk-live-ticker-side{display:none!important}
 .rk-home-landing-flow{margin-top:0!important}
 .rk-streak-card{display:none!important}
 .rk-score-shell .rk-iq-hero,.rk-iq-hero{margin-top:0!important}
@@ -2519,7 +2489,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 @media(min-width:760px){.rk-share-score-v6{grid-template-columns:1fr 260px;align-items:center}.rk-ritual-card-v6{flex-basis:31%}}
 @media(max-width:599px){.rk-real-tile-wrap-v6:nth-child(n+7){display:none}.rk-real-tile-row-v6{gap:8px}.rk-real-tile-wrap-v6 .rk-mahjong-tile{width:40px!important;height:58px!important}.rk-daily-entry-v6{padding:21px 15px 20px}.rk-daily-entry-v6-title{font-size:24px}.rk-warmup-card-v6{align-items:flex-start;flex-direction:column}.rk-warmup-v6-cta{width:100%}.rk-startup-logo-v4{margin-bottom:16px!important}.rk-startup-subtitle-v4{margin-bottom:16px!important}}
 @media(max-width:380px){.rk-real-tile-row-v6{gap:6px}.rk-real-tile-wrap-v6 .rk-mahjong-tile{width:37px!important;height:54px!important}.rk-daily-entry-v6-stats span{font-size:10.5px}}
-
 
 
 /* ─── vNext compact premium hero copy, Free Play CTA, and Rackle Ritual polish ─── */
@@ -2858,7 +2827,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-practice-v9-bottom-actions{display:grid;grid-template-columns:1.35fr .85fr;gap:9px}
 .rk-practice-v9-bottom-actions button{min-height:48px;border-radius:17px;border:1px solid rgba(23,107,66,.12);font-weight:950;cursor:pointer}
 @media(max-width:390px){.rk-practice-v9-score-row{align-items:flex-start;flex-direction:column}.rk-practice-v9-title,.rk-practice-v9-copy{text-align:left}.rk-practice-v9-score{font-size:68px}.rk-intuition-v9-grid{grid-template-columns:1fr}.rk-practice-v9-actions,.rk-practice-v9-bottom-actions{grid-template-columns:1fr}.rk-alt-v9-title{max-width:185px}}
-
 
 
 /* ─── v10 DAILY LOOP + LEADERBOARD + SCORECARD REVIEW POLISH ───────────── */
@@ -3241,8 +3209,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 }
 
 
-
-
 /* ─── v13 homepage readability + dropdown polish ───────────────────────── */
 .rk-daily-entry-v6-copy{
   max-width:315px!important;
@@ -3494,7 +3460,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   .rk-room-live-v6-top{grid-template-columns:minmax(0,1fr) 88px!important;gap:14px!important;}
   .rk-room-live-v6-score{width:88px!important;height:88px!important;border-radius:24px!important;}
   .rk-room-live-v6-score strong{font-size:36px!important;}
-  .rk-dropdown-hint-v12{display:none!important;}
   .rk-room-live-v6-summary:after{right:19px!important;bottom:20px!important;width:38px!important;height:38px!important;}
   .rk-room-live-v6-copy{font-size:12.7px!important;max-width:22ch!important;}
 }
@@ -3855,7 +3820,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 }
 
 
-
 /* ─── v16: Live Club Standings social interaction pass ───────────────────── */
 .rk-room-live-v6{
   cursor:pointer!important;
@@ -4123,7 +4087,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 }
 
 
-
 /* ─── v17: Live standings declutter + lighter clubhouse updates ─────────── */
 .rk-room-live-v17{padding-bottom:14px!important;overflow:hidden!important}
 .rk-room-live-v17 .rk-room-live-v6-title{font-size:26px!important;line-height:1.02!important;letter-spacing:-.65px!important}
@@ -4343,8 +4306,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 .rk-email-home-v19 .rk-email-btn-v8{height:38px!important;border-radius:13px!important;padding:0 14px!important;white-space:nowrap!important}
 .rk-email-home-v19 .rk-email-done-v8{padding:14px!important;border-radius:18px!important;background:rgba(23,107,66,.055)!important}
 @media(max-width:390px){.rk-email-home-v19 .rk-email-form-v8{grid-template-columns:1fr!important}.rk-email-home-v19 .rk-email-btn-v8{width:100%!important}}
-
-
 
 
 /* ─── v20 Scorecard fixes and polish ───────────────────────────────────── */
@@ -4864,7 +4825,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
 }
 
 
-
 /* ─── v37: lightweight tutorial link under Daily Rackle CTA ─────────────── */
 .rk-daily-entry-wrap-v37{
   display:block!important;
@@ -4915,7 +4875,6 @@ button{font-family:'Nunito','Segoe UI',sans-serif}
   outline-offset:3px!important;
   border-radius:8px!important;
 }
-
 
 
 /* ─── v40: How To Play + 2026 Hand Browser UX overhaul ─────────────────── */
@@ -5891,7 +5850,6 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
 }
 
 
-
 /* ─── vNext: Learn + Explore section margin fix ────────────────────────── */
 .rk-learn-home-v8,
 .rk-learn-home-v12,
@@ -6186,12 +6144,8 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   }
   .rk-home-landing-flow > :nth-child(1){grid-column:1!important;grid-row:1 / span 2!important;align-self:stretch!important;}
   .rk-home-landing-flow > :nth-child(2){grid-column:2!important;grid-row:1!important;}
-  .rk-home-landing-flow > :nth-child(3){grid-column:2!important;grid-row:2!important;}
   .rk-home-landing-flow > :nth-child(4){grid-column:1!important;grid-row:3!important;}
   .rk-home-landing-flow > :nth-child(5){grid-column:1!important;grid-row:4!important;}
-  .rk-home-landing-flow > :nth-child(6){grid-column:2!important;grid-row:3!important;}
-  .rk-home-landing-flow > :nth-child(7){grid-column:2!important;grid-row:4!important;}
-  .rk-home-landing-flow > :nth-child(8){grid-column:1 / -1!important;grid-row:5!important;}
 
   /* Main daily feature should feel like a desktop hero card */
   .rk-daily-entry-v6,
@@ -6503,14 +6457,6 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
     min-width:0!important;
     margin:0!important;
   }
-  .rk-home-landing-flow > :nth-child(1){grid-column:1!important;grid-row:1 / span 2!important;align-self:stretch!important;}
-  .rk-home-landing-flow > :nth-child(2){grid-column:2!important;grid-row:1!important;}
-  .rk-home-landing-flow > :nth-child(3){grid-column:2!important;grid-row:2!important;}
-  .rk-home-landing-flow > :nth-child(4){grid-column:1!important;grid-row:3!important;}
-  .rk-home-landing-flow > :nth-child(5){grid-column:1!important;grid-row:4!important;}
-  .rk-home-landing-flow > :nth-child(6){grid-column:2!important;grid-row:3!important;}
-  .rk-home-landing-flow > :nth-child(7){grid-column:2!important;grid-row:4!important;}
-  .rk-home-landing-flow > :nth-child(8){grid-column:1 / -1!important;grid-row:5!important;}
 
   .rk-daily-entry-v6,
   .rk-daily-entry-v11,
@@ -6618,14 +6564,12 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   }
   .rk-home-landing-flow > :nth-child(1){grid-column:1 / -1!important;grid-row:1!important;}
   .rk-home-landing-flow > :nth-child(2){grid-column:1!important;grid-row:2!important;}
-  .rk-home-landing-flow > :nth-child(3){grid-column:2!important;grid-row:2!important;}
   .rk-home-landing-flow > :nth-child(4){grid-column:1 / -1!important;grid-row:3!important;}
   .rk-home-landing-flow > :nth-child(5){grid-column:1 / -1!important;grid-row:4!important;}
   .rk-home-landing-flow > :nth-child(6){grid-column:1!important;grid-row:5!important;}
   .rk-home-landing-flow > :nth-child(7){grid-column:2!important;grid-row:5!important;}
   .rk-home-landing-flow > :nth-child(8){grid-column:1 / -1!important;grid-row:6!important;}
   .rk-daily-entry-v6,.rk-daily-entry-v11,.rk-daily-entry-v24,.rk-home-scorecard-v30{min-height:520px!important;}
-  .rk-freeplay-v24,.rk-freeplay-v27,.rk-freeplay-v35{grid-template-columns:1fr!important;}
 }
 
 
@@ -6737,14 +6681,12 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
     min-width:0!important;
     margin:0!important;
   }
-  .rk-home-landing-flow > :nth-child(1){grid-column:1!important;grid-row:1 / span 2!important;align-self:stretch!important;}
   .rk-home-landing-flow > :nth-child(2){grid-column:2!important;grid-row:1!important;align-self:stretch!important;}
   .rk-home-landing-flow > :nth-child(3){grid-column:2!important;grid-row:2!important;align-self:stretch!important;}
   .rk-home-landing-flow > :nth-child(4){grid-column:1!important;grid-row:3!important;align-self:stretch!important;}
   .rk-home-landing-flow > :nth-child(5){grid-column:1!important;grid-row:4!important;align-self:stretch!important;}
   .rk-home-landing-flow > :nth-child(6){grid-column:2!important;grid-row:3!important;align-self:stretch!important;}
   .rk-home-landing-flow > :nth-child(7){grid-column:2!important;grid-row:4!important;align-self:stretch!important;}
-  .rk-home-landing-flow > :nth-child(8){grid-column:1 / -1!important;grid-row:5!important;}
 
   /* Daily card should be a true desktop hero, not a squeezed mobile card */
   .rk-daily-entry-v6,
@@ -6855,7 +6797,6 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
     gap:30px!important;
     align-items:center!important;
   }
-  .rk-freeplay-v24-top{display:block!important;}
   .rk-freeplay-v24 h2,.rk-freeplay-v27 h2,.rk-freeplay-v35 h2,
   .rk-learn-home-v18-title,.rk-learn-home-title,
   .rk-email-title-v8,.rk-share-score-v6-title{
@@ -6918,14 +6859,6 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
     grid-template-columns:1fr 1fr!important;
     gap:22px!important;
   }
-  .rk-home-landing-flow > :nth-child(1){grid-column:1 / -1!important;grid-row:1!important;}
-  .rk-home-landing-flow > :nth-child(2){grid-column:1!important;grid-row:2!important;}
-  .rk-home-landing-flow > :nth-child(3){grid-column:2!important;grid-row:2!important;}
-  .rk-home-landing-flow > :nth-child(4){grid-column:1 / -1!important;grid-row:3!important;}
-  .rk-home-landing-flow > :nth-child(5){grid-column:1 / -1!important;grid-row:4!important;}
-  .rk-home-landing-flow > :nth-child(6){grid-column:1!important;grid-row:5!important;}
-  .rk-home-landing-flow > :nth-child(7){grid-column:2!important;grid-row:5!important;}
-  .rk-home-landing-flow > :nth-child(8){grid-column:1 / -1!important;grid-row:6!important;}
 }
 
 /* ─── vFinal: force Rackle logo to Fraunces 900 Black ───────────────────── */
@@ -6959,7 +6892,6 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
     letter-spacing:-2.2px!important;
   }
 }
-
 
 
 /* ─── vMobileOnly: disable desktop dashboard and keep mobile app view ───── */
@@ -7093,7 +7025,6 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   .rk-pg{padding-left:20px!important;padding-right:20px!important}
 }
 @media(min-width:1200px){
-  .rk-app{max-width:430px!important;width:430px!important}
 }
 
 /* ─── vFinal: mobile-only desktop/tablet fallback + Fraunces logo lock ─── */
@@ -7252,7 +7183,6 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
 }
 
 
-
 /* ─── v41: left-aligned homepage scorecard concept ─────────────────────── */
 .rk-home-scorecard-v41{
   overflow:hidden!important;
@@ -7338,7 +7268,6 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   white-space:pre-line!important;
   line-height:1.62!important;
 }
-
 
 
 /* ─── v42: homepage scorecard, remove streak bar + style beside score ───── */
@@ -7882,7 +7811,6 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   line-height:1.48!important;
 }
 @media(max-width:390px){
-  .rk-room-leader-name{font-size:19px!important}
   .rk-room-row-score,.rk-quiet-score{font-size:23px!important}
   .rk-room-feed-item-v40{grid-template-columns:26px minmax(0,1fr)!important}
 }
@@ -7890,7 +7818,6 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
 
 /* ─── vNext: iPad-safe layout + leaderboard UX overhaul ───────────────── */
 @media (min-width:768px) and (max-width:1180px){
-  html,body,#root{background:#F8F4EE!important;}
   .rk-outer{
     padding:22px 0!important;
     min-height:100vh!important;
@@ -7912,7 +7839,6 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
 }
 @media (min-width:900px) and (max-width:1180px) and (orientation:landscape){
   .rk-app{width:600px!important;max-width:600px!important;}
-  .rk-pg{padding-left:34px!important;padding-right:34px!important;}
 }
 
 .rk-room-page{
@@ -8934,7 +8860,6 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   list-style:none!important;
   cursor:pointer!important;
 }
-.rk-room-notes-v50 summary::-webkit-details-marker{display:none!important}
 .rk-room-notes-v50 summary span{
   font-family:'Fraunces',Georgia,serif!important;
   font-size:16px!important;
@@ -9209,7 +9134,6 @@ html,body,#root{background:#F8F4EE!important;background-image:none!important;}
   color:#1A1410!important;
   margin-bottom:18px!important;
 }
-.rk-email-home-v8:after{display:none!important}
 .rk-email-kicker-v8,
 .rk-email-kicker-v18{
   margin-bottom:12px!important;
@@ -9285,8 +9209,6 @@ html,body,#root{
 }
 @media(max-width:390px){
   .rk-email-home-v8.rk-email-home-v19,.rk-email-home-v8{padding:18px 16px 16px!important}
-  .rk-email-form-v8{grid-template-columns:1fr!important}
-  .rk-email-btn-v8{width:100%!important}
   .rk-footer{padding-bottom:18px!important}
 }
 
@@ -10065,7 +9987,6 @@ html,body,#root{
 }
 
 
-
 /* ─── vNext: homepage scorecard label + clubhouse title tune ───────────── */
 .rk-home-scorecard-v41-kicker{
   letter-spacing:2.3px!important;
@@ -10450,7 +10371,6 @@ footer{
 }
 
 
-
 /* ─── V1 launch polish: ruthless homepage, game-board leaderboards, human copy ── */
 .rk-home-landing-flow{gap:18px!important}
 .rk-email-home-v8,.rk-email-home-v19{padding:18px 17px!important;text-align:center!important;border-radius:28px!important;background:linear-gradient(145deg,#FFFDF8,#F5EDE0)!important;border:1px solid rgba(160,120,40,.14)!important;box-shadow:0 12px 30px rgba(26,20,16,.05),inset 0 1px 0 rgba(255,255,255,.82)!important}
@@ -10562,7 +10482,6 @@ footer{
   .rk-room-rank-badge-v1{width:48px!important;height:48px!important;font-size:21px!important}
   .rk-room-score-v1{font-size:40px!important;min-width:48px!important}
 }
-
 
 
 /* ─── vFinal launch audit pass: clarity, social club polish, V1 readiness ── */
@@ -10780,7 +10699,6 @@ html,body,#root{background:var(--rk-ivory)!important;}
     margin:0 auto!important;
     padding-top:16px!important;
   }
-  .rk-home-landing-flow > *{min-width:0!important;}
 
   /* Child order works for both not-played and completed states */
   .rk-home-landing-flow > :nth-child(1){grid-column:2!important;grid-row:1 / span 2!important;}
@@ -11639,7 +11557,6 @@ body.rk-card-reference-open{overflow:hidden!important}
 }
 
 
-
 /* v1 rack review polish: compact coach cards, less report-like */
 .rk-scorecard-premium-v26 .rk-daily-review-v10,
 .rk-daily-review-v10{
@@ -12028,7 +11945,6 @@ body.rk-card-reference-open{overflow:hidden!important}
   .rk-room-score-wrap-v60{align-items:flex-start!important;margin-left:61px!important;margin-top:2px!important;}
   .rk-room-score-v60{font-size:34px!important;}
 }
-
 `;
 
 const S={
@@ -14485,7 +14401,7 @@ function iqPassQuality(passedTilesByRound,startingRack,finalRack,sectionId,chose
   // the final rack proves the passes were correct regardless of what was passed.
   // A player who ends with 90%+ direction and tile strength made good decisions.
   // We don't penalise process when the outcome is objectively strong.
-  // This is injected here using the raw scores from the calling context via closure, 
+  // This is injected here using the raw scores from the calling context via closure,
   // but since we don't have them here, we apply the floor post-hoc in calculateCharlestonIQ.
 
   raw=Math.max(0,Math.min(25,Math.round(raw)));
@@ -14983,7 +14899,6 @@ function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScor
 
   return{strengths:uniqueStr,weaknesses:uniqueWk,coachNote,tryNextTime};
 }
-
 
 
 // ─── vNext EXPERT CHARLESTON ANALYSIS ENGINE ───────────────────────────────
@@ -19537,7 +19452,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
       <StrategicCharlestonReadCard iq={iq}/>
 
       <CollapsibleSection label="Your Hand" desc="Final rack · Best path" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
-        {hand&&hand.length>0&&<SortableRack hand={hand}/>} 
+        {hand&&hand.length>0&&<SortableRack hand={hand}/>}
         <div className="rk-best-path-v9">
           <div className="rk-best-path-v9-top">
             <div className="rk-best-path-v9-kicker">Best path</div>
@@ -19546,7 +19461,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
           <div className="rk-best-path-v9-title">{bestLabel}</div>
           <p className="rk-best-path-v9-copy">This is the cleanest hand direction Rackle found from your final Charleston shape.</p>
         </div>
-        {scoredHandObj&&<HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={null}/>} 
+        {scoredHandObj&&<HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={null}/>}
       </CollapsibleSection>
 
       {hand&&hand.length>0&&chosenSec&&(
@@ -20108,7 +20023,6 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
     </div>
   );
 }
-
 
 
 // ─── COACH MODE SCREEN, narrative-first deep analysis ───────────────────────
@@ -20823,7 +20737,7 @@ function Tutorial({onDone,onBack,setScreen}){
   const back=()=>{setSelected(null);setStep(s=>Math.max(0,s-1));};
   return(
     <div style={S.pg} className="rk-pg rk-tutorial-shell">
-      {onBack&&<RackleHeader onBack={onBack} setScreen={setScreen}/>}      
+      {onBack&&<RackleHeader onBack={onBack} setScreen={setScreen}/>}
       <div className="rk-tutorial-stage rk-sweep">
         <div style={{position:"relative",zIndex:2}}>
           <div style={{display:"inline-flex",alignItems:"center",gap:8,background:"rgba(255,255,255,.10)",border:"1px solid rgba(255,255,255,.16)",borderRadius:999,padding:"7px 12px",marginBottom:18}}>
@@ -21780,7 +21694,6 @@ function ClubDirectoryScreen({home,setScreen}){
 }
 
 
-
 // ─── VIRAL ROOM HELPERS ─────────────────────────────────────────────────────
 function rkScoreTone(score){
   const s=Number(score||0);
@@ -22566,7 +22479,7 @@ function TomorrowPreviewCard(){
         <div style={{background:`linear-gradient(145deg,${C.jade}0B,#fff)`,border:`1px solid ${urgency?C.cinn+"1A":C.jade+"16"}`,borderRadius:14,padding:"10px",boxShadow:"inset 0 1px 0 rgba(255,255,255,0.8)",marginBottom:10}}>
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,marginBottom:8}}>
             <div style={{fontSize:8,color:urgency?C.cinn:C.jade,letterSpacing:1.4,fontWeight:900}}>NEW RACK IN</div>
-            
+
           </div>
           <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:7,width:"100%"}}>
             {[{v:timeLeft.hh,l:"hrs"},{v:timeLeft.mm,l:"min"},{v:timeLeft.ss,l:"sec"}].map((part)=>(
@@ -23053,8 +22966,6 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   );
 
 
-
-
   const DesktopInsightDeck=()=>{
     const todayScore=iq?.totalScore||"—";
     const hist=getHist().filter(e=>e.iqScore!=null);
@@ -23196,7 +23107,6 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       </div>
     </section>
   );
-
 
 
   return(
@@ -24331,8 +24241,6 @@ function computeHonestCoverage(rack, handObj){
 }
 
 
-
-
 // ─── 2026 CHARLESTON RESOLVER UPGRADE ───────────────────────────────────────
 // This resolver makes the engine evaluate the whole rack against every NMJL hand
 // variant using the parenthetical rules on the card: Any 1/2/3 suits, matching
@@ -25386,8 +25294,6 @@ function SectionQuizScreen({home,setScreen}){
     </div>
   );
 }
-
-// ════════════════════════════════════════════════════════════════════════════
 
 // ════════════════════════════════════════════════════════════════════════════
 // HOW TO PLAY SCREEN, quick friendly rules + Rackle ritual
