@@ -717,3 +717,261 @@
     max-width:680px!important;
   }
 }
+
+/* ─── v104 desktop/tablet single-column center rail fix ────────────────────
+   Fixes the broken two-column Home layout on desktop/tablet. Keeps the
+   dashboard side rails, but forces the center Rackle app to behave like one
+   polished vertical player column. */
+@media (min-width:768px){
+  html,body,#root,.rk-outer,.rk-dash-shell{
+    background:#F8F4EE!important;
+  }
+  .rk-outer{
+    width:100%!important;
+    padding:0!important;
+    overflow-x:hidden!important;
+  }
+  .rk-dash-shell{
+    width:100%!important;
+    max-width:1320px!important;
+    margin:0 auto!important;
+    padding:24px 16px!important;
+    gap:22px!important;
+    display:flex!important;
+    align-items:flex-start!important;
+    justify-content:center!important;
+    box-sizing:border-box!important;
+    overflow:visible!important;
+  }
+  .rk-app{
+    width:100%!important;
+    max-width:430px!important;
+    flex:0 0 430px!important;
+    min-width:0!important;
+    min-height:auto!important;
+    position:relative!important;
+    overflow-x:hidden!important;
+    background:#F8F4EE!important;
+    border-radius:24px!important;
+    border:1px solid rgba(26,20,16,.07)!important;
+    box-shadow:0 10px 42px rgba(26,20,16,.10),0 0 0 1px rgba(255,255,255,.48) inset!important;
+    margin:0!important;
+  }
+  .rk-dash-left,.rk-dash-right{
+    flex-shrink:0!important;
+    flex-grow:0!important;
+    min-width:0!important;
+  }
+  .rk-pg{
+    width:100%!important;
+    max-width:100%!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:0!important;
+    padding:22px 20px 0!important;
+    background:#F8F4EE!important;
+    overflow-x:hidden!important;
+    box-sizing:border-box!important;
+  }
+
+  /* Home center content must never become a two-column grid. */
+  .rk-home-landing-flow,
+  .rk-home-main-col,
+  .rk-home-side-col,
+  .rk-home-grid,
+  .rk-home-cols,
+  .rk-home-two-col,
+  .rk-home-row,
+  .rk-home-split,
+  .rk-home-left,
+  .rk-home-right,
+  .rk-home-main,
+  .rk-home-side{
+    display:flex!important;
+    flex-direction:column!important;
+    grid-template-columns:1fr!important;
+    grid-auto-flow:row!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    gap:0!important;
+    margin-left:0!important;
+    margin-right:0!important;
+    align-items:stretch!important;
+    justify-items:stretch!important;
+  }
+  .rk-home-landing-flow > *,
+  .rk-home-main-col > *,
+  .rk-home-side-col > *{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    grid-column:1 / -1!important;
+    justify-self:stretch!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+
+  /* Make every Home section read one after the other. */
+  .rk-daily-entry-wrap-v37,
+  .rk-daily-entry-v6,
+  .rk-daily-entry-v11,
+  .rk-daily-entry-v21,
+  .rk-daily-entry-v24,
+  .rk-daily-entry-v35,
+  .rk-home-scorecard-v30,
+  .rk-home-scorecard-v41,
+  .rk-room-live-v6,
+  .rk-room-live-v19,
+  .rk-freeplay-v24,
+  .rk-freeplay-v27,
+  .rk-freeplay-v35,
+  .rk-freeplay-v40,
+  .rk-learn-home-v8,
+  .rk-learn-home-v12,
+  .rk-learn-home-v18,
+  .rk-learn-home-v19,
+  .rk-share-score-v6,
+  .rk-tomorrow-card-v11,
+  .rk-email-home,
+  .rk-email-home-v8,
+  .rk-email-home-v19,
+  .rk-clubhouse-v2,
+  .rk-clubhouse-v3,
+  .rk-clubhouse-v4{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin-left:0!important;
+    margin-right:0!important;
+    margin-top:16px!important;
+    margin-bottom:0!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+  }
+
+  /* Daily Rackle should be the first full-width moment under the hero. */
+  .rk-daily-entry-wrap-v37,
+  .rk-daily-entry-v6,
+  .rk-daily-entry-v11,
+  .rk-daily-entry-v21,
+  .rk-daily-entry-v24,
+  .rk-daily-entry-v35,
+  .rk-home-scorecard-v41.rk-home-section-lg{
+    margin-top:18px!important;
+  }
+
+  /* Remove the accidental internal two-column treatment from Free Play. */
+  .rk-freeplay-v24,
+  .rk-freeplay-v27,
+  .rk-freeplay-v35,
+  .rk-freeplay-v40{
+    display:flex!important;
+    flex-direction:column!important;
+    grid-template-columns:1fr!important;
+    align-items:stretch!important;
+    gap:14px!important;
+  }
+
+  /* Contain the share card and prevent right-edge bleeding. */
+  .rk-share-score-v6{
+    position:relative!important;
+    overflow:hidden!important;
+    padding-left:18px!important;
+    padding-right:18px!important;
+  }
+  .rk-share-score-v6-copybox,
+  .rk-share-lux-card-v6,
+  .rk-score-share-card,
+  .rk-score-share-v20{
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    transform:none!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin-left:0!important;
+    margin-right:0!important;
+    box-sizing:border-box!important;
+  }
+  .rk-share-lux-card-v6{
+    margin-top:14px!important;
+  }
+  .rk-share-score-v6-title{
+    overflow:visible!important;
+    word-break:normal!important;
+    overflow-wrap:normal!important;
+    max-width:100%!important;
+  }
+
+  /* Kicker labels should never wrap word-by-word. */
+  .rk-screen-kicker,
+  .rk-premium-kicker,
+  .rk-share-score-v6-kicker,
+  .rk-room-live-v6-kicker,
+  .rk-freeplay-v24-kicker,
+  .rk-tomorrow-v11-kicker,
+  .rk-email-kicker-v8,
+  .rk-clubhouse-v2-kicker,
+  .rk-clubhouse-v2-label,
+  .rk-startup-pulse-pill-v41,
+  .rk-startup-pulse-pill-v42{
+    white-space:nowrap!important;
+  }
+
+  /* Keep large-section titles consistent in the 430px desktop rail. */
+  .rk-room-live-v6-title,
+  .rk-freeplay-v24 h2,
+  .rk-freeplay-v27 h2,
+  .rk-freeplay-v35 h2,
+  .rk-learn-home-title,
+  .rk-share-score-v6-title,
+  .rk-tomorrow-v11-title,
+  .rk-email-home h2,
+  .rk-clubhouse-v2-title,
+  .rk-clubhouse-v3-title,
+  .rk-clubhouse-v4-title{
+    font-size:22px!important;
+    line-height:1.08!important;
+    letter-spacing:-.4px!important;
+  }
+
+  /* Footer belongs to the app rail, not the browser width. */
+  .rk-footer{
+    width:100%!important;
+    max-width:100%!important;
+    margin:26px 0 0!important;
+    padding:28px 18px 34px!important;
+    background:linear-gradient(180deg,rgba(248,244,238,0),rgba(237,231,218,.58))!important;
+    border-top:1px solid rgba(26,20,16,.06)!important;
+    box-sizing:border-box!important;
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+  }
+  .rk-footer-inner{
+    width:100%!important;
+    max-width:100%!important;
+    margin:0 auto!important;
+    padding:0!important;
+    box-sizing:border-box!important;
+  }
+}
+
+@media (min-width:1024px){
+  .rk-dash-shell.has-dashboard .rk-app{
+    width:430px!important;
+    max-width:430px!important;
+    flex-basis:430px!important;
+  }
+  .rk-dash-mini-stat{flex:1 1 0!important;min-width:80px!important;}
+  .rk-dash-nav-icon{width:24px!important;height:24px!important;font-size:14px!important;}
+}
+
+@media (min-width:1320px){
+  .rk-dash-shell.has-dashboard .rk-app{
+    width:430px!important;
+    max-width:430px!important;
+    flex-basis:430px!important;
+  }
+}
