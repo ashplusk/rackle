@@ -1964,3 +1964,22 @@
   box-shadow:none!important;
   text-shadow:0 1px 2px rgba(0,0,0,.22)!important;
 }
+
+
+/* ─── vNext requested tune: homepage tagline weight + Tomorrow pill border removal ─── */
+/* Load includes Nunito 400 now, so this actually renders lighter instead of falling back. */
+.rk-startup-subtitle-v4,
+.rk-startup-hero-v42 .rk-startup-subtitle-v4{
+  font-weight:400!important;
+}
+
+/* Homepage Tomorrow's Rackle label: text only, no outlined rectangle. */
+.rk-tomorrow-card-v11 .rk-tomorrow-v11-kicker,
+.rk-tomorrow-mystery-final .rk-tomorrow-v11-kicker{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  color:#FFFDF8!important;
+  padding-left:0!important;
+  padding-right:0!important;
+}
