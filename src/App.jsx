@@ -10651,7 +10651,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   const Menu=()=>{
     return(
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:10,marginBottom:2,position:"relative"}}>
+      <div className="rk-home-topbar-v110" style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:10,marginBottom:2,position:"relative",width:"100%"}}>
         {streak>0?(
           <button onClick={()=>setScreen("stats")} aria-label="View streak stats" style={{display:"inline-flex",alignItems:"center",gap:6,border:`1px solid ${C.gold}30`,background:`linear-gradient(135deg,#FFF9EA,${C.cinn}08)`,color:C.cinn,borderRadius:999,padding:"5px 9px 5px 7px",fontSize:11,fontWeight:900,cursor:"pointer",boxShadow:`0 4px 14px ${C.cinn}10`,minHeight:30}}>
             <span style={{width:19,height:19,borderRadius:99,display:"inline-flex",alignItems:"center",justifyContent:"center",background:C.cinn+"12",fontSize:10,lineHeight:1}}>🔥</span>
@@ -10680,11 +10680,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       "Daily Charleston is live",
       "The club board is open",
     ];
-    const headerPillRef=useRef(null);
-    if(!headerPillRef.current){
-      headerPillRef.current=headerPills[Math.floor(Math.random()*headerPills.length)];
-    }
-    const headerPill=headerPillRef.current;
+    // Stable for the day so the status pill does not change on every refresh.
+    const headerPill=headerPills[Math.abs(Number(dn)||0)%headerPills.length];
     return(
       <div className="rk-startup-hero-v4 rk-startup-hero-v42">
         <div className="rk-startup-mark-v4 rk-float">🀄</div>
@@ -13711,7 +13708,7 @@ export default function Rackle(){
   const dashTopToday=Math.max(Number(dashDailyStats?.topScore??dashDailyStats?.max??dashGlobalRows?.[0]?.iqScore??0)||0,dashCurrentScore||0);
   const dashTodayPlayers=Math.max(Number(dashDailyStats?.total??dashDailyStats?.count??dashGlobalRows.length??0)||0,dashCurrentScore?1:0);
   const dashShownClubRank=dashClub&&dashCurrentScore?rkRankOfCurrent(dashClubRows,dashCurrentScore):null;
-  const dashProps = screen === "home" ? {
+  const dashProps = {
     streak,
     rounds,
     dRes,
@@ -13729,7 +13726,7 @@ export default function Rackle(){
     displayHomeClubEntries: dashClubRows,
     homeGlobalEntries: dashGlobalRows,
     shownClubRank: dashShownClubRank,
-  } : null;
+  };
 
   return(
     <AppShell dashProps={dashProps}>

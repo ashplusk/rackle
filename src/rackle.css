@@ -1202,3 +1202,160 @@
 @media (max-width:767px){
   /* Keep the existing mobile experience untouched. */
 }
+
+
+/* ─── FINAL DESKTOP / HEADER POLISH PASS ─────────────────────────────────── */
+/* Keep mobile untouched. These rules apply only where the dashboard shell exists. */
+
+/* Homepage brand: Fraunces 900, black, slightly lighter tagline. */
+.rk-startup-logo-v4,
+.rk-startup-hero-v42 .rk-startup-logo-v4{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-weight:900!important;
+  color:#1A1410!important;
+  letter-spacing:-2px!important;
+}
+.rk-startup-subtitle-v4,
+.rk-startup-hero-v42 .rk-startup-subtitle-v4{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-weight:700!important;
+  color:#176B42!important;
+  letter-spacing:0!important;
+}
+
+/* Top header controls: streak left, menu right. */
+.rk-home-topbar-v110{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  width:100%!important;
+}
+.rk-home-topbar-v110 .rk-home-menu-plain-v101{
+  margin-left:auto!important;
+  flex-shrink:0!important;
+}
+
+/* Dashboard sidebars stay visible on non-home pages too because dashProps is always passed. */
+.rk-dash-shell.has-dashboard .rk-dash-left,
+.rk-dash-shell.has-dashboard .rk-dash-right{
+  min-width:0!important;
+}
+
+/* Live Club Standings: more room, stronger title, cleaner spacing. */
+.rk-room-live-v6,
+.rk-room-live-v17,
+.rk-room-live-v19{
+  padding:22px!important;
+  margin-top:18px!important;
+  margin-bottom:18px!important;
+}
+.rk-room-live-v6-summary{
+  padding:0!important;
+}
+.rk-room-live-v6-kicker{
+  margin-bottom:12px!important;
+  white-space:nowrap!important;
+}
+.rk-room-live-v6-title{
+  font-size:28px!important;
+  line-height:1.05!important;
+  letter-spacing:-0.5px!important;
+  margin:0 0 10px!important;
+}
+.rk-room-live-v6-copy{
+  max-width:30ch!important;
+  line-height:1.55!important;
+}
+.rk-room-live-v17-table{
+  margin-top:16px!important;
+}
+
+/* Free Play: keep content readable and left aligned in the wider rail. */
+.rk-freeplay-v40-preview,
+.rk-freeplay-v40-tiles{
+  justify-content:flex-start!important;
+  margin-left:0!important;
+}
+.rk-freeplay-v24-copy,
+.rk-freeplay-v35-copy,
+.rk-freeplay-v40-copy{
+  text-align:left!important;
+}
+.rk-freeplay-v24-copy p,
+.rk-freeplay-v35-copy p,
+.rk-freeplay-v40-copy p{
+  max-width:44ch!important;
+}
+
+/* Tomorrow card should breathe less at the bottom. */
+.rk-tomorrow-card-v11,
+.rk-tomorrow-mystery-final{
+  margin-bottom:12px!important;
+}
+.rk-tomorrow-v11-title{
+  font-size:24px!important;
+  line-height:1.08!important;
+}
+
+/* Tablet and desktop center rail: bigger, but still a single app rail. */
+@media(min-width:768px){
+  .rk-dash-shell.has-dashboard .rk-app,
+  .rk-dash-shell .rk-app{
+    width:560px!important;
+    max-width:560px!important;
+    flex-basis:560px!important;
+    flex-shrink:0!important;
+  }
+}
+@media(min-width:1024px){
+  .rk-dash-shell{
+    max-width:1540px!important;
+  }
+  .rk-dash-shell.has-dashboard .rk-app,
+  .rk-dash-shell .rk-app{
+    width:620px!important;
+    max-width:620px!important;
+    flex-basis:620px!important;
+  }
+}
+@media(min-width:1320px){
+  .rk-dash-shell{
+    max-width:1680px!important;
+    gap:32px!important;
+  }
+  .rk-dash-shell.has-dashboard .rk-app,
+  .rk-dash-shell .rk-app{
+    width:640px!important;
+    max-width:640px!important;
+    flex-basis:640px!important;
+  }
+  .rk-dash-shell.has-dashboard .rk-dash-left{width:250px!important;}
+  .rk-dash-shell.has-dashboard .rk-dash-right{width:310px!important;}
+}
+
+/* Keep home sections full-width and stacked inside the center rail. */
+@media(min-width:768px){
+  .rk-home-landing-flow{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:18px!important;
+  }
+  .rk-home-landing-flow > *{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+}
+
+/* Mobile guardrails: do not widen or desktop-ify small screens. */
+@media(max-width:767px){
+  .rk-dash-shell.has-dashboard .rk-dash-left,
+  .rk-dash-shell.has-dashboard .rk-dash-right{display:none!important;}
+  .rk-dash-shell.has-dashboard .rk-app,
+  .rk-dash-shell .rk-app{
+    width:100%!important;
+    max-width:100%!important;
+    flex-basis:auto!important;
+  }
+}
