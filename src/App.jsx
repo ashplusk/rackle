@@ -13,6 +13,24 @@ const C={bg:"#F8F4EE",bg2:"#EDE7DA",ink:"#1A1410",mut:"#6B6157",jade:"#176B42",g
   sage:"#EDF5F0",sageB:"#3D6E52",amber:"#FBF3E2",amberB:"#7A5010",parch:"#F8F4EE",
 };
 const F={d:"'Fraunces',Georgia,serif",b:"'Nunito','Segoe UI',sans-serif"};
+const T = {
+  // Display — Fraunces, for big numbers and hero scores
+  d1: {fontFamily:F.d, fontSize:56, fontWeight:900, lineHeight:1,    letterSpacing:-2},
+  d2: {fontFamily:F.d, fontSize:36, fontWeight:900, lineHeight:1,    letterSpacing:-1},
+  d3: {fontFamily:F.d, fontSize:24, fontWeight:900, lineHeight:1.05, letterSpacing:-0.5},
+  // Headings — Fraunces
+  h1: {fontFamily:F.d, fontSize:22, fontWeight:900, lineHeight:1.08, letterSpacing:-0.4},
+  h2: {fontFamily:F.d, fontSize:18, fontWeight:900, lineHeight:1.1,  letterSpacing:-0.5},
+  h3: {fontFamily:F.d, fontSize:15, fontWeight:900, lineHeight:1.12, letterSpacing:-0.15},
+  // Body — Nunito
+  body:  {fontFamily:F.b, fontSize:13, fontWeight:700, lineHeight:1.55, letterSpacing:0},
+  bodyS: {fontFamily:F.b, fontSize:12, fontWeight:700, lineHeight:1.5,  letterSpacing:0},
+  // Labels / kickers — uppercase small caps
+  label:  {fontFamily:F.b, fontSize:9, fontWeight:900, lineHeight:1, letterSpacing:2,   textTransform:"uppercase"},
+  labelS: {fontFamily:F.b, fontSize:8, fontWeight:900, lineHeight:1, letterSpacing:1.8, textTransform:"uppercase"},
+  // Captions
+  caption: {fontFamily:F.b, fontSize:11, fontWeight:700, lineHeight:1.4, letterSpacing:0},
+};
 
 const S={
   outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
@@ -20,12 +38,12 @@ const S={
   pg:{padding:"14px 18px",paddingBottom:52},
   pill:{background:"linear-gradient(180deg,#F2EBDD,#E9E0CF)",borderRadius:14,padding:"8px 8px",textAlign:"center",border:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"center",gap:6,boxShadow:"inset 0 1px 0 rgba(255,255,255,.65),0 2px 8px rgba(26,20,16,.025)"},
   card:{background:"linear-gradient(145deg,#FFFDF8,#F8F1E6)",border:`1px solid rgba(26,20,16,.085)`,borderRadius:18,padding:16,marginBottom:14,boxShadow:"0 6px 22px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.72)"},
-  dot:{width:22,height:22,borderRadius:11,background:C.jade+"10",border:`1.5px solid ${C.jade}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:800,color:C.jade,flexShrink:0,boxShadow:"inset 0 1px 0 rgba(255,255,255,.75)"},
-  passBtn:{width:"100%",padding:"14px 0",borderRadius:14,border:"1px solid rgba(255,255,255,.14)",cursor:"pointer",background:`linear-gradient(135deg,${C.cinn},#8A2020)`,color:"#fff",fontSize:14,fontFamily:F.d,fontWeight:800,letterSpacing:.6,minHeight:50,boxShadow:"0 8px 18px rgba(176,42,42,.16),inset 0 1px 0 rgba(255,255,255,.16)"},
-  greenBtn:{padding:"13px 0",background:`linear-gradient(135deg,${C.jade},#0F5432)`,color:"#fff",border:"1px solid rgba(255,255,255,.16)",borderRadius:14,fontSize:14,fontFamily:F.d,fontWeight:800,letterSpacing:.4,cursor:"pointer",minHeight:50,boxShadow:"0 8px 18px rgba(23,107,66,.18),inset 0 1px 0 rgba(255,255,255,.18)"},
+  dot:{width:22,height:22,borderRadius:11,background:C.jade+"10",border:`1.5px solid ${C.jade}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:900,color:C.jade,flexShrink:0,boxShadow:"inset 0 1px 0 rgba(255,255,255,.75)"},
+  passBtn:{width:"100%",padding:"14px 0",borderRadius:14,border:"1px solid rgba(255,255,255,.14)",cursor:"pointer",background:`linear-gradient(135deg,${C.cinn},#8A2020)`,color:"#fff",fontSize:14,fontFamily:F.d,fontWeight:900,letterSpacing:.6,minHeight:50,boxShadow:"0 8px 18px rgba(176,42,42,.16),inset 0 1px 0 rgba(255,255,255,.16)"},
+  greenBtn:{padding:"13px 0",background:`linear-gradient(135deg,${C.jade},#0F5432)`,color:"#fff",border:"1px solid rgba(255,255,255,.16)",borderRadius:14,fontSize:14,fontFamily:F.d,fontWeight:900,letterSpacing:0,cursor:"pointer",minHeight:50,boxShadow:"0 8px 18px rgba(23,107,66,.18),inset 0 1px 0 rgba(255,255,255,.18)"},
   oBtn:{padding:"11px 0",background:"linear-gradient(180deg,#F2EBDD,#E9E0CF)",color:C.ink,border:`1px solid rgba(23,107,66,.12)`,borderRadius:14,fontSize:13,cursor:"pointer",minHeight:46,fontWeight:700,boxShadow:"0 3px 10px rgba(0,0,0,.035),inset 0 1px 0 rgba(255,255,255,.65)"},
-  back:{background:"rgba(23,107,66,.06)",border:`1px solid rgba(23,107,66,.08)`,borderRadius:999,color:C.jade,fontSize:12,cursor:"pointer",fontWeight:800,padding:"7px 11px",minHeight:34,display:"flex",alignItems:"center",boxShadow:"inset 0 1px 0 rgba(255,255,255,.55)"},
-  sortBtn:{background:"linear-gradient(180deg,#FFFDF8,#F1E9DB)",border:`1px solid ${C.bdr}`,borderRadius:10,padding:"5px 10px",fontSize:9,color:C.mut,cursor:"pointer",fontWeight:800,minHeight:32,boxShadow:"inset 0 1px 0 rgba(255,255,255,.7),0 2px 6px rgba(26,20,16,.025)"},
+  back:{background:"rgba(23,107,66,.06)",border:`1px solid rgba(23,107,66,.08)`,borderRadius:999,color:C.jade,fontSize:12,cursor:"pointer",fontWeight:900,padding:"7px 11px",minHeight:34,display:"flex",alignItems:"center",boxShadow:"inset 0 1px 0 rgba(255,255,255,.55)"},
+  sortBtn:{background:"linear-gradient(180deg,#FFFDF8,#F1E9DB)",border:`1px solid ${C.bdr}`,borderRadius:10,padding:"5px 10px",fontSize:9,color:C.mut,cursor:"pointer",fontWeight:900,minHeight:32,boxShadow:"inset 0 1px 0 rgba(255,255,255,.7),0 2px 6px rgba(26,20,16,.025)"},
   shareCard:{background:"linear-gradient(145deg,#FFFFF8,#F4EFE3)",border:`1.5px solid ${C.jade}18`,borderRadius:18,padding:"16px 20px",textAlign:"center",marginTop:8,boxShadow:"0 6px 22px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.72)"},
 };
 
@@ -127,12 +145,12 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}>
           {/* Logo: tile glyph + wordmark */}
           <div style={{display:"flex",alignItems:"center",gap:7}}>
-            <div style={{width:28,height:28,borderRadius:6,background:"#1B7D4E",display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <div style={{width:28,height:28,borderRadius:6,background:C.jade,display:"flex",alignItems:"center",justifyContent:"center"}}>
               <span style={{fontSize:15,lineHeight:1}}>🀄</span>
             </div>
             <div>
-              <div style={{fontFamily:SERIF,fontSize:15,fontWeight:700,color:"#fff",letterSpacing:-0.3,lineHeight:1}}>Rackle</div>
-              <div style={{fontSize:7,color:"rgba(255,255,255,0.3)",letterSpacing:1.5,fontFamily:SANS,fontWeight:700,marginTop:1}}>RACKLE SCORE</div>
+              <div style={{fontFamily:SERIF,fontSize:15,fontWeight:700,color:"#fff",letterSpacing:-0.5,lineHeight:1}}>Rackle</div>
+              <div style={{fontSize:7,color:"rgba(255,255,255,0.3)",letterSpacing:1.8,fontFamily:SANS,fontWeight:700,marginTop:1}}>RACKLE SCORE</div>
             </div>
           </div>
           {/* Day badge */}
@@ -145,14 +163,14 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
         <div style={{display:"flex",alignItems:"flex-end",justifyContent:"center",gap:18,marginBottom:8}}>
           <div style={{fontFamily:SERIF,fontSize:56,fontWeight:700,color:lvlCol,lineHeight:1,letterSpacing:-2}}>{iq.totalScore}</div>
           <div style={{paddingBottom:6}}>
-            <div style={{fontFamily:SERIF,fontSize:14,fontWeight:700,color:"#fff",lineHeight:1.2}}>{iq.level}</div>
+            <div style={{fontFamily:SERIF,fontSize:14,fontWeight:700,color:"#fff",lineHeight:1.4}}>{iq.level}</div>
             {iq.styleName&&<div style={{fontSize:9,color:"rgba(255,255,255,0.5)",fontFamily:SANS,marginTop:3}}>{iq.styleName}</div>}
             {playerName&&<div style={{fontSize:10,color:"rgba(255,255,255,0.4)",fontFamily:SANS,marginTop:3}}>{playerName}</div>}
           </div>
         </div>
 
         {/* ── PASS DOTS ROW (text-based, reliable in canvas) ── */}
-        {passRow&&<div style={{fontFamily:MONO,fontSize:11,letterSpacing:4,color:lvlCol,marginBottom:12,opacity:0.8}}>{passRow}</div>}
+        {passRow&&<div style={{fontFamily:MONO,fontSize:11,letterSpacing:2,color:lvlCol,marginBottom:12,opacity:0.8}}>{passRow}</div>}
 
         {/* ── DIVIDER ── */}
         <div style={{height:"0.5px",background:"rgba(255,255,255,0.1)",marginBottom:12}}/>
@@ -160,15 +178,15 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
         {/* ── STATS ROW ── */}
         <div style={{display:"flex",gap:0,marginBottom:12}}>
           {section&&<div style={{flex:2,paddingRight:12,borderRight:"0.5px solid rgba(255,255,255,0.08)"}}>
-            <div style={{fontSize:7,color:"rgba(255,255,255,0.35)",letterSpacing:1.5,fontFamily:SANS,fontWeight:700,marginBottom:3}}>SECTION</div>
-            <div style={{fontSize:11,fontWeight:700,fontFamily:SANS,color:"#fff",lineHeight:1.2}}>{section}</div>
+            <div style={{fontSize:7,color:"rgba(255,255,255,0.35)",letterSpacing:1.8,fontFamily:SANS,fontWeight:700,marginBottom:3}}>SECTION</div>
+            <div style={{fontSize:11,fontWeight:700,fontFamily:SANS,color:"#fff",lineHeight:1.4}}>{section}</div>
           </div>}
           {streak>0&&<div style={{flex:1,paddingLeft:12,paddingRight:12,borderRight:"0.5px solid rgba(255,255,255,0.08)"}}>
-            <div style={{fontSize:7,color:"rgba(255,255,255,0.35)",letterSpacing:1.5,fontFamily:SANS,fontWeight:700,marginBottom:3}}>STREAK</div>
+            <div style={{fontSize:7,color:"rgba(255,255,255,0.35)",letterSpacing:1.8,fontFamily:SANS,fontWeight:700,marginBottom:3}}>STREAK</div>
             <div style={{fontSize:11,fontWeight:700,fontFamily:SANS,color:"#fff"}}>{streak}d</div>
           </div>}
           {iq.totalTime>0&&<div style={{flex:1,paddingLeft:12}}>
-            <div style={{fontSize:7,color:"rgba(255,255,255,0.35)",letterSpacing:1.5,fontFamily:SANS,fontWeight:700,marginBottom:3}}>TIME</div>
+            <div style={{fontSize:7,color:"rgba(255,255,255,0.35)",letterSpacing:1.8,fontFamily:SANS,fontWeight:700,marginBottom:3}}>TIME</div>
             <div style={{fontSize:11,fontWeight:700,fontFamily:SANS,color:"#fff"}}>{fT(iq.totalTime)}</div>
           </div>}
         </div>
@@ -194,7 +212,7 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
             {club?`🀄 ${club.name}`:"🀄 American Mahjong"}
           </div>
           <a href="https://playrackle.com" target="_blank" rel="noreferrer"
-            style={{fontSize:9,color:"#1B7D4E",fontFamily:SANS,fontWeight:700,textDecoration:"none",letterSpacing:0.5}}>
+            style={{fontSize:9,color:C.jade,fontFamily:SANS,fontWeight:700,textDecoration:"none",letterSpacing:0.5}}>
             playrackle.com ↗
           </a>
         </div>
@@ -213,10 +231,10 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
           {done?"✓":saving?"⏳":"📤"}
         </div>
         <div style={{flex:1}}>
-          <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#fff",lineHeight:1.2}}>
+          <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:"#fff",lineHeight:1.4}}>
             {done?"Card saved!":saving?"Saving…":"Save & Share"}
           </div>
-          <div style={{fontSize:11,color:"rgba(255,255,255,0.6)",lineHeight:1.3}}>
+          <div style={{fontSize:11,color:"rgba(255,255,255,0.6)",lineHeight:1.4}}>
             {done?"Drop it in your group chat ↗":"Save as image · share anywhere"}
           </div>
         </div>
@@ -238,7 +256,7 @@ function toSlug(name){return name.toLowerCase().replace(/[^a-z0-9]+/g,"-").repla
 function clubBySlug(slug){return Object.entries(CLUBS).find(([,c])=>toSlug(c.name)===slug)||null;}
 
 // ─── TILE UTILITIES ───────────────────────────────────────────────────────────
-const SUITS=["bam","crak","dot"],SN={bam:"Bam",crak:"Crk",dot:"Dot"},SC={bam:"#1B7D4E",crak:"#B83232",dot:"#2460A8"};
+const SUITS=["bam","crak","dot"],SN={bam:"Bam",crak:"Crk",dot:"Dot"},SC={bam:C.jade,crak:"#B83232",dot:"#2460A8"};
 function buildDeck(){const d=[];SUITS.forEach(s=>{for(let n=1;n<=9;n++)for(let i=0;i<4;i++)d.push({t:"s",s,n});});["N","E","W","S"].forEach(v=>{for(let i=0;i<4;i++)d.push({t:"w",v});});["Red","Grn","Soap"].forEach(v=>{for(let i=0;i<4;i++)d.push({t:"d",v});});for(let i=0;i<8;i++)d.push({t:"f"});for(let i=0;i<8;i++)d.push({t:"j"});return d;}
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
 function seededShuffle(a,seed){const b=[...a];let s=seed;for(let i=b.length-1;i>0;i--){s=(s*16807)%2147483647;[b[i],b[s%(i+1)]]=[b[s%(i+1)],b[i]];}return b;}
@@ -246,7 +264,7 @@ function sortVal(t){if(t.t==="s")return{bam:0,crak:1,dot:2}[t.s]*100+t.n;if(t.t=
 function sortHand(t){return[...t].sort((a,b)=>sortVal(a)-sortVal(b));}
 function tL(t){if(t.t==="j")return"🃏";if(t.t==="f")return"🌸";if(t.t==="w")return t.v;if(t.t==="d")return t.v==="Red"?"中":t.v==="Grn"?"發":"白";return`${t.n}`;}
 function tS(t){if(t.t==="j")return"Joker";if(t.t==="f")return"Flower";if(t.t==="w")return"Wind";if(t.t==="d")return t.v==="Soap"?"Soap":t.v==="Red"?"Red":"Green";return SN[t.s];}
-function tC(t){if(t.t==="j")return"#B08A35";if(t.t==="f")return"#B54E7A";if(t.t==="w")return"#5C5247";if(t.t==="d")return t.v==="Red"?"#B83232":t.v==="Grn"?"#1B7D4E":"#6B6560";return SC[t.s];}
+function tC(t){if(t.t==="j")return"#B08A35";if(t.t==="f")return"#B54E7A";if(t.t==="w")return"#5C5247";if(t.t==="d")return t.v==="Red"?"#B83232":t.v==="Grn"?C.jade:"#6B6560";return SC[t.s];}
 function fT(s){if(!s&&s!==0)return"";return`${Math.floor(s/60)}:${(s%60<10?"0":"")+(s%60)}`;}
 function tAria(t){if(t.t==="j")return"Joker tile";if(t.t==="f")return"Flower tile";if(t.t==="w")return`${t.v} Wind tile`;if(t.t==="d")return`${tS(t)} Dragon tile`;return`${t.n} ${SN[t.s]} tile`;}
 function tLabel(t){if(t.t==="j")return"Joker";if(t.t==="f")return"Flower";if(t.t==="w")return`${t.v} Wind`;if(t.t==="d")return`${tS(t)} Dragon`;return`${t.n} ${SN[t.s]}`;}
@@ -424,7 +442,7 @@ const SECS=[
 // The FFFFFF sextette appears in hand 6, flowers are critical here.
 // One hand (FFF 11 22 333 DDDD) uses a Dragon kong, any dragon.
 // Concealed hand: 1 22 333 1 22 333 44.
-{id:"cr",name:"Consec. Run",color:"#1B7D4E",icon:"🟢",desc:"Sequential numbers, pungs & kongs in a 3-5 number window",hold:"Groups (pungs/kongs) of consecutive numbers, all Flowers, Jokers",pass:"Isolated singles outside your run window, all Winds, scattered numbers",combos:"You need pungs or kongs of 3-4 consecutive numbers, not a long string of singles. One hand uses 6 Flowers as a group. One hand uses a Dragon kong, the Dragon must match the MIDDLE number of your run.",joker:null,hands:8,
+{id:"cr",name:"Consec. Run",color:C.jade,icon:"🟢",desc:"Sequential numbers, pungs & kongs in a 3-5 number window",hold:"Groups (pungs/kongs) of consecutive numbers, all Flowers, Jokers",pass:"Isolated singles outside your run window, all Winds, scattered numbers",combos:"You need pungs or kongs of 3-4 consecutive numbers, not a long string of singles. One hand uses 6 Flowers as a group. One hand uses a Dragon kong, the Dragon must match the MIDDLE number of your run.",joker:null,hands:8,
   ck:h=>{
     const ws=crWindowScore(h);
     const flowers=h.filter(t=>t.t==="f").length;
@@ -1808,7 +1826,7 @@ const HAND_FAMILIES={
   "Power":  {label:"Power Hand",emoji:"💪",color:"#7B5CB0",bg:"#F4EFFC",border:"#C4A8E8",
     desc:"Built on jokers and set stacking. Your strength is raw tile depth, pungs and kongs.",
     sections:["q","aln"]},
-  "Run":    {label:"Consecutive Run",emoji:"🟢",color:"#1B7D4E",bg:"#EDF7F1",border:"#8FC9A8",
+  "Run":    {label:"Consecutive Run",emoji:"🟢",color:C.jade,bg:"#EDF7F1",border:"#8FC9A8",
     desc:"Built on connected number sequences. Pungs and kongs within a tight 3-4 number window.",
     sections:["cr"]},
   "Number Pattern":{label:"Number Pattern",emoji:"🔢",color:"#B83232",bg:"#FEF0F0",border:"#E8A8A8",
@@ -4102,7 +4120,7 @@ function getStreakBadge(s){return [...STREAK_BADGES].reverse().find(b=>s>=b.days
 
 const RATS=["Mahjong Master","Table Controller","Sharp Player","Table Ready","Reading the Rack","Feeling the Rack"];
 const REMO=["🌟","🏆","💪","👏","👍","🎲"];
-const RCOL=["#1B7D4E","#1B7D4E","#2460A8","#2460A8","#B08A35","#B83232"];
+const RCOL=[C.jade,C.jade,"#2460A8","#2460A8","#B08A35","#B83232"];
 function gri(s){return s>=0.4?0:s>=0.3?1:s>=0.2?2:s>=0.12?3:s>=0.05?4:5;}
 const F1C=[{dir:"Right",icon:"👉",req:3,blind:false},{dir:"Over",icon:"↕️",req:3,blind:false},{dir:"Left",icon:"👈",req:0,blind:true,max:3}];
 const S2C=[{dir:"Left",icon:"👈",req:3,blind:false},{dir:"Over",icon:"↕️",req:3,blind:false},{dir:"Right",icon:"👉",req:0,blind:true,max:3}];
@@ -5253,8 +5271,8 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
         <RackleHeader onBack={home} setScreen={setScreen}/>
         <div className="rk-premium-card" style={{padding:22,textAlign:"center"}}>
           <div style={{width:46,height:46,borderRadius:18,margin:"0 auto 12px",background:"rgba(23,107,66,.08)",border:"1px solid rgba(23,107,66,.10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>🀄</div>
-          <div style={{fontFamily:F.d,fontSize:20,fontWeight:950,color:C.ink,letterSpacing:-.4}}>Welcome back</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.55,marginTop:6,fontWeight:750}}>Restoring your Rackle account...</div>
+          <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:C.ink,letterSpacing:-.4}}>Welcome back</div>
+          <div style={{fontSize:12,color:C.mut,lineHeight:1.55,marginTop:6,fontWeight:700}}>Restoring your Rackle account...</div>
         </div>
       </div>
     );
@@ -5395,24 +5413,24 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
         <div style={{textAlign:"center",padding:"20px 0 16px"}}>
           <div style={{fontSize:36,marginBottom:8}}>🀄</div>
           <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,marginBottom:6}}>Create your Rackle profile</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.6}}>Set a name and password to track your progress and appear on club leaderboards.</div>
+          <div style={{fontSize:12,color:C.mut,lineHeight:1.55}}>Set a name and password to track your progress and appear on club leaderboards.</div>
         </div>
         <div style={S.card}>
           <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:12}}>YOUR DETAILS</div>
           <div style={{marginBottom:10}}>
-            <div style={{fontSize:11,color:C.mut,fontWeight:600,marginBottom:5}}>Name <span style={{color:C.mut,fontWeight:400}}>(shown on leaderboard)</span></div>
+            <div style={{fontSize:11,color:C.mut,fontWeight:700,marginBottom:5}}>Name <span style={{color:C.mut,fontWeight:700}}>(shown on leaderboard)</span></div>
             <div style={{display:"flex",gap:8}}>
               <input value={firstName} onChange={e=>setFirstName(e.target.value)} placeholder="First" maxLength={15} style={{...inputStyle,flex:1}}/>
               <input value={lastName} onChange={e=>setLastName(e.target.value)} placeholder="Last" maxLength={15} style={{...inputStyle,flex:1}}/>
             </div>
           </div>
           <div style={{marginBottom:10}}>
-            <div style={{fontSize:11,color:C.mut,fontWeight:600,marginBottom:5}}>Email <span style={{color:C.mut,fontWeight:400}}>(private, for account recovery)</span></div>
+            <div style={{fontSize:11,color:C.mut,fontWeight:700,marginBottom:5}}>Email <span style={{color:C.mut,fontWeight:700}}>(private, for account recovery)</span></div>
             <input type="email" value={profile.email||""} onChange={e=>setProfileState(p=>({...p,email:e.target.value}))} placeholder="your@email.com" style={{...inputStyle,border:`1.5px solid ${profile.email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email)?C.cinn:C.bdr}`}}/>
             {profile.email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email)&&<div style={{fontSize:10,color:C.cinn,marginTop:4}}>Enter a valid email address.</div>}
           </div>
           <div style={{marginBottom:10}}>
-            <div style={{fontSize:11,color:C.mut,fontWeight:600,marginBottom:5}}>Your Club</div>
+            <div style={{fontSize:11,color:C.mut,fontWeight:700,marginBottom:5}}>Your Club</div>
             <select value={profile.clubCode} onChange={e=>setProfileState(p=>({...p,clubCode:e.target.value}))} style={{...inputStyle}}>
               <option value="">No club yet</option>
               {Object.entries(CLUBS).map(([code,club])=>(<option key={code} value={code}>{club.name}, {club.location}</option>))}
@@ -5422,7 +5440,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
           <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:10}}>SET A PASSWORD</div>
           <div style={{fontSize:11,color:C.mut,lineHeight:1.5,marginBottom:10}}>At least 6 characters. Stored securely, lets you log in on any device.</div>
           <div style={{marginBottom:8}}>
-            <div style={{fontSize:11,color:C.mut,fontWeight:600,marginBottom:5}}>Password</div>
+            <div style={{fontSize:11,color:C.mut,fontWeight:700,marginBottom:5}}>Password</div>
             <div style={{position:"relative"}}>
               <input type={showPw?"text":"password"} value={pwInput} onChange={e=>setPwInput(e.target.value)} placeholder="Min. 6 characters" style={{...inputStyle,paddingRight:40}}/>
               <button onClick={()=>setShowPw(v=>!v)} style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",fontSize:14,color:C.mut}}>{showPw?"🙈":"👁"}</button>
@@ -5442,7 +5460,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
             </div>}
           </div>
           <div style={{marginBottom:14}}>
-            <div style={{fontSize:11,color:C.mut,fontWeight:600,marginBottom:5}}>Confirm Password</div>
+            <div style={{fontSize:11,color:C.mut,fontWeight:700,marginBottom:5}}>Confirm Password</div>
             <div style={{position:"relative"}}>
               <input type={showPwConfirm?"text":"password"} value={pwConfirm} onChange={e=>setPwConfirm(e.target.value)} placeholder="Re-enter password" style={{...inputStyle,paddingRight:40,border:`1.5px solid ${pwConfirm.length>0&&pwConfirm!==pwInput?C.cinn:C.bdr}`}}/>
               <button onClick={()=>setShowPwConfirm(v=>!v)} style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",fontSize:14,color:C.mut}}>{showPwConfirm?"🙈":"👁"}</button>
@@ -5471,22 +5489,22 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
         <div style={{textAlign:"center",padding:"24px 0 16px"}}>
           <div style={{fontSize:36,marginBottom:8}}>🀄</div>
           <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,marginBottom:6}}>Welcome back, Rackler</div>
-          <div style={{fontSize:12,color:C.mut,lineHeight:1.6}}>Pick up where you left off, your streak, score history, and club ranking are waiting.</div>
+          <div style={{fontSize:12,color:C.mut,lineHeight:1.55}}>Pick up where you left off, your streak, score history, and club ranking are waiting.</div>
         </div>
         <div style={S.card}>
           <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:12}}>YOUR ACCOUNT</div>
           <div style={{marginBottom:10}}>
-            <div style={{fontSize:11,color:C.mut,fontWeight:600,marginBottom:5}}>Email</div>
+            <div style={{fontSize:11,color:C.mut,fontWeight:700,marginBottom:5}}>Email</div>
             <input type="email" value={loginEmail} onChange={e=>{setLoginEmail(e.target.value);setLoginErr("");}} onKeyDown={e=>e.key==="Enter"&&signIn()} placeholder="your@email.com" autoFocus style={{...inputStyle,border:`1.5px solid ${loginEmail&&!emailValid?C.cinn:C.bdr}`}}/>
           </div>
           <div style={{marginBottom:14}}>
-            <div style={{fontSize:11,color:C.mut,fontWeight:600,marginBottom:5}}>Password</div>
+            <div style={{fontSize:11,color:C.mut,fontWeight:700,marginBottom:5}}>Password</div>
             <div style={{position:"relative"}}>
               <input type={showLoginPw?"text":"password"} value={loginPw} onChange={e=>{setLoginPw(e.target.value);setLoginErr("");}} onKeyDown={e=>e.key==="Enter"&&signIn()} placeholder="Your password" style={{...inputStyle,paddingRight:40}}/>
               <button onClick={()=>setShowLoginPw(v=>!v)} style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",fontSize:14,color:C.mut}}>{showLoginPw?"🙈":"👁"}</button>
             </div>
           </div>
-          {loginErr&&<div style={{fontSize:12,color:C.cinn,textAlign:"center",marginBottom:10,fontWeight:600}}>{loginErr}</div>}
+          {loginErr&&<div style={{fontSize:12,color:C.cinn,textAlign:"center",marginBottom:10,fontWeight:700}}>{loginErr}</div>}
           <button onClick={signIn} disabled={!emailValid||!loginPw||loginLoading} style={{...S.greenBtn,width:"100%",opacity:emailValid&&loginPw?1:0.35}}>
             {loginLoading?"Checking…":"Log In →"}
           </button>
@@ -5531,7 +5549,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
     <div style={S.pg} className="rk-pg">
       <RackleHeader onBack={home} setScreen={setScreen}/>
       <div style={{borderRadius:20,overflow:"hidden",background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"24px 20px 20px",textAlign:"center",boxShadow:"0 8px 32px rgba(0,0,0,0.18)",marginBottom:12}}>
-        <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:12}}>PLAYER PROFILE</div>
+        <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:2,fontWeight:700,marginBottom:12}}>PLAYER PROFILE</div>
         <div style={{position:"relative",display:"inline-block",marginBottom:10}}>
           <Avatar url={profile.avatarUrl} initial={profile.nickname} size={72} fontSize={28} border="3px solid rgba(255,255,255,0.25)"/>
           <button onClick={()=>fileInputRef.current?.click()} title="Change photo" style={{position:"absolute",bottom:0,right:0,width:26,height:26,borderRadius:13,background:C.jade,border:"2px solid #fff",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:13,lineHeight:1}}>
@@ -5539,7 +5557,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
           </button>
           <input ref={fileInputRef} type="file" accept="image/*" onChange={handlePhotoChange} style={{display:"none"}}/>
         </div>
-        <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:"#fff",letterSpacing:-0.3,marginBottom:2}}>{profile.nickname}</div>
+        <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:"#fff",letterSpacing:-0.5,marginBottom:2}}>{profile.nickname}</div>
         {myClub&&<div style={{fontSize:11,color:"rgba(255,255,255,0.5)",marginBottom:12}}>{myClub.name}</div>}
         <div style={{width:"100%",height:0.5,background:"rgba(255,255,255,0.08)",margin:"12px 0"}}/>
         <div style={{display:"flex",justifyContent:"center",gap:24}}>
@@ -5567,7 +5585,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
           <span style={{fontSize:14}}>{streakBadge.badge}</span>
           <span style={{fontSize:11,color:"rgba(255,255,255,0.8)",fontWeight:700}}>{streakBadge.title}</span>
         </div>}
-        {favSection&&<div style={{marginTop:8,fontSize:10,color:"rgba(255,255,255,0.4)"}}>Recent favourite: <span style={{color:"rgba(255,255,255,0.7)",fontWeight:600}}>{favSection}</span></div>}
+        {favSection&&<div style={{marginTop:8,fontSize:10,color:"rgba(255,255,255,0.4)"}}>Recent favourite: <span style={{color:"rgba(255,255,255,0.7)",fontWeight:700}}>{favSection}</span></div>}
       </div>
 
       {hist.length>0&&<div style={{...S.card,marginBottom:12}}>
@@ -5575,23 +5593,23 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
         <div style={{display:"flex",gap:8,marginBottom:10}}>
           {avgIQ&&<div style={{flex:1,background:C.bg2,borderRadius:10,padding:"10px",textAlign:"center"}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.jade}}>{avgIQ}</div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>AVG SCORE</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.8,fontWeight:700,marginTop:2}}>AVG SCORE</div>
           </div>}
           {bestIQ&&<div className="rk-recap-metric" style={{color:C.gold}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.gold}}>{bestIQ.score}</div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>BEST SCORE</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.8,fontWeight:700,marginTop:2}}>BEST SCORE</div>
           </div>}
           <div className="rk-recap-metric" style={{color:C.cinn}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.cinn}}>{streak}</div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>STREAK</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.8,fontWeight:700,marginTop:2}}>STREAK</div>
           </div>
         </div>
-        <button onClick={()=>setScreen("stats")} style={{width:"100%",background:"none",border:`1px solid ${C.bdr}`,borderRadius:10,padding:"8px 12px",fontSize:12,color:C.jade,cursor:"pointer",fontWeight:600,textAlign:"center"}}>View Full Stats & Progress →</button>
+        <button onClick={()=>setScreen("stats")} style={{width:"100%",background:"none",border:`1px solid ${C.bdr}`,borderRadius:10,padding:"8px 12px",fontSize:12,color:C.jade,cursor:"pointer",fontWeight:700,textAlign:"center"}}>View Full Stats & Progress →</button>
       </div>}
 
       <div style={{...S.card,marginBottom:8,background:C.jade+"06",borderColor:C.jade+"25"}}>
         <div style={{fontSize:9,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:8}}>INVITE FRIENDS TO RACKLE</div>
-        <div style={{fontSize:12,color:C.ink,lineHeight:1.6,marginBottom:10}}>
+        <div style={{fontSize:12,color:C.ink,lineHeight:1.55,marginBottom:10}}>
           {profile.clubCode?<>Challenge your club, share code <strong>{profile.clubCode}</strong> and get everyone on the leaderboard.</>:"Share Rackle with your mahjong friends and build your club community."}
         </div>
         <button onClick={invite} style={{...S.greenBtn,width:"100%",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
@@ -5602,15 +5620,15 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
       <div style={S.card}>
         <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:12}}>YOUR DETAILS</div>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:`1px solid ${C.bdr}`}}>
-          <span style={{fontSize:12,color:C.mut,fontWeight:600}}>Name</span>
+          <span style={{fontSize:12,color:C.mut,fontWeight:700}}>Name</span>
           <span style={{fontSize:13,fontWeight:700,color:C.ink}}>{profile.nickname}</span>
         </div>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:`1px solid ${C.bdr}`}}>
-          <span style={{fontSize:12,color:C.mut,fontWeight:600}}>Email</span>
+          <span style={{fontSize:12,color:C.mut,fontWeight:700}}>Email</span>
           <span style={{fontSize:13,fontWeight:700,color:C.ink}}>{profile.email||","}</span>
         </div>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",marginBottom:10}}>
-          <span style={{fontSize:12,color:C.mut,fontWeight:600}}>Club</span>
+          <span style={{fontSize:12,color:C.mut,fontWeight:700}}>Club</span>
           <span style={{fontSize:13,fontWeight:700,color:C.ink}}>{myClub?myClub.name:"None"}</span>
         </div>
         <div style={{display:"flex",gap:6}}>
@@ -5641,7 +5659,7 @@ function ProfilePill({rounds,streak,setScreen}){
   if(!hasProfile){
     return(
       <div style={{display:"flex",alignItems:"center",gap:4,padding:"0 8px"}}>
-        <button onClick={()=>{sessionStorage.setItem("rk-goto","signin");setScreen("profile");}} style={{fontSize:11,color:C.mut,fontWeight:600,background:"none",border:"none",padding:"4px 6px",cursor:"pointer"}}>Log in</button>
+        <button onClick={()=>{sessionStorage.setItem("rk-goto","signin");setScreen("profile");}} style={{fontSize:11,color:C.mut,fontWeight:700,background:"none",border:"none",padding:"4px 6px",cursor:"pointer"}}>Log in</button>
         <button onClick={()=>{sessionStorage.removeItem("rk-goto");setScreen("profile");}} style={{fontSize:11,color:C.jade,fontWeight:700,background:"none",border:"none",padding:"4px 6px",cursor:"pointer"}}>Join Rackle</button>
       </div>
     );
@@ -5710,7 +5728,7 @@ function Ti({t,sel,isNew,onClick,dim,large}){
       transform:sel?"translateY(-2px)":"translateY(0)",transition:"transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease",
       opacity:dim?0.38:1,outline:"none"}}>
     <span aria-hidden="true" style={{fontSize:sz.fs,fontWeight:900,color:isJoker?C.gold:c,lineHeight:1,fontFamily:F.d,letterSpacing:isJoker?-0.7:-0.3}}>{tL(t)}</span>
-    <span aria-hidden="true" style={{fontSize:sz.fs2,color:isJoker?C.gold:c,opacity:isFlower?0.62:0.54,fontWeight:800,marginTop:2,letterSpacing:.4,textTransform:"uppercase"}}>{tS(t)}</span>
+    <span aria-hidden="true" style={{fontSize:sz.fs2,color:isJoker?C.gold:c,opacity:isFlower?0.62:0.54,fontWeight:900,marginTop:2,letterSpacing:0,textTransform:"uppercase"}}>{tS(t)}</span>
     {isJoker&&<div aria-hidden="true" style={{position:"absolute",inset:3,borderRadius:8,border:`1px solid ${C.gold}18`,pointerEvents:"none"}}/>}
     {isNew&&<div aria-hidden="true" style={{position:"absolute",top:4,right:4,width:6,height:6,borderRadius:3,background:C.gold,boxShadow:`0 0 0 2px ${C.gold}12`}}/>}
     {sel&&<div aria-hidden="true" style={{position:"absolute",bottom:0,left:8,right:8,height:2,borderRadius:2,background:C.jade,opacity:.85}}/>}
@@ -6245,7 +6263,7 @@ function StartingDealCard({startingRack,chosenHandObj}){
           <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>STARTING DEAL</div>
           <div style={{fontSize:12,fontWeight:700,color:C.ink,marginTop:1}}>
             What you were dealt before the Charleston
-            {startCoverage!=null&&<span style={{fontSize:11,fontWeight:400,color:C.mut}}> · {startCoverage}% coverage before passing</span>}
+            {startCoverage!=null&&<span style={{fontSize:11,fontWeight:700,color:C.mut}}> · {startCoverage}% coverage before passing</span>}
           </div>
         </div>
         <span style={{fontSize:12,color:C.mut}}>{open?"▾":"▸"}</span>
@@ -6253,7 +6271,7 @@ function StartingDealCard({startingRack,chosenHandObj}){
       {open&&<div style={{borderTop:`1px solid ${C.bdr}`,padding:"10px 14px"}} className="rk-in">
         <div style={{marginBottom:8}}><SortableRack hand={startingRack}/></div>
         {startCoverage!=null&&chosenHandObj&&(
-          <div style={{fontSize:11,color:C.ink,lineHeight:1.6,background:C.bg2,borderRadius:8,padding:"8px 10px"}}>
+          <div style={{fontSize:11,color:C.ink,lineHeight:1.55,background:C.bg2,borderRadius:8,padding:"8px 10px"}}>
             {startCoverage>=60
               ?`Your starting deal already covered ${startCoverage}% of ${chosenHandObj.label}, strong raw material. The Charleston was about protecting it.`
               :startCoverage>=35
@@ -6300,11 +6318,11 @@ function PassesCard({passNarrative}){
               </div>
               {p.tiles.length>0&&(
                 <div style={{padding:"8px 12px",borderBottom:p.insight?`1px solid ${p.qualColor}15`:"none"}}>
-                  <div style={{fontSize:8,color:C.mut,fontWeight:600,marginBottom:5,letterSpacing:0.5}}>YOU PASSED</div>
+                  <div style={{fontSize:8,color:C.mut,fontWeight:700,marginBottom:5,letterSpacing:0.5}}>YOU PASSED</div>
                   <div style={{display:"flex",flexWrap:"wrap",gap:5}}>{p.tiles.map((t,j)=><Ti key={j} t={t}/>)}</div>
                 </div>
               )}
-              {p.insight&&<div style={{padding:"8px 12px"}}><p style={{fontSize:11,color:C.ink,margin:0,lineHeight:1.6}}>{p.insight}</p></div>}
+              {p.insight&&<div style={{padding:"8px 12px"}}><p style={{fontSize:11,color:C.ink,margin:0,lineHeight:1.55}}>{p.insight}</p></div>}
             </div>
           ))}
         </div>
@@ -6340,9 +6358,9 @@ function AltHandsCard({hand,resolvedHandLabel,chosenSec,chosenSecObj,sortedSecs,
   if(!lanes.length){
     return(
       <div className="rk-alt-v9-empty">
-        <div style={{fontSize:8,letterSpacing:2,textTransform:"uppercase",fontWeight:950,color:C.jade,marginBottom:6}}>Other paths</div>
-        <div style={{fontFamily:F.d,fontSize:19,fontWeight:950,color:C.ink,lineHeight:1.08,marginBottom:5}}>No better alternate.</div>
-        <div style={{fontSize:12,color:C.mut,lineHeight:1.5,fontWeight:750}}>This rack had one cleaner lane. Protect it and avoid forcing a weaker read.</div>
+        <div style={{fontSize:8,letterSpacing:2,textTransform:"uppercase",fontWeight:900,color:C.jade,marginBottom:6}}>Other paths</div>
+        <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,lineHeight:1.08,marginBottom:5}}>No better alternate.</div>
+        <div style={{fontSize:12,color:C.mut,lineHeight:1.5,fontWeight:700}}>This rack had one cleaner lane. Protect it and avoid forcing a weaker read.</div>
       </div>
     );
   }
@@ -6452,8 +6470,8 @@ function TableTalkRead({iq}){
           <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
             <div style={{width:30,height:30,borderRadius:10,background:c.tone.color+"10",display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,flexShrink:0}}>{c.icon}</div>
             <div className="rk-daily-hero-copy" style={{flex:1,minWidth:0}}>
-              <div style={{fontSize:8,color:C.mut,letterSpacing:1.7,fontWeight:900,textTransform:"uppercase"}}>{c.title}</div>
-              <div style={{fontSize:12,fontWeight:900,color:C.ink,lineHeight:1.25,marginTop:1}}>{c.tone.label}</div>
+              <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:900,textTransform:"uppercase"}}>{c.title}</div>
+              <div style={{fontSize:12,fontWeight:900,color:C.ink,lineHeight:1.4,marginTop:1}}>{c.tone.label}</div>
             </div>
           </div>
           <div style={{fontSize:12,color:C.ink,lineHeight:1.55}}>{c.text}</div>
@@ -6541,7 +6559,7 @@ function HandTargetPreview({hand,scoredHandObj,chosenSec,chosenSecObj,iq,onCoach
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:8,color:chosenSecObj?.color||C.jade,letterSpacing:2,fontWeight:900,marginBottom:4}}>YOUR BEST PATH</div>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.ink,letterSpacing:-0.2,marginBottom:3}}>{displayHandLabel}</div>
-          <div style={{fontSize:11,color:C.mut,lineHeight:1.35}}>{tableLine}</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.4}}>{tableLine}</div>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:9,flexShrink:0,marginLeft:10}}>
           <div style={{display:"inline-flex",alignItems:"center",gap:5,background:tone.color+"10",border:`1px solid ${tone.color}25`,borderRadius:999,padding:"5px 9px"}}>
@@ -6553,18 +6571,18 @@ function HandTargetPreview({hand,scoredHandObj,chosenSec,chosenSecObj,iq,onCoach
       </button>
       {open&&<div className="rk-in" style={{borderTop:`1px solid ${C.bdr}`}}>
         <div style={{padding:"11px 14px",background:"#FFFCF7",borderBottom:`1px solid ${C.bdr}`}}>
-          <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:900,marginBottom:7}}>PATTERN TO NOTICE</div>
+          <div style={{fontSize:8,color:C.mut,letterSpacing:1.8,fontWeight:900,marginBottom:7}}>PATTERN TO NOTICE</div>
           <div style={{display:"flex",gap:6,flexWrap:"wrap",alignItems:"flex-end"}}>
             {groups.map((g,i)=><HandGroupChips key={i} group={g} cardColor={cardColors[i]}/>) }
           </div>
         </div>
         <div style={{padding:"12px 14px"}}>
-          <div style={{fontSize:12,color:C.ink,lineHeight:1.6,marginBottom:onCoachMode?10:0}}>{tone.desc} You had {held} key tile{held===1?"":"s"} showing against this shape.</div>
+          <div style={{fontSize:12,color:C.ink,lineHeight:1.55,marginBottom:onCoachMode?10:0}}>{tone.desc} You had {held} key tile{held===1?"":"s"} showing against this shape.</div>
           {onCoachMode&&<button onClick={onCoachMode} style={{width:"100%",background:C.jade+"08",border:`1px solid ${C.jade}20`,borderRadius:12,padding:"10px 12px",cursor:"pointer",display:"flex",alignItems:"center",gap:9,textAlign:"left"}}>
             <span style={{fontSize:15}}>🎓</span>
             <div style={{flex:1}}>
-              <div style={{fontSize:11,fontWeight:900,color:C.jade,lineHeight:1.3}}>Improve This Rack</div>
-              <div style={{fontSize:10,color:C.mut,lineHeight:1.35}}>Replay your Charleston →</div>
+              <div style={{fontSize:11,fontWeight:900,color:C.jade,lineHeight:1.4}}>Improve This Rack</div>
+              <div style={{fontSize:10,color:C.mut,lineHeight:1.4}}>Replay your Charleston →</div>
             </div>
           </button>}
         </div>
@@ -6621,8 +6639,8 @@ function ExpertReadCard({finalRack, chosenSec, allSections, passLog, iq}){
 
   const Chip=({label,value,colorMap})=>(
     <div style={{flex:1,padding:"9px 6px",textAlign:"center"}}>
-      <div style={{fontSize:7,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>{label}</div>
-      <div style={{fontSize:11,fontWeight:800,color:colorMap[value]||C.mut}}>{value}</div>
+      <div style={{fontSize:7,color:C.mut,letterSpacing:1.8,fontWeight:700,marginBottom:3}}>{label}</div>
+      <div style={{fontSize:11,fontWeight:900,color:colorMap[value]||C.mut}}>{value}</div>
     </div>
   );
 
@@ -6632,17 +6650,17 @@ function ExpertReadCard({finalRack, chosenSec, allSections, passLog, iq}){
       {/* ── HEADER ── */}
       <div style={{background:"linear-gradient(135deg,#0F2016,#1B3A28)",padding:"11px 14px"}}>
         <div style={{fontSize:9,color:"rgba(255,255,255,0.45)",letterSpacing:2,fontWeight:700,marginBottom:2}}>EXPERT READ</div>
-        <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:"#fff",lineHeight:1.2}}>Strategic rack evaluation</div>
+        <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:"#fff",lineHeight:1.4}}>Strategic rack evaluation</div>
       </div>
 
       {/* ── SECTION FIT + PRIMARY DIRECTION ── */}
       <div style={{padding:"12px 14px",borderBottom:`1px solid ${C.bdr}`}}>
-        <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>SECTION FIT</div>
+        <div style={{fontSize:8,color:C.mut,letterSpacing:1.8,fontWeight:700,marginBottom:4}}>SECTION FIT</div>
         <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
-          <div style={{fontSize:13,fontWeight:800,color:read.sectionFitConfidence==="High"?C.jade:read.sectionFitConfidence==="Medium"?C.gold:C.cinn}}>
+          <div style={{fontSize:13,fontWeight:900,color:read.sectionFitConfidence==="High"?C.jade:read.sectionFitConfidence==="Medium"?C.gold:C.cinn}}>
             {read.chosenPct}%
           </div>
-          <div style={{fontSize:11,color:C.ink,fontWeight:600}}>{read.sectionFitLabel}</div>
+          <div style={{fontSize:11,color:C.ink,fontWeight:700}}>{read.sectionFitLabel}</div>
           {!read.sectionMatch&&read.topSec&&(
             <div style={{fontSize:10,color:C.mut,marginLeft:"auto"}}>
               Best fit: {read.topSec.icon} {read.topSec.name} ({read.topPct}%)
@@ -6650,8 +6668,8 @@ function ExpertReadCard({finalRack, chosenSec, allSections, passLog, iq}){
           )}
         </div>
 
-        <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:4}}>PRIMARY DIRECTION</div>
-        <p style={{margin:0,fontSize:12,color:C.ink,lineHeight:1.6}}>{read.primaryDirection}</p>
+        <div style={{fontSize:8,color:C.mut,letterSpacing:1.8,fontWeight:700,marginBottom:4}}>PRIMARY DIRECTION</div>
+        <p style={{margin:0,fontSize:12,color:C.ink,lineHeight:1.55}}>{read.primaryDirection}</p>
       </div>
 
       {/* ── 5-METRIC ROW ── */}
@@ -6664,16 +6682,16 @@ function ExpertReadCard({finalRack, chosenSec, allSections, passLog, iq}){
           {label:"DEAD RISK",value:read.deadnessRisk,colorMap:deadColor},
         ].map((m,i,arr)=>(
           <div key={i} style={{flex:1,padding:"9px 4px",textAlign:"center",borderRight:i<arr.length-1?`1px solid ${C.bdr}`:"none"}}>
-            <div style={{fontSize:6.5,color:C.mut,letterSpacing:1.2,fontWeight:700,marginBottom:3}}>{m.label}</div>
-            <div style={{fontSize:10,fontWeight:800,color:m.colorMap[m.value]||C.mut}}>{m.value}</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.2,fontWeight:700,marginBottom:3}}>{m.label}</div>
+            <div style={{fontSize:10,fontWeight:900,color:m.colorMap[m.value]||C.mut}}>{m.value}</div>
           </div>
         ))}
       </div>
 
       {/* ── EXPERT INSIGHT (always visible) ── */}
       <div style={{padding:"12px 14px",background:C.sage,borderBottom:`1px solid ${C.bdr}`}}>
-        <div style={{fontSize:8,color:C.sageB,letterSpacing:1.5,fontWeight:700,marginBottom:5}}>EXPERT INSIGHT</div>
-        <p style={{margin:0,fontSize:12,color:C.ink,lineHeight:1.65,fontStyle:"italic"}}>{read.expertInsight}</p>
+        <div style={{fontSize:8,color:C.sageB,letterSpacing:1.8,fontWeight:700,marginBottom:5}}>EXPERT INSIGHT</div>
+        <p style={{margin:0,fontSize:12,color:C.ink,lineHeight:1.55,fontStyle:"italic"}}>{read.expertInsight}</p>
       </div>
 
       {/* ── EXPAND / COLLAPSE for secondary paths + observations ── */}
@@ -6687,7 +6705,7 @@ function ExpertReadCard({finalRack, chosenSec, allSections, passLog, iq}){
           {/* Secondary paths */}
           {read.secondaryPaths.length>0&&(
             <div style={{padding:"10px 14px",borderBottom:`1px solid ${C.bdr}`}}>
-              <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>SECONDARY PATHS</div>
+              <div style={{fontSize:8,color:C.mut,letterSpacing:1.8,fontWeight:700,marginBottom:6}}>SECONDARY PATHS</div>
               {read.secondaryPaths.map((p,i)=>(
                 <div key={i} style={{display:"flex",alignItems:"flex-start",gap:7,marginBottom:i<read.secondaryPaths.length-1?6:0}}>
                   <span style={{fontSize:10,color:C.gold,fontWeight:900,flexShrink:0,marginTop:1}}>◈</span>
@@ -6700,7 +6718,7 @@ function ExpertReadCard({finalRack, chosenSec, allSections, passLog, iq}){
           {/* Key observations */}
           {read.observations.length>0&&(
             <div style={{padding:"10px 14px"}}>
-              <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>KEY OBSERVATIONS</div>
+              <div style={{fontSize:8,color:C.mut,letterSpacing:1.8,fontWeight:700,marginBottom:6}}>KEY OBSERVATIONS</div>
               {read.observations.map((o,i)=>(
                 <div key={i} style={{display:"flex",alignItems:"flex-start",gap:7,marginBottom:i<read.observations.length-1?6:0}}>
                   <span style={{fontSize:10,color:C.jade,fontWeight:900,flexShrink:0,marginTop:1}}>›</span>
@@ -6720,10 +6738,10 @@ function MahjongIdentityCard({iq, chosenSec, passLog, finalRack}){
   if(!id)return null;
   return(
     <div style={{...S.card,marginBottom:8,padding:"14px 16px",textAlign:"center",background:"linear-gradient(145deg,#FFFFF5,#F4EFE3)",borderColor:C.gold+"30"}}>
-      <div style={{fontSize:8,color:C.gold,letterSpacing:2.5,fontWeight:700,marginBottom:8}}>YOUR STYLE THIS ROUND</div>
-      <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,lineHeight:1.2,marginBottom:6}}>{id.archetype}</div>
+      <div style={{fontSize:8,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:8}}>YOUR STYLE THIS ROUND</div>
+      <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,lineHeight:1.4,marginBottom:6}}>{id.archetype}</div>
       <div style={{width:32,height:1,background:`linear-gradient(90deg,transparent,${C.gold}60,transparent)`,margin:"0 auto 8px"}}/>
-      <p style={{fontSize:12,color:C.mut,lineHeight:1.6,margin:0,maxWidth:280,marginLeft:"auto",marginRight:"auto"}}>{id.tagline}</p>
+      <p style={{fontSize:12,color:C.mut,lineHeight:1.55,margin:0,maxWidth:280,marginLeft:"auto",marginRight:"auto"}}>{id.tagline}</p>
     </div>
   );
 }
@@ -6794,7 +6812,7 @@ const SHARE_VARIANTS={
   gold:{bg:"linear-gradient(135deg,#8A6820,#6B5018)",shadow:"rgba(107,80,24,0.30)",color:"#fff"},
   red:{bg:"linear-gradient(135deg,#9A2828,#7A1E1E)",shadow:"rgba(122,30,30,0.30)",color:"#fff"},
   green:{bg:"linear-gradient(135deg,#2E6B48,#1B5035)",shadow:"rgba(27,80,53,0.28)",color:"#fff"},
-  jadepill:{bg:"#1B7D4E0F",shadow:"rgba(27,125,78,0.10)",color:"#1B7D4E",border:`1.5px solid #1B7D4E25`},
+  jadepill:{bg:C.jade+"0F",shadow:"rgba(27,125,78,0.10)",color:C.jade,border:`1.5px solid ${C.jade}25`},
   goldpill:{bg:"#B08A350F",shadow:"rgba(176,138,53,0.10)",color:"#221E1A",border:`1.5px solid #B08A3525`},
   viral:{bg:"linear-gradient(145deg,#FFF9ED,#F2E8D5)",shadow:"rgba(160,120,40,0.12)",color:"#1A1410",border:`1px solid rgba(160,120,40,.26)`},
   card:{bg:"#ffffff",shadow:"rgba(0,0,0,0.06)",color:"#221E1A",border:`1px solid #E3DDD3`},
@@ -6833,7 +6851,7 @@ function ShareButton({text,label,sublabel,variant="goldpill"}){
         <div style={{width:variant==="viral"?42:32,height:variant==="viral"?42:32,borderRadius:variant==="viral"?14:8,background:iconBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:variant==="viral"?19:15,flexShrink:0}}>{copied?"✓":"📲"}</div>
         <div style={{flex:1,minWidth:0,display:"flex",flexDirection:"column",gap:2}}>
           <div style={{fontFamily:F.d,fontSize:variant==="viral"?14:12,fontWeight:900,color:titleColor,lineHeight:1.1,letterSpacing:variant==="viral"?-.2:0}}>{copied?"Copied to clipboard!":label||"Challenge Your Club"}</div>
-          <div style={{fontSize:variant==="viral"?12:11,color:subColor,lineHeight:1.35,fontWeight:variant==="viral"?750:400}}>{copied?"Paste it into your group chat":sublabel||"Tap to copy · Drop it in your group chat"}</div>
+          <div style={{fontSize:variant==="viral"?12:11,color:subColor,lineHeight:1.4,fontWeight:variant==="viral"?750:400}}>{copied?"Paste it into your group chat":sublabel||"Tap to copy · Drop it in your group chat"}</div>
         </div>
         <span style={{fontSize:14,color:arrowColor,fontWeight:700,flexShrink:0}}>{copied?"":"›"}</span>
       </button>
@@ -6915,8 +6933,8 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
           <span style={{fontSize:22}}>{hEmoji}</span>
           <div>
             <div style={{fontSize:8,color:hColor,letterSpacing:2,fontWeight:700,marginBottom:2}}>HAND TARGETS · 2026 NMJL</div>
-            <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:hColor,lineHeight:1.2}}>{overrideLabel||hLabel}</div>
-            {hDesc&&<div style={{fontSize:11,color:hColor,opacity:0.7,lineHeight:1.3,marginTop:1}}>{hDesc}</div>}
+            <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:hColor,lineHeight:1.4}}>{overrideLabel||hLabel}</div>
+            {hDesc&&<div style={{fontSize:11,color:hColor,opacity:0.7,lineHeight:1.4,marginTop:1}}>{hDesc}</div>}
           </div>
         </div>
         <span style={{fontSize:12,color:hColor,flexShrink:0,opacity:0.7}}>{open?"▾":"▸"}</span>
@@ -6926,7 +6944,7 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
         {/* Fit toggle, only shown in free play (showFit=false by default) */}
         {!showFit&&(
           <div style={{padding:"8px 14px",borderBottom:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"space-between",background:C.bg2}}>
-            <span style={{fontSize:10,color:C.mut,fontWeight:600}}>Rack fit scores hidden, free play</span>
+            <span style={{fontSize:10,color:C.mut,fontWeight:700}}>Rack fit scores hidden, free play</span>
             <button onClick={()=>setFitVisible(v=>!v)} style={{fontSize:10,fontWeight:700,color:fitVisible?C.cinn:C.jade,background:"none",border:`1px solid ${fitVisible?C.cinn+"40":C.jade+"40"}`,borderRadius:20,padding:"3px 10px",cursor:"pointer"}}>
               {fitVisible?"Hide scores":"Reveal scores"}
             </button>
@@ -6997,16 +7015,16 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
               <div style={{display:"flex",alignItems:"flex-start",gap:8,marginBottom:8}}>
                 <div style={{flex:1}}>
                   <div style={{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap",marginBottom:4}}>
-                    <span style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,letterSpacing:0.3}}>{label}</span>
+                    <span style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.ink,letterSpacing:0.3}}>{label}</span>
                     {pinnedHandLabel&&hand.label===pinnedHandLabel&&<span style={{fontSize:9,fontWeight:700,background:C.jade+"20",color:C.jade,borderRadius:10,padding:"2px 7px",letterSpacing:0.5}}>YOUR HAND</span>}
                     {hand.concealed&&<span style={{fontSize:9,fontWeight:700,background:"#2460A820",color:"#2460A8",borderRadius:10,padding:"2px 7px",letterSpacing:0.5}}>CONCEALED</span>}
                     <span style={{fontSize:9,fontWeight:700,background:"#00000009",color:C.mut,borderRadius:10,padding:"2px 7px"}}>×{hand.value}</span>
                   </div>
-                  {fitVisible&&<div style={{fontSize:11,color:verdictColor,fontWeight:600}}>{verdict}</div>}
+                  {fitVisible&&<div style={{fontSize:11,color:verdictColor,fontWeight:700}}>{verdict}</div>}
                 </div>
                 {fitVisible?(
                   <div style={{textAlign:"right",flexShrink:0}}>
-                    <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:barColor,lineHeight:1}}>{pct}<span style={{fontSize:10,fontWeight:400,color:C.mut}}>%</span></div>
+                    <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:barColor,lineHeight:1}}>{pct}<span style={{fontSize:10,fontWeight:700,color:C.mut}}>%</span></div>
                     <div style={{fontSize:9,color:C.mut}}>rack fit</div>
                   </div>
                 ):(
@@ -7028,11 +7046,11 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
               <div style={{display:"flex",gap:8,marginBottom:10}}>
                 {strengths.length>0&&<div style={{flex:1,background:C.sage,borderRadius:8,padding:"8px 10px",border:`1px solid ${C.sageB}20`}}>
                   <div style={{fontSize:8,color:C.sageB,fontWeight:700,letterSpacing:1,marginBottom:5}}>YOU HAVE ✓</div>
-                  {strengths.slice(0,4).map((s,i)=><div key={i} style={{fontSize:10,color:C.ink,lineHeight:1.6}}>✓ {s}</div>)}
+                  {strengths.slice(0,4).map((s,i)=><div key={i} style={{fontSize:10,color:C.ink,lineHeight:1.55}}>✓ {s}</div>)}
                 </div>}
                 {gaps.length>0&&<div style={{flex:1,background:"#FEF0E8",borderRadius:8,padding:"8px 10px",border:"1px solid rgba(138,64,16,0.12)"}}>
                   <div style={{fontSize:8,color:"#8A4010",fontWeight:700,letterSpacing:1,marginBottom:5}}>STILL NEED →</div>
-                  {gaps.slice(0,4).map((g,i)=><div key={i} style={{fontSize:10,color:"#5C2808",lineHeight:1.6}}>→ {g}</div>)}
+                  {gaps.slice(0,4).map((g,i)=><div key={i} style={{fontSize:10,color:"#5C2808",lineHeight:1.55}}>→ {g}</div>)}
                 </div>}
               </div>
 
@@ -7066,7 +7084,7 @@ function SortableRack({hand:initialHand}){
   return(
     <div className="rk-lux-card" style={{...S.card,marginBottom:8}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-        <div style={{fontSize:9,color:C.mut,letterSpacing:1.2,fontWeight:500}}>Final rack</div>
+        <div style={{fontSize:9,color:C.mut,letterSpacing:1.2,fontWeight:700}}>Final rack</div>
         <button onClick={toggle} className="rk-leaderboard-card" style={{...S.sortBtn,color:sorted?C.jade:C.mut,borderColor:sorted?C.jade+"40":C.bdr,background:sorted?C.jade+"08":"none"}}>{sorted?"Sorted":"Sort"}</button>
       </div>
       <RackSurface>{rack.map((t,i)=><Ti key={i} t={t}/>)}</RackSurface>
@@ -7144,8 +7162,8 @@ function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
           </div>
           {desc&&(
             <div style={{
-              fontSize:11,marginTop:2,lineHeight:1.35,
-              color:C.mut,fontWeight:500,letterSpacing:0.01,
+              fontSize:11,marginTop:2,lineHeight:1.4,
+              color:C.mut,fontWeight:700,letterSpacing:0.01,
             }}>{headerDesc}</div>
           )}
         </div>
@@ -7184,8 +7202,8 @@ function ImproveGameHero({iq,chosenSecObj,bestFitSec,onPractice,onCoachMode,setS
   return(
     <div className="rk-improve-hero rk-sweep">
       <div style={{position:"relative",zIndex:1}}>
-        <div style={{fontSize:9,letterSpacing:2.7,fontWeight:950,color:"rgba(243,212,107,.82)",textTransform:"uppercase",marginBottom:8}}>Improve Your Game</div>
-        <div style={{fontFamily:F.d,fontSize:24,fontWeight:950,lineHeight:1.05,letterSpacing:-.65,marginBottom:8}}>Your next better read starts here.</div>
+        <div style={{fontSize:9,letterSpacing:2.7,fontWeight:900,color:"rgba(243,212,107,.82)",textTransform:"uppercase",marginBottom:8}}>Improve Your Game</div>
+        <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,lineHeight:1.05,letterSpacing:-.65,marginBottom:8}}>Your next better read starts here.</div>
         <div style={{fontSize:13,lineHeight:1.55,color:"rgba(255,255,255,.72)",maxWidth:300,margin:"0 auto"}}>{mainTip}</div>
         <div className="rk-improve-path-row">
           <div className="rk-improve-path-chip rk-improve-path-chip-primary"><strong>{iq.totalScore}</strong><span>Rackle IQ</span></div>
@@ -7193,8 +7211,8 @@ function ImproveGameHero({iq,chosenSecObj,bestFitSec,onPractice,onCoachMode,setS
           <div className="rk-improve-path-chip rk-improve-path-chip-label"><strong>{iq.level?.split(" ")?.[0]||"Ready"}</strong><span>Today’s read</span></div>
         </div>
         <div style={{display:"flex",gap:9,marginTop:14}}>
-          {onCoachMode&&<button onClick={onCoachMode} className="rk-primary-btn" style={{flex:1,borderRadius:15,padding:"12px 10px",color:"#fff",fontSize:13,fontWeight:950,fontFamily:F.d,cursor:"pointer"}}>Open Coach →</button>}
-          {onPractice&&<button onClick={onPractice} style={{flex:1,borderRadius:15,padding:"12px 10px",background:"rgba(255,255,255,.10)",border:"1px solid rgba(255,255,255,.16)",color:"#fff",fontSize:13,fontWeight:950,fontFamily:F.d,cursor:"pointer"}}>Warm up →</button>}
+          {onCoachMode&&<button onClick={onCoachMode} className="rk-primary-btn" style={{flex:1,borderRadius:15,padding:"12px 10px",color:"#fff",fontSize:13,fontWeight:900,fontFamily:F.d,cursor:"pointer"}}>Open Coach →</button>}
+          {onPractice&&<button onClick={onPractice} style={{flex:1,borderRadius:15,padding:"12px 10px",background:"rgba(255,255,255,.10)",border:"1px solid rgba(255,255,255,.16)",color:"#fff",fontSize:13,fontWeight:900,fontFamily:F.d,cursor:"pointer"}}>Warm up →</button>}
         </div>
       </div>
     </div>
@@ -7306,9 +7324,9 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         padding:"13px 10px",textAlign:"center",fontFamily:F.b,cursor:onClick?"pointer":"default",
         width:"100%",appearance:"none"
       }}>
-        <div style={{fontSize:8,letterSpacing:1.6,textTransform:"uppercase",fontWeight:950,color:"rgba(26,20,16,.45)",marginBottom:5}}>{label}</div>
-        <div style={{fontFamily:F.d,fontSize:22,lineHeight:1,fontWeight:950,color:accent,letterSpacing:-.7}}>{value}</div>
-        {sub&&<div style={{fontSize:10,lineHeight:1.25,color:C.mut,fontWeight:750,marginTop:6,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{sub}</div>}
+        <div style={{fontSize:8,letterSpacing:1.6,textTransform:"uppercase",fontWeight:900,color:"rgba(26,20,16,.45)",marginBottom:5}}>{label}</div>
+        <div style={{fontFamily:F.d,fontSize:22,lineHeight:1,fontWeight:900,color:accent,letterSpacing:-.7}}>{value}</div>
+        {sub&&<div style={{fontSize:10,lineHeight:1.4,color:C.mut,fontWeight:700,marginTop:6,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{sub}</div>}
       </Tag>
     );
   };
@@ -7387,14 +7405,14 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       <div className="rk-score-rack-card" style={{borderRadius:22,padding:14,background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid rgba(26,20,16,.075)`,boxShadow:"0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)",marginBottom:12,textAlign:"center"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:12}}>
           <div style={{textAlign:"left"}}>
-            <div style={{fontFamily:F.d,fontSize:18,fontWeight:950,color:C.ink,lineHeight:1.08}}>Your rack</div>
-            <div style={{fontSize:11,color:C.mut,fontWeight:750,marginTop:3}}>Final Charleston shape</div>
+            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,lineHeight:1.08}}>Your rack</div>
+            <div style={{fontSize:11,color:C.mut,fontWeight:700,marginTop:3}}>Final Charleston shape</div>
           </div>
           <div style={{display:"flex",gap:5,alignItems:"center"}}>
             {passDots.length?passDots.map((p,i)=>{
               const col=p.quality==="strong"?C.jade:p.quality==="weak"?C.cinn:C.gold;
               return <span key={i} title={`Pass ${i+1}`} style={{width:9,height:9,borderRadius:999,background:col,boxShadow:`0 0 0 4px ${col}16`}}/>;
-            }):<span style={{fontSize:10,color:C.mut,fontWeight:800}}>No passes</span>}
+            }):<span style={{fontSize:10,color:C.mut,fontWeight:900}}>No passes</span>}
           </div>
         </div>
         <SortableRack hand={hand}/>
@@ -7563,10 +7581,10 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
                 <div key={i} style={{background:qBg[p.quality]||"#fff",borderTop:i>0?`1px solid ${C.bdr}`:"none"}}>
                   <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px",borderBottom:p.passedTiles?.length?`1px solid ${C.bdr}40`:"none"}}>
                     <div style={{display:"flex",alignItems:"center",gap:7}}>
-                      <div style={{width:22,height:22,borderRadius:999,background:(qColor[p.quality]||C.mut)+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:950,color:qColor[p.quality]||C.mut,flexShrink:0}}>{i+1}</div>
+                      <div style={{width:22,height:22,borderRadius:999,background:(qColor[p.quality]||C.mut)+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:900,color:qColor[p.quality]||C.mut,flexShrink:0}}>{i+1}</div>
                       <span style={{fontSize:12,fontWeight:900,color:C.ink}}>{p.roundName||`Pass ${i+1}`}</span>
                     </div>
-                    <span style={{fontSize:10,fontWeight:950,color:qColor[p.quality]||C.mut,background:(qColor[p.quality]||C.mut)+"15",borderRadius:999,padding:"4px 9px"}}>{qLabel[p.quality]||""}</span>
+                    <span style={{fontSize:10,fontWeight:900,color:qColor[p.quality]||C.mut,background:(qColor[p.quality]||C.mut)+"15",borderRadius:999,padding:"4px 9px"}}>{qLabel[p.quality]||""}</span>
                   </div>
                   {p.passedTiles&&p.passedTiles.length>0&&(
                     <div style={{padding:"8px 14px",borderBottom:`1px solid ${C.bdr}40`}}>
@@ -7677,8 +7695,8 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
         opacity:isFilled?1:0.75,
         boxShadow:isFilled?`0 1px 4px ${col}18`:"none",
       }}>
-        <span style={{fontSize:g.isFlower?12:11,fontWeight:800,color:isFilled?col:wasPassed?C.cinn:"#B0AAA0",lineHeight:1}}>{isFilled||wasPassed?label:"·"}</span>
-        <span style={{fontSize:5.5,fontWeight:700,color:isFilled?col+"CC":wasPassed?C.cinn+"AA":"#C0BAB0",marginTop:1,letterSpacing:0.2}}>{sub}</span>
+        <span style={{fontSize:g.isFlower?12:11,fontWeight:900,color:isFilled?col:wasPassed?C.cinn:"#B0AAA0",lineHeight:1}}>{isFilled||wasPassed?label:"·"}</span>
+        <span style={{fontSize:8,fontWeight:700,color:isFilled?col+"CC":wasPassed?C.cinn+"AA":"#C0BAB0",marginTop:1,letterSpacing:0.2}}>{sub}</span>
       </div>
     );
   };
@@ -7691,7 +7709,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
         <div style={{fontSize:8,color:handWasInferred?C.amberB:C.sageB,letterSpacing:2,fontWeight:700,marginBottom:3}}>
           {handWasInferred?"BEST-FIT HAND, INFERRED":"YOUR TARGET HAND"}
         </div>
-        <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,letterSpacing:-0.3,marginBottom:2}}>
+        <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:2}}>
           {displayHandLabel}
         </div>
         <div style={{fontSize:10,color:C.mut}}>{handObj.constraint||secObj?.name} · {handObj.concealed?"Concealed":"Open"} · {handObj.value} pts</div>
@@ -7707,7 +7725,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
       {/* Human path read */}
       <div style={{padding:"12px 14px",borderBottom:`1px solid ${C.bdr}`,background:"#FFFCF7"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:7}}>
-          <span style={{fontSize:9,color:C.mut,letterSpacing:1.5,fontWeight:900}}>PATH READ</span>
+          <span style={{fontSize:9,color:C.mut,letterSpacing:1.8,fontWeight:900}}>PATH READ</span>
           <span style={{fontSize:10,fontWeight:900,color:pathTone.color,background:pathTone.color+"12",border:`1px solid ${pathTone.color}22`,borderRadius:999,padding:"4px 9px"}}>{pathTone.label}</span>
         </div>
         <div style={{fontSize:12,color:C.ink,lineHeight:1.55,marginBottom:8}}>{pathTone.desc} You were holding {totalHeld} useful tile{totalHeld===1?"":"s"} for this shape and still needed {totalGap}.</div>
@@ -7715,26 +7733,26 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
         <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
           <div style={{display:"flex",alignItems:"center",gap:5}}>
             <div style={{width:8,height:8,borderRadius:4,background:C.jade}}/>
-            <span style={{fontSize:9,color:C.mut,fontWeight:600}}>held</span>
+            <span style={{fontSize:9,color:C.mut,fontWeight:700}}>held</span>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:5}}>
             <div style={{width:8,height:8,borderRadius:4,background:C.cinn}}/>
-            <span style={{fontSize:9,color:C.mut,fontWeight:600}}>still needed</span>
+            <span style={{fontSize:9,color:C.mut,fontWeight:700}}>still needed</span>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:5}}>
             <div style={{width:8,height:8,borderRadius:4,border:`1.5px solid #C0BAB0`,background:"#F5F3F0"}}/>
-            <span style={{fontSize:9,color:C.mut,fontWeight:600}}>not seen</span>
+            <span style={{fontSize:9,color:C.mut,fontWeight:700}}>not seen</span>
           </div>
           {criticalPasses.length>0&&<div style={{display:"flex",alignItems:"center",gap:5}}>
             <div style={{width:8,height:8,borderRadius:4,background:C.cinn+"60",border:`1.5px solid ${C.cinn}50`}}/>
-            <span style={{fontSize:9,color:C.mut,fontWeight:600}}>passed away</span>
+            <span style={{fontSize:9,color:C.mut,fontWeight:700}}>passed away</span>
           </div>}
         </div>
       </div>
 
       {/* Tile-by-tile overlay, each group with its slots */}
       <div style={{padding:"12px 14px",background:C.bg2,overflowX:"hidden"}}>
-        <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginBottom:8}}>HAND SHAPE</div>
+        <div style={{fontSize:8,color:C.mut,letterSpacing:1.8,fontWeight:700,marginBottom:8}}>HAND SHAPE</div>
         <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"flex-end",width:"100%",maxWidth:"100%"}}>
           {groupStatus.map((status,gi)=>(
             <div key={gi} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
@@ -7744,7 +7762,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
                 ))}
               </div>
               {/* Group type label */}
-              <div style={{fontSize:7,color:C.mut,fontWeight:600,textAlign:"center",lineHeight:1.2}}>
+              <div style={{fontSize:7,color:C.mut,fontWeight:700,textAlign:"center",lineHeight:1.4}}>
                 {GROUP_TYPES[status.g.type]?.name||status.g.type}
                 {status.gap===0&&<span style={{color:C.jade}}> ✓</span>}
                 {status.gap>0&&status.passedMatching.length>0&&<span style={{color:C.cinn}}> ✗</span>}
@@ -7756,7 +7774,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
 
       {/* Gap analysis */}
       <div style={{padding:"10px 14px"}}>
-        <p style={{fontSize:12,color:C.ink,lineHeight:1.6,margin:"0 0 6px",fontWeight:500}}>{gapSentence}</p>
+        <p style={{fontSize:12,color:C.ink,lineHeight:1.55,margin:"0 0 6px",fontWeight:700}}>{gapSentence}</p>
         {critPassSentence&&(
           <div style={{display:"flex",alignItems:"flex-start",gap:8,background:"#FEF0F0",borderRadius:8,padding:"8px 10px",marginTop:6,border:`1px solid ${C.cinn}20`}}>
             <span style={{fontSize:14,flexShrink:0}}>⚠️</span>
@@ -7781,7 +7799,7 @@ function NarrativeFeedback(){
       <span style={{fontSize:10,color:C.mut,flex:1}}>Was this useful?</span>
       <button onClick={()=>setVote("up")} style={{background:vote==="up"?C.jade+"15":"none",border:`1px solid ${vote==="up"?C.jade+"40":C.bdr}`,borderRadius:8,padding:"4px 10px",cursor:"pointer",fontSize:14,transition:"all 0.15s"}}>👍</button>
       <button onClick={()=>setVote("down")} style={{background:vote==="down"?"#FEF0F0":"none",border:`1px solid ${vote==="down"?C.cinn+"40":C.bdr}`,borderRadius:8,padding:"4px 10px",cursor:"pointer",fontSize:14,transition:"all 0.15s"}}>👎</button>
-      {vote&&<span style={{fontSize:10,color:vote==="up"?C.jade:C.mut,fontWeight:600}}>{vote==="up"?"Thanks!":"Got it, we'll keep improving."}</span>}
+      {vote&&<span style={{fontSize:10,color:vote==="up"?C.jade:C.mut,fontWeight:700}}>{vote==="up"?"Thanks!":"Got it, we'll keep improving."}</span>}
     </div>
   );
 }
@@ -8048,8 +8066,8 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
     <div style={{display:"flex",alignItems:"flex-start",gap:10,marginBottom:10}}>
       <div style={{width:28,height:28,borderRadius:8,background:(color||C.jade)+"12",border:`1px solid ${color||C.jade}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,flexShrink:0,marginTop:1}}>{icon}</div>
       <div style={{flex:1}}>
-        <div style={{fontSize:8,color:color||C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>{label}</div>
-        <p style={{fontSize:12,color:C.ink,lineHeight:1.7,margin:0}}>{humanCoachText(text)}</p>
+        <div style={{fontSize:8,color:color||C.jade,letterSpacing:1.8,fontWeight:700,marginBottom:3}}>{label}</div>
+        <p style={{fontSize:12,color:C.ink,lineHeight:1.55,margin:0}}>{humanCoachText(text)}</p>
       </div>
     </div>
   );
@@ -8064,7 +8082,7 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
 
         {/* Rack read */}
         <div style={{background:C.bg2,borderRadius:10,padding:"10px 12px",marginBottom:12,borderLeft:`3px solid ${C.jade}`}}>
-          <p style={{fontSize:12,color:C.ink,lineHeight:1.7,margin:0}}>{humanCoachText(advice.rackRead)}</p>
+          <p style={{fontSize:12,color:C.ink,lineHeight:1.55,margin:0}}>{humanCoachText(advice.rackRead)}</p>
         </div>
 
         {/* Primary & alt lanes */}
@@ -8096,7 +8114,7 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
         {/* Takeaway */}
         <div style={{marginTop:4,padding:"10px 12px",background:`linear-gradient(135deg,${C.jade}08,${C.jade}04)`,borderRadius:10,border:`1.5px solid ${C.jade}20`}}>
           <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:4}}>NEXT TIME AT THE TABLE</div>
-          <p style={{fontSize:12,color:C.ink,lineHeight:1.65,margin:0,fontWeight:500}}>{humanCoachText(advice.takeaway)}</p>
+          <p style={{fontSize:12,color:C.ink,lineHeight:1.55,margin:0,fontWeight:700}}>{humanCoachText(advice.takeaway)}</p>
         </div>
 
       </div>
@@ -8131,8 +8149,8 @@ function FinalHandCrossReference({hand,startingRack,chosenHandObj,chosenSec,chos
   return(
     <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden",borderColor:C.jade+"22"}}>
       <div style={{padding:"12px 14px",background:"linear-gradient(145deg,#FFFDF8,#F5EFE4)",borderBottom:`1px solid ${C.bdr}`}}>
-        <div style={{fontSize:8,color:C.jade,letterSpacing:2.2,fontWeight:900,textTransform:"uppercase",marginBottom:5}}>Final rack cross-check</div>
-        <div style={{fontFamily:F.d,fontSize:16,fontWeight:950,color:C.ink,lineHeight:1.12,letterSpacing:-.2}}>Best-fit hands and hand shapes</div>
+        <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:900,textTransform:"uppercase",marginBottom:5}}>Final rack cross-check</div>
+        <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.12,letterSpacing:-.2}}>Best-fit hands and hand shapes</div>
         <p style={{fontSize:11.5,color:C.mut,lineHeight:1.55,margin:"7px 0 0"}}>This is not saying you were locked into one final hand. It shows how your post-Charleston rack lines up with the hand shapes Rackle is reading.</p>
       </div>
       <div style={{display:"flex",borderBottom:`1px solid ${C.bdr}`}}>
@@ -8147,13 +8165,13 @@ function FinalHandCrossReference({hand,startingRack,chosenHandObj,chosenSec,chos
           const isChosen=h.chosen;
           return(
             <div key={`${label}-${i}`} style={{display:"grid",gridTemplateColumns:"34px minmax(0,1fr) auto",gap:10,alignItems:"center",padding:"10px 0",borderBottom:i<rows.length-1?`1px solid ${C.bdr}`:"none"}}>
-              <div style={{width:34,height:34,borderRadius:12,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.d,fontWeight:950,fontSize:14,color:isChosen?"#fff":C.jade,background:isChosen?C.jade:C.jade+"10",border:`1px solid ${C.jade}20`}}>{isChosen?"★":i+1}</div>
+              <div style={{width:34,height:34,borderRadius:12,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.d,fontWeight:900,fontSize:14,color:isChosen?"#fff":C.jade,background:isChosen?C.jade:C.jade+"10",border:`1px solid ${C.jade}20`}}>{isChosen?"★":i+1}</div>
               <div style={{minWidth:0}}>
-                <div style={{fontSize:8,color:isChosen?C.jade:C.mut,letterSpacing:1.7,textTransform:"uppercase",fontWeight:950,marginBottom:3}}>{isChosen?handWasInferred?"Inferred best hand":"Your target / best read":`${h.secObj?.icon||""} ${h.secObj?.name||"Section"}`}</div>
+                <div style={{fontSize:8,color:isChosen?C.jade:C.mut,letterSpacing:2,textTransform:"uppercase",fontWeight:900,marginBottom:3}}>{isChosen?handWasInferred?"Inferred best hand":"Your target / best read":`${h.secObj?.icon||""} ${h.secObj?.name||"Section"}`}</div>
                 <div style={{fontSize:12.5,fontWeight:900,color:C.ink,lineHeight:1.28,whiteSpace:"normal"}}>{label}</div>
               </div>
               <div style={{justifySelf:"end",textAlign:"right"}}>
-                <div style={{fontFamily:F.d,fontSize:17,fontWeight:950,color:tone.color,lineHeight:1}}>{h.coveragePct||0}%</div>
+                <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:tone.color,lineHeight:1}}>{h.coveragePct||0}%</div>
                 <div style={{fontSize:8,color:C.mut,fontWeight:900,letterSpacing:1,textTransform:"uppercase"}}>fit</div>
               </div>
             </div>
@@ -8162,22 +8180,22 @@ function FinalHandCrossReference({hand,startingRack,chosenHandObj,chosenSec,chos
       </div>}
       {tab==="rack"&&<div className="rk-in" style={{padding:"12px 14px"}}>
         <div style={{marginBottom:14}}>
-          <div style={{fontSize:8,color:C.jade,letterSpacing:1.8,textTransform:"uppercase",fontWeight:950,marginBottom:7}}>Final rack</div>
-          <div style={{fontSize:11,color:C.mut,lineHeight:1.45,marginBottom:8}}>Your rack after the Charleston. This is the rack used for the best-fit reads above.</div>
+          <div style={{fontSize:8,color:C.jade,letterSpacing:1.8,textTransform:"uppercase",fontWeight:900,marginBottom:7}}>Final rack</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.5,marginBottom:8}}>Your rack after the Charleston. This is the rack used for the best-fit reads above.</div>
           <SortableRack hand={hand}/>
         </div>
         <div>
-          <div style={{fontSize:8,color:C.gold,letterSpacing:1.8,textTransform:"uppercase",fontWeight:950,marginBottom:7}}>Starting deal</div>
+          <div style={{fontSize:8,color:C.gold,letterSpacing:1.8,textTransform:"uppercase",fontWeight:900,marginBottom:7}}>Starting deal</div>
           {hasStarting?<>
-            <div style={{fontSize:11,color:C.mut,lineHeight:1.45,marginBottom:8}}>The 13 tiles you were dealt before any Charleston passes.</div>
+            <div style={{fontSize:11,color:C.mut,lineHeight:1.5,marginBottom:8}}>The 13 tiles you were dealt before any Charleston passes.</div>
             <SortableRack hand={startingRack}/>
           </>:<div style={{fontSize:11,color:C.mut,lineHeight:1.5,background:C.bg2,borderRadius:10,padding:"10px 12px"}}>Starting deal is not available for this saved scorecard.</div>}
         </div>
       </div>}
       {tab==="shape"&&<div className="rk-in" style={{padding:"12px 14px"}}>
         {bestPlan?<>
-          <div style={{fontSize:8,color:C.jade,letterSpacing:1.8,textTransform:"uppercase",fontWeight:950,marginBottom:6}}>Hand shape being checked</div>
-          <div style={{fontSize:12.5,fontWeight:900,color:C.ink,lineHeight:1.3,marginBottom:10}}>{bestLabel}</div>
+          <div style={{fontSize:8,color:C.jade,letterSpacing:1.8,textTransform:"uppercase",fontWeight:900,marginBottom:6}}>Hand shape being checked</div>
+          <div style={{fontSize:12.5,fontWeight:900,color:C.ink,lineHeight:1.4,marginBottom:10}}>{bestLabel}</div>
           <div style={{display:"flex",gap:7,flexWrap:"wrap",alignItems:"flex-end",marginBottom:10}}>
             {bestPlan.groups.map((g,i)=><HandGroupChips key={i} group={g} cardColor={bestPlan.cardColors?.[i]}/>) }
           </div>
@@ -8324,8 +8342,8 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
       {/* ① VERDICT */}
       <SectionDivider label="THE VERDICT"/>
       <div style={{borderRadius:14,background:"#fff",border:`1.5px solid ${C.bdr}`,padding:"16px 18px",marginBottom:10,boxShadow:"0 2px 12px rgba(0,0,0,0.04)"}}>
-        <div style={{fontSize:8,color:C.jade,letterSpacing:2.5,fontWeight:700,marginBottom:8}}>THE VERDICT</div>
-        <p style={{fontSize:13,color:C.ink,lineHeight:1.7,margin:"0 0 14px",fontStyle:"italic"}}>{verdictText}</p>
+        <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:8}}>THE VERDICT</div>
+        <p style={{fontSize:13,color:C.ink,lineHeight:1.55,margin:"0 0 14px",fontStyle:"italic"}}>{verdictText}</p>
         {/* IQ sub-scores inline */}
         <div style={{display:"flex",gap:4}}>
           {[{label:"DIR",v:iq.directionScore,max:40},{label:"PASS",v:iq.passQualityScore,max:25},{label:"TILE",v:iq.tileStrengthScore,max:25},{label:"TIME",v:iq.timingScore,max:10}].map(({label,v,max})=>{
@@ -8335,8 +8353,8 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
             return(
               <div key={label} style={{flex:1,background:bg,borderRadius:10,padding:"9px 4px",textAlign:"center"}}>
                 <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:col,lineHeight:1}}>{v}</div>
-                <div style={{fontSize:6,color:col,opacity:0.7,letterSpacing:1.5,fontWeight:700,marginTop:3}}>{label}</div>
-                <div style={{fontSize:6,color:C.mut}}>/{max}</div>
+                <div style={{fontSize:8,color:col,opacity:0.7,letterSpacing:1.8,fontWeight:700,marginTop:3}}>{label}</div>
+                <div style={{fontSize:8,color:C.mut}}>/{max}</div>
               </div>
             );
           })}
@@ -8434,11 +8452,11 @@ function LeaveModal({onStay,onLeave}){
   return(
     <div role="dialog" aria-modal="true" aria-labelledby="leave-title" style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:100,padding:20}}>
       <div style={{background:"#fff",borderRadius:20,padding:24,maxWidth:320,width:"100%",textAlign:"center"}}>
-        <div style={{fontSize:28,marginBottom:8}}>⚠️</div>
-        <h2 id="leave-title" style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 8px",fontWeight:800}}>Leave this game?</h2>
-        <p style={{fontSize:13,color:C.mut,margin:"0 0 18px",lineHeight:1.6}}>Your progress and timer will be lost. Return to try again.</p>
+        <div style={{fontSize:24,marginBottom:8}}>⚠️</div>
+        <h2 id="leave-title" style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 8px",fontWeight:900}}>Leave this game?</h2>
+        <p style={{fontSize:13,color:C.mut,margin:"0 0 18px",lineHeight:1.55}}>Your progress and timer will be lost. Return to try again.</p>
         <div style={{display:"flex",gap:8}}>
-          <button onClick={onStay} autoFocus style={{flex:1,padding:"12px 0",borderRadius:12,border:`1px solid ${C.bdr}`,background:"#fff",cursor:"pointer",fontSize:13,color:C.ink,fontWeight:600}}>Stay</button>
+          <button onClick={onStay} autoFocus style={{flex:1,padding:"12px 0",borderRadius:12,border:`1px solid ${C.bdr}`,background:"#fff",cursor:"pointer",fontSize:13,color:C.ink,fontWeight:700}}>Stay</button>
           <button onClick={onLeave} style={{flex:1,padding:"12px 0",borderRadius:12,border:"none",background:C.cinn,color:"#fff",cursor:"pointer",fontSize:13,fontWeight:700}}>Leave</button>
         </div>
       </div>
@@ -8450,9 +8468,9 @@ function StreakBadgeToast({badge,onDismiss}){
   useEffect(()=>{const t=setTimeout(onDismiss,4000);return()=>clearTimeout(t);},[]);
   return(
     <div role="status" aria-live="polite" className="rk-in" style={{position:"fixed",top:16,left:"50%",transform:"translateX(-50%)",background:"#fff",borderRadius:16,padding:"12px 20px",boxShadow:"0 8px 32px rgba(0,0,0,0.15)",border:`2px solid ${C.gold}30`,zIndex:200,display:"flex",alignItems:"center",gap:10,maxWidth:280}}>
-      <span style={{fontSize:28}}>{badge.badge}</span>
+      <span style={{fontSize:24}}>{badge.badge}</span>
       <div>
-        <div style={{fontSize:13,fontWeight:800,color:C.ink,fontFamily:F.d}}>{badge.title}!</div>
+        <div style={{fontSize:13,fontWeight:900,color:C.ink,fontFamily:F.d}}>{badge.title}!</div>
         <div style={{fontSize:11,color:C.mut}}>{badge.desc} streak unlocked</div>
       </div>
     </div>
@@ -8465,7 +8483,7 @@ function ClubPostToast({toast,onDismiss}){
     <div role="status" aria-live="polite" className="rk-in" style={{position:"fixed",top:16,left:"50%",transform:"translateX(-50%)",background:"#fff",borderRadius:16,padding:"12px 18px",boxShadow:"0 8px 32px rgba(0,0,0,0.14)",border:`2px solid ${C.jade}25`,zIndex:200,display:"flex",alignItems:"center",gap:12,maxWidth:300,width:"calc(100% - 32px)"}}>
       <div style={{width:36,height:36,borderRadius:10,background:C.jade+"12",border:`1.5px solid ${C.jade}25`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🀄</div>
       <div style={{flex:1,minWidth:0}}>
-        <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.jade,lineHeight:1,marginBottom:3}}>Posted to {toast.clubName}</div>
+        <div style={{fontFamily:F.d,fontSize:13,fontWeight:900,color:C.jade,lineHeight:1,marginBottom:3}}>Posted to {toast.clubName}</div>
         <div style={{fontSize:11,color:C.mut}}>Score {toast.iqScore} is on the board</div>
       </div>
       <button onClick={onDismiss} style={{background:"none",border:"none",color:C.mut,fontSize:14,cursor:"pointer",padding:0,lineHeight:1,flexShrink:0}}>✕</button>
@@ -8509,7 +8527,7 @@ function PremiumClubMenu({open,onClose,setScreen,go,showSettings,streak=0,dRes=n
     <button className={`rk-menu-row rk-menu-${section}${cta?" rk-menu-cta":""}`} onClick={onClick}>
       <span className="rk-menu-row-icon" aria-hidden="true"><span className="rk-menu-emoji">{icon}</span></span>
       <span style={{flex:1,minWidth:0}}><strong>{title}</strong>{sub&&<span>{sub}</span>}</span>
-      <span style={{fontSize:14,color:cta?"#fff":"#8A6820",fontWeight:950,lineHeight:1}}>›</span>
+      <span style={{fontSize:14,color:cta?"#fff":"#8A6820",fontWeight:900,lineHeight:1}}>›</span>
     </button>
   );
   return(
@@ -8636,16 +8654,16 @@ function Footer(){
         <div>
           <div aria-hidden="true" style={{width:40,height:1,background:C.bdr,margin:"0 auto 16px"}}/>
           <div style={{fontSize:12,color:C.jade,fontFamily:F.d,fontStyle:"italic"}}>The Daily Mahjong Workout 🀄</div>
-          <div style={{fontSize:11,color:C.mut,marginTop:8,lineHeight:1.6}}>Made for the American Mahjong community</div>
-          <div style={{marginTop:12}}><a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,letterSpacing:-0.3,textDecoration:"none"}}>Rackle</a></div>
+          <div style={{fontSize:11,color:C.mut,marginTop:8,lineHeight:1.55}}>Made for the American Mahjong community</div>
+          <div style={{marginTop:12}}><a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,letterSpacing:-0.5,textDecoration:"none"}}>Rackle</a></div>
           <div style={{fontSize:10,color:C.mut,marginTop:14,opacity:0.7}}>© {new Date().getFullYear()} <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" style={{color:C.mut,textDecoration:"none"}}>playrackle.com</a> · All rights reserved</div>
         </div>
         <div className="rk-footer-actions" style={{marginTop:10,display:"flex",justifyContent:"center",alignItems:"center",gap:8,flexWrap:"wrap"}}>
-          <a href="https://instagram.com/playrackle" target="_blank" rel="noopener noreferrer" style={{display:"flex",alignItems:"center",gap:6,fontSize:12,color:C.ink,textDecoration:"none",fontWeight:600,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:20,padding:"5px 14px"}}>
+          <a href="https://instagram.com/playrackle" target="_blank" rel="noopener noreferrer" style={{display:"flex",alignItems:"center",gap:6,fontSize:12,color:C.ink,textDecoration:"none",fontWeight:700,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:20,padding:"5px 14px"}}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5.5" stroke={C.ink} strokeWidth="2" fill="none"/><circle cx="12" cy="12" r="4.5" stroke={C.ink} strokeWidth="2" fill="none"/><circle cx="17.5" cy="6.5" r="1" fill={C.ink}/></svg>
             @playrackle
           </a>
-          <a href="mailto:hello@playrackle.com" style={{display:"flex",alignItems:"center",fontSize:12,color:C.ink,textDecoration:"none",fontWeight:600,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:20,padding:"5px 14px"}}>Contact</a>
+          <a href="mailto:hello@playrackle.com" style={{display:"flex",alignItems:"center",fontSize:12,color:C.ink,textDecoration:"none",fontWeight:700,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:20,padding:"5px 14px"}}>Contact</a>
         </div>
       </div>
     </div>
@@ -8663,7 +8681,7 @@ function Settings({home,settings,setSettings,showTutorial,setScreen}){
     ST.set("clubCode",null);ST.set("clubName",null);ST.set("profile",null);
     setConfirmClear(false);window.location.reload();
   };
-  const Row=({label,sub,children})=>(<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 0",borderBottom:`1px solid ${C.bdr}`}}><div><div style={{fontSize:13,fontWeight:600,color:C.ink}}>{label}</div>{sub&&<div style={{fontSize:11,color:C.mut,marginTop:2}}>{sub}</div>}</div>{children}</div>);
+  const Row=({label,sub,children})=>(<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 0",borderBottom:`1px solid ${C.bdr}`}}><div><div style={{fontSize:13,fontWeight:700,color:C.ink}}>{label}</div>{sub&&<div style={{fontSize:11,color:C.mut,marginTop:2}}>{sub}</div>}</div>{children}</div>);
   const Toggle=({val,onChange,label})=>(<button role="switch" aria-checked={val} aria-label={label} onClick={()=>onChange(!val)} style={{width:44,height:24,borderRadius:12,border:"none",cursor:"pointer",background:val?C.jade:"#D5CFC5",position:"relative",transition:"background 0.2s",flexShrink:0}}><span aria-hidden="true" style={{position:"absolute",top:2,left:val?22:2,width:20,height:20,borderRadius:10,background:"#fff",transition:"left 0.2s",boxShadow:"0 1px 3px rgba(0,0,0,0.2)"}}/></button>);
   const upd=(k,v)=>{const n={...settings,[k]:v};setSettings(n);ST.set("settings",n);};
   return(
@@ -8678,7 +8696,7 @@ function Settings({home,settings,setSettings,showTutorial,setScreen}){
         <Row label="Show Timer" sub="Track how long each Charleston takes"><Toggle val={settings.showTimer} onChange={v=>upd("showTimer",v)} label="Toggle show timer"/></Row>
         <Row label="Show Streak on Home" sub="Display your daily streak card on the home screen"><Toggle val={!settings.hideStreak} onChange={v=>upd("hideStreak",!v)} label="Toggle streak visibility"/></Row>
         <Row label="Tile Size" sub="Larger tiles for easier tapping">
-          <div style={{display:"flex",gap:4}}>{["normal","large"].map(sz=>(<button key={sz} onClick={()=>upd("tileSize",sz)} aria-pressed={settings.tileSize===sz} style={{padding:"4px 10px",borderRadius:8,border:`1.5px solid ${settings.tileSize===sz?C.jade:C.bdr}`,background:settings.tileSize===sz?C.jade+"10":"#fff",fontSize:11,fontWeight:600,color:settings.tileSize===sz?C.jade:C.mut,cursor:"pointer",textTransform:"capitalize"}}>{sz}</button>))}</div>
+          <div style={{display:"flex",gap:4}}>{["normal","large"].map(sz=>(<button key={sz} onClick={()=>upd("tileSize",sz)} aria-pressed={settings.tileSize===sz} style={{padding:"4px 10px",borderRadius:8,border:`1.5px solid ${settings.tileSize===sz?C.jade:C.bdr}`,background:settings.tileSize===sz?C.jade+"10":"#fff",fontSize:11,fontWeight:700,color:settings.tileSize===sz?C.jade:C.mut,cursor:"pointer",textTransform:"capitalize"}}>{sz}</button>))}</div>
         </Row>
         <Row label="Haptic Feedback" sub="Vibrate on tile selection (mobile)"><Toggle val={settings.haptic} onChange={v=>upd("haptic",v)} label="Toggle haptic feedback"/></Row>
       </div>
@@ -8686,20 +8704,20 @@ function Settings({home,settings,setSettings,showTutorial,setScreen}){
         <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>DATA</div>
         <Row label="Clear History" sub="Reset all stats and streaks">
           {!confirmClear
-            ? <button onClick={()=>setConfirmClear(true)} style={{padding:"6px 12px",borderRadius:8,border:`1px solid ${C.cinn}30`,background:C.cinn+"08",fontSize:11,cursor:"pointer",fontWeight:600,color:C.cinn}}>Clear</button>
+            ? <button onClick={()=>setConfirmClear(true)} style={{padding:"6px 12px",borderRadius:8,border:`1px solid ${C.cinn}30`,background:C.cinn+"08",fontSize:11,cursor:"pointer",fontWeight:700,color:C.cinn}}>Clear</button>
             : <div style={{display:"flex",gap:6,alignItems:"center"}}>
-                <span style={{fontSize:11,color:C.cinn,fontWeight:600}}>Sure?</span>
-                <button onClick={()=>setConfirmClear(false)} style={{padding:"5px 10px",borderRadius:8,border:`1px solid ${C.bdr}`,background:"#fff",fontSize:11,cursor:"pointer",fontWeight:600,color:C.ink}}>No</button>
+                <span style={{fontSize:11,color:C.cinn,fontWeight:700}}>Sure?</span>
+                <button onClick={()=>setConfirmClear(false)} style={{padding:"5px 10px",borderRadius:8,border:`1px solid ${C.bdr}`,background:"#fff",fontSize:11,cursor:"pointer",fontWeight:700,color:C.ink}}>No</button>
                 <button onClick={clearHistory} style={{padding:"5px 10px",borderRadius:8,border:"none",background:C.cinn,fontSize:11,cursor:"pointer",fontWeight:700,color:"#fff"}}>Yes, clear</button>
               </div>}
         </Row>
       </div>
       <div style={S.card}>
         <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>ABOUT</div>
-        <div style={{fontSize:12,color:C.ink,lineHeight:1.7}}>
+        <div style={{fontSize:12,color:C.ink,lineHeight:1.55}}>
           <div><span style={{fontWeight:700}}>Rackle</span> v2.0 · 2026 NMJL Edition</div>
           <div style={{color:C.mut,marginTop:4}}>Daily Charleston strategy trainer. Same deal for every player, every day. Train your game.</div>
-          <div style={{marginTop:8}}><a href="https://playrackle.com" style={{color:C.jade,fontWeight:600,textDecoration:"none"}}>playrackle.com</a></div>
+          <div style={{marginTop:8}}><a href="https://playrackle.com" style={{color:C.jade,fontWeight:700,textDecoration:"none"}}>playrackle.com</a></div>
         </div>
       </div>
       <div style={{textAlign:"center",padding:"12px 0",marginTop:4}}>
@@ -8735,8 +8753,8 @@ function Tutorial({onDone,onBack,setScreen}){
             <span style={{fontSize:9,letterSpacing:2.4,fontWeight:900,color:"rgba(255,255,255,.78)"}}>RACKLE TRAINING · {progress}%</span>
           </div>
           <div className="rk-float" style={{fontSize:38,marginBottom:8}}>{st.icon}</div>
-          <h2 style={{fontFamily:F.d,fontSize:26,color:"#fff",margin:"0 0 10px",fontWeight:900,letterSpacing:-0.8,lineHeight:1.02}}>{st.title}</h2>
-          <p style={{fontSize:14,color:"rgba(255,255,255,.78)",lineHeight:1.65,margin:"0 auto",fontWeight:650,maxWidth:330}}>{st.body}</p>
+          <h2 style={{fontFamily:F.d,fontSize:24,color:"#fff",margin:"0 0 10px",fontWeight:900,letterSpacing:-0.5,lineHeight:1.02}}>{st.title}</h2>
+          <p style={{fontSize:14,color:"rgba(255,255,255,.78)",lineHeight:1.55,margin:"0 auto",fontWeight:700,maxWidth:330}}>{st.body}</p>
         </div>
       </div>
 
@@ -8746,14 +8764,14 @@ function Tutorial({onDone,onBack,setScreen}){
 
       <div className="rk-premium-card" style={{padding:16,marginBottom:14}}>
         <div style={{fontSize:9,letterSpacing:2.1,fontWeight:900,color:C.jade,marginBottom:10}}>TRY THE READ</div>
-        {st.showTiles&&(<RackSurface>{sampleTiles.map((t,i)=>(<div key={i}><Ti t={t} sel={selected===`tile-${i}`} onClick={()=>setSelected(`tile-${i}`)}/>{selected===`tile-${i}`&&<div className="rk-in" style={{textAlign:"center",fontSize:10,color:tC(t),fontWeight:800,marginTop:3}}>{tAria(t)}</div>}</div>))}</RackSurface>)}
+        {st.showTiles&&(<RackSurface>{sampleTiles.map((t,i)=>(<div key={i}><Ti t={t} sel={selected===`tile-${i}`} onClick={()=>setSelected(`tile-${i}`)}/>{selected===`tile-${i}`&&<div className="rk-in" style={{textAlign:"center",fontSize:10,color:tC(t),fontWeight:900,marginTop:3}}>{tAria(t)}</div>}</div>))}</RackSurface>)}
         {!st.showTiles&&<p className="rk-premium-copy" style={{marginBottom:2}}>{st.detail}</p>}
       </div>
 
       <div className="rk-premium-stack" style={{marginBottom:14}}>
         {choices.map((c,i)=>(
           <button key={i} className="rk-tutorial-choice" onClick={()=>setSelected(`choice-${i}`)} style={selected===`choice-${i}`?{borderColor:c.good?C.jade+"55":C.gold+"55",background:c.good?"linear-gradient(145deg,#F3FBF6,#FFFDF8)":"linear-gradient(145deg,#FFF8EA,#FFFDF8)"}:undefined}>
-            <div className="rk-premium-icon" style={{width:40,height:40,borderRadius:14,fontSize:17}}>{selected===`choice-${i}`?(c.good?"✓":"•"):"✦"}</div>
+            <div className="rk-premium-icon" style={{width:40,height:40,borderRadius:14,fontSize:18}}>{selected===`choice-${i}`?(c.good?"✓":"•"):"✦"}</div>
             <div style={{flex:1}}><strong>{c.title}</strong><br/><span>{c.body}</span></div>
           </button>
         ))}
@@ -8815,7 +8833,7 @@ function CardGuideScreen({home,setScreen}){
       <RackleHeader onBack={home} setScreen={setScreen}/>
       <div style={{marginBottom:14,marginTop:4}}>
         <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>2026 Card Reference</div>
-        <p style={{fontSize:12,color:C.mut,margin:"0 0 12px",lineHeight:1.6}}>Every section, every hand. Your in-game cheat sheet.</p>
+        <p style={{fontSize:12,color:C.mut,margin:"0 0 12px",lineHeight:1.55}}>Every section, every hand. Your in-game cheat sheet.</p>
         {/* Search bar */}
         <div style={{position:"relative",marginBottom:14}}>
           <input value={search} onChange={e=>{setSearch(e.target.value);if(e.target.value.trim())setView("search");}}
@@ -8837,8 +8855,8 @@ function CardGuideScreen({home,setScreen}){
             <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:10}}>
               <div style={{width:44,height:44,borderRadius:12,background:s.color+"14",border:`1px solid ${s.color}25`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>{s.icon}</div>
               <div style={{flex:1}}>
-                <div style={{fontSize:15,fontWeight:800,color:C.ink,marginBottom:2}}>{s.name}</div>
-                <div style={{fontSize:11,color:C.mut,lineHeight:1.3}}>{s.desc}</div>
+                <div style={{fontSize:15,fontWeight:900,color:C.ink,marginBottom:2}}>{s.name}</div>
+                <div style={{fontSize:11,color:C.mut,lineHeight:1.4}}>{s.desc}</div>
               </div>
               <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:3}}>
                 <span style={{fontSize:10,fontWeight:700,color:C.mut}}>{hands.length} hands</span>
@@ -8855,11 +8873,11 @@ function CardGuideScreen({home,setScreen}){
             {/* Hold / pass mini-row */}
             <div style={{display:"flex",gap:6}}>
               <div style={{flex:1,background:C.jade+"08",borderRadius:8,padding:"6px 8px",border:`1px solid ${C.jade}15`}}>
-                <div style={{fontSize:7,color:C.jade,fontWeight:700,letterSpacing:1.5,marginBottom:2}}>✓ HOLD</div>
+                <div style={{fontSize:7,color:C.jade,fontWeight:700,letterSpacing:1.8,marginBottom:2}}>✓ HOLD</div>
                 <div style={{fontSize:10,color:C.ink,lineHeight:1.5}}>{s.hold}</div>
               </div>
               <div style={{flex:1,background:C.cinn+"06",borderRadius:8,padding:"6px 8px",border:`1px solid ${C.cinn}15`}}>
-                <div style={{fontSize:7,color:C.cinn,fontWeight:700,letterSpacing:1.5,marginBottom:2}}>✗ PASS</div>
+                <div style={{fontSize:7,color:C.cinn,fontWeight:700,letterSpacing:1.8,marginBottom:2}}>✗ PASS</div>
                 <div style={{fontSize:10,color:C.ink,lineHeight:1.5}}>{s.pass}</div>
               </div>
             </div>
@@ -8875,7 +8893,7 @@ function CardGuideScreen({home,setScreen}){
       <div style={{...S.card,marginTop:4,background:"linear-gradient(145deg,#FFFFF8,#F4EFE3)",borderColor:C.gold+"30"}}>
         <div style={{fontSize:8,color:C.gold,letterSpacing:2,fontWeight:700,marginBottom:8}}>🐉 DRAGON MATCHING GUIDE</div>
         {[
-          {suit:"Bam",dragon:"Green Dragon",suitCol:SC.bam,dragonCol:"#1B7D4E",tiles:[{t:"s",s:"bam",n:5},{t:"d",v:"Grn"}]},
+          {suit:"Bam",dragon:"Green Dragon",suitCol:SC.bam,dragonCol:C.jade,tiles:[{t:"s",s:"bam",n:5},{t:"d",v:"Grn"}]},
           {suit:"Crak",dragon:"Red Dragon",suitCol:SC.crak,dragonCol:"#B83232",tiles:[{t:"s",s:"crak",n:5},{t:"d",v:"Red"}]},
           {suit:"Dot",dragon:"Soap / White Dragon",suitCol:SC.dot,dragonCol:"#6B6560",tiles:[{t:"s",s:"dot",n:5},{t:"d",v:"Soap"}]},
         ].map(row=>(
@@ -8888,7 +8906,7 @@ function CardGuideScreen({home,setScreen}){
             </div>
           </div>
         ))}
-        <div style={{fontSize:10,color:C.mut,lineHeight:1.6,marginTop:4}}>"Matching Dragon" = use the dragon that matches your suit color. "Opposite Dragon" = use the non-matching one.</div>
+        <div style={{fontSize:10,color:C.mut,lineHeight:1.55,marginTop:4}}>"Matching Dragon" = use the dragon that matches your suit color. "Opposite Dragon" = use the non-matching one.</div>
       </div>
       <Footer/>
     </div>
@@ -8941,13 +8959,13 @@ function CardGuideScreen({home,setScreen}){
       {/* Anchor tile row */}
       {anchor.tiles&&(
         <div style={{...S.card,marginBottom:8,padding:"10px 14px",background:`${secObj?.color}08`,borderColor:`${secObj?.color}25`}}>
-          <div style={{fontSize:8,color:secObj?.color,letterSpacing:1.5,fontWeight:700,marginBottom:6}}>⚓ ANCHOR TILES</div>
+          <div style={{fontSize:8,color:secObj?.color,letterSpacing:1.8,fontWeight:700,marginBottom:6}}>⚓ ANCHOR TILES</div>
           <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:6}}>
             {anchor.tiles.map((tile,i)=>(
-              <span key={i} style={{fontSize:12,fontWeight:800,padding:"4px 10px",borderRadius:10,background:"#fff",color:secObj?.color,border:`1px solid ${secObj?.color}30`}}>{tile}</span>
+              <span key={i} style={{fontSize:12,fontWeight:900,padding:"4px 10px",borderRadius:10,background:"#fff",color:secObj?.color,border:`1px solid ${secObj?.color}30`}}>{tile}</span>
             ))}
           </div>
-          <div style={{fontSize:11,color:C.ink,lineHeight:1.6}}>{anchor.note}</div>
+          <div style={{fontSize:11,color:C.ink,lineHeight:1.55}}>{anchor.note}</div>
         </div>
       )}
 
@@ -8966,7 +8984,7 @@ function CardGuideScreen({home,setScreen}){
           </button>
         ))}
         {(filterConcealed||filterValue)&&(
-          <button onClick={()=>{setFilterConcealed(false);setFilterValue(null);}} style={{padding:"4px 8px",borderRadius:20,border:`1px solid ${C.cinn}40`,background:C.cinn+"08",fontSize:10,color:C.cinn,cursor:"pointer",fontWeight:600}}>Clear</button>
+          <button onClick={()=>{setFilterConcealed(false);setFilterValue(null);}} style={{padding:"4px 8px",borderRadius:20,border:`1px solid ${C.cinn}40`,background:C.cinn+"08",fontSize:10,color:C.cinn,cursor:"pointer",fontWeight:700}}>Clear</button>
         )}
       </div>
 
@@ -8982,8 +9000,8 @@ function CardGuideScreen({home,setScreen}){
       {/* Joker note for section */}
       {secObj?.joker&&(
         <div style={{...S.card,marginTop:4,background:"#FFF9E6",borderColor:C.gold+"30"}}>
-          <div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:5}}>🃏 JOKER TIPS FOR {secObj.name.toUpperCase()}</div>
-          <div style={{fontSize:11,color:C.ink,lineHeight:1.65}}>{secObj.joker}</div>
+          <div style={{fontSize:8,color:C.gold,letterSpacing:1.8,fontWeight:700,marginBottom:5}}>🃏 JOKER TIPS FOR {secObj.name.toUpperCase()}</div>
+          <div style={{fontSize:11,color:C.ink,lineHeight:1.55}}>{secObj.joker}</div>
         </div>
       )}
       <Footer/>
@@ -9005,18 +9023,18 @@ function SectionStrategyCard({sec}){
         <div className="rk-in" style={{borderTop:`1px solid ${C.bdr}`}}>
           <div style={{display:"flex",gap:8,padding:"10px 14px"}}>
             <div style={{flex:1,background:C.jade+"08",borderRadius:8,padding:"8px 10px",border:`1px solid ${C.jade}15`}}>
-              <div style={{fontSize:7,color:C.jade,fontWeight:700,letterSpacing:1.5,marginBottom:4}}>✓ HOLD</div>
-              <div style={{fontSize:11,color:C.ink,lineHeight:1.6}}>{sec.hold}</div>
+              <div style={{fontSize:7,color:C.jade,fontWeight:700,letterSpacing:1.8,marginBottom:4}}>✓ HOLD</div>
+              <div style={{fontSize:11,color:C.ink,lineHeight:1.55}}>{sec.hold}</div>
             </div>
             <div style={{flex:1,background:C.cinn+"06",borderRadius:8,padding:"8px 10px",border:`1px solid ${C.cinn}15`}}>
-              <div style={{fontSize:7,color:C.cinn,fontWeight:700,letterSpacing:1.5,marginBottom:4}}>✗ PASS</div>
-              <div style={{fontSize:11,color:C.ink,lineHeight:1.6}}>{sec.pass}</div>
+              <div style={{fontSize:7,color:C.cinn,fontWeight:700,letterSpacing:1.8,marginBottom:4}}>✗ PASS</div>
+              <div style={{fontSize:11,color:C.ink,lineHeight:1.55}}>{sec.pass}</div>
             </div>
           </div>
           <div style={{padding:"0 14px 10px"}}>
             <div style={{background:C.gold+"08",borderRadius:8,padding:"8px 10px",border:`1px solid ${C.gold}15`}}>
-              <div style={{fontSize:7,color:C.gold,fontWeight:700,letterSpacing:1.5,marginBottom:4}}>💡 STRATEGY</div>
-              <div style={{fontSize:11,color:C.ink,lineHeight:1.65}}>{sec.combos}</div>
+              <div style={{fontSize:7,color:C.gold,fontWeight:700,letterSpacing:1.8,marginBottom:4}}>💡 STRATEGY</div>
+              <div style={{fontSize:11,color:C.ink,lineHeight:1.55}}>{sec.combos}</div>
             </div>
           </div>
         </div>
@@ -9086,7 +9104,7 @@ function MidnightCountdown({dn}){
         {!urgent&&(
           <span className="rk-pulse" style={{width:5,height:5,borderRadius:"50%",background:C.jade,display:"inline-block",flexShrink:0}}/>
         )}
-        <span style={{fontSize:9,color:mutCol,letterSpacing:2.5,fontWeight:700,fontFamily:F.b}}>
+        <span style={{fontSize:9,color:mutCol,letterSpacing:2,fontWeight:700,fontFamily:F.b}}>
           {urgent?"⚠ LAST CHANCE":"TOMORROW'S RACKLE"}
         </span>
       </div>
@@ -9097,7 +9115,7 @@ function MidnightCountdown({dn}){
           <div key={l} style={{display:"flex",alignItems:"flex-start"}}>
             <div style={{textAlign:"center",minWidth:64}}>
               <div style={{fontFamily:F.d,fontSize:44,fontWeight:900,color:col,letterSpacing:-3,lineHeight:1}}>{v}</div>
-              <div style={{fontSize:7,color:mutCol,letterSpacing:2.5,fontWeight:700,marginTop:5,fontFamily:F.b}}>{l}</div>
+              <div style={{fontSize:7,color:mutCol,letterSpacing:2,fontWeight:700,marginTop:5,fontFamily:F.b}}>{l}</div>
             </div>
             {i<2&&(
               <div style={{display:"flex",flexDirection:"column",gap:6,alignSelf:"center",margin:"0 6px",paddingBottom:18}}>
@@ -9133,7 +9151,7 @@ function EmailSignup(){
       <div className="rk-email-kicker-v8 rk-email-kicker-v18">Rackle list</div>
       <h2 className="rk-email-title-v8">Clubhouse updates</h2>
       {done?(
-        <div className="rk-email-done-v8"><div style={{fontFamily:F.d,fontSize:20,fontWeight:950,marginBottom:4}}>You’re on the list.</div><div style={{fontSize:12,color:"rgba(255,255,255,.72)",fontWeight:800}}>You’ll get Rackle drops and club updates.</div></div>
+        <div className="rk-email-done-v8"><div style={{fontFamily:F.d,fontSize:20,fontWeight:900,marginBottom:4}}>You’re on the list.</div><div style={{fontSize:12,color:"rgba(255,255,255,.72)",fontWeight:900}}>You’ll get Rackle drops and club updates.</div></div>
       ):(
         <>
           <p className="rk-email-copy-v8 rk-email-copy-v56">Get new racks, club drops, and Mahjong notes.</p>
@@ -9166,7 +9184,7 @@ function InlineCodeEntry({setScreen}){
         <div style={{display:"flex",alignItems:"center",gap:10}}>
           <div style={{width:30,height:30,borderRadius:8,background:C.jade+"15",border:`1px solid ${C.jade}25`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,flexShrink:0}}>🔑</div>
           <div>
-            <div style={{fontSize:13,fontWeight:800,color:C.jade,fontFamily:F.d,letterSpacing:-0.05}}>I have a club code</div>
+            <div style={{fontSize:13,fontWeight:900,color:C.jade,fontFamily:F.d,letterSpacing:-0.05}}>I have a club code</div>
             <div className="rk-inline-code-copy">Join your club board</div>
           </div>
         </div>
@@ -9187,7 +9205,7 @@ function InlineCodeEntry({setScreen}){
             <button onClick={join} style={{flexShrink:0,padding:"10px 16px",borderRadius:10,border:"none",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:F.b}}>Join →</button>
           </div>
           {err&&<div style={{fontSize:11,color:C.cinn,marginTop:6}}>{err}</div>}
-          <button onClick={()=>{setOpen(false);setScreen("clubs");}} style={{marginTop:10,width:"100%",background:"none",border:"none",fontSize:11,color:C.mut,cursor:"pointer",fontWeight:600,padding:0,textAlign:"center"}}>Don't have a code? Browse the club directory →</button>
+          <button onClick={()=>{setOpen(false);setScreen("clubs");}} style={{marginTop:10,width:"100%",background:"none",border:"none",fontSize:11,color:C.mut,cursor:"pointer",fontWeight:700,padding:0,textAlign:"center"}}>Don't have a code? Browse the club directory →</button>
         </div>
       )}
     </div>
@@ -9264,11 +9282,11 @@ function ClubCodeEntry({setScreen,clubEntries=[],currentScore=0,currentRank=null
             {leader&&<div className="rk-quiet-leader">
               <div className="rk-quiet-badge">1</div>
               <div style={{flex:1,minWidth:0,position:"relative",zIndex:1}}>
-                <div style={{fontSize:9,letterSpacing:2.2,textTransform:"uppercase",fontWeight:950,color:"rgba(243,212,107,.86)",marginBottom:5}}>Club table leader</div>
-                <div style={{fontFamily:F.d,fontSize:20,fontWeight:950,lineHeight:1.05,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{leader.name}</div>
+                <div style={{fontSize:9,letterSpacing:2,textTransform:"uppercase",fontWeight:900,color:"rgba(243,212,107,.86)",marginBottom:5}}>Club table leader</div>
+                <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,lineHeight:1.05,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{leader.name}</div>
                 <div style={{fontSize:12,color:"rgba(255,255,255,.72)",marginTop:3}}>{roomCopy}</div>
               </div>
-              <div style={{fontFamily:F.d,fontSize:36,fontWeight:950,color:"#F3D46B",lineHeight:1,position:"relative",zIndex:1}}>{leader.iqScore}</div>
+              <div style={{fontFamily:F.d,fontSize:36,fontWeight:900,color:"#F3D46B",lineHeight:1,position:"relative",zIndex:1}}>{leader.iqScore}</div>
             </div>}
             <div className="rk-quiet-row-list">
               {rows.map((e,i)=>{
@@ -9292,15 +9310,15 @@ function ClubCodeEntry({setScreen,clubEntries=[],currentScore=0,currentRank=null
         ):(
           <>
             <div className="rk-browser-mode-card" style={{marginTop:0}}>
-              <div style={{fontFamily:F.d,fontSize:18,fontWeight:950,color:C.ink,marginBottom:6}}>Bring your table online</div>
-              <div style={{fontSize:12,color:C.mut,lineHeight:1.6}}>One shared rack. One club board. A reason to come back before the next game.</div>
+              <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,marginBottom:6}}>Bring your table online</div>
+              <div style={{fontSize:12,color:C.mut,lineHeight:1.55}}>One shared rack. One club board. A reason to come back before the next game.</div>
             </div>
-            <button onClick={()=>setScreen("clubs")} className="rk-primary-btn" style={{width:"100%",padding:"12px 0",borderRadius:14,color:"#fff",fontSize:14,fontWeight:950,cursor:"pointer",fontFamily:F.d,marginBottom:8}}>Browse Club Directory →</button>
-            <button onClick={()=>{setCodeOpen(o=>!o);setErr("");setCode("");}} className="rk-secondary-btn" style={{width:"100%",padding:"11px 0",borderRadius:14,color:C.jade,fontSize:13,fontWeight:950,cursor:"pointer",fontFamily:F.b,marginBottom:codeOpen?8:0}}>{codeOpen?"Cancel":"I have a code"}</button>
+            <button onClick={()=>setScreen("clubs")} className="rk-primary-btn" style={{width:"100%",padding:"12px 0",borderRadius:14,color:"#fff",fontSize:14,fontWeight:900,cursor:"pointer",fontFamily:F.d,marginBottom:8}}>Browse Club Directory →</button>
+            <button onClick={()=>{setCodeOpen(o=>!o);setErr("");setCode("");}} className="rk-secondary-btn" style={{width:"100%",padding:"11px 0",borderRadius:14,color:C.jade,fontSize:13,fontWeight:900,cursor:"pointer",fontFamily:F.b,marginBottom:codeOpen?8:0}}>{codeOpen?"Cancel":"I have a code"}</button>
             {codeOpen&&<div className="rk-in" style={{display:"flex",flexDirection:"column",gap:7}}>
               <div style={{display:"flex",justifyContent:"center",gap:7}}>
-                <input value={code} onChange={e=>{setCode(e.target.value.replace(/\D/g,"").slice(0,4));setErr("");}} onKeyDown={e=>e.key==="Enter"&&join()} placeholder="----" maxLength={4} autoFocus className="rk-soft-input" style={{width:94,padding:"10px 12px",fontSize:17,fontFamily:F.d,fontWeight:950,color:C.ink,outline:"none",textAlign:"center",letterSpacing:4}}/>
-                <button onClick={join} className="rk-primary-btn" style={{padding:"10px 18px",borderRadius:12,color:"#fff",fontSize:12,fontWeight:950,cursor:"pointer",whiteSpace:"nowrap"}}>Join →</button>
+                <input value={code} onChange={e=>{setCode(e.target.value.replace(/\D/g,"").slice(0,4));setErr("");}} onKeyDown={e=>e.key==="Enter"&&join()} placeholder="----" maxLength={4} autoFocus className="rk-soft-input" style={{width:94,padding:"10px 12px",fontSize:18,fontFamily:F.d,fontWeight:900,color:C.ink,outline:"none",textAlign:"center",letterSpacing:2}}/>
+                <button onClick={join} className="rk-primary-btn" style={{padding:"10px 18px",borderRadius:12,color:"#fff",fontSize:12,fontWeight:900,cursor:"pointer",whiteSpace:"nowrap"}}>Join →</button>
               </div>
               {err&&<div style={{fontSize:11,color:C.cinn,textAlign:"center"}}>{err}</div>}
             </div>}
@@ -9370,9 +9388,9 @@ function GlobalLeaderboardPill({setScreen}){
           <div style={{textAlign:"center",padding:"22px 14px"}}><div style={{fontSize:22,opacity:.28,marginBottom:6}}>⏳</div><div style={{fontSize:12,color:C.mut}}>Loading global scores…</div></div>
         ):rows.length===0?(
           <div style={{textAlign:"center",padding:"24px 14px"}}>
-            <div style={{fontSize:28,marginBottom:8}}>🀄</div>
-            <div style={{fontFamily:F.d,fontSize:17,fontWeight:950,color:C.ink,marginBottom:5}}>Board’s empty. Take the room.</div>
-            <div style={{fontSize:12,color:C.mut,lineHeight:1.6,marginBottom:12}}>Play today’s Daily and set the number everyone else has to chase.</div>
+            <div style={{fontSize:24,marginBottom:8}}>🀄</div>
+            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,marginBottom:5}}>Board’s empty. Take the room.</div>
+            <div style={{fontSize:12,color:C.mut,lineHeight:1.55,marginBottom:12}}>Play today’s Daily and set the number everyone else has to chase.</div>
             <button onClick={refresh} className="rk-small-toggle">↻ Refresh</button>
           </div>
         ):(
@@ -9381,10 +9399,10 @@ function GlobalLeaderboardPill({setScreen}){
               <div className="rk-quiet-badge">1</div>
               <div style={{flex:1,minWidth:0,position:"relative",zIndex:1}}>
                 <div className="rk-quiet-leader-kicker">Today’s table leader</div>
-                <div style={{fontFamily:F.d,fontSize:20,fontWeight:950,lineHeight:1.05,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{leader.name}</div>
+                <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,lineHeight:1.05,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{leader.name}</div>
                 <div style={{fontSize:12,color:"rgba(255,255,255,.72)",marginTop:3}}>{myEntry?`${gap} points ahead of you`:liveCopy}</div>
               </div>
-              <div style={{fontFamily:F.d,fontSize:36,fontWeight:950,color:"#F3D46B",lineHeight:1,position:"relative",zIndex:1}}>{leader.iqScore}</div>
+              <div style={{fontFamily:F.d,fontSize:36,fontWeight:900,color:"#F3D46B",lineHeight:1,position:"relative",zIndex:1}}>{leader.iqScore}</div>
             </div>}
             <div className="rk-quiet-row-list">
               {rows.map((e,i)=>{
@@ -9406,7 +9424,7 @@ function GlobalLeaderboardPill({setScreen}){
         )}
         <div className="rk-quiet-footer">
           {setScreen&&<button onClick={()=>setScreen("globalLeaderboard")} className="rk-quiet-link">Open full room →</button>}
-          <div style={{fontSize:10.5,color:C.mut,lineHeight:1.45}}>Play the Daily to appear · Board resets tonight</div>
+          <div style={{fontSize:10.5,color:C.mut,lineHeight:1.5}}>Play the Daily to appear · Board resets tonight</div>
         </div>
       </div>}
     </div>
@@ -9424,12 +9442,12 @@ function LeaveClubButton({onLeave}){
   if(confirm)return(
     <div style={{flex:1,display:"flex",gap:6,alignItems:"center"}}>
       <span style={{fontSize:11,color:C.mut,whiteSpace:"nowrap"}}>Leave club?</span>
-      <button onClick={()=>setConfirm(false)} style={{flex:1,padding:"10px 0",borderRadius:10,border:`1px solid ${C.bdr}`,background:"#fff",fontSize:12,fontWeight:600,color:C.ink,cursor:"pointer"}}>No</button>
+      <button onClick={()=>setConfirm(false)} style={{flex:1,padding:"10px 0",borderRadius:10,border:`1px solid ${C.bdr}`,background:"#fff",fontSize:12,fontWeight:700,color:C.ink,cursor:"pointer"}}>No</button>
       <button onClick={leave} style={{flex:1,padding:"10px 0",borderRadius:10,border:"none",background:C.cinn,fontSize:12,fontWeight:700,color:"#fff",cursor:"pointer"}}>Leave</button>
     </div>
   );
   return(
-    <button onClick={()=>setConfirm(true)} style={{flex:1,padding:"10px 0",borderRadius:12,border:`1px solid ${C.bdr}`,background:"#fff",fontSize:12,fontWeight:600,color:C.mut,cursor:"pointer"}}>Leave club</button>
+    <button onClick={()=>setConfirm(true)} style={{flex:1,padding:"10px 0",borderRadius:12,border:`1px solid ${C.bdr}`,background:"#fff",fontSize:12,fontWeight:700,color:C.mut,cursor:"pointer"}}>Leave club</button>
   );
 }
 
@@ -9453,9 +9471,9 @@ function PeriodTable({code,period,myName,showTime,fetchFn}){
 
   if(!entries.length)return(
     <div style={{textAlign:"center",padding:"28px 14px"}}>
-      <div style={{fontSize:26,marginBottom:8}}>🀄</div>
-      <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,marginBottom:4}}>{period==="yesterday"?"No scores yesterday":"No scores yet"}</div>
-      <div style={{fontSize:11,color:C.mut,lineHeight:1.6}}>{period==="yesterday"?"Looks like nobody played yesterday, don't let that happen today.":"Be the first to post a score for this period."}</div>
+      <div style={{fontSize:24,marginBottom:8}}>🀄</div>
+      <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.ink,marginBottom:4}}>{period==="yesterday"?"No scores yesterday":"No scores yet"}</div>
+      <div style={{fontSize:11,color:C.mut,lineHeight:1.55}}>{period==="yesterday"?"Looks like nobody played yesterday, don't let that happen today.":"Be the first to post a score for this period."}</div>
     </div>
   );
 
@@ -9467,7 +9485,7 @@ function PeriodTable({code,period,myName,showTime,fetchFn}){
     <>
       <div style={{display:"grid",gridTemplateColumns:cols.template,gap:0,padding:"8px 14px",background:C.bg2,borderBottom:`1px solid ${C.bdr}`}}>
         {cols.headers.map((h,i)=>(
-          <div key={i} style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,textAlign:i>1?"center":"left"}}>{h}</div>
+          <div key={i} style={{fontSize:8,color:C.mut,letterSpacing:1.8,fontWeight:700,textAlign:i>1?"center":"left"}}>{h}</div>
         ))}
       </div>
       {entries.map((e,i)=>{
@@ -9478,7 +9496,7 @@ function PeriodTable({code,period,myName,showTime,fetchFn}){
             <div style={{fontSize:13}}>{medal||<span style={{fontFamily:F.d,fontSize:12,fontWeight:700,color:C.mut}}>{i+1}</span>}</div>
             <div style={{fontFamily:F.d,fontSize:13,fontWeight:isMe?800:600,color:isMe?C.jade:C.ink,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{e.name}{isMe?" (you)":""}</div>
             <div style={{textAlign:"center"}}><span style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:e.iqScore>=80?C.jade:e.iqScore>=60?C.gold:C.cinn}}>{e.iqScore}</span></div>
-            {showTime&&<div style={{textAlign:"center",fontSize:11,color:C.mut,fontFamily:F.d,fontWeight:600}}>{e.time?fT(e.time):","}</div>}
+            {showTime&&<div style={{textAlign:"center",fontSize:11,color:C.mut,fontFamily:F.d,fontWeight:700}}>{e.time?fT(e.time):","}</div>}
             <div style={{textAlign:"center",fontSize:11,color:C.cinn}}>{e.streak>1?e.streak:""}</div>
           </div>
         );
@@ -9556,7 +9574,7 @@ function ClubDirectoryScreen({home,setScreen}){
               <div style={{fontSize:12,color:C.mut,marginBottom:12}}>{club.location}</div>
               {/* Share link */}
               <div style={{display:"inline-flex",alignItems:"center",gap:8,background:C.sage,borderRadius:10,padding:"7px 12px",border:`1px solid ${C.sageB}20`}}>
-                <span style={{fontSize:11,color:C.sageB,fontWeight:600}}>{clubUrl(selected)}</span>
+                <span style={{fontSize:11,color:C.sageB,fontWeight:700}}>{clubUrl(selected)}</span>
                 <button onClick={()=>navigator.clipboard?.writeText(`https://${clubUrl(selected)}`)} style={{background:"none",border:`1px solid ${C.sageB}40`,borderRadius:6,padding:"3px 8px",fontSize:10,color:C.sageB,fontWeight:700,cursor:"pointer"}}>Copy</button>
               </div>
             </div>
@@ -9585,10 +9603,10 @@ function ClubDirectoryScreen({home,setScreen}){
                           {medal?<span style={{fontSize:16}}>{medal}</span>:<span style={{fontSize:12,color:C.mut,fontWeight:700}}>#{i+1}</span>}
                         </div>
                         <div style={{flex:1,minWidth:0}}>
-                          <div style={{fontSize:13,fontWeight:700,color:C.ink,lineHeight:1.2}}>{e.name}</div>
+                          <div style={{fontSize:13,fontWeight:700,color:C.ink,lineHeight:1.4}}>{e.name}</div>
                         </div>
                         <div style={{textAlign:"right",flexShrink:0}}>
-                          <div style={{fontFamily:F.d,fontSize:15,fontWeight:800,color:C.jade}}>Score {e.iqScore}</div>
+                          <div style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.jade}}>Score {e.iqScore}</div>
                           {e.streak>1&&<div style={{fontSize:9,color:C.gold,fontWeight:700}}>🔥 {e.streak} day streak</div>}
                         </div>
                       </div>
@@ -9621,7 +9639,7 @@ function ClubDirectoryScreen({home,setScreen}){
             {isMember&&(
               <button onClick={()=>setScreen("leaderboard")} style={{...S.greenBtn,width:"100%",marginBottom:12}}>Go to My Club Leaderboard →</button>
             )}
-            <button onClick={()=>setSelected(null)} style={{width:"100%",background:"none",border:`1.5px solid ${C.bdr}`,borderRadius:12,padding:"12px",fontSize:13,color:C.mut,fontWeight:600,cursor:"pointer"}}>← All Clubs</button>
+            <button onClick={()=>setSelected(null)} style={{width:"100%",background:"none",border:`1.5px solid ${C.bdr}`,borderRadius:12,padding:"12px",fontSize:13,color:C.mut,fontWeight:700,cursor:"pointer"}}>← All Clubs</button>
           </div>
         );
       })():(
@@ -9646,7 +9664,7 @@ function ClubDirectoryScreen({home,setScreen}){
           {/* Club list */}
           {filtered.length===0?(
             <div style={{textAlign:"center",padding:"32px 0",color:C.mut,fontSize:13}}>
-              <div style={{fontSize:28,marginBottom:8}}>🀄</div>
+              <div style={{fontSize:24,marginBottom:8}}>🀄</div>
               No clubs found for "{query}".
               <div style={{marginTop:12}}>
                 <a href="mailto:hello@playrackle.com?subject=Start%20my%20Rackle%20club%20leaderboard&body=Club%20name%3A%20%0ALocation%3A%20%0AApprox%20members%3A%20" style={{fontSize:12,color:C.jade,fontWeight:700,textDecoration:"none"}}>+ Get your club listed →</a>
@@ -9662,7 +9680,7 @@ function ClubDirectoryScreen({home,setScreen}){
                     {club.emoji||"🀄"}
                   </div>
                   <div style={{flex:1,minWidth:0}}>
-                    <div style={{fontFamily:F.d,fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2,marginBottom:2}}>{club.name}</div>
+                    <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.ink,lineHeight:1.4,marginBottom:2}}>{club.name}</div>
                     <div style={{fontSize:11,color:C.mut}}>{club.location}</div>
                   </div>
                   <span style={{fontSize:14,color:C.mut,fontWeight:700,flexShrink:0}}>▸</span>
@@ -9935,7 +9953,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
       <RoomLeader leader={leader} myEntry={myEntry} count={entries.length} label="club"/>
       {!(posted&&myRank===1)&&<RoomMyPosition myRank={posted?myRank:null} score={score} leader={leader} count={entries.length} clubName={club.name}/>}
       {score>0&&!posted&&<div className="rk-invite-card">
-        <div style={{fontSize:9,letterSpacing:2.2,textTransform:"uppercase",fontWeight:950,color:C.jade,marginBottom:8}}>Name on board</div>
+        <div style={{fontSize:9,letterSpacing:2,textTransform:"uppercase",fontWeight:900,color:C.jade,marginBottom:8}}>Name on board</div>
         <div style={{display:"flex",gap:8}}><input value={nameInput} onChange={e=>setNameInput(e.target.value)} placeholder="Your name" style={{flex:1,minWidth:0,border:`1px solid rgba(26,20,16,.10)`,borderRadius:14,padding:"12px 13px",fontFamily:F.b,fontSize:13,background:"#FFFDF8",outline:"none"}}/><button onClick={postScore} disabled={posting||!nameInput.trim()} className="rk-room-btn rk-room-btn-primary" style={{padding:"0 16px"}}>{posting?"…":"Post"}</button></div>
       </div>}
       <RoomRows entries={entries} scoreHint={score} emptyTitle="You’re first in the room" emptyCopy="Send it to your table and make them chase."/>
@@ -9979,7 +9997,7 @@ function Statspill({streak,rounds,bestIQ,streakBadge}){
       <button onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:6,background:bg,border,borderRadius:999,padding:"3px 9px 3px 7px",cursor:"pointer",boxShadow:visibleStreak>0?`0 3px 10px ${C.cinn}10`:"none",minHeight:28}}>
         <span style={{width:18,height:18,borderRadius:99,background:visibleStreak>0?C.cinn+"12":bestIQ?C.gold+"12":"rgba(0,0,0,0.04)",display:"inline-flex",alignItems:"center",justifyContent:"center",fontSize:10,flexShrink:0}}>{icon}</span>
         <span style={{fontFamily:F.d,fontSize:11,fontWeight:900,color,lineHeight:1}}>{value}</span>
-        <span style={{fontSize:10,color,fontWeight:800,opacity:0.75,lineHeight:1}}>{label}</span>
+        <span style={{fontSize:10,color,fontWeight:900,opacity:0.75,lineHeight:1}}>{label}</span>
         <span style={{fontSize:8,color,opacity:0.55,marginLeft:0}}>{open?"▴":"▾"}</span>
       </button>
 
@@ -9988,21 +10006,21 @@ function Statspill({streak,rounds,bestIQ,streakBadge}){
         {visibleStreak>0&&<div style={{display:"flex",alignItems:"center",gap:8,paddingBottom:8,borderBottom:rounds>0||bestIQ?`1px solid ${C.bdr}`:"none",marginBottom:rounds>0||bestIQ?8:0}}>
           <span style={{fontSize:16}}>{streakBadge?streakBadge.badge:"📅"}</span>
           <div>
-            <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.cinn,lineHeight:1}}>{visibleStreak}-day streak{streakBadge?` · ${streakBadge.title}`:""}</div>
+            <div style={{fontFamily:F.d,fontSize:13,fontWeight:900,color:C.cinn,lineHeight:1}}>{visibleStreak}-day streak{streakBadge?` · ${streakBadge.title}`:""}</div>
             <div style={{fontSize:10,color:C.mut,marginTop:2}}>{streakBadge?streakBadge.desc:"Keep playing daily!"}</div>
           </div>
         </div>}
         {rounds>0&&<div style={{display:"flex",alignItems:"center",gap:8,paddingBottom:bestIQ?8:0,borderBottom:bestIQ?`1px solid ${C.bdr}`:"none",marginBottom:bestIQ?8:0}}>
           <span style={{fontSize:16}}>🎲</span>
           <div>
-            <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.ink,lineHeight:1}}>{rounds} rounds played</div>
+            <div style={{fontFamily:F.d,fontSize:13,fontWeight:900,color:C.ink,lineHeight:1}}>{rounds} rounds played</div>
             <div style={{fontSize:10,color:C.mut,marginTop:2}}>All time</div>
           </div>
         </div>}
         {bestIQ&&<div style={{display:"flex",alignItems:"center",gap:8}}>
           <span style={{fontSize:16}}>⭐</span>
           <div>
-            <div style={{fontFamily:F.d,fontSize:13,fontWeight:800,color:C.gold,lineHeight:1}}>IQ {bestIQ.score} · Personal best</div>
+            <div style={{fontFamily:F.d,fontSize:13,fontWeight:900,color:C.gold,lineHeight:1}}>IQ {bestIQ.score} · Personal best</div>
             <div style={{fontSize:10,color:C.mut,marginTop:2}}>{bestIQ.daysAgo===0?"Set today":bestIQ.daysAgo===1?"Set yesterday":`Set ${bestIQ.daysAgo} days ago`}</div>
           </div>
         </div>}
@@ -10085,7 +10103,7 @@ function StreakCard({streak,streakBadge,bestIQ,clubName,onStats,firstName}){
       >
         <span style={{fontSize:22,flexShrink:0}}>{streakBadge?streakBadge.badge:"📅"}</span>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:13,fontWeight:800,color:C.ink,fontFamily:F.d,lineHeight:1.2}}>
+          <div style={{fontSize:13,fontWeight:900,color:C.ink,fontFamily:F.d,lineHeight:1.4}}>
             {streak}-day streak{streakBadge?(firstName?` · You're on fire, ${firstName}!`:` · ${streakBadge.title}`):""}
           </div>
         </div>
@@ -10201,14 +10219,14 @@ function TopBanner(){
       <div aria-hidden style={{position:"absolute",right:36,top:"50%",transform:"translateY(-50%)",fontSize:32,opacity:0.04,userSelect:"none",pointerEvents:"none",lineHeight:1}}>🀄</div>
 
       {/* Left: label text */}
-      <span style={{fontSize:8,color:isWelcome?"#C9A84C":"rgba(255,255,255,0.45)",letterSpacing:1.5,fontWeight:800,fontFamily:F.b,flexShrink:0,whiteSpace:"nowrap",marginRight:4}}>{msg.label}</span>
+      <span style={{fontSize:8,color:isWelcome?"#C9A84C":"rgba(255,255,255,0.45)",letterSpacing:1.8,fontWeight:900,fontFamily:F.b,flexShrink:0,whiteSpace:"nowrap",marginRight:4}}>{msg.label}</span>
 
       {/* Message */}
       <div style={{flex:1,minWidth:0,overflow:"hidden"}}>
         <span style={{
           fontSize:11,
           color:fade?"rgba(255,255,255,0.8)":"rgba(255,255,255,0)",
-          fontFamily:F.b,fontWeight:500,
+          fontFamily:F.b,fontWeight:700,
           lineHeight:1.4,
           display:"block",
           whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",
@@ -10266,7 +10284,7 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
           <div className="rk-soft-glow" style={{display:"inline-flex",alignItems:"center",gap:8,background:"rgba(255,255,255,0.13)",border:"1px solid rgba(255,255,255,0.20)",borderRadius:999,padding:"6px 12px",boxShadow:"inset 0 1px 0 rgba(255,255,255,.12)"}}>
             <span className="rk-live-orb" style={{width:9,height:9,borderRadius:99,background:"#4CD987",display:"inline-block",boxShadow:"0 0 10px rgba(76,217,135,.55)"}}/>
             <span style={{fontSize:9,letterSpacing:2,fontWeight:900,color:"rgba(255,255,255,0.84)"}}>DAILY RACKLE · #{dn}</span>
-            <span style={{fontSize:7,letterSpacing:1.5,fontWeight:900,color:"#082D1A",background:"#4CD987",borderRadius:999,padding:"3px 6px",lineHeight:1}}>LIVE</span>
+            <span style={{fontSize:7,letterSpacing:1.8,fontWeight:900,color:"#082D1A",background:"#4CD987",borderRadius:999,padding:"3px 6px",lineHeight:1}}>LIVE</span>
           </div>
           <div style={{fontSize:9.5,color:"rgba(255,255,255,0.72)",fontWeight:900}}>new rack in {reset}</div>
         </div>
@@ -10333,8 +10351,8 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
         <div className="rk-daily-hero-stats" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:7,marginTop:18}}>
           {statCards.map((c,i)=>(
             <div key={i} className="rk-count-live rk-daily-hero-stat" style={{background:"rgba(255,255,255,0.105)",border:"1px solid rgba(255,255,255,0.16)",borderRadius:12,padding:"10px 10px",minHeight:60,boxShadow:"inset 0 1px 0 rgba(255,255,255,.08)"}}>
-              <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:c.tone==="gold"?"#E0C263":"#fff",lineHeight:1}}>{c.value}</div>
-              <div style={{fontSize:7.5,color:"rgba(255,255,255,0.58)",letterSpacing:1.05,fontWeight:800,marginTop:5,textTransform:"uppercase",whiteSpace:"nowrap"}}>{c.label}</div>
+              <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:c.tone==="gold"?"#E0C263":"#fff",lineHeight:1}}>{c.value}</div>
+              <div style={{fontSize:7.5,color:"rgba(255,255,255,0.58)",letterSpacing:1.05,fontWeight:900,marginTop:5,textTransform:"uppercase",whiteSpace:"nowrap"}}>{c.label}</div>
             </div>
           ))}
         </div>
@@ -10343,7 +10361,7 @@ function TodayRackleHeroCard({dn,onPlay,ds,club,clubPlayers,bestIQ,ydIQ,weekDelt
           <div style={{minWidth:0}}>
             <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:3}}>
               <span style={{width:7,height:7,borderRadius:99,background:"#E0C263",display:"inline-block",flexShrink:0,boxShadow:"0 0 10px rgba(224,194,99,.35)"}}/>
-              <div style={{fontSize:8,color:"rgba(255,255,255,0.62)",fontWeight:900,letterSpacing:1.5}}>TOMORROW</div>
+              <div style={{fontSize:8,color:"rgba(255,255,255,0.62)",fontWeight:900,letterSpacing:1.8}}>TOMORROW</div>
             </div>
             <div style={{fontFamily:F.d,fontSize:13.5,fontWeight:900,color:"#fff",lineHeight:1.16,letterSpacing:-0.1,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{tomorrowHint}</div>
           </div>
@@ -10369,13 +10387,13 @@ function ClubPulseCard({club,clubPlayers,clubEntries=[],currentScore=0,currentRa
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:10}}>
         <div>
           <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:900,marginBottom:3}}>TODAY AT YOUR CLUB</div>
-          <div style={{fontFamily:F.d,fontSize:17,fontWeight:900,color:C.ink,lineHeight:1.15}}>{club.name}</div>
+          <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,lineHeight:1.15}}>{club.name}</div>
         </div>
-        <button onClick={()=>setScreen("leaderboard")} style={{background:C.jade+"10",border:`1px solid ${C.jade}25`,borderRadius:999,padding:"7px 11px",fontSize:10,fontWeight:800,color:C.jade,cursor:"pointer"}}>View ranks</button>
+        <button onClick={()=>setScreen("leaderboard")} style={{background:C.jade+"10",border:`1px solid ${C.jade}25`,borderRadius:999,padding:"7px 11px",fontSize:10,fontWeight:900,color:C.jade,cursor:"pointer"}}>View ranks</button>
       </div>
       <div style={{display:"grid",gap:7}}>
         {lines.map((line,i)=>(
-          <div key={i} style={{display:"flex",alignItems:"center",gap:8,fontSize:11,color:i===0?C.jade:C.mut,lineHeight:1.35}}>
+          <div key={i} style={{display:"flex",alignItems:"center",gap:8,fontSize:11,color:i===0?C.jade:C.mut,lineHeight:1.4}}>
             <span style={{width:18,height:18,borderRadius:9,background:i===0?C.jade+"14":C.bg2,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,flexShrink:0}}>{["●","↗","🏆"][i]}</span>
             <span>{line}</span>
           </div>
@@ -10451,7 +10469,7 @@ function TomorrowPreviewCard(){
       <button onClick={()=>setOpen(o=>!o)} aria-expanded={open} style={{width:"100%",background:"none",border:"none",cursor:"pointer",textAlign:"left",padding:"14px 14px 13px",display:"flex",alignItems:"center",gap:12,position:"relative"}}>
         <div style={{width:38,height:38,borderRadius:13,background:urgency?C.cinn+"0D":C.jade+"0D",border:`1px solid ${urgency?C.cinn+"20":C.jade+"20"}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:F.d,fontSize:18,fontWeight:900,color:urgency?C.cinn:C.jade,flexShrink:0}}>✦</div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:8,color:urgency?C.cinn:C.jade,letterSpacing:1.7,fontWeight:900,marginBottom:4}}>TOMORROW'S RACKLE</div>
+          <div style={{fontSize:8,color:urgency?C.cinn:C.jade,letterSpacing:2,fontWeight:900,marginBottom:4}}>TOMORROW'S RACKLE</div>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:C.ink,lineHeight:1.12,letterSpacing:-0.22,marginBottom:4,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{headline}</div>
           <div style={{fontSize:11,color:C.mut,lineHeight:1.4}}>{String(hint).replace(/^Hint:\s*/i,"")}</div>
         </div>
@@ -10462,7 +10480,7 @@ function TomorrowPreviewCard(){
 
       {open&&<div className="rk-in" style={{position:"relative",padding:"0 14px 14px"}}>
         <div style={{height:1,background:`linear-gradient(90deg,transparent,${C.bdr},transparent)`,marginBottom:12}}/>
-        <div style={{fontSize:12,color:C.ink,lineHeight:1.45,fontWeight:750,marginBottom:10,textAlign:"center"}}>{subline}</div>
+        <div style={{fontSize:12,color:C.ink,lineHeight:1.5,fontWeight:700,marginBottom:10,textAlign:"center"}}>{subline}</div>
         <div style={{background:`linear-gradient(145deg,${C.jade}0B,#fff)`,border:`1px solid ${urgency?C.cinn+"1A":C.jade+"16"}`,borderRadius:14,padding:"10px",boxShadow:"inset 0 1px 0 rgba(255,255,255,0.8)",marginBottom:10}}>
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,marginBottom:8}}>
             <div style={{fontSize:8,color:urgency?C.cinn:C.jade,letterSpacing:1.4,fontWeight:900}}>NEW RACK IN</div>
@@ -10471,15 +10489,15 @@ function TomorrowPreviewCard(){
           <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:7,width:"100%"}}>
             {[{v:timeLeft.hh,l:"hrs"},{v:timeLeft.mm,l:"min"},{v:timeLeft.ss,l:"sec"}].map((part)=>(
               <div key={part.l} style={{textAlign:"center",background:"rgba(255,255,255,0.72)",border:`1px solid ${urgency?C.cinn+"16":C.jade+"14"}`,borderRadius:12,padding:"8px 4px 7px",minWidth:0}}>
-                <div style={{fontFamily:F.d,fontSize:25,fontWeight:900,color:urgency?C.cinn:C.jade,lineHeight:1,letterSpacing:-0.8}}>{part.v}</div>
-                <div style={{fontSize:7,color:C.mut,letterSpacing:1.1,fontWeight:800,marginTop:4,textTransform:"uppercase"}}>{part.l}</div>
+                <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:urgency?C.cinn:C.jade,lineHeight:1,letterSpacing:-0.5}}>{part.v}</div>
+                <div style={{fontSize:7,color:C.mut,letterSpacing:1.1,fontWeight:900,marginTop:4,textTransform:"uppercase"}}>{part.l}</div>
               </div>
             ))}
           </div>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:8,background:C.gold+"0D",border:`1px solid ${C.gold}18`,borderRadius:13,padding:"9px 10px"}}>
           <span style={{fontSize:13,flexShrink:0}}>👀</span>
-          <span style={{fontSize:11,color:C.ink,lineHeight:1.45,fontWeight:650}}>Tomorrow watch: {hint}</span>
+          <span style={{fontSize:11,color:C.ink,lineHeight:1.5,fontWeight:700}}>Tomorrow watch: {hint}</span>
         </div>
       </div>}
     </div>
@@ -10625,7 +10643,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const safeValue=(typeof value==="number"&&!Number.isFinite(value))?",":(value==="NaN"||value==null?",":value);
     return(
       <div className="rk-gilt-rank-card" style={{flex:1,minWidth:0,border:`1px solid rgba(243,212,107,.42)`,background:"rgba(255,255,255,0.105)",borderRadius:15,padding:"12px 12px",backdropFilter:"blur(8px)"}}>
-        <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:accent||"#F3D46B",lineHeight:1,letterSpacing:-0.8}}>{safeValue}</div>
+        <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:accent||"#F3D46B",lineHeight:1,letterSpacing:-0.5}}>{safeValue}</div>
         <div style={{fontSize:8,color:"rgba(255,255,255,0.68)",letterSpacing:2,fontWeight:900,marginTop:6}}>{label}</div>
       </div>
     );
@@ -11112,7 +11130,6 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <SharePreview/>
           <TomorrowTease/>
           <EmailSignup/>
-          <div className="rk-home-desktop-insights"><DesktopInsightDeck/></div>
         </div>
         <Footer/>
       </div>
@@ -11120,7 +11137,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   );
 }
 
-function Pill({i,v,l,hl}){return(<div style={{...S.pill,flex:1,background:hl?"#FFF5F0":C.bg2}} aria-label={`${l}: ${v}`}><span aria-hidden="true" style={{fontSize:12}}>{i}</span><div><div style={{fontSize:15,fontFamily:F.d,fontWeight:800,color:hl?C.cinn:C.ink}}>{v}</div><div style={{fontSize:7,color:C.mut,letterSpacing:1.5,fontWeight:700}}>{l}</div></div></div>);}
+function Pill({i,v,l,hl}){return(<div style={{...S.pill,flex:1,background:hl?"#FFF5F0":C.bg2}} aria-label={`${l}: ${v}`}><span aria-hidden="true" style={{fontSize:12}}>{i}</span><div><div style={{fontSize:15,fontFamily:F.d,fontWeight:900,color:hl?C.cinn:C.ink}}>{v}</div><div style={{fontSize:7,color:C.mut,letterSpacing:1.8,fontWeight:700}}>{l}</div></div></div>);}
 
 // ─── STATS ────────────────────────────────────────────────────────────────────
 function Stats({home,onShowScorecard,onRecap,dRes,setScreen,go}){
@@ -11174,7 +11191,7 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen,go}){
         <p>{hist.length?`You’ve played ${dailyHist.length} daily rack${dailyHist.length===1?'':'s'} and ${practiceHist.length} practice rack${practiceHist.length===1?'':'s'}. Your daily average is ${dailyAvg}.`:"Play today’s Daily Rackle to start your form report."}</p>
         <div className="rk-stats-v21-row">
           <div className="rk-stats-v21-dot">🎯</div>
-          <div style={{minWidth:0,flex:1}}><div style={{fontWeight:950,color:C.ink,fontSize:13,lineHeight:1.2}}>Next small improvement</div><div style={{fontSize:12,color:C.mut,lineHeight:1.45,marginTop:3,fontWeight:720}}>{focus}</div></div>
+          <div style={{minWidth:0,flex:1}}><div style={{fontWeight:900,color:C.ink,fontSize:13,lineHeight:1.4}}>Next small improvement</div><div style={{fontSize:12,color:C.mut,lineHeight:1.5,marginTop:3,fontWeight:700}}>{focus}</div></div>
         </div>
       </section>
 
@@ -11183,7 +11200,7 @@ function Stats({home,onShowScorecard,onRecap,dRes,setScreen,go}){
         <p>{topSec?`Most played section: ${topSec.name}. Practice mode is the best place to test a different lane without touching your Daily score.`:"Once you play more hands, Rackle will show which card sections you naturally lean toward."}</p>
         <div className="rk-stats-v21-row">
           <div className="rk-stats-v21-dot">🀄</div>
-          <div style={{minWidth:0,flex:1}}><div style={{fontWeight:950,color:C.ink,fontSize:13,lineHeight:1.2}}>Last rack</div><div style={{fontSize:12,color:C.mut,lineHeight:1.45,marginTop:3,fontWeight:720}}>{last?`${last.mode==='daily'?'Daily':'Practice'} · ${last.iqScore} Rackle IQ${last.time?` · ${fT(last.time)}`:''}`:"No rack played yet."}</div></div>
+          <div style={{minWidth:0,flex:1}}><div style={{fontWeight:900,color:C.ink,fontSize:13,lineHeight:1.4}}>Last rack</div><div style={{fontSize:12,color:C.mut,lineHeight:1.5,marginTop:3,fontWeight:700}}>{last?`${last.mode==='daily'?'Daily':'Practice'} · ${last.iqScore} Rackle IQ${last.time?` · ${fT(last.time)}`:''}`:"No rack played yet."}</div></div>
         </div>
       </section>
 
@@ -11221,20 +11238,20 @@ function ReadyOverlay({mode,dayNum,onReady,onHome}){
     <div style={{position:"fixed",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",zIndex:50,padding:"0 20px",background:"rgba(250,247,241,0.75)",backdropFilter:"blur(6px)"}}>
       <div className="rk-in rk-modal-surface" style={{width:"100%",maxWidth:400,background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",borderRadius:24,border:`1px solid rgba(26,20,16,.09)`,boxShadow:"0 22px 70px rgba(26,20,16,.14),inset 0 1px 0 rgba(255,255,255,.75)",overflow:"hidden"}}>
         <div style={{background:"linear-gradient(135deg,#0F2016,#1B3A28)",padding:"24px 24px 20px",textAlign:"center"}}>
-          <div style={{fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:3,fontWeight:700,marginBottom:10}}>{mode==="daily"?`DAILY RACKLE · #${dayNum}`:"PRACTICE MODE"}</div>
-          <div style={{fontFamily:F.d,fontSize:30,fontWeight:900,color:"#fff",letterSpacing:-0.5,lineHeight:1,marginBottom:4}}>Ready to play?</div>
+          <div style={{fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginBottom:10}}>{mode==="daily"?`DAILY RACKLE · #${dayNum}`:"PRACTICE MODE"}</div>
+          <div style={{fontFamily:F.d,fontSize:36,fontWeight:900,color:"#fff",letterSpacing:-0.5,lineHeight:1,marginBottom:4}}>Ready to play?</div>
           <div style={{width:32,height:1.5,background:`linear-gradient(90deg,transparent,${C.gold},transparent)`,margin:"12px auto 12px"}}/>
           {isChallenge
-            ?<div style={{fontSize:13,color:C.gilt,fontWeight:700,lineHeight:1.6}}>🎯 Beat their IQ of {challengeIQ} to win the challenge!</div>
-            :<div style={{fontSize:12,color:"rgba(255,255,255,0.5)",lineHeight:1.6}}>{mode==="daily"?"Same deal for every player. One shot.":"Unlimited hands. Build your instincts."}</div>
+            ?<div style={{fontSize:13,color:C.gilt,fontWeight:700,lineHeight:1.55}}>🎯 Beat their IQ of {challengeIQ} to win the challenge!</div>
+            :<div style={{fontSize:12,color:"rgba(255,255,255,0.5)",lineHeight:1.55}}>{mode==="daily"?"Same deal for every player. One shot.":"Unlimited hands. Build your instincts."}</div>
           }
         </div>
         {isChallenge&&<div style={{background:C.gilt+"15",borderBottom:`1px solid ${C.gilt}30`,padding:"10px 20px",textAlign:"center"}}>
           <span style={{fontSize:11,color:C.gold,fontWeight:700}}>Target: {challengeIQ} IQ · Day #{challengeDay}</span>
         </div>}
         <div style={{padding:"16px 20px 20px",background:C.bg}}>
-          <button onClick={onReady} style={{width:"100%",padding:"15px 0",borderRadius:12,border:"none",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",fontSize:14,fontFamily:F.d,fontWeight:800,letterSpacing:0.3,cursor:"pointer",boxShadow:`0 4px 14px rgba(27,125,78,0.35)`,marginBottom:10}}>{isChallenge?"Accept Challenge →":"Yes! Let's Play →"}</button>
-          <button onClick={onHome} style={{width:"100%",padding:"9px 0",borderRadius:10,border:"none",background:"none",color:C.mut,fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:F.b}}>← Back to Home</button>
+          <button onClick={onReady} style={{width:"100%",padding:"15px 0",borderRadius:12,border:"none",background:`linear-gradient(135deg,${C.jade},#156B42)`,color:"#fff",fontSize:14,fontFamily:F.d,fontWeight:900,letterSpacing:0.3,cursor:"pointer",boxShadow:`0 4px 14px rgba(27,125,78,0.35)`,marginBottom:10}}>{isChallenge?"Accept Challenge →":"Yes! Let's Play →"}</button>
+          <button onClick={onHome} style={{width:"100%",padding:"9px 0",borderRadius:10,border:"none",background:"none",color:C.mut,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:F.b}}>← Back to Home</button>
         </div>
       </div>
     </div>
@@ -11441,15 +11458,15 @@ function Game({mode,home,onDone,settings,setScreen}){
           {!ready&&<ReadyOverlay mode={mode} dayNum={dn} onReady={()=>setReady(true)} onHome={home}/>}
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
             <div style={{...S.back,opacity:0,pointerEvents:"none"}}>← Back</div>
-            <div style={{textAlign:"center"}}><div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div><div style={{fontFamily:F.d,fontSize:9,color:C.jade,fontWeight:600,fontStyle:"italic",letterSpacing:0.5,marginTop:1}}>The Daily Mahjong Workout.</div></div>
+            <div style={{textAlign:"center"}}><div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div><div style={{fontFamily:F.d,fontSize:9,color:C.jade,fontWeight:700,fontStyle:"italic",letterSpacing:0.5,marginTop:1}}>The Daily Mahjong Workout.</div></div>
             <span style={{fontSize:10,color:C.mut,fontWeight:700}}>{mode==="daily"?`Daily #${dn}`:"Practice"}</span>
           </div>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}><span style={{fontSize:10,color:C.mut,fontWeight:600}}>1st Charleston · Pass 1/3</span></div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}><span style={{fontSize:10,color:C.mut,fontWeight:700}}>1st Charleston · Pass 1/3</span></div>
           <div style={{display:"flex",gap:3,marginBottom:10}}>{[0,1,2].map(i=><div key={i} style={{flex:1,height:4,borderRadius:2,background:i===0?C.gold:C.bdr}}/>)}</div>
-          <div style={{textAlign:"center",marginBottom:10}}><span style={{fontSize:22}}>👉</span><h2 style={{fontFamily:F.d,fontSize:17,color:C.ink,margin:"2px 0"}}>Pass Right</h2><p style={{fontSize:12,color:C.mut}}>Select exactly 3 tiles to pass</p></div>
+          <div style={{textAlign:"center",marginBottom:10}}><span style={{fontSize:22}}>👉</span><h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"2px 0"}}>Pass Right</h2><p style={{fontSize:12,color:C.mut}}>Select exactly 3 tiles to pass</p></div>
           <div style={S.card}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
-              <span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK (13 tiles)</span>
+              <span style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>YOUR RACK (13 tiles)</span>
               <div style={{display:"flex",gap:4}}><button disabled style={{...S.sortBtn,opacity:0.25}}>Sort</button><button disabled style={{...S.sortBtn,opacity:0.25}}>📖 2026 Card</button></div>
             </div>
             <RackSurface>
@@ -11492,7 +11509,7 @@ function Game({mode,home,onDone,settings,setScreen}){
         <>
           <RackleHeader onBack={()=>setShowLeave(true)}/>
           {getDisplayTime()&&<div style={{textAlign:"center",marginBottom:4}}><span style={{fontSize:12,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {getDisplayTime()}</span></div>}
-          <h2 style={{fontFamily:F.d,fontSize:17,color:C.ink,margin:"0 0 2px",textAlign:"center"}}>Courtesy Pass</h2>
+          <h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 2px",textAlign:"center"}}>Courtesy Pass</h2>
           <p style={{fontSize:12,color:C.mut,textAlign:"center",marginBottom:10}}>Select 1-3 tiles to pass across</p>
           {jw&&<JW/>}
           <div style={S.card}><RH hand={hand} onSort={()=>setHand(sortHand(hand))}/>
@@ -11510,7 +11527,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           <p style={{fontSize:12,color:C.mut,marginBottom:10,textAlign:"center"}}>Choose one section to score your read.</p>
           <Rack hand={hand} label="YOUR FINAL RACK" showSort onSort={()=>setHand(sortHand(hand))} large={large}/>
           <button onClick={()=>setShowRef(!showRef)} aria-expanded={showRef} style={{...S.card,width:"100%",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8,background:showRef?C.gold+"06":"#fff"}}>
-            <span style={{fontSize:12,fontWeight:600,color:showRef?C.gold:C.ink}}>📖 {showRef?"Hide":"Show"} 2026 Card Guide</span><span aria-hidden="true" style={{color:C.mut}}>{showRef?"▾":"▸"}</span>
+            <span style={{fontSize:12,fontWeight:700,color:showRef?C.gold:C.ink}}>📖 {showRef?"Hide":"Show"} 2026 Card Guide</span><span aria-hidden="true" style={{color:C.mut}}>{showRef?"▾":"▸"}</span>
           </button>
           {showRef&&<CG onClose={()=>setShowRef(false)}/>}
           <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>SCORE YOUR ROUND</div>
@@ -11540,8 +11557,8 @@ function Game({mode,home,onDone,settings,setScreen}){
                 <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:s.color+"40"}}/>
                 <div style={{width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,margin:"0 2px"}}>{s.icon}</div>
                 <div style={{flex:1,minWidth:0,padding:"10px 8px 10px 4px"}}>
-                  <div style={{fontSize:13,fontWeight:800,color:C.ink,lineHeight:1.2,marginBottom:2}}>{s.name}</div>
-                  <div style={{fontSize:10,color:C.mut,lineHeight:1.3}}>{s.desc}</div>
+                  <div style={{fontSize:13,fontWeight:900,color:C.ink,lineHeight:1.4,marginBottom:2}}>{s.name}</div>
+                  <div style={{fontSize:10,color:C.mut,lineHeight:1.4}}>{s.desc}</div>
                 </div>
                 <div style={{width:28,height:28,borderRadius:14,background:`linear-gradient(135deg,${s.color},${s.color}CC)`,display:"flex",alignItems:"center",justifyContent:"center",marginRight:10,flexShrink:0}}>
                   <span style={{fontSize:12,color:"#fff",fontWeight:900}}>→</span>
@@ -11557,7 +11574,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           {showLeave&&<LeaveModal onStay={()=>setShowLeave(false)} onLeave={()=>{setShowLeave(false);home();}}/>}
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
             <button onClick={()=>setShowLeave(true)} style={S.back}>← Back</button>
-            <div style={{textAlign:"center"}}><div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div><div style={{fontFamily:F.d,fontSize:9,color:C.jade,fontWeight:600,fontStyle:"italic",letterSpacing:0.5,marginTop:1}}>The Daily Mahjong Workout.</div></div>
+            <div style={{textAlign:"center"}}><div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div><div style={{fontFamily:F.d,fontSize:9,color:C.jade,fontWeight:700,fontStyle:"italic",letterSpacing:0.5,marginTop:1}}>The Daily Mahjong Workout.</div></div>
             <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:1}}>
               <span style={{fontSize:10,color:C.mut,fontWeight:700}}>{mode==="daily"?`Daily #${dn}`:"Practice"}</span>
               {getDisplayTime()&&<span style={{fontSize:11,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {getDisplayTime()}</span>}
@@ -11572,7 +11589,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           <div style={{textAlign:"center",marginBottom:10}}>
             {hasNew
               ?<span className="rk-pass-complete-pill">{newIdx.length} tile{newIdx.length!==1?"s":""} received</span>
-              :<p role="status" aria-live="polite" style={{fontSize:12,color:C.mut,fontWeight:800,margin:0}}>Tap tiles to select. Jokers stay in your rack.</p>}
+              :<p role="status" aria-live="polite" style={{fontSize:12,color:C.mut,fontWeight:900,margin:0}}>Tap tiles to select. Jokers stay in your rack.</p>}
           </div>
           {jw&&<JW/>}
           <div style={S.card}>
@@ -11597,7 +11614,7 @@ function Game({mode,home,onDone,settings,setScreen}){
               <div style={{display:"flex",alignItems:"center",gap:8}}>
                 <span style={{fontSize:15}}>💡</span>
                 <div style={{textAlign:"left"}}>
-                  <div style={{fontSize:11,fontWeight:800,color:showHint?C.jade:C.ink,lineHeight:1.2}}>Section Hint</div>
+                  <div style={{fontSize:11,fontWeight:900,color:showHint?C.jade:C.ink,lineHeight:1.4}}>Section Hint</div>
                   <div style={{fontSize:10,color:C.mut,lineHeight:1}}>Best fits for your current rack</div>
                 </div>
               </div>
@@ -11615,11 +11632,11 @@ function Game({mode,home,onDone,settings,setScreen}){
                     <div style={{display:"flex",alignItems:"center",gap:8}}>
                       <span style={{fontSize:18}}>{top.icon}</span>
                       <div style={{flex:1}}>
-                        <div style={{fontSize:14,fontWeight:800,color:C.ink,lineHeight:1.2}}>{top.name}</div>
-                        <div style={{fontSize:10,color:C.mut,lineHeight:1.3,marginTop:1}}>{top.desc}</div>
+                        <div style={{fontSize:14,fontWeight:900,color:C.ink,lineHeight:1.4}}>{top.name}</div>
+                        <div style={{fontSize:10,color:C.mut,lineHeight:1.4,marginTop:1}}>{top.desc}</div>
                       </div>
                       <div style={{textAlign:"right",flexShrink:0}}>
-                        <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:top.color,lineHeight:1}}>{Math.round(top.score*100)}<span style={{fontSize:10,color:C.mut,fontWeight:400}}>%</span></div>
+                        <div style={{fontFamily:F.d,fontSize:20,fontWeight:900,color:top.color,lineHeight:1}}>{Math.round(top.score*100)}<span style={{fontSize:10,color:C.mut,fontWeight:700}}>%</span></div>
                       </div>
                     </div>
                     {/* Fit bar */}
@@ -11631,11 +11648,11 @@ function Game({mode,home,onDone,settings,setScreen}){
                   {/* Hold / Pass chips for top section */}
                   <div style={{padding:"10px 14px",borderBottom:`1px solid ${C.bdr}`,display:"flex",gap:8}}>
                     <div style={{flex:1,background:C.jade+"08",borderRadius:8,padding:"7px 10px"}}>
-                      <div style={{fontSize:8,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>✓ HOLD</div>
+                      <div style={{fontSize:8,color:C.jade,letterSpacing:1.8,fontWeight:700,marginBottom:3}}>✓ HOLD</div>
                       <div style={{fontSize:10,color:C.ink,lineHeight:1.5}}>{top.hold}</div>
                     </div>
                     <div style={{flex:1,background:C.cinn+"06",borderRadius:8,padding:"7px 10px"}}>
-                      <div style={{fontSize:8,color:C.cinn,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>✗ PASS</div>
+                      <div style={{fontSize:8,color:C.cinn,letterSpacing:1.8,fontWeight:700,marginBottom:3}}>✗ PASS</div>
                       <div style={{fontSize:10,color:C.ink,lineHeight:1.5}}>{top.pass}</div>
                     </div>
                   </div>
@@ -11696,9 +11713,9 @@ function Game({mode,home,onDone,settings,setScreen}){
 // ─── SHARED GAME COMPONENTS ────────────────────────────────────────────────────
 function Ask({icon,title,desc,hand,timer,onNo,onYes,onSort,large}){
   return(<div style={S.pg} className="rk-pg"><RackleHeader onBack={onNo}/>{timer&&<div style={{textAlign:"center",marginBottom:4}}><span style={{fontSize:12,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {timer}</span></div>}<div style={{textAlign:"center",marginBottom:12}}><div aria-hidden="true" style={{fontSize:24,marginBottom:6}}>{icon}</div><h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 4px"}}>{title}</h2><p style={{fontSize:12,color:C.mut}}>{desc}</p></div><Rack hand={hand} label="YOUR RACK" showSort={!!onSort} onSort={onSort} large={large}/><div style={{display:"flex",gap:8,marginTop:12}}><button onClick={onNo} style={{...S.oBtn,flex:1}}>No, skip</button><button onClick={onYes} style={{...S.greenBtn,flex:2}}>Yes, continue →</button></div></div>);}
-function JW(){return(<div role="alert" className="rk-in" style={{padding:"6px 10px",background:C.cinn+"08",borderRadius:8,border:`1px solid ${C.cinn}15`,textAlign:"center",marginBottom:6}}><span style={{fontSize:11,color:C.cinn,fontWeight:600}}>🃏 Jokers cannot be passed, they're too valuable!</span></div>);}
-function RH({hand,onSort,showRef,onRef}){return(<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK ({hand.length} tiles)</span><div style={{display:"flex",gap:4}}><button onClick={onSort} style={S.sortBtn}>Sort</button>{onRef&&<button onClick={onRef} aria-expanded={showRef} style={{...S.sortBtn,background:showRef?C.jade+"10":"none",color:showRef?C.jade:C.mut,borderColor:showRef?C.jade+"30":C.bdr}}>📖 2026 Card</button>}</div></div>);}
-function Rack({hand,label,showSort,onSort,large}){return(<div className="rk-lux-card" style={S.card}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>{label}</span>{showSort&&<button onClick={onSort} style={S.sortBtn}>Sort</button>}</div><RackSurface>{hand.map((t,i)=><Ti key={i} t={t} large={large}/>)}</RackSurface></div>);}
+function JW(){return(<div role="alert" className="rk-in" style={{padding:"6px 10px",background:C.cinn+"08",borderRadius:8,border:`1px solid ${C.cinn}15`,textAlign:"center",marginBottom:6}}><span style={{fontSize:11,color:C.cinn,fontWeight:700}}>🃏 Jokers cannot be passed, they're too valuable!</span></div>);}
+function RH({hand,onSort,showRef,onRef}){return(<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>YOUR RACK ({hand.length} tiles)</span><div style={{display:"flex",gap:4}}><button onClick={onSort} style={S.sortBtn}>Sort</button>{onRef&&<button onClick={onRef} aria-expanded={showRef} style={{...S.sortBtn,background:showRef?C.jade+"10":"none",color:showRef?C.jade:C.mut,borderColor:showRef?C.jade+"30":C.bdr}}>📖 2026 Card</button>}</div></div>);}
+function Rack({hand,label,showSort,onSort,large}){return(<div className="rk-lux-card" style={S.card}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><span style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>{label}</span>{showSort&&<button onClick={onSort} style={S.sortBtn}>Sort</button>}</div><RackSurface>{hand.map((t,i)=><Ti key={i} t={t} large={large}/>)}</RackSurface></div>);}
 function CG({onClose}){
   const [exp,setExp]=useState(null);
   return(<div style={{...S.card,background:"linear-gradient(145deg,#FFFFF8,#F7F0E5)",borderColor:C.gold+"30",maxHeight:380,overflowY:"auto"}} className="rk-in rk-lux-card" role="region" aria-label="2026 Card Guide">
@@ -11711,11 +11728,11 @@ function CG({onClose}){
         </button>
         {o&&<div style={{paddingLeft:4,paddingBottom:10}} className="rk-in">
           <div style={{display:"flex",gap:6,marginBottom:8}}>
-            <div style={{flex:1,background:C.jade+"08",borderRadius:8,padding:"7px 9px"}}><div style={{fontSize:8,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>✓ HOLD</div><div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{s.hold}</div></div>
-            <div style={{flex:1,background:C.cinn+"06",borderRadius:8,padding:"7px 9px"}}><div style={{fontSize:8,color:C.cinn,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>✗ PASS</div><div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{s.pass}</div></div>
+            <div style={{flex:1,background:C.jade+"08",borderRadius:8,padding:"7px 9px"}}><div style={{fontSize:8,color:C.jade,letterSpacing:1.8,fontWeight:700,marginBottom:3}}>✓ HOLD</div><div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{s.hold}</div></div>
+            <div style={{flex:1,background:C.cinn+"06",borderRadius:8,padding:"7px 9px"}}><div style={{fontSize:8,color:C.cinn,letterSpacing:1.8,fontWeight:700,marginBottom:3}}>✗ PASS</div><div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>{s.pass}</div></div>
           </div>
-          <div style={{background:C.gold+"06",borderRadius:8,padding:"7px 9px",marginBottom:s.joker?8:0}}><div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>💡 STRATEGY</div><div style={{fontSize:11,color:C.ink,lineHeight:1.6}}>{s.combos}</div></div>
-          {s.joker&&<div style={{background:"#FFF9E6",borderRadius:8,padding:"7px 9px",border:`1px solid ${C.gold}20`}}><div style={{fontSize:8,color:C.gold,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>🃏 JOKER TIP</div><div style={{fontSize:11,color:C.ink,lineHeight:1.6}}>{s.joker}</div></div>}
+          <div style={{background:C.gold+"06",borderRadius:8,padding:"7px 9px",marginBottom:s.joker?8:0}}><div style={{fontSize:8,color:C.gold,letterSpacing:1.8,fontWeight:700,marginBottom:3}}>💡 STRATEGY</div><div style={{fontSize:11,color:C.ink,lineHeight:1.55}}>{s.combos}</div></div>
+          {s.joker&&<div style={{background:"#FFF9E6",borderRadius:8,padding:"7px 9px",border:`1px solid ${C.gold}20`}}><div style={{fontSize:8,color:C.gold,letterSpacing:1.8,fontWeight:700,marginBottom:3}}>🃏 JOKER TIP</div><div style={{fontSize:11,color:C.ink,lineHeight:1.55}}>{s.joker}</div></div>}
         </div>}
       </div>);})}
   </div>);
@@ -11815,8 +11832,8 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
       <RackleHeader onBack={home} setScreen={setScreen}/>
       <div style={{textAlign:"center",padding:"48px 20px"}}>
         <div style={{fontSize:32,marginBottom:12}}>🀄</div>
-        <div style={{fontFamily:F.d,fontSize:18,fontWeight:800,color:C.ink,marginBottom:8}}>No games this week yet</div>
-        <div style={{fontSize:13,color:C.mut,lineHeight:1.6,marginBottom:24}}>Play today's Daily to start building your week.</div>
+        <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,marginBottom:8}}>No games this week yet</div>
+        <div style={{fontSize:13,color:C.mut,lineHeight:1.55,marginBottom:24}}>Play today's Daily to start building your week.</div>
         {dDone
           ?<div style={{fontSize:12,color:C.jade,fontWeight:700}}>✓ Today's Daily is done. See you tomorrow!</div>
           :<button onClick={()=>go("daily")} style={{...S.greenBtn,padding:"13px 32px"}}>Play the Daily Rackle</button>
@@ -11853,11 +11870,11 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
 
       {/* Hero */}
       <div className="rk-recap-hero" style={{borderRadius:20,background:`linear-gradient(160deg,${C.hero1},${C.hero2},${C.hero3})`,padding:"24px 20px 20px",textAlign:"center",boxShadow:"0 8px 32px rgba(0,0,0,0.2)",marginBottom:12}}>
-        <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:3,fontWeight:700,marginBottom:10}}>YOUR WEEK IN RACKLE</div>
+        <div style={{fontSize:9,color:"rgba(255,255,255,0.35)",letterSpacing:2,fontWeight:700,marginBottom:10}}>YOUR WEEK IN RACKLE</div>
         {profile?.nickname&&<div style={{fontSize:12,color:"rgba(255,255,255,0.45)",marginBottom:8}}>{profile.nickname}</div>}
         <div style={{fontFamily:F.d,fontSize:56,fontWeight:900,color:C.gilt,lineHeight:1,letterSpacing:-2,marginBottom:4}}>{avgIQ}</div>
         <div style={{fontSize:9,color:"rgba(255,255,255,0.4)",letterSpacing:2,fontWeight:700,marginBottom:6}}>AVG RACKLE SCORE</div>
-        <div style={{fontFamily:F.d,fontSize:18,fontWeight:800,color:"#fff",marginBottom:16,lineHeight:1}}>{lvl.label}</div>
+        <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:"#fff",marginBottom:16,lineHeight:1}}>{lvl.label}</div>
         <div style={{width:"100%",height:0.5,background:"rgba(255,255,255,0.08)",marginBottom:14}}/>
         <div style={{display:"flex",justifyContent:"center",gap:24,flexWrap:"wrap"}}>
           <div style={{textAlign:"center"}}>
@@ -11904,22 +11921,22 @@ function WeeklyRecapScreen({home,go,dDone,setScreen}){
         <div className="rk-recap-metric-row">
           <div className="rk-recap-metric" style={{color:C.jade}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.jade}}>{dailyDaysPlayed||dailyH.length}</div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>DAILIES</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.8,fontWeight:700,marginTop:2}}>DAILIES</div>
           </div>
           <div className="rk-recap-metric" style={{color:C.gold}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.gold}}>{bestEntry.iqScore}</div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>BEST SCORE</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.8,fontWeight:700,marginTop:2}}>BEST SCORE</div>
           </div>
           <div className="rk-recap-metric" style={{color:C.cinn}}>
             <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.cinn}}>{daysPlayed}</div>
-            <div style={{fontSize:8,color:C.mut,letterSpacing:1.5,fontWeight:700,marginTop:2}}>DAYS PLAYED</div>
+            <div style={{fontSize:8,color:C.mut,letterSpacing:1.8,fontWeight:700,marginTop:2}}>DAYS PLAYED</div>
           </div>
         </div>
       </div>
 
       {/* Delta message */}
       {delta!=null&&<div className="rk-recap-card" style={{...S.card,marginBottom:10,background:delta>=0?C.jade+"06":C.cinn+"06",borderColor:delta>=0?C.jade+"25":C.cinn+"25"}}>
-        <div style={{fontSize:12,color:delta>=0?C.jade:C.cinn,fontWeight:700,lineHeight:1.6}}>
+        <div style={{fontSize:12,color:delta>=0?C.jade:C.cinn,fontWeight:700,lineHeight:1.55}}>
           {delta>=0
             ?`↑ Up ${delta} IQ points from last week, you're improving. Keep the streak going.`
             :`↓ Down ${Math.abs(delta)} IQ points from last week. More practice sessions will turn this around.`}
@@ -12778,12 +12795,12 @@ function HandGroupChips({group, cardColor}){
             boxShadow:`0 1px 3px ${col}15`,
             display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",flexShrink:0,
           }}>
-            <span style={{fontSize:group.isFlower?14:12,fontWeight:800,color:col,lineHeight:1}}>{label}</span>
-            {sub&&<span style={{fontSize:5.5,color:col,opacity:0.6,fontWeight:700,marginTop:1,letterSpacing:0.2}}>{sub}</span>}
+            <span style={{fontSize:group.isFlower?14:12,fontWeight:900,color:col,lineHeight:1}}>{label}</span>
+            {sub&&<span style={{fontSize:8,color:col,opacity:0.6,fontWeight:700,marginTop:1,letterSpacing:0.2}}>{sub}</span>}
           </div>
         ))}
       </div>
-      <div style={{fontSize:7.5,color:C.mut,fontWeight:600,textAlign:"center",lineHeight:1.2}}>{typeLabel}{jokerNote}</div>
+      <div style={{fontSize:7.5,color:C.mut,fontWeight:700,textAlign:"center",lineHeight:1.4}}>{typeLabel}{jokerNote}</div>
     </div>
   );
 }
@@ -12835,7 +12852,7 @@ function HandRenderer({hand, defaultOpen=false}){
         <div style={{flex:1,minWidth:0}}>
           {/* Colored label matching card color scheme */}
           <div style={{display:"flex",alignItems:"center",gap:4,flexWrap:"wrap",marginBottom:2}}>
-            <span style={{fontFamily:F.d,fontSize:13,fontWeight:800,letterSpacing:-0.3}}>
+            <span style={{fontFamily:F.d,fontSize:13,fontWeight:900,letterSpacing:-0.5}}>
               {coloredLabel.map((t,i)=>(
                 <span key={i} style={{color:t.col}}>{t.text}{i<coloredLabel.length-1?" ":""}</span>
               ))}
@@ -12843,7 +12860,7 @@ function HandRenderer({hand, defaultOpen=false}){
             {hand.concealed&&<span style={{fontSize:8,fontWeight:700,background:"#2460A815",color:"#2460A8",borderRadius:8,padding:"2px 6px",flexShrink:0}}>CONCEALED</span>}
             <span style={{fontSize:8,fontWeight:700,background:C.bg2,color:C.mut,borderRadius:8,padding:"2px 6px",flexShrink:0}}>{hand.concealed?"C":"×"}{hand.value}</span>
           </div>
-          <div style={{fontSize:10,color:C.mut,lineHeight:1.45}}>{sec?.name} · {hand.constraint?hand.constraint.split(" · ")[0]:`${totalTiles} tiles`}</div>
+          <div style={{fontSize:10,color:C.mut,lineHeight:1.5}}>{sec?.name} · {hand.constraint?hand.constraint.split(" · ")[0]:`${totalTiles} tiles`}</div>
         </div>
         <span style={{fontSize:11,color:C.mut,flexShrink:0,marginLeft:8}}>{open?"▾":"▸"}</span>
       </button>
@@ -12853,14 +12870,14 @@ function HandRenderer({hand, defaultOpen=false}){
         {hand.constraint&&(
           <div style={{padding:"7px 14px",background:`linear-gradient(135deg,${sec?.color||C.jade}10,${sec?.color||C.jade}06)`,borderBottom:`1px solid ${sec?.color||C.jade}18`,display:"flex",alignItems:"center",gap:6}}>
             <span style={{fontSize:11,flexShrink:0}}>📋</span>
-            <span style={{fontSize:11,fontWeight:600,color:sec?.color||C.jade}}>{hand.constraint}</span>
+            <span style={{fontSize:11,fontWeight:700,color:sec?.color||C.jade}}>{hand.constraint}</span>
           </div>
         )}
 
         {/* Color key */}
         {cardColors.some(c=>c==="G"||c==="R")&&(
           <div style={{padding:"5px 14px",background:"#FDFAF6",borderBottom:`1px solid ${C.bdr}`,display:"flex",gap:12,alignItems:"center"}}>
-            <span style={{fontSize:9,color:C.mut,fontWeight:600,letterSpacing:0.5}}>COLOR KEY:</span>
+            <span style={{fontSize:9,color:C.mut,fontWeight:700,letterSpacing:0.5}}>COLOR KEY:</span>
             {cardColors.includes("G")&&<span style={{fontSize:9,fontWeight:700,color:CARD_COL.G}}>■ Green = Suit A (e.g. Bam)</span>}
             {cardColors.includes("R")&&<span style={{fontSize:9,fontWeight:700,color:CARD_COL.R}}>■ Red = Suit B (e.g. Crak)</span>}
             {cardColors.includes("K")&&<span style={{fontSize:9,fontWeight:700,color:C.mut}}>■ Black = Any suit</span>}
@@ -12886,9 +12903,9 @@ function HandRenderer({hand, defaultOpen=false}){
               const dotCol=cc?CARD_COL[cc]||C.jade:g.isFlower?CARD_COL.F:g.isDragon?CARD_COL.D:g.isWind?CARD_COL.W:C.jade;
               return(
                 <div key={i} style={{display:"flex",alignItems:"flex-start",gap:8,padding:"6px 8px",background:C.bg2,borderRadius:8}}>
-                  <div style={{width:20,height:20,borderRadius:10,background:dotCol+"20",border:`1px solid ${dotCol}40`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:800,color:dotCol,flexShrink:0,marginTop:1}}>{i+1}</div>
+                  <div style={{width:20,height:20,borderRadius:10,background:dotCol+"20",border:`1px solid ${dotCol}40`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:900,color:dotCol,flexShrink:0,marginTop:1}}>{i+1}</div>
                   <div style={{flex:1}}>
-                    <div style={{fontSize:11,fontWeight:700,color:C.ink,lineHeight:1.3,wordBreak:"normal"}}>{g.tileDesc}</div>
+                    <div style={{fontSize:11,fontWeight:700,color:C.ink,lineHeight:1.4,wordBreak:"normal"}}>{g.tileDesc}</div>
                     <div style={{fontSize:10,color:C.mut,lineHeight:1.4,marginTop:1}}>{g.typeInfo.name}{g.typeInfo.jokerOk?" · jokers allowed":" · natural only where noted"}</div>
                   </div>
                 </div>
@@ -12898,13 +12915,13 @@ function HandRenderer({hand, defaultOpen=false}){
 
           {/* Concealed warning */}
           {hand.concealed&&<div style={{marginTop:8,background:"#2460A808",borderRadius:8,padding:"8px 10px",border:`1px solid #2460A820`}}>
-            <div style={{fontSize:9,color:"#2460A8",letterSpacing:1.5,fontWeight:700,marginBottom:3}}>🔒 CONCEALED HAND</div>
+            <div style={{fontSize:9,color:"#2460A8",letterSpacing:1.8,fontWeight:700,marginBottom:3}}>🔒 CONCEALED HAND</div>
             <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>You can never claim a discarded tile for this hand, every tile must be drawn from the wall. Plan for a longer game and never expose any group.</div>
           </div>}
 
           {/* Joker guidance */}
           {!hand.concealed&&<div style={{marginTop:8,background:C.jade+"06",borderRadius:8,padding:"8px 10px"}}>
-            <div style={{fontSize:9,color:C.jade,letterSpacing:1.5,fontWeight:700,marginBottom:3}}>🃏 JOKER RULES FOR THIS HAND</div>
+            <div style={{fontSize:9,color:C.jade,letterSpacing:1.8,fontWeight:700,marginBottom:3}}>🃏 JOKER RULES FOR THIS HAND</div>
             <div style={{fontSize:11,color:C.ink,lineHeight:1.5}}>
               {breakdown.filter(g=>g.typeInfo.jokerOk).length>0
                 ?`Jokers can substitute in: ${breakdown.filter(g=>g.typeInfo.jokerOk).map(g=>g.tileDesc.split(" ,")[0]).slice(0,3).join(", ")}. Jokers can NEVER go in pairs or singles.`
@@ -12946,7 +12963,7 @@ function GlossaryScreen({home,setScreen}){
       <RackleHeader onBack={home} setScreen={setScreen}/>
       <div style={{marginBottom:14,marginTop:4}}>
         <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>Mahjong Glossary</div>
-        <p style={{fontSize:12,color:C.mut,margin:"0 0 12px",lineHeight:1.6}}>Plain-English definitions of every term you'll see on the card.</p>
+        <p style={{fontSize:12,color:C.mut,margin:"0 0 12px",lineHeight:1.55}}>Plain-English definitions of every term you'll see on the card.</p>
         <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search terms…" style={{width:"100%",padding:"10px 12px",borderRadius:10,border:`1.5px solid ${C.bdr}`,fontSize:13,fontFamily:F.b,color:C.ink,outline:"none",background:"#fff"}}/>
       </div>
 
@@ -12958,13 +12975,13 @@ function GlossaryScreen({home,setScreen}){
               style={{display:"flex",alignItems:"center",gap:12,width:"100%",padding:"12px 14px",background:"none",border:"none",cursor:"pointer",textAlign:"left"}}>
               <div style={{width:38,height:38,borderRadius:10,background:C.jade+"10",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{term.emoji}</div>
               <div style={{flex:1,minWidth:0}}>
-                <div style={{fontSize:14,fontWeight:800,color:isOpen?C.jade:C.ink,transition:"color 0.15s"}}>{term.term}</div>
-                <div style={{fontSize:11,color:C.mut,marginTop:1,lineHeight:1.3}}>{term.short}</div>
+                <div style={{fontSize:14,fontWeight:900,color:isOpen?C.jade:C.ink,transition:"color 0.15s"}}>{term.term}</div>
+                <div style={{fontSize:11,color:C.mut,marginTop:1,lineHeight:1.4}}>{term.short}</div>
               </div>
               <span style={{fontSize:12,color:C.mut,flexShrink:0}}>{isOpen?"▾":"▸"}</span>
             </button>
             {isOpen&&<div className="rk-in" style={{borderTop:`1px solid ${C.jade}20`,background:`${C.jade}04`,padding:"10px 14px"}}>
-              <p style={{fontSize:12,color:C.ink,lineHeight:1.7,margin:"0 0 10px"}}>{term.detail}</p>
+              <p style={{fontSize:12,color:C.ink,lineHeight:1.55,margin:"0 0 10px"}}>{term.detail}</p>
               {term.tiles.length>0&&(
                 <div>
                   <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:6}}>EXAMPLE</div>
@@ -13147,12 +13164,12 @@ function SectionQuizScreen({home,setScreen}){
       <div style={{textAlign:"center",padding:"32px 0 24px"}}>
         <div style={{fontSize:48,marginBottom:12}}>🧠</div>
         <div style={{fontFamily:F.d,fontSize:24,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:8}}>Section Quiz</div>
-        <div style={{fontSize:13,color:C.mut,lineHeight:1.7,maxWidth:280,margin:"0 auto 24px"}}>You'll see a random rack of 13 tiles. Pick the section your tiles fit best. {ROUNDS} rounds, see how sharp your read is.</div>
+        <div style={{fontSize:13,color:C.mut,lineHeight:1.55,maxWidth:280,margin:"0 auto 24px"}}>You'll see a random rack of 13 tiles. Pick the section your tiles fit best. {ROUNDS} rounds, see how sharp your read is.</div>
         <div style={{display:"flex",gap:12,justifyContent:"center",marginBottom:24,flexWrap:"wrap"}}>
           {[{icon:"👁",label:"Read the rack"},{icon:"🎯",label:"Pick your section"},{icon:"📊",label:"See the fit scores"}].map((s,i)=>(
             <div key={i} style={{textAlign:"center",width:90}}>
               <div style={{fontSize:24,marginBottom:4}}>{s.icon}</div>
-              <div style={{fontSize:10,color:C.mut,fontWeight:600,lineHeight:1.3}}>{s.label}</div>
+              <div style={{fontSize:10,color:C.mut,fontWeight:700,lineHeight:1.4}}>{s.label}</div>
             </div>
           ))}
         </div>
@@ -13214,7 +13231,7 @@ function SectionQuizScreen({home,setScreen}){
       {/* The rack */}
       <div style={S.card}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
-          <span style={{fontSize:8,color:C.mut,letterSpacing:2.5,fontWeight:700}}>YOUR RACK (13 TILES)</span>
+          <span style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>YOUR RACK (13 TILES)</span>
         </div>
         <div style={{display:"flex",flexWrap:"wrap",gap:5,justifyContent:"center",maxWidth:"100%",overflowX:"hidden"}}>
           {sortHand(rack).map((t,i)=><Ti key={i} t={t} large={false}/>)}
@@ -13231,8 +13248,8 @@ function SectionQuizScreen({home,setScreen}){
                 style={{display:"flex",alignItems:"center",gap:8,padding:"10px 12px",borderRadius:12,border:`1.5px solid ${C.bdr}`,background:"#fff",cursor:"pointer",textAlign:"left",transition:"all 0.15s"}}>
                 <span style={{fontSize:18,flexShrink:0}}>{s.icon}</span>
                 <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontSize:12,fontWeight:700,color:C.ink,lineHeight:1.2}}>{s.name}</div>
-                  <div style={{fontSize:9,color:C.mut,lineHeight:1.2,marginTop:1}}>{s.desc}</div>
+                  <div style={{fontSize:12,fontWeight:700,color:C.ink,lineHeight:1.4}}>{s.name}</div>
+                  <div style={{fontSize:9,color:C.mut,lineHeight:1.4,marginTop:1}}>{s.desc}</div>
                 </div>
               </button>
             ))}
@@ -13251,7 +13268,7 @@ function SectionQuizScreen({home,setScreen}){
               <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
                 <span style={{fontSize:24}}>{isCorrect?"✅":"❌"}</span>
                 <div>
-                  <div style={{fontSize:14,fontWeight:800,color:isCorrect?C.jade:C.cinn}}>{isCorrect?"Correct!":"Not quite"}</div>
+                  <div style={{fontSize:14,fontWeight:900,color:isCorrect?C.jade:C.cinn}}>{isCorrect?"Correct!":"Not quite"}</div>
                   <div style={{fontSize:11,color:C.mut}}>
                     {isCorrect?`${chosenSec?.name} was the best fit.`:`Best fit: ${bestSec?.icon} ${bestSec?.name} (${Math.round(lastResult.bestScore*100)}%)`}
                   </div>
@@ -13568,6 +13585,24 @@ export default function Rackle(){
   const [appReady,setAppReady]=useState(true);
   const isFirstDaily=!ST.get("hadFirstDaily",false);
 
+  const [dashDailyStats,setDashDailyStats]=useState(null);
+  const [dashGlobalEntries,setDashGlobalEntries]=useState([]);
+  const [dashClubEntries,setDashClubEntries]=useState([]);
+
+  useEffect(()=>{
+    if(screen!=="home")return;
+    let cancelled=false;
+    const code=getClubCode();
+    fetchDailyStats().then(stats=>{if(!cancelled)setDashDailyStats(stats||{total:0,count:0,topScore:null,max:null,rows:[]});}).catch(()=>{});
+    fetchGlobalEntries().then(rows=>{if(!cancelled)setDashGlobalEntries(rows||[]);}).catch(()=>{});
+    if(code){
+      fetchLBEntries(code).then(rows=>{if(!cancelled)setDashClubEntries(rows||[]);}).catch(()=>{});
+    }else{
+      setDashClubEntries([]);
+    }
+    return()=>{cancelled=true;};
+  },[screen,dDone,dRes,streak]);
+
   // Fetch clubs and hydrate registered profile from Supabase on load.
   // Supabase is the source of truth. localStorage is only a cache.
   useEffect(()=>{
@@ -13663,8 +13698,41 @@ export default function Rackle(){
 
   const go=(m)=>{setMode(m);setScreen("play");};
 
+
+  const todayDashDRes=dDone&&rkIsTodayDailyResult(dRes)?dRes:null;
+  const dashIq=withIQStyle(todayDashDRes?.iq);
+  const dashClubCode=getClubCode();
+  const dashClub=dashClubCode?CLUBS[dashClubCode]:null;
+  const dashBest=getBestIQ();
+  const dashBestScore=Number.isFinite(Number(dashBest?.score ?? dashBest))?Number(dashBest?.score ?? dashBest):0;
+  const dashCurrentScore=todayDashDRes&&Number.isFinite(Number(dashIq?.totalScore))?Number(dashIq.totalScore):0;
+  const dashGlobalRows=todayDashDRes?rkMergeCurrentScore(dashGlobalEntries,dashCurrentScore,dashIq?.totalTime||todayDashDRes?.time||0,streak,dashClubCode):(dashGlobalEntries||[]);
+  const dashClubRows=dashClub?rkMergeCurrentScore(dashClubEntries,dashCurrentScore,dashIq?.totalTime||todayDashDRes?.time||0,streak,dashClubCode):[];
+  const dashTopToday=Math.max(Number(dashDailyStats?.topScore??dashDailyStats?.max??dashGlobalRows?.[0]?.iqScore??0)||0,dashCurrentScore||0);
+  const dashTodayPlayers=Math.max(Number(dashDailyStats?.total??dashDailyStats?.count??dashGlobalRows.length??0)||0,dashCurrentScore?1:0);
+  const dashShownClubRank=dashClub&&dashCurrentScore?rkRankOfCurrent(dashClubRows,dashCurrentScore):null;
+  const dashProps = screen === "home" ? {
+    streak,
+    rounds,
+    dRes,
+    dDone,
+    go,
+    setScreen,
+    ydIQ: getYesterday()?.iq?.totalScore || null,
+    hasTodayDaily: !!todayDashDRes,
+    currentScore: dashCurrentScore,
+    bestScore: dashBestScore,
+    iq: dashIq,
+    club: dashClub,
+    todayPlayers: dashTodayPlayers,
+    topToday: dashTopToday,
+    displayHomeClubEntries: dashClubRows,
+    homeGlobalEntries: dashGlobalRows,
+    shownClubRank: dashShownClubRank,
+  } : null;
+
   return(
-    <AppShell>
+    <AppShell dashProps={dashProps}>
       {badgeToast&&<StreakBadgeToast badge={badgeToast} onDismiss={()=>setBadgeToast(null)}/>}
       {clubPostToast&&<ClubPostToast toast={clubPostToast} onDismiss={()=>setClubPostToast(null)}/>}
       {/* Sunday weekly recap nudge */}
@@ -13674,7 +13742,7 @@ export default function Rackle(){
             <div className="rk-in" style={{background:"#fff",borderRadius:20,padding:"20px 18px",boxShadow:"0 -4px 32px rgba(0,0,0,0.12)"}}>
               <div style={{fontSize:9,color:C.jade,letterSpacing:2,fontWeight:700,marginBottom:8}}>SUNDAY · YOUR WEEK IN RACKLE</div>
               <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,marginBottom:6}}>Weekly Recap is ready 🀄</div>
-              <div style={{fontSize:12,color:C.mut,lineHeight:1.6,marginBottom:14}}>See your avg score, best hand, consistency, and how you compare to last week.</div>
+              <div style={{fontSize:12,color:C.mut,lineHeight:1.55,marginBottom:14}}>See your avg score, best hand, consistency, and how you compare to last week.</div>
               <div style={{display:"flex",gap:8}}>
                 <button onClick={()=>{dismissWeeklyRecap();setShowWeeklyNudge(false);setScreen("recap");}} style={{...S.greenBtn,flex:2}}>View My Recap →</button>
                 <button onClick={()=>{dismissWeeklyRecap();setShowWeeklyNudge(false);}} style={{...S.oBtn,flex:1}}>Later</button>
@@ -13715,13 +13783,117 @@ export default function Rackle(){
   );
 }
 
-function AppShell({children}){
+function DashRight({
+  streak, currentScore, bestScore, todayPlayers, topToday,
+  displayHomeClubEntries, homeGlobalEntries, shownClubRank,
+  club, hasTodayDaily, go, setScreen, iq
+}){
+  const rows=(club&&displayHomeClubEntries?.length?displayHomeClubEntries:homeGlobalEntries||[]).slice(0,5);
+  const boardLabel=club?club.name:"Global board";
+  const currentName=rkCurrentDisplayName();
+  return(
+    <div className="rk-dash-panel-stack">
+      <div className="rk-dash-card rk-dash-card-dark">
+        <div style={{...T.label,color:"rgba(201,168,76,0.82)",marginBottom:10}}>Today's Rackle IQ</div>
+        <div style={{...T.d2,color:hasTodayDaily?C.gilt:"rgba(255,255,255,0.18)",marginBottom:6}}>{hasTodayDaily?currentScore:"—"}</div>
+        {hasTodayDaily?(
+          <>
+            <div style={{...T.caption,color:"rgba(255,255,255,0.58)",marginBottom:14}}>{iq?.label||"Score posted"}</div>
+            <div style={{display:"flex",gap:8}}>
+              <div className="rk-dash-mini-stat rk-dash-mini-stat-dark"><div style={{...T.labelS,color:"rgba(255,255,255,0.45)",marginBottom:5}}>Best ever</div><div style={{...T.h2,color:C.gilt}}>{bestScore||"—"}</div></div>
+              <div className="rk-dash-mini-stat rk-dash-mini-stat-dark"><div style={{...T.labelS,color:"rgba(255,255,255,0.45)",marginBottom:5}}>Streak</div><div style={{...T.h2,color:C.gilt}}>{streak||0}<span style={{...T.labelS,color:"rgba(255,255,255,0.45)",marginLeft:3}}>days</span></div></div>
+            </div>
+          </>
+        ):(
+          <>
+            <div style={{...T.caption,color:"rgba(255,255,255,0.52)",marginBottom:14}}>Today's rack is waiting for you.</div>
+            <button className="rk-dash-cta-primary" onClick={()=>go("daily")}>Play today's rack →</button>
+          </>
+        )}
+      </div>
+      <div className="rk-dash-card">
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
+          <div style={{...T.label,color:C.jade}}>{boardLabel}</div>
+          <button className="rk-dash-text-link" onClick={()=>setScreen(club?"leaderboard":"globalLeaderboard")}>See all →</button>
+        </div>
+        {rows.length===0?(
+          <div style={{...T.caption,color:C.mut,textAlign:"center",padding:"12px 0"}}>No scores posted yet today.</div>
+        ):rows.map((r,i)=>{
+          const isYou=r.isYou||(currentName&&((r.nickname||r.name||"")===currentName));
+          return(
+            <div key={i} className={`rk-dash-board-row${isYou?" is-you":""}`}>
+              <div className="rk-dash-board-rank" style={i===0?{color:C.gold}:{}}>{i+1}</div>
+              <div style={{...T.bodyS,color:C.ink,flex:1,minWidth:0,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",fontWeight:isYou?900:700}}>
+                {r.nickname||r.name||"Player"}{isYou&&<span style={{...T.labelS,color:C.jade,marginLeft:6}}>you</span>}
+              </div>
+              <div style={{...T.h3,color:i===0?C.gold:C.ink,minWidth:32,textAlign:"right"}}>{r.iqScore||r.score||"—"}</div>
+            </div>
+          );
+        })}
+        {shownClubRank&&(
+          <div style={{...T.caption,color:C.jade,textAlign:"center",marginTop:10,paddingTop:10,borderTop:`1px solid ${C.bdr}`}}>You're #{shownClubRank} in {club?.name||"your club"}</div>
+        )}
+      </div>
+      <div className="rk-dash-card">
+        <div style={{...T.label,color:C.jade,marginBottom:12}}>Live today</div>
+        <div style={{display:"flex",gap:10}}>
+          <div className="rk-dash-mini-stat"><div style={{...T.labelS,color:C.mut,marginBottom:5}}>Players</div><div style={{...T.h1,color:C.ink}}>{todayPlayers||"—"}</div></div>
+          <div className="rk-dash-mini-stat"><div style={{...T.labelS,color:C.mut,marginBottom:5}}>Top score</div><div style={{...T.h1,color:C.ink}}>{topToday||"—"}</div></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DashLeft({streak, rounds, bestScore, ydIQ, go, setScreen}){
+  const stats=[
+    {label:"Best IQ ever",value:bestScore||"—"},
+    {label:"Yesterday's IQ",value:ydIQ||"—"},
+    {label:"Current streak",value:streak?streak+"d":"—"},
+    {label:"Practice rounds",value:rounds||"—"},
+  ];
+  const nav=[
+    {icon:"📊",label:"My stats",action:()=>setScreen("stats")},
+    {icon:"🃏",label:"Card browser",action:()=>setScreen("handbrowser")},
+    {icon:"🎯",label:"Practice mode",action:()=>go("free")},
+    {icon:"🏆",label:"Leaderboard",action:()=>setScreen("globalLeaderboard")},
+    {icon:"🏠",label:"Club room",action:()=>setScreen("leaderboard")},
+    {icon:"📚",label:"How to play",action:()=>setScreen("howto")},
+  ];
+  return(
+    <div className="rk-dash-panel-stack">
+      <div className="rk-dash-card">
+        <div style={{...T.label,color:C.jade,marginBottom:14}}>Your numbers</div>
+        {stats.map(({label,value})=>(
+          <div key={label} className="rk-dash-stat-row"><div style={{...T.caption,color:C.mut}}>{label}</div><div style={{...T.h3,color:C.ink}}>{value}</div></div>
+        ))}
+      </div>
+      <div className="rk-dash-card">
+        <div style={{...T.label,color:C.jade,marginBottom:10}}>Navigate</div>
+        {nav.map(({icon,label,action})=>(
+          <button key={label} className="rk-dash-nav-row" onClick={action}>
+            <span className="rk-dash-nav-icon" aria-hidden="true">{icon}</span>
+            <span style={{...T.bodyS,color:C.ink,flex:1,textAlign:"left"}}>{label}</span>
+            <span style={{...T.caption,color:C.bdr,fontSize:16}}>›</span>
+          </button>
+        ))}
+      </div>
+      <div style={{textAlign:"center",padding:"12px 0 4px",...T.labelS,color:C.bdr,letterSpacing:2}}>playrackle.com</div>
+    </div>
+  );
+}
+
+function AppShell({children,dashProps=null}){
   return(
     <div style={S.outer} className="rk-outer">
-      <div style={S.app} className="rk-app">
-        <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800;9..144,900&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-        {children}
-        <Analytics />
+      <div className={`rk-dash-shell${dashProps?" has-dashboard":""}`}>
+        <aside className="rk-dash-left" aria-label="Personal stats">{dashProps&&<DashLeft {...dashProps}/>}</aside>
+        <div style={S.app} className="rk-app">
+          <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,900&family=Nunito:wght@700;900&display=swap" rel="stylesheet"/>
+          {children}
+          <Analytics />
+        </div>
+        <aside className="rk-dash-right" aria-label="Live standings">{dashProps&&<DashRight {...dashProps}/>}</aside>
       </div>
     </div>
   );
