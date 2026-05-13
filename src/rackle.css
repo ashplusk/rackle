@@ -1886,3 +1886,81 @@
   text-overflow:ellipsis!important;
   max-width:100%!important;
 }
+
+
+/* ─── vNext final mobile spacing + readable pill tune ───────────────────── */
+/* Keep tagline color intact, but make the type lighter and give the live pill a touch more air. */
+.rk-startup-subtitle-v4,
+.rk-startup-hero-v42 .rk-startup-subtitle-v4{
+  font-weight:500!important;
+  opacity:1!important;
+  margin-bottom:15.5px!important;
+}
+.rk-startup-pulse-pill-v41,
+.rk-startup-pulse-pill-v42{
+  margin-top:4.5px!important;
+  margin-bottom:7px!important;
+}
+@media(max-width:390px){
+  .rk-startup-subtitle-v4,
+  .rk-startup-hero-v42 .rk-startup-subtitle-v4{margin-bottom:14.5px!important;}
+  .rk-startup-pulse-pill-v41,
+  .rk-startup-pulse-pill-v42{margin-top:4.5px!important;}
+}
+@media (orientation: landscape) and (max-height:520px) and (pointer:coarse){
+  .rk-startup-subtitle-v4,
+  .rk-startup-hero-v42 .rk-startup-subtitle-v4{margin-bottom:11px!important;}
+  .rk-startup-pulse-pill-v41,
+  .rk-startup-pulse-pill-v42{margin-top:3.5px!important;margin-bottom:6px!important;}
+}
+
+/* Give style stickers a little more room inside homepage, daily, and practice scorecards. */
+.rk-home-scorecard-v41-style,
+.rk-score-shell .rk-iq-style-pill,
+.rk-practice-homeclone-v45 .rk-iq-style-pill{
+  margin-top:18px!important;
+  margin-bottom:22px!important;
+}
+
+/* Live Club Standings: shave the left side by 1px and keep it aligned with Free Play. */
+@media(max-width:767px){
+  .rk-room-live-v6,
+  .rk-room-live-v17,
+  .rk-room-live-v19{
+    margin-left:0!important;
+    margin-right:0!important;
+    padding-left:9px!important;
+    padding-right:10px!important;
+    width:100%!important;
+    max-width:100%!important;
+  }
+  .rk-room-live-v6-top{
+    grid-template-columns:minmax(0,1fr) 48px!important;
+    gap:7px!important;
+  }
+  .rk-room-live-v6-title{
+    font-size:20px!important;
+    line-height:1.08!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    padding-right:2px!important;
+  }
+  .rk-room-live-v6-score{
+    min-width:48px!important;
+    width:48px!important;
+  }
+}
+
+/* Tomorrow's Rackle countdown pill: transparent only, white text, readable outline. */
+.rk-next-rack-kicker-v11,
+.rk-next-rack-panel-v11 .rk-next-rack-kicker-v11,
+.rk-next-rack-card-v11 .rk-next-rack-kicker-v11,
+.rk-score-shell .rk-next-rack-kicker-v11,
+.rk-tomorrow-v11-kicker{
+  background:transparent!important;
+  color:#FFFDF8!important;
+  border:1px solid rgba(255,255,255,.56)!important;
+  box-shadow:none!important;
+  text-shadow:0 1px 2px rgba(0,0,0,.22)!important;
+}
