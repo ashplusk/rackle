@@ -8150,9 +8150,21 @@ function FinalHandCrossReference({hand,startingRack,chosenHandObj,chosenSec,chos
     <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden",borderColor:C.jade+"22"}}>
       <div style={{padding:"12px 14px",background:"linear-gradient(145deg,#FFFDF8,#F5EFE4)",borderBottom:`1px solid ${C.bdr}`}}>
         <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:900,textTransform:"uppercase",marginBottom:5}}>Final rack cross-check</div>
-        <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.12,letterSpacing:-.2}}>Best-fit hands and hand shapes</div>
-        <p style={{fontSize:11.5,color:C.mut,lineHeight:1.55,margin:"7px 0 0"}}>This is not saying you were locked into one final hand. It shows how your post-Charleston rack lines up with the hand shapes Rackle is reading.</p>
+        <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.12,letterSpacing:-.2}}>Final hand, best fits, and hand shapes</div>
+        <p style={{fontSize:11.5,color:C.mut,lineHeight:1.55,margin:"7px 0 0"}}>Start with the final hand read, then cross-check your final rack against the best-fit hands Rackle is seeing.</p>
       </div>
+      {best&&(
+        <div className="rk-final-hand-read-v91">
+          <div className="rk-final-hand-read-v91-top">
+            <div>
+              <span>Final hand read</span>
+              <strong>{bestLabel}</strong>
+            </div>
+            <b>{best.coveragePct||0}% fit</b>
+          </div>
+          <p>{best.chosen&&!handWasInferred?"This is the final hand target connected to your rack review. Use the tabs below to compare your final rack against the suggested hand shape.":"Rackle inferred this as the cleanest final-hand shape from your post-Charleston rack. Use it as a cross-check, not a command."}</p>
+        </div>
+      )}
       <div style={{display:"flex",borderBottom:`1px solid ${C.bdr}`}}>
         <TabButton id="best">Best fits</TabButton>
         <TabButton id="rack">Starting / final</TabButton>
