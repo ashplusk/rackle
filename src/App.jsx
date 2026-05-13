@@ -7468,7 +7468,6 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
               <span>Next table move</span>
               <p>{pivotCopy}</p>
             </div>
-            {onCoachMode&&<button onClick={onCoachMode} className="rk-daily-review-v20-coach">Review the rack →</button>}
           </div>
         )}
       </section>
@@ -8147,13 +8146,13 @@ function FinalHandReadCard({hand,chosenHandObj,chosenSecObj,handWasInferred}){
   const label=best.labelForDisplay||best.variantLabel||best.label||"Best-fit hand";
   const secName=best.secObj?.name||chosenSecObj?.name||"Best-fit section";
   const secIcon=best.secObj?.icon||chosenSecObj?.icon||"🀄";
-  const source=best.chosen&&!handWasInferred?"Player target":"Rackle read";
+  const source=best.chosen&&!handWasInferred?"Player final hand":"Rackle inferred hand";
   return(
-    <div className="rk-final-hand-mini-v92" aria-label="Final hand read">
+    <div className="rk-final-hand-mini-v92" aria-label="Final hand">
       <div className="rk-final-hand-mini-v92-head">
         <div>
           <span>{source}</span>
-          <strong>Final hand read</strong>
+          <strong>Final hand</strong>
         </div>
         <b>{best.coveragePct||0}% fit</b>
       </div>
@@ -8165,7 +8164,7 @@ function FinalHandReadCard({hand,chosenHandObj,chosenSecObj,handWasInferred}){
         </div>
       </div>
       <div className="rk-final-hand-mini-v92-note">
-        Compare this final hand read against your rack below. It is a cross-check, not a command.
+        This is the hand used for your rack cross-check below.
       </div>
     </div>
   );

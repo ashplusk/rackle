@@ -1541,3 +1541,132 @@
 .rk-next-rack-card-v11 [class*="countdown"] *{
   color:#fff!important;
 }
+
+
+/* ─── v1 final mobile/room/rack-review polish ───────────────────────────── */
+/* Live Club Standings: slightly tighter horizontal rhythm without crowding */
+.rk-room-live-v6{
+  margin-left:-1px!important;
+  margin-right:-1px!important;
+}
+.rk-room-live-v6-summary,
+.rk-room-live-v17-table{
+  padding-left:13px!important;
+  padding-right:13px!important;
+}
+.rk-room-live-v6-title{
+  min-width:0!important;
+  max-width:calc(100% - 66px)!important;
+}
+
+/* Homepage Tomorrow's Rackle: remove light backing behind pill, keep it white on jade */
+.rk-tomorrow-v11-kicker,
+.rk-tomorrow-card-v11 .rk-tomorrow-v11-kicker,
+.rk-tomorrow-mystery-final .rk-tomorrow-v11-kicker{
+  background:transparent!important;
+  color:#FFFDF8!important;
+  border-color:rgba(255,255,255,.42)!important;
+  box-shadow:none!important;
+}
+.rk-next-rack-panel-v11 .rk-next-rack-kicker-v11,
+.rk-next-rack-card-v11 .rk-next-rack-kicker-v11{
+  background:transparent!important;
+  color:#FFFDF8!important;
+  border-color:rgba(255,255,255,.46)!important;
+  box-shadow:none!important;
+}
+
+/* Rackle List / Clubhouse Updates: fully left-aligned and calm */
+.rk-email-home-v8,
+.rk-email-home-v19{
+  text-align:left!important;
+  align-items:flex-start!important;
+}
+.rk-email-kicker-v8,
+.rk-email-kicker-v18,
+.rk-email-title-v8,
+.rk-email-copy-v8,
+.rk-email-copy-v56{
+  text-align:left!important;
+  align-self:flex-start!important;
+  margin-left:0!important;
+}
+.rk-email-copy-v8,
+.rk-email-copy-v56{
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  max-width:100%!important;
+}
+.rk-email-form-v8{width:100%!important;}
+
+/* Leaderboard hero: smaller, more scoreboard-like on club/global rooms */
+.rk-room-leader-v60{
+  padding:14px 15px!important;
+  border-radius:24px!important;
+}
+.rk-room-rank-badge-v60{
+  width:48px!important;
+  height:48px!important;
+  border-radius:17px!important;
+  font-size:17px!important;
+}
+.rk-room-leader-main-v60{
+  grid-template-columns:48px minmax(0,1fr)!important;
+  gap:11px!important;
+}
+.rk-room-leader-name-v60{
+  font-size:21px!important;
+  line-height:1.05!important;
+  letter-spacing:-.45px!important;
+}
+.rk-room-leader-sub-v60{
+  font-size:12px!important;
+  line-height:1.4!important;
+  font-weight:700!important;
+}
+.rk-room-score-wrap-v60{min-width:54px!important;}
+.rk-room-score-v60{
+  font-size:32px!important;
+  line-height:.95!important;
+}
+.rk-room-score-wrap-v60 span{
+  font-size:7.5px!important;
+  letter-spacing:1.4px!important;
+}
+@media(max-width:430px){
+  .rk-room-leader-v60{padding:13px!important;gap:9px!important;}
+  .rk-room-rank-badge-v60{width:44px!important;height:44px!important;font-size:16px!important;}
+  .rk-room-leader-main-v60{grid-template-columns:44px minmax(0,1fr)!important;gap:10px!important;}
+  .rk-room-leader-name-v60{font-size:19px!important;line-height:1.05!important;}
+  .rk-room-leader-sub-v60{font-size:11.5px!important;line-height:1.4!important;}
+  .rk-room-score-v60{font-size:30px!important;}
+  .rk-room-score-wrap-v60{min-width:48px!important;}
+}
+
+/* Rack review entry: clearer, less duplicated */
+.rk-daily-review-v92-actions{
+  grid-template-columns:1fr!important;
+  gap:8px!important;
+}
+.rk-daily-review-v92-secondary{
+  min-height:40px!important;
+  font-size:12px!important;
+}
+.rk-daily-review-v92-primary{
+  min-height:46px!important;
+  font-size:13px!important;
+}
+.rk-daily-review-v20-coach{display:none!important;}
+
+/* Final hand card: make the actual hand label the focus */
+.rk-final-hand-mini-v92-head strong{
+  font-size:18px!important;
+}
+.rk-final-hand-mini-v92-body p{
+  font-size:13.5px!important;
+  line-height:1.4!important;
+}
+.rk-final-hand-mini-v92-note{
+  font-size:11px!important;
+}
