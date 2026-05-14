@@ -7446,7 +7446,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
       <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"globalLeaderboard")} className="rk-score-club-room-v20" style={{width:"100%",appearance:"none",fontFamily:F.b,cursor:"pointer"}}>
         <span className="rk-score-club-room-v20-main">
-          <span className="rk-score-club-room-v20-icon">{clubCode?"🏛️":"🌎"}</span>
+          <span className="rk-score-club-room-v20-icon">{clubCode?"Club":"Room"}</span>
           <span className="rk-score-club-room-v20-copy">
             <span className="rk-score-club-room-v20-kicker">{clubCode?"Club room":"Today’s room"}</span>
             <strong>{clubCode?clubRoomLabel:roomLabel}</strong>
@@ -7463,11 +7463,11 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
       <div className="rk-score-share-card rk-score-share-v20">
         <div className="rk-score-share-v20-head">
-          <span className="rk-score-share-v20-icon">📲</span>
+          <span className="rk-score-share-v20-icon">Share</span>
           <span>
             <small>Group chat ready</small>
-            <strong>Send today’s Rackle to the group chat.</strong>
-            <p>{clubRank?`You’re #${clubRank} in your club. Let the table chase ${score}.`:`Post ${score} and see who can beat the same rack.`}</p>
+            <strong>Share today’s Rackle.</strong>
+            <p>Let your club chase the same rack.</p>
           </span>
         </div>
         <div className="rk-score-share-v20-preview" aria-label="Share preview">
@@ -8794,9 +8794,11 @@ function Footer(){
       <div className="rk-footer-inner">
         <div>
           <div aria-hidden="true" style={{width:40,height:1,background:C.bdr,margin:"0 auto 16px"}}/>
-          <div style={{fontSize:12,color:C.jade,fontFamily:F.d,fontStyle:"italic"}}>The Daily Mahjong Workout 🀄</div>
+          <div className="rk-footer-brand-lockup">
+            <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" className="rk-footer-logo">Rackle</a>
+            <div className="rk-footer-tagline">Daily Mahjong Workout</div>
+          </div>
           <div style={{fontSize:11,color:C.mut,marginTop:8,lineHeight:1.55}}>Made for the American Mahjong community</div>
-          <div style={{marginTop:12}}><a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" style={{fontFamily:F.d,fontSize:15,fontWeight:900,color:C.ink,letterSpacing:-0.5,textDecoration:"none"}}>Rackle</a></div>
           <div style={{fontSize:10,color:C.mut,marginTop:14,opacity:0.7}}>© {new Date().getFullYear()} <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" style={{color:C.mut,textDecoration:"none"}}>playrackle.com</a> · All rights reserved</div>
         </div>
         <div className="rk-footer-actions" style={{marginTop:10,display:"flex",justifyContent:"center",alignItems:"center",gap:8,flexWrap:"wrap"}}>
@@ -10023,9 +10025,9 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
     </>}
     <div className="rk-room-actions rk-room-actions-simple-v91">
       <button className="rk-room-btn rk-room-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(shareText,"Rackle Global Room");setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Share room"}</button>
-      <button className="rk-room-btn" onClick={load}>↻ Refresh board</button>
-      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"🏛 Club board":"🏛 Find club"}</button>
-      <button className="rk-room-btn" onClick={home}>← Back home</button>
+      <button className="rk-room-btn" onClick={load}>Refresh</button>
+      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"Club board":"Find club"}</button>
+      <button className="rk-room-btn" onClick={home}>Home</button>
     </div>
     <Footer/>
   </div>;
@@ -10058,7 +10060,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
   if(!club)return <div style={S.pg} className="rk-pg rk-room-page">
     <RackleHeader onBack={home} setScreen={setScreen}/>
     <div className="rk-room-hero"><div className="rk-room-kicker">Club room</div><h1 className="rk-room-title">Find your table</h1><p className="rk-room-copy">Join a club room to compare scores with the people you actually play with.</p></div>
-    <button onClick={()=>setScreen("clubs")} className="rk-room-btn rk-room-btn-primary" style={{width:"100%",marginBottom:12}}>Find Your Club</button>
+    <button onClick={()=>setScreen("clubs")} className="rk-room-btn rk-room-btn-primary" style={{width:"100%",marginBottom:12}}>Find your club</button>
     <Footer/>
   </div>;
 
@@ -10107,10 +10109,10 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
       </div>
     </div>
     <div className="rk-room-actions rk-room-actions-simple-v91">
-      <button className="rk-room-btn rk-room-btn-primary" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>View global room</button>
-      <button className="rk-room-btn" onClick={load}>↻ Refresh board</button>
-      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("clubs")}>🏛 Change club</button>
-      <button className="rk-room-btn" onClick={home}>← Back home</button>
+      <button className="rk-room-btn rk-room-btn-primary" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>Global room</button>
+      <button className="rk-room-btn" onClick={load}>Refresh</button>
+      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("clubs")}>Change club</button>
+      <button className="rk-room-btn" onClick={home}>Home</button>
     </div>
     <Footer/>
   </div>;
@@ -10869,7 +10871,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               </span>
             ))}
           </div>
-          <h2 className="rk-daily-entry-v6-title">Fresh rack. New Charleston.</h2>
+          <h2 className="rk-daily-entry-v6-title"><span>Fresh rack.</span><span>New Charleston.</span></h2>
           <p className="rk-daily-entry-v6-copy"><span>See how your table stacks up.</span><span>Same rack for everyone. One score to chase.</span></p>
           <div className="rk-daily-entry-v6-stats">
             <span>{posted===0?"First score gets the room":`${posted} ${posted===1?"player has":"players already"} posted`}</span>
