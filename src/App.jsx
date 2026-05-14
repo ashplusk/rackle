@@ -7442,25 +7442,17 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </section>
 
-      <section className="rk-score-clean-share-v120 rk-score-share-premium-v130" aria-label="Share today’s Rackle">
-        <div className="rk-score-clean-share-copy-v120">
+      <section className="rk-score-clean-share-v120 rk-score-share-premium-v130 rk-score-share-simple-v140" aria-label="Share today’s Rackle">
+        <div className="rk-score-clean-share-copy-v120 rk-score-share-simple-copy-v140">
           <span>Share today’s Rackle</span>
-          <h2>{affiliatedClubName?`Share your score with ${affiliatedClubName}`:"Share your score with your club"}</h2>
-          <p>Send today’s rack to the table and let everyone chase the same Charleston before midnight.</p>
-        </div>
-        <div className="rk-score-clean-share-preview-v120 rk-score-share-badge-panel-v130">
-          <div className="rk-score-share-card-top-v130">
-            <span>Rackle #{dayNum}</span>
-            <strong>{score}</strong>
-          </div>
-          <div className="rk-score-share-badge-grid-v130">
-            <div className="rk-score-share-badge-v130">
-              <span>Best direction</span>
-              <strong>{shareDirection||"Reading rack"}</strong>
+          <div className="rk-score-share-simple-row-v140">
+            <div className="rk-score-share-score-emblem-v140" aria-label={`Rackle IQ ${score}`}>
+              <strong>{score}</strong>
+              <span>IQ</span>
             </div>
-            <div className="rk-score-share-badge-v130">
-              <span>{clubRank?"Club rank":globalRank?"Global rank":"Today’s board"}</span>
-              <strong>{clubRank?`#${clubRank}`:globalRank?`#${globalRank}`:"Daily"}</strong>
+            <div className="rk-score-share-simple-text-v140">
+              <h2>{affiliatedClubName?`Share your score with ${affiliatedClubName}`:"Share your score with your club"}</h2>
+              <p>{shareDirection?`Best direction: ${shareDirection}`:"Send today’s rack to your table."}</p>
             </div>
           </div>
         </div>
@@ -7478,54 +7470,67 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </section>
 
-      <section className="rk-score-clean-glance-v120" aria-label="Rack at a glance">
-        <div className="rk-score-clean-head-v120">
+      <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140" aria-label="Rack at a glance">
+        <div className="rk-score-clean-head-v120 rk-glance-head-v140">
           <span>Rack at a glance</span>
-          <h2>What your rack is saying</h2>
+          <h2>Your Charleston read</h2>
+          <p>A cleaner view of the lane, backup, and decision you should carry into the next draw.</p>
         </div>
-        <div className="rk-score-clean-lanes-v120">
-          <div className="rk-score-clean-lane-v120 primary">
-            <span>Best direction</span>
-            <strong>{trustRead.best}</strong>
+
+        <div className="rk-glance-feature-v140">
+          <div className="rk-glance-feature-kicker-v140">Best direction</div>
+          <div className="rk-glance-feature-body-v140">
+            <h3>{trustRead.best}</h3>
             <p>{trustRead.bestFit}</p>
           </div>
-          <div className="rk-score-clean-lane-v120">
+          <div className="rk-glance-feature-mark-v140">Best lane</div>
+        </div>
+
+        <div className="rk-glance-card-grid-v140">
+          <div className="rk-glance-card-v140">
             <span>Backup path</span>
             <strong>{trustRead.backup}</strong>
             <p>{trustRead.backupFit}</p>
           </div>
-          <div className="rk-score-clean-lane-v120 avoid">
+          <div className="rk-glance-card-v140 rk-glance-card-avoid-v140">
             <span>Avoid for now</span>
             <strong>{trustRead.avoid}</strong>
             <p>Only chase this if the next draw changes the rack.</p>
           </div>
         </div>
-        <div className="rk-score-clean-expert-v120">
-          <span>Expert read</span>
-          <p>{rkHumanTableCopy(trustRead.expertRead)}</p>
-        </div>
-        <div className="rk-score-clean-next-v120">
-          <span>Next move</span>
-          <p>{rkHumanTableCopy(trustRead.nextMove)}</p>
+
+        <div className="rk-glance-coach-board-v140">
+          <div className="rk-glance-coach-note-v140 expert">
+            <span>Expert read</span>
+            <p>{rkHumanTableCopy(trustRead.expertRead)}</p>
+          </div>
+          <div className="rk-glance-coach-note-v140 next">
+            <span>Next move</span>
+            <p>{rkHumanTableCopy(trustRead.nextMove)}</p>
+          </div>
         </div>
       </section>
 
-      <section className="rk-score-clean-actions-v120" aria-label="Next actions">
+      <section className="rk-score-clean-actions-v120 rk-score-home-style-actions-v140" aria-label="Next actions">
         <button type="button" onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"globalLeaderboard")} className="rk-score-clean-action-v120 primary">
           <span>{clubCode?"Open clubhouse":"Open today’s room"}</span>
           <strong>{clubCode?"Club board":"Global board"}</strong>
+          <em>→</em>
         </button>
         <button type="button" onClick={onPractice} className="rk-score-clean-action-v120">
           <span>Practice another rack</span>
           <strong>Train again</strong>
+          <em>→</em>
         </button>
         {onCoachMode&&<button type="button" onClick={onCoachMode} className="rk-score-clean-action-v120">
           <span>Full rack review</span>
           <strong>See deeper read</strong>
+          <em>→</em>
         </button>}
         <button type="button" onClick={onHome} className="rk-score-clean-action-v120 quiet">
           <span>Back home</span>
           <strong>Clubhouse</strong>
+          <em>→</em>
         </button>
       </section>
     </div>
