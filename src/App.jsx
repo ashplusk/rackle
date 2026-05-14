@@ -9290,7 +9290,6 @@ function EmailSignup(){
   };
   return(
     <section className="rk-email-home-v8 rk-email-home-v19" aria-label="Sign up for Rackle updates">
-      <div className="rk-email-kicker-v8 rk-email-kicker-v18">Rackle list</div>
       <h2 className="rk-email-title-v8">Clubhouse updates</h2>
       {done?(
         <div className="rk-email-done-v8"><div style={{fontFamily:F.d,fontSize:20,fontWeight:900,marginBottom:4}}>You’re on the list.</div><div style={{fontSize:12,color:"rgba(255,255,255,.72)",fontWeight:900}}>You’ll get Rackle drops and club updates.</div></div>
@@ -11286,7 +11285,6 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <Community/>
           <PracticeCard/>
           <Learn/>
-          <SharePreview/>
           <TomorrowTease/>
           <EmailSignup/>
         </div>

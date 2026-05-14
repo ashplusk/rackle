@@ -5592,3 +5592,147 @@ html,body,#root,.rk-outer,.rk-app,.rk-pg{
   }
   .rk-footer{margin-top:0!important;padding-top:14px!important;}
 }
+
+/* ─── vNext focused polish: remove share block, align updates, premium free-play tiles ─── */
+/* Share Your Score has been removed from the homepage JSX. Keep this as a safety net. */
+.rk-home-landing-flow > .rk-share-score-v6{
+  display:none!important;
+}
+
+/* Rackle list / Clubhouse updates: no pill, true left alignment, tighter exit into footer. */
+.rk-email-home,
+.rk-email-home-v8,
+.rk-email-home-v19{
+  padding:8px 0 8px!important;
+  margin-top:8px!important;
+  margin-bottom:2px!important;
+  width:100%!important;
+  max-width:100%!important;
+  text-align:left!important;
+}
+.rk-email-kicker-v8,
+.rk-email-kicker-v18{
+  display:none!important;
+}
+.rk-email-title-v8,
+.rk-email-home-v19 .rk-email-title-v8,
+.rk-email-home h2,
+.rk-email-home-v8 h2,
+.rk-email-home-v19 h2{
+  text-align:left!important;
+  margin-left:0!important;
+  padding-left:0!important;
+}
+.rk-email-copy-v8,
+.rk-email-copy-v56,
+.rk-email-home p,
+.rk-email-home-v8 p,
+.rk-email-home-v19 p,
+.rk-email-form-v8{
+  text-align:left!important;
+  margin-left:0!important;
+  padding-left:0!important;
+}
+
+/* Free Play Room: make the preview tiles feel more premium and prevent flower/dragon clipping. */
+.rk-freeplay-v40-preview{
+  overflow:visible!important;
+}
+.rk-freeplay-v40-tiles{
+  display:flex!important;
+  align-items:center!important;
+  gap:9px!important;
+  padding:14px 16px!important;
+  overflow-x:auto!important;
+  overflow-y:visible!important;
+  -webkit-overflow-scrolling:touch!important;
+  background:linear-gradient(145deg,rgba(255,253,248,.84),rgba(244,238,226,.72))!important;
+  border:1px solid rgba(26,20,16,.08)!important;
+  border-radius:22px!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.86),0 12px 28px rgba(26,20,16,.055)!important;
+}
+.rk-freeplay-v40-tiles::-webkit-scrollbar{
+  display:none!important;
+}
+.rk-freeplay-v40-tile{
+  position:relative!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex:0 0 auto!important;
+  width:43px!important;
+  min-width:43px!important;
+  height:58px!important;
+  padding:0!important;
+  overflow:visible!important;
+  border-radius:14px!important;
+  background:linear-gradient(180deg,#FFFDF8 0%,#F1E9DA 100%)!important;
+  border:1px solid rgba(26,20,16,.10)!important;
+  box-shadow:0 10px 18px rgba(26,20,16,.075),inset 0 1px 0 rgba(255,255,255,.9)!important;
+}
+.rk-freeplay-v40-tile .rk-mahjong-tile{
+  width:41px!important;
+  height:56px!important;
+  border-radius:13px!important;
+  margin:0!important;
+  box-shadow:none!important;
+  border:0!important;
+  background:transparent!important;
+  overflow:visible!important;
+  transform:none!important;
+}
+.rk-freeplay-v40-tile .rk-mahjong-tile > span:first-child{
+  font-size:18px!important;
+  line-height:.95!important;
+  max-width:100%!important;
+  transform:scale(.96)!important;
+}
+.rk-freeplay-v40-tile .rk-mahjong-tile > span:nth-child(2){
+  font-size:7px!important;
+  line-height:1!important;
+  margin-top:3px!important;
+  max-width:100%!important;
+  white-space:nowrap!important;
+}
+.rk-freeplay-v40-tile:after{
+  content:"";
+  position:absolute;
+  left:7px;
+  right:7px;
+  bottom:5px;
+  height:1px;
+  border-radius:999px;
+  background:rgba(176,133,35,.20);
+  pointer-events:none;
+}
+
+@media(max-width:430px){
+  .rk-freeplay-v40-tiles{
+    gap:7px!important;
+    padding:12px 12px!important;
+  }
+  .rk-freeplay-v40-tile{
+    width:39px!important;
+    min-width:39px!important;
+    height:54px!important;
+    border-radius:13px!important;
+  }
+  .rk-freeplay-v40-tile .rk-mahjong-tile{
+    width:37px!important;
+    height:52px!important;
+  }
+  .rk-freeplay-v40-tile .rk-mahjong-tile > span:first-child{
+    font-size:16.5px!important;
+    transform:scale(.94)!important;
+  }
+  .rk-freeplay-v40-tile .rk-mahjong-tile > span:nth-child(2){
+    font-size:6.5px!important;
+  }
+  .rk-email-home,
+  .rk-email-home-v8,
+  .rk-email-home-v19{
+    padding-left:0!important;
+    padding-right:0!important;
+    margin-bottom:0!important;
+  }
+}
