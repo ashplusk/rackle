@@ -6080,3 +6080,247 @@ html,body,#root,.rk-outer,.rk-app,.rk-pg{
     padding-bottom:2px!important;
   }
 }
+
+/* Final homepage consistency pass: remove updates section, align room cards, clean footer signup. */
+.rk-home-landing-flow{
+  gap:16px!important;
+}
+.rk-home-landing-flow > *{
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+
+/* Your Club Today / Live standings: match Learn + Explore rhythm and align inner panels. */
+.rk-room-live-v6,
+.rk-room-live-v17,
+.rk-room-live-v19{
+  width:100%!important;
+  padding:15px!important;
+  margin:0!important;
+  border-radius:24px!important;
+}
+.rk-room-live-v6-summary,
+.rk-room-live-v17-table{
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  display:block!important;
+}
+.rk-room-live-v6-summary{
+  padding:12px!important;
+  border-radius:19px!important;
+  background:rgba(255,255,255,.075)!important;
+  border:1px solid rgba(243,212,107,.14)!important;
+}
+.rk-room-live-v17-table{
+  margin-top:10px!important;
+  padding:12px!important;
+  border-radius:19px!important;
+  background:rgba(255,255,255,.075)!important;
+  border:1px solid rgba(243,212,107,.14)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08)!important;
+}
+.rk-room-live-v17-actions{
+  margin-top:11px!important;
+  margin-bottom:2px!important;
+  padding-bottom:0!important;
+}
+.rk-room-live-v17-actions button{
+  min-height:40px!important;
+  border-radius:15px!important;
+}
+.rk-room-live-v17-row{
+  background:rgba(255,255,255,.085)!important;
+  border:1px solid rgba(255,255,255,.10)!important;
+}
+.rk-room-live-v17-row:first-child{
+  background:linear-gradient(135deg,rgba(243,212,107,.18),rgba(255,255,255,.08))!important;
+  border-color:rgba(243,212,107,.26)!important;
+}
+
+/* Keep Learn + Free Play using the same card cadence. */
+.rk-freeplay-v24,
+.rk-freeplay-v27,
+.rk-freeplay-v35,
+.rk-freeplay-v40,
+.rk-learn-home-v8,
+.rk-learn-home-v12,
+.rk-learn-home-v18,
+.rk-learn-home-v19{
+  padding:18px!important;
+  border-radius:24px!important;
+}
+.rk-learn-home-title,
+.rk-learn-home-v18-title,
+.rk-freeplay-v24 h2,
+.rk-freeplay-v27 h2,
+.rk-freeplay-v35 h2,
+.rk-freeplay-v40 h2{
+  font-size:23px!important;
+  line-height:1.05!important;
+  letter-spacing:-.42px!important;
+}
+.rk-learn-home-copy,
+.rk-learn-home-v18-copy,
+.rk-freeplay-v24 p,
+.rk-freeplay-v27 p,
+.rk-freeplay-v35 p,
+.rk-freeplay-v40 p{
+  font-size:12.5px!important;
+  line-height:1.48!important;
+}
+
+/* Hide old homepage Clubhouse Updates if any legacy render remains. */
+.rk-home-landing-flow > .rk-email-home,
+.rk-home-landing-flow > .rk-email-home-v8,
+.rk-home-landing-flow > .rk-email-home-v19{
+  display:none!important;
+}
+
+/* Footer: simple actions + compact join-list field. */
+.rk-footer{
+  margin-top:18px!important;
+  padding-top:10px!important;
+  background:transparent!important;
+}
+.rk-footer-inner{
+  padding:0 0 2px!important;
+  text-align:center!important;
+}
+.rk-footer-rule{
+  width:40px!important;
+  height:1px!important;
+  background:rgba(26,20,16,.12)!important;
+  margin:0 auto 13px!important;
+}
+.rk-footer-brand-lockup{
+  margin-bottom:5px!important;
+}
+.rk-footer-logo{
+  font-size:28px!important;
+  line-height:1!important;
+}
+.rk-footer-community{
+  margin-top:4px!important;
+  font-size:12px!important;
+  line-height:1.35!important;
+  color:rgba(26,20,16,.58)!important;
+}
+.rk-footer-actions{
+  margin:12px 0 12px!important;
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:8px!important;
+  flex-wrap:wrap!important;
+}
+.rk-footer-pill{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:34px!important;
+  padding:0 15px!important;
+  border-radius:999px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.10)!important;
+  color:#1A1410!important;
+  text-decoration:none!important;
+  font-size:12px!important;
+  font-weight:800!important;
+  box-shadow:0 5px 14px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.75)!important;
+}
+.rk-footer-join{
+  max-width:360px!important;
+  margin:0 auto 11px!important;
+}
+.rk-footer-join-copy{
+  margin-bottom:7px!important;
+  font-size:12px!important;
+  color:rgba(26,20,16,.56)!important;
+  font-weight:700!important;
+}
+.rk-footer-join-form{
+  position:relative!important;
+  width:100%!important;
+}
+.rk-footer-join-form input{
+  width:100%!important;
+  height:46px!important;
+  border-radius:17px!important;
+  border:1px solid rgba(26,20,16,.10)!important;
+  background:#FFFDF8!important;
+  padding:0 104px 0 14px!important;
+  color:#1A1410!important;
+  font-size:13px!important;
+  font-weight:700!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82),0 5px 14px rgba(26,20,16,.035)!important;
+}
+.rk-footer-join-form input::placeholder{
+  color:rgba(26,20,16,.38)!important;
+}
+.rk-footer-join-form button{
+  position:absolute!important;
+  right:5px!important;
+  top:5px!important;
+  height:36px!important;
+  border-radius:13px!important;
+  border:1px solid rgba(243,212,107,.16)!important;
+  background:linear-gradient(145deg,#176B42,#0B3B24)!important;
+  color:#FFFDF8!important;
+  padding:0 13px!important;
+  font-size:11.5px!important;
+  font-weight:900!important;
+  cursor:pointer!important;
+  box-shadow:0 6px 13px rgba(6,43,24,.13),inset 0 1px 0 rgba(255,255,255,.14)!important;
+}
+.rk-footer-join-error{
+  margin-top:6px!important;
+  color:#9C3D2D!important;
+  font-size:11px!important;
+  font-weight:800!important;
+}
+.rk-footer-join-done{
+  border-radius:16px!important;
+  background:rgba(23,107,66,.08)!important;
+  border:1px solid rgba(23,107,66,.12)!important;
+  color:#176B42!important;
+  padding:11px 12px!important;
+  font-size:12px!important;
+  font-weight:900!important;
+}
+.rk-footer-copyright{
+  margin-top:7px!important;
+  font-size:10.5px!important;
+  line-height:1.45!important;
+  color:rgba(26,20,16,.44)!important;
+}
+
+@media(max-width:430px){
+  .rk-home-landing-flow{gap:15px!important;}
+  .rk-room-live-v6,
+  .rk-room-live-v17,
+  .rk-room-live-v19{padding:14px!important;border-radius:23px!important;}
+  .rk-room-live-v6-summary,
+  .rk-room-live-v17-table{padding:11px!important;border-radius:18px!important;}
+  .rk-room-live-v6-top{grid-template-columns:minmax(0,1fr) 54px!important;gap:9px!important;}
+  .rk-room-live-v6-title{font-size:19px!important;}
+  .rk-room-live-v6-copy{font-size:12px!important;max-width:100%!important;}
+  .rk-room-live-v6-score{width:54px!important;min-width:54px!important;padding:8px 4px!important;}
+  .rk-room-live-v6-score strong{font-size:23px!important;}
+  .rk-room-live-v17-head-copy strong,
+  .rk-room-live-v17-head-copy span{max-width:150px!important;}
+  .rk-room-live-v17-actions{gap:7px!important;margin-bottom:1px!important;}
+  .rk-room-live-v17-actions button{font-size:11px!important;min-height:39px!important;}
+  .rk-freeplay-v24,
+  .rk-freeplay-v27,
+  .rk-freeplay-v35,
+  .rk-freeplay-v40,
+  .rk-learn-home-v8,
+  .rk-learn-home-v12,
+  .rk-learn-home-v18,
+  .rk-learn-home-v19{padding:17px!important;}
+  .rk-footer{margin-top:16px!important;}
+  .rk-footer-join{max-width:100%!important;}
+  .rk-footer-join-form input{height:45px!important;padding-right:98px!important;}
+  .rk-footer-join-form button{height:35px!important;padding:0 11px!important;font-size:11px!important;}
+}

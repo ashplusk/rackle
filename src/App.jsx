@@ -8789,23 +8789,46 @@ function RackleHeader({onBack,setScreen}){
 }
 
 function Footer(){
+  const [email,setEmail]=useState("");
+  const [done,setDone]=useState(false);
+  const [err,setErr]=useState("");
+  const submit=async()=>{
+    const clean=email.trim();
+    if(!clean.includes("@")){setErr("Enter a valid email.");return;}
+    try{
+      const res=await fetch("https://formspree.io/f/mgodekdb",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:clean,source:"footer"})});
+      if(!res.ok)throw new Error();
+      setDone(true);setErr("");
+    }catch{setErr("Try again in a moment.");}
+  };
   return(
     <div className="rk-footer">
       <div className="rk-footer-inner">
         <div>
-          <div aria-hidden="true" style={{width:40,height:1,background:C.bdr,margin:"0 auto 16px"}}/>
+          <div aria-hidden="true" className="rk-footer-rule"/>
           <div className="rk-footer-brand-lockup">
             <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" className="rk-footer-logo">Rackle</a>
           </div>
           <div className="rk-footer-community">Made for the American Mahjong community.</div>
+          <div className="rk-footer-actions">
+            <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" className="rk-footer-pill">Play Rackle</a>
+            <a href="mailto:hello@playrackle.com" className="rk-footer-pill">Contact</a>
+          </div>
+          <div className="rk-footer-join" aria-label="Stay updated with Rackle">
+            <div className="rk-footer-join-copy">Stay updated with Rackle.</div>
+            {done?(
+              <div className="rk-footer-join-done">You’re on the list.</div>
+            ):(
+              <>
+                <div className="rk-footer-join-form">
+                  <input value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} placeholder="your@email.com" aria-label="Email address for Rackle updates"/>
+                  <button type="button" onClick={submit}>Join list</button>
+                </div>
+                {err&&<div className="rk-footer-join-error">{err}</div>}
+              </>
+            )}
+          </div>
           <div className="rk-footer-copyright">© {new Date().getFullYear()} <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer">playrackle.com</a> · All rights reserved</div>
-        </div>
-        <div className="rk-footer-actions" style={{marginTop:10,display:"flex",justifyContent:"center",alignItems:"center",gap:8,flexWrap:"wrap"}}>
-          <a href="https://instagram.com/playrackle" target="_blank" rel="noopener noreferrer" style={{display:"flex",alignItems:"center",gap:6,fontSize:12,color:C.ink,textDecoration:"none",fontWeight:700,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:20,padding:"5px 14px"}}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5.5" stroke={C.ink} strokeWidth="2" fill="none"/><circle cx="12" cy="12" r="4.5" stroke={C.ink} strokeWidth="2" fill="none"/><circle cx="17.5" cy="6.5" r="1" fill={C.ink}/></svg>
-            @playrackle
-          </a>
-          <a href="mailto:hello@playrackle.com" style={{display:"flex",alignItems:"center",fontSize:12,color:C.ink,textDecoration:"none",fontWeight:700,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:20,padding:"5px 14px"}}>Contact</a>
         </div>
       </div>
     </div>
@@ -11286,7 +11309,6 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <PracticeCard/>
           <Learn/>
           <TomorrowTease/>
-          <EmailSignup/>
         </div>
         <Footer/>
       </div>
