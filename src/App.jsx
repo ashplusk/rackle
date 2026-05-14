@@ -1,5 +1,5 @@
 import { Analytics } from '@vercel/analytics/react';
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import './rackle.css';
 
 // Rackle V1 · Founding Club Beta
@@ -576,7 +576,7 @@ const SECS=[
     const flBonus=flowers>=2?0.05:flowers>=1?0.025:0;
     // ── 7-consecutive same-suit pair bonus (11 22 33 44 55 66 77 hand) ──────────
     let consecPairBonus=0;
-    for(const suit of SUITS){
+    for(const suit of ["b","c","d"]){
       const pairedNums=[];
       for(let n=1;n<=9;n++){
         if((c[`s-${suit}-${n}`]||0)===2)pairedNums.push(n);
@@ -1026,17 +1026,26 @@ const HAND_CATALOG=[
   // ════════════════════════════════════════════════════════════════
 
   // 11 333 55 777 9999, Any 1 or 3 Suits
+  // Critical rule: the suit-locked 3s, 7s, and 9s must use exactly 1 or 3 suits.
+  // A 2-suit build such as 3B / 7C / 9B is invalid and must not score as a valid path.
   mkHand("11 333 55 777 9999","13579",25,false,r=>{
     const jk=jokers(r);
     const single=Math.max(...ALL_SUITS.map(s=>handFitScore([
       {have:countNumSuit(r,1,s),need:2,noJoker:true},{have:countNumSuit(r,3,s),need:3},
       {have:countNumSuit(r,5,s),need:2,noJoker:true},{have:countNumSuit(r,7,s),need:3},{have:countNumSuit(r,9,s),need:4}
     ],jk,14)));
-    const t1=countNum(r,1),t3=countNum(r,3),t5=countNum(r,5),t7=countNum(r,7),t9=countNum(r,9);
-    const three=handFitScore([
-      {have:t1,need:2,noJoker:true},{have:t3,need:3},
-      {have:t5,need:2,noJoker:true},{have:t7,need:3},{have:t9,need:4}
-    ],jk,14);
+    let three=0;
+    for(const s3 of ALL_SUITS)for(const s7 of ALL_SUITS)for(const s9 of ALL_SUITS){
+      if(new Set([s3,s7,s9]).size!==3)continue;
+      const sc=handFitScore([
+        {have:countNum(r,1),need:2,noJoker:true},
+        {have:countNumSuit(r,3,s3),need:3},
+        {have:countNum(r,5),need:2,noJoker:true},
+        {have:countNumSuit(r,7,s7),need:3},
+        {have:countNumSuit(r,9,s9),need:4}
+      ],jk,14);
+      if(sc>three)three=sc;
+    }
     return Math.max(single,three);
   }),
 
@@ -3913,9 +3922,18 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
     directionExplanation=strategicRead.expertRead?.summary||`${strategicRead.rackPersonality||strategicRead.commitmentStatus}: ${strategicRead.bestDirection}. ${strategicRead.whyItWorks?.[0]||"Whole-rack structure reviewed."}`;
   }
 
-  const totalScore=strategicRead?.rackleIQScore ?? Math.max(0,Math.min(100,directionScore+tileStrengthScore+passQualityScore+timingScore));
+  const nearWin=rkNearWinRead(finalRack,chosenHandObj);
+  let totalScore=strategicRead?.rackleIQScore ?? Math.max(0,Math.min(100,directionScore+tileStrengthScore+passQualityScore+timingScore));
+  if(nearWin){
+    totalScore=Math.max(totalScore,nearWin.calibrated);
+    directionScore=Math.max(directionScore,Math.min(40,Math.round((nearWin.pct/100)*40)));
+    tileStrengthScore=Math.max(tileStrengthScore,nearWin.state==="oneAway"?25:nearWin.state==="execution"?23:20);
+    passQualityScore=Math.max(passQualityScore,nearWin.state==="oneAway"?23:nearWin.state==="execution"?21:18);
+    timingScore=Math.max(timingScore,nearWin.state==="oneAway"?10:nearWin.state==="execution"?9:8);
+    directionExplanation=nearWin.copy;
+  }
   const{level,levelExplanation,tier}=iqScoreLevel(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
-  const style=getIQStyle(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
+  const style=nearWin?{name:nearWin.label,note:nearWin.copy,emoji:nearWin.state==="oneAway"?"🎯":nearWin.state==="execution"?"🔒":"🧭"}:getIQStyle(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
 
   const exactAudit=rkExactCharlestonAudit({finalRack,startingRack,passedTilesByRound:rawPassedTilesByRound,sectionId,chosenHandObj});
   const dist=iqDistanceToOptimal(finalRack,startingRack,passedTilesByRound,sectionId);
@@ -3944,6 +3962,7 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
     directionScore,tileStrengthScore,passQualityScore,timingScore,
     directionExplanation,
     scoredHandLabel:chosenHandObj?.label||null,
+    nearWin,
     handWasInferred,
     distanceToOptimal:{...dist},
     strengths,weaknesses,
@@ -3962,9 +3981,9 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
     commitmentStatus:strategicRead?.commitmentStatus,
     bestDirection:strategicRead?.bestDirection,
     liveSections:strategicRead?.liveSections,
-    coachingInsight:strategicRead?.coachingInsight,
-    coachNote:strategicRead?.coachingInsight||coachNote,
-    tryNextTime:strategicRead?.coachingInsight||tryNextTime,
+    coachingInsight:nearWin?.copy||strategicRead?.coachingInsight,
+    coachNote:nearWin?.copy||strategicRead?.coachingInsight||coachNote,
+    tryNextTime:nearWin?.copy||strategicRead?.coachingInsight||tryNextTime,
     totalTime,shareText,
   };
 }
@@ -6747,12 +6766,12 @@ function MahjongIdentityCard({iq, chosenSec, passLog, finalRack}){
 }
 
 // IQ HERO, shared dark jade gradient hero card used in scorecard + home
-function IQHero({iq:rawIq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHome=false}){
-  const iq=useMemo(()=>rawIq?withIQStyle(rawIq):null,[rawIq]);
+function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHome=false}){
+  if(!iq)return null;
+  iq=withIQStyle(iq);
   const [displayScore,setDisplayScore]=useState(0);
   const [isPB,setIsPB]=useState(false);
   useEffect(()=>{
-    if(!iq)return;
     const hist=getHist().filter(e=>e.iqScore!=null);
     const prevBest=hist.length>1?Math.max(...hist.slice(0,-1).map(e=>e.iqScore)):0;
     if(iq.totalScore>prevBest&&hist.length>0)setIsPB(true);
@@ -6770,8 +6789,7 @@ function IQHero({iq:rawIq,isDaily,dayNum,section,totalTime,chosenSec,allSections
       if(step>=steps){clearInterval(timer);setDisplayScore(target);}
     },interval);
     return()=>clearInterval(timer);
-  },[iq]);
-  if(!iq)return null;
+  },[iq.totalScore]);
 
   const bestFitId=allSections?[...allSections].sort((a,b)=>b.score-a.score)[0]?.id:null;
   const matched=chosenSec&&bestFitId&&chosenSec===bestFitId;
@@ -6906,7 +6924,7 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
   if(!finalRack||!sectionId)return null;
   // Get all scored hands for section, sorted by fit
   const allHands=HAND_CATALOG.filter(h=>h.sec===sectionId)
-    .map(h=>{const cov=computeHonestCoverage(finalRack,h);return{...h,fitScore:cov.pct/100,coveragePct:cov.pct,credibility:cov.credibility,isCredible:cov.isCredible,variantLabel:cov.variantLabel,labelForDisplay:cov.labelForDisplay,coveragePlan:cov.plan,groupNuance:cov.groupNuance,tone:cov.tone,coachLine:cov.coachLine};})
+    .map(h=>{const cov=computeHonestCoverage(finalRack,h);const nw=rkNearWinRead(finalRack,h);return{...h,fitScore:(nw?.pct??cov.pct)/100,coveragePct:nw?.pct??cov.pct,nearWin:nw,credibility:nw?Math.max(cov.credibility||0,nw.pct):cov.credibility,isCredible:cov.isCredible,variantLabel:cov.variantLabel,labelForDisplay:cov.labelForDisplay,coveragePlan:cov.plan,groupNuance:cov.groupNuance,tone:cov.tone,coachLine:nw?.copy||cov.coachLine};})
     .sort((a,b)=>(b.credibility-a.credibility)||(b.coveragePct-a.coveragePct));
   // If a pinned hand is specified, put it first
   let hands=allHands;
@@ -7225,6 +7243,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const [globalEntries,setGlobalEntries]=useState([]);
   const [clubEntries,setClubEntries]=useState([]);
   const [showDetails,setShowDetails]=useState(false);
+  if(!iq)return null;
 
   useEffect(()=>{
     fetchDailyStats().then(s=>{if(s)setDailyStats(s);}).catch(()=>{});
@@ -7233,7 +7252,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     if(clubCode)fetchLBEntries(clubCode).then(rows=>{if(rows)setClubEntries(rows);}).catch(()=>{});
   },[]);
 
-  const score=Number(iq?.totalScore||0);
+  const score=Number(iq.totalScore||0);
   const [animatedScore,setAnimatedScore]=useState(0);
   useEffect(()=>{
     const target=Number(score||0);
@@ -7253,7 +7272,6 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     },interval);
     return()=>clearInterval(timer);
   },[score]);
-  if(!iq)return null;
   const time=Number(resultTime||iq.timeSecs||iq.time_secs||iq.totalTime||iq.time||0);
   const timeLabel=time?fT(Math.round(time)):"—";
   const clubCode=getClubCode();
@@ -7489,16 +7507,17 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
 // ─── PRACTICE SCORECARD, collapsible sections, matching daily vibe ───────────
 function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHome,onDealAgain}){
+  if(!iq)return null;
   const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
-  const scoredHandLabel=iq?.scoredHandLabel||null;
+  const scoredHandLabel=iq.scoredHandLabel||null;
   const scoredHandObj=scoredHandLabel?HAND_CATALOG.find(h=>h.sec===chosenSec&&h.label===scoredHandLabel):null;
   const sortedSecsP=allSections?[...allSections].sort((a,b)=>b.score-a.score):[];
   const [openSec,setOpenSec]=useState({hand:true,alts:false,passes:false});
   const toggle=(k)=>setOpenSec(s=>({...s,[k]:!s[k]}));
-  const passDots=(iq?.passInsights||[]).map(p=>({strong:"🟢",weak:"🔴",mixed:"🟡",neutral:"⚪"}[p.quality]||"⚪")).join("");
-  const styled=iq?withIQStyle(iq):null;
-  const level=iq?.level||styled?.level||"Rack read";
-  const score=Math.round(iq?.totalScore||iq?.rackleIQScore||iq?.score||0);
+  const passDots=(iq.passInsights||[]).map(p=>({strong:"🟢",weak:"🔴",mixed:"🟡",neutral:"⚪"}[p.quality]||"⚪")).join("");
+  const styled=withIQStyle(iq);
+  const level=iq.level||styled.level||"Rack read";
+  const score=Math.round(iq.totalScore||iq.rackleIQScore||iq.score||0);
   const [animatedScore,setAnimatedScore]=useState(0);
   useEffect(()=>{
     const target=Number(score||0);
@@ -7517,7 +7536,6 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
     },interval);
     return()=>clearInterval(timer);
   },[score]);
-  if(!iq)return null;
   const bestLabel=scoredHandObj?.labelForDisplay||scoredHandObj?.variantLabel||scoredHandObj?.label||iq.bestHandLabel||iq.strategicRead?.bestDirection||"Keep reading the rack";
   const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
 
@@ -7791,7 +7809,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
           </div>
         )}
       </div>
-      </div>
+    </div>
   );
 }
 
@@ -12196,7 +12214,7 @@ function shouldMapBlackAsSuit(handObj,groups,cardColors){
   if(!numericK)return false;
   const constraint=String(handObj?.constraint||HAND_CONSTRAINTS?.[handObj?.label]||"");
   const numericCodes=[...new Set(groups.map((g,i)=>g.isNum?cardColors[i]:null).filter(Boolean))];
-  return constraint.includes("Any 3 Suits")||numericCodes.filter(c=>["G","R","K"].includes(c)).length>=3;
+  return /Any\s+1\s+or\s+3\s+Suits/i.test(constraint)||constraint.includes("Any 3 Suits")||numericCodes.filter(c=>["G","R","K"].includes(c)).length>=3;
 }
 function suitMappingOptions(codes){
   if(!codes.length)return[{}];
@@ -12282,6 +12300,57 @@ function computeHonestCoverage(rack, handObj){
   const plan=buildCoveragePlan(rack,handObj,[]);
   const tone=rkCoachPathTone(plan);
   return{held:plan.held,total:plan.total,pct:plan.pct,credibility:rkPlanCredibility(plan),isCredible:rkIsCrediblePath(plan),suitMap:plan.suitMap,variantLabel:plan.variantLabel,labelForDisplay:plan.labelForDisplay,groupNuance:rkGroupNuance(plan),tone,coachLine:rkShortCoachLine(plan),plan};
+}
+
+// ── NEAR-WIN / EXECUTION MODE CALIBRATION ───────────────────────────────────
+// If a rack is 10+ tiles into one valid hand, Rackle must stop speaking like a
+// mid-Charleston analyzer. It should move into closing/execution coaching.
+function rkHasJokerEligibleGap(plan,handObj){
+  if(!plan||handObj?.concealed)return false;
+  return (plan.groupStatus||[]).some(st=>{
+    const g=st.g||{};
+    const gap=Number(st.gap||0);
+    return gap>0 && !g.isFlower && g.type!=="single" && g.type!=="pair";
+  });
+}
+function rkNeededTilesFromPlan(plan){
+  return (plan?.groupStatus||[])
+    .filter(st=>Number(st.gap||0)>0)
+    .map(st=>{
+      const g=st.g||{};
+      const suit=st.resolvedSuit?` ${RACKLE_SUIT_LABELS[st.resolvedSuit]||st.resolvedSuit}`:"";
+      const name=g.isNum?`${g.tile}${suit}`:g.isSoap?"Soap":g.isDragon?"Dragon":g.isWind?g.tile:g.isFlower?"Flower":"tile";
+      return `${st.gap}× ${name}`;
+    })
+    .slice(0,4);
+}
+function rkNearWinRead(rack,handObj){
+  if(!rack||!handObj)return null;
+  let cov;
+  try{cov=computeHonestCoverage(rack,handObj);}catch(e){return null;}
+  if(!cov||cov.isCredible===false)return null;
+  const total=Number(cov.total||14)||14;
+  const held=Number(cov.held||Math.round((cov.pct||0)/100*total))||0;
+  const jk=jokers(rack);
+  const jokerCanHelp=jk>0&&rkHasJokerEligibleGap(cov.plan,handObj);
+  const adjustedHeld=Math.min(total,held+(jokerCanHelp?1:0));
+  if(adjustedHeld<10)return null;
+  const remaining=Math.max(0,total-adjustedHeld);
+  const state=adjustedHeld>=14?"complete":adjustedHeld>=13?"oneAway":adjustedHeld>=12?"execution":adjustedHeld>=11?"strongApproach":"approach";
+  const labelBase={approach:"Locking In",strongApproach:"In Range",execution:"Closing",oneAway:"One Away",complete:"Complete"}[state]||"Closing";
+  const scoreFloor={approach:65,strongApproach:75,execution:85,oneAway:92,complete:100}[state]||85;
+  const scoreCeil={approach:75,strongApproach:85,execution:92,oneAway:98,complete:100}[state]||92;
+  const jokerBoost=jokerCanHelp?6:0;
+  const calibrated=Math.min(100,Math.max(scoreFloor+jokerBoost,Math.round((adjustedHeld/total)*100)));
+  const pct=Math.min(100,Math.max(Number(cov.pct||0),Math.round((adjustedHeld/total)*100)));
+  const needs=rkNeededTilesFromPlan(cov.plan);
+  const target=handObj.labelForDisplay||handObj.variantLabel||handObj.label;
+  const copy=state==="oneAway"
+    ?`One tile away on ${target}. ${needs.length?`Watch for ${needs.join(", ")}.`:"Watch every discard."}`
+    :state==="execution"
+      ?`You're in closing position on ${target}. ${jokerCanHelp?"Your joker is a closing accelerator.":"Stay committed and close it out."}`
+      :`Strong shape toward ${target}. ${remaining} tile${remaining===1?"":"s"} to go.`;
+  return{state,label:labelBase+(jokerCanHelp&&state!=="complete"?" with Joker":""),scoreFloor,scoreCeil,calibrated,pct,held,adjustedHeld,total,remaining,jokerCanHelp,needs,target,copy,coverage:cov};
 }
 
 // ─── 2026 CHARLESTON RESOLVER UPGRADE ───────────────────────────────────────
@@ -13935,7 +14004,7 @@ function AppShell({children,dashProps=null}){
       <div className={`rk-dash-shell${dashProps?" has-dashboard":""}`}>
         <aside className="rk-dash-left" aria-label="Personal stats">{dashProps&&<DashLeft {...dashProps}/>}</aside>
         <div style={S.app} className="rk-app">
-          <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,900&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet"/>
+          <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,900&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet"/>
           {children}
           <Analytics />
         </div>
