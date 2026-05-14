@@ -10859,13 +10859,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               </span>
             ))}
           </div>
-          <h2 className="rk-daily-entry-v6-title">Ready for today’s rack?</h2>
-          <p className="rk-daily-entry-v6-copy"><span>Play one Charleston. Beat the room.</span><span>Same rack for everyone. One score to chase.</span></p>
+          <h2 className="rk-daily-entry-v6-title">Fresh rack. New Charleston.</h2>
+          <p className="rk-daily-entry-v6-copy"><span>See how your table stacks up.</span><span>Same rack for everyone. One score to chase.</span></p>
           <div className="rk-daily-entry-v6-stats">
             <span>{posted===0?"First score gets the room":`${posted} ${posted===1?"player has":"players already"} posted`}</span>
             <span>{scoreToBeat?`${scoreToBeat} is the score to beat`:"Be the first score to beat"}</span>
           </div>
-          <span className="rk-daily-entry-v6-cta"><span className="rk-live-spark"/> Play the Daily Rackle</span>
+          <span className="rk-daily-entry-v6-cta"><span className="rk-live-spark"/> Play Today’s Rackle</span>
           <button type="button" onClick={(e)=>{e.stopPropagation();setScreen("howto");}} className="rk-daily-entry-v37-tutorial" aria-label="Learn how the Daily Rackle works">
             New to Rackle? See how it works →
           </button>
@@ -10971,13 +10971,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div className="rk-tomorrow-v11-top">
           <div>
             <div className="rk-tomorrow-v11-kicker">Tomorrow’s Rackle</div>
-            <h2 className="rk-tomorrow-v11-title">Tomorrow’s rack unlocks at midnight.</h2>
+            <h2 className="rk-tomorrow-v11-title">New rack drops at midnight.</h2>
           </div>
           <div className="rk-tomorrow-v11-badge">{resetLabel}</div>
         </div>
-        <p className="rk-tomorrow-v11-copy">A new Charleston arrives tonight.</p>
+        <p className="rk-tomorrow-v11-copy">Come back tomorrow and climb the club board.</p>
         <div className="rk-tomorrow-v11-row">
-          <span>{tomorrowLine}</span>
+          <span>Tomorrow watch: {tomorrowLine}</span>
         </div>
       </section>
     );
@@ -11150,45 +11150,61 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const clubRows=displayHomeClubEntries;
     const globalCount=Math.max(Number(todayPlayers||0),globalRows.length,currentScore?1:0);
     const clubCount=Number(clubPlayers||clubRows.length||0);
-    const leadValue=Number(topToday||globalRows[0]?.iqScore||0)||0;
-    const leader=(globalRows&&globalRows[0])||{};
+    const activeRows=(activeClubCode&&clubRows.length?clubRows:globalRows)||[];
+    const leadValue=Number(activeRows?.[0]?.iqScore||activeRows?.[0]?.score||0)||0;
+    const leader=activeRows?.[0]||{};
     const leaderName=(leader.name||(leadValue?"Top player":"First score gets the room")).trim();
     const pointsBehind=Number.isFinite(leadValue)&&Number.isFinite(Number(currentScore))?Math.max(0,leadValue-Number(currentScore)):null;
-    const roomLine=currentScore?pointsBehind===0?"You’re holding the table today.":`You’re ${pointsBehind} points off first.`:"See who’s posted and chase the room.";
     const openBoard=()=>activeClubCode?setScreen("leaderboard"):setScreen("globalLeaderboard");
-    const boardRows=(globalRows&&globalRows.length?globalRows:homeClubEntries&&homeClubEntries.length?homeClubEntries:[]).slice(0,3);
-    const fallbackRows=[
-      {name:leaderName,iqScore:leadValue||"—"},
-      {name:hasTodayDaily&&currentScore?currentName:"First score gets the room",iqScore:hasTodayDaily&&currentScore?currentScore:"—"},
-      {name:activeClubCode?"Your club board":"Global room",iqScore:globalCount||"—"},
-    ];
-    const rows=(boardRows.length?boardRows:fallbackRows).slice(0,3);
-    const globalPreviewRows=(globalRows&&globalRows.length?globalRows:fallbackRows).slice(0,3);
-    const clubPreviewRows=(clubRows&&clubRows.length?clubRows:(activeClubCode?fallbackRows:rows)).slice(0,3);
+    const findClub=()=>setScreen("clubs");
+    const fallbackRows=activeClubCode
+      ?[
+        {name:hasTodayDaily&&currentScore?currentName:"Play today to join the board",iqScore:hasTodayDaily&&currentScore?currentScore:"—"},
+        {name:club?.name?`${club.name} board`:"Your club board",iqScore:clubCount||"—"},
+        {name:"First score gets the room",iqScore:leadValue||"—"},
+      ]
+      :[
+        {name:leaderName,iqScore:leadValue||"—"},
+        {name:hasTodayDaily&&currentScore?currentName:"First score gets the room",iqScore:hasTodayDaily&&currentScore?currentScore:"—"},
+        {name:"Global room",iqScore:globalCount||"—"},
+      ];
+    const rows=(activeRows.length?activeRows:fallbackRows).slice(0,3);
     const firstNames=rows.map(r=>(r.name||"Player").trim()).filter(Boolean).slice(0,3);
     const initials=(name)=>String(name||"?").trim().slice(0,1).toUpperCase();
-    const chaseCopy=currentScore
-      ? pointsBehind===0
-        ? "You’re on top. Open the room and defend it."
-        : `You’re ${pointsBehind} point${pointsBehind===1?"":"s"} back. Open the room and chase.`
-      : "Post your score, then see exactly who you’re chasing.";
+    const chaseCopy=activeClubCode
+      ? currentScore
+        ? shownClubRank===1
+          ? "You’re the club score to beat today."
+          : shownClubRank
+            ? `You’re #${shownClubRank} in ${club?.name||"your club"}.`
+            : "Your score is ready for the club board."
+        : "Post your score and see where you stand in your club."
+      : currentScore
+        ? pointsBehind===0
+          ? "You’re on top. Open the room and defend it."
+          : `You’re ${pointsBehind} point${pointsBehind===1?"":"s"} back. Open the room and chase.`
+        : "Post your score, then see exactly who you’re chasing.";
     const socialCopy=activeClubCode
       ? clubCount>0?`${clubCount} club score${clubCount===1?"":"s"} live today`:"No club scores yet today"
       : globalCount>0?`${globalCount} player${globalCount===1?"":"s"} in today’s Rackle room`:"No scores live yet";
-    const previewRows=(activeClubCode&&clubPreviewRows.length?clubPreviewRows:globalPreviewRows).slice(0,3);
-    const boardLabel=activeClubCode?(club?.name||"Club board"):"Rackle room";
-    const secondaryLabel=activeClubCode?"Global room →":"Club room →";
-    const secondaryAction=activeClubCode?()=>setScreen("globalLeaderboard"):openBoard;
+    const previewRows=rows.slice(0,3);
+    const boardLabel=activeClubCode?(club?.name||"Your club"):"Rackle room";
+    const title=activeClubCode?"Your Club":"Rackle Room";
+    const kicker=activeClubCode?"Your club today":"Live standings";
+    const scoreLabel=leadValue?"score to beat":"open";
+    const scoreDisplay=leadValue||"—";
+    const secondaryLabel=activeClubCode?"Global room →":"Find a club →";
+    const secondaryAction=activeClubCode?()=>setScreen("globalLeaderboard"):findClub;
     return(
-      <section className="rk-room-live-v6 rk-room-live-v17 rk-room-live-v19" aria-label="Live club standings">
+      <section className="rk-room-live-v6 rk-room-live-v17 rk-room-live-v19" aria-label={activeClubCode?"Your club standings":"Live Rackle standings"}>
         <button type="button" onClick={openBoard} className="rk-room-live-v6-summary" style={{width:"100%",textAlign:"left",display:"block",border:0}}>
           <div className="rk-room-live-v6-top">
             <div>
-              <div className="rk-room-live-v6-kicker"><span className="rk-live-spark"/> Live club standings</div>
-              <h2 className="rk-room-live-v6-title">Challenge Your Club</h2>
+              <div className="rk-room-live-v6-kicker"><span className="rk-live-spark"/> {kicker}</div>
+              <h2 className="rk-room-live-v6-title">{title}</h2>
               <p className="rk-room-live-v6-copy">{chaseCopy}</p>
             </div>
-            <div className="rk-room-live-v6-score"><strong>{leadValue}</strong><span>leader</span></div>
+            <div className="rk-room-live-v6-score"><strong>{scoreDisplay}</strong><span>{scoreLabel}</span></div>
           </div>
         </button>
 

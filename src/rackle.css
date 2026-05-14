@@ -2165,3 +2165,304 @@
     margin-top:2px!important;
   }
 }
+
+/* ─── Founding club homepage + mobile polish pass ─────────────────────────── */
+/* Scope: homepage layout only. No scoring, auth, database, or game-flow changes. */
+.rk-startup-hero-v42,
+.rk-startup-hero-v4{
+  padding-top:8px!important;
+  padding-bottom:6px!important;
+  margin-bottom:6px!important;
+}
+.rk-startup-logo-v4,
+.rk-startup-hero-v42 .rk-startup-logo-v4{
+  margin-bottom:6px!important;
+  line-height:.92!important;
+}
+.rk-startup-subtitle-v4,
+.rk-startup-hero-v42 .rk-startup-subtitle-v4{
+  margin-bottom:10px!important;
+  font-size:14.5px!important;
+  line-height:1.25!important;
+}
+.rk-startup-pulse-pill-v41,
+.rk-startup-pulse-pill-v42{
+  margin-top:2px!important;
+  margin-bottom:4px!important;
+}
+.rk-home-landing-flow{
+  gap:14px!important;
+}
+.rk-home-landing-flow > *{
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+.rk-home-landing-flow > .rk-daily-entry-wrap-v37,
+.rk-home-landing-flow > .rk-home-scorecard-v41.rk-home-section-lg{
+  margin-top:6px!important;
+}
+
+/* Primary daily action: tighter hero rhythm and clearer CTA hierarchy. */
+.rk-daily-entry-v6,
+.rk-daily-entry-v11,
+.rk-daily-entry-v21,
+.rk-daily-entry-v24,
+.rk-daily-entry-v35{
+  padding:18px 16px!important;
+  border-radius:24px!important;
+}
+.rk-daily-entry-v6-title{
+  font-size:30px!important;
+  line-height:1.04!important;
+  letter-spacing:-.8px!important;
+  margin-bottom:8px!important;
+  max-width:11ch!important;
+}
+.rk-daily-entry-v6-copy{
+  margin-top:0!important;
+  margin-bottom:12px!important;
+  gap:4px!important;
+  font-size:12.5px!important;
+  line-height:1.45!important;
+}
+.rk-daily-entry-v6-stats{
+  margin-top:10px!important;
+  margin-bottom:12px!important;
+  gap:8px!important;
+}
+.rk-daily-entry-v6-cta{
+  min-height:50px!important;
+  font-size:13px!important;
+  letter-spacing:.2px!important;
+  width:100%!important;
+  justify-content:center!important;
+  box-shadow:0 10px 24px rgba(23,107,66,.22), inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+.rk-daily-entry-v37-tutorial{
+  margin-top:10px!important;
+  font-size:11.5px!important;
+  opacity:.82!important;
+}
+
+/* Completed score: remove glow/noise and keep the number clear. */
+.rk-home-scorecard-v41-score,
+.rk-room-live-v6-score strong,
+.rk-share-lux-v6-top strong{
+  text-shadow:none!important;
+  filter:none!important;
+}
+.rk-home-scorecard-v41-score{
+  font-size:64px!important;
+  line-height:.92!important;
+}
+
+/* Your Club / Rackle Room: cleaner lobby card and clearer preview rows. */
+.rk-room-live-v6,
+.rk-room-live-v17,
+.rk-room-live-v19{
+  padding:16px!important;
+  border-radius:24px!important;
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+.rk-room-live-v6-summary{
+  padding:0!important;
+  background:transparent!important;
+}
+.rk-room-live-v6-top{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 64px!important;
+  align-items:start!important;
+  gap:12px!important;
+}
+.rk-room-live-v6-kicker{
+  font-size:8px!important;
+  letter-spacing:1.9px!important;
+  margin-bottom:7px!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.rk-room-live-v6-title{
+  font-size:22px!important;
+  line-height:1.05!important;
+  letter-spacing:-.45px!important;
+  max-width:100%!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+}
+.rk-room-live-v6-copy{
+  font-size:12.5px!important;
+  line-height:1.45!important;
+  margin-top:6px!important;
+  max-width:32ch!important;
+}
+.rk-room-live-v6-score{
+  min-width:64px!important;
+  width:64px!important;
+  padding:8px 6px!important;
+  border-radius:18px!important;
+}
+.rk-room-live-v6-score strong{
+  font-size:25px!important;
+  line-height:.95!important;
+}
+.rk-room-live-v6-score span{
+  font-size:7px!important;
+  letter-spacing:1.1px!important;
+  line-height:1.05!important;
+  white-space:normal!important;
+}
+.rk-room-live-v17-table{
+  margin-top:12px!important;
+  padding:12px!important;
+  border-radius:19px!important;
+}
+.rk-room-live-v17-head{
+  gap:9px!important;
+}
+.rk-room-live-v17-head-copy strong,
+.rk-room-live-v17-head-copy span{
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  max-width:100%!important;
+}
+.rk-room-live-v17-rows{
+  gap:7px!important;
+}
+.rk-room-live-v17-row{
+  min-height:38px!important;
+  padding:9px 10px!important;
+  border-radius:14px!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+}
+.rk-room-live-v17-row span{
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  min-width:0!important;
+}
+.rk-room-live-v17-row strong{
+  font-size:15px!important;
+}
+.rk-room-live-v17-actions{
+  gap:8px!important;
+  margin-top:10px!important;
+}
+.rk-room-live-v17-actions button{
+  min-height:42px!important;
+  font-size:11.5px!important;
+}
+
+/* Free Play: keep secondary card lower in hierarchy than the daily CTA. */
+.rk-freeplay-v24,
+.rk-freeplay-v27,
+.rk-freeplay-v35,
+.rk-freeplay-v40{
+  padding:16px!important;
+  border-radius:24px!important;
+}
+.rk-freeplay-v24 h2,
+.rk-freeplay-v27 h2,
+.rk-freeplay-v35 h2,
+.rk-freeplay-v40 h2{
+  font-size:21px!important;
+  line-height:1.08!important;
+  letter-spacing:-.4px!important;
+}
+.rk-freeplay-v24-copy p,
+.rk-freeplay-v35-copy p,
+.rk-freeplay-v40-copy p{
+  font-size:12.5px!important;
+  line-height:1.45!important;
+}
+
+/* Tomorrow: one compact reset message. */
+.rk-tomorrow-card-v11,
+.rk-tomorrow-mystery-final{
+  padding:16px!important;
+  border-radius:24px!important;
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+.rk-tomorrow-v11-top{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:10px!important;
+  align-items:start!important;
+}
+.rk-tomorrow-v11-title{
+  font-size:20px!important;
+  line-height:1.08!important;
+  letter-spacing:-.45px!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+}
+.rk-tomorrow-v11-badge{
+  min-width:70px!important;
+  height:auto!important;
+  padding:8px 9px!important;
+  font-size:12px!important;
+  line-height:1!important;
+  border-radius:16px!important;
+  white-space:nowrap!important;
+}
+.rk-tomorrow-v11-copy{
+  font-size:12.5px!important;
+  line-height:1.45!important;
+  margin-top:9px!important;
+  margin-bottom:10px!important;
+}
+.rk-tomorrow-v11-row{
+  padding:10px 11px!important;
+  border-radius:15px!important;
+}
+.rk-tomorrow-v11-row span{
+  font-size:11.5px!important;
+  line-height:1.35!important;
+}
+
+@media(max-width:430px){
+  .rk-pg{padding-left:16px!important;padding-right:16px!important;}
+  .rk-startup-logo-v4,
+  .rk-startup-hero-v42 .rk-startup-logo-v4{font-size:42px!important;letter-spacing:-1.6px!important;}
+  .rk-startup-subtitle-v4,
+  .rk-startup-hero-v42 .rk-startup-subtitle-v4{font-size:14px!important;margin-bottom:9px!important;}
+  .rk-startup-pulse-pill-v41,
+  .rk-startup-pulse-pill-v42{transform:scale(.96)!important;}
+  .rk-daily-entry-v6-title{font-size:27px!important;max-width:12ch!important;}
+  .rk-daily-entry-v6-copy{font-size:12px!important;}
+  .rk-home-scorecard-v41-score{font-size:58px!important;}
+  .rk-room-live-v6,
+  .rk-room-live-v17,
+  .rk-room-live-v19{padding:14px!important;}
+  .rk-room-live-v6-top{grid-template-columns:minmax(0,1fr) 58px!important;gap:10px!important;}
+  .rk-room-live-v6-title{font-size:21px!important;}
+  .rk-room-live-v6-score{min-width:58px!important;width:58px!important;}
+  .rk-room-live-v6-score strong{font-size:23px!important;}
+  .rk-room-live-v17-cta{display:none!important;}
+  .rk-tomorrow-v11-title{font-size:19px!important;}
+  .rk-tomorrow-v11-badge{min-width:64px!important;font-size:11px!important;}
+}
+
+@media(max-width:360px){
+  .rk-pg{padding-left:14px!important;padding-right:14px!important;}
+  .rk-startup-logo-v4,
+  .rk-startup-hero-v42 .rk-startup-logo-v4{font-size:39px!important;}
+  .rk-daily-entry-v6,
+  .rk-home-scorecard-v41,
+  .rk-room-live-v6,
+  .rk-freeplay-v24,
+  .rk-share-score-v6,
+  .rk-tomorrow-card-v11{border-radius:22px!important;}
+  .rk-daily-entry-v6-title{font-size:25px!important;}
+  .rk-room-live-v6-top{grid-template-columns:minmax(0,1fr) 54px!important;}
+  .rk-room-live-v6-score{min-width:54px!important;width:54px!important;}
+  .rk-room-live-v6-score strong{font-size:21px!important;}
+  .rk-room-live-v17-actions{grid-template-columns:1fr!important;}
+  .rk-tomorrow-v11-top{grid-template-columns:1fr!important;}
+  .rk-tomorrow-v11-badge{justify-self:start!important;}
+}
