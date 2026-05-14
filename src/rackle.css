@@ -7483,3 +7483,53 @@ html,body,#root,.rk-outer,.rk-app,.rk-pg{
   .rk-lb-invite-card-slim{grid-template-columns:1fr!important;}
   .rk-lb-invite-copy-btn{width:100%!important;}
 }
+
+/* ─── final background consistency pass v207 ───────────────────────────
+   Keep the page canvas as one calm Rackle cream across every screen.
+   Cards and leaderboard panels still keep their own premium treatments. */
+:root{
+  --rk-page-canvas:#F8F4EE;
+}
+html,
+body,
+#root,
+.rk-outer,
+.rk-app,
+.rk-pg,
+.rk-room-page,
+.rk-lb-page,
+.rk-score-shell,
+.rk-home-landing-flow,
+.rk-stats-page,
+.rk-recap-shell,
+.rk-style-glossary-v60,
+.rk-howto-v40,
+.rk-handbrowser-v40{
+  background-color:var(--rk-page-canvas)!important;
+  background-image:none!important;
+}
+.rk-page-header-v75,
+.rk-lb-page .rk-page-header-v75,
+.rk-room-page .rk-page-header-v75,
+.rk-score-shell .rk-page-header-v75{
+  background:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
+.rk-page-header-v75:before,
+.rk-page-header-v75:after,
+.rk-lb-page:before,
+.rk-lb-page:after,
+.rk-pg:before,
+.rk-pg:after{
+  display:none!important;
+  content:none!important;
+}
+@media(min-width:600px){
+  .rk-outer,
+  .rk-app,
+  .rk-pg{
+    background-color:var(--rk-page-canvas)!important;
+    background-image:none!important;
+  }
+}
