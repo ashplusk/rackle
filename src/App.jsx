@@ -13935,7 +13935,7 @@ function AppShell({children,dashProps=null}){
       <div className={`rk-dash-shell${dashProps?" has-dashboard":""}`}>
         <aside className="rk-dash-left" aria-label="Personal stats">{dashProps&&<DashLeft {...dashProps}/>}</aside>
         <div style={S.app} className="rk-app">
-          <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,900&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet"/>
+          <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,900&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet"/>
           {children}
           <Analytics />
         </div>
