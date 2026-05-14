@@ -11225,43 +11225,59 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const scoreDisplay=leadValue||"—";
     const secondaryLabel=activeClubCode?"Global room →":"Find a club →";
     const secondaryAction=activeClubCode?()=>setScreen("globalLeaderboard"):findClub;
-    return(
-      <section className="rk-room-live-v6 rk-room-live-v17 rk-room-live-v19" aria-label={activeClubCode?"Your club standings":"Live Rackle standings"}>
-        <button type="button" onClick={openBoard} className="rk-room-live-v6-summary" style={{width:"100%",textAlign:"left",display:"block",border:0}}>
-          <div className="rk-room-live-v6-top">
-            <div>
-              <div className="rk-room-live-v6-kicker"><span className="rk-live-spark"/> {kicker}</div>
-              <h2 className="rk-room-live-v6-title">{title}</h2>
-              <p className="rk-room-live-v6-copy">{chaseCopy}</p>
-            </div>
-            <div className="rk-room-live-v6-score"><strong>{scoreDisplay}</strong><span>{scoreLabel}</span></div>
-          </div>
-        </button>
+    const primaryLabel=activeClubCode?"Club board":"Open standings";
+    const secondaryLabelClean=activeClubCode?"Global room":"Find club";
+    const rankLabel=shownClubRank?`#${shownClubRank}`:(currentScore?"Ready":"—");
+    const countLabel=activeClubCode?`${clubCount||0} live`:`${globalCount||0} live`;
 
-        <button type="button" onClick={openBoard} className="rk-room-live-v17-table">
-          <div className="rk-room-live-v17-head">
-            <div className="rk-room-live-v6-avatars" aria-hidden="true">
-              {(firstNames.length?firstNames:[leaderName,"You","Club"]).slice(0,3).map((n,i)=><span key={`${n}-${i}`} className="rk-room-live-v6-avatar">{initials(n)}</span>)}
-            </div>
-            <div className="rk-room-live-v17-head-copy"><strong>{boardLabel}</strong><span>{socialCopy}</span></div>
-            <span className="rk-room-live-v17-cta">Open</span>
+    return(
+      <section className="rk-club-today-card" aria-label={activeClubCode?"Your club standings":"Live Rackle standings"}>
+        <div className="rk-club-today-head">
+          <div className="rk-club-today-copy">
+            <div className="rk-club-today-kicker">{kicker}</div>
+            <h2 className="rk-club-today-title">{title}</h2>
+            <p className="rk-club-today-desc">{chaseCopy}</p>
           </div>
-          <div className="rk-room-live-v17-rows">
+          <button type="button" onClick={openBoard} className="rk-club-today-score" aria-label="Open board">
+            <strong>{scoreDisplay}</strong>
+            <span>{scoreLabel}</span>
+          </button>
+        </div>
+
+        <button type="button" onClick={openBoard} className="rk-club-today-board">
+          <div className="rk-club-today-board-top">
+            <div className="rk-club-today-avatars" aria-hidden="true">
+              {(firstNames.length?firstNames:[leaderName,"You","Club"]).slice(0,3).map((n,i)=><span key={`${n}-${i}`} className="rk-club-today-avatar">{initials(n)}</span>)}
+            </div>
+            <div className="rk-club-today-board-copy">
+              <strong>{boardLabel}</strong>
+              <span>{socialCopy}</span>
+            </div>
+          </div>
+
+          <div className="rk-club-today-stats">
+            <div><strong>{countLabel}</strong><span>scores</span></div>
+            <div><strong>{scoreDisplay}</strong><span>to beat</span></div>
+            <div><strong>{rankLabel}</strong><span>you</span></div>
+          </div>
+
+          <div className="rk-club-today-rows">
             {previewRows.map((r,i)=>{
               const isYou=(r.name||"").toLowerCase().includes((currentName||"__never__").toLowerCase()) && !!currentScore;
               return (
-                <div key={`${i}-${r.name||'row'}`} className={`rk-room-live-v17-row ${isYou?"rk-room-live-v17-row-you":""}`}>
-                  <span>{i+1}. {isYou?"You":(r.name||"Player")}</span>
-                  <strong>{r.iqScore||r.score||"—"}</strong>
+                <div key={`${i}-${r.name||'row'}`} className={`rk-club-today-row ${isYou?"rk-club-today-row-you":""}`}>
+                  <span className="rk-club-today-rank">{i+1}</span>
+                  <span className="rk-club-today-name">{isYou?"You":(r.name||"Player")}</span>
+                  <strong className="rk-club-today-row-score">{r.iqScore||r.score||"—"}</strong>
                 </div>
               );
             })}
           </div>
         </button>
 
-        <div className="rk-room-live-v17-actions">
-          <button type="button" onClick={openBoard}>{activeClubCode?"Club standings":"Open standings"}</button>
-          <button type="button" onClick={secondaryAction}>{activeClubCode?"Global room":"Find a club"}</button>
+        <div className="rk-club-today-actions">
+          <button type="button" onClick={openBoard}>{primaryLabel}</button>
+          <button type="button" onClick={secondaryAction}>{secondaryLabelClean}</button>
         </div>
       </section>
     );
