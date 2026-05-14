@@ -9913,28 +9913,27 @@ function RoomLeader({leader,myEntry,count,label="table"}){
   const heroKicker=label==="club"?"Club leader":"Global leader";
   const leaderTitle=samePlayer?"You’re leading today":(leader.name||"Top player");
   const leaderSub=samePlayer
-    ? `Your ${leaderScore} is the number everyone is chasing.`
+    ? `Everyone is chasing your ${leaderScore}.`
     : myEntry
       ? `${gap} point${gap===1?"":"s"} clear of your score.`
       : `${count} score${count===1?"":"s"} posted today.`;
-  return <section className={`rk-lb-feature ${samePlayer?"rk-lb-feature-you":""}`} aria-label={`Today’s ${label} leader`}>
-    <div className="rk-lb-feature-copy">
-      <div className="rk-lb-feature-kicker">{heroKicker}</div>
-      <div className="rk-lb-feature-main">
-        <div className="rk-lb-feature-rank">#1</div>
+  return <section className={`rk-lb-feature rk-lb-feature-${label} ${samePlayer?"rk-lb-feature-you":""}`} aria-label={`Today’s ${label} leader`}>
+    <div className="rk-lb-feature-compact-head">
+      <div className="rk-lb-feature-rank-score">
+        <span className="rk-lb-feature-rank">#1</span>
+        <strong className="rk-lb-feature-score-inline">{leaderScore}</strong>
+        <span className="rk-lb-feature-score-label">IQ</span>
+      </div>
+      <div className="rk-lb-feature-copy">
+        <div className="rk-lb-feature-kicker">{heroKicker}</div>
         <div className="rk-lb-feature-text">
           <h2>{leaderTitle}</h2>
           <p>{leaderSub}</p>
         </div>
       </div>
     </div>
-    <div className="rk-lb-feature-score">
-      <strong>{leaderScore}</strong>
-      <span>Rackle IQ</span>
-    </div>
   </section>;
 }
-
 function RoomMyPosition({myRank,score,leader,count,clubName="the room"}){
   if(!score)return null;
   const leaderScore=Number(leader?.iqScore)||0;
@@ -10068,7 +10067,7 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
         </>
     }
 
-    <div className="rk-lb-actions">
+    <div className="rk-lb-actions rk-lb-actions-premium">
       <button className="rk-lb-btn rk-lb-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(shareText,"Rackle Global Room");setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Share room"}</button>
       <button className="rk-lb-btn" onClick={load}>Refresh</button>
       <button className="rk-lb-btn" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"Club board":"Find club"}</button>
@@ -10183,7 +10182,7 @@ playrackle.com`;
       </div>
     </section>
 
-    <div className="rk-lb-actions">
+    <div className="rk-lb-actions rk-lb-actions-premium">
       <button className="rk-lb-btn rk-lb-btn-primary" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>Global room</button>
       <button className="rk-lb-btn" onClick={load}>Refresh</button>
       <button className="rk-lb-btn" onClick={()=>setScreen&&setScreen("clubs")}>Change club</button>
