@@ -7442,33 +7442,27 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </section>
 
-      <section className="rk-score-clean-share-v120 rk-score-share-premium-v130 rk-score-share-simple-v140 rk-score-share-v150" aria-label="Share today’s Rackle">
-        <div className="rk-score-share-v150-head">
+      <section className="rk-score-clean-share-v120 rk-score-share-premium-v130 rk-score-share-simple-v140 rk-score-share-v150 rk-score-share-v160" aria-label="Share today’s Rackle">
+        <div className="rk-score-share-v150-head rk-score-share-v160-head">
           <span>Share today’s Rackle</span>
           <h2>{affiliatedClubName?`Share with ${affiliatedClubName}`:"Share with your club"}</h2>
           <p>Send your score and let your table chase the same daily rack.</p>
         </div>
 
-        <div className="rk-score-share-v150-summary">
-          <div className="rk-score-share-score-emblem-v140 rk-score-share-emblem-v150" aria-label={`Rackle IQ ${score}`}>
-            <strong>{score}</strong>
-            <span>IQ</span>
+        <div className="rk-score-share-v160-stats" aria-label="Today’s score summary">
+          <div className="rk-score-share-v160-stat primary">
+            <span>{clubRank?"Club rank":globalRank?"Global rank":"Today’s rank"}</span>
+            <strong>{clubRank?`#${clubRank}`:globalRank?`#${globalRank}`:"Posted"}</strong>
+            <em>{clubRank&&clubTotal?`of ${clubTotal} in club`:globalRank&&globalTotal?`of ${globalTotal} today`:affiliatedClubName||"Daily board"}</em>
           </div>
-          <div className="rk-score-share-v150-chips">
-            <div className="rk-score-share-v150-chip">
-              <span>Best direction</span>
-              <strong>{shareDirection}</strong>
-            </div>
-            {shareRankLine&&(
-              <div className="rk-score-share-v150-chip">
-                <span>{clubRank?"Club rank":"Rank"}</span>
-                <strong>{clubRank?`#${clubRank}`:globalRank?`#${globalRank}`:"Posted"}</strong>
-              </div>
-            )}
+          <div className="rk-score-share-v160-stat score">
+            <span>Rackle IQ</span>
+            <strong>{score}</strong>
+            <em>{scoreLabel}</em>
           </div>
         </div>
 
-        <ShareButton text={shareText} label={affiliatedClubName?`Share with ${affiliatedClubName}`:"Share with your club"} sublabel="Send today’s Rackle" variant="green"/>
+        <ShareButton text={shareText} label={affiliatedClubName?`Share with ${affiliatedClubName}`:"Share with your club"} sublabel="Send today’s Rackle to the club chat" variant="green"/>
       </section>
 
       <section className="rk-score-clean-final-v120" aria-label="Your final hand">
@@ -7482,41 +7476,38 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </section>
 
-      <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150" aria-label="Rack at a glance">
-        <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150">
+      <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160" aria-label="Rack at a glance">
+        <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160">
           <span>Rack at a glance</span>
           <h2>Your Charleston read</h2>
           <p>What your rack is telling you now, without pretending the final hand is locked.</p>
         </div>
 
-        <div className="rk-glance-v150-lead">
-          <div className="rk-glance-v150-lead-top">
-            <span>Best direction</span>
-            <em>Best lane</em>
-          </div>
+        <div className="rk-glance-v160-verdict">
+          <span>Best fit read</span>
           <h3>{trustRead.best}</h3>
           <p>{trustRead.bestFit}</p>
         </div>
 
-        <div className="rk-glance-v150-grid">
-          <div className="rk-glance-v150-card">
+        <div className="rk-glance-v160-tiles">
+          <div className="rk-glance-v160-tile">
             <span>Backup path</span>
             <strong>{trustRead.backup}</strong>
             <p>{trustRead.backupFit}</p>
           </div>
-          <div className="rk-glance-v150-card avoid">
+          <div className="rk-glance-v160-tile avoid">
             <span>Avoid for now</span>
             <strong>{trustRead.avoid}</strong>
             <p>Only chase this if the next draw changes the rack.</p>
           </div>
         </div>
 
-        <div className="rk-glance-v150-notes">
-          <div className="rk-glance-v150-note">
+        <div className="rk-glance-v160-coach">
+          <div className="rk-glance-v160-coach-row expert">
             <span>Expert read</span>
             <p>{rkHumanTableCopy(trustRead.expertRead)}</p>
           </div>
-          <div className="rk-glance-v150-note next">
+          <div className="rk-glance-v160-coach-row next">
             <span>Next move</span>
             <p>{rkHumanTableCopy(trustRead.nextMove)}</p>
           </div>
@@ -7536,7 +7527,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </button>
         {onCoachMode&&<button type="button" onClick={onCoachMode} className="rk-score-clean-action-v120">
           <span>Full rack review</span>
-          <strong>See deeper read</strong>
+          <strong>Coach Mode</strong>
           <em>→</em>
         </button>}
         <button type="button" onClick={onHome} className="rk-score-clean-action-v120 quiet">
