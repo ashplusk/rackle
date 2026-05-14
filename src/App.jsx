@@ -7494,27 +7494,48 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <SortableRack hand={hand}/>
       </div>
 
-      <section className="rk-score-card" style={{borderRadius:22,padding:14,marginBottom:12,background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid rgba(26,20,16,.075)`,boxShadow:"0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)"}} aria-label="Scorecard trust read">
-        <div style={{fontSize:10,letterSpacing:1.6,textTransform:"uppercase",fontWeight:900,color:C.mut,marginBottom:10}}>Post-Charleston read</div>
-        <div style={{display:"grid",gap:10}}>
-          <div><strong style={{fontFamily:F.d,fontSize:18,color:C.ink}}>Best direction: {trustRead.best}</strong><p style={{margin:"5px 0 0",fontSize:12,lineHeight:1.5,color:C.mut,fontWeight:700}}>{trustRead.bestFit}</p></div>
-          <div><strong style={{fontFamily:F.d,fontSize:16,color:C.ink}}>Backup: {trustRead.backup}</strong><p style={{margin:"5px 0 0",fontSize:12,lineHeight:1.5,color:C.mut,fontWeight:700}}>{trustRead.backupFit}</p></div>
-          <div><strong style={{fontFamily:F.d,fontSize:16,color:C.ink}}>Avoid: {trustRead.avoid}</strong><p style={{margin:"5px 0 0",fontSize:12,lineHeight:1.5,color:C.mut,fontWeight:700}}>Do not chase tiles that do not support the best lane or a real backup.</p></div>
-          <div style={{background:"rgba(22,107,66,.06)",border:`1px solid ${C.jade}22`,borderRadius:16,padding:12}}>
-            <div style={{fontSize:9,letterSpacing:1.4,textTransform:"uppercase",fontWeight:900,color:C.jade,marginBottom:5}}>Expert read</div>
-            <p style={{margin:0,fontSize:12,lineHeight:1.55,color:C.ink,fontWeight:750}}>{rkHumanTableCopy(trustRead.expertRead)}</p>
+      <section className="rk-score-card rk-post-read-card" aria-label="Scorecard trust read">
+        <div className="rk-post-read-head">
+          <div>
+            <span>Post-Charleston read</span>
+            <h3>What your rack is saying</h3>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
-            <div style={{border:`1px solid ${C.bdr}`,borderRadius:14,padding:10}}>
-              <div style={{fontSize:9,letterSpacing:1.2,textTransform:"uppercase",fontWeight:900,color:C.jade,marginBottom:6}}>What helped</div>
-              {trustRead.helped.map((x,i)=><p key={i} style={{margin:i?"5px 0 0":"0",fontSize:11,lineHeight:1.45,color:C.ink,fontWeight:700}}>✓ {x}</p>)}
-            </div>
-            <div style={{border:`1px solid ${C.bdr}`,borderRadius:14,padding:10}}>
-              <div style={{fontSize:9,letterSpacing:1.2,textTransform:"uppercase",fontWeight:900,color:C.cinn,marginBottom:6}}>What held it back</div>
-              {trustRead.heldBack.map((x,i)=><p key={i} style={{margin:i?"5px 0 0":"0",fontSize:11,lineHeight:1.45,color:C.ink,fontWeight:700}}>• {x}</p>)}
-            </div>
+          <em>{scoreLabel}</em>
+        </div>
+        <div className="rk-post-read-paths">
+          <div className="rk-post-read-path primary">
+            <span>Best direction</span>
+            <strong>{trustRead.best}</strong>
+            <em>{trustRead.bestFit}</em>
           </div>
-          <div><strong style={{fontFamily:F.d,fontSize:16,color:C.ink}}>Next move</strong><p style={{margin:"5px 0 0",fontSize:12,lineHeight:1.5,color:C.mut,fontWeight:700}}>{rkHumanTableCopy(trustRead.nextMove)}</p></div>
+          <div className="rk-post-read-path">
+            <span>Backup</span>
+            <strong>{trustRead.backup}</strong>
+            <em>{trustRead.backupFit}</em>
+          </div>
+          <div className="rk-post-read-path avoid">
+            <span>Avoid</span>
+            <strong>{trustRead.avoid}</strong>
+            <em>Only chase this if the next draw changes the rack.</em>
+          </div>
+        </div>
+        <div className="rk-post-read-note">
+          <span>Expert read</span>
+          <p>{rkHumanTableCopy(trustRead.expertRead)}</p>
+        </div>
+        <div className="rk-post-read-two-col">
+          <div>
+            <span>Helped</span>
+            {trustRead.helped.slice(0,2).map((x,i)=><p key={i}>✓ {x}</p>)}
+          </div>
+          <div>
+            <span>Held back</span>
+            {trustRead.heldBack.slice(0,2).map((x,i)=><p key={i}>• {x}</p>)}
+          </div>
+        </div>
+        <div className="rk-post-read-next">
+          <span>Next move</span>
+          <p>{rkHumanTableCopy(trustRead.nextMove)}</p>
         </div>
       </section>
 
@@ -7525,49 +7546,20 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </div>
 
-      <section className="rk-daily-review-v10" aria-label="Charleston review">
-        <button onClick={()=>setShowDetails(v=>!v)} className="rk-daily-review-v10-head">
-          <span>
-            <small>Rack review</small>
-            <strong>Your table read</strong>
-          </span>
-          <b>{showDetails?"Hide":"Details"}</b>
-        </button>
-        <div className="rk-daily-review-v10-grid">
-          <div className="rk-daily-review-v10-card primary" data-icon="🧭">
-            <span>Your read</span>
-            <strong>{reviewTone}</strong>
-            <p>{reviewCopy}</p>
-          </div>
-          <div className="rk-daily-review-v10-card" data-icon="🀄">
-            <span>Best lane</span>
-            <strong>{reviewBestPath}</strong>
-            <p>The best lane your final rack is pointing toward right now.</p>
-          </div>
-          <div className="rk-daily-review-v10-card" data-icon="🎯">
-            <span>Next move</span>
-            <strong>{tableTag}</strong>
-            <p>{pivotCopy}</p>
-          </div>
+      <section className="rk-deeper-review-card" aria-label="Rack review options">
+        <div>
+          <span>Want the deeper read?</span>
+          <strong>Review the full rack only when you need more detail.</strong>
+          <p>The scorecard above is the quick read. Open the full review for pass-by-pass notes and hand comparisons.</p>
         </div>
-        <div className="rk-daily-review-v92-actions">
-          <button type="button" onClick={()=>setShowDetails(v=>!v)} className="rk-daily-review-v92-secondary">{showDetails?"Hide details":"See quick details"}</button>
-          {onCoachMode&&<button type="button" onClick={onCoachMode} className="rk-daily-review-v92-primary">Full rack review →</button>}
+        <div className="rk-deeper-review-actions">
+          <button type="button" onClick={()=>setShowDetails(v=>!v)}>{showDetails?"Hide quick notes":"Quick notes"}</button>
+          {onCoachMode&&<button type="button" onClick={onCoachMode}>Full rack review →</button>}
         </div>
         {showDetails&&(
-          <div className="rk-daily-review-v20-detail rk-in">
-            <div className="rk-daily-review-v20-detail-card">
-              <span>Shape read</span>
-              <p>{shapeLine||reviewCopy}</p>
-            </div>
-            <div className="rk-daily-review-v20-detail-card">
-              <span>Pass read</span>
-              <p>{passLine||"No major pass regret showed up against the cleanest lane."}</p>
-            </div>
-            <div className="rk-daily-review-v20-detail-card">
-              <span>Next table move</span>
-              <p>{pivotCopy}</p>
-            </div>
+          <div className="rk-deeper-review-notes rk-in">
+            <p><b>Shape:</b> {shapeLine||reviewCopy}</p>
+            <p><b>Passes:</b> {passLine||"No major pass regret showed up against the cleanest lane."}</p>
           </div>
         )}
       </section>
@@ -8483,7 +8475,7 @@ function CoachModeScreen({iq,hand,startingRack,passLog,dayNum,section,chosenSec,
   };
 
   return(
-    <div style={S.pg} className="rk-pg">
+    <div style={S.pg} className="rk-pg rk-coach-review-page">
       <RackleHeader onBack={onBack} setScreen={setScreen}/>
 
       {/* ① VERDICT */}
@@ -11644,8 +11636,8 @@ function Game({mode,home,onDone,settings,setScreen}){
   const maxSelect=isBlind?(cp.max||3):cp.req;
   const selectedNeeded=Math.max(0,(isBlind?0:cp.req)-sel.length);
   const passInstruction=isBlind
-    ?`${passOrdinal} pass: choose up to ${maxSelect} tiles to pass ${passDirection} blind.`
-    :`${passOrdinal} pass: choose ${cp.req} tiles to pass ${passDirection}.`;
+    ?`Choose up to ${maxSelect} tiles to pass ${passDirection} blind.`
+    :`Choose ${cp.req} tiles to pass ${passDirection}.`;
   const selectedLabel=isBlind
     ?`${sel.length} of up to ${maxSelect} selected`
     :`${sel.length} of ${cp.req} selected`;
@@ -11662,12 +11654,12 @@ function Game({mode,home,onDone,settings,setScreen}){
           {!ready&&<ReadyOverlay mode={mode} dayNum={dn} onReady={()=>setReady(true)} onHome={home}/>}
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
             <div style={{...S.back,opacity:0,pointerEvents:"none"}}>← Back</div>
-            <div style={{textAlign:"center"}}><div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div><div style={{fontFamily:F.d,fontSize:9,color:C.jade,fontWeight:700,fontStyle:"italic",letterSpacing:0.5,marginTop:1}}>The Daily Mahjong Workout.</div></div>
+            <div style={{textAlign:"center"}}><div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div><div className="rk-inline-header-tag">Daily Mahjong Workout</div></div>
             <span style={{fontSize:10,color:C.mut,fontWeight:700}}>{mode==="daily"?`Daily #${dn}`:"Practice"}</span>
           </div>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}><span style={{fontSize:10,color:C.mut,fontWeight:700}}>First Charleston · Pass 1 of 3</span></div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}><span className="rk-game-flow-mini-label">Charleston · 1/3</span></div>
           <div style={{display:"flex",gap:3,marginBottom:10}}>{[0,1,2].map(i=><div key={i} style={{flex:1,height:4,borderRadius:2,background:i===0?C.gold:C.bdr}}/>)}</div>
-          <div style={{textAlign:"center",marginBottom:10}}><span style={{fontSize:22}}>👉</span><h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"2px 0"}}>First pass: choose 3 tiles to pass right</h2><p style={{fontSize:12,color:C.mut}}>Jokers stay protected in your rack.</p></div>
+          <div className="rk-game-start-instruction"><h2>Choose 3 tiles to pass right</h2><p>Jokers stay protected.</p></div>
           <div style={S.card}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
               <span style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>YOUR RACK (13 tiles)</span>
@@ -11778,14 +11770,14 @@ function Game({mode,home,onDone,settings,setScreen}){
           {showLeave&&<LeaveModal onStay={()=>setShowLeave(false)} onLeave={()=>{setShowLeave(false);home();}}/>}
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
             <button onClick={()=>setShowLeave(true)} style={S.back}>← Back</button>
-            <div style={{textAlign:"center"}}><div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div><div style={{fontFamily:F.d,fontSize:9,color:C.jade,fontWeight:700,fontStyle:"italic",letterSpacing:0.5,marginTop:1}}>The Daily Mahjong Workout.</div></div>
+            <div style={{textAlign:"center"}}><div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div><div className="rk-inline-header-tag">Daily Mahjong Workout</div></div>
             <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:1}}>
               <span style={{fontSize:10,color:C.mut,fontWeight:700}}>{mode==="daily"?`Daily #${dn}`:"Practice"}</span>
               {getDisplayTime()&&<span style={{fontSize:11,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {getDisplayTime()}</span>}
             </div>
           </div>
           <div className="rk-game-flow-card">
-            <span className="rk-game-flow-kicker">{cn===1?"First Charleston":"Second Charleston"} · Pass {pi+1} of 3</span>
+            <span className="rk-game-flow-kicker">Charleston · {pi+1}/3</span>
             <h2 className="rk-game-flow-title">{passInstruction}</h2>
             <p className="rk-game-flow-copy">{hasNew?"Review the tiles you received before the next pass.":"Tap your pass tiles. Jokers stay protected in your rack."}</p>
           </div>

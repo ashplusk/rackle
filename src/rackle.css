@@ -2482,3 +2482,356 @@
 .rk-share-lux-v6-tile{display:inline-flex!important;transform:scale(.74);transform-origin:center;line-height:0;}
 .rk-share-lux-v6-tile .rk-mahjong-tile{margin:0!important;}
 @media(max-width:380px){.rk-received-tiles-panel{padding:9px}.rk-received-tiles-row{gap:5px}.rk-received-tiles-row .rk-mahjong-tile{width:30px!important;height:42px!important}.rk-share-lux-v6-tile{transform:scale(.68)}}
+
+/* ─── Streamlined UX consistency pass: reduce duplicate weight, clean mobile rhythm ─── */
+.rk-pg{
+  line-height:1.45!important;
+}
+.rk-home-landing-flow{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:18px!important;
+}
+.rk-home-landing-flow > section,
+.rk-home-landing-flow > div{
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+.rk-startup-subtitle-v4,
+.rk-startup-hero-v42 .rk-startup-subtitle-v4,
+.rk-header-brand-tag-v75,
+.rk-inline-header-tag{
+  font-family:'Nunito','Inter',system-ui,sans-serif!important;
+  font-size:10.5px!important;
+  line-height:1.1!important;
+  font-weight:500!important;
+  font-style:normal!important;
+  letter-spacing:.55px!important;
+  color:#176B42!important;
+  opacity:.82!important;
+  text-transform:none!important;
+  margin-top:4px!important;
+}
+.rk-startup-subtitle-v4,
+.rk-startup-hero-v42 .rk-startup-subtitle-v4{
+  font-size:13px!important;
+  margin-top:4px!important;
+  margin-bottom:8px!important;
+}
+.rk-screen-title,
+.rk-daily-entry-v6-title,
+.rk-room-live-v6-title,
+.rk-freeplay-v24 h2,
+.rk-freeplay-v27 h2,
+.rk-freeplay-v35 h2,
+.rk-freeplay-v40 h2,
+.rk-tomorrow-v11-title{
+  line-height:1.08!important;
+}
+.rk-daily-entry-v6-copy,
+.rk-room-live-v6-copy,
+.rk-freeplay-v24-copy p,
+.rk-freeplay-v35-copy p,
+.rk-freeplay-v40-copy p,
+.rk-tomorrow-v11-copy,
+.rk-home-scorecard-v41-copy{
+  line-height:1.48!important;
+  font-weight:650!important;
+}
+.rk-daily-entry-v6,
+.rk-home-scorecard-v41,
+.rk-room-live-v6,
+.rk-freeplay-v24,
+.rk-freeplay-v27,
+.rk-freeplay-v35,
+.rk-freeplay-v40,
+.rk-tomorrow-card-v11,
+.rk-share-score-v6,
+.rk-learn-home-v8{
+  margin-bottom:0!important;
+}
+
+/* Gameplay: remove repeated Charleston wording and make the instruction smaller/crisper. */
+.rk-game-flow-card{
+  padding:13px 14px!important;
+  border-radius:18px!important;
+  margin-bottom:10px!important;
+}
+.rk-game-flow-kicker,
+.rk-game-flow-mini-label{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:5px!important;
+  font-size:8px!important;
+  line-height:1!important;
+  letter-spacing:1.8px!important;
+  text-transform:uppercase!important;
+  font-weight:850!important;
+  color:#176B42!important;
+  opacity:.78!important;
+}
+.rk-game-flow-title{
+  font-size:18px!important;
+  line-height:1.12!important;
+  margin:5px 0 4px!important;
+  letter-spacing:-.35px!important;
+}
+.rk-game-flow-copy{
+  font-size:11.5px!important;
+  line-height:1.4!important;
+  margin:0!important;
+  font-weight:650!important;
+}
+.rk-game-start-instruction{
+  text-align:center!important;
+  margin:6px 0 10px!important;
+}
+.rk-game-start-instruction h2{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:18px!important;
+  line-height:1.12!important;
+  color:#1A1410!important;
+  margin:0 0 4px!important;
+  letter-spacing:-.35px!important;
+}
+.rk-game-start-instruction p{
+  font-size:11.5px!important;
+  line-height:1.4!important;
+  color:#6B6157!important;
+  margin:0!important;
+  font-weight:650!important;
+}
+
+/* Scorecard: make the post-Charleston read feel like one designed module. */
+.rk-post-read-card{
+  border-radius:24px!important;
+  padding:15px!important;
+  margin-bottom:14px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F6EFE4)!important;
+  border:1px solid rgba(26,20,16,.08)!important;
+  box-shadow:0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.76)!important;
+}
+.rk-post-read-head{
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  margin-bottom:12px!important;
+}
+.rk-post-read-head span,
+.rk-post-read-path span,
+.rk-post-read-note span,
+.rk-post-read-two-col span,
+.rk-post-read-next span,
+.rk-deeper-review-card span{
+  display:block!important;
+  font-size:8px!important;
+  line-height:1!important;
+  letter-spacing:1.7px!important;
+  text-transform:uppercase!important;
+  font-weight:900!important;
+  color:rgba(26,20,16,.48)!important;
+  margin-bottom:6px!important;
+}
+.rk-post-read-head h3{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:21px!important;
+  line-height:1.06!important;
+  letter-spacing:-.45px!important;
+  color:#1A1410!important;
+  margin:0!important;
+}
+.rk-post-read-head em{
+  flex-shrink:0!important;
+  border-radius:999px!important;
+  padding:7px 9px!important;
+  background:rgba(23,107,66,.07)!important;
+  border:1px solid rgba(23,107,66,.11)!important;
+  color:#176B42!important;
+  font-style:normal!important;
+  font-size:10px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  max-width:120px!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.rk-post-read-paths{
+  display:grid!important;
+  gap:8px!important;
+  margin-bottom:10px!important;
+}
+.rk-post-read-path{
+  padding:11px 12px!important;
+  border-radius:17px!important;
+  background:rgba(255,255,255,.64)!important;
+  border:1px solid rgba(26,20,16,.07)!important;
+}
+.rk-post-read-path.primary{
+  background:linear-gradient(145deg,rgba(23,107,66,.09),rgba(255,255,255,.76))!important;
+  border-color:rgba(23,107,66,.15)!important;
+}
+.rk-post-read-path.avoid{
+  background:linear-gradient(145deg,rgba(176,65,41,.055),rgba(255,255,255,.74))!important;
+}
+.rk-post-read-path strong{
+  display:block!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:18px!important;
+  line-height:1.08!important;
+  letter-spacing:-.35px!important;
+  color:#1A1410!important;
+  overflow-wrap:anywhere!important;
+}
+.rk-post-read-path em{
+  display:block!important;
+  margin-top:5px!important;
+  font-style:normal!important;
+  font-size:11.5px!important;
+  line-height:1.38!important;
+  color:#6B6157!important;
+  font-weight:750!important;
+}
+.rk-post-read-note,
+.rk-post-read-next{
+  border-radius:17px!important;
+  padding:12px!important;
+  background:rgba(23,107,66,.055)!important;
+  border:1px solid rgba(23,107,66,.11)!important;
+  margin-bottom:10px!important;
+}
+.rk-post-read-note p,
+.rk-post-read-next p{
+  margin:0!important;
+  font-size:12.5px!important;
+  line-height:1.5!important;
+  color:#1A1410!important;
+  font-weight:700!important;
+}
+.rk-post-read-two-col{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:8px!important;
+  margin-bottom:10px!important;
+}
+.rk-post-read-two-col > div{
+  border-radius:16px!important;
+  padding:11px!important;
+  background:rgba(255,255,255,.62)!important;
+  border:1px solid rgba(26,20,16,.07)!important;
+}
+.rk-post-read-two-col p{
+  margin:0 0 6px!important;
+  font-size:11.5px!important;
+  line-height:1.42!important;
+  color:#1A1410!important;
+  font-weight:700!important;
+}
+.rk-post-read-two-col p:last-child{margin-bottom:0!important;}
+.rk-post-read-next{margin-bottom:0!important;background:linear-gradient(145deg,rgba(176,138,53,.08),rgba(255,255,255,.70))!important;border-color:rgba(176,138,53,.14)!important;}
+
+/* Replace duplicate review stack with a calm deeper-review card. */
+.rk-deeper-review-card{
+  border-radius:24px!important;
+  padding:15px!important;
+  margin:0 0 14px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F7F0E5)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 8px 24px rgba(26,20,16,.04),inset 0 1px 0 rgba(255,255,255,.75)!important;
+}
+.rk-deeper-review-card strong{
+  display:block!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:17px!important;
+  line-height:1.12!important;
+  letter-spacing:-.3px!important;
+  color:#1A1410!important;
+  margin-bottom:6px!important;
+}
+.rk-deeper-review-card p{
+  margin:0!important;
+  font-size:12px!important;
+  line-height:1.48!important;
+  color:#6B6157!important;
+  font-weight:650!important;
+}
+.rk-deeper-review-actions{
+  display:grid!important;
+  grid-template-columns:.85fr 1.15fr!important;
+  gap:8px!important;
+  margin-top:12px!important;
+}
+.rk-deeper-review-actions button{
+  min-height:43px!important;
+  border-radius:15px!important;
+  border:1px solid rgba(26,20,16,.10)!important;
+  background:linear-gradient(180deg,#F2EBDD,#E9E0CF)!important;
+  color:#1A1410!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:12.5px!important;
+  font-weight:850!important;
+  cursor:pointer!important;
+}
+.rk-deeper-review-actions button:last-child{
+  background:linear-gradient(135deg,#176B42,#0F5432)!important;
+  color:#FFFDF8!important;
+  border-color:rgba(255,255,255,.16)!important;
+}
+.rk-deeper-review-notes{
+  margin-top:10px!important;
+  padding:10px 11px!important;
+  border-radius:15px!important;
+  background:rgba(255,255,255,.60)!important;
+  border:1px solid rgba(26,20,16,.07)!important;
+}
+.rk-deeper-review-notes p + p{margin-top:7px!important;}
+.rk-deeper-review-notes b{color:#1A1410!important;}
+
+/* Make full rack review feel closer to the scorecard surface. */
+.rk-coach-review-page{
+  background:radial-gradient(circle at 50% -70px,rgba(255,255,255,.70),transparent 235px),linear-gradient(180deg,#F8F4EE 0%,#F5EFE5 100%)!important;
+}
+.rk-coach-review-page .rk-rack-review-back-v90{
+  min-height:46px!important;
+  border-radius:16px!important;
+  font-size:13px!important;
+}
+.rk-coach-review-page .rk-section-hairline,
+.rk-coach-review-page [class*="Divider"]{
+  opacity:.82!important;
+}
+
+@media(max-width:430px){
+  .rk-pg{padding-left:15px!important;padding-right:15px!important;}
+  .rk-home-landing-flow{gap:19px!important;}
+  .rk-room-live-v6,
+  .rk-room-live-v17,
+  .rk-room-live-v19{padding:13px!important;}
+  .rk-room-live-v17-table{
+    margin-left:-6px!important;
+    margin-right:-6px!important;
+    width:calc(100% + 12px)!important;
+    padding:10px!important;
+  }
+  .rk-room-live-v17-row{padding:9px 9px!important;}
+  .rk-room-live-v17-actions{margin-left:-2px!important;margin-right:-2px!important;}
+  .rk-post-read-head{align-items:flex-start!important;}
+  .rk-post-read-head h3{font-size:20px!important;}
+  .rk-post-read-head em{max-width:104px!important;font-size:9.5px!important;}
+  .rk-post-read-path strong{font-size:17px!important;}
+  .rk-post-read-two-col{grid-template-columns:1fr!important;}
+  .rk-deeper-review-actions{grid-template-columns:1fr!important;}
+  .rk-game-flow-title,
+  .rk-game-start-instruction h2{font-size:17px!important;}
+}
+
+@media(max-width:360px){
+  .rk-pg{padding-left:13px!important;padding-right:13px!important;}
+  .rk-home-landing-flow{gap:17px!important;}
+  .rk-room-live-v17-table{margin-left:-7px!important;margin-right:-7px!important;width:calc(100% + 14px)!important;}
+  .rk-post-read-card,
+  .rk-deeper-review-card{padding:13px!important;border-radius:22px!important;}
+  .rk-post-read-head{display:block!important;}
+  .rk-post-read-head em{display:inline-flex!important;margin-top:8px!important;max-width:100%!important;}
+}
