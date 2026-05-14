@@ -2561,96 +2561,13 @@ function iqTiming(totalTime,roundCount,passLog){
 }
 
 const IQ_TIERS=[
-  {
-    min:95,max:100,range:"95-100",level:"Mahjong Master",color:C.jade,bg:C.jade+"12",
-    notes:[
-      "You saw everything. Clean reads and total control.",
-      "Elite Charleston. You dictated the rack from start to finish.",
-      "Nothing got past you, perfect instincts today."
-    ]
-  },
-  {
-    min:90,max:94,range:"90-94",level:"Table Controller",color:C.jade,bg:C.jade+"10",
-    notes:[
-      "You controlled the flow of the Charleston.",
-      "Strong reads with confident direction throughout.",
-      "You stayed ahead of the rack all game."
-    ]
-  },
-  {
-    min:85,max:89,range:"85-89",level:"Sharp Player",color:C.jade,bg:C.jade+"08",
-    notes:[
-      "Strong reads with confident passing.",
-      "Clean Charleston with one small edge to unlock.",
-      "You kept strong options alive throughout."
-    ]
-  },
-  {
-    min:80,max:84,range:"80-84",level:"Confident Reader",color:C.jade,bg:C.jade+"06",
-    notes:[
-      "You played with confidence and direction.",
-      "Good instincts, now tighten a few passes.",
-      "You saw the board clearly most of the way."
-    ]
-  },
-  {
-    min:75,max:79,range:"75-79",level:"Table Ready",color:"#2460A8",bg:"#2460A810",
-    notes:[
-      "You’re ready for the table, just refine execution.",
-      "Good instincts with room to sharpen.",
-      "Solid direction throughout the Charleston."
-    ]
-  },
-  {
-    min:70,max:74,range:"70-74",level:"Steady Player",color:"#2460A8",bg:"#2460A808",
-    notes:[
-      "You stayed steady with improving reads.",
-      "A few cleaner decisions unlock more.",
-      "You’re building strong habits."
-    ]
-  },
-  {
-    min:65,max:69,range:"65-69",level:"Finding Your Flow",color:C.gold,bg:C.gold+"10",
-    notes:[
-      "Your instincts are forming, trust them earlier.",
-      "You had strong ideas, commit with more confidence.",
-      "You’re starting to see the shape."
-    ]
-  },
-  {
-    min:60,max:64,range:"60-64",level:"Building Rhythm",color:C.gold,bg:C.gold+"08",
-    notes:[
-      "You’re finding rhythm, stay flexible a bit longer.",
-      "The reads are coming together.",
-      "You’re close to cleaner passing."
-    ]
-  },
-  {
-    min:55,max:59,range:"55-59",level:"Reading the Rack",color:C.gold,bg:C.gold+"06",
-    notes:[
-      "You’re starting to read the rack better.",
-      "Try narrowing your direction earlier.",
-      "The instincts are building."
-    ]
-  },
-  {
-    min:50,max:54,range:"50-54",level:"Warming Up",color:C.cinn,bg:C.cinn+"10",
-    notes:[
-      "You’re getting into the flow of the Charleston.",
-      "Focus on simplifying early decisions.",
-      "You’re building your base."
-    ]
-  },
-  {
-    min:0,max:49,range:"<50",level:"Feeling the Rack",color:C.cinn,bg:C.cinn+"08",
-    notes:[
-      "Start by picking a direction early.",
-      "Let the rack guide your decisions.",
-      "Try not to hold every option."
-    ]
-  }
+  {min:85,max:100,range:"85-100",level:"Excellent Charleston",color:C.gold,bg:C.gold+"12",notes:["Excellent Charleston. You have a clear direction, real tile depth, and enough acceleration to make the table chase you."]},
+  {min:75,max:84,range:"75-84",level:"Strong Charleston",color:C.jade,bg:C.jade+"10",notes:["Strong Charleston. You have a believable lane and enough useful tiles to keep building."]},
+  {min:65,max:74,range:"65-74",level:"Solid but still flexible",color:"#2460A8",bg:"#2460A810",notes:["Solid but still flexible. The rack has a real idea, but the next few turns still matter."]},
+  {min:50,max:64,range:"50-64",level:"Playable but unclear",color:C.gold,bg:C.gold+"10",notes:["Playable but unclear. There is life here, but the rack needs cleaner shape before you lock in."]},
+  {min:35,max:49,range:"35-49",level:"Thin rack",color:C.cinn,bg:C.cinn+"10",notes:["Thin rack. The rack has a few clues, but not enough structure yet."]},
+  {min:0,max:34,range:"<35",level:"Difficult rack",color:C.cinn,bg:C.cinn+"08",notes:["Difficult rack. Protect pairs, reduce noise, and do not force a thin hand."]}
 ];
-
 const IQ_STYLES=[
   {
     key:"aggressive",name:"Aggressive ⚡",
@@ -3591,12 +3508,126 @@ function rkExpertDeadnessRisk({struct,topSection,liveDirections}){
   return{score:rkClamp(risk,0,100),reasons:reasons.slice(0,4)};
 }
 function rkExpertScoreBand(score){
-  if(score<20)return "Dead rack";
-  if(score<40)return "Weak rack";
-  if(score<55)return "Playable, still fragile";
-  if(score<70)return "Strong Charleston";
-  if(score<85)return "Excellent rack";
-  return "Monster Charleston";
+  const band=rkLaunchScoreBand(score);
+  return band.label;
+}
+
+function rkLaunchScoreBand(score){
+  const n=Math.max(0,Math.min(100,Math.round(Number(score)||0)));
+  if(n>=85)return{label:"Excellent Charleston",short:"Excellent",tone:"You have a clear direction, real tile depth, and enough acceleration to make the table chase you."};
+  if(n>=75)return{label:"Strong Charleston",short:"Strong",tone:"You have a believable lane and enough useful tiles to keep building."};
+  if(n>=65)return{label:"Solid but still flexible",short:"Solid",tone:"The rack has a real idea, but the next few turns still matter."};
+  if(n>=50)return{label:"Playable but unclear",short:"Playable",tone:"There is life here, but the rack needs cleaner shape before you lock in."};
+  if(n>=35)return{label:"Thin rack",short:"Thin",tone:"The rack has a few clues, but not enough structure yet."};
+  return{label:"Difficult rack",short:"Difficult",tone:"This one needs patience. Protect pairs, reduce noise, and do not force a thin hand."};
+}
+
+function rkQualFitLabel(pct,extra=""){
+  const n=Math.max(0,Math.min(100,Math.round(Number(pct)||0)));
+  let label=n>=78?"Strong fit":n>=58?"Moderate fit":n>=38?"Thin fit":n>=24?"Backup only":"Not recommended";
+  return extra?`${label}, ${extra}`:label;
+}
+
+function rkUsefulTileCountForSection(rack=[],sectionId){
+  const meta=SECTION_META[sectionId]||{};
+  return (rack||[]).filter(t=>{
+    if(!t)return false;
+    if(t.t==="j")return sectionId!=="sp";
+    if(t.t==="f")return !!meta.wantsFlowers||["cr","aln","q","sp"].includes(sectionId);
+    if((meta.strongTypes||[]).includes(t.t))return true;
+    if(t.t==="s"&&(meta.strongNums||[]).includes(t.n))return true;
+    if(sectionId==="cr"&&t.t==="s")return true;
+    if(sectionId==="aln"&&t.t==="s")return true;
+    if(sectionId==="q"&&(t.t==="s"||t.t==="d"))return true;
+    if(sectionId==="2026"&&t.t==="d"&&t.v==="Soap")return true;
+    return false;
+  }).length;
+}
+
+function rkScoreSanityCap({score,strategicRead,nearWin}){
+  let cap=96;
+  const sr=strategicRead||{};
+  const factors=sr.expertFactors||sr.expertRead?.factors||{};
+  const reads=sr.sectionReads||[];
+  const top=reads[0]||sr.topSection||null;
+  const second=reads[1]||null;
+  const topScore=Number(top?.score||0);
+  const gap=top&&second?Math.max(0,Number(top.score||0)-Number(second.score||0)):topScore;
+  const tileStructure=sr.tileStructure||{};
+  const grouped=(tileStructure.pairs?.length||0)+(tileStructure.pungs?.length||0)+(tileStructure.kongs?.length||0);
+  const isolated=Number(tileStructure.isolatedCount||0);
+  const efficiency=Number(factors.efficiency||0);
+  const acceleration=Number(factors.acceleration||0);
+  const deadness=Number(factors.deadnessRisk||0);
+  const liveCount=(sr.liveSections||[]).length;
+  const clearDirection=topScore>=56&&gap>=8;
+  const realShape=grouped>=2||efficiency>=62||acceleration>=66;
+
+  if(topScore<38)cap=Math.min(cap,48);
+  else if(topScore<48)cap=Math.min(cap,58);
+  else if(topScore<56)cap=Math.min(cap,68);
+
+  if(!clearDirection)cap=Math.min(cap,74);
+  if(!realShape)cap=Math.min(cap,70);
+  if(grouped===0&&isolated>=4)cap=Math.min(cap,58);
+  if(isolated>=6)cap=Math.min(cap,56);
+  else if(isolated>=5)cap=Math.min(cap,64);
+  if(liveCount>=4&&gap<10)cap=Math.min(cap,68);
+  if(deadness>=70)cap=Math.min(cap,52);
+  else if(deadness>=58)cap=Math.min(cap,60);
+
+  if(score>=80&&!(clearDirection&&realShape&&efficiency>=58&&deadness<48)){
+    cap=Math.min(cap,79);
+  }
+  if(score>=85&&!(clearDirection&&realShape&&efficiency>=70&&acceleration>=68&&deadness<36)){
+    cap=Math.min(cap,84);
+  }
+
+  if(nearWin){
+    if(nearWin.state==="oneAway")cap=Math.max(cap,90);
+    else if(nearWin.state==="execution")cap=Math.max(cap,86);
+    else cap=Math.max(cap,82);
+  }
+
+  const adjusted=Math.max(0,Math.min(100,Math.round(Math.min(Number(score)||0,cap))));
+  const wasCapped=adjusted<Math.round(Number(score)||0);
+  return{score:adjusted,wasCapped,cap:Math.round(cap),clearDirection,realShape,isolated,grouped,deadness,efficiency,acceleration,topScore,gap};
+}
+
+function rkScorecardTrustRead(iq={},hand=[]){
+  const score=Number(iq.totalScore||0);
+  const band=rkLaunchScoreBand(score);
+  const sections=iq.strategicRead?.sectionReads||[];
+  const top=sections[0]||iq.strategicRead?.topSection||null;
+  const second=sections[1]||null;
+  const third=sections[2]||null;
+  const best=iq.bestDirection||top?.name||iq.strategicRead?.bestDirection||"Still watching";
+  const backup=second?.name||iq.liveSections?.[1]?.name||"Keep a flexible backup";
+  const avoid=third?.name&&Number(third.score||0)<Math.max(42,(Number(top?.score||0)-18))?third.name:(iq.expertRead?.deadness?.reasons?.[0]||"loose tiles that do not feed your best lane");
+  const useful=top?.id?rkUsefulTileCountForSection(hand,top.id):0;
+  const bestFit=top?rkQualFitLabel(top.score||0,useful?`${useful} useful tiles`:""):"Keep watching";
+  const backupFit=second?rkQualFitLabel(second.score||0):"Backup only";
+  const helped=[];
+  const heldBack=[];
+  const factors=iq.expertFactors||iq.expertRead?.factors||{};
+  const ts=iq.strategicRead?.tileStructure||{};
+
+  if((ts.pairs?.length||0)>=2)helped.push(`You kept ${ts.pairs.length} useful pairs.`);
+  if((ts.pungs?.length||0)>0)helped.push(`You had natural group depth to build from.`);
+  if(Number(factors.charlestonDiscipline||0)>=65)helped.push("Your passes cleared noise without cutting too deeply into the best lane.");
+  if(Number(factors.efficiency||0)>=62)helped.push("Your tiles compressed toward a believable shape.");
+  if(!helped.length)helped.push("You kept at least one lane alive instead of forcing a dead hand.");
+
+  if((ts.isolatedCount||0)>=4)heldBack.push(`${ts.isolatedCount} isolated tiles made the rack harder to trust.`);
+  if(Number(factors.deadnessRisk||0)>=55)heldBack.push("Deadness risk was still high, too much depended on exact future tiles.");
+  if(Number(factors.efficiency||0)<52)heldBack.push("The rack needed cleaner pair or group structure.");
+  if(iq.scoreSanity?.wasCapped)heldBack.push("The score was kept conservative because the rack still looked scattered.");
+  if(!heldBack.length)heldBack.push("The rack still needed one more clean draw before becoming a true commitment.");
+
+  const expertRead=iq.expertRead?.summary||iq.coachingInsight||iq.directionExplanation||band.tone;
+  const nextMove=iq.tryNextTime||iq.coachNote||iq.expertRead?.timingLine||"Protect the best lane, keep the backup alive, and pass isolated tiles first.";
+
+  return{band,best,backup,avoid,bestFit,backupFit,expertRead,helped:helped.slice(0,3),heldBack:heldBack.slice(0,3),nextMove};
 }
 function rkExpertCharlestonCalibration({struct,sectionReads=[],liveDirections=[],shapeScore=0,tileEfficiency=0,commitmentClarity=0,flexibility=0,growthPotential=0,momentumStrength=0,passedTilesByRound=[],sectionId}){
   const top=sectionReads[0]||null;
@@ -3932,6 +3963,8 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
     timingScore=Math.max(timingScore,nearWin.state==="oneAway"?10:nearWin.state==="execution"?9:8);
     directionExplanation=nearWin.copy;
   }
+  const scoreSanity=rkScoreSanityCap({score:totalScore,strategicRead,nearWin});
+  totalScore=scoreSanity.score;
   const{level,levelExplanation,tier}=iqScoreLevel(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
   const style=nearWin?{name:nearWin.label,note:nearWin.copy,emoji:nearWin.state==="oneAway"?"🎯":nearWin.state==="execution"?"🔒":"🧭"}:getIQStyle(totalScore,directionScore,tileStrengthScore,passQualityScore,timingScore);
 
@@ -3974,6 +4007,7 @@ function calculateCharlestonIQ(gameState,puzzleId,isDaily,dayNum){
     charlestonRuleOk:charlestonRuleAudit?.charlestonRuleOk!==false&&exactAudit?.charlestonRuleOk!==false,
     jokerRuleOk:charlestonRuleAudit?.jokerRuleOk!==false&&exactAudit?.jokerRuleOk!==false,
     strategicRead,
+    scoreSanity,
     expertRead:strategicRead?.expertRead,
     expertFactors:strategicRead?.expertFactors,
     passReview:strategicRead?.passReview,
@@ -4004,12 +4038,14 @@ function adv(hand,cid){
     if(ch.id===top.id||ch.score>=top.score*strongThreshold){v="Strong choice";em="💪";}
     else if(ch.score>=top.score*playableThreshold){v="Playable but risky";em="🤔";}
   }
-  const p=ch?(ch.score*100).toFixed(0):"0";
-  const topPct=(top.score*100).toFixed(0);
+  const p=ch?Math.round(ch.score*100):0;
+  const topPct=Math.round(top.score*100);
+  const chosenLabel=rkQualFitLabel(p);
+  const topLabel=rkQualFitLabel(topPct);
   let r;
-  if(v==="Strong choice"){r=`${p}% fit, your tiles aligned well with ${ch?.name}. Solid passing instincts.`;}
-  else if(v==="Playable but risky"){r=`${p}% fit for ${ch?.name}, but your tiles leaned more toward ${top.name} (${topPct}%). A pivot earlier could have paid off.`;}
-  else{r=`Only ${p}% fit for ${ch?.name}. Your tiles were a much better match for ${top.name} (${topPct}%), worth practicing that read.`;}
+  if(v==="Strong choice"){r=`${chosenLabel}. Your tiles aligned well with ${ch?.name}. Solid passing instincts.`;}
+  else if(v==="Playable but risky"){r=`${chosenLabel} for ${ch?.name}, but your tiles leaned more toward ${top.name} (${topLabel}). A pivot earlier could have paid off.`;}
+  else{r=`${chosenLabel} for ${ch?.name}. Your tiles were a cleaner match for ${top.name} (${topLabel}), worth practicing that read.`;}
   return{verdict:v,emoji:em,reason:r,alts,top,chosen:ch};
 }
 
@@ -6980,7 +7016,9 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
           const pct=Math.round((hand.coveragePct??hand.fitScore*100));
           const tone=hand.coveragePlan?rkCoachPathTone(hand.coveragePlan):coverageTone(pct);
           const barColor=tone.color;
-          const verdict=`${tone.label}. ${hand.coachLine||tone.desc}`;
+          const useful=rkUsefulTileCountForSection(finalRack,sectionId);
+          const fitText=rkQualFitLabel(pct,useful?`${useful} useful tiles`:"");
+          const verdict=`${fitText}. ${hand.coachLine||tone.desc}`;
           const verdictColor=tone.color;
 
           // Tile analysis
@@ -7050,7 +7088,7 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
                 </div>
                 {fitVisible?(
                   <div style={{textAlign:"right",flexShrink:0}}>
-                    <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:barColor,lineHeight:1}}>{pct}<span style={{fontSize:10,fontWeight:700,color:C.mut}}>%</span></div>
+                    <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:barColor,lineHeight:1.1,maxWidth:92}}>{rkQualFitLabel(pct)}</div>
                     <div style={{fontSize:9,color:C.mut}}>rack fit</div>
                   </div>
                 ):(
@@ -7300,14 +7338,16 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
   const passEmoji=rkSharePattern(iq);
   const passDots=(iq.passInsights||[]).slice(0,3);
-  const quickRead=(()=>{
-    if(score>=85)return "Great read. Hard to chase.";
-    if(score>=70)return "Clean read. You kept your strongest lane alive.";
-    if(score>=55)return "Good fight. One cleaner pass moves you up.";
-    if(score>=40)return "Scrappy rack. Still alive.";
-    return "Tough rack. Shake it off tomorrow.";
+  const trustRead=rkScorecardTrustRead(iq,hand);
+  const quickRead=(trustRead?.band?.tone)||(()=>{
+    if(score>=85)return "Excellent Charleston. You have a clear direction, real tile depth, and enough acceleration.";
+    if(score>=75)return "Strong Charleston. You kept a believable lane alive.";
+    if(score>=65)return "Solid but still flexible. The next few turns still matter.";
+    if(score>=50)return "Playable but unclear. The rack needs cleaner shape before you lock in.";
+    if(score>=35)return "Thin rack. Protect structure and avoid forcing a thin lane.";
+    return "Difficult rack. Reduce noise and keep the best clues.";
   })();
-  const scoreLabel=score>=85?"Excellent":score>=70?"Strong":score>=55?"Playable":score>=40?"Scrappy":"Tough";
+  const scoreLabel=trustRead?.band?.short||rkLaunchScoreBand(score).short;
   const scoreAccent=score>=85?C.gold:score>=70?C.jade:score>=55?"#2460A8":score>=40?C.gold:C.cinn;
   const shareName=(playerName||"I").trim();
   const shareClubLine=affiliatedClubName
@@ -7443,6 +7483,30 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
         <SortableRack hand={hand}/>
       </div>
+
+      <section className="rk-score-card" style={{borderRadius:22,padding:14,marginBottom:12,background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid rgba(26,20,16,.075)`,boxShadow:"0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)"}} aria-label="Scorecard trust read">
+        <div style={{fontSize:10,letterSpacing:1.6,textTransform:"uppercase",fontWeight:900,color:C.mut,marginBottom:10}}>Post-Charleston read</div>
+        <div style={{display:"grid",gap:10}}>
+          <div><strong style={{fontFamily:F.d,fontSize:18,color:C.ink}}>Best direction: {trustRead.best}</strong><p style={{margin:"5px 0 0",fontSize:12,lineHeight:1.5,color:C.mut,fontWeight:700}}>{trustRead.bestFit}</p></div>
+          <div><strong style={{fontFamily:F.d,fontSize:16,color:C.ink}}>Backup: {trustRead.backup}</strong><p style={{margin:"5px 0 0",fontSize:12,lineHeight:1.5,color:C.mut,fontWeight:700}}>{trustRead.backupFit}</p></div>
+          <div><strong style={{fontFamily:F.d,fontSize:16,color:C.ink}}>Avoid: {trustRead.avoid}</strong><p style={{margin:"5px 0 0",fontSize:12,lineHeight:1.5,color:C.mut,fontWeight:700}}>Do not chase tiles that do not support the best lane or a real backup.</p></div>
+          <div style={{background:"rgba(22,107,66,.06)",border:`1px solid ${C.jade}22`,borderRadius:16,padding:12}}>
+            <div style={{fontSize:9,letterSpacing:1.4,textTransform:"uppercase",fontWeight:900,color:C.jade,marginBottom:5}}>Expert read</div>
+            <p style={{margin:0,fontSize:12,lineHeight:1.55,color:C.ink,fontWeight:750}}>{rkHumanTableCopy(trustRead.expertRead)}</p>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+            <div style={{border:`1px solid ${C.bdr}`,borderRadius:14,padding:10}}>
+              <div style={{fontSize:9,letterSpacing:1.2,textTransform:"uppercase",fontWeight:900,color:C.jade,marginBottom:6}}>What helped</div>
+              {trustRead.helped.map((x,i)=><p key={i} style={{margin:i?"5px 0 0":"0",fontSize:11,lineHeight:1.45,color:C.ink,fontWeight:700}}>✓ {x}</p>)}
+            </div>
+            <div style={{border:`1px solid ${C.bdr}`,borderRadius:14,padding:10}}>
+              <div style={{fontSize:9,letterSpacing:1.2,textTransform:"uppercase",fontWeight:900,color:C.cinn,marginBottom:6}}>What held it back</div>
+              {trustRead.heldBack.map((x,i)=><p key={i} style={{margin:i?"5px 0 0":"0",fontSize:11,lineHeight:1.45,color:C.ink,fontWeight:700}}>• {x}</p>)}
+            </div>
+          </div>
+          <div><strong style={{fontFamily:F.d,fontSize:16,color:C.ink}}>Next move</strong><p style={{margin:"5px 0 0",fontSize:12,lineHeight:1.5,color:C.mut,fontWeight:700}}>{rkHumanTableCopy(trustRead.nextMove)}</p></div>
+        </div>
+      </section>
 
       <div className="rk-score-action-panel-v8" aria-label="Scorecard actions">
         <button onClick={onPractice} className="rk-score-primary-next-v8">Practice another rack →</button>
@@ -7583,7 +7647,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
         <div className="rk-best-path-v9">
           <div className="rk-best-path-v9-top">
             <div className="rk-best-path-v9-kicker">Best path</div>
-            {primPct>0&&<div className="rk-best-path-v9-chip">{primPct}% fit</div>}
+            {primPct>0&&<div className="rk-best-path-v9-chip">{rkQualFitLabel(primPct)}</div>}
           </div>
           <div className="rk-best-path-v9-title">{bestLabel}</div>
           <p className="rk-best-path-v9-copy">This is the cleanest hand direction Rackle found from your final Charleston shape.</p>
