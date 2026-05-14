@@ -2165,3 +2165,18 @@
     margin-top:2px!important;
   }
 }
+
+/* Mobile home gutters: reduce the homepage and live standings padding by 1px per side. */
+@media(max-width:430px){
+  .rk-app > .rk-pg{
+    padding-left:17px!important;
+    padding-right:17px!important;
+  }
+
+  .rk-home-landing-flow .rk-room-live-v6,
+  .rk-home-landing-flow .rk-room-live-v17,
+  .rk-home-landing-flow .rk-room-live-v19{
+    padding-left:15px!important;
+    padding-right:15px!important;
+  }
+}

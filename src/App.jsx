@@ -1,5 +1,5 @@
 import { Analytics } from '@vercel/analytics/react';
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import './rackle.css';
 
 // Rackle V1 · Founding Club Beta
@@ -658,10 +658,6 @@ function dragons(rack,v){return v?countTile(rack,t=>t.t==="d"&&t.v===v):countTil
 // For scoring: matchingDragon(r,suit) = count of dragons that legally match
 //              oppDragon(r,suit)      = count of dragons that are legally opposite
 function matchingDragon(rack,suit){
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
   // American Mahjong dragon matching: Bam→Green, Crak→Red, Dot→Soap.
   // Soap is also the printed zero for 2026, but it should not act as a
   // matching dragon for Bam/Crak lines.
@@ -673,37 +669,6 @@ function oppDragon(rack,suit){
   if(suit==="bam") return dragons(rack,"Red")+dragons(rack,"Soap");
   if(suit==="crak")return dragons(rack,"Grn")+dragons(rack,"Soap");
   return dragons(rack,"Red")+dragons(rack,"Grn");
-=======
-  if(suit==="bam") return dragons(rack,"Grn")+dragons(rack,"Soap");
-  if(suit==="crak")return dragons(rack,"Red")+dragons(rack,"Soap");
-  return dragons(rack,"Soap"); // dot match = Soap only
-}
-function oppDragon(rack,suit){
-=======
-  if(suit==="bam") return dragons(rack,"Grn")+dragons(rack,"Soap");
-  if(suit==="crak")return dragons(rack,"Red")+dragons(rack,"Soap");
-  return dragons(rack,"Soap"); // dot match = Soap only
-}
-function oppDragon(rack,suit){
->>>>>>> theirs
-=======
-  if(suit==="bam") return dragons(rack,"Grn")+dragons(rack,"Soap");
-  if(suit==="crak")return dragons(rack,"Red")+dragons(rack,"Soap");
-  return dragons(rack,"Soap"); // dot match = Soap only
-}
-function oppDragon(rack,suit){
->>>>>>> theirs
-=======
-  if(suit==="bam") return dragons(rack,"Grn")+dragons(rack,"Soap");
-  if(suit==="crak")return dragons(rack,"Red")+dragons(rack,"Soap");
-  return dragons(rack,"Soap"); // dot match = Soap only
-}
-function oppDragon(rack,suit){
->>>>>>> theirs
-  if(suit==="bam") return dragons(rack,"Red");
-  if(suit==="crak")return dragons(rack,"Grn");
-  return dragons(rack,"Red")+dragons(rack,"Grn"); // dot opp = Red or Grn
->>>>>>> theirs
 }
 
 // Score how many "slots" of a group a rack can fill (with joker assist for pungs/kongs)
@@ -6782,12 +6747,12 @@ function MahjongIdentityCard({iq, chosenSec, passLog, finalRack}){
 }
 
 // IQ HERO, shared dark jade gradient hero card used in scorecard + home
-function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHome=false}){
-  if(!iq)return null;
-  iq=withIQStyle(iq);
+function IQHero({iq:rawIq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHome=false}){
+  const iq=useMemo(()=>rawIq?withIQStyle(rawIq):null,[rawIq]);
   const [displayScore,setDisplayScore]=useState(0);
   const [isPB,setIsPB]=useState(false);
   useEffect(()=>{
+    if(!iq)return;
     const hist=getHist().filter(e=>e.iqScore!=null);
     const prevBest=hist.length>1?Math.max(...hist.slice(0,-1).map(e=>e.iqScore)):0;
     if(iq.totalScore>prevBest&&hist.length>0)setIsPB(true);
@@ -6805,7 +6770,8 @@ function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHom
       if(step>=steps){clearInterval(timer);setDisplayScore(target);}
     },interval);
     return()=>clearInterval(timer);
-  },[iq.totalScore]);
+  },[iq]);
+  if(!iq)return null;
 
   const bestFitId=allSections?[...allSections].sort((a,b)=>b.score-a.score)[0]?.id:null;
   const matched=chosenSec&&bestFitId&&chosenSec===bestFitId;
@@ -7259,7 +7225,6 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const [globalEntries,setGlobalEntries]=useState([]);
   const [clubEntries,setClubEntries]=useState([]);
   const [showDetails,setShowDetails]=useState(false);
-  if(!iq)return null;
 
   useEffect(()=>{
     fetchDailyStats().then(s=>{if(s)setDailyStats(s);}).catch(()=>{});
@@ -7268,7 +7233,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     if(clubCode)fetchLBEntries(clubCode).then(rows=>{if(rows)setClubEntries(rows);}).catch(()=>{});
   },[]);
 
-  const score=Number(iq.totalScore||0);
+  const score=Number(iq?.totalScore||0);
   const [animatedScore,setAnimatedScore]=useState(0);
   useEffect(()=>{
     const target=Number(score||0);
@@ -7288,6 +7253,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     },interval);
     return()=>clearInterval(timer);
   },[score]);
+  if(!iq)return null;
   const time=Number(resultTime||iq.timeSecs||iq.time_secs||iq.totalTime||iq.time||0);
   const timeLabel=time?fT(Math.round(time)):"—";
   const clubCode=getClubCode();
@@ -7523,17 +7489,16 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
 // ─── PRACTICE SCORECARD, collapsible sections, matching daily vibe ───────────
 function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHome,onDealAgain}){
-  if(!iq)return null;
   const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
-  const scoredHandLabel=iq.scoredHandLabel||null;
+  const scoredHandLabel=iq?.scoredHandLabel||null;
   const scoredHandObj=scoredHandLabel?HAND_CATALOG.find(h=>h.sec===chosenSec&&h.label===scoredHandLabel):null;
   const sortedSecsP=allSections?[...allSections].sort((a,b)=>b.score-a.score):[];
   const [openSec,setOpenSec]=useState({hand:true,alts:false,passes:false});
   const toggle=(k)=>setOpenSec(s=>({...s,[k]:!s[k]}));
-  const passDots=(iq.passInsights||[]).map(p=>({strong:"🟢",weak:"🔴",mixed:"🟡",neutral:"⚪"}[p.quality]||"⚪")).join("");
-  const styled=withIQStyle(iq);
-  const level=iq.level||styled.level||"Rack read";
-  const score=Math.round(iq.totalScore||iq.rackleIQScore||iq.score||0);
+  const passDots=(iq?.passInsights||[]).map(p=>({strong:"🟢",weak:"🔴",mixed:"🟡",neutral:"⚪"}[p.quality]||"⚪")).join("");
+  const styled=iq?withIQStyle(iq):null;
+  const level=iq?.level||styled?.level||"Rack read";
+  const score=Math.round(iq?.totalScore||iq?.rackleIQScore||iq?.score||0);
   const [animatedScore,setAnimatedScore]=useState(0);
   useEffect(()=>{
     const target=Number(score||0);
@@ -7552,6 +7517,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
     },interval);
     return()=>clearInterval(timer);
   },[score]);
+  if(!iq)return null;
   const bestLabel=scoredHandObj?.labelForDisplay||scoredHandObj?.variantLabel||scoredHandObj?.label||iq.bestHandLabel||iq.strategicRead?.bestDirection||"Keep reading the rack";
   const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
 
@@ -7696,7 +7662,6 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
 
   const barCol=pct>=80?C.jade:pct>=55?C.gold:C.cinn;
 
-<<<<<<< ours
   // Render an individual tile slot
   const SlotTile=({status,slotIdx})=>{
     const{g,cc,totalHeld,need,gap,passedMatching,passedRounds,resolvedSuit}=status;
@@ -7704,24 +7669,6 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
     const isFilled=slotIdx<totalHeld;
     const isJoker=slotIdx>=status.naturalHeld&&slotIdx<totalHeld; // joker-filled slot
     const wasPassed=!isFilled&&passedMatching.length>0;
-=======
-  const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
-  const chosenHandObj=chosenHand?HAND_CATALOG.find(h=>h.sec===chosenSec&&h.label===chosenHand):null;
-  const sortedSecs=allSections?[...allSections].sort((a,b)=>b.score-a.score):[];
-  const bestFitSec=sortedSecs[0];
-  const chosenFit=chosenSec&&allSections?allSections.find(s=>s.id===chosenSec):null;
-  const chosenPct=chosenFit?Math.round(chosenFit.score*100):null;
-  const bestPct=bestFitSec?Math.round(bestFitSec.score*100):null;
-  const sectionMatch=chosenSec===bestFitSec?.id;
-  const trueHands=(hand&&hand.length>0?HAND_CATALOG
-    .map(h=>({...h,fit:h.fit(hand)}))
-    .filter(h=>h.fit>=0.8)
-    .sort((a,b)=>b.fit-a.fit)
-    .slice(0,8):[]);
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
->>>>>>> theirs
 
     const col=isFilled
       ?(cc?CARD_COL[cc]||CARD_COL.K:g.isFlower?CARD_COL.F:g.isSoap?CARD_COL.S:g.isWind?CARD_COL.W:g.isDragon?CARD_COL.D:CARD_COL.K)
@@ -7741,12 +7688,6 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
     const sub=isFilled
       ?(isJoker?"Joker":resolvedSuit?RACKLE_SUIT_LABELS[resolvedSuit]:cc==="G"?"Bam":cc==="R"?"Crak":cc==="K"?"Any":g.isFlower?"✓":g.isWind?"✓":g.isDragon?"✓":"✓")
       :wasPassed?`P${(passedRounds[0]||"").charAt(0)||"?"}`:",";
-=======
->>>>>>> theirs
-=======
->>>>>>> theirs
-=======
->>>>>>> theirs
 
     return(
       <div style={{
@@ -7834,7 +7775,6 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
         </div>
       </div>
 
-<<<<<<< ours
       {/* Gap analysis */}
       <div style={{padding:"10px 14px"}}>
         <p style={{fontSize:12,color:C.ink,lineHeight:1.55,margin:"0 0 6px",fontWeight:700}}>{gapSentence}</p>
@@ -7842,147 +7782,6 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
           <div style={{display:"flex",alignItems:"flex-start",gap:8,background:"#FEF0F0",borderRadius:8,padding:"8px 10px",marginTop:6,border:`1px solid ${C.cinn}20`}}>
             <span style={{fontSize:14,flexShrink:0}}>⚠️</span>
             <p style={{fontSize:11,color:C.ink,margin:0,lineHeight:1.55}}><strong>Passed away:</strong> {critPassSentence}</p>
-=======
-      {/* True/possible hands from full 2026 catalog */}
-      {hand&&hand.length>0&&<div style={{...S.card,marginBottom:10,padding:"12px 14px"}}>
-        <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>TRUE POSSIBLE HANDS</div>
-        <div style={{fontSize:11,color:C.mut,lineHeight:1.55,marginBottom:8}}>
-          Ranked across every 2026 NMJL hand. Higher % means your final rack is closer to the exact hand pattern (including suit/dragon constraints in the hand scorer).
-        </div>
-        {trueHands.length>0?<div style={{display:"flex",flexDirection:"column",gap:6}}>
-          {trueHands.map((h,i)=>{
-            const sec=SECS.find(s=>s.id===h.sec);
-            const pct=Math.round(h.fit*100);
-            const col=pct>=90?C.jade:pct>=80?C.gold:C.cinn;
-            return(
-              <div key={`${h.sec}-${h.label}-${i}`} style={{border:`1px solid ${C.bdr}`,borderRadius:10,padding:"8px 10px",background:"#fff"}}>
-                <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",gap:10}}>
-                  <div style={{fontSize:11,fontWeight:700,color:C.ink,lineHeight:1.35}}>{h.label}</div>
-                  <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:col,flexShrink:0}}>{pct}%</div>
-                </div>
-                <div style={{fontSize:10,color:C.mut,marginTop:2}}>
-                  {sec?.icon} {sec?.name} · {h.concealed?"Concealed":"Open"} · {h.value} pts
-                </div>
-              </div>
-            );
-          })}
-        </div>:<div style={{fontSize:11,color:C.mut,lineHeight:1.5}}>No high-confidence matches yet (80%+). You likely needed an earlier section pivot.</div>}
-      </div>}
-
-      {/* True/possible hands from full 2026 catalog */}
-      {hand&&hand.length>0&&<div style={{...S.card,marginBottom:10,padding:"12px 14px"}}>
-        <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>TRUE POSSIBLE HANDS</div>
-        <div style={{fontSize:11,color:C.mut,lineHeight:1.55,marginBottom:8}}>
-          Ranked across every 2026 NMJL hand. Higher % means your final rack is closer to the exact hand pattern (including suit/dragon constraints in the hand scorer).
-        </div>
-        {trueHands.length>0?<div style={{display:"flex",flexDirection:"column",gap:6}}>
-          {trueHands.map((h,i)=>{
-            const sec=SECS.find(s=>s.id===h.sec);
-            const pct=Math.round(h.fit*100);
-            const col=pct>=90?C.jade:pct>=80?C.gold:C.cinn;
-            return(
-              <div key={`${h.sec}-${h.label}-${i}`} style={{border:`1px solid ${C.bdr}`,borderRadius:10,padding:"8px 10px",background:"#fff"}}>
-                <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",gap:10}}>
-                  <div style={{fontSize:11,fontWeight:700,color:C.ink,lineHeight:1.35}}>{h.label}</div>
-                  <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:col,flexShrink:0}}>{pct}%</div>
-                </div>
-                <div style={{fontSize:10,color:C.mut,marginTop:2}}>
-                  {sec?.icon} {sec?.name} · {h.concealed?"Concealed":"Open"} · {h.value} pts
-                </div>
-              </div>
-            );
-          })}
-        </div>:<div style={{fontSize:11,color:C.mut,lineHeight:1.5}}>No high-confidence matches yet (80%+). You likely needed an earlier section pivot.</div>}
-      </div>}
-
-      {/* True/possible hands from full 2026 catalog */}
-      {hand&&hand.length>0&&<div style={{...S.card,marginBottom:10,padding:"12px 14px"}}>
-        <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>TRUE POSSIBLE HANDS</div>
-        <div style={{fontSize:11,color:C.mut,lineHeight:1.55,marginBottom:8}}>
-          Ranked across every 2026 NMJL hand. Higher % means your final rack is closer to the exact hand pattern (including suit/dragon constraints in the hand scorer).
-        </div>
-        {trueHands.length>0?<div style={{display:"flex",flexDirection:"column",gap:6}}>
-          {trueHands.map((h,i)=>{
-            const sec=SECS.find(s=>s.id===h.sec);
-            const pct=Math.round(h.fit*100);
-            const col=pct>=90?C.jade:pct>=80?C.gold:C.cinn;
-            return(
-              <div key={`${h.sec}-${h.label}-${i}`} style={{border:`1px solid ${C.bdr}`,borderRadius:10,padding:"8px 10px",background:"#fff"}}>
-                <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",gap:10}}>
-                  <div style={{fontSize:11,fontWeight:700,color:C.ink,lineHeight:1.35}}>{h.label}</div>
-                  <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:col,flexShrink:0}}>{pct}%</div>
-                </div>
-                <div style={{fontSize:10,color:C.mut,marginTop:2}}>
-                  {sec?.icon} {sec?.name} · {h.concealed?"Concealed":"Open"} · {h.value} pts
-                </div>
-              </div>
-            );
-          })}
-        </div>:<div style={{fontSize:11,color:C.mut,lineHeight:1.5}}>No high-confidence matches yet (80%+). You likely needed an earlier section pivot.</div>}
-      </div>}
-
-      {/* True/possible hands from full 2026 catalog */}
-      {hand&&hand.length>0&&<div style={{...S.card,marginBottom:10,padding:"12px 14px"}}>
-        <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:8}}>TRUE POSSIBLE HANDS</div>
-        <div style={{fontSize:11,color:C.mut,lineHeight:1.55,marginBottom:8}}>
-          Ranked across every 2026 NMJL hand. Higher % means your final rack is closer to the exact hand pattern (including suit/dragon constraints in the hand scorer).
-        </div>
-        {trueHands.length>0?<div style={{display:"flex",flexDirection:"column",gap:6}}>
-          {trueHands.map((h,i)=>{
-            const sec=SECS.find(s=>s.id===h.sec);
-            const pct=Math.round(h.fit*100);
-            const col=pct>=90?C.jade:pct>=80?C.gold:C.cinn;
-            return(
-              <div key={`${h.sec}-${h.label}-${i}`} style={{border:`1px solid ${C.bdr}`,borderRadius:10,padding:"8px 10px",background:"#fff"}}>
-                <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",gap:10}}>
-                  <div style={{fontSize:11,fontWeight:700,color:C.ink,lineHeight:1.35}}>{h.label}</div>
-                  <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:col,flexShrink:0}}>{pct}%</div>
-                </div>
-                <div style={{fontSize:10,color:C.mut,marginTop:2}}>
-                  {sec?.icon} {sec?.name} · {h.concealed?"Concealed":"Open"} · {h.value} pts
-                </div>
-              </div>
-            );
-          })}
-        </div>:<div style={{fontSize:11,color:C.mut,lineHeight:1.5}}>No high-confidence matches yet (80%+). You likely needed an earlier section pivot.</div>}
-      </div>}
-
-      {/* All sections — collapsed by default */}
-      {allSections&&allSections.length>0&&(()=>{
-        const topSec=[...allSections].sort((a,b)=>b.score-a.score)[0];
-        return(
-          <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden"}}>
-            <button onClick={()=>setSfOpen(o=>!o)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"11px 14px",background:"#fff",border:"none",cursor:"pointer",textAlign:"left",borderBottom:sfOpen?`1px solid ${C.bdr}`:"none"}}>
-              <div style={{display:"flex",alignItems:"center",gap:8}}>
-                <span style={{fontSize:18}}>{topSec?.icon||"📊"}</span>
-                <div>
-                  <div style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>ALL SECTIONS RANKED</div>
-                  <div style={{fontSize:12,fontWeight:700,color:C.ink,marginTop:1}}>Section fit breakdown</div>
-                </div>
-              </div>
-              <span style={{fontSize:12,color:C.mut}}>{sfOpen?"▾":"▸"}</span>
-            </button>
-            {sfOpen&&<div style={{padding:"10px 14px"}} className="rk-in">
-              {allSections.slice(0,5).map((s,i)=>{
-                const isChosen=s.id===chosenSec;const isTop=i===0;
-                const pct=Math.round(s.score*100);
-                return(
-                  <div key={s.id} style={{display:"flex",alignItems:"center",gap:8,marginBottom:i<4?8:0}}>
-                    <span style={{fontSize:13,flexShrink:0}}>{s.icon}</span>
-                    <div style={{flex:1,minWidth:0}}>
-                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
-                        <span style={{fontSize:11,fontWeight:isChosen?700:500,color:isChosen?C.ink:C.mut}}>{s.name}{isChosen?" · your pick":""}{isTop&&!isChosen?" · best fit":""}</span>
-                        <span style={{fontSize:11,fontWeight:700,color:isChosen?C.jade:C.mut,fontFamily:F.d}}>{pct}%</span>
-                      </div>
-                      <div style={{height:4,borderRadius:2,background:C.bdr,overflow:"hidden"}}>
-                        <div style={{height:"100%",borderRadius:2,width:`${pct}%`,background:isChosen?C.jade:isTop&&!isChosen?C.gold:"#D5CFC5"}}/>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>}
->>>>>>> theirs
           </div>
         )}
         {totalGap===0&&(
@@ -7992,7 +7791,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
           </div>
         )}
       </div>
-    </div>
+      </div>
   );
 }
 
