@@ -5736,3 +5736,347 @@ html,body,#root,.rk-outer,.rk-app,.rk-pg{
     margin-bottom:0!important;
   }
 }
+
+/* ─── vNext: room polish, board contrast, clubhouse signup simplify ─── */
+/* Home: Your Club Today/live standings should match the tighter Learn + Explore rhythm. */
+.rk-room-live-v6,
+.rk-room-live-v17,
+.rk-room-live-v19{
+  margin:13px 0 18px!important;
+  padding:13px!important;
+  border-radius:25px!important;
+}
+.rk-room-live-v6-summary{
+  padding:12px!important;
+  border-radius:21px!important;
+  background:radial-gradient(circle at 94% 16%,rgba(243,212,107,.13),transparent 38%),linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.035))!important;
+  border:1px solid rgba(243,212,107,.15)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10)!important;
+}
+.rk-room-live-v6-top{
+  align-items:center!important;
+}
+.rk-room-live-v6-title{
+  color:#FFFDF8!important;
+  text-shadow:0 1px 0 rgba(0,0,0,.12)!important;
+}
+.rk-room-live-v6-copy{
+  color:rgba(255,253,248,.72)!important;
+}
+.rk-room-live-v6-score{
+  background:rgba(255,253,248,.07)!important;
+  border:1px solid rgba(243,212,107,.16)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08)!important;
+}
+.rk-room-live-v17-table{
+  margin-top:10px!important;
+  padding:10px!important;
+  border-radius:21px!important;
+  background:rgba(0,0,0,.10)!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+}
+.rk-room-live-v17-row{
+  background:rgba(255,253,248,.075)!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-radius:15px!important;
+  transition:transform .16s ease, background .16s ease, border-color .16s ease!important;
+}
+.rk-room-live-v17-row:first-child{
+  background:linear-gradient(90deg,rgba(243,212,107,.19),rgba(255,253,248,.07))!important;
+  border-color:rgba(243,212,107,.22)!important;
+}
+.rk-room-live-v17-row:hover,
+.rk-room-live-v17-row:active{
+  transform:translateY(-1px)!important;
+  background:rgba(255,253,248,.11)!important;
+}
+.rk-room-live-v17-actions{
+  margin-top:11px!important;
+  margin-bottom:12px!important;
+  padding-bottom:6px!important;
+}
+.rk-room-live-v17-actions button{
+  min-height:43px!important;
+  border-radius:16px!important;
+}
+
+/* Room pages: remove the pale board block and make the leaderboard feel like a real board. */
+.rk-room-board-v60{
+  background:radial-gradient(circle at 96% 8%,rgba(243,212,107,.11),transparent 34%),linear-gradient(150deg,#062B18 0%,#0D4A2E 54%,#041F12 100%)!important;
+  border:1px solid rgba(243,212,107,.18)!important;
+  box-shadow:0 16px 42px rgba(6,43,24,.20),inset 0 1px 0 rgba(255,255,255,.09)!important;
+  color:#FFFDF8!important;
+}
+.rk-room-board-head-v60{
+  padding:0 2px 13px!important;
+  border-bottom:1px solid rgba(255,255,255,.09)!important;
+  margin-bottom:10px!important;
+}
+.rk-room-board-kicker-v60{
+  color:#F3D46B!important;
+}
+.rk-room-board-head-v60 h2{
+  color:#FFFDF8!important;
+  font-size:24px!important;
+}
+.rk-room-board-head-v60 > span{
+  background:rgba(243,212,107,.12)!important;
+  color:#F3D46B!important;
+  border-color:rgba(243,212,107,.22)!important;
+}
+.rk-room-board-table-head-v60{
+  color:rgba(255,253,248,.54)!important;
+  padding:0 11px 8px!important;
+}
+.rk-room-row-v60,
+.rk-room-board-v60 .rk-room-row-v60{
+  background:rgba(255,253,248,.075)!important;
+  border:1px solid rgba(255,255,255,.09)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08)!important;
+}
+.rk-room-row-podium,
+.rk-room-board-v60 .rk-room-row-podium{
+  background:linear-gradient(90deg,rgba(243,212,107,.17),rgba(255,253,248,.075))!important;
+  border-color:rgba(243,212,107,.22)!important;
+}
+.rk-room-row-rank-v60{
+  background:rgba(255,253,248,.10)!important;
+  color:#FFFDF8!important;
+  border:1px solid rgba(255,255,255,.09)!important;
+}
+.rk-room-row-top{
+  background:linear-gradient(145deg,#F3D46B,#B08523)!important;
+  color:#062B18!important;
+  border-color:rgba(255,255,255,.20)!important;
+}
+.rk-room-row-name{
+  color:#FFFDF8!important;
+}
+.rk-room-row-sub,
+.rk-room-row-score-wrap-v60 span{
+  color:rgba(255,253,248,.62)!important;
+}
+.rk-room-row-score{
+  color:#F3D46B!important;
+}
+
+/* Room metrics: force all three stats onto one clean row on club and global rooms. */
+.rk-room-metrics{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:7px!important;
+}
+.rk-room-metric{
+  min-width:0!important;
+  padding:10px 5px!important;
+  border-radius:16px!important;
+}
+.rk-room-metric strong{
+  font-size:22px!important;
+  white-space:nowrap!important;
+}
+.rk-room-metric span{
+  font-size:7.6px!important;
+  letter-spacing:1px!important;
+  white-space:normal!important;
+  line-height:1.12!important;
+}
+
+/* Invite the table: simpler, smaller, and less blocky. */
+.rk-invite-card{
+  border-radius:22px!important;
+  padding:14px!important;
+  background:linear-gradient(145deg,#FFFDF8,#F4EDE1)!important;
+  border:1px solid rgba(26,20,16,.08)!important;
+  box-shadow:0 10px 26px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-invite-card .rk-room-you-icon{
+  width:40px!important;
+  height:40px!important;
+  min-width:40px!important;
+  border-radius:14px!important;
+  font-size:8px!important;
+  letter-spacing:1.2px!important;
+  background:rgba(23,107,66,.08)!important;
+  color:#176B42!important;
+  border:1px solid rgba(23,107,66,.12)!important;
+}
+.rk-invite-card .rk-room-you-title{
+  font-size:18px!important;
+  line-height:1.05!important;
+}
+.rk-invite-card .rk-room-you-copy{
+  font-size:12px!important;
+  line-height:1.35!important;
+}
+.rk-invite-card .rk-room-actions{
+  margin:10px 0 0!important;
+  gap:7px!important;
+}
+.rk-invite-card .rk-room-btn{
+  min-height:42px!important;
+  border-radius:15px!important;
+  font-size:11.5px!important;
+}
+
+/* Clubhouse updates: quiet section, small label, combined input/button. */
+.rk-email-home,
+.rk-email-home-v8,
+.rk-email-home-v19{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  padding:10px 0 4px!important;
+  margin:10px 0 0!important;
+}
+.rk-email-title-v8,
+.rk-email-home-v19 .rk-email-title-v8,
+.rk-email-home h2,
+.rk-email-home-v8 h2,
+.rk-email-home-v19 h2{
+  display:inline-flex!important;
+  width:auto!important;
+  align-items:center!important;
+  padding:6px 10px!important;
+  margin:0 0 8px!important;
+  border-radius:999px!important;
+  background:rgba(23,107,66,.07)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  color:#176B42!important;
+  font-family:'Inter',system-ui,sans-serif!important;
+  font-size:9px!important;
+  line-height:1!important;
+  letter-spacing:1.75px!important;
+  text-transform:uppercase!important;
+  font-weight:900!important;
+}
+.rk-email-copy-v8,
+.rk-email-copy-v56,
+.rk-email-home p,
+.rk-email-home-v8 p,
+.rk-email-home-v19 p{
+  max-width:330px!important;
+  margin:0 0 10px!important;
+  color:rgba(26,20,16,.58)!important;
+  font-size:12px!important;
+  line-height:1.45!important;
+}
+.rk-email-form-v8{
+  position:relative!important;
+  display:block!important;
+  width:100%!important;
+  margin:0!important;
+}
+.rk-email-input-v8{
+  width:100%!important;
+  height:50px!important;
+  padding:0 104px 0 14px!important;
+  border-radius:18px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.10)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82),0 6px 16px rgba(26,20,16,.035)!important;
+  font-size:13px!important;
+}
+.rk-email-btn-v8{
+  position:absolute!important;
+  right:6px!important;
+  top:6px!important;
+  height:38px!important;
+  min-height:38px!important;
+  width:auto!important;
+  padding:0 14px!important;
+  border-radius:14px!important;
+  font-size:11.5px!important;
+  white-space:nowrap!important;
+  background:linear-gradient(145deg,#176B42,#0B3B24)!important;
+  color:#FFFDF8!important;
+  border:1px solid rgba(243,212,107,.18)!important;
+  box-shadow:0 6px 14px rgba(6,43,24,.14),inset 0 1px 0 rgba(255,255,255,.14)!important;
+}
+.rk-email-done-v8{
+  background:rgba(23,107,66,.08)!important;
+  border:1px solid rgba(23,107,66,.12)!important;
+  color:#1A1410!important;
+  border-radius:18px!important;
+  padding:14px!important;
+}
+.rk-email-done-v8 div{color:#1A1410!important;}
+
+@media(max-width:430px){
+  .rk-room-live-v6,
+  .rk-room-live-v17,
+  .rk-room-live-v19{
+    margin:12px 0 17px!important;
+    padding:12px!important;
+  }
+  .rk-room-live-v6-summary,
+  .rk-room-live-v17-table{
+    padding:10px!important;
+  }
+  .rk-room-live-v17-row{
+    min-height:43px!important;
+    padding:9px 10px!important;
+  }
+  .rk-room-live-v17-actions{
+    margin-bottom:10px!important;
+  }
+  .rk-room-page{
+    padding-left:15px!important;
+    padding-right:15px!important;
+  }
+  .rk-room-hero{
+    padding:17px 14px 15px!important;
+    border-radius:24px!important;
+  }
+  .rk-room-metrics{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:6px!important;
+  }
+  .rk-room-metric{
+    padding:9px 3px!important;
+    border-radius:14px!important;
+  }
+  .rk-room-metric strong{
+    font-size:20px!important;
+  }
+  .rk-room-metric span{
+    font-size:6.8px!important;
+    letter-spacing:.78px!important;
+  }
+  .rk-room-board-v60{
+    padding:12px!important;
+    border-radius:24px!important;
+  }
+  .rk-room-board-head-v60 h2{
+    font-size:21px!important;
+  }
+  .rk-room-board-table-head-v60{
+    grid-template-columns:40px minmax(0,1fr) 58px!important;
+    padding-left:8px!important;
+    padding-right:8px!important;
+  }
+  .rk-room-board-v60 .rk-room-row-v60,
+  .rk-room-row-v60{
+    grid-template-columns:36px minmax(0,1fr) 54px!important;
+    gap:7px!important;
+    padding:9px!important;
+    border-radius:17px!important;
+  }
+  .rk-room-row-rank-v60{
+    width:31px!important;
+    height:31px!important;
+    border-radius:12px!important;
+    font-size:12px!important;
+  }
+  .rk-room-row-score{
+    font-size:22px!important;
+  }
+  .rk-invite-card{
+    padding:13px!important;
+    border-radius:21px!important;
+  }
+  .rk-email-home,
+  .rk-email-home-v8,
+  .rk-email-home-v19{
+    padding-bottom:2px!important;
+  }
+}
