@@ -8796,10 +8796,9 @@ function Footer(){
           <div aria-hidden="true" style={{width:40,height:1,background:C.bdr,margin:"0 auto 16px"}}/>
           <div className="rk-footer-brand-lockup">
             <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" className="rk-footer-logo">Rackle</a>
-            <div className="rk-footer-tagline">Daily Mahjong Workout</div>
           </div>
-          <div style={{fontSize:11,color:C.mut,marginTop:8,lineHeight:1.55}}>Made for the American Mahjong community</div>
-          <div style={{fontSize:10,color:C.mut,marginTop:14,opacity:0.7}}>© {new Date().getFullYear()} <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" style={{color:C.mut,textDecoration:"none"}}>playrackle.com</a> · All rights reserved</div>
+          <div className="rk-footer-community">Made for the American Mahjong community.</div>
+          <div className="rk-footer-copyright">© {new Date().getFullYear()} <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer">playrackle.com</a> · All rights reserved</div>
         </div>
         <div className="rk-footer-actions" style={{marginTop:10,display:"flex",justifyContent:"center",alignItems:"center",gap:8,flexWrap:"wrap"}}>
           <a href="https://instagram.com/playrackle" target="_blank" rel="noopener noreferrer" style={{display:"flex",alignItems:"center",gap:6,fontSize:12,color:C.ink,textDecoration:"none",fontWeight:700,background:C.bg2,border:`1px solid ${C.bdr}`,borderRadius:20,padding:"5px 14px"}}>
@@ -10988,9 +10987,6 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <div className="rk-tomorrow-v11-badge">{resetLabel}</div>
         </div>
         <p className="rk-tomorrow-v11-copy">Come back tomorrow and climb the club board.</p>
-        <div className="rk-tomorrow-v11-row">
-          <span>Tomorrow watch: {tomorrowLine}</span>
-        </div>
       </section>
     );
   };
