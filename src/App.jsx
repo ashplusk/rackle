@@ -6917,12 +6917,12 @@ function ShareButton({text,label,sublabel,variant="goldpill"}){
         background:v.bg,border:v.border||"none",
         cursor:"pointer",display:"flex",alignItems:"center",gap:variant==="viral"?12:10,padding:variant==="viral"?"15px 16px":"11px 14px",
         textAlign:"left",boxShadow:variant==="viral"?`0 12px 26px ${v.shadow}, inset 0 1px 0 rgba(255,255,255,.16)`:`0 3px 12px ${v.shadow}`,transition:"opacity 0.15s"}}>
-        <div style={{width:variant==="viral"?42:32,height:variant==="viral"?42:32,borderRadius:variant==="viral"?14:8,background:iconBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:variant==="viral"?19:15,flexShrink:0}}>{copied?"✓":"📲"}</div>
+        <div style={{width:variant==="viral"?42:32,height:variant==="viral"?42:32,borderRadius:variant==="viral"?14:8,background:iconBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:variant==="viral"?19:15,flexShrink:0}}>{copied?"✓":"SH"}</div>
         <div style={{flex:1,minWidth:0,display:"flex",flexDirection:"column",gap:2}}>
           <div style={{fontFamily:F.d,fontSize:variant==="viral"?14:12,fontWeight:900,color:titleColor,lineHeight:1.1,letterSpacing:variant==="viral"?-.2:0}}>{copied?"Copied to clipboard!":label||"Challenge Your Club"}</div>
           <div style={{fontSize:variant==="viral"?12:11,color:subColor,lineHeight:1.4,fontWeight:variant==="viral"?750:400}}>{copied?"Paste it into your group chat":sublabel||"Tap to copy · Drop it in your group chat"}</div>
         </div>
-        <span style={{fontSize:14,color:arrowColor,fontWeight:700,flexShrink:0}}>{copied?"":"›"}</span>
+        <span style={{fontSize:11,color:arrowColor,fontWeight:900,flexShrink:0,letterSpacing:1,textTransform:"uppercase"}}>{copied?"":"Send"}</span>
       </button>
     </div>
   );
@@ -7431,12 +7431,12 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
             <button type="button" onClick={()=>setScreen&&setScreen("globalLeaderboard")} aria-label="View global leaderboard">
               <span>Global room</span>
               <strong>{globalRank?`#${globalRank}`:"—"}</strong>
-              <em>View global →</em>
+              <em>View global</em>
             </button>
             <button type="button" onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")} aria-label={clubCode?"View club leaderboard":"Find a club"}>
               <span>{affiliatedClubName||"Club room"}</span>
               <strong>{clubRank?`#${clubRank}`:(clubCode?"live":"join")}</strong>
-              <em>{clubCode?"View club →":"Find club →"}</em>
+              <em>{clubCode?"View club":"Find club"}</em>
             </button>
           </div>
         </div>
@@ -7457,7 +7457,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <span className="rk-score-avatar-stack" aria-hidden="true">
             {Array.from({length:socialAvatarCount}).map((_,i)=><span key={i} className="rk-score-avatar-dot" style={i%2?{background:"linear-gradient(145deg,#176B42,#DDEBDF)"}:undefined}/>) }
           </span>
-          <b>Open room →</b>
+          <b>Open room</b>
         </span>
       </button>
 
@@ -7497,8 +7497,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       <section className="rk-score-card rk-post-read-card" aria-label="Scorecard trust read">
         <div className="rk-post-read-head">
           <div>
-            <span>Post-Charleston read</span>
-            <h3>What your rack is saying</h3>
+            <span>Your rack at a glance</span>
+            <h3>Post-Charleston read</h3>
           </div>
           <em>{scoreLabel}</em>
         </div>
@@ -7540,7 +7540,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       </section>
 
       <div className="rk-score-action-panel-v8" aria-label="Scorecard actions">
-        <button onClick={onPractice} className="rk-score-primary-next-v8">Practice another rack →</button>
+        <button onClick={onPractice} className="rk-score-primary-next-v8">Practice another rack</button>
         <div className="rk-score-link-row-v8">
           <button onClick={onHome}>Back to clubhouse</button>
         </div>
@@ -7554,7 +7554,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
         <div className="rk-deeper-review-actions">
           <button type="button" onClick={()=>setShowDetails(v=>!v)}>{showDetails?"Hide quick notes":"Quick notes"}</button>
-          {onCoachMode&&<button type="button" onClick={onCoachMode}>Full rack review →</button>}
+          {onCoachMode&&<button type="button" onClick={onCoachMode}>Full rack review</button>}
         </div>
         {showDetails&&(
           <div className="rk-deeper-review-notes rk-in">
@@ -7571,7 +7571,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <MidnightCountdown dn={dayNum}/>
         </div>
         <button onClick={onHome} className="rk-back-clubhouse-v11">
-          <span aria-hidden="true">←</span> Back to clubhouse
+          <span aria-hidden="true">←</span> Back home
         </button>
       </div>
     </div>
@@ -9239,16 +9239,16 @@ function MidnightCountdown({dn}){
   const ss2=Math.floor((diff2%60000)/1000);
   const pad=(n)=>n.toString().padStart(2,"0");
   const col=urgent?C.cinn:C.ink;
-  const mutCol=urgent?C.cinn+"99":C.mut;
+  const mutCol=urgent?C.cinn:C.jade;
   return(
     <div style={{textAlign:"center",padding:"14px 0 12px",margin:"4px 0",position:"relative"}}>
       {/* Label pill */}
-      <div style={{display:"inline-flex",alignItems:"center",gap:8,background:urgent?C.cinn+"12":C.bg2,border:`1px solid ${urgent?C.cinn+"40":C.bdr}`,borderRadius:20,padding:"5px 14px",marginBottom:12}}>
+      <div style={{display:"inline-flex",alignItems:"center",gap:8,background:urgent?C.cinn+"12":"rgba(23,107,66,.08)",border:`1px solid ${urgent?C.cinn+"40":"rgba(23,107,66,.14)"}`,borderRadius:20,padding:"6px 12px",marginBottom:12}}>
         {!urgent&&(
           <span className="rk-pulse" style={{width:5,height:5,borderRadius:"50%",background:C.jade,display:"inline-block",flexShrink:0}}/>
         )}
-        <span style={{fontSize:9,color:mutCol,letterSpacing:2,fontWeight:700,fontFamily:F.b}}>
-          {urgent?"⚠ LAST CHANCE":"TOMORROW'S RACKLE"}
+        <span style={{fontSize:9,color:mutCol,letterSpacing:1.8,fontWeight:900,fontFamily:F.b}}>
+          {urgent?"LAST CHANCE":"TOMORROW'S RACKLE"}
         </span>
       </div>
 
@@ -10939,12 +10939,12 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <button type="button" onClick={(e)=>{e.stopPropagation();goGlobalRank(e);}} aria-label="View global leaderboard">
             <span>Global room</span>
             <strong>{globalValue}</strong>
-            <em>View global →</em>
+            <em>View global</em>
           </button>
           <button type="button" onClick={(e)=>{e.stopPropagation();goClubRank(e);}} aria-label={club?"View club leaderboard":"Browse club directory"}>
             <span>{club?.name||"Club room"}</span>
             <strong>{clubValue}</strong>
-            <em>{club?"View club →":"Find club →"}</em>
+            <em>{club?"View club":"Find club"}</em>
           </button>
         </div>
       </div>
@@ -11069,7 +11069,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           <div className="rk-share-score-v6-kicker">Share your score</div>
           <h2 className="rk-share-score-v6-title">Can your table beat it?</h2>
           <p className="rk-share-score-v6-copy">Share today’s Rackle and let your club chase the same rack.</p>
-          <button onClick={copyShare} className="rk-share-score-v6-btn">{shareCopied?"Copied":"Share My Score →"}</button>
+          <button onClick={copyShare} className="rk-share-score-v6-btn">{shareCopied?"Copied":"Share score"}</button>
         </div>
         <div className="rk-share-lux-card-v6" aria-hidden="true">
           <div className="rk-share-lux-v6-top">
@@ -11226,7 +11226,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
               {(firstNames.length?firstNames:[leaderName,"You","Club"]).slice(0,3).map((n,i)=><span key={`${n}-${i}`} className="rk-room-live-v6-avatar">{initials(n)}</span>)}
             </div>
             <div className="rk-room-live-v17-head-copy"><strong>{boardLabel}</strong><span>{socialCopy}</span></div>
-            <span className="rk-room-live-v17-cta">Open room →</span>
+            <span className="rk-room-live-v17-cta">Open</span>
           </div>
           <div className="rk-room-live-v17-rows">
             {previewRows.map((r,i)=>{
@@ -11242,8 +11242,8 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         </button>
 
         <div className="rk-room-live-v17-actions">
-          <button type="button" onClick={openBoard}>{activeClubCode?"Club standings →":"Open standings →"}</button>
-          <button type="button" onClick={secondaryAction}>{secondaryLabel}</button>
+          <button type="button" onClick={openBoard}>{activeClubCode?"Club standings":"Open standings"}</button>
+          <button type="button" onClick={secondaryAction}>{activeClubCode?"Global room":"Find a club"}</button>
         </div>
       </section>
     );
