@@ -6917,7 +6917,7 @@ function ShareButton({text,label,sublabel,variant="goldpill"}){
         background:v.bg,border:v.border||"none",
         cursor:"pointer",display:"flex",alignItems:"center",gap:variant==="viral"?12:10,padding:variant==="viral"?"15px 16px":"11px 14px",
         textAlign:"left",boxShadow:variant==="viral"?`0 12px 26px ${v.shadow}, inset 0 1px 0 rgba(255,255,255,.16)`:`0 3px 12px ${v.shadow}`,transition:"opacity 0.15s"}}>
-        <div style={{width:variant==="viral"?42:32,height:variant==="viral"?42:32,borderRadius:variant==="viral"?14:8,background:iconBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:variant==="viral"?19:15,flexShrink:0}}>{copied?"✓":"SH"}</div>
+        <div style={{width:variant==="viral"?42:32,height:variant==="viral"?42:32,borderRadius:variant==="viral"?14:8,background:iconBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:variant==="viral"?19:15,flexShrink:0}}>{copied?"✓":"📱"}</div>
         <div style={{flex:1,minWidth:0,display:"flex",flexDirection:"column",gap:2}}>
           <div style={{fontFamily:F.d,fontSize:variant==="viral"?14:12,fontWeight:900,color:titleColor,lineHeight:1.1,letterSpacing:variant==="viral"?-.2:0}}>{copied?"Copied to clipboard!":label||"Challenge Your Club"}</div>
           <div style={{fontSize:variant==="viral"?12:11,color:subColor,lineHeight:1.4,fontWeight:variant==="viral"?750:400}}>{copied?"Paste it into your group chat":sublabel||"Tap to copy · Drop it in your group chat"}</div>
@@ -7442,21 +7442,29 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </section>
 
-      <section className="rk-score-clean-share-v120" aria-label="Share today’s Rackle">
+      <section className="rk-score-clean-share-v120 rk-score-share-premium-v130" aria-label="Share today’s Rackle">
         <div className="rk-score-clean-share-copy-v120">
           <span>Share today’s Rackle</span>
-          <h2>Let your club chase the same rack.</h2>
-          <p>{affiliatedClubName?`Send your ${score} to ${affiliatedClubName} and see who can beat it before midnight.`:`Send your ${score} to the group chat and invite your table into today’s board.`}</p>
+          <h2>{affiliatedClubName?`Share your score with ${affiliatedClubName}`:"Share your score with your club"}</h2>
+          <p>Send today’s rack to the table and let everyone chase the same Charleston before midnight.</p>
         </div>
-        <div className="rk-score-clean-share-preview-v120">
-          <div>
+        <div className="rk-score-clean-share-preview-v120 rk-score-share-badge-panel-v130">
+          <div className="rk-score-share-card-top-v130">
             <span>Rackle #{dayNum}</span>
             <strong>{score}</strong>
           </div>
-          <p>{shareDirection?`Best direction: ${shareDirection}`:"Best direction pending"}</p>
-          <em>{clubRank?`Club rank #${clubRank}`:globalRank?`Global rank #${globalRank}`:"Daily board"}</em>
+          <div className="rk-score-share-badge-grid-v130">
+            <div className="rk-score-share-badge-v130">
+              <span>Best direction</span>
+              <strong>{shareDirection||"Reading rack"}</strong>
+            </div>
+            <div className="rk-score-share-badge-v130">
+              <span>{clubRank?"Club rank":globalRank?"Global rank":"Today’s board"}</span>
+              <strong>{clubRank?`#${clubRank}`:globalRank?`#${globalRank}`:"Daily"}</strong>
+            </div>
+          </div>
         </div>
-        <ShareButton text={shareText} label="Share score" sublabel={affiliatedClubName?"Send to club":"Send to group chat"} variant="viral"/>
+        <ShareButton text={shareText} label={affiliatedClubName?`Share your score with ${affiliatedClubName}`:"Share your score with your club"} sublabel="Send today’s Rackle" variant="viral"/>
       </section>
 
       <section className="rk-score-clean-final-v120" aria-label="Your final hand">
