@@ -4403,7 +4403,7 @@ function getAffiliatedClubName(code=getClubCode()){
   if(club?.name)return club.name;
   const profile=ST.get("profile",null)||{};
   const possible=String(profile?.clubName||profile?.club_name||profile?.club||"").trim();
-  if(possible&&!isClubDisplayName(possible)){
+  if(possible){
     // Only use a stored free-text club label when it is not actually the player name.
     const playerName=getPlayerDisplayName();
     if(!playerName||rkNormText(possible)!==rkNormText(playerName))return possible;
@@ -4415,11 +4415,11 @@ function setClubName(n){
   ST.set("clubName",n);
 }
 function getClubCode(){
-  const stored=ST.get("clubCode",null);
-  if(stored)return stored;
   const profile=ST.get("profile",null);
-  if(profile?.clubCode){ST.set("clubCode",profile.clubCode);return profile.clubCode;}
-  if(profile?.club_code){ST.set("clubCode",profile.club_code);return profile.club_code;}
+  const profileCode=String(profile?.clubCode||profile?.club_code||"").trim();
+  if(profileCode&&profileCode!=="__global__"){ST.set("clubCode",profileCode);return profileCode;}
+  const stored=String(ST.get("clubCode",null)||"").trim();
+  if(stored&&stored!=="__global__")return stored;
   return null;
 }
 function setClubCode(c){ST.set("clubCode",c);}
@@ -4455,11 +4455,15 @@ function rkSeedFromRow(row,index=0){
     .filter(v=>v!==undefined&&v!==null&&String(v).trim()!=="")
     .join("|");
 }
-function rkLooksGeneratedPlayerName(name){return /^player\s*\d+$/i.test(String(name||"").trim());}
+function rkLooksGeneratedPlayerName(name){return /^(player|rackler)\s*#?\s*\d+$/i.test(String(name||"").trim());}
+function rkGuestName(seed,index=0){
+  const cleanSeed=String(seed||"").trim();
+  return cleanSeed?`Guest ${hashLeaderboardSeed(cleanSeed||index)}`:"Guest Player";
+}
 function rkSafePlayerName(name,seed,index=0){
   const raw=String(name||"").trim();
-  if(raw&&!isClubDisplayName(raw))return raw;
-  return `Player ${hashLeaderboardSeed(seed||index)}`;
+  if(raw&&!isClubDisplayName(raw)&&!rkLooksGeneratedPlayerName(raw))return raw;
+  return rkGuestName(seed,index);
 }
 function rkLocalDisplayName(){
   const profile=rkRawProfile();
@@ -4995,7 +4999,10 @@ async function deleteLBEntry(code,name){
 }
 function getOrCreateAnonymousName(){
   let n=ST.get("anonName",null);
-  if(!n){n=`Player ${100+Math.floor(Math.random()*900)}`;ST.set("anonName",n);}
+  if(!n||rkLooksGeneratedPlayerName(n)){
+    n=`Guest ${100+Math.floor(Math.random()*900)}`;
+    ST.set("anonName",n);
+  }
   return n;
 }
 function getClubShareKey(code){return `${getDailySeed()}-${code||"global"}`;}
@@ -8701,7 +8708,7 @@ function RackleHeader({onBack,setScreen}){
                 </div>
                 <div>
                   <div className="rk-header-menu-name-v75">{profile.nickname.split(" ")[0]}</div>
-                  <div className="rk-header-menu-sub-v75">View profile</div>
+                  <div className="rk-header-menu-sub-v75">{getAffiliatedClubName(profile.clubCode||profile.club_code||getClubCode())||"No club joined yet"}</div>
                 </div>
               </button>
             ):(
@@ -9446,7 +9453,7 @@ function GlobalLeaderboardPill({setScreen}){
               {leader&&<span className="rk-quiet-preview-pill rk-quiet-preview-pill-gold">{leader.iqScore} leads</span>}
               {myRank>0?<span className="rk-quiet-preview-pill rk-quiet-preview-pill-green">You #{myRank}</span>:<span className="rk-quiet-preview-pill rk-quiet-preview-pill-gold">Play to rank</span>}
             </div>
-          ):(<div style={{fontSize:12,color:C.mut,lineHeight:1.55}}>{loading?"Loading the room…":liveCopy}</div>)}
+          ):(<div style={{fontSize:12,color:C.mut,lineHeight:1.55}}>{loading?"Loading today’s scores…":liveCopy}</div>)}
         </div>
         <span className="rk-quiet-chevron" style={{color:"#2460A8"}} aria-hidden="true"><span className={`rk-chevron-mark ${open?"rk-chevron-mark-open":""}`} /></span>
       </button>
@@ -9943,10 +9950,10 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
         <RoomMetric value={myRank?`#${myRank}`:"—"} label="your rank"/>
       </div>
     </div>
-    {loading?<div className="rk-premium-card" style={{padding:28,textAlign:"center",marginBottom:12}}>Loading the room…</div>:<>
+    {loading?<div className="rk-premium-card" style={{padding:28,textAlign:"center",marginBottom:12}}>Loading today’s scores…</div>:<>
       <RoomLeader leader={leader} myEntry={myEntry} count={entries.length} label="table"/>
       {myRank!==1&&<RoomMyPosition myRank={myRank} score={score} leader={leader} count={entries.length} clubName="Global room"/>}
-      <RoomRows entries={entries} scoreHint={score} emptyTitle="Room is open" emptyCopy="First score is on the board once you play. Send it to your table."/>
+      <RoomRows entries={entries} scoreHint={score} emptyTitle="Be the first to post a score today" emptyCopy="Play today’s rack to get ranked."/>
     </>}
     <div className="rk-room-actions rk-room-actions-simple-v91">
       <button className="rk-room-btn rk-room-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(shareText,"Rackle Global Room");setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Share room"}</button>
@@ -10017,14 +10024,14 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
         <RoomMetric value={myRank?`#${myRank}`:"—"} label="your rank"/>
       </div>
     </div>
-    {loading?<div className="rk-premium-card" style={{padding:28,textAlign:"center",marginBottom:12}}>Loading club room…</div>:<>
+    {loading?<div className="rk-premium-card" style={{padding:28,textAlign:"center",marginBottom:12}}>Loading today’s scores…</div>:<>
       <RoomLeader leader={leader} myEntry={myEntry} count={entries.length} label="club"/>
       {!(posted&&myRank===1)&&<RoomMyPosition myRank={posted?myRank:null} score={score} leader={leader} count={entries.length} clubName={club.name}/>}
       {score>0&&!posted&&<div className="rk-invite-card">
         <div style={{fontSize:9,letterSpacing:2,textTransform:"uppercase",fontWeight:900,color:C.jade,marginBottom:8}}>Name on board</div>
         <div style={{display:"flex",gap:8}}><input value={nameInput} onChange={e=>setNameInput(e.target.value)} placeholder="Your name" style={{flex:1,minWidth:0,border:`1px solid rgba(26,20,16,.10)`,borderRadius:14,padding:"12px 13px",fontFamily:F.b,fontSize:13,background:"#FFFDF8",outline:"none"}}/><button onClick={postScore} disabled={posting||!nameInput.trim()} className="rk-room-btn rk-room-btn-primary" style={{padding:"0 16px"}}>{posting?"…":"Post"}</button></div>
       </div>}
-      <RoomRows entries={entries} scoreHint={score} emptyTitle="You’re first in the room" emptyCopy="Send it to your table and make them chase."/>
+      <RoomRows entries={entries} scoreHint={score} emptyTitle="Be the first to post a score today" emptyCopy="Play today’s rack to get ranked."/>
     </>}
     <div className="rk-invite-card">
       <div style={{display:"flex",alignItems:"center",gap:11,textAlign:"left",marginBottom:12}}><div className="rk-room-you-icon">🔑</div><div><div className="rk-room-you-title">Invite the table</div><div className="rk-room-you-copy">Private code: <strong>{code}</strong></div></div></div>
@@ -11424,20 +11431,35 @@ function Game({mode,home,onDone,settings,setScreen}){
   // American Mahjong rule: Jokers are NEVER passed in the Charleston.
   // Keep this centralized so Daily, Free Play, blind passes, and Courtesy Pass all obey it.
   const getIncomingTiles=(count)=>{
+    const requested=Math.max(0,Number(count)||0);
     const safePool=(pool||[]).filter(t=>t&&t.t!=="j");
     const scored=safePool
       .map((t,idx)=>({t,idx,score:oppDiscardScore(t,oppSectionRef.current)}))
       .sort((a,b)=>b.score-a.score);
 
-    const picked=scored.slice(0,count);
+    const picked=scored.slice(0,requested);
     const pickedIdx=new Set(picked.map(x=>x.idx));
     const incoming=picked.map(x=>x.t).filter(t=>t&&t.t!=="j");
-    const newPool=safePool.filter((_,i)=>!pickedIdx.has(i));
+    let newPool=safePool.filter((_,i)=>!pickedIdx.has(i));
 
-    return{incoming,newPool};
+    // Defensive fallback: keep rack counts stable even if a stale pool was exhausted.
+    // Refill only with legal non-joker tiles. Jokers can be dealt initially, but never received.
+    if(incoming.length<requested){
+      const needed=requested-incoming.length;
+      const fallback=shuffle(buildDeck().filter(t=>t&&t.t!=="j")).slice(0,needed);
+      incoming.push(...fallback);
+      newPool=[...newPool,...shuffle(buildDeck().filter(t=>t&&t.t!=="j")).slice(0,Math.max(0,needed*2))];
+      console.warn("Rackle Charleston pool refilled with non-joker tiles to preserve pass count.");
+    }
+
+    return{incoming:incoming.slice(0,requested).filter(t=>t&&t.t!=="j"),newPool:newPool.filter(t=>t&&t.t!=="j")};
   };
 
-  const sanitizePassTiles=(tiles=[])=>tiles.filter(t=>t&&t.t!=="j");
+  const sanitizePassTiles=(tiles=[])=>{
+    const safe=(tiles||[]).filter(t=>t&&t.t!=="j");
+    if(safe.length!==(tiles||[]).filter(Boolean).length)console.warn("Blocked illegal Charleston joker pass/receive.");
+    return safe;
+  };
 
   const doSwap=(count)=>{
     haptic(40);
@@ -11455,7 +11477,12 @@ function Game({mode,home,onDone,settings,setScreen}){
 
     // Pick incoming tiles from pool. Jokers are excluded by rule.
     const {incoming,newPool}=getIncomingTiles(pt.length);
-    const safeIncoming=sanitizePassTiles(incoming);
+    const safeIncoming=sanitizePassTiles(incoming).slice(0,pt.length);
+    if(safeIncoming.length!==pt.length){
+      console.warn("Blocked Charleston pass because incoming non-joker tile count was invalid.");
+      setJw(true);setTimeout(()=>setJw(false),1800);
+      return;
+    }
     setPool((newPool||[]).filter(t=>t&&t.t!=="j"));
 
     const comb=[...rem,...safeIncoming];const ni=[];for(let i=rem.length;i<comb.length;i++)ni.push(i);
@@ -11579,7 +11606,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           <div style={S.card}><RH hand={hand} onSort={()=>setHand(sortHand(hand))}/>
             <RackSurface>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} dim={t.t==="j"} onClick={()=>cTog(i)} large={large}/>)}</RackSurface></div>
           <div aria-live="polite" style={{textAlign:"center",fontSize:13,color:sel.length>0?C.jade:C.mut,fontWeight:700,margin:"4px 0"}}>{sel.length}/3 selected</div>
-          <button onClick={()=>{haptic(40);if(sel.length<1){setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");return;}const legalSel=sel.filter(i=>hand[i]&&hand[i].t!=="j");if(legalSel.length!==sel.length){haptic(80);setJw(true);setTimeout(()=>setJw(false),1800);setSel(legalSel);return;}const pt=sanitizePassTiles(legalSel.map(i=>hand[i]));setPassed(p=>[...p,...pt]);const rem=hand.filter((_,i)=>!legalSel.includes(i));const {incoming:inc,newPool}=getIncomingTiles(pt.length);const safeInc=sanitizePassTiles(inc);setPool((newPool||[]).filter(t=>t&&t.t!=="j"));setHand([...rem,...safeInc]);const cpNowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);const cpPassEl=cpNowEl-lastPassElRef.current;lastPassElRef.current=cpNowEl;setPassLog(pl=>[...pl,{label:"Courtesy Pass",roundName:"Courtesy Pass",out:pt,in:safeInc,blind:false,secs:cpPassEl,ruleChecked:true}]);setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");}} style={{...S.passBtn}}>{sel.length<1?"Skip →":`Pass ${sel.length} across →`}</button>
+          <button onClick={()=>{haptic(40);if(sel.length<1){setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");return;}const legalSel=sel.filter(i=>hand[i]&&hand[i].t!=="j");if(legalSel.length!==sel.length){haptic(80);setJw(true);setTimeout(()=>setJw(false),1800);setSel(legalSel);return;}const pt=sanitizePassTiles(legalSel.map(i=>hand[i]));setPassed(p=>[...p,...pt]);const rem=hand.filter((_,i)=>!legalSel.includes(i));const {incoming:inc,newPool}=getIncomingTiles(pt.length);const safeInc=sanitizePassTiles(inc).slice(0,pt.length);if(safeInc.length!==pt.length){console.warn("Blocked courtesy pass because incoming non-joker tile count was invalid.");setJw(true);setTimeout(()=>setJw(false),1800);return;}setPool((newPool||[]).filter(t=>t&&t.t!=="j"));setHand([...rem,...safeInc]);const cpNowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);const cpPassEl=cpNowEl-lastPassElRef.current;lastPassElRef.current=cpNowEl;setPassLog(pl=>[...pl,{label:"Courtesy Pass",roundName:"Courtesy Pass",out:pt,in:safeInc,blind:false,secs:cpPassEl,ruleChecked:true}]);setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");}} style={{...S.passBtn}}>{sel.length<1?"Skip →":`Pass ${sel.length} across →`}</button>
         </>
       )}
 
