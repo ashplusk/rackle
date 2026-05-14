@@ -5286,3 +5286,118 @@ html,body,#root,.rk-outer,.rk-app,.rk-pg{
   letter-spacing:.35px!important;
   line-height:1.15!important;
 }
+
+/* ─── vFinal requested spacing tune: club margin, Free Play breathing room, purple Tomorrow ─── */
+/* Your Club Today: keep the card aligned, trim side padding slightly, and give it matching bottom rhythm. */
+.rk-room-live-v6,
+.rk-room-live-v17,
+.rk-room-live-v19{
+  margin-top:16px!important;
+  margin-bottom:16px!important;
+  padding-left:16px!important;
+  padding-right:16px!important;
+}
+.rk-room-live-v6-summary,
+.rk-room-live-v17-table{
+  padding-left:11px!important;
+  padding-right:11px!important;
+}
+
+/* Free Play Room: give the section the same breathing room as Learn + Explore. */
+.rk-freeplay-v24,
+.rk-freeplay-v27,
+.rk-freeplay-v35,
+.rk-freeplay-v40{
+  margin-top:18px!important;
+  margin-bottom:22px!important;
+  padding:22px!important;
+}
+
+/* Tomorrow's Rackle: restore the darker purple treatment so it is unmistakably readable. */
+.rk-tomorrow-card-v11,
+.rk-tomorrow-mystery-final,
+.rk-next-rack-card-v11,
+.rk-next-rack-panel-v11 .rk-next-rack-card-v11{
+  background:linear-gradient(145deg,#302141 0%,#49315F 54%,#261835 100%)!important;
+  color:#FFF9EA!important;
+  border:1px solid rgba(245,214,124,.24)!important;
+  box-shadow:0 14px 34px rgba(48,33,65,.20), inset 0 1px 0 rgba(255,255,255,.10)!important;
+}
+.rk-tomorrow-card-v11:after,
+.rk-tomorrow-mystery-final:after,
+.rk-next-rack-card-v11:after{
+  display:none!important;
+  content:none!important;
+}
+.rk-tomorrow-card-v11 *,
+.rk-tomorrow-mystery-final *,
+.rk-next-rack-card-v11 *{
+  text-shadow:none!important;
+}
+.rk-tomorrow-v11-kicker,
+.rk-next-rack-kicker-v11,
+.rk-tomorrow-card-v11 .rk-tomorrow-v11-kicker,
+.rk-tomorrow-mystery-final .rk-tomorrow-v11-kicker,
+.rk-next-rack-card-v11 [style*="TOMORROW"],
+.rk-next-rack-panel-v11 [style*="TOMORROW"]{
+  color:#FFF9EA!important;
+  background:rgba(255,249,234,.11)!important;
+  border:1px solid rgba(255,249,234,.18)!important;
+  border-radius:999px!important;
+  padding:7px 12px!important;
+  font-size:8.5px!important;
+  line-height:1!important;
+  letter-spacing:1.7px!important;
+  font-weight:900!important;
+  width:max-content!important;
+  max-width:100%!important;
+}
+.rk-tomorrow-v11-title,
+.rk-next-rack-card-v11 strong,
+.rk-next-rack-card-v11 b{
+  color:#FFF9EA!important;
+}
+.rk-tomorrow-v11-copy,
+.rk-next-rack-copy-v11,
+.rk-tomorrow-v11-row span{
+  color:rgba(255,249,234,.76)!important;
+}
+.rk-tomorrow-v11-badge,
+.rk-next-rack-card-v11 div[style*="font-size:44px"]{
+  color:#F1D36D!important;
+  background:rgba(241,211,109,.10)!important;
+  border:1px solid rgba(241,211,109,.22)!important;
+  border-radius:999px!important;
+  text-shadow:none!important;
+}
+.rk-tomorrow-float-tiles{opacity:.08!important;}
+
+@media(max-width:430px){
+  .rk-room-live-v6,
+  .rk-room-live-v17,
+  .rk-room-live-v19{
+    margin-top:14px!important;
+    margin-bottom:14px!important;
+    padding-left:13px!important;
+    padding-right:13px!important;
+  }
+  .rk-room-live-v6-summary,
+  .rk-room-live-v17-table{
+    padding-left:9px!important;
+    padding-right:9px!important;
+  }
+  .rk-freeplay-v24,
+  .rk-freeplay-v27,
+  .rk-freeplay-v35,
+  .rk-freeplay-v40{
+    margin-top:18px!important;
+    margin-bottom:22px!important;
+    padding:18px!important;
+  }
+  .rk-tomorrow-card-v11,
+  .rk-tomorrow-mystery-final,
+  .rk-next-rack-card-v11{
+    padding:18px!important;
+    border-radius:24px!important;
+  }
+}
