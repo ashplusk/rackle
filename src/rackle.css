@@ -2466,3 +2466,19 @@
   .rk-tomorrow-v11-top{grid-template-columns:1fr!important;}
   .rk-tomorrow-v11-badge{justify-self:start!important;}
 }
+
+/* Gameplay clarity pass: selected/protected/received states */
+.rk-tile-selected{border-color:rgba(23,107,66,.58)!important;}
+.rk-tile-received{border-color:rgba(176,138,53,.42)!important;}
+.rk-tile-locked{cursor:not-allowed!important;}
+.rk-tile-locked:hover{transform:translateY(0)!important;box-shadow:0 3px 9px rgba(160,120,40,.10),0 1px 0 rgba(255,255,255,.85) inset!important;}
+.rk-received-tiles-panel{margin-top:12px;padding:10px 11px;border-radius:15px;background:linear-gradient(145deg,rgba(176,138,53,.08),rgba(255,253,248,.86));border:1px solid rgba(176,138,53,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.68);}
+.rk-received-tiles-label{font-size:8px;letter-spacing:1.7px;text-transform:uppercase;font-weight:900;color:#B08523;text-align:center;margin-bottom:8px;}
+.rk-received-tiles-row{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;}
+.rk-received-tiles-row .rk-mahjong-tile{width:32px!important;height:45px!important;border-radius:9px!important;}
+.rk-received-tiles-row .rk-mahjong-tile span:first-of-type{font-size:14px!important;}
+.rk-received-tiles-row .rk-mahjong-tile span:nth-of-type(2){font-size:6px!important;}
+.rk-share-lux-v6-tiles{display:flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;}
+.rk-share-lux-v6-tile{display:inline-flex!important;transform:scale(.74);transform-origin:center;line-height:0;}
+.rk-share-lux-v6-tile .rk-mahjong-tile{margin:0!important;}
+@media(max-width:380px){.rk-received-tiles-panel{padding:9px}.rk-received-tiles-row{gap:5px}.rk-received-tiles-row .rk-mahjong-tile{width:30px!important;height:42px!important}.rk-share-lux-v6-tile{transform:scale(.68)}}

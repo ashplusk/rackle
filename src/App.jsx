@@ -5759,10 +5759,11 @@ function shouldShowNudge(dDone){
 const DEFAULT_SETTINGS={tileSize:"normal",haptic:true,showTimer:true,hideStreak:false};
 
 // ─── SMALL UI COMPONENTS ─────────────────────────────────────────────────────
-function Ti({t,sel,isNew,onClick,dim,large}){
+function Ti({t,sel,isNew,onClick,dim,large,locked=false}){
   const c=tC(t);
   const isJoker=t.t==="j";
   const isFlower=t.t==="f";
+  const isInteractive=!!onClick;
   const sz=large?{w:44,h:64,fs:19,fs2:8}:{w:37,h:54,fs:16,fs2:7};
   const baseBg=isJoker
     ?"linear-gradient(180deg,#FFF7E8,#EFE1C4)"
@@ -5772,28 +5773,34 @@ function Ti({t,sel,isNew,onClick,dim,large}){
   const selectedBg=isJoker
     ?"linear-gradient(180deg,#FFF4D8,#E8D09A)"
     :"linear-gradient(180deg,#FFFFFB,#F6F0E4)";
-  const borderCol=sel?"rgba(27,125,78,.42)":isNew?"rgba(160,120,40,.34)":"rgba(26,20,16,.10)";
-  const shadow=sel
-    ?"0 7px 14px rgba(0,0,0,.12), 0 1px 0 rgba(255,255,255,.85) inset"
-    :isNew
-      ?"0 4px 10px rgba(160,120,40,.12), 0 1px 0 rgba(255,255,255,.85) inset"
-      :"0 2px 5px rgba(26,20,16,.07), 0 1px 0 rgba(255,255,255,.85) inset";
+  const borderCol=locked?"rgba(176,138,53,.34)":sel?"rgba(27,125,78,.58)":isNew?"rgba(160,120,40,.38)":"rgba(26,20,16,.10)";
+  const shadow=locked
+    ?"0 3px 9px rgba(160,120,40,.10), 0 1px 0 rgba(255,255,255,.85) inset"
+    :sel
+      ?"0 9px 18px rgba(27,125,78,.18), 0 0 0 3px rgba(27,125,78,.10), 0 1px 0 rgba(255,255,255,.85) inset"
+      :isNew
+        ?"0 5px 12px rgba(160,120,40,.15), 0 0 0 3px rgba(176,138,53,.08), 0 1px 0 rgba(255,255,255,.85) inset"
+        :"0 2px 5px rgba(26,20,16,.07), 0 1px 0 rgba(255,255,255,.85) inset";
+  const label=locked&&isJoker?`${tAria(t)} protected. Jokers cannot be passed.`:tAria(t);
   return(
-  <div className="rk-mahjong-tile" onClick={onClick} role={onClick?"checkbox":undefined} aria-checked={onClick?sel:undefined}
-    aria-label={onClick?`${sel?"Deselect":"Select"} ${tAria(t)}`:tAria(t)} tabIndex={onClick?0:undefined}
+  <div className={`rk-mahjong-tile${sel?" rk-tile-selected":""}${isNew?" rk-tile-received":""}${locked?" rk-tile-locked":""}`} onClick={onClick} role={isInteractive?"checkbox":undefined} aria-checked={isInteractive?sel:undefined}
+    aria-disabled={locked||undefined}
+    aria-label={isInteractive?`${sel?"Deselect":"Select"} ${label}`:label} tabIndex={isInteractive?0:undefined}
     onKeyDown={onClick?(e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();onClick();}})  :undefined}
-    style={{width:sz.w,height:sz.h,borderRadius:10,cursor:onClick?"pointer":"default",userSelect:"none",
+    style={{width:sz.w,height:sz.h,borderRadius:10,cursor:isInteractive?(locked?"not-allowed":"pointer"):"default",userSelect:"none",
       background:sel?selectedBg:baseBg,
       border:`1px solid ${borderCol}`,display:"flex",flexDirection:"column",
       alignItems:"center",justifyContent:"center",padding:0,flexShrink:0,position:"relative",overflow:"hidden",
       boxShadow:shadow,
-      transform:sel?"translateY(-2px)":"translateY(0)",transition:"transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease",
-      opacity:dim?0.38:1,outline:"none"}}>
+      transform:sel?"translateY(-3px)":isNew?"translateY(-1px)":"translateY(0)",transition:"transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease",
+      opacity:dim?0.42:1,outline:"none"}}>
     <span aria-hidden="true" style={{fontSize:sz.fs,fontWeight:900,color:isJoker?C.gold:c,lineHeight:1,fontFamily:F.d,letterSpacing:isJoker?-0.7:-0.3}}>{tL(t)}</span>
     <span aria-hidden="true" style={{fontSize:sz.fs2,color:isJoker?C.gold:c,opacity:isFlower?0.62:0.54,fontWeight:900,marginTop:2,letterSpacing:0,textTransform:"uppercase"}}>{tS(t)}</span>
     {isJoker&&<div aria-hidden="true" style={{position:"absolute",inset:3,borderRadius:8,border:`1px solid ${C.gold}18`,pointerEvents:"none"}}/>}
-    {isNew&&<div aria-hidden="true" style={{position:"absolute",top:4,right:4,width:6,height:6,borderRadius:3,background:C.gold,boxShadow:`0 0 0 2px ${C.gold}12`}}/>}
-    {sel&&<div aria-hidden="true" style={{position:"absolute",bottom:0,left:8,right:8,height:2,borderRadius:2,background:C.jade,opacity:.85}}/>}
+    {locked&&isJoker&&<div aria-hidden="true" style={{position:"absolute",left:4,right:4,bottom:4,borderRadius:999,background:"rgba(176,138,53,.14)",border:`1px solid ${C.gold}18`,color:C.gold,fontSize:6,fontWeight:900,letterSpacing:.55,lineHeight:"10px",textAlign:"center",pointerEvents:"none"}}>KEEP</div>}
+    {isNew&&<div aria-hidden="true" style={{position:"absolute",top:4,right:4,width:7,height:7,borderRadius:4,background:C.gold,boxShadow:`0 0 0 3px ${C.gold}12`}}/>}
+    {sel&&<div aria-hidden="true" style={{position:"absolute",top:4,right:4,width:15,height:15,borderRadius:999,background:C.jade,color:"#fff",fontSize:10,fontWeight:900,display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 2px 6px rgba(27,125,78,.24)"}}>✓</div>}
+    {sel&&<div aria-hidden="true" style={{position:"absolute",bottom:0,left:7,right:7,height:3,borderRadius:3,background:C.jade,opacity:.92}}/>}
   </div>);}
 
 function RackSurface({children,style}){
@@ -7350,15 +7357,18 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const scoreLabel=trustRead?.band?.short||rkLaunchScoreBand(score).short;
   const scoreAccent=score>=85?C.gold:score>=70?C.jade:score>=55?"#2460A8":score>=40?C.gold:C.cinn;
   const shareName=(playerName||"I").trim();
-  const shareClubLine=affiliatedClubName
-    ? `${clubRank?`#${clubRank} in `:""}${affiliatedClubName}`
-    : globalRank?`#${globalRank} on today’s Rackle board`:"";
+  const shareDirection=trustRead?.best||topSectionRead?.name||iq.bestDirection||"Still watching";
+  const shareRankLine=clubRank
+    ? `Club rank: #${clubRank}${affiliatedClubName?` in ${affiliatedClubName}`:""}`
+    : globalRank?`Global rank: #${globalRank}${globalTotal?` of ${globalTotal}`:""}`:"";
+  const shareInsight=(trustRead?.heldBack?.[0]||trustRead?.band?.tone||quickRead||"").replace(/\s+/g," ").trim();
   const shareText=[
-    `🀄 Rackle #${dayNum}`,
-    `${shareName} scored ${score}. Same rack for everyone. Can you beat it?`,
-    globalRank?`Global #${globalRank}${globalTotal?` of ${globalTotal}`:""}`:"",
-    shareClubLine,
-    passEmoji,
+    `Rackle #${dayNum}`,
+    `Score: ${score}`,
+    shareDirection?`Best direction: ${shareDirection}`:"",
+    shareRankLine,
+    shareInsight,
+    `Play today’s rack:`,
     `playrackle.com`
   ].filter(Boolean).join("\n");
   const viralPrompt=affiliatedClubName?`Can ${affiliatedClubName} beat ${score} before midnight?`:`Can your group beat ${score} before midnight?`;
@@ -7462,8 +7472,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
         <div className="rk-score-share-v20-preview" aria-label="Share preview">
           <div><span>Rackle #{dayNum}</span><strong>{score}</strong></div>
-          <p>{globalRank?`Global #${globalRank}`:"Global board"}{clubRank?` · Club #${clubRank}`:""}</p>
-          <em>{passEmoji}</em>
+          <p>{shareDirection?`Best direction: ${shareDirection}`:"Best direction pending"}</p>
+          <em>{clubRank?`Club #${clubRank}`:globalRank?`Global #${globalRank}`:"Daily board"}</em>
         </div>
         <ShareButton text={shareText} label="Share My Score" sublabel={affiliatedClubName?`Send it to ${affiliatedClubName}`:"Drop it in your group chat"} variant="viral"/>
       </div>
@@ -10754,11 +10764,19 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   };
 
   const copyShare=async()=>{
-    const pattern=rkSharePattern(iq);
-    const myName=(currentName||"I").trim();
-    const scoreLine=iq?`${myName} scored ${iq.totalScore} on today’s Rackle.`:`${myName} played today’s Rackle.`;
-    const clubLine=club?`${club.name}: beat this before the board resets.`:"Beat this before the board resets.";
-    const text=[`🀄 Rackle #${dn}`,scoreLine,`Streak: ${streak||0}d`,clubLine,pattern,"playrackle.com"].filter(Boolean).join("\n");
+    const homeTrustRead=iq?rkScorecardTrustRead(iq,todayDRes?.finalRack||[]):null;
+    const bestDirection=homeTrustRead?.best||iq?.bestDirection||todayDRes?.section||"Still watching";
+    const rankLine=shownClubRank?`Club rank: #${shownClubRank}${club?` in ${club.name}`:""}`:"";
+    const insight=(homeTrustRead?.heldBack?.[0]||homeTrustRead?.band?.tone||"Same rack for everyone. Can you beat it?").replace(/\s+/g," ").trim();
+    const text=[
+      `Rackle #${dn}`,
+      iq?`Score: ${iq.totalScore}`:`Score: played`,
+      bestDirection?`Best direction: ${bestDirection}`:"",
+      rankLine,
+      insight,
+      "Play today’s rack:",
+      "playrackle.com"
+    ].filter(Boolean).join("\n");
     const markShared=async()=>{
       if(!activeClubCode)return;
       const count=await recordClubShare(activeClubCode,currentName);
@@ -11070,7 +11088,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <span>Club {clubRank}</span>
             <span>{streak||0}d streak</span>
           </div>
-          <div className="rk-share-lux-v6-tiles"><span>中</span><span>2</span><span>5</span><span>8</span><span>發</span></div>
+          <div className="rk-share-lux-v6-tiles">{freePlayPracticeRack.slice(0,5).map((tile,i)=><span key={`share-tile-${i}`} className="rk-share-lux-v6-tile"><Ti t={tile}/></span>)}</div>
           <div className="rk-share-lux-v6-url">playrackle.com</div>
         </div>
       </section>
@@ -11621,6 +11639,21 @@ function Game({mode,home,onDone,settings,setScreen}){
   const getDisplayTime=()=>{if(!settings?.showTimer)return null;return fT(el);};
   const isBlind=cp.blind,canPass=isBlind?sel.length<=(cp.max||3):sel.length===cp.req,hasNew=newIdx.length>0;
   const dn=getDayNum();
+  const passOrdinal=["First","Second","Third"][pi]||`Pass ${pi+1}`;
+  const passDirection=(cp.dir||"").toLowerCase();
+  const maxSelect=isBlind?(cp.max||3):cp.req;
+  const selectedNeeded=Math.max(0,(isBlind?0:cp.req)-sel.length);
+  const passInstruction=isBlind
+    ?`${passOrdinal} pass: choose up to ${maxSelect} tiles to pass ${passDirection} blind.`
+    :`${passOrdinal} pass: choose ${cp.req} tiles to pass ${passDirection}.`;
+  const selectedLabel=isBlind
+    ?`${sel.length} of up to ${maxSelect} selected`
+    :`${sel.length} of ${cp.req} selected`;
+  const passCtaEnabled=canPass||(isBlind&&sel.length===0);
+  const passCtaLabel=isBlind
+    ?(sel.length===0?`Skip blind pass`:`Pass ${sel.length} tile${sel.length===1?"":"s"} ${cp.dir}`)
+    :(selectedNeeded>0?`Choose ${selectedNeeded} more tile${selectedNeeded===1?"":"s"}`:`Pass ${cp.req} tiles ${cp.dir}`);
+  const receivedTiles=hasNew?newIdx.map(i=>hand[i]).filter(Boolean):[];
 
   return(
     <div style={{...S.pg,position:"relative",minHeight:"100vh"}} className="rk-pg">
@@ -11632,9 +11665,9 @@ function Game({mode,home,onDone,settings,setScreen}){
             <div style={{textAlign:"center"}}><div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div><div style={{fontFamily:F.d,fontSize:9,color:C.jade,fontWeight:700,fontStyle:"italic",letterSpacing:0.5,marginTop:1}}>The Daily Mahjong Workout.</div></div>
             <span style={{fontSize:10,color:C.mut,fontWeight:700}}>{mode==="daily"?`Daily #${dn}`:"Practice"}</span>
           </div>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}><span style={{fontSize:10,color:C.mut,fontWeight:700}}>1st Charleston · Pass 1/3</span></div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}><span style={{fontSize:10,color:C.mut,fontWeight:700}}>First Charleston · Pass 1 of 3</span></div>
           <div style={{display:"flex",gap:3,marginBottom:10}}>{[0,1,2].map(i=><div key={i} style={{flex:1,height:4,borderRadius:2,background:i===0?C.gold:C.bdr}}/>)}</div>
-          <div style={{textAlign:"center",marginBottom:10}}><span style={{fontSize:22}}>👉</span><h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"2px 0"}}>Pass Right</h2><p style={{fontSize:12,color:C.mut}}>Select exactly 3 tiles to pass</p></div>
+          <div style={{textAlign:"center",marginBottom:10}}><span style={{fontSize:22}}>👉</span><h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"2px 0"}}>First pass: choose 3 tiles to pass right</h2><p style={{fontSize:12,color:C.mut}}>Jokers stay protected in your rack.</p></div>
           <div style={S.card}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
               <span style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>YOUR RACK (13 tiles)</span>
@@ -11644,8 +11677,8 @@ function Game({mode,home,onDone,settings,setScreen}){
               {hand.map((t,i)=>{const isFlipped=flipped.includes(i);return isFlipped?<div key={i} className="rk-flip"><Ti t={t} large={large}/></div>:<div key={i} style={{width:large?44:37,height:large?64:54,borderRadius:10,background:`linear-gradient(160deg,${C.jade}E6,#10492C)`,border:`1px solid ${C.jade}55`,flexShrink:0,boxShadow:`0 4px 10px rgba(27,125,78,0.18), 0 1px 0 rgba(255,255,255,.12) inset`,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:14,opacity:0.18}}>🀄</span></div>;})}
             </RackSurface>
           </div>
-          <div style={{textAlign:"center",fontSize:13,color:C.mut,fontWeight:700,margin:"5px 0",opacity:0.25}}>0 of 3 selected</div>
-          <button disabled style={{...S.passBtn,opacity:0.2}}>🔄 Pass 0 Right</button>
+          <div style={{textAlign:"center",fontSize:13,color:C.mut,fontWeight:700,margin:"5px 0",opacity:0.45}}>0 of 3 selected</div>
+          <button disabled style={{...S.passBtn,opacity:0.24}}>Choose 3 tiles</button>
         </>
       )}
 
@@ -11680,13 +11713,13 @@ function Game({mode,home,onDone,settings,setScreen}){
         <>
           <RackleHeader onBack={()=>setShowLeave(true)}/>
           {getDisplayTime()&&<div style={{textAlign:"center",marginBottom:4}}><span style={{fontSize:12,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {getDisplayTime()}</span></div>}
-          <h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 2px",textAlign:"center"}}>Courtesy Pass</h2>
-          <p style={{fontSize:12,color:C.mut,textAlign:"center",marginBottom:10}}>Select 1-3 tiles to pass across</p>
+          <h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 2px",textAlign:"center"}}>Courtesy pass: choose 1–3 tiles across</h2>
+          <p style={{fontSize:12,color:C.mut,textAlign:"center",marginBottom:10}}>Optional. Skip if your rack is already clean. Jokers stay protected.</p>
           {jw&&<JW/>}
           <div style={S.card}><RH hand={hand} onSort={()=>setHand(sortHand(hand))}/>
-            <RackSurface>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} dim={t.t==="j"} onClick={()=>cTog(i)} large={large}/>)}</RackSurface></div>
-          <div aria-live="polite" style={{textAlign:"center",fontSize:13,color:sel.length>0?C.jade:C.mut,fontWeight:700,margin:"4px 0"}}>{sel.length}/3 selected</div>
-          <button onClick={()=>{haptic(40);if(sel.length<1){setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");return;}const legalSel=sel.filter(i=>hand[i]&&hand[i].t!=="j");if(legalSel.length!==sel.length){haptic(80);setJw(true);setTimeout(()=>setJw(false),1800);setSel(legalSel);return;}const pt=sanitizePassTiles(legalSel.map(i=>hand[i]));setPassed(p=>[...p,...pt]);const rem=hand.filter((_,i)=>!legalSel.includes(i));const {incoming:inc,newPool}=getIncomingTiles(pt.length);const safeInc=sanitizePassTiles(inc).slice(0,pt.length);if(safeInc.length!==pt.length){console.warn("Blocked courtesy pass because incoming non-joker tile count was invalid.");setJw(true);setTimeout(()=>setJw(false),1800);return;}setPool((newPool||[]).filter(t=>t&&t.t!=="j"));setHand([...rem,...safeInc]);const cpNowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);const cpPassEl=cpNowEl-lastPassElRef.current;lastPassElRef.current=cpNowEl;setPassLog(pl=>[...pl,{label:"Courtesy Pass",roundName:"Courtesy Pass",out:pt,in:safeInc,blind:false,secs:cpPassEl,ruleChecked:true}]);setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");}} style={{...S.passBtn}}>{sel.length<1?"Skip →":`Pass ${sel.length} across →`}</button>
+            <RackSurface>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} dim={t.t==="j"} locked={t.t==="j"} onClick={()=>cTog(i)} large={large}/>)}</RackSurface></div>
+          <div aria-live="polite" style={{textAlign:"center",fontSize:13,color:sel.length>0?C.jade:C.mut,fontWeight:800,margin:"4px 0"}}>{sel.length} of 3 selected</div>
+          <button onClick={()=>{haptic(40);if(sel.length<1){setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");return;}const legalSel=sel.filter(i=>hand[i]&&hand[i].t!=="j");if(legalSel.length!==sel.length){haptic(80);setJw(true);setTimeout(()=>setJw(false),1800);setSel(legalSel);return;}const pt=sanitizePassTiles(legalSel.map(i=>hand[i]));setPassed(p=>[...p,...pt]);const rem=hand.filter((_,i)=>!legalSel.includes(i));const {incoming:inc,newPool}=getIncomingTiles(pt.length);const safeInc=sanitizePassTiles(inc).slice(0,pt.length);if(safeInc.length!==pt.length){console.warn("Blocked courtesy pass because incoming non-joker tile count was invalid.");setJw(true);setTimeout(()=>setJw(false),1800);return;}setPool((newPool||[]).filter(t=>t&&t.t!=="j"));setHand([...rem,...safeInc]);const cpNowEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);const cpPassEl=cpNowEl-lastPassElRef.current;lastPassElRef.current=cpNowEl;setPassLog(pl=>[...pl,{label:"Courtesy Pass",roundName:"Courtesy Pass",out:pt,in:safeInc,blind:false,secs:cpPassEl,ruleChecked:true}]);setSel([]);setNewIdx([]);stopTimer();setPhase("chooseHand");}} style={{...S.passBtn}}>{sel.length<1?"Skip courtesy pass":`Pass ${sel.length} tile${sel.length===1?"":"s"} across`}</button>
         </>
       )}
 
@@ -11753,25 +11786,26 @@ function Game({mode,home,onDone,settings,setScreen}){
           </div>
           <div className="rk-game-flow-card">
             <span className="rk-game-flow-kicker">{cn===1?"First Charleston":"Second Charleston"} · Pass {pi+1} of 3</span>
-            <h2 className="rk-game-flow-title">Pass {cp.dir}{isBlind?" blind":""}</h2>
-            <p className="rk-game-flow-copy">{isBlind?`Send 0-${cp.max||3} tiles.`:`Choose ${cp.req} tiles. Then pass.`}</p>
+            <h2 className="rk-game-flow-title">{passInstruction}</h2>
+            <p className="rk-game-flow-copy">{hasNew?"Review the tiles you received before the next pass.":"Tap your pass tiles. Jokers stay protected in your rack."}</p>
           </div>
           <div role="progressbar" aria-valuenow={pi} aria-valuemin={0} aria-valuemax={3} style={{display:"flex",gap:3,marginBottom:10}}>{[0,1,2].map(i=><div key={i} style={{flex:1,height:4,borderRadius:2,background:i<pi?C.jade:i===pi?(hasNew?C.jade:C.gold):C.bdr}}/>)}</div>
           <div style={{textAlign:"center",marginBottom:10}}>
             {hasNew
-              ?<span className="rk-pass-complete-pill">{newIdx.length} tile{newIdx.length!==1?"s":""} received</span>
-              :<p role="status" aria-live="polite" style={{fontSize:12,color:C.mut,fontWeight:900,margin:0}}>Tap tiles to select. Jokers stay in your rack.</p>}
+              ?<span className="rk-pass-complete-pill">Tiles received · next pass loading</span>
+              :<p role="status" aria-live="polite" style={{fontSize:12,color:C.mut,fontWeight:900,margin:0}}>{selectedLabel}</p>}
           </div>
           {jw&&<JW/>}
           <div style={S.card}>
             <RH hand={hand} onSort={()=>setHand(sortHand(hand))} showRef={showRef} onRef={()=>setShowRef(!showRef)}/>
-            <RackSurface>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} isNew={newIdx.includes(i)} dim={t.t==="j"&&!hasNew} onClick={!hasNew?()=>toggle(i):undefined} large={large}/>)}</RackSurface>
+            <RackSurface>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} isNew={newIdx.includes(i)} dim={t.t==="j"&&!hasNew} locked={t.t==="j"&&!hasNew} onClick={!hasNew?()=>toggle(i):undefined} large={large}/>)}</RackSurface>
+            {hasNew&&receivedTiles.length>0&&(<div className="rk-received-tiles-panel" aria-label="Tiles received"><div className="rk-received-tiles-label">Tiles received</div><div className="rk-received-tiles-row">{receivedTiles.map((t,i)=><Ti key={`received-${i}-${tL(t)}-${tS(t)}`} t={t} isNew />)}</div></div>)}
           </div>
           {showRef&&<CG onClose={()=>setShowRef(false)}/>}
           {!hasNew&&<>
-            <div role="status" aria-live="polite" style={{textAlign:"center",fontSize:13,color:sel.length>0?C.jade:C.mut,fontWeight:700,margin:"5px 0"}}>{sel.length} of {isBlind?(cp.max||3):cp.req} selected</div>
-            <button onClick={doPass} disabled={!canPass&&!(isBlind&&sel.length===0)} style={{...S.passBtn,opacity:canPass||(isBlind&&sel.length===0)?1:0.3}}>
-              {isBlind&&sel.length===0?"Skip":`Pass ${sel.length} ${cp.dir}`}
+            <div role="status" aria-live="polite" style={{textAlign:"center",fontSize:13,color:sel.length>0?C.jade:C.mut,fontWeight:800,margin:"5px 0"}}>{selectedLabel}</div>
+            <button onClick={doPass} disabled={!passCtaEnabled} aria-disabled={!passCtaEnabled} style={{...S.passBtn,opacity:passCtaEnabled?1:0.36}}>
+              {passCtaLabel}
             </button>
           </>}
           {!hasNew&&mode==="free"&&<div style={{marginTop:8}}>
