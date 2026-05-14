@@ -7356,6 +7356,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   })();
   const scoreLabel=trustRead?.band?.short||rkLaunchScoreBand(score).short;
   const scoreAccent=score>=85?C.gold:score>=70?C.jade:score>=55?"#2460A8":score>=40?C.gold:C.cinn;
+  const topSectionRead=allSections&&allSections.length?[...allSections].sort((a,b)=>(b.score||0)-(a.score||0))[0]:null;
   const shareName=(playerName||"I").trim();
   const shareDirection=trustRead?.best||topSectionRead?.name||iq.bestDirection||"Still watching";
   const shareRankLine=clubRank
@@ -7374,7 +7375,6 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const viralPrompt=affiliatedClubName?`Can ${affiliatedClubName} beat ${score} before midnight?`:`Can your group beat ${score} before midnight?`;
   const scoredHandLabel=iq.scoredHandLabel||chosenHand||null;
   const scoredHandObj=scoredHandLabel?HAND_CATALOG.find(h=>h.sec===chosenSec&&h.label===scoredHandLabel):null;
-  const topSectionRead=allSections&&allSections.length?[...allSections].sort((a,b)=>(b.score||0)-(a.score||0))[0]:null;
   const reviewBestPath=scoredHandObj?.labelForDisplay||scoredHandObj?.variantLabel||scoredHandObj?.label||iq.bestHandLabel||topSectionRead?.name||"Keep reading the rack";
   const reviewTone=score>=75?"Strong read":score>=55?"Playable read":score>=40?"Developing read":"Reset rack";
   const ruleSafeLine=rkRuleSafeScorecardLine(iq);
@@ -7475,7 +7475,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <p>{shareDirection?`Best direction: ${shareDirection}`:"Best direction pending"}</p>
           <em>{clubRank?`Club #${clubRank}`:globalRank?`Global #${globalRank}`:"Daily board"}</em>
         </div>
-        <ShareButton text={shareText} label="Share My Score" sublabel={affiliatedClubName?`Send it to ${affiliatedClubName}`:"Drop it in your group chat"} variant="viral"/>
+        <ShareButton text={shareText} label="Share score" sublabel={affiliatedClubName?`Send it to ${affiliatedClubName}`:"Drop it in your group chat"} variant="viral"/>
       </div>
 
       <div className="rk-score-rack-card" style={{borderRadius:22,padding:14,background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid rgba(26,20,16,.075)`,boxShadow:"0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)",marginBottom:12,textAlign:"center"}}>
@@ -10102,7 +10102,7 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
       <RoomRows entries={entries} scoreHint={score} emptyTitle="Be the first to post a score today" emptyCopy="Play today’s rack to get ranked."/>
     </>}
     <div className="rk-invite-card">
-      <div style={{display:"flex",alignItems:"center",gap:11,textAlign:"left",marginBottom:12}}><div className="rk-room-you-icon">🔑</div><div><div className="rk-room-you-title">Invite the table</div><div className="rk-room-you-copy">Private code: <strong>{code}</strong></div></div></div>
+      <div style={{display:"flex",alignItems:"center",gap:11,textAlign:"left",marginBottom:12}}><div className="rk-room-you-icon">CODE</div><div><div className="rk-room-you-title">Invite the table</div><div className="rk-room-you-copy">Private code: <strong>{code}</strong></div></div></div>
       <div className="rk-room-actions" style={{marginBottom:0}}>
         <button className="rk-room-btn rk-room-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(inviteText,`Join ${club.name}`);setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Copy invite"}</button>
         <button className="rk-room-btn" onClick={async()=>{const ok=await rkCopyOrShare(shareText,club.name);setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>Share score</button>
