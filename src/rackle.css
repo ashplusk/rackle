@@ -6470,7 +6470,7 @@ html,body,#root,.rk-outer,.rk-app,.rk-pg{
   position:relative!important;
   overflow:hidden!important;
   width:100%!important;
-  margin:1px!important;
+  margin:2px!important;
   padding:15px!important;
   border-radius:24px!important;
   background:
@@ -6710,23 +6710,58 @@ html,body,#root,.rk-outer,.rk-app,.rk-pg{
   border-top:1px solid rgba(243,212,107,.13)!important;
 }
 .rk-club-today-actions button{
-  min-height:42px!important;
+  position:relative!important;
+  overflow:hidden!important;
+  min-height:44px!important;
   border-radius:15px!important;
-  border:1px solid rgba(243,212,107,.16)!important;
-  background:rgba(255,248,232,.92)!important;
-  color:#0B3B24!important;
+  border:1px solid rgba(243,212,107,.18)!important;
   font-size:12px!important;
   font-weight:900!important;
+  letter-spacing:.1px!important;
   cursor:pointer!important;
-  box-shadow:0 6px 14px rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.70)!important;
+  transition:transform .18s ease,box-shadow .18s ease,filter .18s ease,background .18s ease!important;
+  box-shadow:0 8px 18px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.50)!important;
+}
+.rk-club-today-actions button:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(110deg,transparent 0%, rgba(255,255,255,.26) 45%, transparent 62%);
+  transform:translateX(-130%);
+  transition:transform .55s ease!important;
+  pointer-events:none;
+}
+.rk-club-today-actions button:hover{
+  transform:translateY(-1px)!important;
+  box-shadow:0 12px 24px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.55)!important;
+  filter:saturate(1.04)!important;
+}
+.rk-club-today-actions button:hover:before{transform:translateX(130%);}
+.rk-club-today-actions button:first-child{
+  background:linear-gradient(180deg,#F3D46B 0%, #D4A73A 100%)!important;
+  color:#12351F!important;
+  border-color:rgba(255,244,208,.34)!important;
+  box-shadow:0 10px 22px rgba(201,155,47,.24), inset 0 1px 0 rgba(255,255,255,.48)!important;
+}
+.rk-club-today-actions button:last-child{
+  background:linear-gradient(180deg,#176B42 0%, #0D4A2E 100%)!important;
+  color:#FFF8E8!important;
+  border-color:rgba(255,255,255,.16)!important;
+  box-shadow:0 10px 22px rgba(13,74,46,.28), inset 0 1px 0 rgba(255,255,255,.14)!important;
+}
+.rk-club-today-actions button:first-child:hover{
+  box-shadow:0 14px 26px rgba(201,155,47,.30), inset 0 1px 0 rgba(255,255,255,.52)!important;
+}
+.rk-club-today-actions button:last-child:hover{
+  box-shadow:0 14px 26px rgba(13,74,46,.34), inset 0 1px 0 rgba(255,255,255,.18)!important;
 }
 .rk-club-today-board:active,
 .rk-club-today-score:active,
-.rk-club-today-actions button:active{transform:scale(.992)!important;}
+.rk-club-today-actions button:active{transform:scale(.985)!important;}
 
 @media(max-width:430px){
   .rk-club-today-card{
-    margin:1px!important;
+    margin:2px!important;
     padding:14px!important;
     border-radius:23px!important;
   }
