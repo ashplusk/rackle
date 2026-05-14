@@ -1,5 +1,5 @@
 import { Analytics } from '@vercel/analytics/react';
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import './rackle.css';
 
 // Rackle V1 · Founding Club Beta
@@ -95,9 +95,7 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
           });
           setDone(true);setTimeout(()=>setDone(false),3000);
           setSaving(false);return;
-        }catch{
-          // User cancelled or native sharing failed; fall back to download.
-        }
+        }catch(e){}
       }
       // Desktop fallback, download
       const url=URL.createObjectURL(blob);
@@ -6749,12 +6747,12 @@ function MahjongIdentityCard({iq, chosenSec, passLog, finalRack}){
 }
 
 // IQ HERO, shared dark jade gradient hero card used in scorecard + home
-function IQHero({iq:rawIq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHome=false}){
-  const iq=useMemo(()=>rawIq?withIQStyle(rawIq):null,[rawIq]);
+function IQHero({iq,isDaily,dayNum,section,totalTime,chosenSec,allSections,isHome=false}){
+  if(!iq)return null;
+  iq=withIQStyle(iq);
   const [displayScore,setDisplayScore]=useState(0);
   const [isPB,setIsPB]=useState(false);
   useEffect(()=>{
-    if(!iq)return;
     const hist=getHist().filter(e=>e.iqScore!=null);
     const prevBest=hist.length>1?Math.max(...hist.slice(0,-1).map(e=>e.iqScore)):0;
     if(iq.totalScore>prevBest&&hist.length>0)setIsPB(true);
@@ -6772,8 +6770,7 @@ function IQHero({iq:rawIq,isDaily,dayNum,section,totalTime,chosenSec,allSections
       if(step>=steps){clearInterval(timer);setDisplayScore(target);}
     },interval);
     return()=>clearInterval(timer);
-  },[iq]);
-  if(!iq)return null;
+  },[iq.totalScore]);
 
   const bestFitId=allSections?[...allSections].sort((a,b)=>b.score-a.score)[0]?.id:null;
   const matched=chosenSec&&bestFitId&&chosenSec===bestFitId;
@@ -7227,6 +7224,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const [globalEntries,setGlobalEntries]=useState([]);
   const [clubEntries,setClubEntries]=useState([]);
   const [showDetails,setShowDetails]=useState(false);
+  if(!iq)return null;
 
   useEffect(()=>{
     fetchDailyStats().then(s=>{if(s)setDailyStats(s);}).catch(()=>{});
@@ -7235,7 +7233,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     if(clubCode)fetchLBEntries(clubCode).then(rows=>{if(rows)setClubEntries(rows);}).catch(()=>{});
   },[]);
 
-  const score=Number(iq?.totalScore||0);
+  const score=Number(iq.totalScore||0);
   const [animatedScore,setAnimatedScore]=useState(0);
   useEffect(()=>{
     const target=Number(score||0);
@@ -7255,7 +7253,6 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     },interval);
     return()=>clearInterval(timer);
   },[score]);
-  if(!iq)return null;
   const time=Number(resultTime||iq.timeSecs||iq.time_secs||iq.totalTime||iq.time||0);
   const timeLabel=time?fT(Math.round(time)):"—";
   const clubCode=getClubCode();
@@ -7491,16 +7488,17 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
 // ─── PRACTICE SCORECARD, collapsible sections, matching daily vibe ───────────
 function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHome,onDealAgain}){
+  if(!iq)return null;
   const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
-  const scoredHandLabel=iq?.scoredHandLabel||null;
+  const scoredHandLabel=iq.scoredHandLabel||null;
   const scoredHandObj=scoredHandLabel?HAND_CATALOG.find(h=>h.sec===chosenSec&&h.label===scoredHandLabel):null;
   const sortedSecsP=allSections?[...allSections].sort((a,b)=>b.score-a.score):[];
   const [openSec,setOpenSec]=useState({hand:true,alts:false,passes:false});
   const toggle=(k)=>setOpenSec(s=>({...s,[k]:!s[k]}));
-  const passDots=(iq?.passInsights||[]).map(p=>({strong:"🟢",weak:"🔴",mixed:"🟡",neutral:"⚪"}[p.quality]||"⚪")).join("");
-  const styled=iq?withIQStyle(iq):null;
-  const level=iq?.level||styled?.level||"Rack read";
-  const score=Math.round(iq?.totalScore||iq?.rackleIQScore||iq?.score||0);
+  const passDots=(iq.passInsights||[]).map(p=>({strong:"🟢",weak:"🔴",mixed:"🟡",neutral:"⚪"}[p.quality]||"⚪")).join("");
+  const styled=withIQStyle(iq);
+  const level=iq.level||styled.level||"Rack read";
+  const score=Math.round(iq.totalScore||iq.rackleIQScore||iq.score||0);
   const [animatedScore,setAnimatedScore]=useState(0);
   useEffect(()=>{
     const target=Number(score||0);
@@ -7519,7 +7517,6 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
     },interval);
     return()=>clearInterval(timer);
   },[score]);
-  if(!iq)return null;
   const bestLabel=scoredHandObj?.labelForDisplay||scoredHandObj?.variantLabel||scoredHandObj?.label||iq.bestHandLabel||iq.strategicRead?.bestDirection||"Keep reading the rack";
   const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
 
@@ -10692,7 +10689,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   };
 
   const MiniStat=({value,label,accent})=>{
-    const safeValue=(typeof value==="number"&&!Number.isFinite(value))?"—":(value==="NaN"||value==null?"—":value);
+    const safeValue=(typeof value==="number"&&!Number.isFinite(value))?",":(value==="NaN"||value==null?",":value);
     return(
       <div className="rk-gilt-rank-card" style={{flex:1,minWidth:0,border:`1px solid rgba(243,212,107,.42)`,background:"rgba(255,255,255,0.105)",borderRadius:15,padding:"12px 12px",backdropFilter:"blur(8px)"}}>
         <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:accent||"#F3D46B",lineHeight:1,letterSpacing:-0.5}}>{safeValue}</div>
@@ -10703,7 +10700,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   const Menu=()=>{
     return(
-      <div className="rk-home-menu-row-v101" style={{display:"flex",alignItems:"center",justifyContent:streak>0?"space-between":"flex-end",gap:10,marginTop:10,marginBottom:2,position:"relative"}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:10,marginBottom:2,position:"relative"}}>
         {streak>0?(
           <button onClick={()=>setScreen("stats")} aria-label="View streak stats" style={{display:"inline-flex",alignItems:"center",gap:6,border:`1px solid ${C.gold}30`,background:`linear-gradient(135deg,#FFF9EA,${C.cinn}08)`,color:C.cinn,borderRadius:999,padding:"5px 9px 5px 7px",fontSize:11,fontWeight:900,cursor:"pointer",boxShadow:`0 4px 14px ${C.cinn}10`,minHeight:30}}>
             <span style={{width:19,height:19,borderRadius:99,display:"inline-flex",alignItems:"center",justifyContent:"center",background:C.cinn+"12",fontSize:10,lineHeight:1}}>🔥</span>
@@ -10711,7 +10708,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <span style={{fontSize:9,fontWeight:900,letterSpacing:0.5,textTransform:"uppercase",opacity:0.72}}>streak</span>
             <span style={{fontSize:9,color:C.gold,marginLeft:1}}>›</span>
           </button>
-        ):null}
+        ):<div/>}
         <button onClick={()=>setMenuOpen(o=>!o)} aria-label="Menu" className={`rk-home-menu-plain-v101${menuOpen?" is-open":""}`}>
           <span/>
           <span/>
@@ -13467,21 +13464,10 @@ function HandBrowserScreen({home,setScreen}){
   const visibleHands=allHands.slice(0,visibleLimit);
   const sectionCounts=SECS.map(s=>({sec:s,count:HAND_CATALOG.filter(h=>h.sec===s.id).length,concealed:HAND_CATALOG.filter(h=>h.sec===s.id&&h.concealed).length}));
   const jumpToResults=()=>setTimeout(()=>document.getElementById("rk-hand-results")?.scrollIntoView({behavior:"smooth",block:"start"}),60);
-  const pickSection=(id)=>{
-    setVisibleLimit(6);
-    setActiveSec(activeSec===id?null:id);
-    if(activeSec!==id)jumpToResults();
-  };
-  const toggleConcealed=()=>{
-    setVisibleLimit(6);
-    setOnlyConcealed(v=>!v);
-  };
-  const showAllSections=()=>{
-    setVisibleLimit(6);
-    setActiveSec(null);
-    setSearch("");
-    setOnlyConcealed(false);
-  };
+  const pickSection=(id)=>{setActiveSec(activeSec===id?null:id);if(activeSec!==id)jumpToResults();};
+  const quickSearch=(term)=>{setSearch(term);setActiveSec(null);setOnlyConcealed(false);jumpToResults();};
+
+  useEffect(()=>{setVisibleLimit(6);},[activeSec,search,onlyConcealed]);
 
   return(
     <div style={S.pg} className="rk-pg rk-handbrowser-v40">
@@ -13494,8 +13480,8 @@ function HandBrowserScreen({home,setScreen}){
       </section>
 
       <section className="rk-handbrowser-v40-quickbar rk-handbrowser-v45-quickbar" aria-label="Card filters">
-        <button className={onlyConcealed?"active":""} onClick={toggleConcealed}>Concealed only</button>
-        <button className="clear" onClick={showAllSections}>Show all sections</button>
+        <button className={onlyConcealed?"active":""} onClick={()=>setOnlyConcealed(v=>!v)}>Concealed only</button>
+        <button className="clear" onClick={()=>{setActiveSec(null);setSearch("");setOnlyConcealed(false);}}>Show all sections</button>
       </section>
 
       <section className="rk-handbrowser-v40-sections" aria-label="Card sections">
@@ -13640,6 +13626,8 @@ export default function Rackle(){
   const [badgeToast,setBadgeToast]=useState(null);
   const [clubPostToast,setClubPostToast]=useState(null);
   const [showWeeklyNudge,setShowWeeklyNudge]=useState(shouldShowWeeklyRecap);
+  const [isHydrated,setIsHydrated]=useState(false);
+  const [appReady,setAppReady]=useState(true);
   const isFirstDaily=!ST.get("hadFirstDaily",false);
 
   const [dashDailyStats,setDashDailyStats]=useState(null);
@@ -13652,8 +13640,11 @@ export default function Rackle(){
     const code=getClubCode();
     fetchDailyStats().then(stats=>{if(!cancelled)setDashDailyStats(stats||{total:0,count:0,topScore:null,max:null,rows:[]});}).catch(()=>{});
     fetchGlobalEntries().then(rows=>{if(!cancelled)setDashGlobalEntries(rows||[]);}).catch(()=>{});
-    const clubEntriesPromise=code?fetchLBEntries(code):Promise.resolve([]);
-    clubEntriesPromise.then(rows=>{if(!cancelled)setDashClubEntries(rows||[]);}).catch(()=>{});
+    if(code){
+      fetchLBEntries(code).then(rows=>{if(!cancelled)setDashClubEntries(rows||[]);}).catch(()=>{});
+    }else{
+      setDashClubEntries([]);
+    }
     return()=>{cancelled=true;};
   },[screen,dDone,dRes,streak]);
 
@@ -13692,7 +13683,7 @@ export default function Rackle(){
         const clubMatch=path.match(/\/clubs\/(.+)/);
         if(clubMatch)setScreen("clubs");
       }finally{
-        if(!cancelled)refresh();
+        if(!cancelled){setIsHydrated(true);setAppReady(true);}
       }
     })();
     return()=>{cancelled=true;window.removeEventListener("rackle:remoteHydrated",refresh);};
@@ -13943,7 +13934,7 @@ function AppShell({children,dashProps=null}){
       <div className={`rk-dash-shell${dashProps?" has-dashboard":""}`}>
         <aside className="rk-dash-left" aria-label="Personal stats">{dashProps&&<DashLeft {...dashProps}/>}</aside>
         <div style={S.app} className="rk-app">
-          <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,900&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet"/>
+          <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,900&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet"/>
           {children}
           <Analytics />
         </div>
