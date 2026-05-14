@@ -10957,7 +10957,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <span>{shareCopied?"Paste it into your group chat":"Drop it in your group chat"}</span>
             <small>{clubActivityText}</small>
           </div>
-          <b>→</b>
+          <b aria-hidden="true">›</b>
         </button>
         <button onClick={showScorecard} className="rk-home-scorecard-v41-full">Open full scorecard →</button>
       </div>
@@ -11018,7 +11018,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     <section className="rk-freeplay-v24 rk-freeplay-v40" aria-label="Free play practice room">
       <div className="rk-freeplay-v24-top rk-freeplay-v40-top">
         <div className="rk-freeplay-v24-copy rk-freeplay-v40-copy">
-          <div className="rk-freeplay-v24-kicker"><span>🔥</span> Free play room</div>
+          <div className="rk-freeplay-v24-kicker">Free play room</div>
           <h2>Improve Your Game</h2>
           <p>Practice another Charleston whenever you want. New rack, clean passes, instant readout.</p>
         </div>
@@ -11040,7 +11040,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       </div>
 
       <button type="button" onClick={()=>go("free")} className="rk-freeplay-v24-cta">
-        Start Free Play →
+        Start Free Play
       </button>
     </section>
   );
