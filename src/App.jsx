@@ -7408,7 +7408,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   };
 
   return(
-    <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26" style={{paddingBottom:32}}>
+    <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26 rk-scorecard-clean-v120" style={{paddingBottom:32}}>
       <section className="rk-daily-scorecard-homeclone-v45 rk-home-scorecard-v41" aria-label="Daily Rackle scorecard">
         <div className="rk-home-scorecard-v41-main rk-daily-scorecard-homeclone-v45-main">
           <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
@@ -7442,138 +7442,84 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </section>
 
-      {/* v45: Daily scorecard now uses the same achievement-card format as the homepage scorecard. */}
-
-      <button onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"globalLeaderboard")} className="rk-score-club-room-v20" style={{width:"100%",appearance:"none",fontFamily:F.b,cursor:"pointer"}}>
-        <span className="rk-score-club-room-v20-main">
-          <span className="rk-score-club-room-v20-icon">{clubCode?"Club":"Room"}</span>
-          <span className="rk-score-club-room-v20-copy">
-            <span className="rk-score-club-room-v20-kicker">{clubCode?"Club room":"Today’s room"}</span>
-            <strong>{clubCode?clubRoomLabel:roomLabel}</strong>
-            <small>{clubRoomSub}</small>
-          </span>
-        </span>
-        <span className="rk-score-club-room-v20-side">
-          <span className="rk-score-avatar-stack" aria-hidden="true">
-            {Array.from({length:socialAvatarCount}).map((_,i)=><span key={i} className="rk-score-avatar-dot" style={i%2?{background:"linear-gradient(145deg,#176B42,#DDEBDF)"}:undefined}/>) }
-          </span>
-          <b>Open room</b>
-        </span>
-      </button>
-
-      <div className="rk-score-share-card rk-score-share-v20">
-        <div className="rk-score-share-v20-head">
-          <span className="rk-score-share-v20-icon">Share</span>
-          <span>
-            <small>Group chat ready</small>
-            <strong>Share today’s Rackle.</strong>
-            <p>Let your club chase the same rack.</p>
-          </span>
+      <section className="rk-score-clean-share-v120" aria-label="Share today’s Rackle">
+        <div className="rk-score-clean-share-copy-v120">
+          <span>Share today’s Rackle</span>
+          <h2>Let your club chase the same rack.</h2>
+          <p>{affiliatedClubName?`Send your ${score} to ${affiliatedClubName} and see who can beat it before midnight.`:`Send your ${score} to the group chat and invite your table into today’s board.`}</p>
         </div>
-        <div className="rk-score-share-v20-preview" aria-label="Share preview">
-          <div><span>Rackle #{dayNum}</span><strong>{score}</strong></div>
-          <p>{shareDirection?`Best direction: ${shareDirection}`:"Best direction pending"}</p>
-          <em>{clubRank?`Club #${clubRank}`:globalRank?`Global #${globalRank}`:"Daily board"}</em>
-        </div>
-        <ShareButton text={shareText} label="Share score" sublabel={affiliatedClubName?`Send it to ${affiliatedClubName}`:"Drop it in your group chat"} variant="viral"/>
-      </div>
-
-      <div className="rk-score-rack-card" style={{borderRadius:22,padding:14,background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",border:`1px solid rgba(26,20,16,.075)`,boxShadow:"0 8px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)",marginBottom:12,textAlign:"center"}}>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:12}}>
-          <div style={{textAlign:"left"}}>
-            <div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,lineHeight:1.08}}>Your rack</div>
-            <div style={{fontSize:11,color:C.mut,fontWeight:700,marginTop:3}}>Final Charleston shape</div>
-          </div>
-          <div style={{display:"flex",gap:5,alignItems:"center"}}>
-            {passDots.length?passDots.map((p,i)=>{
-              const col=p.quality==="strong"?C.jade:p.quality==="weak"?C.cinn:C.gold;
-              return <span key={i} title={`Pass ${i+1}`} style={{width:9,height:9,borderRadius:999,background:col,boxShadow:`0 0 0 4px ${col}16`}}/>;
-            }):<span style={{fontSize:10,color:C.mut,fontWeight:900}}>No passes</span>}
-          </div>
-        </div>
-        <SortableRack hand={hand}/>
-      </div>
-
-      <section className="rk-score-card rk-post-read-card" aria-label="Scorecard trust read">
-        <div className="rk-post-read-head">
+        <div className="rk-score-clean-share-preview-v120">
           <div>
-            <span>Your rack at a glance</span>
-            <h3>Post-Charleston read</h3>
+            <span>Rackle #{dayNum}</span>
+            <strong>{score}</strong>
           </div>
-          <em>{scoreLabel}</em>
+          <p>{shareDirection?`Best direction: ${shareDirection}`:"Best direction pending"}</p>
+          <em>{clubRank?`Club rank #${clubRank}`:globalRank?`Global rank #${globalRank}`:"Daily board"}</em>
         </div>
-        <div className="rk-post-read-paths">
-          <div className="rk-post-read-path primary">
+        <ShareButton text={shareText} label="Share score" sublabel={affiliatedClubName?"Send to club":"Send to group chat"} variant="viral"/>
+      </section>
+
+      <section className="rk-score-clean-final-v120" aria-label="Your final hand">
+        <div className="rk-score-clean-head-v120">
+          <span>Final hand</span>
+          <h2>Your rack after the Charleston</h2>
+          <p>This is the shape you finished with. Use it to compare what you kept, what you passed, and where the rack is leaning.</p>
+        </div>
+        <div className="rk-score-clean-rack-v120">
+          <SortableRack hand={hand}/>
+        </div>
+      </section>
+
+      <section className="rk-score-clean-glance-v120" aria-label="Rack at a glance">
+        <div className="rk-score-clean-head-v120">
+          <span>Rack at a glance</span>
+          <h2>What your rack is saying</h2>
+        </div>
+        <div className="rk-score-clean-lanes-v120">
+          <div className="rk-score-clean-lane-v120 primary">
             <span>Best direction</span>
             <strong>{trustRead.best}</strong>
-            <em>{trustRead.bestFit}</em>
+            <p>{trustRead.bestFit}</p>
           </div>
-          <div className="rk-post-read-path">
-            <span>Backup</span>
+          <div className="rk-score-clean-lane-v120">
+            <span>Backup path</span>
             <strong>{trustRead.backup}</strong>
-            <em>{trustRead.backupFit}</em>
+            <p>{trustRead.backupFit}</p>
           </div>
-          <div className="rk-post-read-path avoid">
-            <span>Avoid</span>
+          <div className="rk-score-clean-lane-v120 avoid">
+            <span>Avoid for now</span>
             <strong>{trustRead.avoid}</strong>
-            <em>Only chase this if the next draw changes the rack.</em>
+            <p>Only chase this if the next draw changes the rack.</p>
           </div>
         </div>
-        <div className="rk-post-read-note">
+        <div className="rk-score-clean-expert-v120">
           <span>Expert read</span>
           <p>{rkHumanTableCopy(trustRead.expertRead)}</p>
         </div>
-        <div className="rk-post-read-two-col">
-          <div>
-            <span>Helped</span>
-            {trustRead.helped.slice(0,2).map((x,i)=><p key={i}>✓ {x}</p>)}
-          </div>
-          <div>
-            <span>Held back</span>
-            {trustRead.heldBack.slice(0,2).map((x,i)=><p key={i}>• {x}</p>)}
-          </div>
-        </div>
-        <div className="rk-post-read-next">
+        <div className="rk-score-clean-next-v120">
           <span>Next move</span>
           <p>{rkHumanTableCopy(trustRead.nextMove)}</p>
         </div>
       </section>
 
-      <div className="rk-score-action-panel-v8" aria-label="Scorecard actions">
-        <button onClick={onPractice} className="rk-score-primary-next-v8">Practice another rack</button>
-        <div className="rk-score-link-row-v8">
-          <button onClick={onHome}>Back to clubhouse</button>
-        </div>
-      </div>
-
-      <section className="rk-deeper-review-card" aria-label="Rack review options">
-        <div>
-          <span>Want the deeper read?</span>
-          <strong>Review the full rack only when you need more detail.</strong>
-          <p>The scorecard above is the quick read. Open the full review for pass-by-pass notes and hand comparisons.</p>
-        </div>
-        <div className="rk-deeper-review-actions">
-          <button type="button" onClick={()=>setShowDetails(v=>!v)}>{showDetails?"Hide quick notes":"Quick notes"}</button>
-          {onCoachMode&&<button type="button" onClick={onCoachMode}>Full rack review</button>}
-        </div>
-        {showDetails&&(
-          <div className="rk-deeper-review-notes rk-in">
-            <p><b>Shape:</b> {shapeLine||reviewCopy}</p>
-            <p><b>Passes:</b> {passLine||"No major pass regret showed up against the cleanest lane."}</p>
-          </div>
-        )}
-      </section>
-
-      <div className="rk-review-bottom-home rk-next-rack-panel-v11">
-        <div className="rk-next-rack-card-v11">
-          <div className="rk-next-rack-kicker-v11">Tomorrow’s Rackle</div>
-          <p className="rk-next-rack-copy-v11">Come back tomorrow and defend your spot.</p>
-          <MidnightCountdown dn={dayNum}/>
-        </div>
-        <button onClick={onHome} className="rk-back-clubhouse-v11">
-          <span aria-hidden="true">←</span> Back home
+      <section className="rk-score-clean-actions-v120" aria-label="Next actions">
+        <button type="button" onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"globalLeaderboard")} className="rk-score-clean-action-v120 primary">
+          <span>{clubCode?"Open clubhouse":"Open today’s room"}</span>
+          <strong>{clubCode?"Club board":"Global board"}</strong>
         </button>
-      </div>
+        <button type="button" onClick={onPractice} className="rk-score-clean-action-v120">
+          <span>Practice another rack</span>
+          <strong>Train again</strong>
+        </button>
+        {onCoachMode&&<button type="button" onClick={onCoachMode} className="rk-score-clean-action-v120">
+          <span>Full rack review</span>
+          <strong>See deeper read</strong>
+        </button>}
+        <button type="button" onClick={onHome} className="rk-score-clean-action-v120 quiet">
+          <span>Back home</span>
+          <strong>Clubhouse</strong>
+        </button>
+      </section>
     </div>
   );
 }
@@ -7613,7 +7559,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
   const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
 
   return(
-    <div className="rk-score-shell rk-practice-v9-shell">
+    <div className="rk-score-shell rk-practice-v9-shell rk-scorecard-clean-v120">
       <section className="rk-practice-homeclone-v45 rk-home-scorecard-v41" aria-label="Practice Rackle scorecard">
         <div className="rk-home-scorecard-v41-main rk-practice-homeclone-v45-main">
           <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
@@ -7627,82 +7573,55 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
           </div>
           <div className="rk-home-scorecard-v41-title">{level}</div>
           <p className="rk-home-scorecard-v41-copy">One clearer pass can change the whole rack.</p>
-          <div className="rk-home-scorecard-v41-actions rk-practice-homeclone-v45-actions">
-            <button type="button" onClick={onDealAgain}>
-              <span>Practice room</span>
-              <strong>Again</strong>
-              <em>Play another rack →</em>
-            </button>
-            <button type="button" onClick={onHome}>
-              <span>Clubhouse</span>
-              <strong>Home</strong>
-              <em>Back to Rackle →</em>
-            </button>
-          </div>
         </div>
       </section>
 
-      <StrategicCharlestonReadCard iq={iq}/>
-
-      <CollapsibleSection label="Your Hand" desc="Final rack · Best path" icon="🀄" open={openSec.hand} onToggle={()=>toggle("hand")}>
-        {hand&&hand.length>0&&<SortableRack hand={hand}/>}
-        <div className="rk-best-path-v9">
-          <div className="rk-best-path-v9-top">
-            <div className="rk-best-path-v9-kicker">Best path</div>
-            {primPct>0&&<div className="rk-best-path-v9-chip">{rkQualFitLabel(primPct)}</div>}
-          </div>
-          <div className="rk-best-path-v9-title">{bestLabel}</div>
-          <p className="rk-best-path-v9-copy">This is the cleanest hand direction Rackle found from your final Charleston shape.</p>
+      <section className="rk-score-clean-final-v120" aria-label="Your practice hand">
+        <div className="rk-score-clean-head-v120">
+          <span>Final hand</span>
+          <h2>Your rack after the Charleston</h2>
+          <p>This practice rack is not on the daily board. Use it to sharpen the next pass.</p>
         </div>
-        {scoredHandObj&&<HandTargetPreview hand={hand} scoredHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} iq={iq} onCoachMode={null}/>}
-      </CollapsibleSection>
-
-      {hand&&hand.length>0&&chosenSec&&(
-        <CollapsibleSection label="Best-fit Hands" desc="Cross-check your final rack" icon="🔀" open={openSec.alts} onToggle={()=>toggle("alts")}>
-          <AltHandsCard hand={hand} resolvedHandLabel={scoredHandObj?.label||null} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecsP} primaryCoveragePct={primPct}/>
-          <FinalHandCrossReference hand={hand} startingRack={[]} chosenHandObj={scoredHandObj} chosenSec={chosenSec} chosenSecObj={chosenSecObj} sortedSecs={sortedSecsP} handWasInferred={true}/>
-        </CollapsibleSection>
-      )}
-
-      {iq.passInsights&&iq.passInsights.length>0&&(
-        <CollapsibleSection label="Your Passes" desc="What helped and what hurt" icon="🔄" open={openSec.passes} onToggle={()=>toggle("passes")} badge={passDots||undefined}>
-          <div className="rk-score-card" style={{marginBottom:8,padding:0,overflow:"hidden"}}>
-            {iq.passInsights.map((p,i)=>{
-              const qBg={strong:"#EDF5F0",weak:"#FEF0F0",mixed:"#FBF3E2",neutral:"#fff"};
-              const qColor={strong:C.jade,weak:C.cinn,mixed:C.amberB,neutral:C.mut};
-              const qLabel={strong:"Clean pass",weak:"Risky pass",mixed:"Mixed pass",neutral:"Neutral"};
-              return(
-                <div key={i} style={{background:qBg[p.quality]||"#fff",borderTop:i>0?`1px solid ${C.bdr}`:"none"}}>
-                  <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px",borderBottom:p.passedTiles?.length?`1px solid ${C.bdr}40`:"none"}}>
-                    <div style={{display:"flex",alignItems:"center",gap:7}}>
-                      <div style={{width:22,height:22,borderRadius:999,background:(qColor[p.quality]||C.mut)+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:900,color:qColor[p.quality]||C.mut,flexShrink:0}}>{i+1}</div>
-                      <span style={{fontSize:12,fontWeight:900,color:C.ink}}>{p.roundName||`Pass ${i+1}`}</span>
-                    </div>
-                    <span style={{fontSize:10,fontWeight:900,color:qColor[p.quality]||C.mut,background:(qColor[p.quality]||C.mut)+"15",borderRadius:999,padding:"4px 9px"}}>{qLabel[p.quality]||""}</span>
-                  </div>
-                  {p.passedTiles&&p.passedTiles.length>0&&(
-                    <div style={{padding:"8px 14px",borderBottom:`1px solid ${C.bdr}40`}}>
-                      <div style={{display:"flex",flexWrap:"wrap",gap:5}}>{p.passedTiles.map((t,j)=><Ti key={j} t={t}/>)}</div>
-                    </div>
-                  )}
-                  <div style={{padding:"8px 14px 10px"}}>
-                    <p style={{fontSize:12,color:C.ink,margin:0,lineHeight:1.55,fontWeight:700}}>{p.insight}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </CollapsibleSection>
-      )}
-
-      <div className="rk-practice-v9-bottom-card">
-        <div className="rk-practice-v9-bottom-title">Run it back?</div>
-        <p className="rk-practice-v9-bottom-copy">Practice another Charleston and see if you can make the next read cleaner.</p>
-        <div className="rk-practice-v9-bottom-actions">
-          <button onClick={onDealAgain} style={{background:`linear-gradient(135deg,${C.jade},#0F5535)`,color:"#fff",boxShadow:`0 8px 18px rgba(23,107,66,.18)`}}>Play another rack</button>
-          <button onClick={onHome} style={{background:"linear-gradient(180deg,#F2EBDD,#E9E0CF)",color:C.ink}}>Back home</button>
+        <div className="rk-score-clean-rack-v120">
+          <SortableRack hand={hand}/>
         </div>
-      </div>
+      </section>
+
+      <section className="rk-score-clean-glance-v120" aria-label="Practice rack at a glance">
+        <div className="rk-score-clean-head-v120">
+          <span>Rack at a glance</span>
+          <h2>Cleanest path</h2>
+        </div>
+        <div className="rk-score-clean-lanes-v120 practice">
+          <div className="rk-score-clean-lane-v120 primary">
+            <span>Best path</span>
+            <strong>{bestLabel}</strong>
+            <p>{primPct>0?rkQualFitLabel(primPct):"Use this as the main direction if your next draw supports it."}</p>
+          </div>
+          <div className="rk-score-clean-lane-v120">
+            <span>Score read</span>
+            <strong>{level}</strong>
+            <p>{score>=75?"Strong practice rack. You have a believable lane.":score>=55?"Playable rack. It needs cleaner shape before locking in.":"Thin practice rack. Keep the best clues and reduce noise."}</p>
+          </div>
+        </div>
+        {iq.passInsights&&iq.passInsights.length>0&&(
+          <div className="rk-score-clean-expert-v120">
+            <span>Pass note</span>
+            <p>{rkHumanTableCopy(iq.passInsights[0]?.insight||"Review what you passed and whether it protected your best shape.")}</p>
+          </div>
+        )}
+      </section>
+
+      <section className="rk-score-clean-actions-v120 practice" aria-label="Practice actions">
+        <button type="button" onClick={onDealAgain} className="rk-score-clean-action-v120 primary">
+          <span>Practice another rack</span>
+          <strong>Deal again</strong>
+        </button>
+        <button type="button" onClick={onHome} className="rk-score-clean-action-v120">
+          <span>Back to clubhouse</span>
+          <strong>Home</strong>
+        </button>
+      </section>
       <Footer/>
     </div>
   );
