@@ -9892,9 +9892,13 @@ function rkBuildActivity(entries=[],label="room",myRank=null){
   if(feed.length<3)feed.push(`Board resets tonight.`);
   return feed.slice(0,3);
 }
-function RoomMetric({value,label}){
-  return <div className="rk-room-metric"><strong>{value}</strong><span>{label}</span></div>;
+function RoomMetric({value,label,accent="jade"}){
+  return <div className={`rk-lb-stat rk-lb-stat-${accent}`}>
+    <strong>{value}</strong>
+    <span>{label}</span>
+  </div>;
 }
+
 function RoomLeader({leader,myEntry,count,label="table"}){
   if(!leader)return null;
   const leaderScore=Number(leader.iqScore)||0;
@@ -9903,86 +9907,97 @@ function RoomLeader({leader,myEntry,count,label="table"}){
   const samePlayer=!!myEntry&&(
     (leader.playerId&&myEntry.playerId&&leader.playerId===myEntry.playerId)||
     (leader.player_id&&myEntry.player_id&&leader.player_id===myEntry.player_id)||
-    (leader.name&&myEntry.name&&leader.name===myEntry.name&&leaderScore===myScore)||
+    (leader.name&&myEntry.name&&leader.name===myEntry.name&&leaderScore===myScore) ||
     (gap===0&&rkEntryMatchesCurrentPlayer(leader,leaderScore))
   );
-  const isClub=label==="club";
-  const roomName=isClub?"club":"table";
-  const leaderName=leader.name||"Table leader";
-  const leaderTitle=samePlayer?`Top of the ${roomName}`:leaderName;
+  const heroKicker=label==="club"?"Club leader":"Global leader";
+  const leaderTitle=samePlayer?"You’re leading today":(leader.name||"Top player");
   const leaderSub=samePlayer
-    ?`Everyone is chasing your ${leaderScore}.`
-    :myEntry?`You’re ${gap} point${gap===1?"":"s"} back.`:`${count} score${count===1?"":"s"} posted today.`;
-  return <section className={`rk-room-leader rk-room-leader-v60 ${samePlayer?"rk-room-leader-you":""}`} aria-label={`Today’s ${label} leader`}>
-    <div className="rk-room-leader-main-v60">
-      <div className="rk-room-rank-badge rk-room-rank-badge-v60">#1</div>
-      <div className="rk-room-leader-copy rk-room-leader-copy-v60">
-        <div className="rk-room-leader-kicker rk-room-leader-kicker-v60">Today’s {label} leader</div>
-        <div className="rk-room-leader-name rk-room-leader-name-v60">{leaderTitle}</div>
-        <div className="rk-room-leader-sub rk-room-leader-sub-v60">{leaderSub}</div>
+    ? `Your ${leaderScore} is the number everyone is chasing.`
+    : myEntry
+      ? `${gap} point${gap===1?"":"s"} clear of your score.`
+      : `${count} score${count===1?"":"s"} posted today.`;
+  return <section className={`rk-lb-feature ${samePlayer?"rk-lb-feature-you":""}`} aria-label={`Today’s ${label} leader`}>
+    <div className="rk-lb-feature-copy">
+      <div className="rk-lb-feature-kicker">{heroKicker}</div>
+      <div className="rk-lb-feature-main">
+        <div className="rk-lb-feature-rank">#1</div>
+        <div className="rk-lb-feature-text">
+          <h2>{leaderTitle}</h2>
+          <p>{leaderSub}</p>
+        </div>
       </div>
     </div>
-    <div className="rk-room-score-wrap-v60">
-      <div className="rk-room-score rk-room-score-v60">{leaderScore}</div>
+    <div className="rk-lb-feature-score">
+      <strong>{leaderScore}</strong>
       <span>Rackle IQ</span>
     </div>
   </section>;
 }
+
 function RoomMyPosition({myRank,score,leader,count,clubName="the room"}){
   if(!score)return null;
   const leaderScore=Number(leader?.iqScore)||0;
   const gap=myRank&&myRank>1?Math.max(0,leaderScore-score):0;
-  const title=myRank===1?"Top of the table":myRank?`You are #${myRank}`:"You are on the board";
+  const title=myRank===1?"You’re on top":myRank?`You’re #${myRank}`:"Ready to rank";
   const copy=myRank===1
-    ?`Everyone is chasing your ${score}.`
-    :myRank?`${gap} point${gap===1?"":"s"} behind today’s leader.`:`Play the Daily to claim your spot.`;
-  return <section className="rk-room-position-v60" aria-label="Your position">
-    <div>
-      <div className="rk-room-position-kicker-v60">Your position</div>
-      <div className="rk-room-position-title-v60">{title}</div>
-      <div className="rk-room-position-copy-v60">{copy}</div>
+    ? `You’re setting the pace in ${clubName}.`
+    : myRank
+      ? `${gap} point${gap===1?"":"s"} back from the lead. ${count||0} score${count===1?"":"s"} posted so far.`
+      : `Play today’s rack to claim your spot in ${clubName}.`;
+  return <section className="rk-lb-position" aria-label="Your position">
+    <div className="rk-lb-position-copy">
+      <div className="rk-lb-position-kicker">Your position</div>
+      <div className="rk-lb-position-title">{title}</div>
+      <div className="rk-lb-position-text">{copy}</div>
     </div>
-    <div className="rk-room-position-meta-v60">
+    <div className="rk-lb-position-meta">
       <strong>{myRank?`#${myRank}`:"—"}</strong>
-      <span>{count||0} posted</span>
+      <span>{score} IQ</span>
     </div>
   </section>;
 }
-function RoomRows({entries=[],scoreHint=null,emptyTitle="No scores yet",emptyCopy="Play today’s rack and claim the room."}){
-  if(!entries.length)return <section className="rk-room-board-v50 rk-room-board-empty-v50 rk-room-board-v1 rk-room-board-v60">
-    <div className="rk-room-board-empty-icon">🀄</div>
-    <div className="rk-room-board-empty-title">{emptyTitle}</div>
-    <div className="rk-room-board-empty-copy">{emptyCopy}</div>
+
+function RoomRows({entries=[],scoreHint=null,emptyTitle="No scores yet",emptyCopy="Play today’s rack and claim the room.",title="Today’s board",subtitle="Leaderboard"}){
+  if(!entries.length)return <section className="rk-lb-board rk-lb-board-empty">
+    <div className="rk-lb-empty-mark">🀄</div>
+    <div className="rk-lb-empty-title">{emptyTitle}</div>
+    <div className="rk-lb-empty-copy">{emptyCopy}</div>
   </section>;
-  return <section className="rk-room-board-v50 rk-room-board-v1 rk-room-board-v60" aria-label="Leaderboard">
-    <div className="rk-room-board-v50-head rk-room-board-head-v1 rk-room-board-head-v60">
+
+  return <section className="rk-lb-board" aria-label="Leaderboard">
+    <div className="rk-lb-board-head">
       <div>
-        <div className="rk-room-board-v50-kicker rk-room-board-kicker-v60">Today’s board</div>
-        <h2>Leaderboard</h2>
+        <div className="rk-lb-board-kicker">{title}</div>
+        <h2>{subtitle}</h2>
       </div>
       <span>{entries.length} posted</span>
     </div>
-    <div className="rk-room-board-table-head-v60" aria-hidden="true"><span>Rank</span><span>Player</span><span>Score</span></div>
-    <div className="rk-room-board-v50-list rk-room-board-list-v1 rk-room-board-list-v60">
+    <div className="rk-lb-table-head" aria-hidden="true"><span>Rank</span><span>Player</span><span>Score</span></div>
+    <div className="rk-lb-board-list">
       {entries.slice(0,30).map((e,i)=>{
         const isMe=rkEntryMatchesCurrentPlayer(e,scoreHint);
         const rank=i+1;
         const podium=rank===1?"gold":rank===2?"silver":rank===3?"bronze":"";
-        return <div key={`${e.playerId||e.player_id||e.name}-${i}`} className={`rk-room-row rk-room-row-v50 rk-room-row-v1 rk-room-row-v60 ${isMe?"rk-room-row-me":""} ${rank<=3?"rk-room-row-podium":""} ${podium?`rk-podium-${podium}`:""}`}>
-          <div className={`rk-room-row-rank rk-room-row-rank-v50 rk-room-row-rank-v1 rk-room-row-rank-v60 ${rank<=3?"rk-room-row-top":""}`}>{rank}</div>
-          <div className="rk-room-row-player-v50 rk-room-row-player-v1 rk-room-row-player-v60">
-            <div className="rk-room-row-name">{e.name}{isMe?" · you":""}</div>
-            <div className="rk-room-row-sub">{rkEntrySub(e)}</div>
+        return <div key={`${e.playerId||e.player_id||e.name}-${i}`} className={`rk-lb-row ${isMe?"rk-lb-row-you":""} ${podium?`rk-lb-row-${podium}`:""}`}>
+          <div className={`rk-lb-rank ${rank<=3?"rk-lb-rank-top":""}`}>{rank}</div>
+          <div className="rk-lb-player">
+            <div className="rk-lb-player-top">
+              <div className="rk-lb-player-name">{e.name}{isMe?" · you":""}</div>
+              {rank<=3&&<span className={`rk-lb-podium rk-lb-podium-${podium}`}>{rank===1?"Leader":rank===2?"Chasing":"In the mix"}</span>}
+            </div>
+            <div className="rk-lb-player-sub">{rkEntrySub(e)}</div>
           </div>
-          <div className="rk-room-row-score-wrap-v50 rk-room-row-score-wrap-v1 rk-room-row-score-wrap-v60">
+          <div className="rk-lb-score-wrap">
             <span>IQ</span>
-            <div className={`rk-room-row-score ${rkScoreTone(e.iqScore)}`}>{e.iqScore}</div>
+            <div className={`rk-lb-score ${rkScoreTone(e.iqScore)}`}>{e.iqScore}</div>
           </div>
         </div>;
       })}
     </div>
   </section>;
 }
+
 function RoomActivity(){return null;}
 function rkSharePattern(iq){
   const dots=(iq?.passInsights||[]).slice(0,4).map(p=>p.quality==="strong"?"🟩":p.quality==="weak"?"⬜":"🟨").join("");
@@ -10012,6 +10027,7 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
   const iq=withIQStyle(todayDRes?.iq);
   const score=Number(iq?.totalScore||0);
   const time=Number(todayDRes?.time||iq?.totalTime||0);
+
   const load=useCallback(async()=>{
     setLoading(true);
     const rows=await fetchGlobalEntries();
@@ -10024,32 +10040,41 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
   const myRank=score>0?rkRankOfCurrent(entries,score)||null:null;
   const leader=entries[0]||null;
   const myEntry=myRank?entries[myRank-1]:null;
-  const activity=rkBuildActivity(entries,"global room",myRank);
   const shareText=shareRoomText({title:`Rackle Global Room · Day #${dn}`,score,rank:myRank});
 
-  return <div style={S.pg} className="rk-pg rk-room-page">
+  return <div style={S.pg} className="rk-pg rk-lb-page">
     <RackleHeader onBack={home} setScreen={setScreen}/>
-    <div className="rk-room-hero">
-      <div className="rk-room-kicker">Global room · Day #{dn}</div>
-      <h1 className="rk-room-title">Today’s Rackle Room</h1>
-      <p className="rk-room-copy">Same rack for everyone. See who leads, where you sit, and what score your table needs to beat.</p>
-      <div className="rk-room-metrics">
-        <RoomMetric value={entries.length||"—"} label="players"/>
-        <RoomMetric value={leader?.iqScore||"—"} label="score to beat"/>
-        <RoomMetric value={myRank?`#${myRank}`:"—"} label="your rank"/>
+
+    <section className="rk-lb-hero rk-lb-hero-global">
+      <div className="rk-lb-hero-topline">
+        <span className="rk-lb-hero-pill">Global room</span>
+        <span className="rk-lb-hero-day">Day #{dn}</span>
       </div>
+      <h1 className="rk-lb-hero-title">Today’s Rackle leaderboard</h1>
+      <p className="rk-lb-hero-copy">Same rack for everyone. See who’s leading the room and where your score lands today.</p>
+      <div className="rk-lb-stats-grid">
+        <RoomMetric value={entries.length||"—"} label="players" accent="blue"/>
+        <RoomMetric value={leader?.iqScore||"—"} label="score to beat" accent="gold"/>
+        <RoomMetric value={myRank?`#${myRank}`:(score?"—":"Play") } label="your rank" accent="jade"/>
+      </div>
+    </section>
+
+    {loading
+      ? <div className="rk-lb-loading-card">Loading today’s scores…</div>
+      : <>
+          <RoomLeader leader={leader} myEntry={myEntry} count={entries.length} label="global"/>
+          <RoomMyPosition myRank={myRank} score={score} leader={leader} count={entries.length} clubName="the global room"/>
+          <RoomRows entries={entries} scoreHint={score} emptyTitle="Be the first to post a score today" emptyCopy="Play today’s rack to get ranked." title="Global board" subtitle="Leaderboard"/>
+        </>
+    }
+
+    <div className="rk-lb-actions">
+      <button className="rk-lb-btn rk-lb-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(shareText,"Rackle Global Room");setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Share room"}</button>
+      <button className="rk-lb-btn" onClick={load}>Refresh</button>
+      <button className="rk-lb-btn" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"Club board":"Find club"}</button>
+      <button className="rk-lb-btn" onClick={home}>Home</button>
     </div>
-    {loading?<div className="rk-premium-card" style={{padding:28,textAlign:"center",marginBottom:12}}>Loading today’s scores…</div>:<>
-      <RoomLeader leader={leader} myEntry={myEntry} count={entries.length} label="table"/>
-      {myRank!==1&&<RoomMyPosition myRank={myRank} score={score} leader={leader} count={entries.length} clubName="Global room"/>}
-      <RoomRows entries={entries} scoreHint={score} emptyTitle="Be the first to post a score today" emptyCopy="Play today’s rack to get ranked."/>
-    </>}
-    <div className="rk-room-actions rk-room-actions-simple-v91">
-      <button className="rk-room-btn rk-room-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(shareText,"Rackle Global Room");setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Share room"}</button>
-      <button className="rk-room-btn" onClick={load}>Refresh</button>
-      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"Club board":"Find club"}</button>
-      <button className="rk-room-btn" onClick={home}>Home</button>
-    </div>
+
     <Footer/>
   </div>;
 }
@@ -10078,19 +10103,26 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
   },[code,score,time,streak]);
   useEffect(()=>{load();},[load]);
 
-  if(!club)return <div style={S.pg} className="rk-pg rk-room-page">
+  if(!club)return <div style={S.pg} className="rk-pg rk-lb-page">
     <RackleHeader onBack={home} setScreen={setScreen}/>
-    <div className="rk-room-hero"><div className="rk-room-kicker">Club room</div><h1 className="rk-room-title">Find your table</h1><p className="rk-room-copy">Join a club room to compare scores with the people you actually play with.</p></div>
-    <button onClick={()=>setScreen("clubs")} className="rk-room-btn rk-room-btn-primary" style={{width:"100%",marginBottom:12}}>Find your club</button>
+    <section className="rk-lb-hero rk-lb-hero-club">
+      <div className="rk-lb-hero-topline"><span className="rk-lb-hero-pill">Club room</span></div>
+      <h1 className="rk-lb-hero-title">Find your table</h1>
+      <p className="rk-lb-hero-copy">Join a club room to compare scores with the people you actually play with.</p>
+    </section>
+    <div className="rk-lb-actions rk-lb-actions-single">
+      <button onClick={()=>setScreen("clubs")} className="rk-lb-btn rk-lb-btn-primary">Find your club</button>
+    </div>
     <Footer/>
   </div>;
 
   const myRank=score>0?rkRankOfCurrent(entries,score)||null:null;
   const leader=entries[0]||null;
   const myEntry=myRank?entries[myRank-1]:null;
-  const activity=rkBuildActivity(entries,"club room",myRank);
-  const inviteText=`Join ${club.name} on Rackle. Same daily Charleston. Private club leaderboard.\nClub code: ${code}\nplayrackle.com`;
   const shareText=shareRoomText({title:`${club.name} · Rackle Day #${dn}`,score,rank:myRank,clubCode:code,clubName:club.name});
+  const inviteText=`Join ${club.name} on Rackle. Same daily Charleston. Private club leaderboard.
+Club code: ${code}
+playrackle.com`;
   const posted=score>0&&entries.some(e=>rkEntryMatchesCurrentPlayer(e,score));
 
   const postScore=async()=>{
@@ -10101,45 +10133,67 @@ function LeaderboardScreen({home,dRes,streak,setScreen}){
     setPosting(false);
   };
 
-  return <div style={S.pg} className="rk-pg rk-room-page">
+  return <div style={S.pg} className="rk-pg rk-lb-page">
     <RackleHeader onBack={home} setScreen={setScreen}/>
-    <div className="rk-room-hero">
-      <div className="rk-room-kicker">Your club · Day #{dn}</div>
-      <h1 className="rk-room-title">{club.name}</h1>
-      <p className="rk-room-copy">Same daily rack. One club board. See who is leading and who is chasing.</p>
-      <div className="rk-room-metrics">
-        <RoomMetric value={entries.length||"—"} label="club scores"/>
-        <RoomMetric value={leader?.iqScore||"—"} label="score to beat"/>
-        <RoomMetric value={myRank?`#${myRank}`:"—"} label="your rank"/>
+
+    <section className="rk-lb-hero rk-lb-hero-club">
+      <div className="rk-lb-hero-topline">
+        <span className="rk-lb-hero-pill">Club room</span>
+        <span className="rk-lb-hero-day">Day #{dn}</span>
       </div>
-    </div>
-    {loading?<div className="rk-premium-card" style={{padding:28,textAlign:"center",marginBottom:12}}>Loading today’s scores…</div>:<>
-      <RoomLeader leader={leader} myEntry={myEntry} count={entries.length} label="club"/>
-      {!(posted&&myRank===1)&&<RoomMyPosition myRank={posted?myRank:null} score={score} leader={leader} count={entries.length} clubName={club.name}/>}
-      {score>0&&!posted&&<div className="rk-invite-card">
-        <div style={{fontSize:9,letterSpacing:2,textTransform:"uppercase",fontWeight:900,color:C.jade,marginBottom:8}}>Name on board</div>
-        <div style={{display:"flex",gap:8}}><input value={nameInput} onChange={e=>setNameInput(e.target.value)} placeholder="Your name" style={{flex:1,minWidth:0,border:`1px solid rgba(26,20,16,.10)`,borderRadius:14,padding:"12px 13px",fontFamily:F.b,fontSize:13,background:"#FFFDF8",outline:"none"}}/><button onClick={postScore} disabled={posting||!nameInput.trim()} className="rk-room-btn rk-room-btn-primary" style={{padding:"0 16px"}}>{posting?"…":"Post"}</button></div>
-      </div>}
-      <RoomRows entries={entries} scoreHint={score} emptyTitle="Be the first to post a score today" emptyCopy="Play today’s rack to get ranked."/>
-    </>}
-    <div className="rk-invite-card">
-      <div style={{display:"flex",alignItems:"center",gap:11,textAlign:"left",marginBottom:12}}><div className="rk-room-you-icon">CODE</div><div><div className="rk-room-you-title">Invite the table</div><div className="rk-room-you-copy">Private code: <strong>{code}</strong></div></div></div>
-      <div className="rk-room-actions" style={{marginBottom:0}}>
-        <button className="rk-room-btn rk-room-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(inviteText,`Join ${club.name}`);setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Copy invite"}</button>
-        <button className="rk-room-btn" onClick={async()=>{const ok=await rkCopyOrShare(shareText,club.name);setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>Share score</button>
+      <h1 className="rk-lb-hero-title">{club.name}</h1>
+      <p className="rk-lb-hero-copy">One shared daily rack for your table. See who’s leading and how close you are to the top.</p>
+      <div className="rk-lb-stats-grid">
+        <RoomMetric value={entries.length||"—"} label="club scores" accent="jade"/>
+        <RoomMetric value={leader?.iqScore||"—"} label="score to beat" accent="gold"/>
+        <RoomMetric value={myRank?`#${myRank}`:(score?"—":"Play") } label="your rank" accent="purple"/>
       </div>
+    </section>
+
+    {loading
+      ? <div className="rk-lb-loading-card">Loading today’s scores…</div>
+      : <>
+          <RoomLeader leader={leader} myEntry={myEntry} count={entries.length} label="club"/>
+          <RoomMyPosition myRank={myRank} score={score} leader={leader} count={entries.length} clubName={club.name}/>
+          {score>0&&!posted && <section className="rk-lb-inline-form">
+            <div className="rk-lb-inline-copy">
+              <div className="rk-lb-inline-kicker">Post your score</div>
+              <div className="rk-lb-inline-title">Add your name to today’s board</div>
+            </div>
+            <div className="rk-lb-inline-controls">
+              <input value={nameInput} onChange={e=>setNameInput(e.target.value)} placeholder="Your name" className="rk-lb-input"/>
+              <button onClick={postScore} disabled={posting||!nameInput.trim()} className="rk-lb-btn rk-lb-btn-primary">{posting?"Posting…":"Post score"}</button>
+            </div>
+          </section>}
+          <RoomRows entries={entries} scoreHint={score} emptyTitle="Be the first to post a score today" emptyCopy="Play today’s rack to get ranked." title="Club board" subtitle="Leaderboard"/>
+        </>
+    }
+
+    <section className="rk-lb-invite-card">
+      <div className="rk-lb-invite-top">
+        <div className="rk-lb-invite-badge">CODE</div>
+        <div>
+          <div className="rk-lb-invite-title">Invite the table</div>
+          <div className="rk-lb-invite-copy">Private club code: <strong>{code}</strong></div>
+        </div>
+      </div>
+      <div className="rk-lb-actions rk-lb-actions-2up" style={{marginTop:14}}>
+        <button className="rk-lb-btn rk-lb-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(inviteText,`Join ${club.name}`);setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Copy invite"}</button>
+        <button className="rk-lb-btn" onClick={async()=>{const ok=await rkCopyOrShare(shareText,club.name);setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>Share score</button>
+      </div>
+    </section>
+
+    <div className="rk-lb-actions">
+      <button className="rk-lb-btn rk-lb-btn-primary" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>Global room</button>
+      <button className="rk-lb-btn" onClick={load}>Refresh</button>
+      <button className="rk-lb-btn" onClick={()=>setScreen&&setScreen("clubs")}>Change club</button>
+      <button className="rk-lb-btn" onClick={home}>Home</button>
     </div>
-    <div className="rk-room-actions rk-room-actions-simple-v91">
-      <button className="rk-room-btn rk-room-btn-primary" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>Global room</button>
-      <button className="rk-room-btn" onClick={load}>Refresh</button>
-      <button className="rk-room-btn" onClick={()=>setScreen&&setScreen("clubs")}>Change club</button>
-      <button className="rk-room-btn" onClick={home}>Home</button>
-    </div>
+
     <Footer/>
   </div>;
 }
 
-// ─── STATS PILL, collapsed by default, tap to expand ────────────────────────
 function Statspill({streak,rounds,bestIQ,streakBadge}){
   const [open,setOpen]=useState(false);
   const visibleStreak=streak>0?streak:0;
