@@ -10015,6 +10015,16 @@ function shareRoomText({title,score,rank,clubCode,clubName}){
 async function rkCopyOrShare(text,title="Rackle"){
   try{if(navigator.share)await navigator.share({title,text});else await navigator.clipboard.writeText(text);return true;}catch(e){try{await navigator.clipboard.writeText(text);return true;}catch(_){return false;}}
 }
+function RoomShareCard({title,copy,buttonLabel="Share room",copied=false,onShare}){
+  return <section className="rk-lb-share-card" aria-label={title}>
+    <div className="rk-lb-share-copy">
+      <div className="rk-lb-share-kicker">Share the room</div>
+      <h2>{title}</h2>
+      <p>{copy}</p>
+    </div>
+    <button className="rk-lb-share-btn" onClick={onShare}>{copied?"Copied":buttonLabel}</button>
+  </section>;
+}
 
 // ─── GLOBAL RACKLE LEADERBOARD SCREEN ───────────────────────────────────────
 function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
@@ -10067,11 +10077,17 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
         </>
     }
 
-    <div className="rk-lb-actions rk-lb-actions-premium">
-      <button className="rk-lb-btn rk-lb-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(shareText,"Rackle Global Room");setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Share room"}</button>
-      <button className="rk-lb-btn" onClick={load}>Refresh</button>
-      <button className="rk-lb-btn" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"Club board":"Find club"}</button>
-      <button className="rk-lb-btn" onClick={home}>Home</button>
+    <RoomShareCard
+      title="Share today’s global room"
+      copy="Send the board to your table so everyone can chase the same daily rack."
+      buttonLabel="Share room"
+      copied={copied}
+      onShare={async()=>{const ok=await rkCopyOrShare(shareText,"Rackle Global Room");setCopied(ok);setTimeout(()=>setCopied(false),1400);}}
+    />
+
+    <div className="rk-lb-nav-actions">
+      <button className="rk-lb-nav-btn rk-lb-nav-btn-home" onClick={home}>Home</button>
+      <button className="rk-lb-nav-btn rk-lb-nav-btn-primary" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"Club board":"Find club"}</button>
     </div>
 
     <Footer/>
@@ -10168,7 +10184,15 @@ playrackle.com`;
         </>
     }
 
-    <section className="rk-lb-invite-card">
+    <RoomShareCard
+      title="Share this club room"
+      copy="Send today’s board to your table so your club can compare scores before the reset."
+      buttonLabel="Share room"
+      copied={copied}
+      onShare={async()=>{const ok=await rkCopyOrShare(shareText,club.name);setCopied(ok);setTimeout(()=>setCopied(false),1400);}}
+    />
+
+    <section className="rk-lb-invite-card rk-lb-invite-card-slim">
       <div className="rk-lb-invite-top">
         <div className="rk-lb-invite-badge">CODE</div>
         <div>
@@ -10176,17 +10200,12 @@ playrackle.com`;
           <div className="rk-lb-invite-copy">Private club code: <strong>{code}</strong></div>
         </div>
       </div>
-      <div className="rk-lb-actions rk-lb-actions-2up" style={{marginTop:14}}>
-        <button className="rk-lb-btn rk-lb-btn-primary" onClick={async()=>{const ok=await rkCopyOrShare(inviteText,`Join ${club.name}`);setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Copy invite"}</button>
-        <button className="rk-lb-btn" onClick={async()=>{const ok=await rkCopyOrShare(shareText,club.name);setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>Share score</button>
-      </div>
+      <button className="rk-lb-invite-copy-btn" onClick={async()=>{const ok=await rkCopyOrShare(inviteText,`Join ${club.name}`);setCopied(ok);setTimeout(()=>setCopied(false),1400);}}>{copied?"Copied":"Copy invite"}</button>
     </section>
 
-    <div className="rk-lb-actions rk-lb-actions-premium">
-      <button className="rk-lb-btn rk-lb-btn-primary" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>Global room</button>
-      <button className="rk-lb-btn" onClick={load}>Refresh</button>
-      <button className="rk-lb-btn" onClick={()=>setScreen&&setScreen("clubs")}>Change club</button>
-      <button className="rk-lb-btn" onClick={home}>Home</button>
+    <div className="rk-lb-nav-actions">
+      <button className="rk-lb-nav-btn rk-lb-nav-btn-home" onClick={home}>Home</button>
+      <button className="rk-lb-nav-btn rk-lb-nav-btn-primary" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>Global room</button>
     </div>
 
     <Footer/>
