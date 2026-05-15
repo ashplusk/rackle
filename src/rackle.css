@@ -9714,3 +9714,105 @@ body,
     border-radius:14px!important;
   }
 }
+
+/* Scorecard share section cleanup */
+.rk-scorecard-share-stats{
+  display:none!important;
+}
+
+.rk-scorecard-share-card,
+.rk-scorecard-share-section{
+  gap:16px!important;
+}
+
+.rk-scorecard-share-content{
+  gap:10px!important;
+}
+
+.rk-scorecard-share-button{
+  width:100%!important;
+  min-height:58px!important;
+  margin-top:6px!important;
+  padding:12px 14px!important;
+  border-radius:19px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  text-align:left!important;
+  background:linear-gradient(180deg,#176B42 0%,#0D432A 100%)!important;
+  color:#FFF8E8!important;
+  border:1px solid rgba(243,212,107,.32)!important;
+  box-shadow:
+    0 14px 28px rgba(13,67,42,.22),
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 0 rgba(0,0,0,.20)!important;
+}
+
+.rk-scorecard-share-button,
+.rk-scorecard-share-button *{
+  color:#FFF8E8!important;
+}
+
+.rk-scorecard-share-button strong,
+.rk-scorecard-share-button .rk-scorecard-share-button-title{
+  font-family:'Fraunces', Georgia, serif!important;
+  font-weight:900!important;
+  font-size:17px!important;
+  line-height:1.05!important;
+  letter-spacing:.1px!important;
+}
+
+.rk-scorecard-share-button span,
+.rk-scorecard-share-button .rk-scorecard-share-button-subtitle{
+  font-size:11px!important;
+  line-height:1.25!important;
+  font-weight:800!important;
+  color:rgba(255,248,232,.78)!important;
+}
+
+.rk-scorecard-share-button .rk-scorecard-share-send-pill,
+.rk-scorecard-share-button em{
+  flex-shrink:0!important;
+  border-radius:999px!important;
+  padding:7px 10px!important;
+  background:rgba(255,248,232,.14)!important;
+  border:1px solid rgba(255,248,232,.22)!important;
+  color:#FFF8E8!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:10px!important;
+  font-weight:900!important;
+  font-style:normal!important;
+  letter-spacing:1px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-scorecard-share-button:hover{
+  transform:translateY(-1px)!important;
+  box-shadow:
+    0 17px 34px rgba(13,67,42,.28),
+    inset 0 1px 0 rgba(255,255,255,.20),
+    inset 0 -1px 0 rgba(0,0,0,.20)!important;
+}
+
+.rk-scorecard-share-button:active{
+  transform:translateY(0) scale(.985)!important;
+}
+
+@media (max-width:430px){
+  .rk-scorecard-share-button{
+    min-height:56px!important;
+    padding:12px 13px!important;
+    border-radius:18px!important;
+  }
+
+  .rk-scorecard-share-button strong,
+  .rk-scorecard-share-button .rk-scorecard-share-button-title{
+    font-size:16px!important;
+  }
+
+  .rk-scorecard-share-button span,
+  .rk-scorecard-share-button .rk-scorecard-share-button-subtitle{
+    font-size:10.5px!important;
+  }
+}
