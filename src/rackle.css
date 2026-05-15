@@ -2645,9 +2645,9 @@
   flex-shrink:0!important;
   border-radius:999px!important;
   padding:7px 9px!important;
-  background:rgba(23,107,66,.07)!important;
-  border:1px solid rgba(23,107,66,.11)!important;
-  color:#176B42!important;
+  background:rgba(255,253,248,.92)!important;
+  border:1px solid rgba(255,255,255,.58)!important;
+  color:#0B3B24!important;
   font-style:normal!important;
   font-size:10px!important;
   line-height:1!important;
@@ -3012,9 +3012,9 @@ html,body,#root{
 }
 .rk-room-board-head-v60 > span{
   border-radius:999px!important;
-  background:rgba(23,107,66,.07)!important;
-  border:1px solid rgba(23,107,66,.11)!important;
-  color:#176B42!important;
+  background:rgba(255,253,248,.92)!important;
+  border:1px solid rgba(255,255,255,.58)!important;
+  color:#0B3B24!important;
   padding:6px 9px!important;
   font-size:10px!important;
   font-weight:900!important;
@@ -9221,8 +9221,8 @@ body,
   color:rgba(26,20,16,.56)!important;
   font-family:'Nunito','Inter',system-ui,sans-serif!important;
   font-size:11.5px!important;
-  font-weight:750!important;
-  line-height:1.42!important;
+  font-weight:500!important;
+  line-height:1.44!important;
 }
 .rk-footer-community{
   margin:0 auto 12px!important;
@@ -9263,13 +9263,13 @@ body,
   margin:0 auto 10px!important;
   padding:9px!important;
   border-radius:16px!important;
-  background:rgba(255,253,248,.42)!important;
-  border:1px solid rgba(23,107,66,.09)!important;
-  box-shadow:0 6px 18px rgba(26,20,16,.025)!important;
+  background:linear-gradient(145deg,#176B42,#0B3B24)!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  box-shadow:0 8px 20px rgba(6,43,24,.10),inset 0 1px 0 rgba(255,255,255,.10)!important;
 }
 .rk-footer-join-copy{
   margin:0 0 6px!important;
-  color:rgba(23,107,66,.76)!important;
+  color:rgba(255,253,248,.82)!important;
   font-family:'Nunito','Inter',system-ui,sans-serif!important;
   font-size:9.5px!important;
   font-weight:900!important;
@@ -9289,7 +9289,7 @@ body,
   height:34px!important;
   width:auto!important;
   border-radius:999px!important;
-  border:1px solid rgba(26,20,16,.09)!important;
+  border:1px solid rgba(255,255,255,.18)!important;
   background:#FFFDF8!important;
   padding:0 11px!important;
   color:#1A1410!important;
@@ -9298,8 +9298,8 @@ body,
   box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important;
 }
 .rk-footer-join-form input:focus{
-  border-color:rgba(23,107,66,.34)!important;
-  box-shadow:0 0 0 3px rgba(23,107,66,.08),inset 0 1px 0 rgba(255,255,255,.78)!important;
+  border-color:rgba(255,255,255,.58)!important;
+  box-shadow:0 0 0 3px rgba(255,255,255,.12),inset 0 1px 0 rgba(255,255,255,.78)!important;
 }
 .rk-footer-join-form input::placeholder{
   color:rgba(26,20,16,.34)!important;
@@ -9311,20 +9311,20 @@ body,
   min-width:58px!important;
   padding:0 12px!important;
   border-radius:999px!important;
-  border:1px solid rgba(255,255,255,.14)!important;
-  background:linear-gradient(145deg,#176B42,#0B3B24)!important;
-  color:#FFFDF8!important;
+  border:1px solid rgba(255,255,255,.68)!important;
+  background:#FFFDF8!important;
+  color:#0B3B24!important;
   font-family:'Nunito','Inter',system-ui,sans-serif!important;
   font-size:11px!important;
   font-weight:900!important;
-  box-shadow:0 6px 14px rgba(6,43,24,.12),inset 0 1px 0 rgba(255,255,255,.14)!important;
+  box-shadow:0 5px 12px rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.82)!important;
 }
 .rk-footer-join-done{
   padding:9px 10px!important;
   border-radius:14px!important;
-  background:rgba(23,107,66,.07)!important;
-  border:1px solid rgba(23,107,66,.11)!important;
-  color:#176B42!important;
+  background:rgba(255,253,248,.92)!important;
+  border:1px solid rgba(255,255,255,.58)!important;
+  color:#0B3B24!important;
   font-size:11.5px!important;
   font-weight:900!important;
 }
@@ -9348,7 +9348,7 @@ body,
   .rk-footer{margin-top:22px!important;padding:16px 0 18px!important;}
   .rk-footer-inner{padding:0 8px!important;}
   .rk-footer-logo{font-size:21px!important;}
-  .rk-footer-tagline{font-size:11px!important;max-width:245px!important;}
+  .rk-footer-tagline{font-size:11px!important;max-width:245px!important;font-weight:500!important;}
   .rk-footer-actions{margin-bottom:11px!important;}
   .rk-footer-pill{min-height:31px!important;padding:0 12px!important;font-size:11px!important;}
   .rk-footer-join{max-width:292px!important;padding:8px!important;}

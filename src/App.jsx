@@ -8743,7 +8743,7 @@ function Footer(){
           <div aria-hidden="true" className="rk-footer-rule"/>
           <div className="rk-footer-brand-lockup">
             <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" className="rk-footer-logo">Rackle</a>
-            <div className="rk-footer-tagline">The daily Charleston ritual for American Mahjong players.</div>
+            <div className="rk-footer-tagline">The daily Mahjong workout.</div>
           </div>
           <div className="rk-footer-community">Made for the American Mahjong community.</div>
           <div className="rk-footer-actions">
