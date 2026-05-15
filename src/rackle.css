@@ -9937,3 +9937,112 @@ body,
     font-size:11px!important;
   }
 }
+
+/* Club leaderboard share button revamp */
+.rk-lb-club-share-score-btn{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+  width:100%!important;
+  min-height:64px!important;
+  padding:15px 18px!important;
+  border-radius:22px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:10px!important;
+  text-align:center!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:18px!important;
+  font-weight:900!important;
+  line-height:1.05!important;
+  letter-spacing:-.1px!important;
+  color:#FFF8E8!important;
+  background:
+    radial-gradient(circle at 82% 16%, rgba(243,212,107,.22), transparent 30%),
+    linear-gradient(180deg,#176B42 0%,#0D432A 100%)!important;
+  border:1px solid rgba(243,212,107,.38)!important;
+  box-shadow:
+    0 16px 34px rgba(13,67,42,.25),
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 0 rgba(0,0,0,.22)!important;
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    filter .18s ease,
+    border-color .18s ease!important;
+}
+
+.rk-lb-club-share-score-btn:before{
+  content:"📱"!important;
+  width:38px!important;
+  height:38px!important;
+  border-radius:14px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex-shrink:0!important;
+  background:rgba(255,248,232,.13)!important;
+  border:1px solid rgba(255,248,232,.20)!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:20px!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.13)!important;
+}
+
+.rk-lb-club-share-score-btn:after{
+  content:"SEND"!important;
+  position:relative!important;
+  margin-left:auto!important;
+  flex-shrink:0!important;
+  padding:8px 11px!important;
+  border-radius:999px!important;
+  background:rgba(255,248,232,.14)!important;
+  border:1px solid rgba(255,248,232,.24)!important;
+  color:#FFF8E8!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:10px!important;
+  font-weight:900!important;
+  letter-spacing:1.3px!important;
+  line-height:1!important;
+}
+
+.rk-lb-club-share-score-btn:hover{
+  transform:translateY(-1px)!important;
+  filter:saturate(1.04)!important;
+  border-color:rgba(243,212,107,.50)!important;
+  box-shadow:
+    0 19px 38px rgba(13,67,42,.31),
+    inset 0 1px 0 rgba(255,255,255,.20),
+    inset 0 -1px 0 rgba(0,0,0,.22)!important;
+}
+
+.rk-lb-club-share-score-btn:active{
+  transform:translateY(0) scale(.985)!important;
+}
+
+.rk-lb-club-share-score-btn:focus-visible{
+  outline:3px solid rgba(243,212,107,.30)!important;
+  outline-offset:3px!important;
+}
+
+@media (max-width:430px){
+  .rk-lb-club-share-score-btn{
+    min-height:58px!important;
+    padding:13px 14px!important;
+    border-radius:20px!important;
+    font-size:16px!important;
+    justify-content:flex-start!important;
+  }
+
+  .rk-lb-club-share-score-btn:before{
+    width:34px!important;
+    height:34px!important;
+    border-radius:12px!important;
+    font-size:18px!important;
+  }
+
+  .rk-lb-club-share-score-btn:after{
+    padding:7px 9px!important;
+    font-size:9px!important;
+  }
+}
