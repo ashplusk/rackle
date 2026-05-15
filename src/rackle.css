@@ -10152,3 +10152,48 @@ body,
     line-height:1.38!important;
   }
 }
+
+/* Final hand section text alignment */
+.rk-scorecard-final-hand h2,
+.rk-scorecard-final-hand h3,
+.rk-scorecard-final-title,
+.rk-scorecard-final-hand-title,
+.rk-final-hand-title,
+.rk-final-rack-title,
+.rk-final-hand-card h2,
+.rk-final-hand-card h3,
+.rk-scorecard-final-card h2,
+.rk-scorecard-final-card h3{
+  text-align:left!important;
+  margin-left:0!important;
+  margin-right:0!important;
+}
+
+.rk-scorecard-final-hand p,
+.rk-scorecard-final-copy,
+.rk-scorecard-final-hand-copy,
+.rk-final-hand-copy,
+.rk-final-rack-copy,
+.rk-final-hand-card p,
+.rk-scorecard-final-card p{
+  text-align:left!important;
+  margin-left:0!important;
+  margin-right:0!important;
+}
+
+/* Text-specific fallback for the visible Final Hand copy */
+.rk-pg h2:has(+ p),
+.rk-pg h3:has(+ p){
+  text-wrap:balance;
+}
+
+@supports selector(:has(*)){
+  .rk-pg section:has(h2, h3):has([class*="rack"]) h2,
+  .rk-pg section:has(h2, h3):has([class*="rack"]) h3{
+    text-align:left!important;
+  }
+
+  .rk-pg section:has(h2, h3):has([class*="rack"]) p{
+    text-align:left!important;
+  }
+}
