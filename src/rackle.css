@@ -10197,3 +10197,96 @@ body,
     text-align:left!important;
   }
 }
+
+/* Gameplay Charleston instruction card centering + margin polish */
+.rk-game-flow-card{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  padding:30px 22px 34px!important;
+  margin:14px 0 20px!important;
+  border-radius:26px!important;
+}
+
+.rk-game-flow-kicker{
+  width:max-content!important;
+  max-width:100%!important;
+  margin:0 auto 30px!important;
+  text-align:center!important;
+}
+
+.rk-game-flow-title{
+  width:100%!important;
+  max-width:680px!important;
+  margin:0 auto 10px!important;
+  text-align:center!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-weight:900!important;
+  line-height:1.08!important;
+  letter-spacing:-.35px!important;
+  text-wrap:balance!important;
+}
+
+.rk-game-flow-copy{
+  width:100%!important;
+  max-width:610px!important;
+  margin:0 auto!important;
+  text-align:center!important;
+  line-height:1.38!important;
+  text-wrap:balance!important;
+}
+
+.rk-game-start-instruction{
+  text-align:center!important;
+}
+
+.rk-game-start-instruction .rk-game-flow-title,
+.rk-game-start-instruction .rk-game-flow-copy{
+  text-align:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+@media (max-width:430px){
+  .rk-game-flow-card{
+    padding:28px 18px 31px!important;
+    margin:12px 0 18px!important;
+    border-radius:24px!important;
+  }
+
+  .rk-game-flow-kicker{
+    margin-bottom:28px!important;
+  }
+
+  .rk-game-flow-title{
+    max-width:330px!important;
+    margin-bottom:9px!important;
+    font-size:26px!important;
+    line-height:1.1!important;
+    letter-spacing:-.25px!important;
+  }
+
+  .rk-game-flow-copy{
+    max-width:315px!important;
+    font-size:15px!important;
+    line-height:1.42!important;
+  }
+}
+
+@media (max-width:375px){
+  .rk-game-flow-card{
+    padding:26px 16px 29px!important;
+  }
+
+  .rk-game-flow-title{
+    max-width:300px!important;
+    font-size:24px!important;
+  }
+
+  .rk-game-flow-copy{
+    max-width:292px!important;
+    font-size:14px!important;
+  }
+}
