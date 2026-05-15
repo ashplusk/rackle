@@ -11698,10 +11698,13 @@ function Game({mode,home,onDone,settings,setScreen}){
       {phase==="deal"&&hand.length>0&&(
         <>
           {!ready&&<ReadyOverlay mode={mode} dayNum={dn} onReady={()=>setReady(true)} onHome={home}/>}
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
-            <div style={{...S.back,opacity:0,pointerEvents:"none"}}>← Back</div>
-            <div style={{textAlign:"center"}}><div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div><div className="rk-inline-header-tag">Daily Mahjong Workout</div></div>
-            <span style={{fontSize:10,color:C.mut,fontWeight:700}}>{mode==="daily"?`Daily #${dn}`:"Practice"}</span>
+          <div className="rk-gameplay-inline-header-v200">
+            <div className="rk-gameplay-inline-left-v200" aria-hidden="true">← Back</div>
+            <div className="rk-gameplay-inline-brand-v200">
+              <div className="rk-gameplay-inline-logo-v200">Rackle</div>
+              <div className="rk-inline-header-tag rk-gameplay-inline-tag-v200">Daily Mahjong Workout</div>
+            </div>
+            <span className="rk-gameplay-inline-mode-v200">{mode==="daily"?`Daily #${dn}`:"Practice"}</span>
           </div>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}><span className="rk-game-flow-mini-label">Charleston · 1/3</span></div>
           <div style={{display:"flex",gap:3,marginBottom:10}}>{[0,1,2].map(i=><div key={i} style={{flex:1,height:4,borderRadius:2,background:i===0?C.gold:C.bdr}}/>)}</div>
