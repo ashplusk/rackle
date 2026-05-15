@@ -10341,3 +10341,139 @@ body,
     font-size:20px!important;
   }
 }
+
+/* Gameplay instruction premium compact revamp */
+.rk-game-flow-card{
+  position:relative!important;
+  overflow:hidden!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  padding:22px 20px 24px!important;
+  margin:10px 0 16px!important;
+  border-radius:24px!important;
+  background:
+    radial-gradient(circle at 90% 8%, rgba(243,212,107,.10), transparent 30%),
+    linear-gradient(145deg,#FFFDF8 0%,#F7F0E4 100%)!important;
+  border:1px solid rgba(26,20,16,.08)!important;
+  box-shadow:
+    0 10px 26px rgba(26,20,16,.055),
+    inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+
+.rk-game-flow-card:before{
+  content:""!important;
+  position:absolute!important;
+  top:0!important;
+  left:22px!important;
+  right:22px!important;
+  height:3px!important;
+  border-radius:999px!important;
+  background:linear-gradient(90deg,transparent,rgba(243,212,107,.85),transparent)!important;
+  opacity:.75!important;
+}
+
+.rk-game-flow-kicker{
+  width:max-content!important;
+  max-width:100%!important;
+  margin:0 auto 18px!important;
+  padding:7px 14px!important;
+  border-radius:999px!important;
+  background:rgba(23,107,66,.075)!important;
+  border:1px solid rgba(23,107,66,.16)!important;
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:10px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:2.2px!important;
+  text-transform:uppercase!important;
+  text-align:center!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72)!important;
+}
+
+.rk-game-flow-title{
+  width:100%!important;
+  max-width:560px!important;
+  margin:0 auto 8px!important;
+  text-align:center!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:24px!important;
+  font-weight:900!important;
+  line-height:1.12!important;
+  letter-spacing:-.2px!important;
+  color:#1A1410!important;
+  text-wrap:balance!important;
+}
+
+.rk-game-flow-copy{
+  width:100%!important;
+  max-width:480px!important;
+  margin:0 auto!important;
+  text-align:center!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:14px!important;
+  font-weight:750!important;
+  line-height:1.42!important;
+  color:#6B6157!important;
+  text-wrap:balance!important;
+}
+
+.rk-game-start-instruction,
+.rk-game-start-instruction .rk-game-flow-title,
+.rk-game-start-instruction .rk-game-flow-copy{
+  text-align:center!important;
+}
+
+@media (max-width:430px){
+  .rk-game-flow-card{
+    padding:20px 16px 22px!important;
+    margin:9px 0 15px!important;
+    border-radius:22px!important;
+  }
+
+  .rk-game-flow-card:before{
+    left:18px!important;
+    right:18px!important;
+    height:2px!important;
+  }
+
+  .rk-game-flow-kicker{
+    margin-bottom:16px!important;
+    padding:7px 12px!important;
+    font-size:9px!important;
+    letter-spacing:2px!important;
+  }
+
+  .rk-game-flow-title{
+    max-width:310px!important;
+    margin-bottom:7px!important;
+    font-size:19px!important;
+    line-height:1.14!important;
+    letter-spacing:-.1px!important;
+  }
+
+  .rk-game-flow-copy{
+    max-width:300px!important;
+    font-size:13px!important;
+    line-height:1.38!important;
+  }
+}
+
+@media (max-width:375px){
+  .rk-game-flow-card{
+    padding:18px 14px 20px!important;
+  }
+
+  .rk-game-flow-title{
+    max-width:285px!important;
+    font-size:18px!important;
+  }
+
+  .rk-game-flow-copy{
+    max-width:280px!important;
+    font-size:12.5px!important;
+  }
+}
