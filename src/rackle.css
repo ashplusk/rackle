@@ -10046,3 +10046,109 @@ body,
     font-size:9px!important;
   }
 }
+
+/* Gameplay pass instruction text polish */
+.rk-game-pass-card,
+.rk-pass-instruction-card,
+.rk-charleston-prompt,
+.rk-pass-prompt,
+.rk-pass-step-card,
+.rk-game-instruction-card{
+  text-align:center!important;
+}
+
+.rk-game-pass-card h1,
+.rk-game-pass-card h2,
+.rk-game-pass-card h3,
+.rk-pass-instruction-card h1,
+.rk-pass-instruction-card h2,
+.rk-pass-instruction-card h3,
+.rk-charleston-prompt h1,
+.rk-charleston-prompt h2,
+.rk-charleston-prompt h3,
+.rk-pass-prompt h1,
+.rk-pass-prompt h2,
+.rk-pass-prompt h3,
+.rk-pass-step-card h1,
+.rk-pass-step-card h2,
+.rk-pass-step-card h3,
+.rk-game-instruction-card h1,
+.rk-game-instruction-card h2,
+.rk-game-instruction-card h3{
+  max-width:100%!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:center!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-weight:900!important;
+  line-height:1.08!important;
+  letter-spacing:-.35px!important;
+  text-wrap:balance!important;
+}
+
+.rk-game-pass-card p,
+.rk-pass-instruction-card p,
+.rk-charleston-prompt p,
+.rk-pass-prompt p,
+.rk-pass-step-card p,
+.rk-game-instruction-card p{
+  max-width:560px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:center!important;
+  line-height:1.42!important;
+  text-wrap:balance!important;
+}
+
+/* Current gameplay instruction card fallback based on visible layout */
+.rk-pg [class*="pass"] h1,
+.rk-pg [class*="pass"] h2,
+.rk-pg [class*="pass"] h3,
+.rk-pg [class*="charleston"] h1,
+.rk-pg [class*="charleston"] h2,
+.rk-pg [class*="charleston"] h3{
+  text-align:center!important;
+  text-wrap:balance!important;
+}
+
+.rk-pg [class*="pass"] p,
+.rk-pg [class*="charleston"] p{
+  text-align:center!important;
+  text-wrap:balance!important;
+}
+
+@media (max-width:430px){
+  .rk-game-pass-card h1,
+  .rk-game-pass-card h2,
+  .rk-game-pass-card h3,
+  .rk-pass-instruction-card h1,
+  .rk-pass-instruction-card h2,
+  .rk-pass-instruction-card h3,
+  .rk-charleston-prompt h1,
+  .rk-charleston-prompt h2,
+  .rk-charleston-prompt h3,
+  .rk-pass-prompt h1,
+  .rk-pass-prompt h2,
+  .rk-pass-prompt h3,
+  .rk-pass-step-card h1,
+  .rk-pass-step-card h2,
+  .rk-pass-step-card h3,
+  .rk-game-instruction-card h1,
+  .rk-game-instruction-card h2,
+  .rk-game-instruction-card h3{
+    font-size:26px!important;
+    line-height:1.1!important;
+    letter-spacing:-.25px!important;
+  }
+
+  .rk-game-pass-card p,
+  .rk-pass-instruction-card p,
+  .rk-charleston-prompt p,
+  .rk-pass-prompt p,
+  .rk-pass-step-card p,
+  .rk-game-instruction-card p{
+    max-width:300px!important;
+    font-size:15px!important;
+    line-height:1.38!important;
+  }
+}
