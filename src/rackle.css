@@ -9406,3 +9406,50 @@ body,
     letter-spacing:-4.7px!important;
   }
 }
+
+
+/* ─── homepage core section spacing pass ────────────────────────────────
+   Scope: homepage rhythm only. Keeps score animation, footer, cards, and logic intact. */
+.rk-home-landing-flow{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:42px!important;
+  margin-top:18px!important;
+}
+.rk-home-landing-flow > section,
+.rk-home-landing-flow > div{
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+.rk-home-landing-flow > .rk-daily-entry-wrap-v37,
+.rk-home-landing-flow > .rk-home-scorecard-v41.rk-home-section-lg{
+  margin-bottom:2px!important;
+}
+.rk-home-landing-flow > .rk-club-today-card,
+.rk-home-landing-flow > .rk-freeplay-v24,
+.rk-home-landing-flow > .rk-freeplay-v40,
+.rk-home-landing-flow > .rk-learn-home-v8,
+.rk-home-landing-flow > .rk-learn-home-v12,
+.rk-home-landing-flow > .rk-learn-home-v18,
+.rk-home-landing-flow > .rk-learn-home-v19,
+.rk-home-landing-flow > .rk-tomorrow-card-v11,
+.rk-home-landing-flow > .rk-tomorrow-mystery-final{
+  width:100%!important;
+}
+.rk-home-landing-flow + .rk-footer{
+  margin-top:30px!important;
+}
+@media (max-width:430px){
+  .rk-home-landing-flow{
+    gap:36px!important;
+    margin-top:16px!important;
+  }
+  .rk-home-landing-flow + .rk-footer{
+    margin-top:26px!important;
+  }
+}
+@media (max-width:360px){
+  .rk-home-landing-flow{
+    gap:32px!important;
+  }
+}
