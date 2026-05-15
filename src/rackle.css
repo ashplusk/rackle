@@ -9178,3 +9178,180 @@ body,
 @media(max-width:350px){
   .rk-score-share-v160-stats{grid-template-columns:1fr!important;}
 }
+
+
+/* Footer overhaul: smaller brand lockup, discreet join field, app-wide polish. */
+.rk-footer{
+  margin-top:26px!important;
+  padding:18px 0 20px!important;
+  background:transparent!important;
+  border-top:1px solid rgba(23,107,66,.10)!important;
+}
+.rk-footer-inner{
+  padding:0 12px!important;
+  text-align:center!important;
+}
+.rk-footer-rule{
+  width:34px!important;
+  height:1px!important;
+  margin:0 auto 12px!important;
+  background:rgba(23,107,66,.16)!important;
+}
+.rk-footer-brand-lockup{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:5px!important;
+  margin:0 auto 9px!important;
+}
+.rk-footer-logo{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:22px!important;
+  line-height:.92!important;
+  font-weight:850!important;
+  letter-spacing:-.45px!important;
+  color:#0B3B24!important;
+  text-decoration:none!important;
+}
+.rk-footer-tagline{
+  display:block!important;
+  max-width:280px!important;
+  margin:0 auto!important;
+  color:rgba(26,20,16,.56)!important;
+  font-family:'Nunito','Inter',system-ui,sans-serif!important;
+  font-size:11.5px!important;
+  font-weight:750!important;
+  line-height:1.42!important;
+}
+.rk-footer-community{
+  margin:0 auto 12px!important;
+  color:rgba(26,20,16,.44)!important;
+  font-family:'Nunito','Inter',system-ui,sans-serif!important;
+  font-size:10.8px!important;
+  font-weight:700!important;
+  line-height:1.35!important;
+}
+.rk-footer-actions{
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:8px!important;
+  flex-wrap:wrap!important;
+  margin:0 auto 12px!important;
+}
+.rk-footer-pill{
+  min-height:32px!important;
+  padding:0 13px!important;
+  border-radius:999px!important;
+  background:rgba(255,253,248,.70)!important;
+  border:1px solid rgba(23,107,66,.12)!important;
+  color:#0B3B24!important;
+  box-shadow:0 5px 14px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.70)!important;
+  font-size:11.5px!important;
+  font-weight:900!important;
+  text-decoration:none!important;
+  transition:transform .16s ease,box-shadow .16s ease,background .16s ease!important;
+}
+.rk-footer-pill:hover{
+  transform:translateY(-1px)!important;
+  background:#FFFDF8!important;
+  box-shadow:0 8px 18px rgba(26,20,16,.055),inset 0 1px 0 rgba(255,255,255,.80)!important;
+}
+.rk-footer-join{
+  max-width:300px!important;
+  margin:0 auto 10px!important;
+  padding:9px!important;
+  border-radius:16px!important;
+  background:rgba(255,253,248,.42)!important;
+  border:1px solid rgba(23,107,66,.09)!important;
+  box-shadow:0 6px 18px rgba(26,20,16,.025)!important;
+}
+.rk-footer-join-copy{
+  margin:0 0 6px!important;
+  color:rgba(23,107,66,.76)!important;
+  font-family:'Nunito','Inter',system-ui,sans-serif!important;
+  font-size:9.5px!important;
+  font-weight:900!important;
+  letter-spacing:1.35px!important;
+  line-height:1.2!important;
+  text-transform:uppercase!important;
+}
+.rk-footer-join-form{
+  position:relative!important;
+  display:flex!important;
+  width:100%!important;
+  gap:6px!important;
+}
+.rk-footer-join-form input{
+  flex:1 1 auto!important;
+  min-width:0!important;
+  height:34px!important;
+  width:auto!important;
+  border-radius:999px!important;
+  border:1px solid rgba(26,20,16,.09)!important;
+  background:#FFFDF8!important;
+  padding:0 11px!important;
+  color:#1A1410!important;
+  font-size:12px!important;
+  font-weight:700!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-footer-join-form input:focus{
+  border-color:rgba(23,107,66,.34)!important;
+  box-shadow:0 0 0 3px rgba(23,107,66,.08),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+.rk-footer-join-form input::placeholder{
+  color:rgba(26,20,16,.34)!important;
+}
+.rk-footer-join-form button{
+  position:static!important;
+  flex:0 0 auto!important;
+  height:34px!important;
+  min-width:58px!important;
+  padding:0 12px!important;
+  border-radius:999px!important;
+  border:1px solid rgba(255,255,255,.14)!important;
+  background:linear-gradient(145deg,#176B42,#0B3B24)!important;
+  color:#FFFDF8!important;
+  font-family:'Nunito','Inter',system-ui,sans-serif!important;
+  font-size:11px!important;
+  font-weight:900!important;
+  box-shadow:0 6px 14px rgba(6,43,24,.12),inset 0 1px 0 rgba(255,255,255,.14)!important;
+}
+.rk-footer-join-done{
+  padding:9px 10px!important;
+  border-radius:14px!important;
+  background:rgba(23,107,66,.07)!important;
+  border:1px solid rgba(23,107,66,.11)!important;
+  color:#176B42!important;
+  font-size:11.5px!important;
+  font-weight:900!important;
+}
+.rk-footer-join-error{
+  margin-top:6px!important;
+  color:#9C3D2D!important;
+  font-size:10.5px!important;
+  font-weight:850!important;
+}
+.rk-footer-copyright{
+  margin-top:7px!important;
+  color:rgba(26,20,16,.38)!important;
+  font-size:10px!important;
+  line-height:1.45!important;
+}
+.rk-footer-copyright a{
+  color:rgba(23,107,66,.62)!important;
+  text-decoration:none!important;
+}
+@media(max-width:430px){
+  .rk-footer{margin-top:22px!important;padding:16px 0 18px!important;}
+  .rk-footer-inner{padding:0 8px!important;}
+  .rk-footer-logo{font-size:21px!important;}
+  .rk-footer-tagline{font-size:11px!important;max-width:245px!important;}
+  .rk-footer-actions{margin-bottom:11px!important;}
+  .rk-footer-pill{min-height:31px!important;padding:0 12px!important;font-size:11px!important;}
+  .rk-footer-join{max-width:292px!important;padding:8px!important;}
+  .rk-footer-join-form input{height:33px!important;font-size:11.5px!important;padding:0 10px!important;}
+  .rk-footer-join-form button{height:33px!important;min-width:54px!important;font-size:10.5px!important;padding:0 10px!important;}
+}

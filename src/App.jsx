@@ -8743,21 +8743,22 @@ function Footer(){
           <div aria-hidden="true" className="rk-footer-rule"/>
           <div className="rk-footer-brand-lockup">
             <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" className="rk-footer-logo">Rackle</a>
+            <div className="rk-footer-tagline">The daily Charleston ritual for American Mahjong players.</div>
           </div>
           <div className="rk-footer-community">Made for the American Mahjong community.</div>
           <div className="rk-footer-actions">
             <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" className="rk-footer-pill">Play Rackle</a>
             <a href="mailto:hello@playrackle.com" className="rk-footer-pill">Contact</a>
           </div>
-          <div className="rk-footer-join" aria-label="Stay updated with Rackle">
-            <div className="rk-footer-join-copy">Stay updated with Rackle.</div>
+          <div className="rk-footer-join" aria-label="Join Rackle updates">
+            <div className="rk-footer-join-copy">Join Rackle updates</div>
             {done?(
               <div className="rk-footer-join-done">You’re on the list.</div>
             ):(
               <>
                 <div className="rk-footer-join-form">
-                  <input value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} placeholder="your@email.com" aria-label="Email address for Rackle updates"/>
-                  <button type="button" onClick={submit}>Join list</button>
+                  <input value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} placeholder="you@email.com" aria-label="Email address for Rackle updates"/>
+                  <button type="button" onClick={submit}>Join</button>
                 </div>
                 {err&&<div className="rk-footer-join-error">{err}</div>}
               </>
@@ -9255,7 +9256,7 @@ function EmailSignup(){
         <>
           <p className="rk-email-copy-v8 rk-email-copy-v56">Get new racks, club drops, and Mahjong notes.</p>
           <div className="rk-email-form-v8">
-            <input className="rk-email-input-v8" type="email" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} placeholder="your@email.com" aria-label="Email address for Rackle updates" />
+            <input className="rk-email-input-v8" type="email" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} placeholder="you@email.com" aria-label="Email address for Rackle updates" />
             <button className="rk-email-btn-v8" onClick={submit}>Join list</button>
           </div>
           {err&&<div className="rk-email-error-v8">{err}</div>}
