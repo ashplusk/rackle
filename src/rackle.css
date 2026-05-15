@@ -9715,38 +9715,121 @@ body,
   }
 }
 
-/* Scorecard share section cleanup */
-.rk-scorecard-share-stats{
+/* Scorecard share section premium revamp */
+.rk-scorecard-share-stats,
+.rk-scorecard-share-metrics,
+.rk-scorecard-share-stat-grid,
+.rk-scorecard-share-badges,
+.rk-scorecard-share-stat,
+.rk-scorecard-share-metric,
+.rk-scorecard-share-rank,
+.rk-scorecard-share-iq{
   display:none!important;
 }
 
 .rk-scorecard-share-card,
 .rk-scorecard-share-section{
-  gap:16px!important;
+  padding:22px!important;
+  border-radius:26px!important;
+  background:
+    radial-gradient(circle at 92% 12%, rgba(243,212,107,.12), transparent 28%),
+    linear-gradient(145deg,#FFFDF8 0%,#F6EFE2 100%)!important;
+  border:1px solid rgba(26,20,16,.09)!important;
+  box-shadow:
+    0 16px 36px rgba(26,20,16,.07),
+    inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+
+.rk-scorecard-share-card .rk-pill,
+.rk-scorecard-share-section .rk-pill,
+.rk-scorecard-share-kicker{
+  width:max-content!important;
+  max-width:100%!important;
+  margin:0 0 16px!important;
+  padding:8px 14px!important;
+  border-radius:999px!important;
+  background:rgba(23,107,66,.08)!important;
+  border:1px solid rgba(23,107,66,.16)!important;
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:11px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:2.4px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-scorecard-share-card h2,
+.rk-scorecard-share-card h3,
+.rk-scorecard-share-title,
+.rk-scorecard-share-section h2,
+.rk-scorecard-share-section h3{
+  margin:0 0 9px!important;
+  max-width:100%!important;
+  text-align:left!important;
+  color:#1A1410!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-weight:900!important;
+  font-size:28px!important;
+  line-height:1.04!important;
+  letter-spacing:-.5px!important;
+}
+
+.rk-scorecard-share-card p,
+.rk-scorecard-share-copy,
+.rk-scorecard-share-section p{
+  margin:0!important;
+  max-width:520px!important;
+  text-align:left!important;
+  color:#6B6157!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:15px!important;
+  font-weight:750!important;
+  line-height:1.55!important;
 }
 
 .rk-scorecard-share-content{
-  gap:10px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  gap:16px!important;
 }
 
 .rk-scorecard-share-button{
   width:100%!important;
-  min-height:58px!important;
-  margin-top:6px!important;
-  padding:12px 14px!important;
-  border-radius:19px!important;
+  min-height:70px!important;
+  margin-top:4px!important;
+  padding:14px 16px!important;
+  border-radius:22px!important;
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr) auto!important;
+  align-items:center!important;
+  column-gap:14px!important;
+  text-align:left!important;
+  background:
+    radial-gradient(circle at 88% 18%, rgba(243,212,107,.18), transparent 30%),
+    linear-gradient(180deg,#176B42 0%,#0D432A 100%)!important;
+  color:#FFF8E8!important;
+  border:1px solid rgba(243,212,107,.34)!important;
+  box-shadow:
+    0 16px 34px rgba(13,67,42,.25),
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 0 rgba(0,0,0,.22)!important;
+  overflow:hidden!important;
+}
+
+.rk-scorecard-share-button:before{
+  content:"📱"!important;
+  width:44px!important;
+  height:44px!important;
+  border-radius:15px!important;
   display:flex!important;
   align-items:center!important;
-  justify-content:space-between!important;
-  gap:12px!important;
-  text-align:left!important;
-  background:linear-gradient(180deg,#176B42 0%,#0D432A 100%)!important;
-  color:#FFF8E8!important;
-  border:1px solid rgba(243,212,107,.32)!important;
-  box-shadow:
-    0 14px 28px rgba(13,67,42,.22),
-    inset 0 1px 0 rgba(255,255,255,.18),
-    inset 0 -1px 0 rgba(0,0,0,.20)!important;
+  justify-content:center!important;
+  background:rgba(255,248,232,.13)!important;
+  border:1px solid rgba(255,248,232,.18)!important;
+  font-size:22px!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12)!important;
 }
 
 .rk-scorecard-share-button,
@@ -9756,43 +9839,53 @@ body,
 
 .rk-scorecard-share-button strong,
 .rk-scorecard-share-button .rk-scorecard-share-button-title{
+  display:block!important;
+  min-width:0!important;
   font-family:'Fraunces', Georgia, serif!important;
   font-weight:900!important;
-  font-size:17px!important;
-  line-height:1.05!important;
-  letter-spacing:.1px!important;
+  font-size:19px!important;
+  line-height:1.08!important;
+  letter-spacing:-.1px!important;
+  white-space:normal!important;
 }
 
 .rk-scorecard-share-button span,
 .rk-scorecard-share-button .rk-scorecard-share-button-subtitle{
-  font-size:11px!important;
-  line-height:1.25!important;
+  display:block!important;
+  margin-top:5px!important;
+  min-width:0!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:12px!important;
+  line-height:1.3!important;
   font-weight:800!important;
-  color:rgba(255,248,232,.78)!important;
+  color:rgba(255,248,232,.76)!important;
+  white-space:normal!important;
 }
 
 .rk-scorecard-share-button .rk-scorecard-share-send-pill,
 .rk-scorecard-share-button em{
+  justify-self:end!important;
   flex-shrink:0!important;
   border-radius:999px!important;
-  padding:7px 10px!important;
-  background:rgba(255,248,232,.14)!important;
-  border:1px solid rgba(255,248,232,.22)!important;
+  padding:8px 11px!important;
+  background:rgba(255,248,232,.15)!important;
+  border:1px solid rgba(255,248,232,.24)!important;
   color:#FFF8E8!important;
   font-family:'Nunito','Segoe UI',sans-serif!important;
   font-size:10px!important;
+  line-height:1!important;
   font-weight:900!important;
   font-style:normal!important;
-  letter-spacing:1px!important;
+  letter-spacing:1.4px!important;
   text-transform:uppercase!important;
 }
 
 .rk-scorecard-share-button:hover{
   transform:translateY(-1px)!important;
   box-shadow:
-    0 17px 34px rgba(13,67,42,.28),
+    0 19px 38px rgba(13,67,42,.30),
     inset 0 1px 0 rgba(255,255,255,.20),
-    inset 0 -1px 0 rgba(0,0,0,.20)!important;
+    inset 0 -1px 0 rgba(0,0,0,.22)!important;
 }
 
 .rk-scorecard-share-button:active{
@@ -9800,19 +9893,47 @@ body,
 }
 
 @media (max-width:430px){
+  .rk-scorecard-share-card,
+  .rk-scorecard-share-section{
+    padding:19px!important;
+    border-radius:24px!important;
+  }
+
+  .rk-scorecard-share-card h2,
+  .rk-scorecard-share-card h3,
+  .rk-scorecard-share-title,
+  .rk-scorecard-share-section h2,
+  .rk-scorecard-share-section h3{
+    font-size:23px!important;
+    line-height:1.08!important;
+  }
+
+  .rk-scorecard-share-card p,
+  .rk-scorecard-share-copy,
+  .rk-scorecard-share-section p{
+    font-size:13px!important;
+    line-height:1.5!important;
+  }
+
   .rk-scorecard-share-button{
-    min-height:56px!important;
-    padding:12px 13px!important;
-    border-radius:18px!important;
+    min-height:66px!important;
+    padding:13px 14px!important;
+    border-radius:20px!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    column-gap:12px!important;
+  }
+
+  .rk-scorecard-share-button:before{
+    display:none!important;
   }
 
   .rk-scorecard-share-button strong,
   .rk-scorecard-share-button .rk-scorecard-share-button-title{
-    font-size:16px!important;
+    font-size:17px!important;
   }
 
   .rk-scorecard-share-button span,
   .rk-scorecard-share-button .rk-scorecard-share-button-subtitle{
-    font-size:10.5px!important;
+    font-size:11px!important;
   }
 }
