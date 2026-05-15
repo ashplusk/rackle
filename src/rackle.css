@@ -9570,3 +9570,11 @@ body,
     font-size:17px!important;
   }
 }
+
+/* Club CTA font polish */
+.rk-club-today-actions button,
+.rk-club-today-actions button span,
+.rk-club-today-actions button strong{
+  font-family:'Fraunces', Georgia, serif!important;
+  font-weight:900!important;
+}
