@@ -9996,8 +9996,8 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
     />
 
     <div className="rk-lb-nav-actions">
-      <button className="rk-lb-nav-btn rk-lb-nav-btn-home" onClick={home}>Home</button>
-      <button className="rk-lb-nav-btn rk-lb-nav-btn-primary" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"Club board":"Find club"}</button>
+      <button className="rk-lb-nav-btn rk-lb-nav-btn-home" onClick={home}>← Home</button>
+      <button className="rk-lb-nav-btn rk-lb-nav-btn-primary" onClick={()=>setScreen&&setScreen(getClubCode()?"leaderboard":"clubs")}>{getClubCode()?"Club board":"Find club"} →</button>
     </div>
 
     <Footer/>
@@ -10114,8 +10114,8 @@ playrackle.com`;
     </section>
 
     <div className="rk-lb-nav-actions">
-      <button className="rk-lb-nav-btn rk-lb-nav-btn-home" onClick={home}>Home</button>
-      <button className="rk-lb-nav-btn rk-lb-nav-btn-primary" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>Global room</button>
+      <button className="rk-lb-nav-btn rk-lb-nav-btn-home" onClick={home}>← Home</button>
+      <button className="rk-lb-nav-btn rk-lb-nav-btn-primary" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>Global room →</button>
     </div>
 
     <Footer/>
