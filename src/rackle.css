@@ -9377,3 +9377,32 @@ body,
     margin-bottom:10px!important;
   }
 }
+
+
+/* ─── homepage scorecard count-up polish ─────────────────────────────── */
+.rk-home-scorecard-v41-score-countup{
+  font-size:clamp(78px,20vw,108px)!important;
+  line-height:.82!important;
+  letter-spacing:-5.8px!important;
+  min-width:2.1ch!important;
+  font-variant-numeric:tabular-nums!important;
+  transform:translateZ(0)!important;
+}
+.rk-home-scorecard-v41-score-row{
+  align-items:flex-end!important;
+}
+.rk-home-scorecard-v41-score-label{
+  margin-top:13px!important;
+}
+@media (max-width:420px){
+  .rk-home-scorecard-v41-score-countup{
+    font-size:clamp(74px,22vw,92px)!important;
+    letter-spacing:-5.2px!important;
+  }
+}
+@media (max-width:360px){
+  .rk-home-scorecard-v41-score-countup{
+    font-size:70px!important;
+    letter-spacing:-4.7px!important;
+  }
+}

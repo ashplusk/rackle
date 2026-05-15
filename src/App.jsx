@@ -10919,6 +10919,36 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
   const CompletedDaily=()=> {
     const scoreValue=iq?.totalScore||dRes?.rating||"✓";
+    const scoreNumber=Number(scoreValue);
+    const hasAnimatedScore=Number.isFinite(scoreNumber)&&scoreNumber>0;
+    const [animatedScore,setAnimatedScore]=useState(hasAnimatedScore?0:scoreValue);
+
+    useEffect(()=>{
+      if(!hasAnimatedScore){
+        setAnimatedScore(scoreValue);
+        return;
+      }
+      const prefersReducedMotion=typeof window!=="undefined"&&window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if(prefersReducedMotion){
+        setAnimatedScore(scoreNumber);
+        return;
+      }
+      let rafId;
+      const duration=950;
+      const startTime=typeof performance!=="undefined"?performance.now():Date.now();
+      const easeOutCubic=(t)=>1-Math.pow(1-t,3);
+      const tick=(now)=>{
+        const elapsed=now-startTime;
+        const progress=Math.min(1,elapsed/duration);
+        setAnimatedScore(Math.round(scoreNumber*easeOutCubic(progress)));
+        if(progress<1)rafId=requestAnimationFrame(tick);
+      };
+      setAnimatedScore(0);
+      rafId=requestAnimationFrame(tick);
+      return()=>cancelAnimationFrame(rafId);
+    },[hasAnimatedScore,scoreNumber,scoreValue]);
+
+    const shownScoreValue=hasAnimatedScore?animatedScore:scoreValue;
     const globalRowsForScore=rkMergeCurrentScore(homeGlobalEntries,currentScore,iq?.totalTime||todayDRes?.time||0,streak,activeClubCode);
     const globalRankForScore=currentScore?rkRankOfCurrent(globalRowsForScore,currentScore):null;
     const globalValue=globalRankForScore?`#${globalRankForScore}`:"—";
@@ -10930,7 +10960,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div className="rk-home-scorecard-v41-kicker"><span/> Daily Rackle Scorecard · #{dn}</div>
         <div className="rk-home-scorecard-v41-score-row">
           <div>
-            <div className="rk-home-scorecard-v41-score rk-pop">{scoreValue}</div>
+            <div className="rk-home-scorecard-v41-score rk-home-scorecard-v41-score-countup rk-pop" aria-label={`Rackle IQ ${scoreValue}`}>{shownScoreValue}</div>
             <div className="rk-home-scorecard-v41-score-label">Rackle IQ</div>
           </div>
           {iq?.styleName&&<button type="button" onClick={(e)=>{e.stopPropagation();setScreen("styleGlossary");}} className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next rk-style-pill-clickable" aria-label={`Learn what ${iq.styleName} means`}>{iq.styleName}</button>}
