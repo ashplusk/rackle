@@ -8724,18 +8724,6 @@ function RackleHeader({onBack,setScreen}){
 }
 
 function Footer(){
-  const [email,setEmail]=useState("");
-  const [done,setDone]=useState(false);
-  const [err,setErr]=useState("");
-  const submit=async()=>{
-    const clean=email.trim();
-    if(!clean.includes("@")){setErr("Enter a valid email.");return;}
-    try{
-      const res=await fetch("https://formspree.io/f/mgodekdb",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:clean,source:"footer"})});
-      if(!res.ok)throw new Error();
-      setDone(true);setErr("");
-    }catch{setErr("Try again in a moment.");}
-  };
   return(
     <div className="rk-footer">
       <div className="rk-footer-inner">
@@ -8749,20 +8737,6 @@ function Footer(){
           <div className="rk-footer-actions">
             <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" className="rk-footer-pill">Play Rackle</a>
             <a href="mailto:hello@playrackle.com" className="rk-footer-pill">Contact</a>
-          </div>
-          <div className="rk-footer-join" aria-label="Join Rackle updates">
-            <div className="rk-footer-join-copy">Join Rackle updates</div>
-            {done?(
-              <div className="rk-footer-join-done">You’re on the list.</div>
-            ):(
-              <>
-                <div className="rk-footer-join-form">
-                  <input value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} placeholder="you@email.com" aria-label="Email address for Rackle updates"/>
-                  <button type="button" onClick={submit}>Join</button>
-                </div>
-                {err&&<div className="rk-footer-join-error">{err}</div>}
-              </>
-            )}
           </div>
           <div className="rk-footer-copyright">© {new Date().getFullYear()} <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer">playrackle.com</a> · All rights reserved</div>
         </div>

@@ -9355,3 +9355,25 @@ body,
   .rk-footer-join-form input{height:33px!important;font-size:11.5px!important;padding:0 10px!important;}
   .rk-footer-join-form button{height:33px!important;min-width:54px!important;font-size:10.5px!important;padding:0 10px!important;}
 }
+
+
+/* Footer cleanup: remove signup field and add logo/tagline breathing room. */
+.rk-footer-brand-lockup{
+  gap:9px!important;
+  margin-bottom:11px!important;
+}
+.rk-footer-tagline{
+  font-weight:500!important;
+}
+.rk-footer-join{
+  display:none!important;
+}
+.rk-footer-actions{
+  margin-bottom:12px!important;
+}
+@media(max-width:430px){
+  .rk-footer-brand-lockup{
+    gap:8px!important;
+    margin-bottom:10px!important;
+  }
+}
