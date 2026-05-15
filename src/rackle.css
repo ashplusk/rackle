@@ -10321,3 +10321,23 @@ body,
     font-size:13px!important;
   }
 }
+
+/* Gameplay instruction title extra reduction */
+.rk-game-flow-title{
+  font-size:27px!important;
+  line-height:1.12!important;
+}
+
+@media (max-width:430px){
+  .rk-game-flow-title{
+    font-size:21px!important;
+    line-height:1.14!important;
+    letter-spacing:-.15px!important;
+  }
+}
+
+@media (max-width:375px){
+  .rk-game-flow-title{
+    font-size:20px!important;
+  }
+}
