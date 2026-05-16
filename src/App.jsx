@@ -11922,7 +11922,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const scoreDisplay=leadValue||"—";
     const secondaryLabel=activeClubCode?"Global room →":"Find a club →";
     const secondaryAction=activeClubCode?()=>setScreen("globalLeaderboard"):findClub;
-    const primaryLabel=activeClubCode?"Club board":"Open standings";
+    const primaryLabel=activeClubCode?"Club board":"Global Board";
     const secondaryLabelClean=activeClubCode?"Global room":"Find club";
     const rankLabel=shownClubRank?`#${shownClubRank}`:(currentScore?"Ready":"—");
     const countLabel=activeClubCode?`${clubCount||0} live`:`${globalCount||0} live`;
