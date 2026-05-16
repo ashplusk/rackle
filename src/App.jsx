@@ -7462,7 +7462,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           </div>
         </div>
 
-        <ShareButton text={shareText} label={affiliatedClubName?`Share with ${affiliatedClubName}`:"Share with your club"} sublabel="Send today’s Rackle to the club chat" variant="green"/>
+        <ShareButton text={shareText} label="Share your score" sublabel={affiliatedClubName?`Send it to ${affiliatedClubName}`:"Send it to your club"} variant="green"/>
       </section>
 
       <section className="rk-score-clean-final-v120" aria-label="Your final hand">
@@ -7476,11 +7476,11 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </section>
 
-      <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160" aria-label="Your rack at a glance">
+      <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160" aria-label="Rack at a glance">
         <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160">
-          <span>Your rack at a glance</span>
-          <h2>Post-Charleston read</h2>
-          <p>A quick read on your best lane, backup path, and the tiles to be careful with.</p>
+          <span>Rack at a glance</span>
+          <h2>Your Charleston read</h2>
+          <p>A simple read on your best direction, backup path, and what to avoid next.</p>
         </div>
 
         <div className="rk-glance-v160-verdict">
@@ -7605,7 +7605,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
 
       <section className="rk-score-clean-glance-v120" aria-label="Practice rack at a glance">
         <div className="rk-score-clean-head-v120">
-          <span>Your rack at a glance</span>
+          <span>Rack at a glance</span>
           <h2>Cleanest path</h2>
         </div>
         <div className="rk-score-clean-lanes-v120 practice">
