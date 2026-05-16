@@ -21099,3 +21099,28 @@ footer p{
     min-width:0!important;
   }
 }
+
+/* Final override: lighter Your Rack’s Direction description */
+.rk-scorecard-premium-page-v500 .rk-glance-overhaul-v1000 .rk-glance-overhaul-head-v1000 p,
+.rk-scorecard-clean-v120 .rk-glance-overhaul-v1000 .rk-glance-overhaul-head-v1000 p,
+.rk-glance-overhaul-v1000 .rk-glance-overhaul-head-v1000 p{
+  color:#7A7168!important;
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-size:12.75px!important;
+  line-height:1.62!important;
+  font-weight:300!important;
+  letter-spacing:0!important;
+  opacity:.86!important;
+  text-align:left!important;
+  margin-top:8px!important;
+}
+
+@media (max-width:430px){
+  .rk-scorecard-premium-page-v500 .rk-glance-overhaul-v1000 .rk-glance-overhaul-head-v1000 p,
+  .rk-scorecard-clean-v120 .rk-glance-overhaul-v1000 .rk-glance-overhaul-head-v1000 p,
+  .rk-glance-overhaul-v1000 .rk-glance-overhaul-head-v1000 p{
+    font-size:12.5px!important;
+    line-height:1.6!important;
+    font-weight:300!important;
+  }
+}
