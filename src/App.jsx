@@ -12170,7 +12170,7 @@ function ReadyOverlay({mode,dayNum,onReady,onHome}){
   );
 }
 
-function Game({mode,home,onDone,settings,setScreen,go}){
+function Game({mode,home,onDone,onScorecardReady,settings,setScreen,go}){
   const [phase,setPhase]=useState("deal");
   const [ready,setReady]=useState(false);
   const [flipped,setFlipped]=useState([]);
@@ -12483,13 +12483,18 @@ function Game({mode,home,onDone,settings,setScreen,go}){
         allSections:e||[]
       };
 
-      try{onDone(result);}catch(doneErr){console.error("Rackle save result failed",doneErr);}
+      if(mode==="daily"){
+        const completedAt=Date.now();
+        const dailyResult={...result,mode:"daily",ts:completedAt,completedTs:completedAt,completedDate:rkTodayDateKey(),rkCompletedDate:rkTodayDateKey(),completedAt:new Date(completedAt).toISOString(),daySeed:getDailySeed(),day_seed:getDailySeed()};
+        try{ST.set("dd",getDailySeed());ST.set("dres",dailyResult);}catch(cacheErr){console.warn("Could not pre-cache daily result",cacheErr);}
+        try{onScorecardReady?onScorecardReady(dailyResult):onDone(dailyResult);}catch(doneErr){console.error("Rackle save result failed",doneErr);}
+      }else{
+        try{onDone(result);}catch(doneErr){console.error("Rackle save result failed",doneErr);}
+      }
       window.scrollTo(0,0);
       document.documentElement.scrollTop=0;
       document.body.scrollTop=0;
       setPhase("result");
-      // Daily scorecards should open through the main app route, where the saved Daily result lives.
-      // This avoids getting stuck on the section picker if React state batching delays the in-game result view.
       if(mode==="daily"&&typeof setScreen==="function"){
         setTimeout(()=>setScreen("scorecard"),0);
       }
@@ -12511,12 +12516,52 @@ function Game({mode,home,onDone,settings,setScreen,go}){
       chosenSecRef.current=sectionId;
       setChosenSecBoth(sectionId);
       setIqResultBoth(fallbackIq);
+      const sec=SECS.find(x=>x.id===sectionId);
+      if(mode==="daily"){
+        const completedAt=Date.now();
+        const fallbackResult={rating:"Rack read",emoji:"🀄",section:`${sec?.icon||""} ${sec?.name||"Selected lane"}`.trim(),sid:sectionId,score:fallbackScore,time:0,gi:2,iqScore:fallbackIq.totalScore,iq:fallbackIq,finalRack:hand,startingRack:startingRack&&startingRack.length?startingRack:hand,passLog:rkSanitizePassLog(passLog),chosenSec:sectionId,chosenHand:null,allSections:ev(hand),mode:"daily",ts:completedAt,completedTs:completedAt,completedDate:rkTodayDateKey(),rkCompletedDate:rkTodayDateKey(),completedAt:new Date(completedAt).toISOString(),daySeed:getDailySeed(),day_seed:getDailySeed()};
+        try{ST.set("dd",getDailySeed());ST.set("dres",fallbackResult);}catch(cacheErr){console.warn("Could not pre-cache fallback result",cacheErr);}
+        try{onScorecardReady?onScorecardReady(fallbackResult):onDone(fallbackResult);}catch(doneErr){console.error("Rackle fallback save failed",doneErr);}
+      }
       setPhase("result");
       if(mode==="daily"&&typeof setScreen==="function"){
         setTimeout(()=>setScreen("scorecard"),0);
       }
     }
   };
+
+  const scoreButtonTapGuardRef=useRef({id:null,ts:0});
+  const scoreRoundForSectionRef=useRef(null);
+  scoreRoundForSectionRef.current=scoreRoundForSection;
+  useEffect(()=>{
+    const handler=(event)=>{
+      const target=event.target;
+      const btn=target&&target.closest?target.closest("[data-rk-score-section]"):null;
+      if(!btn)return;
+      const sectionId=btn.getAttribute("data-rk-score-section");
+      if(!sectionId)return;
+      const now=Date.now();
+      if(scoreButtonTapGuardRef.current.id===sectionId&&now-scoreButtonTapGuardRef.current.ts<700){
+        event.preventDefault?.();
+        event.stopPropagation?.();
+        event.stopImmediatePropagation?.();
+        return;
+      }
+      scoreButtonTapGuardRef.current={id:sectionId,ts:now};
+      event.preventDefault?.();
+      event.stopPropagation?.();
+      event.stopImmediatePropagation?.();
+      scoreRoundForSectionRef.current?.(sectionId);
+    };
+    document.addEventListener("pointerdown",handler,true);
+    document.addEventListener("touchstart",handler,true);
+    document.addEventListener("click",handler,true);
+    return()=>{
+      document.removeEventListener("pointerdown",handler,true);
+      document.removeEventListener("touchstart",handler,true);
+      document.removeEventListener("click",handler,true);
+    };
+  },[]);
 
   return(
     <div style={{...S.pg,position:"relative",minHeight:"100vh"}} className="rk-pg">
@@ -12631,7 +12676,7 @@ function Game({mode,home,onDone,settings,setScreen,go}){
           <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>SCORE YOUR ROUND</div>
           <div onClick={(e)=>{const btn=e.target.closest?.("[data-rk-score-section]");if(btn){e.preventDefault();e.stopPropagation();scoreRoundForSection(btn.dataset.rkScoreSection);}}} style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
             {SECS.map((s)=>(
-              <button key={s.id} type="button" className="rk-score-round-option-v700" data-rk-score-section={s.id} onTouchEnd={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}} onPointerUp={(e)=>{if(e.pointerType==="touch"){e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}}} onClick={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}}
+              <button key={s.id} type="button" className="rk-score-round-option-v700" data-rk-score-section={s.id} onMouseDown={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}} onTouchStart={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}} onTouchEnd={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}} onPointerDown={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}} onPointerUp={(e)=>{if(e.pointerType==="touch"){e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}}} onClick={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}}
                 style={{cursor:"pointer",display:"flex",alignItems:"center",gap:0,borderRadius:12,overflow:"hidden",border:`1.5px solid ${C.bdr}`,background:"#fff",textAlign:"left",padding:0,transition:"all 0.15s"}}>
                 <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:s.color+"40"}}/>
                 <div style={{width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,margin:"0 2px"}}>{s.icon}</div>
@@ -14901,11 +14946,10 @@ export default function Rackle(){
         {screen==="tutorial"&&<Tutorial onDone={()=>{ST.set("tutDone",true);setScreen("home");}} onBack={()=>setScreen("home")} setScreen={setScreen}/>}
         {screen==="cardguide"&&<CardGuideScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
         {screen==="howto"&&<HowToPlayScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
-        {screen==="play"&&<Game mode={mode} home={()=>setScreen("home")} onDone={onDone} settings={settings} setScreen={setScreen} go={go}/>} 
+        {screen==="play"&&<Game mode={mode} home={()=>setScreen("home")} onDone={onDone} onScorecardReady={(result)=>{onDone(result);setTimeout(()=>setScreen("scorecard"),0);}} settings={settings} setScreen={setScreen} go={go}/>} 
         {screen==="stats"&&<Stats home={()=>setScreen("home")} onShowScorecard={()=>setScreen("scorecard")} onRecap={()=>setScreen("recap")} dRes={dRes} setScreen={setScreen} go={go}/>}
         {screen==="settings"&&<Settings home={()=>setScreen("home")} settings={settings} setSettings={setSettings} showTutorial={()=>setScreen("tutorial")} setScreen={setScreen}/>}
-        {screen==="scorecard"&&<ScorecardScreen res={rkIsTodayDailyResult(dRes)?dRes:null} home={()=>setScreen("home")} dayNum={getDayNum()} onPractice={()=>go("free")} setScreen={setScreen}/>}
-        {screen==="leaderboard"&&<LeaderboardScreen home={()=>setScreen("home")} dRes={dRes} streak={streak} setScreen={setScreen}/>}
+        {screen==="scorecard"&&<ScorecardScreen res={rkIsTodayDailyResult(dRes)?dRes:rkGetTodayDailyResult()} home={()=>setScreen("home")} dayNum={getDayNum()} onPractice={()=>go("free")} setScreen={setScreen}/>} {screen==="leaderboard"&&<LeaderboardScreen home={()=>setScreen("home")} dRes={dRes} streak={streak} setScreen={setScreen}/>}
         {screen==="globalLeaderboard"&&<GlobalLeaderboardScreen home={()=>setScreen("home")} dRes={dRes} streak={streak} setScreen={setScreen}/>}
         {screen==="clubs"&&<ClubDirectoryScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
         {screen==="profile"&&<ProfileScreen home={()=>setScreen("home")} streak={streak} rounds={rounds} dRes={dRes} setScreen={setScreen}/>}
