@@ -7290,6 +7290,25 @@ function ImproveGameHero({iq,chosenSecObj,bestFitSec,onPractice,onCoachMode,setS
   );
 }
 
+
+const RACKLE_IQ_TYPE_RANGES=[
+  {min:85,label:"Focused",icon:"●"},
+  {min:75,label:"Flexible",icon:"●"},
+  {min:65,label:"Balanced",icon:"●"},
+  {min:50,label:"Open",icon:"●"},
+  {min:35,label:"Scattered",icon:"●"},
+  {min:0,label:"Thin",icon:"●"}
+];
+
+function rkIQTypeForScore(score){
+  const numeric=Number(score||0);
+  return RACKLE_IQ_TYPE_RANGES.find(r=>numeric>=r.min)||RACKLE_IQ_TYPE_RANGES[RACKLE_IQ_TYPE_RANGES.length-1];
+}
+
+function rkFormatScoreShare({dayNum,score,typeLabel}){
+  return `Rackle #${dayNum} · ${score} IQ · ${typeLabel} 🀄 playrackle.com`;
+}
+
 function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onHome,onPractice,onCoachMode,setScreen,resultTime=0}){
   const [dailyStats,setDailyStats]=useState(null);
   const [globalEntries,setGlobalEntries]=useState([]);
@@ -7407,134 +7426,185 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     );
   };
 
+
+  const todayDateLabel=new Date().toLocaleDateString(undefined,{month:"short",day:"numeric"});
+  const iqType=rkIQTypeForScore(score);
+  const globalRankLabel=globalRank?`#${globalRank}`:"—";
+  const clubRankLabel=clubRank?`#${clubRank}`:"—";
+  const clubMemberCount=clubTotal||clubRows.length||0;
+  const clubMemberLine=clubMemberCount===1?"1 club member played today":clubMemberCount>1?`${clubMemberCount} club members played today`:"Club board opens after your first score";
+  const shareScoreText=rkFormatScoreShare({dayNum,score,typeLabel:iqType.label});
+  const scorecardSubtitle=quickRead||"Your rack has a readable path after the Charleston.";
+  const finalRackSubcopy="Sort your rack by suit and review the shape you finished with.";
+  const bestFitName=iq.bestHandLabel||iq.scoredHandLabel||trustRead.best||shareDirection||"Best fit";
+  const bestFitDetail=trustRead.bestFit||"This was the clearest direction your rack showed after the Charleston.";
+  const backupName=trustRead.backup||"Backup path";
+  const backupDetail=trustRead.backupFit||"Keep this open if the next tile supports the shape.";
+  const expertReadText=rkHumanTableCopy(trustRead.expertRead||shapeLine||reviewCopy);
+  const nextMoveText=rkHumanTableCopy(trustRead.nextMove||pivotCopy||"Use the next pick to confirm the strongest lane before locking in.");
+  const shareWithClub=async()=>{
+    const text=shareScoreText;
+    try{
+      if(navigator.share){
+        await navigator.share({title:`Rackle #${dayNum}`,text,url:"https://playrackle.com"});
+        return;
+      }
+    }catch{}
+    try{
+      await navigator.clipboard.writeText(text);
+    }catch{}
+  };
+
   return(
-    <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26 rk-scorecard-clean-v120" style={{paddingBottom:32}}>
-      <section className="rk-daily-scorecard-homeclone-v45 rk-home-scorecard-v41" aria-label="Daily Rackle scorecard">
-        <div className="rk-home-scorecard-v41-main rk-daily-scorecard-homeclone-v45-main">
-          <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
-          <div className="rk-home-scorecard-v41-kicker"><span/> Daily Rackle Scorecard · #{dayNum}</div>
-          <div className="rk-home-scorecard-v41-score-row rk-daily-scorecard-homeclone-v45-score-row">
-            <div>
-              <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43">{animatedScore}</div>
-              <div className="rk-home-scorecard-v41-score-label">Rackle IQ</div>
-            </div>
-            {(iq.styleName||scoreLabel)&&(
-              <button type="button" onClick={()=>setScreen&&setScreen("styleGlossary")} className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next rk-style-pill-clickable" aria-label={`Learn what ${iq.styleName||scoreLabel} means`}>
-                {iq.styleName||scoreLabel}
-              </button>
-            )}
-          </div>
-          <div className="rk-home-scorecard-v41-title">{iq.level||scoreLabel}</div>
-          <p className="rk-home-scorecard-v41-copy">{quickRead}</p>
+    <div className="rk-daily-scorecard-ds" style={{paddingBottom:32}}>
+      <header className="rk-ds-nav" aria-label="Rackle navigation">
+        <div className="rk-ds-streak-pill" aria-label={`${streak||15} day streak`}>
+          <span aria-hidden="true"></span>
+          <strong>{streak||15}d streak</strong>
+        </div>
+        <button type="button" onClick={onHome} className="rk-ds-brand" aria-label="Go to Rackle home">
+          <strong>Rackle</strong>
+          <span>The Daily Mahjong Workout.</span>
+        </button>
+        <button type="button" className="rk-ds-menu" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </header>
 
-          <div className="rk-home-scorecard-v41-actions" aria-label="Scorecard rooms">
-            <button type="button" onClick={()=>setScreen&&setScreen("globalLeaderboard")} aria-label="View global leaderboard">
-              <span>Global room</span>
-              <strong>{globalRank?`#${globalRank}`:"—"}</strong>
-              <em>View global</em>
-            </button>
-            <button type="button" onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")} aria-label={clubCode?"View club leaderboard":"Find a club"}>
-              <span>{affiliatedClubName||"Club room"}</span>
-              <strong>{clubRank?`#${clubRank}`:(clubCode?"live":"join")}</strong>
-              <em>{clubCode?"View club":"Find club"}</em>
-            </button>
-          </div>
+      <div className="rk-ds-room-open">
+        <span></span>
+        Today&apos;s room is open
+      </div>
+
+      <section className="rk-ds-hero-card" aria-label="Daily Rackle scorecard">
+        <div className="rk-ds-hero-top">
+          <div className="rk-ds-hero-badge"><span></span> Daily Rackle · #{dayNum}</div>
+          <div className="rk-ds-date">{todayDateLabel}</div>
+        </div>
+
+        <div className="rk-ds-score-wrap">
+          <div className="rk-ds-score">{animatedScore}</div>
+          <div className="rk-ds-score-label">Rackle IQ</div>
+        </div>
+
+        <button type="button" onClick={()=>setScreen&&setScreen("styleGlossary")} className="rk-ds-iq-pill" aria-label={`Learn about ${iqType.label}`}>
+          <span aria-hidden="true">{iqType.icon}</span>
+          {iqType.label}
+        </button>
+
+        <h1>{iq.level||scoreLabel}</h1>
+        <p>{scorecardSubtitle}</p>
+
+        <div className="rk-ds-rank-grid" aria-label="Rankings">
+          <button type="button" onClick={()=>setScreen&&setScreen("globalLeaderboard")}>
+            <span>Global Room</span>
+            <strong>{globalRankLabel}</strong>
+            <em>View global</em>
+          </button>
+          <button type="button" onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")}>
+            <span>Club</span>
+            <strong>{clubRankLabel}</strong>
+            <em>{clubCode?"View club":"Find club"}</em>
+          </button>
         </div>
       </section>
 
-      <section className="rk-score-clean-share-v120 rk-score-share-premium-v130 rk-score-share-simple-v140 rk-score-share-v150 rk-score-share-v160" aria-label="Share your score">
-        <div className="rk-score-share-v150-head rk-score-share-v160-head">
-          <span>Share your score</span>
-          <h2>Share your score</h2>
-          <p>Send today’s result to your club.</p>
-        </div>
-
-        <div className="rk-score-share-v160-stats" aria-label="Today’s score summary">
-          <div className="rk-score-share-v160-stat primary">
-            <span>{clubRank?"Club rank":globalRank?"Global rank":"Today’s rank"}</span>
-            <strong>{clubRank?`#${clubRank}`:globalRank?`#${globalRank}`:"Posted"}</strong>
-            <em>{clubRank&&clubTotal?`of ${clubTotal} in club`:globalRank&&globalTotal?`of ${globalTotal} today`:affiliatedClubName||"Daily board"}</em>
-          </div>
-          <div className="rk-score-share-v160-stat score">
-            <span>Rackle IQ</span>
-            <strong>{score}</strong>
-            <em>{scoreLabel}</em>
-          </div>
-        </div>
-
-        <ShareButton text={shareText} label="Share your score" sublabel="Send it to your club" variant="green"/>
+      <section className="rk-ds-share-wrap" aria-label="Share your score">
+        <button type="button" onClick={shareWithClub} className="rk-ds-share-bar">
+          <span className="rk-ds-share-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path d="M8 12h8M13 7l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </span>
+          <span className="rk-ds-share-copy">
+            <strong>Share your score</strong>
+            <em>Drop it in your group chat</em>
+          </span>
+          <span className="rk-ds-send">Send</span>
+        </button>
+        <div className="rk-ds-share-sub">{clubMemberLine}</div>
       </section>
 
-      <section className="rk-score-clean-final-v120" aria-label="Your final hand">
-        <div className="rk-score-clean-head-v120">
-          <span>Final hand</span>
+      <button type="button" onClick={onCoachMode} className="rk-ds-open-full">
+        <span>Open full scorecard</span>
+        <strong>→</strong>
+      </button>
+
+      <section className="rk-ds-section">
+        <div className="rk-ds-section-head">
           <h2>Final rack</h2>
-          <p>See the shape you finished with after the Charleston.</p>
+          <p>{finalRackSubcopy}</p>
         </div>
-        <div className="rk-score-clean-rack-v120">
+        <div className="rk-ds-white-card rk-ds-final-rack-card">
+          <div className="rk-ds-card-label">Final rack · Sort by suit</div>
           <SortableRack hand={hand}/>
         </div>
       </section>
 
-      <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160" aria-label="Rack at a glance">
-        <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160">
-          <span>Rack at a glance</span>
-          <h2>Your Charleston read</h2>
-          <p>A clear read on where your rack is leaning and what to avoid next.</p>
+      <section className="rk-ds-section">
+        <div className="rk-ds-section-head">
+          <h2>Rack at a glance</h2>
+          <p>A clear read on where your rack is leaning and what to do next.</p>
         </div>
 
-        <div className="rk-glance-v160-verdict">
-          <span>Best fit read</span>
-          <h3>{iq.bestHandLabel||iq.scoredHandLabel||trustRead.best}</h3>
-          <p>{trustRead.bestFit}</p>
-        </div>
-
-        <div className="rk-glance-v160-tiles">
-          <div className="rk-glance-v160-tile">
+        <div className="rk-ds-fit-stack">
+          <div className="rk-ds-best-fit">
+            <span>Best fit</span>
+            <strong>{bestFitName}</strong>
+            <p>{bestFitDetail}</p>
+          </div>
+          <div className="rk-ds-backup-fit">
             <span>Backup path</span>
-            <strong>{trustRead.backup}</strong>
-            <p>{trustRead.backupFit}</p>
+            <strong>{backupName}</strong>
+            <p>{backupDetail}</p>
           </div>
         </div>
 
-        <div className="rk-glance-v160-coach">
-          <div className="rk-glance-v160-coach-row expert">
-            <span>Expert read</span>
-            <p>{rkHumanTableCopy(trustRead.expertRead)}</p>
-          </div>
-          <div className="rk-glance-v160-coach-row next">
+        <div className="rk-ds-expert-card">
+          <p>{expertReadText}</p>
+          <div className="rk-ds-next-move">
             <span>Next move</span>
-            <p>{rkHumanTableCopy(trustRead.nextMove)}</p>
+            <p>{nextMoveText}</p>
           </div>
-
         </div>
       </section>
 
-      <section className="rk-score-clean-actions-v120 rk-score-home-style-actions-v140" aria-label="Next actions">
-        <button type="button" onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"globalLeaderboard")} className="rk-score-clean-action-v120 primary">
-          <span>{clubCode?"Open clubhouse":"Open today’s room"}</span>
-          <strong>{clubCode?"Club board":"Global board"}</strong>
+      <button type="button" onClick={onCoachMode} className="rk-ds-deep-link">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+          <path d="M4 19V5M9 19v-8M14 19V8M19 19v-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        </svg>
+        <span>See score deep dive</span>
+        <strong>→</strong>
+      </button>
+
+      <nav className="rk-ds-nav-rows" aria-label="Scorecard links">
+        <button type="button" onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"globalLeaderboard")}>
+          <span>Open Clubhouse</span>
+          <strong>Club board</strong>
           <em>→</em>
         </button>
-        <button type="button" onClick={onPractice} className="rk-score-clean-action-v120">
-          <span>Practice another rack</span>
+        <button type="button" onClick={onPractice}>
+          <span>Practice Another Rack</span>
           <strong>Build the habit</strong>
           <em>→</em>
         </button>
-        {onCoachMode&&<button type="button" onClick={onCoachMode} className="rk-score-clean-action-v120">
-          <span>Score deep dive</span>
+        {onCoachMode&&<button type="button" onClick={onCoachMode}>
+          <span>Score Deep Dive</span>
           <strong>Coach Mode</strong>
           <em>→</em>
         </button>}
-        <button type="button" onClick={onHome} className="rk-score-clean-action-v120 quiet">
-          <span>Back home</span>
+        <button type="button" onClick={onHome}>
+          <span>Back Home</span>
           <strong>Clubhouse</strong>
           <em>→</em>
         </button>
-      </section>
+      </nav>
+
+      <Footer/>
     </div>
   );
 }
+
 
 // ─── PRACTICE SCORECARD, collapsible sections, matching daily vibe ───────────
 function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHome,onDealAgain}){

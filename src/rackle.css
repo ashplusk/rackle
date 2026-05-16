@@ -11012,107 +11012,6 @@ body,
 
 
 
-/* Daily scorecard uses homepage green scorecard styling */
-.rk-daily-scorecard-homeclone-v45.rk-home-scorecard-v41{
-  position:relative!important;
-  overflow:hidden!important;
-  width:100%!important;
-  margin:0!important;
-  border-radius:28px!important;
-  background:
-    radial-gradient(circle at 88% 12%, rgba(243,212,107,.18), transparent 30%),
-    linear-gradient(145deg,#0D432A 0%,#176B42 58%,#0A2F1E 100%)!important;
-  border:1px solid rgba(243,212,107,.24)!important;
-  box-shadow:
-    0 18px 42px rgba(13,67,42,.22),
-    inset 0 1px 0 rgba(255,255,255,.16),
-    inset 0 -1px 0 rgba(0,0,0,.18)!important;
-}
-
-.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-main,
-.rk-daily-scorecard-homeclone-v45-main{
-  position:relative!important;
-  z-index:1!important;
-  padding:22px!important;
-  border-radius:28px!important;
-  background:transparent!important;
-  border:0!important;
-  box-shadow:none!important;
-}
-
-.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-watermark{
-  opacity:.10!important;
-  color:#FFF8E8!important;
-}
-
-.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-kicker{
-  margin-bottom:13px!important;
-  color:rgba(255,248,232,.76)!important;
-}
-
-.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-kicker span{
-  background:#F3D46B!important;
-}
-
-.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score{
-  font-size:var(--rk-home-score-size, 56px)!important;
-  line-height:.92!important;
-  letter-spacing:-1.6px!important;
-  color:#FFF8E8!important;
-  text-shadow:none!important;
-}
-
-.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score-label{
-  margin-top:6px!important;
-  color:rgba(255,248,232,.72)!important;
-}
-
-.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-title{
-  margin-top:13px!important;
-  color:#FFF8E8!important;
-}
-
-.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-copy{
-  margin-top:8px!important;
-  max-width:560px!important;
-  color:rgba(255,248,232,.78)!important;
-}
-
-.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-style{
-  background:rgba(255,248,232,.12)!important;
-  border:1px solid rgba(243,212,107,.28)!important;
-  color:#F3D46B!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.12)!important;
-}
-
-.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-style:hover{
-  background:rgba(255,248,232,.16)!important;
-}
-
-@media (max-width:430px){
-  .rk-daily-scorecard-homeclone-v45.rk-home-scorecard-v41{
-    border-radius:25px!important;
-  }
-
-  .rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-main,
-  .rk-daily-scorecard-homeclone-v45-main{
-    padding:19px!important;
-    border-radius:25px!important;
-  }
-
-  .rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score{
-    font-size:var(--rk-home-score-size-mobile, 50px)!important;
-  }
-}
-
-/* Daily scorecard supporting sections refinement */
-.rk-score-shell.rk-scorecard-clean-v120,
-.rk-score-ultra-simple.rk-scorecard-clean-v120{
-  display:flex!important;
-  flex-direction:column!important;
-  gap:18px!important;
-  padding-bottom:34px!important;
-}
 
 /* Shared card shell: matches homepage section rhythm */
 .rk-score-clean-share-v120,
@@ -11504,17 +11403,6 @@ body,
   }
 }
 
-/* Daily scorecard player refinement */
-.rk-daily-scorecard-homeclone-v45.rk-home-scorecard-v41{
-  background:
-    radial-gradient(circle at 88% 12%, rgba(243,212,107,.14), transparent 30%),
-    linear-gradient(145deg,#082417 0%,#0D432A 56%,#071D13 100%)!important;
-  border-color:rgba(243,212,107,.22)!important;
-  box-shadow:
-    0 18px 42px rgba(8,36,23,.26),
-    inset 0 1px 0 rgba(255,255,255,.13),
-    inset 0 -1px 0 rgba(0,0,0,.22)!important;
-}
 
 /* Make Share your score slim, compact, and readable */
 .rk-score-clean-share-v120,
@@ -11785,18 +11673,6 @@ body,
   }
 }
 
-/* Daily scorecard simplified player cleanup */
-.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score{
-  font-size:72px!important;
-  line-height:.86!important;
-  letter-spacing:-2.2px!important;
-}
-
-.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score-label{
-  margin-top:8px!important;
-  font-size:10px!important;
-  letter-spacing:1.8px!important;
-}
 
 /* Share section becomes one simple CTA */
 .rk-score-clean-share-v120,
@@ -12035,70 +11911,6 @@ body,
   }
 }
 
-/* Share score CTA cleanup */
-.rk-score-clean-share-v120,
-.rk-score-share-premium-v130,
-.rk-score-share-simple-v140,
-.rk-score-share-v150,
-.rk-score-share-v160{
-  padding:0!important;
-  margin:0!important;
-  border-radius:0!important;
-  background:transparent!important;
-  border:0!important;
-  box-shadow:none!important;
-}
-
-.rk-score-clean-share-v120:before,
-.rk-score-share-v160:before{
-  display:none!important;
-  content:none!important;
-}
-
-.rk-score-clean-share-v120 .rk-share-card,
-.rk-score-share-v160 .rk-share-card{
-  width:100%!important;
-  min-height:58px!important;
-  padding:12px 14px!important;
-  border-radius:20px!important;
-  display:flex!important;
-  align-items:center!important;
-  gap:12px!important;
-  background:
-    radial-gradient(circle at 92% 15%, rgba(243,212,107,.14), transparent 30%),
-    linear-gradient(180deg,#176B42 0%,#0D432A 100%)!important;
-  border:1px solid rgba(243,212,107,.30)!important;
-  box-shadow:
-    0 13px 28px rgba(13,67,42,.22),
-    inset 0 1px 0 rgba(255,255,255,.16)!important;
-}
-
-.rk-score-clean-share-v120 .rk-share-card,
-.rk-score-clean-share-v120 .rk-share-card *,
-.rk-score-share-v160 .rk-share-card,
-.rk-score-share-v160 .rk-share-card *{
-  color:#FFF8E8!important;
-}
-
-.rk-score-clean-share-v120 .rk-share-card > div:first-child,
-.rk-score-share-v160 .rk-share-card > div:first-child{
-  width:38px!important;
-  height:38px!important;
-  min-width:38px!important;
-  border-radius:14px!important;
-  background:rgba(255,248,232,.13)!important;
-  border:1px solid rgba(255,248,232,.20)!important;
-  color:#FFF8E8!important;
-  font-size:19px!important;
-  flex-shrink:0!important;
-}
-
-.rk-score-clean-share-v120 .rk-share-card > div:nth-child(2),
-.rk-score-share-v160 .rk-share-card > div:nth-child(2){
-  flex:1 1 auto!important;
-  min-width:0!important;
-  padding-right:4px!important;
-}
 
 /* Remove the extra generated Send pill */
 .rk-score-clean-share-v120 .rk-share-card:after,
@@ -12185,5 +11997,697 @@ body,
   .rk-score-clean-share-v120 .rk-share-card [style*="line-height:1.4"],
   .rk-score-share-v160 .rk-share-card [style*="line-height:1.4"]{
     font-size:10.5px!important;
+  }
+}
+
+/* Daily Rackle scorecard design-system rebuild */
+.rk-daily-scorecard-ds{
+  --rk-bg:#F5F2EC;
+  --rk-dark:#1a3320;
+  --rk-dark-2:#2a4a2a;
+  --rk-accent:#4a8c3a;
+  --rk-bright:#6fcf60;
+  --rk-muted-dark:#7a9e6e;
+  --rk-muted-light:#a8c89a;
+  --rk-gold:#e8d870;
+  --rk-card:#ffffff;
+  --rk-border:#d8d4c8;
+  --rk-tint:#f5f2e8;
+  --rk-ink:#1a2e1a;
+  --rk-label:#9a9688;
+  --rk-body:#3a4e3a;
+  min-height:100vh;
+  background:var(--rk-bg);
+  margin:0;
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  box-sizing:border-box;
+}
+
+.rk-daily-scorecard-ds *{
+  box-sizing:border-box;
+}
+
+.rk-ds-nav{
+  height:46px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:8px;
+}
+
+.rk-ds-streak-pill{
+  justify-self:start;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  min-height:30px;
+  padding:0 10px;
+  border-radius:999px;
+  background:#fff3e0;
+  border:0.5px solid #e8c97a;
+  color:#7a5c00;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:12px;
+  font-weight:600;
+}
+
+.rk-ds-streak-pill span{
+  width:7px;
+  height:7px;
+  border-radius:999px;
+  background:#e8c97a;
+  display:block;
+}
+
+.rk-ds-brand{
+  justify-self:center;
+  border:0;
+  background:transparent;
+  padding:0;
+  text-align:center;
+  color:var(--rk-ink);
+  cursor:pointer;
+}
+
+.rk-ds-brand strong{
+  display:block;
+  font-family:Georgia,serif;
+  font-size:20px;
+  line-height:1;
+  font-weight:700;
+  letter-spacing:-.02em;
+}
+
+.rk-ds-brand span{
+  display:block;
+  margin-top:4px;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:10px;
+  line-height:1;
+  font-weight:400;
+  color:#5f7158;
+}
+
+.rk-ds-menu{
+  justify-self:end;
+  width:34px;
+  height:34px;
+  border:0;
+  background:transparent;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  justify-content:center;
+  gap:4px;
+  cursor:pointer;
+  padding:0;
+}
+
+.rk-ds-menu span{
+  width:20px;
+  height:2px;
+  background:var(--rk-ink);
+  border-radius:99px;
+  display:block;
+}
+
+.rk-ds-room-open{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:11px;
+  font-weight:400;
+  color:var(--rk-accent);
+  margin-top:-2px;
+  margin-bottom:2px;
+}
+
+.rk-ds-room-open span{
+  width:6px;
+  height:6px;
+  border-radius:999px;
+  background:var(--rk-bright);
+  display:block;
+}
+
+.rk-ds-hero-card{
+  background:var(--rk-dark);
+  border-radius:16px;
+  padding:16px;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+}
+
+.rk-ds-hero-top{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.rk-ds-hero-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  min-height:26px;
+  padding:0 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.12);
+  color:var(--rk-muted-light);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+
+.rk-ds-hero-badge span{
+  width:6px;
+  height:6px;
+  border-radius:999px;
+  background:var(--rk-bright);
+}
+
+.rk-ds-date{
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:11px;
+  font-weight:400;
+  color:var(--rk-muted-dark);
+  white-space:nowrap;
+}
+
+.rk-ds-score-wrap{
+  text-align:center;
+  margin-top:4px;
+}
+
+.rk-ds-score{
+  font-family:Georgia,serif;
+  font-size:72px;
+  line-height:.86;
+  font-weight:700;
+  color:#fff;
+  letter-spacing:-.055em;
+}
+
+.rk-ds-score-label{
+  margin-top:8px;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:11px;
+  line-height:1;
+  font-weight:400;
+  color:var(--rk-muted-light);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.rk-ds-iq-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  min-height:30px;
+  padding:0 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.1);
+  border:0.5px solid rgba(255,255,255,0.2);
+  color:var(--rk-gold);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.rk-ds-iq-pill span{
+  color:var(--rk-gold);
+  font-size:9px;
+}
+
+.rk-ds-hero-card h1{
+  margin:2px 0 0;
+  font-family:Georgia,serif;
+  font-size:30px;
+  line-height:1.15;
+  font-weight:700;
+  letter-spacing:-.02em;
+  color:#fff;
+  text-align:center;
+}
+
+.rk-ds-hero-card p{
+  margin:0;
+  max-width:320px;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:14px;
+  line-height:1.5;
+  font-weight:400;
+  color:var(--rk-muted-light);
+  text-align:center;
+}
+
+.rk-ds-rank-grid{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  margin-top:2px;
+}
+
+.rk-ds-rank-grid button{
+  min-height:70px;
+  border:0;
+  border-radius:10px;
+  padding:10px;
+  background:rgba(255,255,255,0.08);
+  cursor:pointer;
+  text-align:center;
+  color:var(--rk-muted-dark);
+}
+
+.rk-ds-rank-grid span{
+  display:block;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:10px;
+  font-weight:400;
+  color:var(--rk-muted-dark);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.rk-ds-rank-grid strong{
+  display:block;
+  margin-top:5px;
+  font-family:Georgia,serif;
+  font-size:22px;
+  line-height:1;
+  font-weight:700;
+  color:var(--rk-gold);
+}
+
+.rk-ds-rank-grid em{
+  display:block;
+  margin-top:5px;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:10px;
+  font-weight:400;
+  font-style:normal;
+  color:var(--rk-muted-dark);
+}
+
+.rk-ds-share-wrap{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+
+.rk-ds-share-bar{
+  width:100%;
+  min-height:58px;
+  border:0;
+  border-radius:12px;
+  background:var(--rk-dark-2);
+  padding:12px 16px;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:12px;
+  cursor:pointer;
+  text-align:left;
+}
+
+.rk-ds-share-icon{
+  width:34px;
+  height:34px;
+  border-radius:8px;
+  background:var(--rk-dark);
+  color:var(--rk-bright);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.rk-ds-share-copy strong{
+  display:block;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:14px;
+  line-height:1.15;
+  font-weight:600;
+  color:#fff;
+}
+
+.rk-ds-share-copy em{
+  display:block;
+  margin-top:4px;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:11px;
+  line-height:1.2;
+  font-weight:400;
+  font-style:normal;
+  color:var(--rk-muted-dark);
+}
+
+.rk-ds-send{
+  min-height:32px;
+  padding:0 12px;
+  border-radius:8px;
+  background:var(--rk-accent);
+  color:#fff;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:11px;
+  font-weight:600;
+  text-transform:uppercase;
+}
+
+.rk-ds-share-sub{
+  padding-left:2px;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:11px;
+  font-weight:400;
+  color:var(--rk-label);
+}
+
+.rk-ds-open-full{
+  width:100%;
+  min-height:48px;
+  border-radius:12px;
+  border:1px solid var(--rk-dark-2);
+  background:var(--rk-dark);
+  padding:13px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  color:#e8f5e0;
+  cursor:pointer;
+}
+
+.rk-ds-open-full span{
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:14px;
+  font-weight:500;
+}
+
+.rk-ds-open-full strong{
+  color:#6a9e5a;
+  font-size:20px;
+  font-weight:500;
+}
+
+.rk-ds-section{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.rk-ds-section-head h2{
+  margin:0;
+  font-family:Georgia,serif;
+  font-size:22px;
+  line-height:1.1;
+  font-weight:700;
+  color:var(--rk-ink);
+  letter-spacing:-.02em;
+}
+
+.rk-ds-section-head p{
+  margin:4px 0 0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:13px;
+  line-height:1.4;
+  font-weight:400;
+  color:#6a7c5e;
+}
+
+.rk-ds-white-card{
+  background:var(--rk-card);
+  border:0.5px solid var(--rk-border);
+  border-radius:14px;
+  padding:14px 16px;
+}
+
+.rk-ds-card-label{
+  margin-bottom:12px;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:10px;
+  line-height:1;
+  font-weight:400;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--rk-label);
+}
+
+.rk-ds-final-rack-card .tile,
+.rk-ds-final-rack-card [class*="tile"]{
+  max-width:34px;
+}
+
+.rk-ds-fit-stack{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.rk-ds-best-fit{
+  background:var(--rk-dark);
+  border-radius:14px;
+  padding:14px 16px;
+}
+
+.rk-ds-best-fit span{
+  display:block;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--rk-bright);
+}
+
+.rk-ds-best-fit strong{
+  display:block;
+  margin-top:7px;
+  font-family:Georgia,serif;
+  font-size:17px;
+  line-height:1.15;
+  font-weight:700;
+  color:#fff;
+}
+
+.rk-ds-best-fit p{
+  margin:6px 0 0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:13px;
+  line-height:1.45;
+  font-weight:400;
+  color:#7ab87a;
+}
+
+.rk-ds-backup-fit{
+  background:var(--rk-card);
+  border:0.5px solid var(--rk-border);
+  border-radius:14px;
+  padding:14px 16px;
+}
+
+.rk-ds-backup-fit span{
+  display:block;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:10px;
+  font-weight:400;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--rk-label);
+}
+
+.rk-ds-backup-fit strong{
+  display:block;
+  margin-top:7px;
+  font-family:Georgia,serif;
+  font-size:17px;
+  line-height:1.15;
+  font-weight:700;
+  color:var(--rk-ink);
+}
+
+.rk-ds-backup-fit p{
+  margin:6px 0 0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:13px;
+  line-height:1.45;
+  font-weight:400;
+  color:#7a8c6e;
+}
+
+.rk-ds-expert-card{
+  background:var(--rk-card);
+  border:0.5px solid var(--rk-border);
+  border-radius:14px;
+  padding:14px 16px;
+}
+
+.rk-ds-expert-card > p{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:14px;
+  line-height:1.65;
+  font-weight:400;
+  color:var(--rk-body);
+}
+
+.rk-ds-next-move{
+  margin-top:12px;
+  background:var(--rk-tint);
+  border-radius:12px;
+  padding:12px;
+}
+
+.rk-ds-next-move span{
+  display:block;
+  margin-bottom:6px;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--rk-label);
+}
+
+.rk-ds-next-move p{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:13px;
+  line-height:1.45;
+  font-weight:400;
+  color:var(--rk-body);
+}
+
+.rk-ds-deep-link{
+  min-height:44px;
+  border:0;
+  background:transparent;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  color:var(--rk-accent);
+  cursor:pointer;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:13px;
+  font-weight:500;
+}
+
+.rk-ds-deep-link span{
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+
+.rk-ds-deep-link strong{
+  font-size:16px;
+  font-weight:500;
+}
+
+.rk-ds-nav-rows{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.rk-ds-nav-rows button{
+  width:100%;
+  min-height:56px;
+  background:var(--rk-card);
+  border:0.5px solid var(--rk-border);
+  border-radius:12px;
+  padding:14px 16px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  grid-template-areas:"label arrow" "title arrow";
+  align-items:center;
+  text-align:left;
+  cursor:pointer;
+}
+
+.rk-ds-nav-rows span{
+  grid-area:label;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:10px;
+  line-height:1;
+  font-weight:400;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--rk-label);
+}
+
+.rk-ds-nav-rows strong{
+  grid-area:title;
+  margin-top:5px;
+  font-family:Georgia,serif;
+  font-size:16px;
+  line-height:1.1;
+  font-weight:700;
+  color:var(--rk-ink);
+}
+
+.rk-ds-nav-rows em{
+  grid-area:arrow;
+  font-style:normal;
+  color:var(--rk-accent);
+  font-size:20px;
+  font-weight:500;
+}
+
+.rk-daily-scorecard-ds .rk-footer{
+  margin-top:10px;
+}
+
+.rk-daily-scorecard-ds footer,
+.rk-daily-scorecard-ds .rk-footer-v,
+.rk-daily-scorecard-ds .rk-footer{
+  text-align:center;
+}
+
+.rk-daily-scorecard-ds button:active{
+  transform:scale(.99);
+}
+
+@media (max-width:390px){
+  .rk-daily-scorecard-ds{
+    padding:12px;
+  }
+
+  .rk-ds-score{
+    font-size:66px;
+  }
+
+  .rk-ds-hero-card h1{
+    font-size:27px;
+  }
+
+  .rk-ds-streak-pill{
+    font-size:11px;
+    padding:0 8px;
+  }
+
+  .rk-ds-brand strong{
+    font-size:19px;
+  }
+
+  .rk-ds-share-bar{
+    padding:12px;
+    gap:10px;
+  }
+
+  .rk-ds-send{
+    padding:0 10px;
   }
 }
