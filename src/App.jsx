@@ -7924,7 +7924,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </section>
 
-      <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160" aria-label="Rack at a glance">
+      <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160 rk-scorecard-panel-v500 rk-scorecard-strategy-v500" aria-label="Rack at a glance">
         <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160">
           <span>Rack at a glance</span>
           <h2>Your table read</h2>
@@ -7958,7 +7958,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </section>
 
-      <section className="rk-score-style-card-v190" aria-label="Your style">
+      <section className="rk-score-style-card-v190 rk-scorecard-panel-v500 rk-scorecard-style-v500" aria-label="Your style">
         <div className="rk-score-style-head-v190">
           <span>Your style</span>
           <strong>{styleRead.label}</strong>
@@ -7974,7 +7974,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </section>
 
-      <section className="rk-better-players-v260" aria-label="What better players did">
+      <section className="rk-better-players-v260 rk-scorecard-panel-v500 rk-scorecard-social-v500" aria-label="What better players did">
         <div className="rk-better-players-head-v260">
           <span>Social read</span>
           <h2>What better players did</h2>
@@ -8081,7 +8081,7 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
   const styleRead=rkStyleReadForScorecard(styled?.styleName||scoreLabel,score,trustRead);
 
   return(
-    <div className="rk-score-shell rk-practice-v9-shell rk-scorecard-clean-v120 rk-practice-scorecard-match-v200">
+    <div className="rk-score-shell rk-practice-v9-shell rk-scorecard-clean-v120 rk-practice-scorecard-match-v200 rk-scorecard-premium-page-v500">
       <section className="rk-practice-homeclone-v45 rk-home-scorecard-v41 rk-score-reveal-v250" aria-label="Practice Rackle scorecard">
         <div className="rk-home-scorecard-v41-main rk-practice-homeclone-v45-main">
           <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
@@ -8100,7 +8100,7 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
         </div>
       </section>
 
-      <section className="rk-final-rack-simple-v180" aria-label="Your practice rack">
+      <section className="rk-final-rack-simple-v180 rk-scorecard-panel-v500 rk-scorecard-final-v500" aria-label="Your practice rack">
         <div className="rk-final-rack-simple-head-v180">
           <strong>{showStartingRack&&hasStartingRack?"Starting rack":"Your final rack"}</strong>
           <div className="rk-final-rack-toggle-v180" role="group" aria-label="Choose rack view">
@@ -8113,7 +8113,7 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
         </div>
       </section>
 
-      <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160" aria-label="Practice rack at a glance">
+      <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160 rk-scorecard-panel-v500 rk-scorecard-strategy-v500" aria-label="Practice rack at a glance">
         <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160">
           <span>Rack at a glance</span>
           <h2>Your table read</h2>
@@ -8146,7 +8146,7 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
         </div>
       </section>
 
-      <section className="rk-score-style-card-v190" aria-label="Your style">
+      <section className="rk-score-style-card-v190 rk-scorecard-panel-v500 rk-scorecard-style-v500" aria-label="Your style">
         <div className="rk-score-style-head-v190">
           <span>Your style</span>
           <strong>{styleRead.label}</strong>
