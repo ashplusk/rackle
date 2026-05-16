@@ -13451,3 +13451,204 @@ body,
 .rk-tomorrow-v11-copy{
   font-weight:750!important;
 }
+
+/* Score reveal redesign: premium reward moment */
+@keyframes rkRevealFadeUpV250{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+@keyframes rkRevealScoreV250{
+  0%{opacity:0;transform:translateY(12px) scale(.94);filter:blur(2px);}
+  52%{opacity:1;transform:translateY(0) scale(1.035);filter:blur(0);}
+  100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0);}
+}
+
+@keyframes rkRevealLineV250{
+  from{transform:scaleX(0);opacity:0;}
+  to{transform:scaleX(1);opacity:1;}
+}
+
+@keyframes rkRevealPulseV250{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.025);}
+}
+
+.rk-score-reveal-v250{
+  position:relative!important;
+  overflow:hidden!important;
+}
+
+.rk-score-reveal-v250:before{
+  content:""!important;
+  position:absolute!important;
+  top:0!important;
+  left:26px!important;
+  right:26px!important;
+  height:2px!important;
+  border-radius:999px!important;
+  transform-origin:center!important;
+  background:linear-gradient(90deg,transparent,rgba(243,212,107,.78),transparent)!important;
+  animation:rkRevealLineV250 .62s cubic-bezier(.16,1,.3,1) both!important;
+  pointer-events:none!important;
+}
+
+.rk-score-reveal-status-v250{
+  width:max-content!important;
+  max-width:100%!important;
+  margin:-3px 0 14px!important;
+  padding:7px 11px!important;
+  border-radius:999px!important;
+  background:rgba(255,248,232,.075)!important;
+  border:1px solid rgba(255,248,232,.13)!important;
+  color:rgba(255,248,232,.74)!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:8.5px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:1.55px!important;
+  text-transform:uppercase!important;
+  animation:rkRevealFadeUpV250 .45s cubic-bezier(.16,1,.3,1) .08s both!important;
+}
+
+.rk-score-reveal-number-v250{
+  font-size:82px!important;
+  line-height:.80!important;
+  letter-spacing:-3.3px!important;
+  transform-origin:left center!important;
+  animation:rkRevealScoreV250 .82s cubic-bezier(.16,1,.3,1) .18s both!important;
+}
+
+.rk-score-reveal-v250 .rk-home-scorecard-v41-score-label{
+  animation:rkRevealFadeUpV250 .45s cubic-bezier(.16,1,.3,1) .36s both!important;
+}
+
+.rk-score-reveal-style-v250,
+.rk-score-reveal-v250 .rk-home-scorecard-v41-style{
+  animation:rkRevealFadeUpV250 .48s cubic-bezier(.16,1,.3,1) .42s both!important;
+}
+
+.rk-score-reveal-title-v250{
+  max-width:620px!important;
+  margin-top:17px!important;
+  font-size:31px!important;
+  line-height:1.02!important;
+  letter-spacing:-.7px!important;
+  animation:rkRevealFadeUpV250 .52s cubic-bezier(.16,1,.3,1) .55s both!important;
+}
+
+.rk-score-reveal-copy-v250{
+  max-width:560px!important;
+  margin-top:9px!important;
+  font-size:13.75px!important;
+  line-height:1.52!important;
+  font-weight:780!important;
+  animation:rkRevealFadeUpV250 .52s cubic-bezier(.16,1,.3,1) .68s both!important;
+}
+
+.rk-score-reveal-micro-v250{
+  display:inline-flex!important;
+  width:max-content!important;
+  max-width:100%!important;
+  margin-top:13px!important;
+  padding:8px 11px!important;
+  border-radius:999px!important;
+  background:rgba(243,212,107,.10)!important;
+  border:1px solid rgba(243,212,107,.20)!important;
+  color:#F3D46B!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:9px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:1.45px!important;
+  text-transform:uppercase!important;
+  animation:rkRevealFadeUpV250 .52s cubic-bezier(.16,1,.3,1) .80s both!important;
+}
+
+.rk-score-reveal-v250 .rk-home-scorecard-v41-actions,
+.rk-score-reveal-v250 + .rk-score-clean-share-v120,
+.rk-score-reveal-v250 .rk-home-scorecard-v41-bottom{
+  animation:rkRevealFadeUpV250 .58s cubic-bezier(.16,1,.3,1) .92s both!important;
+}
+
+.rk-score-reveal-v250 .rk-home-scorecard-v41-main{
+  isolation:isolate!important;
+}
+
+.rk-score-reveal-v250 .rk-home-scorecard-v41-watermark{
+  opacity:.09!important;
+  animation:rkRevealPulseV250 2.8s ease-in-out 1.05s 1 both!important;
+}
+
+.rk-score-reveal-v250 .rk-home-scorecard-v41-score-row{
+  align-items:center!important;
+}
+
+.rk-score-reveal-v250 .rk-home-scorecard-v41-kicker{
+  animation:rkRevealFadeUpV250 .42s cubic-bezier(.16,1,.3,1) both!important;
+}
+
+.rk-home-score-reveal-v250 .rk-score-reveal-status-v250{
+  margin-left:0!important;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .rk-score-reveal-v250:before,
+  .rk-score-reveal-status-v250,
+  .rk-score-reveal-number-v250,
+  .rk-score-reveal-v250 .rk-home-scorecard-v41-score-label,
+  .rk-score-reveal-style-v250,
+  .rk-score-reveal-v250 .rk-home-scorecard-v41-style,
+  .rk-score-reveal-title-v250,
+  .rk-score-reveal-copy-v250,
+  .rk-score-reveal-micro-v250,
+  .rk-score-reveal-v250 .rk-home-scorecard-v41-actions,
+  .rk-score-reveal-v250 + .rk-score-clean-share-v120,
+  .rk-score-reveal-v250 .rk-home-scorecard-v41-bottom,
+  .rk-score-reveal-v250 .rk-home-scorecard-v41-kicker,
+  .rk-score-reveal-v250 .rk-home-scorecard-v41-watermark{
+    animation:none!important;
+    opacity:1!important;
+    transform:none!important;
+    filter:none!important;
+  }
+}
+
+@media (max-width:430px){
+  .rk-score-reveal-status-v250{
+    margin-bottom:13px!important;
+    font-size:8px!important;
+    padding:7px 10px!important;
+  }
+
+  .rk-score-reveal-number-v250{
+    font-size:72px!important;
+    letter-spacing:-2.8px!important;
+  }
+
+  .rk-score-reveal-title-v250{
+    font-size:26px!important;
+    line-height:1.04!important;
+    margin-top:15px!important;
+  }
+
+  .rk-score-reveal-copy-v250{
+    font-size:13px!important;
+  }
+
+  .rk-score-reveal-micro-v250{
+    margin-top:11px!important;
+    font-size:8.25px!important;
+  }
+}
+
+@media (max-width:370px){
+  .rk-score-reveal-number-v250{
+    font-size:64px!important;
+    letter-spacing:-2.2px!important;
+  }
+
+  .rk-score-reveal-title-v250{
+    font-size:23px!important;
+  }
+}

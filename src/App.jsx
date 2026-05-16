@@ -7514,6 +7514,61 @@ function rkFriendlyDirectionDetail(direction, fallback){
   return fallback||"This is the clearest NMJL card direction your rack is showing right now.";
 }
 
+
+function rkScoreRevealFrame(score,trustRead={},iq={},mode="daily"){
+  const n=Number(score||0);
+  const factors=iq?.expertFactors||iq?.expertRead?.factors||{};
+  const best=trustRead?.best||iq?.bestDirection||iq?.strategicRead?.bestDirection||"your best lane";
+  const compression=Number(factors.efficiency||factors.compression||0);
+  const acceleration=Number(factors.acceleration||0);
+  const convergence=Number(factors.convergence||0);
+  const deadness=Number(factors.deadnessRisk||0);
+  const prefix=mode==="practice"?"Practice Charleston complete":"Today’s Charleston complete";
+
+  if(n>=90)return{
+    status:prefix,
+    headline:"Elite compression.",
+    copy:`Clean density, clear direction, real speed. ${best} was worth defending.`,
+    tag:"Rare table read"
+  };
+  if(n>=84)return{
+    status:prefix,
+    headline:acceleration>=72?"Fast rack. High pressure.":"Sharp Charleston.",
+    copy:`Strong shape after the Charleston. You had enough structure to cut harder and make the table chase you.`,
+    tag:"Strong reveal"
+  };
+  if(n>=76)return{
+    status:prefix,
+    headline:compression>=68?"Clean convergence.":"Strong table read.",
+    copy:`You found a believable lane. ${best} had shape, but the next few tiles still mattered.`,
+    tag:"Good pressure"
+  };
+  if(n>=68)return{
+    status:prefix,
+    headline:"Good rack. Not automatic.",
+    copy:`The lane was there, but the rack still needed cleaner speed before it became dangerous.`,
+    tag:"Still in play"
+  };
+  if(n>=58)return{
+    status:prefix,
+    headline:convergence<58?"Dangerously flexible.":"Playable, but drifting.",
+    copy:`You kept the hand alive, but too many medium-strength paths were still asking for space.`,
+    tag:"Drift watch"
+  };
+  if(n>=45)return{
+    status:prefix,
+    headline:"Thin speed.",
+    copy:`Some tiles worked together, but the rack never fully compressed after the Charleston.`,
+    tag:"Needs cleanup"
+  };
+  return{
+    status:prefix,
+    headline:"Tough table read.",
+    copy:deadness>=60?`Too much dead weight survived. The right play was cleanup, not optimism.`:`This rack needed patience. Protect structure and wait for a cleaner signal.`,
+    tag:"Hard rack"
+  };
+}
+
 function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onHome,onPractice,onCoachMode,setScreen,resultTime=0}){
   const [dailyStats,setDailyStats]=useState(null);
   const [globalEntries,setGlobalEntries]=useState([]);
@@ -7580,6 +7635,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     return "Difficult rack. Reduce noise and keep the best clues.";
   })();
   const scoreLabel=trustRead?.band?.short||rkLaunchScoreBand(score).short;
+  const revealFrame=rkScoreRevealFrame(score,trustRead,iq,"daily");
   const scoreAccent=score>=85?C.gold:score>=70?C.jade:score>=55?"#2460A8":score>=40?C.gold:C.cinn;
   const topSectionRead=allSections&&allSections.length?[...allSections].sort((a,b)=>(b.score||0)-(a.score||0))[0]:null;
   const shareName=(playerName||"I").trim();
@@ -7652,23 +7708,25 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const styleRead=rkStyleReadForScorecard(iq.styleName||scoreLabel,score,trustRead);
   return(
     <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26 rk-scorecard-clean-v120" style={{paddingBottom:32}}>
-      <section className="rk-daily-scorecard-homeclone-v45 rk-home-scorecard-v41" aria-label="Daily Rackle scorecard">
+      <section className="rk-daily-scorecard-homeclone-v45 rk-home-scorecard-v41 rk-score-reveal-v250" aria-label="Daily Rackle scorecard">
         <div className="rk-home-scorecard-v41-main rk-daily-scorecard-homeclone-v45-main">
           <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
           <div className="rk-home-scorecard-v41-kicker"><span/> Today’s Table Read · #{dayNum}</div>
+          <div className="rk-score-reveal-status-v250">{revealFrame.status}</div>
           <div className="rk-home-scorecard-v41-score-row rk-daily-scorecard-homeclone-v45-score-row">
             <div>
-              <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43">{animatedScore}</div>
+              <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43 rk-score-reveal-number-v250" aria-label={`Rackle IQ ${score}`}>{animatedScore}</div>
               <div className="rk-home-scorecard-v41-score-label">Rackle IQ</div>
             </div>
             {(iq.styleName||scoreLabel)&&(
-              <button type="button" onClick={()=>setScreen&&setScreen("styleGlossary")} className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next rk-style-pill-clickable" aria-label={`Learn what ${iq.styleName||scoreLabel} means`}>
+              <button type="button" onClick={()=>setScreen&&setScreen("styleGlossary")} className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next rk-style-pill-clickable rk-score-reveal-style-v250" aria-label={`Learn what ${iq.styleName||scoreLabel} means`}>
                 {iq.styleName||scoreLabel}
               </button>
             )}
           </div>
-          <div className="rk-home-scorecard-v41-title">{iq.level||scoreLabel}</div>
-          <p className="rk-home-scorecard-v41-copy">{quickRead}</p>
+          <div className="rk-home-scorecard-v41-title rk-score-reveal-title-v250">{revealFrame.headline}</div>
+          <p className="rk-home-scorecard-v41-copy rk-score-reveal-copy-v250">{revealFrame.copy}</p>
+          <div className="rk-score-reveal-micro-v250">{revealFrame.tag}</div>
 
           <div className="rk-home-scorecard-v41-actions" aria-label="Scorecard rooms">
             <button type="button" onClick={()=>setScreen&&setScreen("globalLeaderboard")} aria-label="View global leaderboard">
@@ -7836,6 +7894,7 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
     : score>=55
       ? "Playable practice rack. The shape was alive, but it needed cleaner structure before locking in."
       : "Thin practice rack. Keep the best clues, reduce noise, and wait for the next clear signal.";
+  const revealFrame=rkScoreRevealFrame(score,trustRead,iq,"practice");
   const startingRackSource=(
     Array.isArray(iq?.startingRack)&&iq.startingRack.length?iq.startingRack:
     Array.isArray(iq?.starting_rack)&&iq.starting_rack.length?iq.starting_rack:
@@ -7859,19 +7918,21 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
 
   return(
     <div className="rk-score-shell rk-practice-v9-shell rk-scorecard-clean-v120 rk-practice-scorecard-match-v200">
-      <section className="rk-practice-homeclone-v45 rk-home-scorecard-v41" aria-label="Practice Rackle scorecard">
+      <section className="rk-practice-homeclone-v45 rk-home-scorecard-v41 rk-score-reveal-v250" aria-label="Practice Rackle scorecard">
         <div className="rk-home-scorecard-v41-main rk-practice-homeclone-v45-main">
           <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
           <div className="rk-home-scorecard-v41-kicker"><span/> Practice Table Read</div>
+          <div className="rk-score-reveal-status-v250">{revealFrame.status}</div>
           <div className="rk-home-scorecard-v41-score-row rk-practice-homeclone-v45-score-row">
             <div>
-              <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43">{animatedScore}</div>
+              <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43 rk-score-reveal-number-v250" aria-label={`Rackle IQ ${score}`}>{animatedScore}</div>
               <div className="rk-home-scorecard-v41-score-label">Rackle IQ</div>
             </div>
             {styled?.styleName&&<div className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next">{styled.styleName}</div>}
           </div>
-          <div className="rk-home-scorecard-v41-title">{level}</div>
-          <p className="rk-home-scorecard-v41-copy">{quickRead}</p>
+          <div className="rk-home-scorecard-v41-title rk-score-reveal-title-v250">{revealFrame.headline}</div>
+          <p className="rk-home-scorecard-v41-copy rk-score-reveal-copy-v250">{revealFrame.copy}</p>
+          <div className="rk-score-reveal-micro-v250">{revealFrame.tag}</div>
         </div>
       </section>
 
@@ -11260,24 +11321,27 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     },[hasAnimatedScore,scoreNumber,scoreValue]);
 
     const shownScoreValue=hasAnimatedScore?animatedScore:scoreValue;
+    const homeRevealFrame=rkScoreRevealFrame(scoreNumber||0,rkScorecardTrustRead(iq||{},todayHand||hand||[]),iq||{},"daily");
     const globalRowsForScore=rkMergeCurrentScore(homeGlobalEntries,currentScore,iq?.totalTime||todayDRes?.time||0,streak,activeClubCode);
     const globalRankForScore=currentScore?rkRankOfCurrent(globalRowsForScore,currentScore):null;
     const globalValue=globalRankForScore?`#${globalRankForScore}`:"—";
     const clubValue=club?(shownClubRank?`#${shownClubRank}`:(hasClubScore?"live":"club")):"join";
     return(
-    <section className="rk-home-scorecard-v41 rk-home-section-lg" aria-label="Your Daily Rackle scorecard">
+    <section className="rk-home-scorecard-v41 rk-home-section-lg rk-score-reveal-v250 rk-home-score-reveal-v250" aria-label="Your Daily Rackle scorecard">
       <div role="button" tabIndex={0} onClick={showScorecard} onKeyDown={(e)=>{if(e.key==="Enter"||e.key===" ")showScorecard();}} className="rk-home-scorecard-v41-main" aria-label="Open your full scorecard">
         <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
         <div className="rk-home-scorecard-v41-kicker"><span/> Today’s Table Read · #{dn}</div>
+        <div className="rk-score-reveal-status-v250">{homeRevealFrame.status}</div>
         <div className="rk-home-scorecard-v41-score-row">
           <div>
-            <div className="rk-home-scorecard-v41-score rk-home-scorecard-v41-score-countup rk-pop" aria-label={`Rackle IQ ${scoreValue}`}>{shownScoreValue}</div>
+            <div className="rk-home-scorecard-v41-score rk-home-scorecard-v41-score-countup rk-pop rk-score-reveal-number-v250" aria-label={`Rackle IQ ${scoreValue}`}>{shownScoreValue}</div>
             <div className="rk-home-scorecard-v41-score-label">Rackle IQ</div>
           </div>
           {iq?.styleName&&<button type="button" onClick={(e)=>{e.stopPropagation();setScreen("styleGlossary");}} className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next rk-style-pill-clickable" aria-label={`Learn what ${iq.styleName} means`}>{iq.styleName}</button>}
         </div>
-        <div className="rk-home-scorecard-v41-title">{iq?.level||"Daily complete"}</div>
-        <p className="rk-home-scorecard-v41-copy">{levelLine}</p>
+        <div className="rk-home-scorecard-v41-title rk-score-reveal-title-v250">{homeRevealFrame.headline}</div>
+        <p className="rk-home-scorecard-v41-copy rk-score-reveal-copy-v250">{homeRevealFrame.copy}</p>
+        <div className="rk-score-reveal-micro-v250">{homeRevealFrame.tag}</div>
 
         <div className="rk-home-scorecard-v41-actions" aria-label="Scorecard rooms">
           <button type="button" onClick={(e)=>{e.stopPropagation();goGlobalRank(e);}} aria-label="View global leaderboard">
