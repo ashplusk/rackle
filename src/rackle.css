@@ -17097,3 +17097,677 @@ body,
     grid-template-columns:1fr!important;
   }
 }
+
+/* Homepage global design-system refinement v800 */
+:root{
+  --rk-home-safe-x:20px;
+  --rk-home-section-gap:36px;
+  --rk-card-radius-lg:30px;
+  --rk-card-radius-md:24px;
+  --rk-card-pad-x:22px;
+  --rk-card-pad-y:22px;
+  --rk-home-shadow:0 12px 30px rgba(26,20,16,.045), inset 0 1px 0 rgba(255,255,255,.84);
+  --rk-home-border:1px solid rgba(26,20,16,.07);
+  --rk-home-parchment:linear-gradient(145deg,#FFFDF8 0%,#F7F0E5 100%);
+  --rk-jade-gradient:linear-gradient(180deg,#176B42 0%,#0D432A 100%);
+  --rk-home-copy:#6B6157;
+  --rk-home-ink:#1A1410;
+}
+
+/* Global homepage rhythm */
+.rk-pg > .rk-home-landing-flow{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:var(--rk-home-section-gap)!important;
+  margin-top:12px!important;
+  padding-bottom:8px!important;
+}
+
+.rk-home-landing-flow > *{
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+
+/* Standard section card system */
+.rk-daily-entry-v6,
+.rk-club-today-card,
+.rk-tomorrow-card-v11.rk-tomorrow-mystery-final,
+.rk-freeplay-v24.rk-freeplay-v40,
+.rk-learn-home-v8.rk-learn-home-v12.rk-learn-home-v18.rk-learn-home-v19{
+  border-radius:var(--rk-card-radius-lg)!important;
+  padding:var(--rk-card-pad-y) var(--rk-card-pad-x)!important;
+  border:var(--rk-home-border)!important;
+  box-shadow:var(--rk-home-shadow)!important;
+}
+
+/* Unified typography */
+.rk-daily-entry-v6-title,
+.rk-club-today-title,
+.rk-tomorrow-v11-title,
+.rk-freeplay-v40-copy h2,
+.rk-learn-home-v18-title{
+  font-family:'Fraunces', Georgia, serif!important;
+  color:var(--rk-home-ink)!important;
+  font-size:27px!important;
+  line-height:1.05!important;
+  font-weight:900!important;
+  letter-spacing:-.65px!important;
+  margin:0!important;
+  text-shadow:none!important;
+}
+
+.rk-daily-entry-v6-copy,
+.rk-club-today-desc,
+.rk-tomorrow-v11-copy,
+.rk-freeplay-v40-copy p,
+.rk-learn-home-v18-copy{
+  color:var(--rk-home-copy)!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:13.25px!important;
+  line-height:1.58!important;
+  font-weight:500!important;
+  letter-spacing:0!important;
+  opacity:1!important;
+  text-shadow:none!important;
+  max-width:38ch!important;
+}
+
+.rk-daily-entry-v6-kicker,
+.rk-club-today-kicker,
+.rk-tomorrow-v11-kicker,
+.rk-freeplay-v24-kicker,
+.rk-learn-home-v18-kicker{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:max-content!important;
+  max-width:100%!important;
+  min-height:27px!important;
+  margin:0 0 15px!important;
+  padding:0 11px!important;
+  border-radius:999px!important;
+  background:rgba(23,107,66,.075)!important;
+  border:1px solid rgba(23,107,66,.13)!important;
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:8px!important;
+  line-height:1!important;
+  font-weight:800!important;
+  letter-spacing:1.55px!important;
+  text-transform:uppercase!important;
+  box-shadow:none!important;
+}
+
+/* Global button system on homepage */
+.rk-daily-entry-v6-cta,
+.rk-freeplay-v24-cta,
+.rk-home-scorecard-v41-share,
+.rk-home-scorecard-v41-full,
+.rk-club-today-actions button,
+.rk-learn-home-v18-card{
+  touch-action:manipulation!important;
+  transition:transform .16s ease, background .16s ease, border-color .16s ease!important;
+}
+
+.rk-daily-entry-v6-cta,
+.rk-freeplay-v24-cta,
+.rk-home-scorecard-v41-share{
+  min-height:54px!important;
+  border-radius:20px!important;
+  background:var(--rk-jade-gradient)!important;
+  color:#FFF8E8!important;
+  border:1px solid rgba(243,212,107,.20)!important;
+  box-shadow:
+    0 10px 24px rgba(13,67,42,.14),
+    inset 0 1px 0 rgba(255,255,255,.14)!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:16px!important;
+  font-weight:900!important;
+  letter-spacing:-.2px!important;
+}
+
+.rk-daily-entry-v6-cta:active,
+.rk-freeplay-v24-cta:active,
+.rk-home-scorecard-v41-share:active,
+.rk-club-today-actions button:active,
+.rk-learn-home-v18-card:active{
+  transform:scale(.985)!important;
+}
+
+/* Header / logo area feels calmer */
+.rk-startup-hero-v4.rk-startup-hero-v42{
+  margin:0!important;
+  padding:22px 14px 10px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  border:0!important;
+}
+
+.rk-startup-mark-v4{
+  margin-bottom:9px!important;
+  opacity:.88!important;
+  filter:none!important;
+}
+
+.rk-startup-logo-v4{
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:42px!important;
+  line-height:.95!important;
+  font-weight:900!important;
+  letter-spacing:-1.1px!important;
+  color:#123B24!important;
+  margin-bottom:8px!important;
+}
+
+.rk-startup-subtitle-v4{
+  color:#6B6157!important;
+  font-size:10px!important;
+  line-height:1!important;
+  font-weight:500!important;
+  letter-spacing:1.45px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-startup-pulse-pill-v41,
+.rk-startup-pulse-pill-v42{
+  min-height:31px!important;
+  margin-top:14px!important;
+  padding:0 13px!important;
+  border-radius:999px!important;
+  background:rgba(255,253,248,.82)!important;
+  border:1px solid rgba(26,20,16,.065)!important;
+  color:#176B42!important;
+  box-shadow:none!important;
+  font-weight:700!important;
+}
+
+/* Play Today card */
+.rk-daily-entry-wrap-v37{
+  margin-top:0!important;
+}
+
+.rk-daily-entry-v6{
+  background:var(--rk-home-parchment)!important;
+  overflow:hidden!important;
+}
+
+.rk-daily-entry-v6:before,
+.rk-daily-entry-v6:after,
+.rk-daily-entry-v6-glow{
+  display:none!important;
+  opacity:0!important;
+}
+
+.rk-daily-entry-v6-title{
+  margin-top:18px!important;
+  max-width:12ch!important;
+}
+
+.rk-daily-entry-v6-copy{
+  margin-top:12px!important;
+}
+
+.rk-daily-entry-v6-stats{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:9px!important;
+  margin-top:18px!important;
+}
+
+.rk-daily-entry-v6-stats span{
+  min-height:31px!important;
+  padding:0 12px!important;
+  border-radius:999px!important;
+  background:rgba(23,107,66,.055)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:10.75px!important;
+  font-weight:700!important;
+  box-shadow:none!important;
+}
+
+.rk-daily-entry-v6-cta{
+  margin-top:22px!important;
+}
+
+.rk-daily-entry-v37-tutorial{
+  margin-top:13px!important;
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:12px!important;
+  font-weight:600!important;
+}
+
+/* Tile rows and preview surfaces */
+.rk-daily-entry-v6 .rk-real-tile-row-v6,
+.rk-freeplay-v40-tiles{
+  gap:9px!important;
+  justify-content:center!important;
+}
+
+.rk-freeplay-v40-preview{
+  margin-top:18px!important;
+  padding:13px!important;
+  border-radius:22px!important;
+  background:linear-gradient(145deg,rgba(255,253,248,.82),rgba(246,238,225,.72))!important;
+  border:1px solid rgba(26,20,16,.065)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+
+/* Today's Room / Club card */
+.rk-club-today-card{
+  background:
+    radial-gradient(circle at 88% 8%, rgba(23,107,66,.10), transparent 34%),
+    linear-gradient(145deg,#FFFDF8 0%,#F3E8D5 100%)!important;
+}
+
+.rk-club-today-head{
+  display:flex!important;
+  align-items:flex-start!important;
+  gap:16px!important;
+  margin-bottom:17px!important;
+}
+
+.rk-club-today-desc{
+  margin-top:10px!important;
+}
+
+.rk-club-today-score{
+  width:82px!important;
+  min-width:82px!important;
+  height:74px!important;
+  border-radius:22px!important;
+  background:var(--rk-jade-gradient)!important;
+  border:1px solid rgba(243,212,107,.18)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.13)!important;
+}
+
+.rk-club-today-score strong{
+  color:#FFF8E8!important;
+  font-size:27px!important;
+}
+
+.rk-club-today-score span{
+  color:rgba(255,248,232,.70)!important;
+  font-size:7.5px!important;
+  font-weight:700!important;
+}
+
+.rk-club-today-board{
+  margin-top:4px!important;
+  padding:15px!important;
+  border-radius:24px!important;
+  background:rgba(255,253,248,.74)!important;
+  border:1px solid rgba(26,20,16,.06)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+
+.rk-club-today-board-copy strong,
+.rk-club-today-name,
+.rk-club-today-row-score{
+  color:#1A1410!important;
+}
+
+.rk-club-today-board-copy span,
+.rk-club-today-rank,
+.rk-club-today-stats div span{
+  color:#6B6157!important;
+  font-weight:500!important;
+}
+
+.rk-club-today-stats{
+  gap:9px!important;
+  margin:15px 0!important;
+}
+
+.rk-club-today-stats div{
+  min-height:57px!important;
+  border-radius:17px!important;
+  background:rgba(255,253,248,.80)!important;
+  border:1px solid rgba(26,20,16,.055)!important;
+  box-shadow:none!important;
+}
+
+.rk-club-today-stats div strong{
+  color:#123B24!important;
+  font-size:18px!important;
+}
+
+.rk-club-today-row{
+  min-height:40px!important;
+  border-radius:15px!important;
+  background:rgba(255,255,255,.62)!important;
+  border:1px solid rgba(26,20,16,.05)!important;
+}
+
+.rk-club-today-actions{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:10px!important;
+  margin-top:16px!important;
+}
+
+.rk-club-today-actions button{
+  min-height:52px!important;
+  border-radius:20px!important;
+  padding:0 14px!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:14.5px!important;
+  font-weight:900!important;
+  letter-spacing:-.15px!important;
+  box-shadow:none!important;
+}
+
+.rk-club-today-actions button:first-child{
+  background:var(--rk-jade-gradient)!important;
+  color:#FFF8E8!important;
+  border:1px solid rgba(243,212,107,.20)!important;
+}
+
+.rk-club-today-actions button:nth-child(2){
+  background:#FFFDF8!important;
+  color:#123B24!important;
+  border:1px solid rgba(18,59,36,.14)!important;
+}
+
+/* Tomorrow's Rackle: anticipation, not visual noise */
+.rk-tomorrow-card-v11.rk-tomorrow-mystery-final{
+  background:
+    radial-gradient(circle at 92% 10%, rgba(255,248,232,.10), transparent 32%),
+    linear-gradient(145deg,#352451 0%,#4D3473 54%,#2B1D45 100%)!important;
+  border:1px solid rgba(255,248,232,.13)!important;
+  box-shadow:
+    0 14px 34px rgba(43,29,69,.13),
+    inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+
+.rk-tomorrow-card-v11.rk-tomorrow-mystery-final:before{
+  opacity:.35!important;
+}
+
+.rk-tomorrow-v11-top{
+  align-items:center!important;
+  gap:16px!important;
+}
+
+.rk-tomorrow-v11-kicker{
+  background:rgba(255,248,232,.08)!important;
+  border:1px solid rgba(255,248,232,.12)!important;
+  color:rgba(255,248,232,.70)!important;
+}
+
+.rk-tomorrow-v11-title{
+  color:#FFF8E8!important;
+  max-width:13ch!important;
+}
+
+.rk-tomorrow-v11-copy{
+  color:rgba(255,248,232,.72)!important;
+  margin-top:12px!important;
+  max-width:36ch!important;
+}
+
+.rk-tomorrow-v11-badge{
+  align-self:center!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:35px!important;
+  height:35px!important;
+  max-height:35px!important;
+  padding:0 12px!important;
+  margin:0!important;
+  border-radius:999px!important;
+  background:rgba(255,248,232,.11)!important;
+  border:1px solid rgba(255,248,232,.16)!important;
+  color:#FFF8E8!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:10px!important;
+  font-weight:800!important;
+  line-height:1!important;
+  box-shadow:none!important;
+}
+
+/* Free Play */
+.rk-freeplay-v24.rk-freeplay-v40{
+  background:var(--rk-home-parchment)!important;
+}
+
+.rk-freeplay-v40-top{
+  align-items:flex-start!important;
+  gap:16px!important;
+}
+
+.rk-freeplay-v40-copy p{
+  margin-top:10px!important;
+}
+
+.rk-freeplay-v40-steps{
+  display:grid!important;
+  gap:10px!important;
+  margin:18px 0!important;
+}
+
+.rk-freeplay-v40-steps div{
+  min-height:58px!important;
+  padding:11px!important;
+  border-radius:18px!important;
+  background:rgba(255,253,248,.72)!important;
+  border:1px solid rgba(26,20,16,.055)!important;
+  box-shadow:none!important;
+}
+
+.rk-freeplay-v40-steps strong{
+  width:28px!important;
+  height:28px!important;
+  min-width:28px!important;
+  border-radius:11px!important;
+  background:rgba(23,107,66,.09)!important;
+  color:#176B42!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:14px!important;
+}
+
+.rk-freeplay-v40-steps b{
+  color:#1A1410!important;
+  font-size:15px!important;
+  font-weight:800!important;
+}
+
+.rk-freeplay-v40-steps small{
+  color:#6B6157!important;
+  font-size:11.25px!important;
+  line-height:1.35!important;
+  font-weight:400!important;
+}
+
+/* Learn + Explore */
+.rk-learn-home-v8.rk-learn-home-v12.rk-learn-home-v18.rk-learn-home-v19{
+  background:linear-gradient(145deg,#FFFDF8 0%,#F8F1E6 100%)!important;
+}
+
+.rk-learn-home-v18-copy{
+  margin-top:10px!important;
+}
+
+.rk-learn-home-v18-grid{
+  gap:10px!important;
+  margin-top:18px!important;
+}
+
+.rk-learn-home-v18-card{
+  min-height:68px!important;
+  padding:13px!important;
+  border-radius:20px!important;
+  background:rgba(255,253,248,.74)!important;
+  border:1px solid rgba(26,20,16,.055)!important;
+  box-shadow:none!important;
+}
+
+.rk-learn-home-v18-icon{
+  width:38px!important;
+  height:38px!important;
+  min-width:38px!important;
+  border-radius:15px!important;
+  background:rgba(23,107,66,.085)!important;
+  color:#176B42!important;
+  box-shadow:none!important;
+}
+
+.rk-learn-home-v18-text strong{
+  color:#1A1410!important;
+  font-size:15px!important;
+  line-height:1.12!important;
+  font-weight:800!important;
+}
+
+.rk-learn-home-v18-text span{
+  margin-top:3px!important;
+  color:#6B6157!important;
+  font-size:11.5px!important;
+  line-height:1.38!important;
+  font-weight:400!important;
+}
+
+.rk-learn-home-v18-arrow{
+  width:30px!important;
+  height:30px!important;
+  border-radius:999px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  color:#176B42!important;
+  box-shadow:none!important;
+}
+
+/* Footer consistency */
+.rk-footer,
+.rk-premium-footer,
+footer{
+  margin-top:34px!important;
+}
+
+.rk-footer p,
+.rk-premium-footer p,
+footer p{
+  font-weight:400!important;
+  color:#6B6157!important;
+  line-height:1.55!important;
+}
+
+/* Reduce decorative noise globally on homepage cards */
+.rk-freeplay-v24.rk-freeplay-v40:before,
+.rk-learn-home-v19:before,
+.rk-tomorrow-card-v11.rk-sweep:before,
+.rk-club-today-card:before{
+  opacity:.45!important;
+}
+
+.rk-tomorrow-float-tiles{
+  opacity:.10!important;
+}
+
+/* Responsive tuning */
+@media (max-width:430px){
+  :root{
+    --rk-home-safe-x:18px;
+    --rk-home-section-gap:34px;
+    --rk-card-radius-lg:27px;
+    --rk-card-pad-x:18px;
+    --rk-card-pad-y:20px;
+  }
+
+  .rk-pg > .rk-home-landing-flow{
+    gap:var(--rk-home-section-gap)!important;
+    margin-top:8px!important;
+  }
+
+  .rk-startup-hero-v4.rk-startup-hero-v42{
+    padding:20px 12px 8px!important;
+  }
+
+  .rk-startup-logo-v4{
+    font-size:38px!important;
+  }
+
+  .rk-daily-entry-v6-title,
+  .rk-club-today-title,
+  .rk-tomorrow-v11-title,
+  .rk-freeplay-v40-copy h2,
+  .rk-learn-home-v18-title{
+    font-size:23px!important;
+    line-height:1.06!important;
+  }
+
+  .rk-daily-entry-v6-copy,
+  .rk-club-today-desc,
+  .rk-tomorrow-v11-copy,
+  .rk-freeplay-v40-copy p,
+  .rk-learn-home-v18-copy{
+    font-size:12.75px!important;
+    line-height:1.55!important;
+  }
+
+  .rk-club-today-head,
+  .rk-freeplay-v40-top,
+  .rk-tomorrow-v11-top{
+    gap:13px!important;
+  }
+
+  .rk-club-today-score{
+    width:72px!important;
+    min-width:72px!important;
+    height:66px!important;
+  }
+
+  .rk-club-today-score strong{
+    font-size:23px!important;
+  }
+
+  .rk-club-today-actions button{
+    min-height:49px!important;
+    font-size:13.25px!important;
+    border-radius:18px!important;
+  }
+
+  .rk-tomorrow-v11-badge{
+    min-height:32px!important;
+    height:32px!important;
+    max-height:32px!important;
+    font-size:9.5px!important;
+  }
+
+  .rk-freeplay-v40-steps div,
+  .rk-learn-home-v18-card{
+    min-height:62px!important;
+  }
+}
+
+@media (max-width:370px){
+  :root{
+    --rk-home-section-gap:31px;
+    --rk-card-pad-x:16px;
+    --rk-card-pad-y:18px;
+  }
+
+  .rk-startup-logo-v4{
+    font-size:35px!important;
+  }
+
+  .rk-daily-entry-v6-title,
+  .rk-club-today-title,
+  .rk-tomorrow-v11-title,
+  .rk-freeplay-v40-copy h2,
+  .rk-learn-home-v18-title{
+    font-size:21px!important;
+  }
+
+  .rk-club-today-actions{
+    grid-template-columns:1fr!important;
+  }
+
+  .rk-tomorrow-v11-top{
+    flex-direction:column!important;
+    align-items:flex-start!important;
+  }
+}

@@ -11692,7 +11692,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       "The next rack is waiting.",
       "Midnight resets the room.",
       "New rack. New chase.",
-      "Your club board starts fresh.",
+      "Tomorrow rewards discipline.",
     ];
     const tomorrowLine=tomorrowSayings[Math.floor(Math.random()*tomorrowSayings.length)];
     return(
@@ -11705,7 +11705,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           </div>
           <div className="rk-tomorrow-v11-badge">{resetLabel}</div>
         </div>
-        <p className="rk-tomorrow-v11-copy">Come back tomorrow and defend your table read.</p>
+        <p className="rk-tomorrow-v11-copy">Defend your table read tomorrow.</p>
       </section>
     );
   };
