@@ -7485,7 +7485,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
         <div className="rk-glance-v160-verdict">
           <span>Best fit read</span>
-          <h3>{trustRead.best}</h3>
+          <h3>{iq.bestHandLabel||iq.scoredHandLabel||trustRead.best}</h3>
           <p>{trustRead.bestFit}</p>
         </div>
 
@@ -7494,11 +7494,6 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
             <span>Backup path</span>
             <strong>{trustRead.backup}</strong>
             <p>{trustRead.backupFit}</p>
-          </div>
-          <div className="rk-glance-v160-tile avoid">
-            <span>Avoid for now</span>
-            <strong>{trustRead.avoid}</strong>
-            <p>Only chase this if the next draw changes the rack.</p>
           </div>
         </div>
 
@@ -7510,6 +7505,10 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <div className="rk-glance-v160-coach-row next">
             <span>Next move</span>
             <p>{rkHumanTableCopy(trustRead.nextMove)}</p>
+          </div>
+          <div className="rk-glance-v160-coach-row pass-review">
+            <span>Pass review</span>
+            <p>{passDots?`${passDots} ${passLine}`:passLine}</p>
           </div>
         </div>
       </section>

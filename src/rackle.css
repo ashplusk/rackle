@@ -11503,3 +11503,284 @@ body,
     min-height:56px!important;
   }
 }
+
+/* Daily scorecard player refinement */
+.rk-daily-scorecard-homeclone-v45.rk-home-scorecard-v41{
+  background:
+    radial-gradient(circle at 88% 12%, rgba(243,212,107,.14), transparent 30%),
+    linear-gradient(145deg,#082417 0%,#0D432A 56%,#071D13 100%)!important;
+  border-color:rgba(243,212,107,.22)!important;
+  box-shadow:
+    0 18px 42px rgba(8,36,23,.26),
+    inset 0 1px 0 rgba(255,255,255,.13),
+    inset 0 -1px 0 rgba(0,0,0,.22)!important;
+}
+
+/* Make Share your score slim, compact, and readable */
+.rk-score-clean-share-v120,
+.rk-score-share-premium-v130,
+.rk-score-share-simple-v140,
+.rk-score-share-v150,
+.rk-score-share-v160{
+  padding:16px!important;
+  border-radius:23px!important;
+  background:linear-gradient(145deg,#FFFDF8 0%,#F7F0E4 100%)!important;
+}
+
+.rk-score-clean-share-v120:before{
+  left:20px!important;
+  right:20px!important;
+}
+
+.rk-score-share-v150-head,
+.rk-score-share-v160-head{
+  margin-bottom:12px!important;
+}
+
+.rk-score-share-v150-head span,
+.rk-score-share-v160-head span{
+  display:none!important;
+}
+
+.rk-score-share-v150-head h2,
+.rk-score-share-v160-head h2{
+  margin:0 0 5px!important;
+  font-size:20px!important;
+  line-height:1.08!important;
+  letter-spacing:-.25px!important;
+}
+
+.rk-score-share-v150-head p,
+.rk-score-share-v160-head p{
+  font-size:12.5px!important;
+  line-height:1.4!important;
+  max-width:420px!important;
+}
+
+.rk-score-clean-share-v120 .rk-share-card,
+.rk-score-share-v160 .rk-share-card{
+  min-height:52px!important;
+  padding:10px 12px!important;
+  border-radius:17px!important;
+  background:linear-gradient(145deg,#FFFDF8 0%,#F0E6D4 100%)!important;
+  border:1px solid rgba(26,20,16,.09)!important;
+  box-shadow:
+    0 8px 18px rgba(26,20,16,.05),
+    inset 0 1px 0 rgba(255,255,255,.84)!important;
+}
+
+.rk-score-clean-share-v120 .rk-share-card,
+.rk-score-clean-share-v120 .rk-share-card *,
+.rk-score-share-v160 .rk-share-card,
+.rk-score-share-v160 .rk-share-card *{
+  color:#1A1410!important;
+}
+
+.rk-score-clean-share-v120 .rk-share-card > div:first-child,
+.rk-score-share-v160 .rk-share-card > div:first-child{
+  width:34px!important;
+  height:34px!important;
+  border-radius:12px!important;
+  background:rgba(23,107,66,.10)!important;
+  border:1px solid rgba(23,107,66,.16)!important;
+  color:#176B42!important;
+}
+
+.rk-score-clean-share-v120 .rk-share-card [style*="font-family"],
+.rk-score-share-v160 .rk-share-card [style*="font-family"]{
+  color:#1A1410!important;
+  font-size:16px!important;
+}
+
+.rk-score-clean-share-v120 .rk-share-card [style*="line-height:1.4"],
+.rk-score-share-v160 .rk-share-card [style*="line-height:1.4"]{
+  color:#6B6157!important;
+  font-size:11.5px!important;
+}
+
+.rk-score-clean-share-v120 .rk-share-card:after,
+.rk-score-share-v160 .rk-share-card:after{
+  content:"Share"!important;
+  width:auto!important;
+  height:30px!important;
+  min-width:58px!important;
+  padding:0 11px!important;
+  border-radius:999px!important;
+  background:#176B42!important;
+  color:#FFF8E8!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:10px!important;
+  font-weight:900!important;
+  letter-spacing:1.1px!important;
+  text-transform:uppercase!important;
+}
+
+/* Final hand: simpler and slimmer */
+.rk-score-clean-final-v120{
+  padding:17px!important;
+  border-radius:24px!important;
+}
+
+.rk-score-clean-final-v120 .rk-score-clean-head-v120{
+  margin-bottom:12px!important;
+}
+
+.rk-score-clean-final-v120 .rk-score-clean-head-v120 span{
+  display:none!important;
+}
+
+.rk-score-clean-final-v120 .rk-score-clean-head-v120 h2{
+  margin:0!important;
+  white-space:nowrap!important;
+  font-size:21px!important;
+  line-height:1.1!important;
+}
+
+.rk-score-clean-final-v120 .rk-score-clean-head-v120 p{
+  display:none!important;
+}
+
+.rk-score-clean-rack-v120{
+  margin-top:12px!important;
+  padding:13px!important;
+  border-radius:20px!important;
+}
+
+/* Rack at a glance: less listy, more focused */
+.rk-score-clean-glance-v120,
+.rk-score-glance-board-v140,
+.rk-score-glance-v150,
+.rk-score-glance-v160{
+  padding:18px!important;
+  border-radius:25px!important;
+}
+
+.rk-score-clean-glance-v120 .rk-score-clean-head-v120,
+.rk-glance-head-v160{
+  margin-bottom:14px!important;
+}
+
+.rk-glance-head-v160 span,
+.rk-score-clean-head-v120.rk-glance-head-v160 span{
+  margin-bottom:10px!important;
+}
+
+.rk-glance-head-v160 h2,
+.rk-score-clean-head-v120.rk-glance-head-v160 h2{
+  font-size:22px!important;
+  line-height:1.08!important;
+}
+
+.rk-glance-head-v160 p,
+.rk-score-clean-head-v120.rk-glance-head-v160 p{
+  font-size:12.75px!important;
+  line-height:1.45!important;
+}
+
+.rk-glance-v160-verdict{
+  margin-top:0!important;
+  padding:16px!important;
+  border-radius:21px!important;
+  background:
+    radial-gradient(circle at 90% 12%, rgba(243,212,107,.17), transparent 30%),
+    linear-gradient(145deg,#082417 0%,#0D432A 100%)!important;
+}
+
+.rk-glance-v160-verdict span{
+  font-size:8.5px!important;
+  margin-bottom:7px!important;
+}
+
+.rk-glance-v160-verdict h3{
+  font-size:23px!important;
+  line-height:1.05!important;
+  margin-bottom:7px!important;
+}
+
+.rk-glance-v160-verdict p{
+  font-size:12.5px!important;
+  line-height:1.45!important;
+}
+
+.rk-glance-v160-tiles{
+  grid-template-columns:1fr!important;
+  margin-top:10px!important;
+  gap:10px!important;
+}
+
+.rk-glance-v160-tile{
+  min-height:auto!important;
+  padding:14px!important;
+  border-radius:18px!important;
+}
+
+.rk-glance-v160-tile span{
+  font-size:8.5px!important;
+  margin-bottom:6px!important;
+}
+
+.rk-glance-v160-tile strong{
+  font-size:18px!important;
+  margin-bottom:6px!important;
+}
+
+.rk-glance-v160-tile p{
+  font-size:12px!important;
+}
+
+.rk-glance-v160-coach{
+  margin-top:10px!important;
+  gap:9px!important;
+}
+
+.rk-glance-v160-coach-row{
+  padding:14px!important;
+  border-radius:18px!important;
+}
+
+.rk-glance-v160-coach-row span{
+  font-size:8.5px!important;
+  margin-bottom:6px!important;
+}
+
+.rk-glance-v160-coach-row p{
+  font-size:12px!important;
+  line-height:1.45!important;
+}
+
+.rk-glance-v160-coach-row.pass-review{
+  background:linear-gradient(145deg,#FFFDF8,#F2E9D8)!important;
+}
+
+.rk-glance-v160-coach-row.pass-review span{
+  color:#176B42!important;
+}
+
+@media (max-width:430px){
+  .rk-score-share-v150-head h2,
+  .rk-score-share-v160-head h2{
+    font-size:19px!important;
+  }
+
+  .rk-score-clean-final-v120 .rk-score-clean-head-v120 h2{
+    font-size:19px!important;
+    letter-spacing:-.2px!important;
+  }
+
+  .rk-glance-v160-verdict h3{
+    font-size:21px!important;
+  }
+
+  .rk-score-clean-share-v120 .rk-share-card:after,
+  .rk-score-share-v160 .rk-share-card:after{
+    min-width:52px!important;
+    padding:0 9px!important;
+    font-size:9px!important;
+  }
+}
+
+@media (max-width:370px){
+  .rk-score-clean-final-v120 .rk-score-clean-head-v120 h2{
+    font-size:17px!important;
+  }
+}
