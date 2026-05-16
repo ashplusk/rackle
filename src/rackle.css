@@ -19926,3 +19926,96 @@ footer p{
     font-size:12.5px!important;
   }
 }
+
+/* Rackle logo refined: match target Fraunces italic treatment */
+.rk-startup-logo-v4,
+.rk-header-brand-title-v75,
+.rk-gameplay-inline-logo-v200,
+.rk-gameplay-live-logo-v220,
+.rk-footer-logo,
+.rk-premium-footer-logo,
+.rk-brand-logo,
+.rk-logo,
+.rk-boot-logo{
+  font-family:'Fraunces', Georgia, serif!important;
+  font-style:italic!important;
+  font-weight:800!important;
+  letter-spacing:-.055em!important;
+  line-height:.9!important;
+  color:#1A1410!important;
+  text-rendering:geometricPrecision!important;
+  -webkit-font-smoothing:antialiased!important;
+  font-synthesis:none!important;
+}
+
+/* Homepage hero logo scale */
+.rk-startup-logo-v4{
+  font-size:48px!important;
+  font-weight:800!important;
+  letter-spacing:-.058em!important;
+}
+
+/* Compact headers */
+.rk-header-brand-title-v75,
+.rk-gameplay-inline-logo-v200,
+.rk-gameplay-live-logo-v220{
+  font-size:30px!important;
+  font-weight:800!important;
+  letter-spacing:-.055em!important;
+}
+
+/* Footer and boot states */
+.rk-footer-logo,
+.rk-premium-footer-logo,
+.rk-brand-logo,
+.rk-logo,
+.rk-boot-logo{
+  font-weight:800!important;
+  letter-spacing:-.055em!important;
+}
+
+/* Keep all taglines non-italic and readable */
+.rk-startup-subtitle-v4,
+.rk-header-brand-tag-v75,
+.rk-inline-header-tag,
+.rk-gameplay-inline-tag-v200,
+.rk-gameplay-live-tag-v220,
+.rk-footer-tagline,
+.rk-premium-footer p,
+.rk-footer p{
+  font-style:normal!important;
+}
+
+/* Dark surface variants */
+.rk-scorecard-premium-page-v500 .rk-header-brand-title-v75,
+.rk-scorecard-premium-page-v500 .rk-gameplay-inline-logo-v200,
+.rk-scorecard-premium-page-v500 .rk-gameplay-live-logo-v220{
+  font-family:'Fraunces', Georgia, serif!important;
+  font-style:italic!important;
+  font-weight:800!important;
+  letter-spacing:-.055em!important;
+}
+
+@media (max-width:430px){
+  .rk-startup-logo-v4{
+    font-size:44px!important;
+  }
+
+  .rk-header-brand-title-v75,
+  .rk-gameplay-inline-logo-v200,
+  .rk-gameplay-live-logo-v220{
+    font-size:28px!important;
+  }
+}
+
+@media (max-width:370px){
+  .rk-startup-logo-v4{
+    font-size:40px!important;
+  }
+
+  .rk-header-brand-title-v75,
+  .rk-gameplay-inline-logo-v200,
+  .rk-gameplay-live-logo-v220{
+    font-size:26px!important;
+  }
+}
