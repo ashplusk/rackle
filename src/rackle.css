@@ -19506,3 +19506,27 @@ footer p{
     max-width:64px!important;
   }
 }
+
+/* Rackle logo italic treatment */
+.rk-startup-logo-v4,
+.rk-header-brand-title-v75,
+.rk-gameplay-inline-logo-v200,
+.rk-gameplay-live-logo-v220,
+.rk-footer-logo,
+.rk-premium-footer-logo,
+.rk-brand-logo,
+.rk-logo,
+[class*="logo"][class*="Rackle"],
+[class*="brand-title"]{
+  font-style:italic!important;
+}
+
+/* Keep tagline non-italic */
+.rk-startup-subtitle-v4,
+.rk-header-brand-tag-v75,
+.rk-inline-header-tag,
+.rk-gameplay-inline-tag-v200,
+.rk-gameplay-live-tag-v220,
+.rk-footer-tagline{
+  font-style:normal!important;
+}
