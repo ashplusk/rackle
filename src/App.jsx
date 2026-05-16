@@ -12419,11 +12419,102 @@ function Game({mode,home,onDone,settings,setScreen,go}){
     :(selectedNeeded>0?`Choose ${selectedNeeded} more tile${selectedNeeded===1?"":"s"}`:`Pass ${cp.req} tiles ${cp.dir}`);
   const receivedTiles=hasNew?newIdx.map(i=>hand[i]).filter(Boolean):[];
 
+  const scoreRoundForSection=(sectionId)=>{
+    try{
+      const sec=SECS.find(x=>x.id===sectionId);
+      if(!sec||!hand||!hand.length)return;
+      haptic(20);
+      setTd(true);
+      chosenSecRef.current=sectionId;
+      setChosenSecBoth(sectionId);
+      setChosenHand(null);
+
+      const e=ev(hand);
+      const top=e&&e.length?e[0]:{score:0,icon:sec.icon,name:sec.name,id:sec.id};
+      const gi=gri(Number(top.score)||0);
+      const totalEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);
+      const dn2=getDayNum();
+      const isD=mode==="daily";
+      const sr=startingRack&&startingRack.length>0?startingRack:hand;
+      const safeLog=rkSanitizePassLog(passLog);
+
+      let iq=null;
+      try{
+        iq=calculateCharlestonIQ(
+          {startingRack:sr,finalRack:hand,passedTilesByRound:safeLog,totalTime:totalEl,sectionId,chosenHand:null},
+          getDailySeed(),
+          isD,
+          dn2
+        );
+      }catch(calcErr){
+        console.error("Rackle score calculation failed. Showing fallback scorecard.",calcErr);
+        const fallbackScore=Math.max(0,Math.min(100,Math.round((Number(top.score)||0)*100)));
+        iq={
+          totalScore:fallbackScore,
+          rackleIQScore:fallbackScore,
+          score:fallbackScore,
+          level:"Rack read",
+          styleName:"Table Read",
+          bestDirection:sec.name,
+          scoredHandLabel:null,
+          strategicRead:{bestDirection:sec.name,sectionReads:e||[],topSection:e?.[0]||null,tileStructure:{}},
+          expertFactors:{},
+          expertRead:{summary:"Your rack was scored, but the detailed read could not finish. Review the final rack and compare your lane."}
+        };
+      }
+
+      setIqResultBoth(iq);
+
+      const result={
+        rating:RATS[gi],
+        emoji:REMO[gi],
+        section:`${top.icon||sec.icon} ${top.name||sec.name}`,
+        sid:top.id||sec.id,
+        score:Number(top.score)||0,
+        time:totalEl,
+        gi,
+        iqScore:iq?iq.totalScore:null,
+        iq,
+        finalRack:hand,
+        startingRack:sr,
+        passLog:safeLog,
+        chosenSec:sectionId,
+        chosenHand:null,
+        allSections:e||[]
+      };
+
+      try{onDone(result);}catch(doneErr){console.error("Rackle save result failed",doneErr);}
+      window.scrollTo(0,0);
+      document.documentElement.scrollTop=0;
+      document.body.scrollTop=0;
+      setPhase("result");
+    }catch(err){
+      console.error("Rackle score section click failed",err);
+      // Last-resort fallback so the player is not stuck on the section picker.
+      const fallbackScore=55;
+      const fallbackIq={
+        totalScore:fallbackScore,
+        rackleIQScore:fallbackScore,
+        score:fallbackScore,
+        level:"Rack read",
+        styleName:"Table Read",
+        bestDirection:SECS.find(x=>x.id===sectionId)?.name||"Selected lane",
+        strategicRead:{bestDirection:SECS.find(x=>x.id===sectionId)?.name||"Selected lane",sectionReads:[],tileStructure:{}},
+        expertFactors:{},
+        expertRead:{summary:"Your scorecard opened, but the detailed read needs another refresh."}
+      };
+      chosenSecRef.current=sectionId;
+      setChosenSecBoth(sectionId);
+      setIqResultBoth(fallbackIq);
+      setPhase("result");
+    }
+  };
+
   return(
     <div style={{...S.pg,position:"relative",minHeight:"100vh"}} className="rk-pg">
-      {phase==="result"&&iqResult&&(
+      {phase==="result"&&(iqResult||iqResultRef.current)&&(
         <IQScorecard
-          iq={iqResult}
+          iq={iqResult||iqResultRef.current}
           hand={hand}
           startingRack={startingRack&&startingRack.length?startingRack:hand}
           passLog={rkSanitizePassLog(passLog)}
@@ -12532,26 +12623,7 @@ function Game({mode,home,onDone,settings,setScreen,go}){
           <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>SCORE YOUR ROUND</div>
           <div style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
             {SECS.map((s)=>(
-              <button key={s.id} type="button" className="rk-score-round-option-v700" onClick={()=>{
-                haptic(20);
-                setTd(true);
-                const e=ev(hand),top=e[0],gi=gri(top.score);
-                const totalEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);
-                const dn2=getDayNum();
-                const isD=mode==="daily";
-                const sr=startingRack&&startingRack.length>0?startingRack:hand;
-                const safeLog=rkSanitizePassLog(passLog);
-                const iq=calculateCharlestonIQ({startingRack:sr,finalRack:hand,passedTilesByRound:safeLog,totalTime:totalEl,sectionId:s.id,chosenHand:null},getDailySeed(),isD,dn2);
-                chosenSecRef.current=s.id;
-                iqResultRef.current=iq;
-                setChosenSec(s.id);
-                setChosenHand(null);
-                setIqResult(iq);
-                const result={rating:RATS[gi],emoji:REMO[gi],section:`${top.icon} ${top.name}`,sid:top.id,score:top.score,time:totalEl,gi,iqScore:iq?iq.totalScore:null,iq,finalRack:hand,startingRack:sr,passLog:safeLog,chosenSec:s.id,chosenHand:null,allSections:ev(hand)};
-                try{onDone(result);}catch(_){}
-                window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;
-                setPhase("result");
-              }}
+              <button key={s.id} type="button" className="rk-score-round-option-v700" onPointerUp={(e)=>{if(e.pointerType==="touch"){e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}}} onClick={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}}
                 style={{cursor:"pointer",display:"flex",alignItems:"center",gap:0,borderRadius:12,overflow:"hidden",border:`1.5px solid ${C.bdr}`,background:"#fff",textAlign:"left",padding:0,transition:"all 0.15s"}}>
                 <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:s.color+"40"}}/>
                 <div style={{width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,margin:"0 2px"}}>{s.icon}</div>
