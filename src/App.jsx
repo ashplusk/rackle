@@ -12203,6 +12203,7 @@ function Game({mode,home,onDone,settings,setScreen,go}){
   const [showLeave,setShowLeave]=useState(false);
   const [iqResult,setIqResult]=useState(null);
   const iqResultRef=useRef(null);
+  const scoreResultRef=useRef(null);
   const scoreClickGuardRef=useRef({sectionId:null,ts:0});
   const setIqResultBoth=(v)=>{iqResultRef.current=v;setIqResult(v);};
   const elRef=useRef(0);const stRef=useRef(null);const lastPassElRef=useRef(0);
@@ -12413,7 +12414,7 @@ function Game({mode,home,onDone,settings,setScreen,go}){
     const d=mode==="daily"?seededShuffle(buildDeck(),getDailySeed()):shuffle(buildDeck());const dealt=d.slice(0,13);
     setHand(dealt);setStartingRack(dealt);setPool(d.slice(13).filter(t=>t.t!=="j"));
     setSel([]);setPassed([]);setPassLog([]);setNewIdx([]);setCn(1);setPi(0);setChosenSecBoth(null);setChosenHand(null);
-    setShowRef(false);setShowHint(false);setHintExp(null);setIqResultBoth(null);
+    setShowRef(false);setShowHint(false);setHintExp(null);scoreResultRef.current=null;setIqResultBoth(null);
     setTd(false);elRef.current=0;stRef.current=null;setEl(0);setFlipped([]);setReady(false);
     setPhase("deal");
   };
@@ -12504,6 +12505,7 @@ function Game({mode,home,onDone,settings,setScreen,go}){
         allSections:e||[]
       };
 
+      scoreResultRef.current=result;
       if(mode==="daily"){
         const completedAt=Date.now();
         const dailyResult={...result,mode:"daily",ts:completedAt,completedTs:completedAt,completedDate:rkTodayDateKey(),rkCompletedDate:rkTodayDateKey(),completedAt:new Date(completedAt).toISOString(),daySeed:getDailySeed(),day_seed:getDailySeed()};
@@ -12539,8 +12541,11 @@ function Game({mode,home,onDone,settings,setScreen,go}){
       if(mode==="daily"){
         const completedAt=Date.now();
         const fallbackResult={rating:"Rack read",emoji:"🀄",section:`${sec?.icon||""} ${sec?.name||"Selected lane"}`.trim(),sid:sectionId,score:fallbackScore,time:0,gi:2,iqScore:fallbackIq.totalScore,iq:fallbackIq,finalRack:hand,startingRack:startingRack&&startingRack.length?startingRack:hand,passLog:rkSanitizePassLog(passLog),chosenSec:sectionId,chosenHand:null,allSections:ev(hand),mode:"daily",ts:completedAt,completedTs:completedAt,completedDate:rkTodayDateKey(),rkCompletedDate:rkTodayDateKey(),completedAt:new Date(completedAt).toISOString(),daySeed:getDailySeed(),day_seed:getDailySeed()};
+        scoreResultRef.current=fallbackResult;
         try{ST.set("dd",getDailySeed());ST.set("dres",fallbackResult);}catch(cacheErr){console.warn("Could not pre-cache fallback result",cacheErr);}
         try{onDone(fallbackResult);}catch(doneErr){console.error("Rackle fallback save failed",doneErr);}
+      }else{
+        scoreResultRef.current={rating:"Rack read",emoji:"🀄",section:`${sec?.icon||""} ${sec?.name||"Selected lane"}`.trim(),sid:sectionId,score:fallbackScore,time:0,gi:2,iqScore:fallbackIq.totalScore,iq:fallbackIq,finalRack:hand,startingRack:startingRack&&startingRack.length?startingRack:hand,passLog:rkSanitizePassLog(passLog),chosenSec:sectionId,chosenHand:null,allSections:ev(hand)};
       }
       setPhase("result");
       // Stay in-game and render the scorecard locally. Parent scorecard routing caused blank screens in mobile testing.
@@ -12552,22 +12557,22 @@ function Game({mode,home,onDone,settings,setScreen,go}){
       {phase==="result"&&(iqResult||iqResultRef.current)&&(
         <IQScorecard
           iq={iqResult||iqResultRef.current}
-          hand={hand}
-          startingRack={startingRack&&startingRack.length?startingRack:hand}
-          passLog={rkSanitizePassLog(passLog)}
+          hand={(scoreResultRef.current?.finalRack)||hand}
+          startingRack={(scoreResultRef.current?.startingRack)||(startingRack&&startingRack.length?startingRack:hand)}
+          passLog={rkSanitizePassLog((scoreResultRef.current?.passLog)||passLog)}
           isDaily={mode==="daily"}
           dayNum={dn}
-          section={section}
-          chosenSec={chosenSecRef.current||chosenSec}
-          chosenHand={chosenHand}
-          allSections={ev(hand)}
+          section={scoreResultRef.current?.section||""}
+          chosenSec={scoreResultRef.current?.chosenSec||chosenSecRef.current||chosenSec}
+          chosenHand={scoreResultRef.current?.chosenHand||chosenHand}
+          allSections={scoreResultRef.current?.allSections||ev(hand)}
           onHome={home}
           onDealAgain={restart}
           onPractice={()=>go?go("free"):home()}
           setScreen={setScreen}
         />
       )}
-      {phase==="result"&&!iqResult&&(
+      {phase==="result"&&!(iqResult||iqResultRef.current)&&(
         <div className="rk-score-round-fallback-v700">
           <RackleHeader onBack={home} setScreen={setScreen}/>
           <div className="rk-score-round-fallback-card-v700">
@@ -12660,7 +12665,7 @@ function Game({mode,home,onDone,settings,setScreen,go}){
           <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>SCORE YOUR ROUND</div>
           <div onClick={(e)=>{const btn=e.target.closest?.("[data-rk-score-section]");if(btn){e.preventDefault();e.stopPropagation();scoreRoundForSection(btn.dataset.rkScoreSection);}}} style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
             {SECS.map((s)=>(
-              <button key={s.id} type="button" className="rk-score-round-option-v700" data-rk-score-section={s.id} onPointerUp={(e)=>{if(e.pointerType==="touch"){e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}}} onClick={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}}
+              <button key={s.id} type="button" className="rk-score-round-option-v700" data-rk-score-section={s.id} onTouchEnd={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}} onClick={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}}
                 style={{cursor:"pointer",display:"flex",alignItems:"center",gap:0,borderRadius:12,overflow:"hidden",border:`1.5px solid ${C.bdr}`,background:"#fff",textAlign:"left",padding:0,transition:"all 0.15s"}}>
                 <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:s.color+"40"}}/>
                 <div style={{width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,margin:"0 2px"}}>{s.icon}</div>
