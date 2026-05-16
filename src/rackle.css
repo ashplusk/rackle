@@ -15092,3 +15092,621 @@ body,
     letter-spacing:.15px!important;
   }
 }
+
+/* Premium scorecard redesign: luxury result screen */
+@keyframes rkScorecardSectionInV400{
+  from{opacity:0;transform:translateY(12px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+@keyframes rkScorecardScoreSettleV400{
+  0%{opacity:0;transform:translateY(14px) scale(.96);filter:blur(2px);}
+  55%{opacity:1;transform:translateY(0) scale(1.025);filter:blur(0);}
+  100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0);}
+}
+
+.rk-score-shell.rk-scorecard-clean-v120,
+.rk-score-ultra-simple.rk-scorecard-clean-v120,
+.rk-practice-v9-shell.rk-scorecard-clean-v120,
+.rk-practice-scorecard-match-v200{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:18px!important;
+  padding-bottom:46px!important;
+}
+
+/* Make the page feel like a result screen, not a report */
+.rk-score-shell.rk-scorecard-clean-v120 > section,
+.rk-score-ultra-simple.rk-scorecard-clean-v120 > section,
+.rk-practice-v9-shell.rk-scorecard-clean-v120 > section,
+.rk-practice-scorecard-match-v200 > section{
+  animation:rkScorecardSectionInV400 .54s cubic-bezier(.16,1,.3,1) both!important;
+}
+
+.rk-score-shell.rk-scorecard-clean-v120 > section:nth-of-type(2),
+.rk-practice-v9-shell.rk-scorecard-clean-v120 > section:nth-of-type(2){animation-delay:.05s!important;}
+.rk-score-shell.rk-scorecard-clean-v120 > section:nth-of-type(3),
+.rk-practice-v9-shell.rk-scorecard-clean-v120 > section:nth-of-type(3){animation-delay:.10s!important;}
+.rk-score-shell.rk-scorecard-clean-v120 > section:nth-of-type(4),
+.rk-practice-v9-shell.rk-scorecard-clean-v120 > section:nth-of-type(4){animation-delay:.15s!important;}
+.rk-score-shell.rk-scorecard-clean-v120 > section:nth-of-type(5),
+.rk-practice-v9-shell.rk-scorecard-clean-v120 > section:nth-of-type(5){animation-delay:.20s!important;}
+
+/* Hero score: trophy moment */
+.rk-daily-scorecard-homeclone-v45.rk-home-scorecard-v41,
+.rk-practice-v9-shell .rk-practice-homeclone-v45.rk-home-scorecard-v41{
+  border-radius:32px!important;
+  background:
+    radial-gradient(circle at 86% 8%, rgba(243,212,107,.14), transparent 29%),
+    radial-gradient(circle at 10% 100%, rgba(111,207,96,.055), transparent 28%),
+    linear-gradient(145deg,#061A10 0%,#103820 56%,#06150D 100%)!important;
+  border:1px solid rgba(243,212,107,.22)!important;
+  box-shadow:
+    0 20px 46px rgba(6,26,16,.24),
+    inset 0 1px 0 rgba(255,255,255,.13),
+    inset 0 -1px 0 rgba(0,0,0,.25)!important;
+}
+
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-main,
+.rk-daily-scorecard-homeclone-v45-main,
+.rk-practice-v9-shell .rk-practice-homeclone-v45 .rk-home-scorecard-v41-main,
+.rk-practice-v9-shell .rk-practice-homeclone-v45-main{
+  padding:24px 22px 25px!important;
+}
+
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-kicker,
+.rk-practice-v9-shell .rk-practice-homeclone-v45 .rk-home-scorecard-v41-kicker{
+  width:max-content!important;
+  max-width:100%!important;
+  margin:0 0 12px!important;
+  padding:7px 11px!important;
+  border-radius:999px!important;
+  background:rgba(255,248,232,.075)!important;
+  border:1px solid rgba(255,248,232,.13)!important;
+  color:rgba(255,248,232,.72)!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:8.25px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:1.75px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-score-reveal-status-v250{
+  margin:0 0 18px!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  color:#F3D46B!important;
+  font-size:9px!important;
+  letter-spacing:1.65px!important;
+}
+
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score-row,
+.rk-practice-v9-shell .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-row{
+  align-items:flex-end!important;
+  gap:16px!important;
+  margin-top:2px!important;
+}
+
+.rk-score-reveal-number-v250,
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score,
+.rk-practice-v9-shell .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score{
+  font-size:92px!important;
+  line-height:.78!important;
+  letter-spacing:-4px!important;
+  color:#FFF8E8!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-weight:900!important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.08),
+    0 14px 32px rgba(0,0,0,.18)!important;
+  animation:rkScorecardScoreSettleV400 .78s cubic-bezier(.16,1,.3,1) .12s both!important;
+}
+
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score-label,
+.rk-practice-v9-shell .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-label{
+  margin-top:10px!important;
+  color:rgba(255,248,232,.64)!important;
+  font-size:9px!important;
+  letter-spacing:2.15px!important;
+}
+
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-style,
+.rk-practice-v9-shell .rk-practice-homeclone-v45 .rk-home-scorecard-v41-style{
+  min-height:36px!important;
+  padding:0 13px!important;
+  border-radius:999px!important;
+  background:rgba(243,212,107,.11)!important;
+  border:1px solid rgba(243,212,107,.24)!important;
+  color:#F3D46B!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10)!important;
+  font-size:10px!important;
+  letter-spacing:.75px!important;
+}
+
+.rk-score-reveal-title-v250,
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-title,
+.rk-practice-v9-shell .rk-practice-homeclone-v45 .rk-home-scorecard-v41-title{
+  margin-top:20px!important;
+  color:#FFF8E8!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:34px!important;
+  line-height:1.01!important;
+  font-weight:900!important;
+  letter-spacing:-.9px!important;
+  max-width:12.5ch!important;
+}
+
+.rk-score-reveal-copy-v250,
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-copy,
+.rk-practice-v9-shell .rk-practice-homeclone-v45 .rk-home-scorecard-v41-copy{
+  margin-top:10px!important;
+  max-width:34ch!important;
+  color:rgba(255,248,232,.76)!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:13.25px!important;
+  line-height:1.58!important;
+  font-weight:760!important;
+}
+
+.rk-score-reveal-micro-v250{
+  margin-top:15px!important;
+  padding:8px 11px!important;
+  background:rgba(255,248,232,.075)!important;
+  border:1px solid rgba(255,248,232,.13)!important;
+  color:#F3D46B!important;
+}
+
+/* Share bar should be screenshot-clean and compact */
+.rk-score-clean-share-v120,
+.rk-score-share-v160{
+  margin-top:-2px!important;
+}
+
+.rk-score-clean-share-v120 .rk-share-card,
+.rk-score-share-v160 .rk-share-card{
+  min-height:58px!important;
+  padding:12px 14px!important;
+  border-radius:22px!important;
+  background:linear-gradient(180deg,#123B24 0%,#0A2416 100%)!important;
+  border:1px solid rgba(243,212,107,.18)!important;
+  box-shadow:
+    0 12px 28px rgba(10,36,22,.16),
+    inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+
+/* Final rack: quiet, tactile, important */
+.rk-final-rack-simple-v180{
+  padding:0!important;
+}
+
+.rk-final-rack-simple-head-v180{
+  margin:0 2px 11px!important;
+  align-items:center!important;
+}
+
+.rk-final-rack-simple-head-v180 strong{
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:23px!important;
+  line-height:1.03!important;
+  font-weight:900!important;
+  letter-spacing:-.55px!important;
+  color:#1A1410!important;
+}
+
+.rk-final-rack-toggle-v180{
+  background:#F1E7D8!important;
+  border:1px solid rgba(26,20,16,.07)!important;
+  box-shadow:none!important;
+}
+
+.rk-final-rack-toggle-v180 button{
+  min-height:30px!important;
+  padding:0 12px!important;
+  font-size:10px!important;
+  letter-spacing:.35px!important;
+}
+
+.rk-final-rack-toggle-v180 button.active{
+  background:#123B24!important;
+  color:#FFF8E8!important;
+}
+
+.rk-final-rack-simple-surface-v180{
+  padding:15px!important;
+  border-radius:25px!important;
+  background:
+    linear-gradient(145deg,#FFFDF8 0%,#F3E9D8 100%)!important;
+  border:1px solid rgba(26,20,16,.07)!important;
+  box-shadow:
+    0 10px 24px rgba(26,20,16,.045),
+    inset 0 1px 0 rgba(255,255,255,.84)!important;
+}
+
+/* Strategic breakdown: editorial hierarchy */
+.rk-score-clean-glance-v120,
+.rk-score-glance-board-v140,
+.rk-score-glance-v150,
+.rk-score-glance-v160,
+.rk-score-style-card-v190,
+.rk-better-players-v260{
+  border-radius:28px!important;
+  background:
+    linear-gradient(145deg,#FFFDF8 0%,#F6ECDB 100%)!important;
+  border:1px solid rgba(26,20,16,.07)!important;
+  box-shadow:
+    0 12px 30px rgba(26,20,16,.045),
+    inset 0 1px 0 rgba(255,255,255,.84)!important;
+}
+
+.rk-score-clean-glance-v120,
+.rk-score-glance-v160{
+  padding:20px!important;
+}
+
+.rk-score-clean-head-v120.rk-glance-head-v160,
+.rk-better-players-head-v260,
+.rk-score-style-head-v190{
+  margin-bottom:16px!important;
+}
+
+.rk-score-clean-head-v120.rk-glance-head-v160 span,
+.rk-glance-head-v160 span,
+.rk-score-style-head-v190 span,
+.rk-better-players-head-v260 span{
+  margin-bottom:13px!important;
+  padding:7px 11px!important;
+  background:rgba(18,59,36,.075)!important;
+  border:1px solid rgba(18,59,36,.13)!important;
+  color:#176B42!important;
+  font-size:8px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:1.65px!important;
+}
+
+.rk-score-clean-head-v120.rk-glance-head-v160 h2,
+.rk-glance-head-v160 h2,
+.rk-score-style-head-v190 strong,
+.rk-better-players-head-v260 h2{
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:24px!important;
+  line-height:1.04!important;
+  font-weight:900!important;
+  letter-spacing:-.65px!important;
+  color:#1A1410!important;
+}
+
+.rk-score-clean-head-v120.rk-glance-head-v160 p,
+.rk-glance-head-v160 p,
+.rk-better-players-head-v260 p{
+  margin-top:8px!important;
+  max-width:34ch!important;
+  color:#6B6157!important;
+  font-size:12.75px!important;
+  line-height:1.52!important;
+  font-weight:740!important;
+}
+
+/* Best insight should feel important */
+.rk-glance-v160-verdict{
+  position:relative!important;
+  padding:18px!important;
+  border-radius:24px!important;
+  background:
+    radial-gradient(circle at 88% 10%, rgba(243,212,107,.13), transparent 32%),
+    linear-gradient(145deg,#071E13 0%,#123B24 100%)!important;
+  border:1px solid rgba(243,212,107,.22)!important;
+  box-shadow:
+    0 14px 30px rgba(7,30,19,.18),
+    inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+
+.rk-glance-v160-verdict span{
+  color:#6FCF60!important;
+  font-size:8px!important;
+  letter-spacing:1.7px!important;
+}
+
+.rk-glance-v160-verdict h3{
+  margin-top:9px!important;
+  color:#FFF8E8!important;
+  font-size:25px!important;
+  line-height:1.03!important;
+  letter-spacing:-.55px!important;
+}
+
+.rk-glance-v160-verdict p{
+  margin-top:9px!important;
+  color:rgba(255,248,232,.75)!important;
+  font-size:13px!important;
+  line-height:1.55!important;
+  font-weight:750!important;
+}
+
+/* Medium-priority pathway card */
+.rk-glance-v160-tile{
+  padding:15px!important;
+  border-radius:21px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.06)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+
+.rk-glance-v160-tile strong{
+  font-size:19px!important;
+  letter-spacing:-.25px!important;
+}
+
+/* Coaching sections: editorial quote blocks */
+.rk-glance-v160-coach{
+  gap:10px!important;
+}
+
+.rk-glance-v160-coach-row{
+  position:relative!important;
+  padding:16px 16px 16px 18px!important;
+  border-radius:22px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.06)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.80)!important;
+}
+
+.rk-glance-v160-coach-row:before{
+  content:""!important;
+  position:absolute!important;
+  left:0!important;
+  top:14px!important;
+  bottom:14px!important;
+  width:3px!important;
+  border-radius:999px!important;
+  background:#176B42!important;
+}
+
+.rk-glance-v160-coach-row.next:before{
+  background:#E8D870!important;
+}
+
+.rk-glance-v160-coach-row span{
+  display:block!important;
+  color:#176B42!important;
+  font-size:8px!important;
+  letter-spacing:1.6px!important;
+  margin-bottom:8px!important;
+}
+
+.rk-glance-v160-coach-row p{
+  margin:0!important;
+  color:#3F3731!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:16px!important;
+  line-height:1.45!important;
+  font-weight:760!important;
+  letter-spacing:-.12px!important;
+}
+
+/* Your style: identity sticker, cleaner text */
+.rk-score-style-card-v190{
+  padding:18px!important;
+}
+
+.rk-score-style-head-v190{
+  gap:13px!important;
+}
+
+.rk-score-style-card-v190 > p{
+  color:#4F463F!important;
+  font-size:13px!important;
+  line-height:1.58!important;
+  font-weight:750!important;
+  max-width:36ch!important;
+}
+
+.rk-score-style-reasons-v190{
+  gap:8px!important;
+  margin-top:14px!important;
+}
+
+.rk-score-style-reasons-v190 div{
+  min-height:34px!important;
+  border-radius:16px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.055)!important;
+}
+
+/* What Better Players Did: social layer should feel premium, not data-heavy */
+.rk-better-players-v260{
+  padding:18px!important;
+}
+
+.rk-better-players-list-v260{
+  gap:9px!important;
+}
+
+.rk-better-players-row-v260{
+  min-height:72px!important;
+  border-radius:20px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.06)!important;
+}
+
+.rk-better-players-stat-v260{
+  min-height:48px!important;
+  border-radius:16px!important;
+}
+
+.rk-better-players-stat-v260 strong{
+  font-size:20px!important;
+  letter-spacing:-.35px!important;
+}
+
+.rk-better-players-row-v260 p{
+  color:#3F3731!important;
+  font-size:12.5px!important;
+  line-height:1.48!important;
+}
+
+/* Actions: fewer dashboard vibes, stronger tap quality */
+.rk-score-clean-actions-v120,
+.rk-practice-v9-shell .rk-score-clean-actions-v120.practice{
+  gap:10px!important;
+  margin-top:2px!important;
+}
+
+.rk-score-clean-action-v120,
+.rk-practice-v9-shell .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120{
+  min-height:60px!important;
+  padding:14px 15px!important;
+  border-radius:22px!important;
+  background:linear-gradient(145deg,#FFFDF8 0%,#F1E7D5 100%)!important;
+  border:1px solid rgba(26,20,16,.07)!important;
+  box-shadow:
+    0 9px 22px rgba(26,20,16,.04),
+    inset 0 1px 0 rgba(255,255,255,.84)!important;
+}
+
+.rk-score-clean-action-v120.primary,
+.rk-practice-v9-shell .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120.primary{
+  background:linear-gradient(180deg,#176B42 0%,#0D432A 100%)!important;
+  border:1px solid rgba(243,212,107,.22)!important;
+}
+
+.rk-score-clean-action-v120 span,
+.rk-practice-v9-shell .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120 span{
+  font-size:8.5px!important;
+  letter-spacing:1.45px!important;
+}
+
+.rk-score-clean-action-v120 strong,
+.rk-practice-v9-shell .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120 strong{
+  font-size:19px!important;
+  line-height:1.04!important;
+  letter-spacing:-.35px!important;
+}
+
+/* Hover/tap polish */
+.rk-score-clean-action-v120,
+.rk-score-clean-share-v120 .rk-share-card,
+.rk-score-share-v160 .rk-share-card,
+.rk-final-rack-toggle-v180 button{
+  transition:transform .16s ease, box-shadow .16s ease, background .16s ease, border-color .16s ease!important;
+}
+
+.rk-score-clean-action-v120:active,
+.rk-score-clean-share-v120 .rk-share-card:active,
+.rk-score-share-v160 .rk-share-card:active{
+  transform:scale(.985)!important;
+}
+
+/* Reduce motion compliance */
+@media (prefers-reduced-motion: reduce){
+  .rk-score-shell.rk-scorecard-clean-v120 > section,
+  .rk-score-ultra-simple.rk-scorecard-clean-v120 > section,
+  .rk-practice-v9-shell.rk-scorecard-clean-v120 > section,
+  .rk-practice-scorecard-match-v200 > section,
+  .rk-score-reveal-number-v250,
+  .rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score,
+  .rk-practice-v9-shell .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score{
+    animation:none!important;
+    opacity:1!important;
+    transform:none!important;
+    filter:none!important;
+  }
+}
+
+/* Mobile result-screen tuning */
+@media (max-width:430px){
+  .rk-score-shell.rk-scorecard-clean-v120,
+  .rk-score-ultra-simple.rk-scorecard-clean-v120,
+  .rk-practice-v9-shell.rk-scorecard-clean-v120,
+  .rk-practice-scorecard-match-v200{
+    gap:16px!important;
+  }
+
+  .rk-daily-scorecard-homeclone-v45.rk-home-scorecard-v41,
+  .rk-practice-v9-shell .rk-practice-homeclone-v45.rk-home-scorecard-v41{
+    border-radius:28px!important;
+  }
+
+  .rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-main,
+  .rk-daily-scorecard-homeclone-v45-main,
+  .rk-practice-v9-shell .rk-practice-homeclone-v45 .rk-home-scorecard-v41-main,
+  .rk-practice-v9-shell .rk-practice-homeclone-v45-main{
+    padding:21px 19px 22px!important;
+  }
+
+  .rk-score-reveal-number-v250,
+  .rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score,
+  .rk-practice-v9-shell .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score{
+    font-size:78px!important;
+    letter-spacing:-3.1px!important;
+  }
+
+  .rk-score-reveal-title-v250,
+  .rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-title,
+  .rk-practice-v9-shell .rk-practice-homeclone-v45 .rk-home-scorecard-v41-title{
+    font-size:28px!important;
+    max-width:13ch!important;
+  }
+
+  .rk-score-reveal-copy-v250,
+  .rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-copy,
+  .rk-practice-v9-shell .rk-practice-homeclone-v45 .rk-home-scorecard-v41-copy{
+    font-size:13px!important;
+    max-width:32ch!important;
+  }
+
+  .rk-final-rack-simple-head-v180 strong,
+  .rk-score-clean-head-v120.rk-glance-head-v160 h2,
+  .rk-glance-head-v160 h2,
+  .rk-score-style-head-v190 strong,
+  .rk-better-players-head-v260 h2{
+    font-size:21px!important;
+  }
+
+  .rk-score-clean-glance-v120,
+  .rk-score-glance-v160,
+  .rk-score-style-card-v190,
+  .rk-better-players-v260{
+    padding:16px!important;
+    border-radius:24px!important;
+  }
+
+  .rk-glance-v160-verdict h3{
+    font-size:22px!important;
+  }
+
+  .rk-glance-v160-coach-row p{
+    font-size:14.5px!important;
+  }
+
+  .rk-score-clean-action-v120 strong,
+  .rk-practice-v9-shell .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120 strong{
+    font-size:17px!important;
+  }
+}
+
+@media (max-width:370px){
+  .rk-score-reveal-number-v250,
+  .rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score,
+  .rk-practice-v9-shell .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score{
+    font-size:68px!important;
+    letter-spacing:-2.4px!important;
+  }
+
+  .rk-score-reveal-title-v250,
+  .rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-title,
+  .rk-practice-v9-shell .rk-practice-homeclone-v45 .rk-home-scorecard-v41-title{
+    font-size:25px!important;
+  }
+
+  .rk-better-players-row-v260{
+    grid-template-columns:1fr!important;
+  }
+
+  .rk-better-players-stat-v260{
+    width:max-content!important;
+    min-width:78px!important;
+  }
+}
