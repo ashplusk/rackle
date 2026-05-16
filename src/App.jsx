@@ -7407,53 +7407,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     );
   };
 
-
-  const resultStatusRaw=(iq.resultStatus||iq.result||iq.outcome||iq.gameResult||"").toString().toLowerCase();
-  const resultLabel=resultStatusRaw.includes("mahj")?"Mahjongg":resultStatusRaw.includes("wall")?"Wall game":resultStatusRaw.includes("loss")?"Loss":score>=75?"Mahjongg":score>=55?"Wall game":"Loss";
-  const resultTone=resultLabel==="Mahjongg"?"win":"loss";
-  const todayDateLabel=new Date().toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});
-  const pickedHandObj=chosenHand&&typeof chosenHand==="object"?chosenHand:null;
-  const chosenHandLabel=typeof chosenHand==="string"?chosenHand:(pickedHandObj?.labelForDisplay||pickedHandObj?.variantLabel||pickedHandObj?.label||iq.scoredHandLabel||iq.bestHandLabel||null);
-  const candidateHands=(()=>{
-    const pool=(HAND_CATALOG||[]).map(h=>{
-      const cov=computeHonestCoverage(hand,h);
-      return {
-        ...h,
-        match:Math.round(cov.pct||0),
-        labelForDisplay:cov.labelForDisplay||h.label,
-        variantLabel:cov.variantLabel,
-        coverage:cov
-      };
-    }).sort((a,b)=>(b.match-a.match)||((b.value||0)-(a.value||0))).slice(0,3);
-    return pool.length?pool:[];
-  })();
-  const finalHandObj=pickedHandObj||candidateHands[0]||null;
-  const finalHandName=chosenHandLabel||finalHandObj?.labelForDisplay||finalHandObj?.variantLabel||finalHandObj?.label||trustRead?.best||"Best available hand";
-  const finalHandSection=finalHandObj?.sec||chosenSecObj?.name||chosenSec||section?.name||trustRead?.best||"Rackle read";
-  const finalHandPoints=finalHandObj?.value||iq.pointValue||iq.points||25;
-  const handsInReach=Math.max(1,candidateHands.filter(h=>Number(h.match)>=35).length||candidateHands.length||1);
-  const topMatch=Number(candidateHands[0]?.match||Math.max(35,Math.min(94,score)));
-  const picksToWin=Math.max(1,Math.min(8,Math.round((100-topMatch)/12)+1));
-  const tilesPivoted=Array.isArray(passLog)?passLog.reduce((n,p)=>n+(Array.isArray(p?.passed)?p.passed.length:0),0):Number(iq.tilesPivoted||iq.pivots||3);
-  const closenessPct=Math.max(8,Math.min(96,Math.round((score*.62)+(topMatch*.38))));
-  const quickTakeText=score>=75
-    ? `This was a strong Charleston. Your rack found a clear lane early, and the final shape gave you enough structure to keep pressure on the table.`
-    : score>=55
-      ? `This rack stayed playable, but it still needed one cleaner group before it became a true threat. The right move was to keep the best lane open without forcing a hand too early.`
-      : `This was a thin rack after the Charleston. You had clues, but not enough tile depth to chase confidently, so the best play was to protect shape and stay flexible.`;
-  // TODO: Replace quickTakeText with dynamic generation based on draw sequence, passes, pivots, and final hand distance.
-
   return(
-    <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26 rk-scorecard-clean-v120 rk-daily-result-page-v300" style={{paddingBottom:32}}>
-      <section className="rk-daily-result-header-v300" aria-label="Today's hand">
-        <div>
-          <span>Daily #{dayNum}</span>
-          <h1>Today&apos;s hand</h1>
-          <p>{todayDateLabel}</p>
-        </div>
-        <div className={`rk-daily-result-badge-v300 ${resultTone}`}>{resultLabel}</div>
-      </section>
-
+    <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26 rk-scorecard-clean-v120" style={{paddingBottom:32}}>
       <section className="rk-daily-scorecard-homeclone-v45 rk-home-scorecard-v41" aria-label="Daily Rackle scorecard">
         <div className="rk-home-scorecard-v41-main rk-daily-scorecard-homeclone-v45-main">
           <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
@@ -7471,82 +7426,119 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           </div>
           <div className="rk-home-scorecard-v41-title">{iq.level||scoreLabel}</div>
           <p className="rk-home-scorecard-v41-copy">{quickRead}</p>
+
+          <div className="rk-home-scorecard-v41-actions" aria-label="Scorecard rooms">
+            <button type="button" onClick={()=>setScreen&&setScreen("globalLeaderboard")} aria-label="View global leaderboard">
+              <span>Global room</span>
+              <strong>{globalRank?`#${globalRank}`:"—"}</strong>
+              <em>View global</em>
+            </button>
+            <button type="button" onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"clubs")} aria-label={clubCode?"View club leaderboard":"Find a club"}>
+              <span>{affiliatedClubName||"Club room"}</span>
+              <strong>{clubRank?`#${clubRank}`:(clubCode?"live":"join")}</strong>
+              <em>{clubCode?"View club":"Find club"}</em>
+            </button>
+          </div>
         </div>
       </section>
 
-      <section className="rk-final-hand-result-v300" aria-label="Final hand">
-        <div className="rk-result-card-head-v300">
+      <section className="rk-score-clean-share-v120 rk-score-share-premium-v130 rk-score-share-simple-v140 rk-score-share-v150 rk-score-share-v160" aria-label="Share today’s Rackle">
+        <div className="rk-score-share-v150-head rk-score-share-v160-head">
+          <span>Share today’s Rackle</span>
+          <h2>{affiliatedClubName?`Share with ${affiliatedClubName}`:"Share with your club"}</h2>
+          <p>Send your score to the table so your club can chase the same rack.</p>
+        </div>
+
+        <div className="rk-score-share-v160-stats" aria-label="Today’s score summary">
+          <div className="rk-score-share-v160-stat primary">
+            <span>{clubRank?"Club rank":globalRank?"Global rank":"Today’s rank"}</span>
+            <strong>{clubRank?`#${clubRank}`:globalRank?`#${globalRank}`:"Posted"}</strong>
+            <em>{clubRank&&clubTotal?`of ${clubTotal} in club`:globalRank&&globalTotal?`of ${globalTotal} today`:affiliatedClubName||"Daily board"}</em>
+          </div>
+          <div className="rk-score-share-v160-stat score">
+            <span>Rackle IQ</span>
+            <strong>{score}</strong>
+            <em>{scoreLabel}</em>
+          </div>
+        </div>
+
+        <ShareButton text={shareText} label={affiliatedClubName?`Share with ${affiliatedClubName}`:"Share with your club"} sublabel="Send today’s Rackle to the club chat" variant="green"/>
+      </section>
+
+      <section className="rk-score-clean-final-v120" aria-label="Your final hand">
+        <div className="rk-score-clean-head-v120">
           <span>Final hand</span>
-          <div className={`rk-result-status-v300 ${resultTone}`}>{resultLabel}</div>
+          <h2>Your rack after the Charleston</h2>
+          <p>This is your rack after the Charleston. Compare what you kept, what you passed, and where the hand started to point.</p>
         </div>
-        <h2>{finalHandName}</h2>
-        <div className="rk-final-hand-meta-v300">
-          <span>{finalHandSection}</span>
-          <strong>{finalHandPoints} points</strong>
-        </div>
-        <div className="rk-final-hand-rack-v300">
+        <div className="rk-score-clean-rack-v120">
           <SortableRack hand={hand}/>
         </div>
       </section>
 
-      <section className="rk-how-it-went-v300" aria-label="How it went">
-        <div className="rk-result-card-head-v300 left">
-          <span>How it went</span>
+      <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160" aria-label="Rack at a glance">
+        <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160">
+          <span>Rack at a glance</span>
+          <h2>Your Charleston read</h2>
+          <p>A simple read on your best direction, backup path, and what to avoid next.</p>
         </div>
-        <div className="rk-how-stats-v300">
-          <div><span>Hands in reach</span><strong>{handsInReach}</strong></div>
-          <div><span>Picks to win</span><strong>{picksToWin}</strong></div>
-          <div><span>Tiles pivoted</span><strong>{tilesPivoted}</strong></div>
+
+        <div className="rk-glance-v160-verdict">
+          <span>Best fit read</span>
+          <h3>{trustRead.best}</h3>
+          <p>{trustRead.bestFit}</p>
         </div>
-        <div className="rk-arc-v300" aria-label="Closeness to mahjongg">
-          <div className="rk-arc-track-v300"><div style={{width:`${closenessPct}%`}}/></div>
-          <div className="rk-arc-labels-v300"><span>Early picks</span><span>Final tile</span></div>
+
+        <div className="rk-glance-v160-tiles">
+          <div className="rk-glance-v160-tile">
+            <span>Backup path</span>
+            <strong>{trustRead.backup}</strong>
+            <p>{trustRead.backupFit}</p>
+          </div>
+          <div className="rk-glance-v160-tile avoid">
+            <span>Avoid for now</span>
+            <strong>{trustRead.avoid}</strong>
+            <p>Only chase this if the next draw changes the rack.</p>
+          </div>
+        </div>
+
+        <div className="rk-glance-v160-coach">
+          <div className="rk-glance-v160-coach-row expert">
+            <span>Expert read</span>
+            <p>{rkHumanTableCopy(trustRead.expertRead)}</p>
+          </div>
+          <div className="rk-glance-v160-coach-row next">
+            <span>Next move</span>
+            <p>{rkHumanTableCopy(trustRead.nextMove)}</p>
+          </div>
         </div>
       </section>
 
-      <section className="rk-trending-hands-v300" aria-label="Where your hand was going">
-        <div className="rk-result-card-head-v300 left">
-          <span>Where your hand was going</span>
-        </div>
-        <div className="rk-candidate-list-v300">
-          {candidateHands.map((h,i)=>(
-            <div key={`${h.sec}-${h.label}-${i}`} className={`rk-candidate-row-v300 rank-${i+1}`}>
-              <div className="rk-candidate-copy-v300">
-                <strong>{h.labelForDisplay||h.variantLabel||h.label}</strong>
-                <span>{h.sec}</span>
-              </div>
-              <div className="rk-candidate-score-v300">
-                <strong>{h.match}%</strong>
-                <div><span style={{width:`${h.match}%`}}/></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="rk-quick-take-v300" aria-label="Quick take">
-        <div className="rk-result-card-head-v300 left">
-          <span>Quick take</span>
-        </div>
-        <p>{quickTakeText}</p>
-      </section>
-
-      <section className="rk-share-club-v300" aria-label="Share with your club">
-        <div>
-          <span>Share with your club</span>
-          <h2>{affiliatedClubName?`Send it to ${affiliatedClubName}`:"Send it to your table"}</h2>
-          <p>Post today&apos;s result so your club can chase the same rack.</p>
-        </div>
-        <ShareButton text={shareText} label="Share today's Rackle" sublabel="Send score to the club chat" variant="green"/>
-      </section>
-
-      <section className="rk-score-deep-dive-v300" aria-label="Score deep dive">
-        {onCoachMode&&<button type="button" onClick={onCoachMode}>Score deep dive →</button>}
+      <section className="rk-score-clean-actions-v120 rk-score-home-style-actions-v140" aria-label="Next actions">
+        <button type="button" onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"globalLeaderboard")} className="rk-score-clean-action-v120 primary">
+          <span>{clubCode?"Open clubhouse":"Open today’s room"}</span>
+          <strong>{clubCode?"Club board":"Global board"}</strong>
+          <em>→</em>
+        </button>
+        <button type="button" onClick={onPractice} className="rk-score-clean-action-v120">
+          <span>Practice another rack</span>
+          <strong>Build the habit</strong>
+          <em>→</em>
+        </button>
+        {onCoachMode&&<button type="button" onClick={onCoachMode} className="rk-score-clean-action-v120">
+          <span>Score deep dive</span>
+          <strong>Coach Mode</strong>
+          <em>→</em>
+        </button>}
+        <button type="button" onClick={onHome} className="rk-score-clean-action-v120 quiet">
+          <span>Back home</span>
+          <strong>Clubhouse</strong>
+          <em>→</em>
+        </button>
       </section>
     </div>
   );
 }
-
 
 // ─── PRACTICE SCORECARD, collapsible sections, matching daily vibe ───────────
 function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHome,onDealAgain}){
