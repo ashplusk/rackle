@@ -12488,6 +12488,11 @@ function Game({mode,home,onDone,settings,setScreen,go}){
       document.documentElement.scrollTop=0;
       document.body.scrollTop=0;
       setPhase("result");
+      // Daily scorecards should open through the main app route, where the saved Daily result lives.
+      // This avoids getting stuck on the section picker if React state batching delays the in-game result view.
+      if(mode==="daily"&&typeof setScreen==="function"){
+        setTimeout(()=>setScreen("scorecard"),0);
+      }
     }catch(err){
       console.error("Rackle score section click failed",err);
       // Last-resort fallback so the player is not stuck on the section picker.
@@ -12507,6 +12512,9 @@ function Game({mode,home,onDone,settings,setScreen,go}){
       setChosenSecBoth(sectionId);
       setIqResultBoth(fallbackIq);
       setPhase("result");
+      if(mode==="daily"&&typeof setScreen==="function"){
+        setTimeout(()=>setScreen("scorecard"),0);
+      }
     }
   };
 
@@ -12621,9 +12629,9 @@ function Game({mode,home,onDone,settings,setScreen,go}){
           </button>
           {showRef&&<CG onClose={()=>setShowRef(false)}/>}
           <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>SCORE YOUR ROUND</div>
-          <div style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
+          <div onClick={(e)=>{const btn=e.target.closest?.("[data-rk-score-section]");if(btn){e.preventDefault();e.stopPropagation();scoreRoundForSection(btn.dataset.rkScoreSection);}}} style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
             {SECS.map((s)=>(
-              <button key={s.id} type="button" className="rk-score-round-option-v700" onPointerUp={(e)=>{if(e.pointerType==="touch"){e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}}} onClick={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}}
+              <button key={s.id} type="button" className="rk-score-round-option-v700" data-rk-score-section={s.id} onTouchEnd={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}} onPointerUp={(e)=>{if(e.pointerType==="touch"){e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}}} onClick={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}}
                 style={{cursor:"pointer",display:"flex",alignItems:"center",gap:0,borderRadius:12,overflow:"hidden",border:`1.5px solid ${C.bdr}`,background:"#fff",textAlign:"left",padding:0,transition:"all 0.15s"}}>
                 <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:s.color+"40"}}/>
                 <div style={{width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,margin:"0 2px"}}>{s.icon}</div>
