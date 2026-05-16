@@ -2570,75 +2570,75 @@ const IQ_TIERS=[
 ];
 const IQ_STYLES=[
   {
-    key:"aggressive",name:"Aggressive ⚡",
+    key:"aggressive",name:"Aggressive Builder",
     notes:[
-      "You chased upside and locked in early.",
-      "Bold passing with high reward potential.",
-      "You pushed the rack forward aggressively."
+      "You pushed the rack forward. Good when the lane is real, costly when the shape is thin.",
+      "You were willing to commit. The question is whether the rack had earned it.",
+      "Sharp tempo. Make sure the speed is backed by density."
     ]
   },
   {
-    key:"flexible",name:"Flexible ♻️",
+    key:"flexible",name:"Flexible Watcher",
     notes:[
-      "You kept multiple paths alive.",
-      "You kept more than one lane alive.",
-      "You adapted well to the rack."
+      "You kept lanes alive, but flexibility only helps when the shared core is strong.",
+      "You protected options. Now the rack needs sharper convergence.",
+      "Good patience. Just do not let medium paths crowd the best one."
     ]
   },
   {
-    key:"disciplined",name:"Disciplined 🎯",
+    key:"disciplined",name:"Disciplined Passer",
     notes:[
-      "You stayed focused on your direction.",
-      "Clean, controlled table decisions.",
-      "You avoided noisy pivots."
+      "You cut dead weight cleanly.",
+      "Your passes protected the best lane without babysitting weak tiles.",
+      "Controlled Charleston. The rack stayed readable."
     ]
   },
   {
-    key:"adaptive",name:"Adaptive 🔄",
+    key:"adaptive",name:"Table Reader",
     notes:[
-      "You adjusted your plan as the rack evolved.",
-      "Strong mid-Charleston pivots.",
-      "You responded well to new information."
+      "You adjusted without panicking.",
+      "You let the rack tell you where to go.",
+      "Good table sense. The next step is committing when the lane earns it."
     ]
   },
   {
-    key:"defensive",name:"Defensive 🛡️",
+    key:"defensive",name:"Cautious Holder",
     notes:[
-      "You protected your options carefully.",
-      "You avoided risky commitments.",
-      "You played a safe, controlled Charleston."
+      "You protected the rack, but may have held safety too long.",
+      "You avoided disaster. Now look for the moment to cut harder.",
+      "Safe Charleston. It needed more bite."
     ]
   },
   {
-    key:"fastReader",name:"Fast Reader ⚡",
+    key:"fastReader",name:"Fast Reader",
     notes:[
-      "You saw direction early and acted quickly.",
-      "Quick decisions with strong instincts.",
-      "You didn’t hesitate."
+      "You saw the lane early.",
+      "Quick read. Strong when backed by clean shape.",
+      "You did not overthink the first signal."
     ]
   },
   {
-    key:"latePivot",name:"Late Pivot 🔁",
+    key:"latePivot",name:"Late Pivot",
     notes:[
-      "You changed direction late in the Charleston.",
-      "Strong recovery after early uncertainty.",
-      "You found your line late."
+      "The hand drifted early, then found a better lane.",
+      "You recovered, but the rack spent time sideways.",
+      "Good adjustment. Earlier discipline would have helped."
     ]
   },
   {
-    key:"chaos",name:"Chaos Charleston 🎲",
+    key:"chaos",name:"Scattered Watcher",
     notes:[
-      "You explored multiple directions throughout.",
-      "Unpredictable but creative play.",
-      "You kept the rack wide open."
+      "Too many medium-strength paths stayed alive.",
+      "The rack looked flexible but lacked true acceleration.",
+      "You had options, but not enough compression."
     ]
   },
   {
-    key:"smoothPasser",name:"Smooth Passer 🌊",
+    key:"smoothPasser",name:"Clean Passer",
     notes:[
-      "Your passing felt clean and natural.",
-      "You moved through decisions fluidly.",
-      "Strong rhythm throughout the Charleston."
+      "You moved through the Charleston cleanly.",
+      "Good pass rhythm. Low noise, clear choices.",
+      "Your passes did not fight the rack."
     ]
   }
 ];
@@ -2836,19 +2836,18 @@ function iqTileInsights(finalRack,startingRack,passedTilesByRound,sectionId){
 
 function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScore,brokenPairsCount,sectionId){
   const strengths=[],weaknesses=[];
-  if(directionScore>=35)strengths.push("Clean early read. You knew where the rack wanted to go.");
-  if(tileStrengthScore>=20)strengths.push("Strong final shape. Your tiles connected well.");
-  if(passQualityScore>=20)strengths.push("Clean passing through the Charleston.");
-  if(timingScore>=9)strengths.push("Good pace. You trusted the rack without rushing.");
+  if(directionScore>=35)strengths.push("Clear table read. You saw where the rack wanted to go.");
+  if(tileStrengthScore>=20)strengths.push("Good compression. The final rack had working shape.");
+  if(passQualityScore>=20)strengths.push("Clean passing. You cut noise without damaging the lane.");
+  if(timingScore>=9)strengths.push("Strong commitment timing. You did not babysit weak paths.");
 
-  if(directionScore<20)weaknesses.push("Your rack stayed a little too wide.");
-  if(tileStrengthScore<=10)weaknesses.push("Your final rack needed more connected tiles.");
-  if(passQualityScore<=12)weaknesses.push("A few risky passes gave away useful tiles.");
-  // Section-specific pair feedback, in S&P, breaking triples into pairs is good
+  if(directionScore<20)weaknesses.push("The rack stayed too wide.");
+  if(tileStrengthScore<=10)weaknesses.push("Not enough tile density. The rack needed pairs, groups, or a cleaner window.");
+  if(passQualityScore<=12)weaknesses.push("A few passes slowed the best lane.");
   if(brokenPairsCount>0&&sectionId!=="sp"){
-    weaknesses.push(`Broke ${brokenPairsCount} pair${brokenPairsCount>1?"s":""} during the Charleston, protect your pairs.`);
+    weaknesses.push(`You broke ${brokenPairsCount} pair${brokenPairsCount>1?"s":""}. Pairs are structure, not decoration.`);
   }
-  if(timingScore<=5)weaknesses.push("Your pace got uneven. Take a breath, read the rack, then pass.");
+  if(timingScore<=5)weaknesses.push("The hand drifted. Commit earlier or cut harder.");
 
   const uniqueStr=[...new Set(strengths)].slice(0,2);
   const uniqueWk=[...new Set(weaknesses)].slice(0,2);
@@ -2856,60 +2855,59 @@ function iqFeedback(directionScore,tileStrengthScore,passQualityScore,timingScor
   let coachNote="";
   let tryNextTime="";
 
-  // Section-specific coach notes
   if(sectionId==="sp"){
-    if(directionScore<20&&passQualityScore<=12)coachNote="S&P is fully concealed. Focus on building pairs. If you are dealt jokers, treat them as dead tiles because they cannot be used or passed.";
-    else if(passQualityScore<=12)coachNote="You were playing S&P, but passed tiles that would have been good pairs. For S&P: hold pairs, account for dead jokers, avoid triples.";
-    else if(directionScore<20)coachNote="Your rack had too many singles. S&P needs 6+ clean pairs to win, consolidate toward fewer, deeper pairs.";
-    else coachNote="S&P is a discipline game. Keep holding pairs, keep releasing jokers, and you'll complete it.";
+    if(directionScore<20&&passQualityScore<=12)coachNote="Singles & Pairs is a discipline section. Jokers are dead, pairs are gold, and loose singles need a reason to stay.";
+    else if(passQualityScore<=12)coachNote="You were in Singles & Pairs territory, but the passes were not strict enough. Hold pairs. Release anything that does not build exact shape.";
+    else if(directionScore<20)coachNote="Too many singles, not enough structure. Singles & Pairs needs exactness, not hope.";
+    else coachNote="Good S&P discipline. Keep pairs, count dead jokers, and do not let triples fool you.";
   } else if(sectionId==="q"){
-    if(directionScore<20)coachNote="Quints without 2 jokers is nearly impossible. Identify joker count in deal, if you have fewer than 2, pivot immediately.";
-    else coachNote="With 2 jokers, focus entirely on stacking 3-4 of one specific tile. Spread is your enemy in Quints.";
+    if(directionScore<20)coachNote="Quints needs speed. Without joker pressure or a natural group, it is usually a trap.";
+    else coachNote="Quints only works when the rack accelerates. Pick the deepest tile group and stop protecting side ideas.";
   } else if(sectionId==="cr"){
-    if(directionScore<20)coachNote="Consecutive Run isn't about long strings of singles, it's pungs and kongs within a 3-4 number window. Identify your window by pass 1.";
-    else if(tileStrengthScore<=10)coachNote="You had the right window, but not enough group depth. Pass tiles outside the window ruthlessly to deepen groups within it.";
-    else coachNote="Good CR instincts. Next level: pick the tightest window possible (3-wide > 5-wide) for more hand options.";
+    if(directionScore<20)coachNote="Consecutive Run is not a string of singles. It needs compression inside a tight number window.";
+    else if(tileStrengthScore<=10)coachNote="The window was there, but the depth was not. Pass outside the window and make the groups heavier.";
+    else coachNote="Good CR instinct. The sharper play is choosing the tightest window and cutting the rest.";
   } else if(sectionId==="wd"){
-    if(directionScore<20)coachNote="W&D needs 7+ honor tiles. Pass all number tiles in round 1 unless you have a complete kong of 1-4.";
-    else coachNote="Winds are your backbone, 7 of 8 hands use them. Stack same-wind groups before dragons.";
+    if(directionScore<20)coachNote="Winds & Dragons needs grouped honors. Loose honors look tempting, but they do not accelerate.";
+    else coachNote="Winds are the backbone. Build grouped honors first, then decide whether the dragons are helping or just riding along.";
   } else if(sectionId==="2026"){
-    if(directionScore<20)coachNote="2026 needs both 2s and 6s, they appear in all 4 hands. Soap (White Dragon) is wild-suit zero. These three tiles are your filter.";
-    else coachNote="Strong 2026 read. Soap (White Dragon) makes it easier, it plays as any suit, so hold it whenever you're building this section.";
+    if(directionScore<20)coachNote="2026 needs real 2/6/Soap pressure. One piece of the section is not enough to chase it.";
+    else coachNote="Good 2026 read. Now keep the structure tight: 2s, 6s, Soap, and nothing decorative.";
   } else if(directionScore<20&&passQualityScore<=12){
-    coachNote="Your passing and direction both need attention. The key habit: identify your strongest group before your very first pass, then protect it ruthlessly.";
+    coachNote="The rack needed a firmer table read. Name the strongest group before the first pass, then cut against that read.";
   } else if(passQualityScore<=12){
-    coachNote="You were pointing in the right direction, but your passing decisions cost you. Focus on what leaves your hand, not just what stays.";
+    coachNote="The direction was there, but the passes slowed it down. Watch what leaves your rack, not just what stays.";
   } else if(directionScore<20){
-    coachNote="Your passing was disciplined, but the rack didn't commit to a clear path. Try to name your section by the second pass and filter from there.";
+    coachNote="The passes were disciplined, but the rack never chose a lane. By the second pass, weak backups need to go.";
   } else if(brokenPairsCount>0){
-    coachNote="Watch your pairs. A pair broken early often can't be rebuilt, they're structural anchors for most hands.";
+    coachNote="Watch the pairs. Breaking one early often kills the hand’s future speed.";
   } else {
-    coachNote="Push higher by paying attention to your middle tiles, the ones that could serve two sections. Committing early to one path unlocks a sharper Charleston.";
+    coachNote="The next jump comes from discipline. Cut tiles that only look useful and protect the ones that compress.";
   }
 
-  // Section-specific tryNextTime tips
   const secTips={
-    "2026":"Hold every 2, 6, and Soap you see. In round 1, pass all odd numbers except via a Soap or Dragon connection.",
-    "2468":"Pass odds immediately in round 1. Your 6s are the anchor, never pass a 6 in any round.",
-    "369":"6 is in every 369 hand, never pass it. Round 1: pass everything except 3s, 6s, 9s, jokers, and flowers.",
-    "13579":"5 and 3 appear in every 13579 hand, prioritize them above all other odds. Pass all even tiles in round 1 without hesitation.",
-    "cr":"Identify your 3-4 number window by your first pass. Then pass every tile outside that window, even if it hurts.",
-    "wd":"Pass every number tile round 1 unless you have 4 of one number (1-4 only). Winds first, then dragons.",
-    "aln":"Pick your number immediately. Pass everything else, every round, until you have 8+ of that one number.",
-    "q":"Count jokers first. If you have 2+, pick your target tile and stack it. If fewer than 2, pivot to another section.",
-    "sp":"Pass jokers immediately, they're worthless here. Hold every pair. Break no pairs to chase anything.",
+    "2026":"Filter hard for 2s, 6s, and Soap. If those are not building, do not force the section.",
+    "2468":"Even tiles are not enough. Look for density around the same numbers, especially 6s.",
+    "369":"The 6 is the anchor. Without it, the section slows down quickly.",
+    "13579":"Odds need depth. Do not keep scattered odd singles just because they are odd.",
+    "cr":"Choose the tightest 3-number window you can defend. Singles outside the window are passengers.",
+    "wd":"Grouped honors matter. Loose Winds and Dragons are not a plan.",
+    "aln":"Pick the number that owns the rack. Like Numbers needs a real anchor, not a vague spread.",
+    "q":"Count jokers first. No joker speed usually means no Quints.",
+    "sp":"Pairs first. Jokers out. Exact tiles only.",
   };
   const scores=[
-    {name:"direction",ratio:directionScore/40,tip:secTips[sectionId]||"Before your first pass, identify the section your rack most favors. Everything else follows from that read."},
-    {name:"tiles",ratio:tileStrengthScore/25,tip:"Before passing any tile, ask: does it support my main group, a pair, or a window? If no to all three, it goes."},
-    {name:"passes",ratio:passQualityScore/25,tip:"Before each pass, check: does this tile connect to anything I'm keeping? Tiles that connect to nothing are the ones to pass."},
-    {name:"timing",ratio:timingScore/10,tip:"Aim for 10-25 seconds per pass, the real-world average is about 17s. Enough to read the rack without second-guessing your first instinct."},
+    {name:"direction",ratio:directionScore/40,tip:secTips[sectionId]||"Before your first pass, name the lane you would actually defend. Then pass against everything else."},
+    {name:"tiles",ratio:tileStrengthScore/25,tip:"Ask whether each tile creates density, a pair, a group, or a clean window. If not, it is probably dead weight."},
+    {name:"passes",ratio:passQualityScore/25,tip:"Good passing is subtraction. Cut the tiles that make the rack look flexible but slow."},
+    {name:"timing",ratio:timingScore/10,tip:"Do not protect three ideas for three passes. Let the first clean signal narrow the rack."},
   ];
   const worst=scores.sort((a,b)=>a.ratio-b.ratio)[0];
   tryNextTime=worst.tip;
 
   return{strengths:uniqueStr,weaknesses:uniqueWk,coachNote,tryNextTime};
 }
+
 
 // ─── vNext EXPERT CHARLESTON ANALYSIS ENGINE ───────────────────────────────
 // Human-first NMJL Charleston evaluator. This layer reads the whole rack,
@@ -3104,12 +3102,15 @@ function rkExpertSectionPassengerNote(passengerCount,secName){
   return "";
 }
 function rkExpertSectionWhy(score,secId,struct,support=[],needs=[]){
-  const main=support?.[0]||"one small structural clue";
-  if(score>=72)return `${main} gave this lane real compression.`;
-  if(score>=56)return `${main} kept this lane alive, but it still needed more depth.`;
-  if(score>=40)return `${main} was useful, but the shape was still fragile.`;
-  return needs?.[0]?`This needed ${needs[0]} before it deserved trust.`:`This was more theoretical than dangerous.`;
+  const main=support?.[0]||"one small clue";
+  const need=needs?.[0]||"more density";
+  if(score>=76)return `${main}. Strong compression and believable speed.`;
+  if(score>=62)return `${main}. Real lane, but not fully exposure-ready.`;
+  if(score>=48)return `${main}. Alive, but still short on convergence.`;
+  if(score>=34)return `Thin lane. It needed ${need} before it deserved protection.`;
+  return `More theoretical than playable. Do not overprotect this path.`;
 }
+
 function rkExpertCalibrateFitPercent(score,struct,secId,rankIndex=0,topScore=null){
   let calibrated=score;
   const passengerCount=0; // kept for future display; section score already has passenger penalty
@@ -3143,23 +3144,28 @@ function rkExpertPassengerTiles(rack=[],secId){
 function rkHumanExpertSummary({score,struct,top,deadness,passRead,compression,acceleration,gap}){
   const topName=top?.name||"the best lane";
   const bestWindow=struct.bestWindow?`${RK_SUIT_NAMES[struct.bestWindow.suit]} ${struct.bestWindow.nums[0]}-${struct.bestWindow.nums[2]}`:null;
-  if(score>=90)return bestWindow?`Elite rack. The ${bestWindow} window was compressed, fast, and worth defending.`:`Elite rack. The shape was compressed, efficient, and already dangerous.`;
-  if(score>=80)return `Strong Charleston. ${topName} was not just possible, it had real acceleration.`;
-  if(score>=70)return `Good rack, but not automatic. ${topName} had shape, while a few passengers still slowed it down.`;
-  if(score>=60)return `Playable read. ${topName} stayed alive, but it needed cleaner convergence before it became scary.`;
-  if(score>=50)return `Middling rack. The clues were there, but too much strength was still theoretical.`;
-  if(score>=40)return `Still alive, but fragile. The rack had clues without enough depth yet.`;
-  if(deadness?.reasons?.[0])return `Thin rack. ${deadness.reasons[0]} kept it from accelerating.`;
-  return `Drifting rack. Too much shape was still theoretical after the Charleston.`;
+  if(score>=90)return bestWindow?`Elite rack. ${bestWindow} compressed early and had speed.`:`Elite rack. Clean density, clear direction, real speed.`;
+  if(score>=80)return `Strong shape. Real acceleration. ${topName} was worth defending.`;
+  if(score>=70)return `Good rack. ${topName} had shape, but a few passengers slowed it down.`;
+  if(score>=60)return `Playable, but drifting. The lane was there, the speed was not.`;
+  if(score>=50)return `Some density, not enough direction. The rack looked better than it moved.`;
+  if(score>=40)return `Fragile rack. A few clues, not enough compression.`;
+  if(deadness?.reasons?.[0])return `Thin rack. ${deadness.reasons[0]}.`;
+  return `Drifting rack. Too much of the strength was theoretical.`;
 }
+
 function rkExpertTimingLine({struct,top,score,liveDirections=[]}){
-  if(struct.bestWindow?.depth>=5)return `The read rewarded noticing the ${RK_SUIT_NAMES[struct.bestWindow.suit]} ${struct.bestWindow.nums[0]}-${struct.bestWindow.nums[2]} compression early.`;
-  if((liveDirections||[]).length>=4)return `This rack punished over-reading. Several branches looked alive, but most were only passengers.`;
-  if(struct.isolated?.length>=5)return `This rack needed faster cleanup. Too many singles survived the Charleston.`;
-  if(top?.id==="wd")return `Winds and Dragons needed patience, but not blind loyalty. Thin honors can look stronger than they are.`;
-  if(score>=70)return `The right tempo was commitment: protect the engine and clear the rest.`;
-  return `The read came down to timing the pivot, not keeping every option alive.`;
+  if(struct.bestWindow?.depth>=5)return `Strong commitment timing. The ${RK_SUIT_NAMES[struct.bestWindow.suit]} ${struct.bestWindow.nums[0]}-${struct.bestWindow.nums[2]} window was the table read.`;
+  if((liveDirections||[]).length>=4)return `Drift risk was the story. Several paths looked alive, but most were passengers.`;
+  if(struct.isolated?.length>=5)return `Cleanup needed to happen sooner. Too many singles made it through the Charleston.`;
+  if(top?.id==="wd")return `Winds & Dragons needed patience, not loyalty. Loose honors can fool you.`;
+  if(top?.id==="aln")return `Like Numbers only works when one number starts to own the rack.`;
+  if(top?.id==="q")return `Quints needs speed. Without joker pressure, it stalls quickly.`;
+  if(score>=80)return `Commitment timing was strong. You had enough density to cut harder.`;
+  if(score>=70)return `Good read. The next level is cutting the weak backup earlier.`;
+  return `The decision was not which hand looked possible. It was when to stop protecting weak paths.`;
 }
+
 
 function rkEvaluateSection(struct,rack,sec){
   const secId=sec.id;
@@ -3442,14 +3448,16 @@ function rkCommitmentState(iq,shapeScore,commitmentClarity,top,second,liveDirect
   return "Resetting";
 }
 function rkCoachingInsight(commitmentState,shapeQuality,struct,top){
-  if(commitmentState==="Committed")return `The rack has earned a lane. Commit, but do not chase loose edges that do not feed the engine.`;
-  if(commitmentState==="Leaning")return `You are close to choosing a lane. One clean pickup probably commits this rack.`;
-  if(commitmentState==="Flexible")return `Stay loose. Protect the shared core tiles and let the next draw choose the lane.`;
-  if(commitmentState==="Resetting")return `Reset the read. Keep only tiles that pair, connect, or build a clear window.`;
-  if(struct.bestWindow?.depth>=3)return `The clues are real, but this still wants patience before commitment.`;
-  if(struct.pairs.length>=2)return `Protect the pairs, but do not turn them into a final plan too early.`;
-  return `Watch one more turn before forcing an idea.`;
+  const topName=top?.name||"the best lane";
+  if(commitmentState==="Committed")return `The rack earned a lane. Protect ${topName}, then cut anything that does not feed it.`;
+  if(commitmentState==="Leaning")return `You were close to commitment. One clean pickup should decide the rack.`;
+  if(commitmentState==="Flexible")return `Too many lanes stayed alive. Keep the shared core, but stop protecting weak branches.`;
+  if(commitmentState==="Resetting")return `Reset the hand. Keep pairs, groups, and clean windows. Everything else is dead weight.`;
+  if(struct.bestWindow?.depth>=3)return `The window was real, but the rack needed more depth before it could move fast.`;
+  if(struct.pairs.length>=2)return `The pairs were doing work. Do not turn them into a plan until they actually point somewhere.`;
+  return `This rack needed discipline, not optimism. Wait for a cleaner signal.`;
 }
+
 
 function rkExpertTileMatchesSection(t,secId){
   if(!t)return false;
@@ -3481,14 +3489,14 @@ function rkExpertPassRegretAnalysis({passedTilesByRound=[],sectionId,topSection,
   const regret=[];
   Object.entries(byTile).sort((a,b)=>b[1]-a[1]).slice(0,3).forEach(([label,count])=>{
     const first=important.find(x=>tLabel(x.t)===label);
-    if(count>=2)regret.push(`You passed ${count} ${label} tiles during ${rkExpertRoundLabel(first?.p)}. That made the ${topSection?.name||"best"} lane harder to accelerate.`);
-    else regret.push(`You passed ${label} during ${rkExpertRoundLabel(first?.p)}. It later mattered for the cleanest lane.`);
+    if(count>=2)regret.push(`You let ${count} ${label} tiles go in ${rkExpertRoundLabel(first?.p)}. That slowed the cleanest lane.`);
+    else regret.push(`The ${label} pass in ${rkExpertRoundLabel(first?.p)} mattered later. That tile had more future value than it looked like.`);
   });
   const weakPassed=out.filter(x=>!rkExpertTileMatchesSection(x.t,topId)&&x.t?.t!=="j");
   const disciplineWin=weakPassed.length>=5&&important.length===0;
   const correct=[];
-  if(disciplineWin)correct.push(`Your passes cleared unrelated tiles without cutting into the best lane.`);
-  if(weakPassed.length>=3&&important.length<=1)correct.push(`You reduced rack noise well. That helped the final shape stay readable.`);
+  if(disciplineWin)correct.push(`Good discipline. You cut dead weight without damaging the best lane.`);
+  if(weakPassed.length>=3&&important.length<=1)correct.push(`Your passes cleaned up the rack. Low noise, better read.`);
   let penalty=Math.min(24,important.length*5+Math.max(0,Object.values(byTile).filter(c=>c>=2).length*4));
   if(disciplineWin)penalty=Math.max(0,penalty-5);
   const score=rkClamp(78-penalty+(disciplineWin?8:0),22,94);
@@ -3498,9 +3506,10 @@ function rkExpertPassRegretAnalysis({passedTilesByRound=[],sectionId,topSection,
     passedImportant:passedLabels.slice(0,8),
     regret:regret.slice(0,3),
     correct:correct.slice(0,2),
-    summary:regret[0]||correct[0]||`Your Charleston did not create an obvious pass regret against the best lane.`
+    summary:regret[0]||correct[0]||`No obvious pass regret. The issue was shape, not a single bad tile.`
   };
 }
+
 function rkExpertDeadnessRisk({struct,topSection,liveDirections}){
   const topId=topSection?.id;
   const maxGroup=rkMaxNaturalGroup(struct);
@@ -3509,18 +3518,19 @@ function rkExpertDeadnessRisk({struct,topSection,liveDirections}){
   const thirdSuit=struct.suitEntries?.[2]?.[1]||0;
   let risk=18;
   const reasons=[];
-  if(struct.isolated.length>=5){risk+=24;reasons.push(`too many isolated tiles stayed in the rack`);}
-  else if(struct.isolated.length>=3){risk+=12;reasons.push(`several singles still needed support`);}
-  if(struct.pairs.length<2&&maxGroup<3){risk+=14;reasons.push(`not enough duplication yet`);}
-  if(bestSuit<5&&secondSuit>=3&&thirdSuit>=2){risk+=12;reasons.push(`the suits were still split`);}
-  if(struct.honorTotal>=4&&struct.groupedHonor===0){risk+=16;reasons.push(`loose honors looked tempting but were thin`);}
-  if(topId==="wd"&&struct.groupedHonor<2){risk+=12;reasons.push(`winds and dragons still needed more compression`);}
-  if(topId==="aln"&&Number(struct.bestSameNumber?.[1]||0)<3){risk+=12;reasons.push(`Like Numbers lacked a strong number anchor`);}
-  if(topId==="q"&&struct.jokers<2){risk+=18;reasons.push(`Quints was short on joker help`);}
-  if(topId==="sp"&&struct.jokers>0){risk+=18;reasons.push(`jokers cannot help Singles and Pairs`);}
-  if((liveDirections||[]).length>=4){risk+=9;reasons.push(`too many directions were only half-alive`);}
+  if(struct.isolated.length>=5){risk+=24;reasons.push(`too many singles survived the Charleston`);}
+  else if(struct.isolated.length>=3){risk+=12;reasons.push(`several tiles were still riding alone`);}
+  if(struct.pairs.length<2&&maxGroup<3){risk+=14;reasons.push(`not enough pair or group density`);}
+  if(bestSuit<5&&secondSuit>=3&&thirdSuit>=2){risk+=12;reasons.push(`the suits never fully chose a side`);}
+  if(struct.honorTotal>=4&&struct.groupedHonor===0){risk+=16;reasons.push(`loose honors looked better than they were`);}
+  if(topId==="wd"&&struct.groupedHonor<2){risk+=12;reasons.push(`Winds & Dragons needed grouped honors, not loose texture`);}
+  if(topId==="aln"&&Number(struct.bestSameNumber?.[1]||0)<3){risk+=12;reasons.push(`Like Numbers lacked a true number anchor`);}
+  if(topId==="q"&&struct.jokers<2){risk+=18;reasons.push(`Quints did not have enough joker speed`);}
+  if(topId==="sp"&&struct.jokers>0){risk+=18;reasons.push(`jokers are dead weight in Singles & Pairs`);}
+  if((liveDirections||[]).length>=4){risk+=9;reasons.push(`too many medium-strength paths stayed alive`);}
   return{score:rkClamp(risk,0,100),reasons:reasons.slice(0,4)};
 }
+
 function rkExpertScoreBand(score){
   const band=rkLaunchScoreBand(score);
   return band.label;
@@ -3628,127 +3638,36 @@ function rkScorecardTrustRead(iq={},hand=[]){
   const second=sections[1]||null;
   const third=sections[2]||null;
   const best=iq.bestDirection||top?.name||iq.strategicRead?.bestDirection||"Still watching";
-  const backup=second?.name||iq.liveSections?.[1]?.name||"Keep a flexible backup";
-  const avoid=third?.name&&Number(third.score||0)<Math.max(42,(Number(top?.score||0)-18))?third.name:(iq.expertRead?.deadness?.reasons?.[0]||"loose tiles that do not feed your best lane");
+  const backup=second?.name||iq.liveSections?.[1]?.name||"weak backup path";
+  const avoid=third?.name&&Number(third.score||0)<Math.max(42,(Number(top?.score||0)-18))?third.name:(iq.expertRead?.deadness?.reasons?.[0]||"tiles that do not feed the lane");
   const useful=top?.id?rkUsefulTileCountForSection(hand,top.id):0;
-  const bestFit=top?rkQualFitLabel(top.score||0,useful?`${useful} useful tiles`:""):"Keep watching";
+  const bestFit=top?rkQualFitLabel(top.score||0,useful?`${useful} useful tiles`:""):"Still reading";
   const backupFit=second?rkQualFitLabel(second.score||0):"Backup only";
   const helped=[];
   const heldBack=[];
   const factors=iq.expertFactors||iq.expertRead?.factors||{};
   const ts=iq.strategicRead?.tileStructure||{};
 
-  if((ts.pairs?.length||0)>=2)helped.push(`You kept ${ts.pairs.length} useful pairs.`);
-  if((ts.pungs?.length||0)>0)helped.push(`You had natural group depth to build from.`);
-  if(Number(factors.charlestonDiscipline||0)>=65)helped.push("Your passes cleared noise without cutting too deeply into the best lane.");
-  if(Number(factors.efficiency||0)>=62)helped.push("Your tiles compressed toward a believable shape.");
-  if(!helped.length)helped.push("You kept at least one lane alive instead of forcing a dead hand.");
+  if(Number(factors.convergence||0)>=70)helped.push("The rack finally chose a lane.");
+  if(Number(factors.efficiency||0)>=68)helped.push("Compression was doing real work.");
+  if(Number(factors.acceleration||0)>=68)helped.push("The hand had speed, not just shape.");
+  if((ts.pungs?.length||0)>0)helped.push("Natural group depth gave the rack bite.");
+  if((ts.pairs?.length||0)>=2)helped.push(`${ts.pairs.length} pairs gave you something to build from.`);
+  if(Number(factors.charlestonDiscipline||0)>=70)helped.push("You cut dead weight without damaging the best lane.");
+  if(!helped.length)helped.push("You kept the rack alive, but it still needed a sharper signal.");
 
-  if((ts.isolatedCount||0)>=4)heldBack.push(`${ts.isolatedCount} isolated tiles made the rack harder to trust.`);
-  if(Number(factors.deadnessRisk||0)>=55)heldBack.push("Deadness risk was still high, too much depended on exact future tiles.");
-  if(Number(factors.efficiency||0)<52)heldBack.push("The rack needed cleaner pair or group structure.");
-  if(iq.scoreSanity?.wasCapped)heldBack.push("The score was kept conservative because the rack still looked scattered.");
-  if(!heldBack.length)heldBack.push("The rack still needed one more clean draw before becoming a true commitment.");
+  if(Number(factors.pseudoFlexPenalty||0)>=14)heldBack.push("Too many medium-strength paths stayed alive.");
+  if((ts.isolatedCount||0)>=4)heldBack.push(`${ts.isolatedCount} isolated tiles kept the rack from compressing.`);
+  if(Number(factors.deadnessRisk||0)>=55)heldBack.push("Deadness risk was high. Too much depended on perfect future tiles.");
+  if(Number(factors.acceleration||0)<52)heldBack.push("The rack had ideas, but not enough speed.");
+  if(Number(factors.efficiency||0)<52)heldBack.push("Tile density was thin. Not enough pairs or groups were working together.");
+  if(iq.scoreSanity?.wasCapped)heldBack.push("The score stayed conservative because the rack still looked scattered.");
+  if(!heldBack.length)heldBack.push("One cleaner pickup would have made the lane easier to defend.");
 
   const expertRead=iq.expertRead?.summary||iq.coachingInsight||iq.directionExplanation||band.tone;
-  const nextMove=iq.tryNextTime||iq.coachNote||iq.expertRead?.timingLine||"Protect the best lane, keep the backup alive, and pass isolated tiles first.";
+  const nextMove=iq.tryNextTime||iq.coachNote||iq.expertRead?.timingLine||"Protect the lane that actually compresses. Stop babysitting weak backups.";
 
   return{band,best,backup,avoid,bestFit,backupFit,expertRead,helped:helped.slice(0,3),heldBack:heldBack.slice(0,3),nextMove};
-}
-
-function rkExpertTrustMetrics({struct,sectionReads=[],liveDirections=[]}){
-  const top=sectionReads[0]||null;
-  const second=sectionReads[1]||null;
-  const topScore=Number(top?.score||0);
-  const secondScore=Number(second?.score||0);
-  const gap=Math.max(0,topScore-secondScore);
-  const liveCount=(liveDirections||[]).length;
-  const maxGroup=rkMaxNaturalGroup(struct);
-  const bestSuit=Number(struct.suitEntries?.[0]?.[1]||0);
-  const secondSuit=Number(struct.suitEntries?.[1]?.[1]||0);
-  const thirdSuit=Number(struct.suitEntries?.[2]?.[1]||0);
-  const bestSame=Number(struct.bestSameNumber?.[1]||0);
-  const isolated=Number(struct.isolated?.length||0);
-  const grouped=(struct.pairs?.length||0)+(struct.pungs?.length||0)+(struct.kongs?.length||0);
-  const realGroups=(struct.pungs?.length||0)+(struct.kongs?.length||0);
-  const pairCount=Number(struct.pairs?.length||0);
-  const suitClarity=rkClamp(
-    18+
-    (bestSuit>=7?26:bestSuit>=6?20:bestSuit>=5?14:bestSuit>=4?8:0)+
-    (secondSuit>=3&&thirdSuit>=3?-18:thirdSuit>=2?-9:0)-
-    isolated*2
-  );
-  const compression=rkClamp(
-    10+
-    pairCount*7+
-    (struct.pungs?.length||0)*15+
-    (struct.kongs?.length||0)*20+
-    (struct.bestWindow?.depth||0)*6+
-    (struct.bestWindow?.dup||0)*6+
-    Math.min(maxGroup*7,24)+
-    (bestSame>=4?18:bestSame>=3?12:bestSame>=2?5:0)+
-    (bestSuit>=6?14:bestSuit>=5?8:0)-
-    isolated*8-
-    ((struct.honorTotal||0)>=4&&(struct.groupedHonor||0)===0?18:0)-
-    (secondSuit>=3&&thirdSuit>=2?12:0)
-  );
-  const convergence=rkClamp(
-    8+
-    topScore*.48+
-    gap*.80+
-    compression*.25+
-    suitClarity*.15+
-    (grouped>=3?10:grouped>=2?5:0)-
-    (liveCount>=5?24:liveCount>=4?16:liveCount>=3&&gap<12?8:0)-
-    isolated*4
-  );
-  const acceleration=rkClamp(
-    8+
-    realGroups*16+
-    pairCount*6+
-    (struct.bestWindow?.depth||0)*5+
-    (struct.bestWindow?.dup||0)*6+
-    Math.min(maxGroup*8,26)+
-    (bestSuit>=6?10:0)+
-    (struct.jokers||0)*4-
-    isolated*6-
-    (top?.id==="sp"&&(struct.jokers||0)>0?22:0)-
-    (top?.id==="q"&&(struct.jokers||0)<2?18:0)
-  );
-  const pseudoFlexPenalty=
-    (liveCount>=5?22:liveCount>=4?16:liveCount>=3&&gap<10?10:0)+
-    (topScore<56&&liveCount>=3?10:0)+
-    (secondSuit>=3&&thirdSuit>=3?10:0);
-  const deadWeightPenalty=
-    isolated*5+
-    ((struct.honorTotal||0)>=4&&(struct.groupedHonor||0)===0?16:0)+
-    (grouped===0?10:0)+
-    (top?.passengerCount>=5?10:top?.passengerCount>=4?6:0);
-  const deadnessRisk=rkClamp(
-    12+
-    isolated*8+
-    (grouped===0?18:grouped===1?8:0)+
-    ((struct.honorTotal||0)>=4&&(struct.groupedHonor||0)===0?20:0)+
-    (bestSuit<5&&secondSuit>=3&&thirdSuit>=2?14:0)+
-    (top?.id==="wd"&&(struct.groupedHonor||0)<2?14:0)+
-    (top?.id==="aln"&&bestSame<3?16:0)+
-    (top?.id==="q"&&(struct.jokers||0)<2?22:0)+
-    (top?.id==="sp"&&(struct.jokers||0)>0?22:0)+
-    pseudoFlexPenalty*.60
-  );
-  const eliteEligible=topScore>=76&&gap>=16&&compression>=82&&convergence>=78&&acceleration>=76&&deadnessRisk<=28&&isolated<=2&&(grouped>=3||realGroups>=1);
-  const strongEligible=topScore>=66&&gap>=10&&compression>=66&&convergence>=64&&acceleration>=58&&deadnessRisk<=44&&isolated<=4&&grouped>=2;
-  return{
-    top,second,topScore,secondScore,gap,liveCount,maxGroup,bestSuit,secondSuit,thirdSuit,bestSame,
-    isolated,grouped,realGroups,pairCount,suitClarity,compression,convergence,acceleration,
-    pseudoFlexPenalty,deadWeightPenalty,deadnessRisk,eliteEligible,strongEligible
-  };
-}
-
-function rkExpertCurveScore(raw){
-  // A deliberately disciplined curve. Average playable racks should not float into the 70s.
-  const centered=50+(Number(raw||0)-54)*0.66;
-  return Math.round(centered);
 }
 
 function rkExpertCharlestonCalibration({struct,sectionReads=[],liveDirections=[],shapeScore=0,tileEfficiency=0,commitmentClarity=0,flexibility=0,growthPotential=0,momentumStrength=0,passedTilesByRound=[],sectionId}){
@@ -3852,9 +3771,11 @@ function rkExpertCharlestonCalibration({struct,sectionReads=[],liveDirections=[]
   const summary=rkHumanExpertSummary({score,struct,top,deadness,passRead,compression:trust.compression,acceleration:trust.acceleration,gap});
   const expertNotes=[];
   if(top?.coachLine)expertNotes.push(top.coachLine);
-  if(top?.passengerTiles?.length)expertNotes.push(`Passengers: ${top.passengerTiles.slice(0,3).join(", ")} were not doing enough for ${top.name}.`);
-  if(deadness.reasons[0])expertNotes.push(`Risk: ${deadness.reasons[0]}.`);
-  if(trust.pseudoFlexPenalty>=16)expertNotes.push(`Several branches were alive in theory, but the rack lacked convergence.`);
+  if(top?.passengerTiles?.length)expertNotes.push(`Dead weight: ${top.passengerTiles.slice(0,3).join(", ")} were riding along without helping ${top.name}.`);
+  if(deadness.reasons[0])expertNotes.push(`Drift risk: ${deadness.reasons[0]}.`);
+  if(trust.pseudoFlexPenalty>=16)expertNotes.push(`Too many medium-strength paths stayed alive. That is flexibility without speed.`);
+  if((trust.acceleration||0)<52)expertNotes.push(`Acceleration was the issue. The rack had ideas, but no fast next step.`);
+  if((trust.compression||0)>=70)expertNotes.push(`Compression quality was strong. The rack had tiles working together.`);
   if(passRead.regret[0])expertNotes.push(passRead.regret[0]);
   else if(passRead.correct[0])expertNotes.push(passRead.correct[0]);
   if(top?.needs?.[0])expertNotes.push(`Still needed: ${top.needs[0]}.`);
@@ -3951,20 +3872,25 @@ function rkEvaluateCharlestonEngine({finalRack,startingRack=[],passedTilesByRoun
 }
 function rkHumanTableCopy(text=""){
   return String(text||"")
-    .replace(/your rack shows/gi,"your rack shows")
+    .replace(/maintains flexibility/gi,"kept too much alive")
+    .replace(/preserved optionality/gi,"protected options longer than necessary")
+    .replace(/aligns to multiple sections/gi,"touched multiple lanes without fully choosing one")
+    .replace(/multiple sections/gi,"multiple lanes")
+    .replace(/broad optionality/gi,"wide but not fast")
     .replace(/based on your tile distribution/gi,"from the tiles you kept")
-    .replace(/your passes suggest/gi,"your passes suggest")
+    .replace(/your passes suggest/gi,"your passes showed")
     .replace(/AI/gi,"Rackle")
-    .replace(/table read/gi,"table read")
-    .replace(/rack review/gi,"rack review")
-    .replace(/clearest lane/gi,"clearest lane")
-    .replace(/strongly leaning/gi,"strongly leaning")
-    .replace(/you should have/gi,"next time, try to")
+    .replace(/analyzer/gi,"table read")
+    .replace(/analysis/gi,"rack read")
     .replace(/optimal/gi,"cleanest")
-    .replace(/correct call/gi,"good table read")
-    .replace(/incorrect/gi,"hard to support")
+    .replace(/correct call/gi,"sharp table read")
+    .replace(/incorrect/gi,"hard to defend")
+    .replace(/recommendation/gi,"table read")
+    .replace(/confidence/gi,"trust")
+    .replace(/flexibility/gi,"lane control")
     .trim();
 }
+
 function rkRuleSafeScorecardLine(iq){
   if(iq?.jokerRuleOk===false)return "Rule check: a Joker appeared in the pass log. Rackle blocks Joker passes, so replay this rack before sharing.";
   if(iq?.charlestonRuleOk===false)return "Rule check: one Charleston pass looked off. Replay this rack before sharing.";
@@ -3986,20 +3912,20 @@ function StrategicCharlestonReadCard({iq}){
     <div className="rk-intuition-v9">
       <div className="rk-intuition-v9-head">
         <div>
-          <div className="rk-intuition-v9-kicker">Mahjong Intuition</div>
+          <div className="rk-intuition-v9-kicker">Table Wisdom</div>
           <h3 className="rk-intuition-v9-title">Your table read</h3>
         </div>
         <div className="rk-intuition-v9-pill">{state}</div>
       </div>
       <div className="rk-intuition-v9-main">
-        <div className="rk-intuition-v9-path">Best direction</div>
+        <div className="rk-intuition-v9-path">Best lane</div>
         <div className="rk-intuition-v9-direction">{direction}</div>
         <p className="rk-intuition-v9-sentence">{coach}</p>
       </div>
       <div className="rk-intuition-v9-grid">
         <div className="rk-intuition-v9-mini"><span>Shape</span><strong>{shape}</strong></div>
         <div className="rk-intuition-v9-mini"><span>Personality</span><strong>{personality}</strong></div>
-        <div className="rk-intuition-v9-mini"><span>Why it worked</span><strong>{why}</strong></div>
+        <div className="rk-intuition-v9-mini"><span>What worked</span><strong>{why}</strong></div>
         <div className="rk-intuition-v9-mini"><span>Pass review</span><strong>{passLine}</strong></div>
         <div className="rk-intuition-v9-mini"><span>Watch out</span><strong>{tension}</strong></div>
       </div>
@@ -7127,14 +7053,14 @@ function QualityPip({quality}){
 // SCORE BAR (all jade)
 function ScoreBar({label,score,max,note}){
   const titleMap={
-    "Direction Quality":"Direction",
-    "Tile Strength":"Tile Read",
-    "Pass Quality":"Passing",
-    "Timing Score":"Flow",
-    "Direction":"Direction",
-    "Tile Read":"Tile Read",
-    "Passing":"Passing",
-    "Flow":"Flow",
+    "Direction Quality":"Lane Quality",
+    "Tile Strength":"Tile Density",
+    "Pass Quality":"Pass Discipline",
+    "Timing Score":"Commitment Timing",
+    "Direction":"Lane",
+    "Tile Read":"Tile Density",
+    "Passing":"Pass Discipline",
+    "Flow":"Tempo",
   };
   const cleanLabel=titleMap[label]||label;
   const pct=Math.round(score/max*100);
@@ -7490,57 +7416,74 @@ function rkStyleReadForScorecard(styleName,score,trustRead){
   if(key.includes("focus")||key.includes("locked")){
     return {
       label:raw||"Focused Builder",
-      copy:`You saw the lane early and protected the tiles that mattered. Your rack was already pointing toward ${best}, so the strongest play was to keep the table read clean.`,
-      reasons:["Clear table read","Useful tiles worked together","Low noise after the Charleston"]
+      copy:`You saw ${best} early and did not over-shop the rack. Good commitment timing, as long as the density keeps showing up.`,
+      reasons:["Clear table read","Low drift risk","Better commitment timing"]
     };
   }
 
   if(key.includes("flex")){
     return {
-      label:raw||"Flexible Builder",
-      copy:"You kept more than one path alive without losing the rack. That made your Charleston playable, but the final shape still needed cleaner pairs or repeated tiles before it became dangerous.",
-      reasons:["Multiple lanes stayed open","Backup path was believable","Still needed cleaner structure"]
+      label:raw||"Flexible Watcher",
+      copy:"You kept the rack playable, but flexibility started to cost speed. The next step is cutting the weak backup before it steals space from the best lane.",
+      reasons:["Multiple lanes stayed alive","Compression was not finished","Speed needed to improve"]
     };
   }
 
-  if(key.includes("scatter")||key.includes("messy")){
+  if(key.includes("scatter")||key.includes("messy")||key.includes("chaos")){
     return {
       label:raw||"Scattered Watcher",
-      copy:"Your rack had clues, but they were pulling in a few directions. A strong player would use the next pick to cut noise and listen for the clearest lane.",
-      reasons:["Several loose tiles","No clean lane yet","Needed better tile compression"]
+      copy:"Too many medium-strength paths stayed alive. The rack looked flexible, but it never fully compressed.",
+      reasons:["High drift risk","Weak convergence","Dead weight stayed too long"]
     };
   }
 
   if(key.includes("thin")||numeric<50){
     return {
       label:raw||"Thin Rack",
-      copy:"This Charleston made you work. You had a few clues, but not enough depth to chase hard, so protecting useful shape mattered more than forcing a hand.",
-      reasons:["Limited tile depth","Few true keepers","Needed help from future picks"]
+      copy:"This Charleston made you work. You had clues, but not enough tile density or acceleration to trust a hard commitment.",
+      reasons:["Low tile density","Weak speed","Needed sharper cleanup"]
+    };
+  }
+
+  if(key.includes("aggressive")){
+    return {
+      label:raw||"Aggressive Builder",
+      copy:"You pushed the rack forward. That can be strong, but only when the lane has enough density to justify the commitment.",
+      reasons:["Early commitment","Upside chase","Needed proof of speed"]
+    };
+  }
+
+  if(key.includes("disciplined")||key.includes("clean")){
+    return {
+      label:raw||"Disciplined Passer",
+      copy:"You cut the noise cleanly. This is how good racks become readable after the Charleston.",
+      reasons:["Dead weight cleared","Best lane protected","Cleaner table read"]
     };
   }
 
   if(numeric>=80){
     return {
       label:raw||"Strong Builder",
-      copy:`You finished the Charleston with a real lane and a table read worth defending. Your rack had enough structure to keep building toward ${best}.`,
-      reasons:["Strong primary lane","Useful backup path","Clean post-Charleston shape"]
+      copy:`Strong shape. Real speed. ${best} was worth defending after the Charleston.`,
+      reasons:["Good compression","Clear direction","Fast next-step routes"]
     };
   }
 
   if(numeric>=65){
     return {
       label:raw||"Balanced Builder",
-      copy:"You played a steady Charleston. The rack had a believable direction, but the next few picks still needed to confirm the strongest lane.",
-      reasons:["Playable structure","Some flexibility remained","Needed one clearer signal"]
+      copy:"You had enough structure to keep playing, but the rack still needed a cleaner signal before full commitment.",
+      reasons:["Playable density","Some drift risk","Commitment still forming"]
     };
   }
 
   return {
-    label:raw||"Open Rack",
-    copy:"You kept the rack alive, but it was not ready to lock into one hand yet. The next move is to protect the strongest lane and avoid chasing the whole card.",
-    reasons:["Some useful tiles","Direction still forming","Avoid overcommitting too early"]
+    label:raw||"Table Reader",
+    copy:"You kept the hand alive, but the next move is discipline. Protect what compresses and release what only looks useful.",
+    reasons:["Some useful tiles","Direction still forming","Dead weight needed cutting"]
   };
 }
+
 
 function rkFriendlyDirectionName(direction){
   const raw=(direction||"").toString().trim();
@@ -7648,7 +7591,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const shareText=[
     `Rackle #${dayNum}`,
     `Score: ${score}`,
-    shareDirection?`Best direction: ${shareDirection}`:"",
+    shareDirection?`Best lane: ${shareDirection}`:"",
     shareRankLine,
     shareInsight,
     `Play today’s rack:`,
