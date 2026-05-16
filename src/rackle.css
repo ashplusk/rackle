@@ -18666,3 +18666,61 @@ footer p{
     max-width:31ch!important;
   }
 }
+
+/* Consistent Rackle tagline capitalization + sizing */
+.rk-startup-subtitle-v4,
+.rk-startup-hero-v42 .rk-startup-subtitle-v4,
+.rk-header-brand-tag-v75,
+.rk-inline-header-tag,
+.rk-gameplay-inline-tag-v200,
+.rk-gameplay-live-tag-v220{
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-size:13px!important;
+  line-height:1.15!important;
+  font-weight:500!important;
+  font-style:normal!important;
+  letter-spacing:1.25px!important;
+  text-transform:none!important;
+  color:#176B42!important;
+  opacity:.88!important;
+  white-space:nowrap!important;
+}
+
+.rk-startup-subtitle-v4,
+.rk-startup-hero-v42 .rk-startup-subtitle-v4{
+  margin-top:7px!important;
+  margin-bottom:10px!important;
+}
+
+.rk-header-brand-tag-v75{
+  margin-top:5px!important;
+}
+
+.rk-gameplay-inline-tag-v200,
+.rk-gameplay-live-tag-v220{
+  margin-top:5px!important;
+}
+
+@media (max-width:430px){
+  .rk-startup-subtitle-v4,
+  .rk-startup-hero-v42 .rk-startup-subtitle-v4,
+  .rk-header-brand-tag-v75,
+  .rk-inline-header-tag,
+  .rk-gameplay-inline-tag-v200,
+  .rk-gameplay-live-tag-v220{
+    font-size:12.5px!important;
+    letter-spacing:1.15px!important;
+  }
+}
+
+@media (max-width:370px){
+  .rk-startup-subtitle-v4,
+  .rk-startup-hero-v42 .rk-startup-subtitle-v4,
+  .rk-header-brand-tag-v75,
+  .rk-inline-header-tag,
+  .rk-gameplay-inline-tag-v200,
+  .rk-gameplay-live-tag-v220{
+    font-size:12px!important;
+    letter-spacing:1px!important;
+  }
+}

@@ -9247,7 +9247,7 @@ function RackleHeader({onBack,setScreen}){
         className="rk-header-logo-home-v60 rk-header-brand-v75"
       >
         <span className="rk-header-brand-title-v75">Rackle</span>
-        <span className="rk-header-brand-tag-v75">The daily Charleston ritual</span>
+        <span className="rk-header-brand-tag-v75">The Daily Charleston ritual</span>
       </button>
 
       <div className="rk-header-menu-wrap-v75">
@@ -11002,7 +11002,7 @@ function StreakCard({streak,streakBadge,bestIQ,clubName,onStats,firstName}){
 // ─── TOP BANNER ───────────────────────────────────────────────────────────────
 function TopBanner(){
   const messages=[
-    {label:"WELCOME",text:"The daily Charleston ritual Same hand. Every player. Every day."},
+    {label:"WELCOME",text:"The Daily Charleston ritual Same hand. Every player. Every day."},
     {label:"LIVE",text:"Same rack today. Every player gets one read."},
     {label:"TIP",text:"Jokers stay with you. They can’t be passed in the Charleston. Hold them and build around them."},
     {label:"TIP",text:"Flowers appear in most winning hands. Don't throw them away early."},
@@ -11521,7 +11521,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div className="rk-startup-hero-v4 rk-startup-hero-v42">
         <div className="rk-startup-mark-v4 rk-float">🀄</div>
         <h1 className="rk-startup-logo-v4">Rackle</h1>
-        <p className="rk-startup-subtitle-v4">The daily Charleston ritual</p>
+        <p className="rk-startup-subtitle-v4">The Daily Charleston ritual</p>
         <div className="rk-startup-pulse-pill-v41 rk-startup-pulse-pill-v42" aria-label="Today’s Rackle status">
           <span></span> {headerPill}
         </div>
@@ -12436,7 +12436,7 @@ function Game({mode,home,onDone,settings,setScreen,go}){
             <div className="rk-gameplay-inline-left-v200" aria-hidden="true">← Back</div>
             <div className="rk-gameplay-inline-brand-v200">
               <div className="rk-gameplay-inline-logo-v200">Rackle</div>
-              <div className="rk-inline-header-tag rk-gameplay-inline-tag-v200">The daily Charleston ritual</div>
+              <div className="rk-inline-header-tag rk-gameplay-inline-tag-v200">The Daily Charleston ritual</div>
             </div>
             <span className="rk-gameplay-inline-mode-v200">{mode==="daily"?`Daily #${dn}`:"Practice"}</span>
           </div>
@@ -12555,7 +12555,7 @@ function Game({mode,home,onDone,settings,setScreen,go}){
             <button onClick={()=>setShowLeave(true)} className="rk-gameplay-back-v220">← Back</button>
             <div className="rk-gameplay-live-brand-v220">
               <div className="rk-gameplay-live-logo-v220">Rackle</div>
-              <div className="rk-inline-header-tag rk-gameplay-live-tag-v220">The daily Charleston ritual</div>
+              <div className="rk-inline-header-tag rk-gameplay-live-tag-v220">The Daily Charleston ritual</div>
             </div>
             <div className="rk-gameplay-live-meta-v220">
               <span>{mode==="daily"?`Daily #${dn}`:"Practice"}</span>
