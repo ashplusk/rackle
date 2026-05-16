@@ -7309,15 +7309,15 @@ function rkFriendlyDirectionName(direction){
 function rkFriendlyDirectionDetail(direction, fallback){
   const raw=(direction||"").toString().trim();
   const key=raw.toLowerCase();
-  if(key.includes("like"))return "This means your rack is pointing toward the Like Numbers part of the card, where repeated numbers across suits matter more than a broad mix of tiles.";
-  if(key.includes("13579")||key.includes("odd"))return "This means your rack is leaning toward odd-number hands on the card. Protect useful 1s, 3s, 5s, 7s, and 9s before chasing loose tiles.";
-  if(key.includes("2468")||key.includes("even"))return "This means your rack is leaning toward even-number hands on the card. Look for clean 2s, 4s, 6s, and 8s that build together.";
-  if(key.includes("wind")||key.includes("dragon")||key.includes("honor"))return "This means the honors are doing enough work to keep Winds & Dragons in view, but only if you have real pairs or multiples.";
-  if(key.includes("quint"))return "This means your rack has enough repeated tile potential to keep a Quints path alive, usually with joker support.";
-  if(key.includes("consecutive")||key.includes("run"))return "This means your rack has connected numbers that could build into a Consecutive Run hand.";
-  if(key.includes("singles")||key.includes("pairs"))return "This means your rack is closer to a Singles & Pairs shape, where exact tiles matter and jokers cannot help.";
-  if(key.includes("2026"))return "This means your rack has enough 2026 structure to keep that section in view.";
-  return fallback||"This is the clearest part of the NMJL card your rack is pointing toward right now.";
+  if(key.includes("like"))return "This points toward the Like Numbers section, where repeated numbers across suits matter more than a broad mix of tiles.";
+  if(key.includes("13579")||key.includes("odd"))return "This points toward the 13579 section. Protect useful 1s, 3s, 5s, 7s, and 9s before chasing loose tiles.";
+  if(key.includes("2468")||key.includes("even"))return "This points toward the 2468 section. Look for clean 2s, 4s, 6s, and 8s that build together.";
+  if(key.includes("wind")||key.includes("dragon")||key.includes("honor"))return "This points toward Winds & Dragons, but only if your honors have real pair or multiple support.";
+  if(key.includes("quint"))return "This points toward Quints, usually when repeated tiles and joker support are doing enough work.";
+  if(key.includes("consecutive")||key.includes("run"))return "This points toward Consecutive Run hands, where connected numbers can build together.";
+  if(key.includes("singles")||key.includes("pairs"))return "This points toward Singles & Pairs, where exact tiles matter and jokers cannot help.";
+  if(key.includes("2026"))return "This points toward the 2026 section if your numbered tiles and soaps are doing enough work.";
+  return fallback||"This is the clearest NMJL card direction your rack is showing right now.";
 }
 
 function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onHome,onPractice,onCoachMode,setScreen,resultTime=0}){
@@ -7325,6 +7325,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const [globalEntries,setGlobalEntries]=useState([]);
   const [clubEntries,setClubEntries]=useState([]);
   const [showDetails,setShowDetails]=useState(false);
+  const [showStartingRack,setShowStartingRack]=useState(false);
   if(!iq)return null;
 
   useEffect(()=>{
@@ -7352,14 +7353,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       setAnimatedScore(next);
       if(progress>=1){clearInterval(timer);setAnimatedScore(target);}
     },interval);
-  
-  const [showStartingRack,setShowStartingRack]=useState(false);
-  const glanceBestName=rkFriendlyDirectionName(trustRead.best||shareDirection);
-  const glanceBestDetail=rkFriendlyDirectionDetail(trustRead.best||shareDirection,trustRead.bestFit);
-  const glanceBackupName=rkFriendlyDirectionName(trustRead.backup);
-  const glanceBackupDetail=rkFriendlyDirectionDetail(trustRead.backup,trustRead.backupFit);
-  const rackToShow=showStartingRack&&startingRack&&startingRack.length?startingRack:hand;
-  return()=>clearInterval(timer);
+    return()=>clearInterval(timer);
   },[score]);
   const time=Number(resultTime||iq.timeSecs||iq.time_secs||iq.totalTime||iq.time||0);
   const timeLabel=time?fT(Math.round(time)):"—";
@@ -7444,6 +7438,12 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     );
   };
 
+
+  const glanceBestName=rkFriendlyDirectionName(trustRead.best||shareDirection);
+  const glanceBestDetail=rkFriendlyDirectionDetail(trustRead.best||shareDirection,trustRead.bestFit);
+  const glanceBackupName=rkFriendlyDirectionName(trustRead.backup);
+  const glanceBackupDetail=rkFriendlyDirectionDetail(trustRead.backup,trustRead.backupFit);
+  const rackToShow=showStartingRack&&startingRack&&startingRack.length?startingRack:hand;
   return(
     <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26 rk-scorecard-clean-v120" style={{paddingBottom:32}}>
       <section className="rk-daily-scorecard-homeclone-v45 rk-home-scorecard-v41" aria-label="Daily Rackle scorecard">
