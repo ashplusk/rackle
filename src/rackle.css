@@ -19675,3 +19675,8 @@ footer p{
   transform:scale(.988)!important;
   filter:saturate(1.05)!important;
 }
+
+/* Scorecard single-render guard */
+.rk-game-scorecard-single-v990{
+  display:block!important;
+}

@@ -12552,36 +12552,47 @@ function Game({mode,home,onDone,settings,setScreen,go}){
     }
   };
 
-  return(
-    <div style={{...S.pg,position:"relative",minHeight:"100vh"}} className="rk-pg">
-      {phase==="result"&&(iqResult||iqResultRef.current)&&(
-        <IQScorecard
-          iq={iqResult||iqResultRef.current}
-          hand={(scoreResultRef.current?.finalRack)||hand}
-          startingRack={(scoreResultRef.current?.startingRack)||(startingRack&&startingRack.length?startingRack:hand)}
-          passLog={rkSanitizePassLog((scoreResultRef.current?.passLog)||passLog)}
-          isDaily={mode==="daily"}
-          dayNum={dn}
-          section={scoreResultRef.current?.section||""}
-          chosenSec={scoreResultRef.current?.chosenSec||chosenSecRef.current||chosenSec}
-          chosenHand={scoreResultRef.current?.chosenHand||chosenHand}
-          allSections={scoreResultRef.current?.allSections||ev(hand)}
-          onHome={home}
-          onDealAgain={restart}
-          onPractice={()=>go?go("free"):home()}
-          setScreen={setScreen}
-        />
-      )}
-      {phase==="result"&&!(iqResult||iqResultRef.current)&&(
+  if(phase==="result"){
+    const resolvedIq=iqResult||iqResultRef.current;
+    const resolvedResult=scoreResultRef.current||{};
+    if(resolvedIq){
+      return(
+        <div style={{...S.pg,position:"relative",minHeight:"100vh"}} className="rk-pg rk-game-scorecard-single-v990">
+          <IQScorecard
+            iq={resolvedIq}
+            hand={resolvedResult.finalRack||hand}
+            startingRack={resolvedResult.startingRack||(startingRack&&startingRack.length?startingRack:hand)}
+            passLog={rkSanitizePassLog(resolvedResult.passLog||passLog)}
+            isDaily={mode==="daily"}
+            dayNum={dn}
+            section={resolvedResult.section||""}
+            chosenSec={resolvedResult.chosenSec||chosenSecRef.current||chosenSec}
+            chosenHand={resolvedResult.chosenHand||chosenHand}
+            allSections={resolvedResult.allSections||ev(hand)}
+            onHome={home}
+            onDealAgain={restart}
+            onPractice={()=>go?go("free"):home()}
+            setScreen={setScreen}
+          />
+        </div>
+      );
+    }
+    return(
+      <div style={{...S.pg,position:"relative",minHeight:"100vh"}} className="rk-pg">
         <div className="rk-score-round-fallback-v700">
           <RackleHeader onBack={home} setScreen={setScreen}/>
           <div className="rk-score-round-fallback-card-v700">
             <strong>Scorecard loading</strong>
-            <p>Your rack was scored, but the scorecard data was not ready. Go back home and open your scorecard from today’s result.</p>
+            <p>Your rack was scored, but the scorecard data was not ready. Go back home and open today’s scorecard again.</p>
             <button type="button" onClick={home}>Back home</button>
           </div>
         </div>
-      )}
+      </div>
+    );
+  }
+
+  return(
+    <div style={{...S.pg,position:"relative",minHeight:"100vh"}} className="rk-pg">
       {phase==="deal"&&hand.length>0&&(
         <>
           {!ready&&<ReadyOverlay mode={mode} dayNum={dn} onReady={()=>setReady(true)} onHome={home}/>}
