@@ -13360,3 +13360,978 @@ body,
     font-size:18px!important;
   }
 }
+
+/* Launch polish: supporting pages + homepage practice/learn cards */
+
+/* Shared page rhythm */
+.rk-howto-v40,
+.rk-handbrowser-v40,
+.rk-cardguide-polish-v1{
+  padding-left:18px!important;
+  padding-right:18px!important;
+  padding-bottom:58px!important;
+}
+
+/* How to Play and Hand Browser hero cards */
+.rk-howto-v40-hero,
+.rk-handbrowser-v40-hero{
+  position:relative!important;
+  overflow:hidden!important;
+  margin:10px 0 14px!important;
+  padding:20px 18px!important;
+  border-radius:28px!important;
+  background:
+    radial-gradient(circle at 90% 10%, rgba(243,212,107,.12), transparent 30%),
+    linear-gradient(145deg,#071E13 0%,#123B24 56%,#07180F 100%)!important;
+  border:1px solid rgba(243,212,107,.20)!important;
+  box-shadow:
+    0 18px 42px rgba(7,30,19,.18),
+    inset 0 1px 0 rgba(255,255,255,.12),
+    inset 0 -1px 0 rgba(0,0,0,.20)!important;
+}
+
+.rk-howto-v40-hero:before,
+.rk-handbrowser-v40-hero:before{
+  content:""!important;
+  position:absolute!important;
+  top:0!important;
+  left:24px!important;
+  right:24px!important;
+  height:2px!important;
+  border-radius:999px!important;
+  background:linear-gradient(90deg,transparent,rgba(243,212,107,.72),transparent)!important;
+}
+
+.rk-howto-v40-kicker,
+.rk-handbrowser-v40-kicker{
+  display:inline-flex!important;
+  width:max-content!important;
+  max-width:100%!important;
+  margin:0 0 14px!important;
+  padding:7px 11px!important;
+  border-radius:999px!important;
+  background:rgba(255,248,232,.08)!important;
+  border:1px solid rgba(255,248,232,.12)!important;
+  color:#F3D46B!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:8.5px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  letter-spacing:1.7px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-howto-v40-hero h1,
+.rk-handbrowser-v40-hero h1{
+  margin:0 0 8px!important;
+  color:#FFF8E8!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:30px!important;
+  line-height:1.04!important;
+  font-weight:900!important;
+  letter-spacing:-.65px!important;
+}
+
+.rk-howto-v40-hero p,
+.rk-handbrowser-v40-hero p{
+  max-width:560px!important;
+  margin:0!important;
+  color:rgba(255,248,232,.74)!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:13.5px!important;
+  line-height:1.52!important;
+  font-weight:750!important;
+}
+
+/* How to Play flow */
+.rk-howto-v42-flow{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:10px!important;
+  margin-top:16px!important;
+}
+
+.rk-howto-v42-flow-step{
+  padding:13px!important;
+  border-radius:18px!important;
+  background:rgba(255,248,232,.08)!important;
+  border:1px solid rgba(255,248,232,.12)!important;
+  text-align:left!important;
+}
+
+.rk-howto-v42-flow-step b{
+  display:inline-flex!important;
+  min-height:24px!important;
+  padding:0 8px!important;
+  align-items:center!important;
+  border-radius:999px!important;
+  background:rgba(243,212,107,.12)!important;
+  color:#F3D46B!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:8px!important;
+  font-weight:900!important;
+  letter-spacing:1.2px!important;
+}
+
+.rk-howto-v42-flow-step strong{
+  display:block!important;
+  margin-top:9px!important;
+  color:#FFF8E8!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:17px!important;
+  line-height:1.1!important;
+  font-weight:900!important;
+}
+
+.rk-howto-v42-flow-step span{
+  display:block!important;
+  margin-top:5px!important;
+  color:rgba(255,248,232,.68)!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:11.5px!important;
+  line-height:1.35!important;
+  font-weight:700!important;
+}
+
+/* Supporting page white cards */
+.rk-howto-v40-card,
+.rk-howto-v40-scorecard-preview,
+.rk-handbrowser-v40-sections,
+.rk-handbrowser-v40-section-note,
+.rk-handbrowser-v40-dragon-card,
+.rk-handbrowser-v40-empty,
+.rk-cardguide-polish-v1 .rk-row-card{
+  position:relative!important;
+  overflow:hidden!important;
+  border-radius:26px!important;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(243,212,107,.08), transparent 30%),
+    linear-gradient(145deg,#FFFDF8 0%,#F7F0E4 100%)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:
+    0 12px 30px rgba(26,20,16,.045),
+    inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+
+.rk-howto-v40-card,
+.rk-howto-v40-scorecard-preview,
+.rk-handbrowser-v40-sections,
+.rk-handbrowser-v40-section-note,
+.rk-handbrowser-v40-dragon-card,
+.rk-handbrowser-v40-empty{
+  padding:18px!important;
+  margin-bottom:12px!important;
+}
+
+.rk-howto-v40-card:before,
+.rk-howto-v40-scorecard-preview:before,
+.rk-handbrowser-v40-sections:before,
+.rk-handbrowser-v40-dragon-card:before,
+.rk-handbrowser-v40-empty:before{
+  content:""!important;
+  position:absolute!important;
+  top:0!important;
+  left:22px!important;
+  right:22px!important;
+  height:2px!important;
+  border-radius:999px!important;
+  background:linear-gradient(90deg,transparent,rgba(243,212,107,.66),transparent)!important;
+}
+
+/* Page section headings */
+.rk-howto-v40-card-head span,
+.rk-handbrowser-v40-section-head span,
+.rk-handbrowser-v40-card-head span,
+.rk-handbrowser-v40-results-head span{
+  display:inline-flex!important;
+  width:max-content!important;
+  max-width:100%!important;
+  margin:0 0 12px!important;
+  padding:7px 10px!important;
+  border-radius:999px!important;
+  background:rgba(18,59,36,.075)!important;
+  border:1px solid rgba(18,59,36,.14)!important;
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:8.5px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  letter-spacing:1.6px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-howto-v40-card-head h2,
+.rk-handbrowser-v40-card-head h2,
+.rk-handbrowser-v40-results-head h2,
+.rk-handbrowser-v40-section-head strong,
+.rk-howto-v40-scorecard-preview h2,
+.rk-handbrowser-v40-empty h2{
+  margin:0!important;
+  color:#1A1410!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:22px!important;
+  line-height:1.08!important;
+  font-weight:900!important;
+  letter-spacing:-.35px!important;
+}
+
+.rk-howto-v40-scorecard-preview p,
+.rk-handbrowser-v40-empty p{
+  margin:8px 0 0!important;
+  color:#6B6157!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:13px!important;
+  line-height:1.5!important;
+  font-weight:750!important;
+}
+
+/* How to Play step cards */
+.rk-howto-v40-steps{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:10px!important;
+}
+
+.rk-howto-v40-step{
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr)!important;
+  gap:12px!important;
+  align-items:start!important;
+  padding:14px!important;
+  border-radius:20px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.065)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+
+.rk-howto-v40-num{
+  width:34px!important;
+  height:34px!important;
+  border-radius:14px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#123B24!important;
+  color:#F3D46B!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:14px!important;
+  font-weight:900!important;
+}
+
+.rk-howto-v40-step em{
+  display:block!important;
+  margin-bottom:5px!important;
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:8px!important;
+  font-style:normal!important;
+  font-weight:900!important;
+  letter-spacing:1.4px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-howto-v40-step h3{
+  margin:0 0 6px!important;
+  color:#1A1410!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:18px!important;
+  line-height:1.1!important;
+  font-weight:900!important;
+  letter-spacing:-.2px!important;
+}
+
+.rk-howto-v40-step p{
+  margin:0!important;
+  color:#5F564E!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:12.5px!important;
+  line-height:1.48!important;
+  font-weight:750!important;
+}
+
+/* How to Play rules */
+.rk-howto-v40-rule-grid{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:10px!important;
+}
+
+.rk-howto-v40-rule{
+  padding:14px!important;
+  border-radius:20px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.065)!important;
+}
+
+.rk-howto-v40-rule > div{
+  width:36px!important;
+  height:36px!important;
+  border-radius:14px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:rgba(18,59,36,.08)!important;
+  border:1px solid rgba(18,59,36,.14)!important;
+  font-size:18px!important;
+  margin-bottom:10px!important;
+}
+
+.rk-howto-v40-rule h3{
+  margin:0 0 6px!important;
+  color:#1A1410!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:18px!important;
+  font-weight:900!important;
+  letter-spacing:-.2px!important;
+}
+
+.rk-howto-v40-rule p{
+  margin:0!important;
+  color:#5F564E!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:12.5px!important;
+  line-height:1.48!important;
+  font-weight:750!important;
+}
+
+.rk-howto-v40-scorecard-preview{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:14px!important;
+  align-items:center!important;
+}
+
+.rk-howto-v40-score-badge{
+  width:62px!important;
+  height:62px!important;
+  border-radius:22px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#123B24!important;
+  color:#F3D46B!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:28px!important;
+  font-weight:900!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+
+.rk-howto-v40-actions{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:10px!important;
+  margin:12px 0 14px!important;
+}
+
+.rk-howto-v40-actions button{
+  min-height:56px!important;
+  border-radius:20px!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  background:linear-gradient(145deg,#FFFDF8 0%,#F1E7D5 100%)!important;
+  color:#1A1410!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:17px!important;
+  font-weight:900!important;
+  cursor:pointer!important;
+  box-shadow:0 10px 24px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+
+.rk-howto-v40-actions button:first-child{
+  background:linear-gradient(180deg,#176B42 0%,#0D432A 100%)!important;
+  color:#FFF8E8!important;
+  border:1px solid rgba(243,212,107,.28)!important;
+}
+
+/* Hand Browser filters and section cards */
+.rk-handbrowser-v40-quickbar{
+  display:flex!important;
+  gap:8px!important;
+  margin:0 0 12px!important;
+}
+
+.rk-handbrowser-v40-quickbar button{
+  min-height:40px!important;
+  padding:0 12px!important;
+  border-radius:999px!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  background:#FFFDF8!important;
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:11px!important;
+  font-weight:900!important;
+  cursor:pointer!important;
+}
+
+.rk-handbrowser-v40-quickbar button.active{
+  background:#123B24!important;
+  color:#FFF8E8!important;
+  border-color:rgba(243,212,107,.24)!important;
+}
+
+.rk-handbrowser-v40-quickbar button.clear{
+  color:#6B6157!important;
+}
+
+.rk-handbrowser-v40-section-grid{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:9px!important;
+  margin-top:14px!important;
+}
+
+.rk-handbrowser-v40-section{
+  width:100%!important;
+  min-height:64px!important;
+  padding:12px!important;
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr)!important;
+  gap:12px!important;
+  align-items:center!important;
+  text-align:left!important;
+  border-radius:18px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.065)!important;
+  cursor:pointer!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+
+.rk-handbrowser-v40-section.active{
+  background:linear-gradient(145deg,#123B24,#0D432A)!important;
+  border-color:rgba(243,212,107,.22)!important;
+}
+
+.rk-handbrowser-v40-section-icon{
+  width:40px!important;
+  height:40px!important;
+  border-radius:15px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:rgba(18,59,36,.08)!important;
+  border:1px solid rgba(18,59,36,.12)!important;
+  font-size:18px!important;
+}
+
+.rk-handbrowser-v40-section.active .rk-handbrowser-v40-section-icon{
+  background:rgba(255,248,232,.10)!important;
+  border-color:rgba(255,248,232,.16)!important;
+}
+
+.rk-handbrowser-v40-section-copy strong{
+  display:block!important;
+  color:#1A1410!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:17px!important;
+  line-height:1.1!important;
+  font-weight:900!important;
+  letter-spacing:-.2px!important;
+}
+
+.rk-handbrowser-v40-section-copy em{
+  display:block!important;
+  margin-top:5px!important;
+  color:#6B6157!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:11px!important;
+  line-height:1.25!important;
+  font-weight:750!important;
+  font-style:normal!important;
+}
+
+.rk-handbrowser-v40-section.active .rk-handbrowser-v40-section-copy strong{
+  color:#FFF8E8!important;
+}
+
+.rk-handbrowser-v40-section.active .rk-handbrowser-v40-section-copy em{
+  color:rgba(255,248,232,.68)!important;
+}
+
+.rk-handbrowser-v40-section-note div{
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr)!important;
+  gap:10px!important;
+  align-items:start!important;
+}
+
+.rk-handbrowser-v40-section-note span{
+  width:38px!important;
+  height:38px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border-radius:14px!important;
+  background:rgba(18,59,36,.08)!important;
+  border:1px solid rgba(18,59,36,.14)!important;
+  font-size:18px!important;
+}
+
+.rk-handbrowser-v40-section-note strong{
+  color:#1A1410!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:18px!important;
+  font-weight:900!important;
+}
+
+.rk-handbrowser-v40-section-note p{
+  grid-column:2!important;
+  margin:-14px 0 0!important;
+  color:#5F564E!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:12.5px!important;
+  line-height:1.45!important;
+  font-weight:750!important;
+}
+
+/* Hand Browser dragon guide and results */
+.rk-handbrowser-v40-dragon-grid{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:8px!important;
+}
+
+.rk-handbrowser-v40-dragon{
+  padding:10px!important;
+  border-radius:16px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.06)!important;
+  display:grid!important;
+  grid-template-columns:auto 1fr auto!important;
+  gap:10px!important;
+  align-items:center!important;
+}
+
+.rk-handbrowser-v40-dragon strong{
+  color:#1A1410!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:16px!important;
+  font-weight:900!important;
+}
+
+.rk-handbrowser-v40-dragon span{
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:11px!important;
+  font-weight:900!important;
+}
+
+.rk-handbrowser-v40-results-head{
+  margin:12px 0 10px!important;
+  padding:0 2px!important;
+}
+
+.rk-handbrowser-v40-results-list{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:10px!important;
+}
+
+.rk-hand-card{
+  border-radius:20px!important;
+  overflow:hidden!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 8px 20px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+
+.rk-hand-card-open{
+  border-color:rgba(23,107,66,.20)!important;
+}
+
+.rk-hand-card > button{
+  min-height:62px!important;
+  padding:14px!important;
+}
+
+.rk-handbrowser-v40-load,
+.rk-handbrowser-v40-empty button{
+  width:100%!important;
+  min-height:54px!important;
+  margin-top:8px!important;
+  border-radius:19px!important;
+  border:1px solid rgba(243,212,107,.28)!important;
+  background:linear-gradient(180deg,#176B42 0%,#0D432A 100%)!important;
+  color:#FFF8E8!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:16px!important;
+  font-weight:900!important;
+  cursor:pointer!important;
+  box-shadow:0 12px 26px rgba(13,67,42,.20),inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+
+/* Legacy Card Guide screen */
+.rk-cardguide-polish-v1 > div:nth-child(2){
+  margin-top:10px!important;
+  margin-bottom:14px!important;
+}
+
+.rk-cardguide-polish-v1 input{
+  min-height:44px!important;
+  border-radius:16px!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  background:#FFFDF8!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82),0 8px 20px rgba(26,20,16,.035)!important;
+}
+
+.rk-cardguide-polish-v1 .rk-row-card{
+  margin-bottom:10px!important;
+  border-radius:22px!important;
+  padding:15px!important;
+}
+
+/* Homepage: Free Playroom */
+.rk-freeplay-v24.rk-freeplay-v40{
+  position:relative!important;
+  overflow:hidden!important;
+  padding:20px!important;
+  border-radius:28px!important;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(243,212,107,.10), transparent 30%),
+    linear-gradient(145deg,#FFFDF8 0%,#F7F0E4 100%)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:
+    0 12px 30px rgba(26,20,16,.045),
+    inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+
+.rk-freeplay-v24.rk-freeplay-v40:before,
+.rk-learn-home-v19:before{
+  content:""!important;
+  position:absolute!important;
+  top:0!important;
+  left:24px!important;
+  right:24px!important;
+  height:2px!important;
+  border-radius:999px!important;
+  background:linear-gradient(90deg,transparent,rgba(243,212,107,.70),transparent)!important;
+}
+
+.rk-freeplay-v40-top{
+  gap:16px!important;
+  align-items:center!important;
+}
+
+.rk-freeplay-v24-kicker{
+  width:max-content!important;
+  margin-bottom:12px!important;
+  padding:7px 10px!important;
+  border-radius:999px!important;
+  background:rgba(18,59,36,.075)!important;
+  border:1px solid rgba(18,59,36,.14)!important;
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:8.5px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:1.6px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-freeplay-v40-copy h2{
+  margin:0 0 8px!important;
+  color:#1A1410!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:24px!important;
+  line-height:1.05!important;
+  font-weight:900!important;
+  letter-spacing:-.4px!important;
+}
+
+.rk-freeplay-v40-copy p{
+  margin:0!important;
+  color:#6B6157!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:13px!important;
+  line-height:1.5!important;
+  font-weight:750!important;
+}
+
+.rk-freeplay-v40-preview{
+  flex-shrink:0!important;
+  padding:10px!important;
+  border-radius:22px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.06)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+
+.rk-freeplay-v40-tiles{
+  display:flex!important;
+  gap:5px!important;
+  align-items:flex-end!important;
+}
+
+.rk-freeplay-v40-tile{
+  transform:none!important;
+  margin:0!important;
+}
+
+.rk-freeplay-v40-steps{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:8px!important;
+  margin:15px 0!important;
+}
+
+.rk-freeplay-v40-steps div{
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr)!important;
+  gap:10px!important;
+  align-items:center!important;
+  padding:10px!important;
+  border-radius:16px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.055)!important;
+}
+
+.rk-freeplay-v40-steps strong{
+  width:28px!important;
+  height:28px!important;
+  border-radius:999px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#123B24!important;
+  color:#F3D46B!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:13px!important;
+  font-weight:900!important;
+}
+
+.rk-freeplay-v40-steps b{
+  color:#1A1410!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:15px!important;
+  font-weight:900!important;
+}
+
+.rk-freeplay-v40-steps small{
+  display:block!important;
+  margin-top:2px!important;
+  color:#6B6157!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:11px!important;
+  font-weight:750!important;
+  line-height:1.35!important;
+}
+
+.rk-freeplay-v24-cta{
+  min-height:56px!important;
+  border-radius:20px!important;
+  background:linear-gradient(180deg,#176B42 0%,#0D432A 100%)!important;
+  border:1px solid rgba(243,212,107,.28)!important;
+  color:#FFF8E8!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:17px!important;
+  font-weight:900!important;
+  box-shadow:0 12px 26px rgba(13,67,42,.20),inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+
+/* Homepage: Learn + Explore */
+.rk-learn-home-v19{
+  position:relative!important;
+  overflow:hidden!important;
+  padding:20px!important;
+  border-radius:28px!important;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(23,107,66,.08), transparent 30%),
+    linear-gradient(145deg,#FFFDF8 0%,#F7F0E4 100%)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:
+    0 12px 30px rgba(26,20,16,.045),
+    inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+
+.rk-learn-home-v18-head{
+  margin-bottom:15px!important;
+}
+
+.rk-learn-home-v18-kicker{
+  width:max-content!important;
+  margin-bottom:12px!important;
+  padding:7px 10px!important;
+  border-radius:999px!important;
+  background:rgba(18,59,36,.075)!important;
+  border:1px solid rgba(18,59,36,.14)!important;
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:8.5px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  letter-spacing:1.6px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-learn-home-v18-title{
+  margin:0 0 8px!important;
+  color:#1A1410!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:24px!important;
+  line-height:1.05!important;
+  font-weight:900!important;
+  letter-spacing:-.4px!important;
+}
+
+.rk-learn-home-v18-copy{
+  margin:0!important;
+  color:#6B6157!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:13px!important;
+  line-height:1.5!important;
+  font-weight:750!important;
+}
+
+.rk-learn-home-v18-grid{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:9px!important;
+}
+
+.rk-learn-home-v18-card{
+  width:100%!important;
+  min-height:60px!important;
+  padding:12px!important;
+  border-radius:18px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.065)!important;
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr) auto!important;
+  gap:12px!important;
+  align-items:center!important;
+  text-align:left!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+
+.rk-learn-home-v18-icon{
+  width:36px!important;
+  height:36px!important;
+  border-radius:14px!important;
+  background:rgba(18,59,36,.08)!important;
+  border:1px solid rgba(18,59,36,.14)!important;
+  color:#176B42!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:13px!important;
+  font-weight:900!important;
+}
+
+.rk-learn-home-v18-text strong{
+  display:block!important;
+  color:#1A1410!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:16.5px!important;
+  line-height:1.08!important;
+  font-weight:900!important;
+  letter-spacing:-.2px!important;
+}
+
+.rk-learn-home-v18-text span{
+  display:block!important;
+  margin-top:4px!important;
+  color:#6B6157!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:11.5px!important;
+  line-height:1.35!important;
+  font-weight:750!important;
+}
+
+.rk-learn-home-v18-arrow{
+  width:30px!important;
+  height:30px!important;
+  border-radius:999px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#176B42!important;
+  color:#FFF8E8!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:17px!important;
+  font-weight:900!important;
+}
+
+/* Mobile tuning */
+@media (max-width:430px){
+  .rk-howto-v40,
+  .rk-handbrowser-v40,
+  .rk-cardguide-polish-v1{
+    padding-left:16px!important;
+    padding-right:16px!important;
+  }
+
+  .rk-howto-v40-hero,
+  .rk-handbrowser-v40-hero,
+  .rk-freeplay-v24.rk-freeplay-v40,
+  .rk-learn-home-v19{
+    border-radius:25px!important;
+    padding:18px!important;
+  }
+
+  .rk-howto-v40-hero h1,
+  .rk-handbrowser-v40-hero h1{
+    font-size:26px!important;
+  }
+
+  .rk-howto-v42-flow{
+    grid-template-columns:1fr!important;
+  }
+
+  .rk-howto-v40-scorecard-preview{
+    grid-template-columns:1fr!important;
+  }
+
+  .rk-howto-v40-score-badge{
+    width:56px!important;
+    height:56px!important;
+    border-radius:20px!important;
+    font-size:25px!important;
+  }
+
+  .rk-freeplay-v40-top{
+    flex-direction:column!important;
+    align-items:flex-start!important;
+  }
+
+  .rk-freeplay-v40-preview{
+    width:100%!important;
+  }
+
+  .rk-freeplay-v40-tiles{
+    justify-content:center!important;
+    overflow:hidden!important;
+  }
+
+  .rk-freeplay-v40-copy h2,
+  .rk-learn-home-v18-title,
+  .rk-howto-v40-card-head h2,
+  .rk-handbrowser-v40-card-head h2,
+  .rk-handbrowser-v40-results-head h2,
+  .rk-handbrowser-v40-section-head strong{
+    font-size:21px!important;
+  }
+
+  .rk-handbrowser-v40-quickbar{
+    flex-wrap:wrap!important;
+  }
+
+  .rk-handbrowser-v40-quickbar button{
+    flex:1 1 auto!important;
+  }
+}
+
+@media (max-width:370px){
+  .rk-howto-v40,
+  .rk-handbrowser-v40,
+  .rk-cardguide-polish-v1{
+    padding-left:14px!important;
+    padding-right:14px!important;
+  }
+
+  .rk-freeplay-v40-tiles{
+    gap:3px!important;
+  }
+
+  .rk-learn-home-v18-text strong{
+    font-size:15.5px!important;
+  }
+}
