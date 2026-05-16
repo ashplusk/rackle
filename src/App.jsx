@@ -11615,7 +11615,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const globalValue=globalRankForScore?`#${globalRankForScore}`:"—";
     const clubValue=club?(shownClubRank?`#${shownClubRank}`:(hasClubScore?"live":"club")):"join";
     return(
-    <section className="rk-home-scorecard-v41 rk-home-section-lg rk-score-reveal-v250 rk-home-score-reveal-v250" aria-label="Your Daily Rackle scorecard">
+    <section className="rk-home-scorecard-v41 rk-home-section-lg rk-score-reveal-v250 rk-home-score-reveal-v250 rk-scorecard-preview-optimized-v600" aria-label="Your Daily Rackle scorecard">
       <div role="button" tabIndex={0} onClick={showScorecard} onKeyDown={(e)=>{if(e.key==="Enter"||e.key===" ")showScorecard();}} className="rk-home-scorecard-v41-main" aria-label="Open your full scorecard">
         <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
         <div className="rk-home-scorecard-v41-kicker"><span/> Today’s Table Read · #{dn}</div>
