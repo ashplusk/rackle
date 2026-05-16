@@ -3152,17 +3152,6 @@ function rkHumanExpertSummary({score,struct,top,deadness,passRead,compression,ac
   if(deadness?.reasons?.[0])return `Thin rack. ${deadness.reasons[0]} kept it from accelerating.`;
   return `Drifting rack. Too much shape was still theoretical after the Charleston.`;
 }
-){
-  const topName=top?.name||"the best lane";
-  const bestWindow=struct.bestWindow?`${RK_SUIT_NAMES[struct.bestWindow.suit]} ${struct.bestWindow.nums[0]}-${struct.bestWindow.nums[2]}`:null;
-  if(score>=82)return bestWindow?`Monster rack. The ${bestWindow} window was compressed, fast, and hard to ignore.`:`Monster rack. The shape was compressed, efficient, and already dangerous.`;
-  if(score>=70)return `Excellent Charleston. ${topName} was not just possible, it was accelerating.`;
-  if(score>=60)return `Strong rack, but not automatic. ${topName} had shape, while a few passengers still slowed it down.`;
-  if(score>=50)return `Playable read. ${topName} stayed alive, but it needed cleaner compression before it became scary.`;
-  if(score>=40)return `Still alive, but fragile. The rack had clues without enough depth yet.`;
-  if(deadness?.reasons?.[0])return `Thin rack. ${deadness.reasons[0]} kept it from accelerating.`;
-  return `Drifting rack. Too much shape was still theoretical after the Charleston.`;
-}
 function rkExpertTimingLine({struct,top,score,liveDirections=[]}){
   if(struct.bestWindow?.depth>=5)return `The read rewarded noticing the ${RK_SUIT_NAMES[struct.bestWindow.suit]} ${struct.bestWindow.nums[0]}-${struct.bestWindow.nums[2]} compression early.`;
   if((liveDirections||[]).length>=4)return `This rack punished over-reading. Several branches looked alive, but most were only passengers.`;
@@ -3630,55 +3619,6 @@ function rkScoreSanityCap({score,strategicRead,nearWin}){
     efficiency,acceleration,convergence,pseudoFlex,topScore,gap
   };
 }
-){
-  let cap=96;
-  const sr=strategicRead||{};
-  const factors=sr.expertFactors||sr.expertRead?.factors||{};
-  const reads=sr.sectionReads||[];
-  const top=reads[0]||sr.topSection||null;
-  const second=reads[1]||null;
-  const topScore=Number(top?.score||0);
-  const gap=top&&second?Math.max(0,Number(top.score||0)-Number(second.score||0)):topScore;
-  const tileStructure=sr.tileStructure||{};
-  const grouped=(tileStructure.pairs?.length||0)+(tileStructure.pungs?.length||0)+(tileStructure.kongs?.length||0);
-  const isolated=Number(tileStructure.isolatedCount||0);
-  const efficiency=Number(factors.efficiency||0);
-  const acceleration=Number(factors.acceleration||0);
-  const deadness=Number(factors.deadnessRisk||0);
-  const liveCount=(sr.liveSections||[]).length;
-  const clearDirection=topScore>=56&&gap>=8;
-  const realShape=grouped>=2||efficiency>=62||acceleration>=66;
-
-  if(topScore<38)cap=Math.min(cap,48);
-  else if(topScore<48)cap=Math.min(cap,58);
-  else if(topScore<56)cap=Math.min(cap,68);
-
-  if(!clearDirection)cap=Math.min(cap,74);
-  if(!realShape)cap=Math.min(cap,70);
-  if(grouped===0&&isolated>=4)cap=Math.min(cap,58);
-  if(isolated>=6)cap=Math.min(cap,56);
-  else if(isolated>=5)cap=Math.min(cap,64);
-  if(liveCount>=4&&gap<10)cap=Math.min(cap,68);
-  if(deadness>=70)cap=Math.min(cap,52);
-  else if(deadness>=58)cap=Math.min(cap,60);
-
-  if(score>=80&&!(clearDirection&&realShape&&efficiency>=58&&deadness<48)){
-    cap=Math.min(cap,79);
-  }
-  if(score>=85&&!(clearDirection&&realShape&&efficiency>=70&&acceleration>=68&&deadness<36)){
-    cap=Math.min(cap,84);
-  }
-
-  if(nearWin){
-    if(nearWin.state==="oneAway")cap=Math.max(cap,90);
-    else if(nearWin.state==="execution")cap=Math.max(cap,86);
-    else cap=Math.max(cap,82);
-  }
-
-  const adjusted=Math.max(0,Math.min(100,Math.round(Math.min(Number(score)||0,cap))));
-  const wasCapped=adjusted<Math.round(Number(score)||0);
-  return{score:adjusted,wasCapped,cap:Math.round(cap),clearDirection,realShape,isolated,grouped,deadness,efficiency,acceleration,topScore,gap};
-}
 
 function rkScorecardTrustRead(iq={},hand=[]){
   const score=Number(iq.totalScore||0);
@@ -3924,53 +3864,6 @@ function rkExpertCharlestonCalibration({struct,sectionReads=[],liveDirections=[]
     topSection:top?.name||null,topSectionId:top?.id||null,timingLine,passengerTiles:top?.passengerTiles||[],
     topCoachLine:top?.coachLine||"",trust
   };
-}
-){
-  const top=sectionReads[0]||null;
-  const second=sectionReads[1]||null;
-  const topScore=top?.score||0;
-  const gap=top&&second?Math.max(0,top.score-second.score):topScore;
-  const maxGroup=rkMaxNaturalGroup(struct);
-  const bestSuit=struct.suitEntries?.[0]?.[1]||0;
-  const groupedDepth=struct.pairs.length*7+struct.pungs.length*13+struct.kongs.length*18+(struct.bestWindow?.depth||0)*5+(bestSuit>=6?10:bestSuit>=5?6:0);
-  const compression=rkClamp(18+groupedDepth+Math.min(maxGroup*6,22)-struct.isolated.length*7-(struct.honorTotal>=3&&struct.groupedHonor===0?10:0));
-  const acceleration=rkClamp(16+struct.pairs.length*8+struct.pungs.length*13+struct.kongs.length*18+(struct.bestWindow?.depth||0)*4+struct.jokers*5-struct.isolated.length*5-(top?.id==="sp"&&struct.jokers?18:0));
-  const viableNeeds=(top?.needs||[]).length;
-  const viability=rkClamp(topScore*.70+(top?.coverage||0)*.22+gap*.35-viableNeeds*5-(top?.status==="thin"?18:0)-(top?.status==="technically possible"?8:0));
-  const passRead=rkExpertPassRegretAnalysis({passedTilesByRound,sectionId,topSection:top,struct});
-  const deadness=rkExpertDeadnessRisk({struct,topSection:top,liveDirections});
-  const controlledFlex=rkClamp(35+Math.min((liveDirections||[]).length,3)*7+gap*.35+rkCoreOverlap(struct,sectionReads.filter(s=>s.score>=40))*0.45-(liveDirections.length>=4?18:0)-struct.isolated.length*4);
-  const commitment=rkClamp(commitmentClarity*.72+gap*.35+(compression>=62?8:0)-(liveDirections.length>=4?10:0));
-  let raw=viability*.26+compression*.22+acceleration*.18+passRead.score*.14+commitment*.12+controlledFlex*.08-deadness.score*.22;
-  // Conservative calibration. Most real racks should land in the 42-67 range.
-  let score=45+(raw-50)*0.72;
-  if(topScore<38)score=Math.min(score,48);
-  if(topScore<48)score=Math.min(score,55);
-  if(deadness.score>=58)score=Math.min(score,60);
-  if(deadness.score>=70)score=Math.min(score,52);
-  if(liveDirections.length>=4&&gap<10)score=Math.min(score,63);
-  if(compression<48&&acceleration<52)score=Math.min(score,66);
-  if(struct.honorTotal>=7&&struct.groupedHonor<2&&top?.id==="wd")score=Math.min(score,66);
-  if(top?.id==="wd"&&struct.groupedHonor<2)score=Math.min(score,68);
-  if(top?.id==="aln"&&Number(struct.bestSameNumber?.[1]||0)<3)score=Math.min(score,61);
-  if(top?.id==="q"&&struct.jokers<2)score=Math.min(score,50);
-  if(top?.id==="sp"&&struct.jokers>0)score=Math.min(score,48);
-  if(score>78&&(compression<70||acceleration<68||viability<70||deadness.score>34))score=78;
-  if(score>85&&(compression<82||acceleration<78||viability<78||deadness.score>22||passRead.penalty>4))score=84;
-  if(score>92)score=92;
-  score=Math.max(12,Math.min(96,Math.round(score)));
-  const band=rkExpertScoreBand(score);
-  const factors={viability:Math.round(viability),efficiency:Math.round(compression),acceleration:Math.round(acceleration),charlestonDiscipline:Math.round(passRead.score),deadnessRisk:Math.round(deadness.score),commitmentQuality:Math.round(commitment),controlledFlexibility:Math.round(controlledFlex)};
-  const summary=rkHumanExpertSummary({score,struct,top,deadness,passRead,compression,acceleration,gap});
-  const expertNotes=[];
-  if(top?.coachLine)expertNotes.push(top.coachLine);
-  if(top?.passengerTiles?.length)expertNotes.push(`Passengers: ${top.passengerTiles.slice(0,3).join(", ")} were not doing enough for ${top.name}.`);
-  if(deadness.reasons[0])expertNotes.push(`Risk: ${deadness.reasons[0]}.`);
-  if(passRead.regret[0])expertNotes.push(passRead.regret[0]);
-  else if(passRead.correct[0])expertNotes.push(passRead.correct[0]);
-  if(top?.needs?.[0])expertNotes.push(`Still needed: ${top.needs[0]}.`);
-  const timingLine=rkExpertTimingLine({struct,top,score,liveDirections});
-  return{score,band,factors,summary,expertNotes:expertNotes.slice(0,4),passReview:passRead,deadness,topSection:top?.name||null,topSectionId:top?.id||null,timingLine,passengerTiles:top?.passengerTiles||[],topCoachLine:top?.coachLine||""};
 }
 
 function rkEvaluateCharlestonEngine({finalRack,startingRack=[],passedTilesByRound=[],sectionId,chosenHand,allSections=[]}){
