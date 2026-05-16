@@ -7883,6 +7883,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
     ? dailyNextMoveBase
     : rkHumanTableCopy(`Use the next pick to prove ${actualAlignmentSection}. If it does not add density, cut the weakest backup and keep the rack compressed.`);
   const styleRead=rkStyleReadForScorecard(iq.styleName||scoreLabel,score,trustRead);
+  const socialPivotLine=rkHumanTableCopy(dailyNextMoveText||trustRead.nextMove||`Use the next pick to prove ${actualAlignmentSection}. If it does not add density, cut the weakest backup.`);
+  const socialDenseLine=rkHumanTableCopy(`The strongest read was to compress around ${actualAlignmentSection}. Better scores usually came from building density there, not keeping every medium backup alive.`);
   const betterPlayersRead=rkBetterPlayersInsights({entries:(clubRows&&clubRows.length>=3)?clubRows:globalRows,score,trustRead,iq,allSections,clubName:affiliatedClubName});
   return(
     <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26 rk-scorecard-clean-v120" style={{paddingBottom:32}}>
@@ -7959,7 +7961,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160 rk-scorecard-panel-v500 rk-scorecard-strategy-v500 rk-glance-overhaul-v1000" aria-label="Rack at a glance">
         <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160 rk-glance-overhaul-head-v1000">
           <span>Rack at a glance</span>
-          <h2>Your rack’s direction</h2>
+          <h2>Your Rack’s Direction</h2>
           <p>A sharper read on the hand shape your final rack was actually moving toward.</p>
         </div>
 
@@ -7996,9 +7998,9 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       </section>
 
       <section className="rk-score-style-card-v190 rk-scorecard-panel-v500 rk-scorecard-style-v500" aria-label="Your style">
-        <div className="rk-score-style-head-v190">
+        <div className="rk-score-style-head-v190 rk-score-style-head-sticker-v1010">
           <span>Your style</span>
-          <strong>{styleRead.label}</strong>
+          <strong className="rk-style-sticker-v1010">{styleRead.label}</strong>
         </div>
         <p>{styleRead.copy}</p>
         <div className="rk-score-style-reasons-v190" aria-label="Why you got this style">
@@ -8011,12 +8013,24 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </section>
 
-      <section className="rk-better-players-v260 rk-scorecard-panel-v500 rk-scorecard-social-v500" aria-label="What better players did">
+      <section className="rk-better-players-v260 rk-scorecard-panel-v500 rk-scorecard-social-v500 rk-social-read-left-v1010" aria-label="What better players did">
         <div className="rk-better-players-head-v260">
           <span>Social read</span>
           <h2>What better players did</h2>
-          <p>Small patterns from today’s room. Use them to compare your read, not overthink it.</p>
+          <p>Compare your rack against the room. Focus on where stronger players pivoted and where they built density.</p>
         </div>
+
+        <div className="rk-social-guidance-v1010" aria-label="Pivot and density guidance">
+          <div className="rk-social-guidance-card-v1010 pivot">
+            <span>Pivot cue</span>
+            <p>{socialPivotLine}</p>
+          </div>
+          <div className="rk-social-guidance-card-v1010 density">
+            <span>Dense section</span>
+            <p>{socialDenseLine}</p>
+          </div>
+        </div>
+
         <div className="rk-better-players-list-v260">
           {betterPlayersRead.map((item,i)=>(
             <div key={i} className={`rk-better-players-row-v260 ${item.tone||""}`}>
@@ -8161,7 +8175,7 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
       <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160 rk-scorecard-panel-v500 rk-scorecard-strategy-v500 rk-glance-overhaul-v1000" aria-label="Practice rack at a glance">
         <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160 rk-glance-overhaul-head-v1000">
           <span>Rack at a glance</span>
-          <h2>Your rack’s direction</h2>
+          <h2>Your Rack’s Direction</h2>
           <p>A sharper read on the hand shape your final rack was actually moving toward.</p>
         </div>
 
@@ -8198,9 +8212,9 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
       </section>
 
       <section className="rk-score-style-card-v190 rk-scorecard-panel-v500 rk-scorecard-style-v500" aria-label="Your style">
-        <div className="rk-score-style-head-v190">
+        <div className="rk-score-style-head-v190 rk-score-style-head-sticker-v1010">
           <span>Your style</span>
-          <strong>{styleRead.label}</strong>
+          <strong className="rk-style-sticker-v1010">{styleRead.label}</strong>
         </div>
         <p>{styleRead.copy}</p>
         <div className="rk-score-style-reasons-v190" aria-label="Why you got this style">
