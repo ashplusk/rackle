@@ -7462,7 +7462,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           </div>
         </div>
 
-        <ShareButton text={shareText} label="Share your score with your club" sublabel="Tap to send" variant="green"/>
+        <ShareButton text={shareText} label="Share your score" sublabel="Send it to your club" variant="green"/>
       </section>
 
       <section className="rk-score-clean-final-v120" aria-label="Your final hand">
