@@ -14742,3 +14742,133 @@ body,
     font-size:7.25px!important;
   }
 }
+
+/* Tomorrow's Rackle refinement: richer colour + aligned timer pill */
+.rk-tomorrow-card-v11.rk-tomorrow-mystery-final{
+  background:
+    radial-gradient(circle at 92% 10%, rgba(243,212,107,.12), transparent 32%),
+    linear-gradient(145deg,#3B285F 0%,#5A3E86 54%,#2B1D45 100%)!important;
+  border:1px solid rgba(243,212,107,.18)!important;
+  box-shadow:
+    0 12px 28px rgba(43,29,69,.16),
+    inset 0 1px 0 rgba(255,255,255,.14),
+    inset 0 -1px 0 rgba(0,0,0,.18)!important;
+  color:#FFF8E8!important;
+}
+
+.rk-tomorrow-card-v11.rk-tomorrow-mystery-final:before{
+  opacity:.58!important;
+  background:linear-gradient(90deg,transparent,rgba(243,212,107,.72),transparent)!important;
+}
+
+.rk-tomorrow-v11-top{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  margin:0!important;
+}
+
+.rk-tomorrow-v11-top > div:first-child{
+  min-width:0!important;
+  flex:1!important;
+}
+
+.rk-tomorrow-v11-kicker{
+  color:rgba(255,248,232,.68)!important;
+  opacity:1!important;
+  margin:0 0 9px!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:8.5px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:1.55px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-tomorrow-v11-title{
+  color:#FFF8E8!important;
+  font-size:21px!important;
+  line-height:1.06!important;
+  letter-spacing:-.35px!important;
+  margin:0!important;
+}
+
+.rk-tomorrow-v11-copy{
+  color:rgba(255,248,232,.74)!important;
+  opacity:1!important;
+  margin:10px 0 0!important;
+  font-size:12.75px!important;
+  line-height:1.45!important;
+  font-weight:750!important;
+}
+
+.rk-tomorrow-v11-badge{
+  align-self:center!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:34px!important;
+  height:34px!important;
+  max-height:34px!important;
+  padding:0 12px!important;
+  margin:0!important;
+  border-radius:999px!important;
+  background:rgba(255,248,232,.12)!important;
+  border:1px solid rgba(255,248,232,.18)!important;
+  color:#F3D46B!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:10.5px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  white-space:nowrap!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+
+.rk-tomorrow-float-tiles{
+  opacity:.12!important;
+  color:#FFF8E8!important;
+  filter:none!important;
+}
+
+@media (max-width:430px){
+  .rk-tomorrow-card-v11.rk-tomorrow-mystery-final{
+    padding:16px!important;
+  }
+
+  .rk-tomorrow-v11-top{
+    align-items:flex-start!important;
+    gap:10px!important;
+  }
+
+  .rk-tomorrow-v11-badge{
+    align-self:flex-start!important;
+    min-height:32px!important;
+    height:32px!important;
+    max-height:32px!important;
+    padding:0 10px!important;
+    font-size:9.75px!important;
+    margin-top:0!important;
+  }
+
+  .rk-tomorrow-v11-title{
+    font-size:19px!important;
+    line-height:1.08!important;
+  }
+
+  .rk-tomorrow-v11-copy{
+    font-size:12.5px!important;
+    margin-top:9px!important;
+  }
+}
+
+@media (max-width:370px){
+  .rk-tomorrow-v11-top{
+    flex-direction:column!important;
+    align-items:flex-start!important;
+  }
+
+  .rk-tomorrow-v11-badge{
+    margin-top:2px!important;
+  }
+}
