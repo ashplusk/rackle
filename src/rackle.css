@@ -21201,3 +21201,28 @@ footer p{
     padding-right:10px!important;
   }
 }
+
+/* Scorecard table-read pill dot: smaller, proportional */
+.rk-home-scorecard-v41.rk-scorecard-preview-optimized-v600 .rk-home-scorecard-v41-kicker span,
+.rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-kicker span,
+.rk-practice-homeclone-v45 .rk-home-scorecard-v41-kicker span{
+  width:7px!important;
+  height:7px!important;
+  min-width:7px!important;
+  margin-right:8px!important;
+  border-radius:999px!important;
+  background:#6FCF60!important;
+  box-shadow:0 0 0 3px rgba(111,207,96,.10)!important;
+}
+
+@media (max-width:430px){
+  .rk-home-scorecard-v41.rk-scorecard-preview-optimized-v600 .rk-home-scorecard-v41-kicker span,
+  .rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-kicker span,
+  .rk-practice-homeclone-v45 .rk-home-scorecard-v41-kicker span{
+    width:6px!important;
+    height:6px!important;
+    min-width:6px!important;
+    margin-right:7px!important;
+    box-shadow:0 0 0 3px rgba(111,207,96,.09)!important;
+  }
+}
