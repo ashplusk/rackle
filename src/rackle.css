@@ -16726,3 +16726,80 @@ body,
     font-size:24px!important;
   }
 }
+
+/* Homepage Daily Rackle card: restore original parchment tone */
+.rk-daily-entry-v6{
+  background:linear-gradient(145deg,#FFFDF8 0%,#F7F0E5 100%)!important;
+  border:1px solid rgba(26,20,16,.085)!important;
+  box-shadow:
+    0 10px 28px rgba(26,20,16,.045),
+    inset 0 1px 0 rgba(255,255,255,.82)!important;
+  color:#1A1410!important;
+}
+
+.rk-daily-entry-v6:before{
+  opacity:.45!important;
+  background:linear-gradient(90deg,transparent,rgba(243,212,107,.58),transparent)!important;
+}
+
+.rk-daily-entry-v6-glow{
+  display:none!important;
+  opacity:0!important;
+}
+
+.rk-daily-entry-v6-kicker{
+  color:#176B42!important;
+  background:rgba(23,107,66,.07)!important;
+  border:1px solid rgba(23,107,66,.11)!important;
+}
+
+.rk-daily-entry-v6-title{
+  color:#1A1410!important;
+  text-shadow:none!important;
+}
+
+.rk-daily-entry-v6-copy{
+  color:#6B6157!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+
+.rk-daily-entry-v6-stats span{
+  color:#176B42!important;
+  background:rgba(23,107,66,.055)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  box-shadow:none!important;
+}
+
+.rk-daily-entry-v37-tutorial{
+  color:#176B42!important;
+}
+
+/* keep reduced top spacing from the last pass */
+.rk-pg > .rk-home-landing-flow{
+  margin-top:4px!important;
+  gap:12px!important;
+}
+
+.rk-startup-hero-v4.rk-startup-hero-v42{
+  padding-bottom:8px!important;
+}
+
+.rk-daily-entry-wrap-v37{
+  margin-top:2px!important;
+}
+
+@media (max-width:430px){
+  .rk-pg > .rk-home-landing-flow{
+    margin-top:2px!important;
+    gap:11px!important;
+  }
+
+  .rk-startup-hero-v4.rk-startup-hero-v42{
+    padding-bottom:6px!important;
+  }
+
+  .rk-daily-entry-wrap-v37{
+    margin-top:0!important;
+  }
+}
