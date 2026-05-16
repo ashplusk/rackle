@@ -9082,7 +9082,7 @@ function CardGuideScreen({home,setScreen}){
 
   // ── SECTION LIST VIEW ─────────────────────────────────────────────────────
   if(view==="sections"){return(
-    <div style={S.pg} className="rk-pg rk-cardguide-polish-v1">
+    <div style={S.pg} className="rk-pg">
       <RackleHeader onBack={home} setScreen={setScreen}/>
       <div style={{marginBottom:14,marginTop:4}}>
         <div style={{fontFamily:F.d,fontSize:22,fontWeight:900,color:C.ink,letterSpacing:-0.5,marginBottom:4}}>2026 Card Reference</div>
