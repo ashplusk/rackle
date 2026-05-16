@@ -12128,7 +12128,7 @@ function ReadyOverlay({mode,dayNum,onReady,onHome}){
   );
 }
 
-function Game({mode,home,onDone,settings,setScreen}){
+function Game({mode,home,onDone,settings,setScreen,go}){
   const [phase,setPhase]=useState("deal");
   const [ready,setReady]=useState(false);
   const [flipped,setFlipped]=useState([]);
@@ -12304,7 +12304,7 @@ function Game({mode,home,onDone,settings,setScreen}){
   const stopTimer=()=>{if(stRef.current){elRef.current+=Date.now()-stRef.current;stRef.current=null;}setTd(true);};
 
   const confirm=()=>{
-    if(!chosenSec)return;setTd(true);
+    if(!chosenSec)return;chosenSecRef.current=chosenSec;setTd(true);
     const e=ev(hand),top=e[0],gi=gri(top.score);
     const totalEl=Math.floor((elRef.current+(stRef.current?Date.now()-stRef.current:0))/1000);
     const dn=getDayNum();
@@ -12358,6 +12358,34 @@ function Game({mode,home,onDone,settings,setScreen}){
 
   return(
     <div style={{...S.pg,position:"relative",minHeight:"100vh"}} className="rk-pg">
+      {phase==="result"&&iqResult&&(
+        <IQScorecard
+          iq={iqResult}
+          hand={hand}
+          startingRack={startingRack&&startingRack.length?startingRack:hand}
+          passLog={rkSanitizePassLog(passLog)}
+          isDaily={mode==="daily"}
+          dayNum={dn}
+          section={section}
+          chosenSec={chosenSecRef.current||chosenSec}
+          chosenHand={chosenHand}
+          allSections={ev(hand)}
+          onHome={home}
+          onDealAgain={restart}
+          onPractice={()=>go?go("free"):home()}
+          setScreen={setScreen}
+        />
+      )}
+      {phase==="result"&&!iqResult&&(
+        <div className="rk-score-round-fallback-v700">
+          <RackleHeader onBack={home} setScreen={setScreen}/>
+          <div className="rk-score-round-fallback-card-v700">
+            <strong>Scorecard loading</strong>
+            <p>Your rack was scored, but the scorecard data was not ready. Go back home and open your scorecard from today’s result.</p>
+            <button type="button" onClick={home}>Back home</button>
+          </div>
+        </div>
+      )}
       {phase==="deal"&&hand.length>0&&(
         <>
           {!ready&&<ReadyOverlay mode={mode} dayNum={dn} onReady={()=>setReady(true)} onHome={home}/>}
@@ -12441,7 +12469,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>SCORE YOUR ROUND</div>
           <div style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
             {SECS.map((s)=>(
-              <button key={s.id} onClick={()=>{
+              <button key={s.id} type="button" className="rk-score-round-option-v700" onClick={()=>{
                 haptic(20);
                 setTd(true);
                 const e=ev(hand),top=e[0],gi=gri(top.score);
@@ -12457,7 +12485,7 @@ function Game({mode,home,onDone,settings,setScreen}){
                 setChosenHand(null);
                 setIqResult(iq);
                 const result={rating:RATS[gi],emoji:REMO[gi],section:`${top.icon} ${top.name}`,sid:top.id,score:top.score,time:totalEl,gi,iqScore:iq?iq.totalScore:null,iq,finalRack:hand,startingRack:sr,passLog:safeLog,chosenSec:s.id,chosenHand:null,allSections:ev(hand)};
-                setTimeout(()=>{try{onDone(result);}catch(_){}},0);
+                try{onDone(result);}catch(_){}
                 window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;
                 setPhase("result");
               }}
@@ -14730,7 +14758,7 @@ export default function Rackle(){
         {screen==="tutorial"&&<Tutorial onDone={()=>{ST.set("tutDone",true);setScreen("home");}} onBack={()=>setScreen("home")} setScreen={setScreen}/>}
         {screen==="cardguide"&&<CardGuideScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
         {screen==="howto"&&<HowToPlayScreen home={()=>setScreen("home")} setScreen={setScreen}/>}
-        {screen==="play"&&<Game mode={mode} home={()=>setScreen("home")} onDone={onDone} settings={settings} setScreen={setScreen}/>}
+        {screen==="play"&&<Game mode={mode} home={()=>setScreen("home")} onDone={onDone} settings={settings} setScreen={setScreen} go={go}/>} 
         {screen==="stats"&&<Stats home={()=>setScreen("home")} onShowScorecard={()=>setScreen("scorecard")} onRecap={()=>setScreen("recap")} dRes={dRes} setScreen={setScreen} go={go}/>}
         {screen==="settings"&&<Settings home={()=>setScreen("home")} settings={settings} setSettings={setSettings} showTutorial={()=>setScreen("tutorial")} setScreen={setScreen}/>}
         {screen==="scorecard"&&<ScorecardScreen res={rkIsTodayDailyResult(dRes)?dRes:null} home={()=>setScreen("home")} dayNum={getDayNum()} onPractice={()=>go("free")} setScreen={setScreen}/>}
