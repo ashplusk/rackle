@@ -13652,3 +13652,189 @@ body,
     font-size:23px!important;
   }
 }
+
+/* What Better Players Did: social intelligence layer */
+.rk-better-players-v260{
+  position:relative!important;
+  overflow:hidden!important;
+  padding:17px!important;
+  border-radius:26px!important;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(243,212,107,.08), transparent 30%),
+    linear-gradient(145deg,#FFFDF8 0%,#F7F0E4 100%)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:
+    0 12px 30px rgba(26,20,16,.05),
+    inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+
+.rk-better-players-v260:before{
+  content:""!important;
+  position:absolute!important;
+  top:0!important;
+  left:24px!important;
+  right:24px!important;
+  height:2px!important;
+  border-radius:999px!important;
+  background:linear-gradient(90deg,transparent,rgba(243,212,107,.70),transparent)!important;
+}
+
+.rk-better-players-head-v260{
+  margin-bottom:13px!important;
+}
+
+.rk-better-players-head-v260 span{
+  display:inline-flex!important;
+  width:max-content!important;
+  max-width:100%!important;
+  margin-bottom:12px!important;
+  padding:7px 11px!important;
+  border-radius:999px!important;
+  background:rgba(18,59,36,.075)!important;
+  border:1px solid rgba(18,59,36,.14)!important;
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:8.5px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:1.6px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-better-players-head-v260 h2{
+  margin:0!important;
+  color:#1A1410!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:21px!important;
+  line-height:1.07!important;
+  font-weight:900!important;
+  letter-spacing:-.35px!important;
+}
+
+.rk-better-players-head-v260 p{
+  margin:7px 0 0!important;
+  color:#6B6157!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:12.75px!important;
+  line-height:1.48!important;
+  font-weight:750!important;
+}
+
+.rk-better-players-list-v260{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:9px!important;
+}
+
+.rk-better-players-row-v260{
+  display:grid!important;
+  grid-template-columns:72px minmax(0,1fr)!important;
+  gap:11px!important;
+  align-items:center!important;
+  min-height:68px!important;
+  padding:11px!important;
+  border-radius:19px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.065)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+
+.rk-better-players-stat-v260{
+  min-height:46px!important;
+  padding:7px 5px!important;
+  border-radius:15px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  background:rgba(23,107,66,.08)!important;
+  border:1px solid rgba(23,107,66,.13)!important;
+}
+
+.rk-better-players-row-v260.gold .rk-better-players-stat-v260{
+  background:rgba(243,212,107,.14)!important;
+  border-color:rgba(243,212,107,.24)!important;
+}
+
+.rk-better-players-row-v260.red .rk-better-players-stat-v260{
+  background:rgba(166,58,42,.08)!important;
+  border-color:rgba(166,58,42,.16)!important;
+}
+
+.rk-better-players-stat-v260 strong{
+  display:block!important;
+  color:#176B42!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:18px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:-.25px!important;
+}
+
+.rk-better-players-row-v260.gold .rk-better-players-stat-v260 strong{
+  color:#8E6F18!important;
+}
+
+.rk-better-players-row-v260.red .rk-better-players-stat-v260 strong{
+  color:#A63A2A!important;
+}
+
+.rk-better-players-stat-v260 span{
+  display:block!important;
+  margin-top:4px!important;
+  color:#6B6157!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:8px!important;
+  line-height:1.05!important;
+  font-weight:900!important;
+  letter-spacing:.9px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-better-players-row-v260 p{
+  margin:0!important;
+  color:#4F463F!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:12.25px!important;
+  line-height:1.44!important;
+  font-weight:780!important;
+}
+
+@media (max-width:430px){
+  .rk-better-players-v260{
+    padding:15px!important;
+    border-radius:23px!important;
+  }
+
+  .rk-better-players-head-v260 h2{
+    font-size:19px!important;
+  }
+
+  .rk-better-players-row-v260{
+    grid-template-columns:66px minmax(0,1fr)!important;
+    gap:10px!important;
+    min-height:66px!important;
+    padding:10px!important;
+  }
+
+  .rk-better-players-stat-v260 strong{
+    font-size:16px!important;
+  }
+
+  .rk-better-players-row-v260 p{
+    font-size:12px!important;
+  }
+}
+
+@media (max-width:370px){
+  .rk-better-players-row-v260{
+    grid-template-columns:1fr!important;
+    align-items:start!important;
+  }
+
+  .rk-better-players-stat-v260{
+    width:max-content!important;
+    min-width:74px!important;
+  }
+}

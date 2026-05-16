@@ -7569,6 +7569,150 @@ function rkScoreRevealFrame(score,trustRead={},iq={},mode="daily"){
   };
 }
 
+
+function rkBetterPlayersEntryScore(e){
+  return Number(e?.iqScore??e?.iq_score??e?.score??e?.totalScore??0)||0;
+}
+function rkBetterPlayersEntryIQ(e){
+  return e?.iq||e?.rackIQ||e?.rackleIQ||e?.rackle_iq||e?.scorecard?.iq||e?.result?.iq||null;
+}
+function rkBetterPlayersLaneFromIQ(entryIQ){
+  return entryIQ?.bestDirection||
+    entryIQ?.strategicRead?.bestDirection||
+    entryIQ?.expertRead?.topSection||
+    entryIQ?.topSection||
+    entryIQ?.scoredHandLabel||
+    entryIQ?.bestHandLabel||
+    "";
+}
+function rkBetterPlayersTopValue(values=[]){
+  const counts=new Map();
+  values.filter(Boolean).forEach(v=>{
+    const key=String(v||"").trim();
+    if(!key)return;
+    counts.set(key,(counts.get(key)||0)+1);
+  });
+  return [...counts.entries()].sort((a,b)=>b[1]-a[1])[0]||null;
+}
+function rkBetterPlayersInsights({entries=[],score=0,trustRead={},iq={},allSections=[],clubName=""}={}){
+  const rows=[...(entries||[])]
+    .filter(e=>rkBetterPlayersEntryScore(e)>0)
+    .sort((a,b)=>rkBetterPlayersEntryScore(b)-rkBetterPlayersEntryScore(a));
+  const scoreNum=Number(score||0);
+  const betterRows=rows.filter(e=>rkBetterPlayersEntryScore(e)>scoreNum);
+  const topCount=Math.max(1,Math.min(5,Math.ceil(rows.length*.10)||3));
+  const topRows=rows.slice(0,topCount);
+  const topScore=rkBetterPlayersEntryScore(rows[0]);
+  const topIQs=topRows.map(rkBetterPlayersEntryIQ).filter(Boolean);
+  const topLanes=topIQs.map(rkBetterPlayersLaneFromIQ).filter(Boolean);
+  const topLane=rkBetterPlayersTopValue(topLanes);
+  const topLanePct=topLane&&topRows.length?Math.round((topLane[1]/topRows.length)*100):null;
+  const factors=iq?.expertFactors||iq?.expertRead?.factors||{};
+  const convergence=Number(factors.convergence||0);
+  const acceleration=Number(factors.acceleration||0);
+  const compression=Number(factors.efficiency||factors.compression||0);
+  const pseudoFlex=Number(factors.pseudoFlexPenalty||0);
+  const deadness=Number(factors.deadnessRisk||0);
+  const best=trustRead?.best||iq?.bestDirection||allSections?.[0]?.name||"the best lane";
+  const roomName=clubName?"club":"room";
+  const items=[];
+
+  if(rows.length>=4&&betterRows.length>0){
+    const betterPct=Math.round((betterRows.length/rows.length)*100);
+    items.push({
+      stat:`${betterPct}%`,
+      label:"finished above you",
+      text:betterRows.length===1
+        ?`One player found more speed. The gap was not luck, it was cleaner convergence.`
+        :`${betterRows.length} players beat this score. The pattern to study is speed, not more options.`,
+      tone:"gold"
+    });
+  }else if(rows.length>=2&&scoreNum>=topScore){
+    items.push({
+      stat:"#1",
+      label:`in the ${roomName}`,
+      text:`You set the pressure today. Now the question is whether the table can catch your read.`,
+      tone:"green"
+    });
+  }else if(rows.length>=2&&topScore){
+    items.push({
+      stat:`${topScore}`,
+      label:"score to study",
+      text:`The top score had a cleaner route. Compare where your rack drifted before the final pass.`,
+      tone:"gold"
+    });
+  }else{
+    items.push({
+      stat:"Live",
+      label:"room forming",
+      text:`You are early on today’s rack. Post the read and give the room something to chase.`,
+      tone:"green"
+    });
+  }
+
+  if(topLane&&topLanePct&&topLanePct>=34){
+    items.push({
+      stat:`${topLanePct}%`,
+      label:"top lane",
+      text:`Top scores clustered around ${topLane[0]}. That is where the rack appears to have compressed fastest.`,
+      tone:"green"
+    });
+  }else if(pseudoFlex>=16){
+    items.push({
+      stat:"Drift",
+      label:"better-player lesson",
+      text:`Too many medium-strength paths stayed alive. Stronger players would cut the weak backup earlier.`,
+      tone:"red"
+    });
+  }else if(convergence>=70){
+    items.push({
+      stat:"Clean",
+      label:"convergence",
+      text:`This rack rewarded commitment. Once ${best} showed up, holding extra lanes became expensive.`,
+      tone:"green"
+    });
+  }else{
+    items.push({
+      stat:"Pivot",
+      label:"decision point",
+      text:`The rack asked for a sharper pivot. The teachable moment was when to stop protecting the backup.`,
+      tone:"gold"
+    });
+  }
+
+  if(acceleration>=72){
+    items.push({
+      stat:"Fast",
+      label:"pressure route",
+      text:`The strongest route had speed. This was a rack where clean next steps mattered more than broad coverage.`,
+      tone:"green"
+    });
+  }else if(compression>=70){
+    items.push({
+      stat:"Dense",
+      label:"tile pressure",
+      text:`Your density was real. The question was whether you used it to commit or kept shopping too long.`,
+      tone:"gold"
+    });
+  }else if(deadness>=58){
+    items.push({
+      stat:"Dead",
+      label:"weight check",
+      text:`Better players would clean this up sooner. Too many tiles were riding along without helping the lane.`,
+      tone:"red"
+    });
+  }else{
+    items.push({
+      stat:"Sharp",
+      label:"table question",
+      text:`Would you defend ${best} again, or cut toward the backup earlier? That is the discussion point.`,
+      tone:"green"
+    });
+  }
+
+  return items.slice(0,3);
+}
+
 function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onHome,onPractice,onCoachMode,setScreen,resultTime=0}){
   const [dailyStats,setDailyStats]=useState(null);
   const [globalEntries,setGlobalEntries]=useState([]);
@@ -7706,6 +7850,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const hasStartingRack=startingRackSource.length>0;
   const rackToShow=showStartingRack&&hasStartingRack?startingRackSource:hand;
   const styleRead=rkStyleReadForScorecard(iq.styleName||scoreLabel,score,trustRead);
+  const betterPlayersRead=rkBetterPlayersInsights({entries:(clubRows&&clubRows.length>=3)?clubRows:globalRows,score,trustRead,iq,allSections,clubName:affiliatedClubName});
   return(
     <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26 rk-scorecard-clean-v120" style={{paddingBottom:32}}>
       <section className="rk-daily-scorecard-homeclone-v45 rk-home-scorecard-v41 rk-score-reveal-v250" aria-label="Daily Rackle scorecard">
@@ -7824,6 +7969,25 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
             <div key={i}>
               <span></span>
               <em>{reason}</em>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="rk-better-players-v260" aria-label="What better players did">
+        <div className="rk-better-players-head-v260">
+          <span>Social read</span>
+          <h2>What better players did</h2>
+          <p>Small patterns from today’s room. Use them to compare your read, not overthink it.</p>
+        </div>
+        <div className="rk-better-players-list-v260">
+          {betterPlayersRead.map((item,i)=>(
+            <div key={i} className={`rk-better-players-row-v260 ${item.tone||""}`}>
+              <div className="rk-better-players-stat-v260">
+                <strong>{item.stat}</strong>
+                <span>{item.label}</span>
+              </div>
+              <p>{item.text}</p>
             </div>
           ))}
         </div>
