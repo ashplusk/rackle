@@ -7290,6 +7290,36 @@ function ImproveGameHero({iq,chosenSecObj,bestFitSec,onPractice,onCoachMode,setS
   );
 }
 
+
+function rkFriendlyDirectionName(direction){
+  const raw=(direction||"").toString().trim();
+  const key=raw.toLowerCase();
+  if(!raw)return "Best available section";
+  if(key.includes("13579")||key.includes("odd"))return "13579 section";
+  if(key.includes("2468")||key.includes("even"))return "2468 section";
+  if(key.includes("like"))return "Like Numbers section";
+  if(key.includes("wind")||key.includes("dragon")||key.includes("honor"))return "Winds & Dragons section";
+  if(key.includes("quint"))return "Quints section";
+  if(key.includes("consecutive")||key.includes("run"))return "Consecutive Run section";
+  if(key.includes("singles")||key.includes("pairs"))return "Singles & Pairs section";
+  if(key.includes("2026"))return "2026 section";
+  return raw;
+}
+
+function rkFriendlyDirectionDetail(direction, fallback){
+  const raw=(direction||"").toString().trim();
+  const key=raw.toLowerCase();
+  if(key.includes("like"))return "This means your rack is pointing toward the Like Numbers part of the card, where repeated numbers across suits matter more than a broad mix of tiles.";
+  if(key.includes("13579")||key.includes("odd"))return "This means your rack is leaning toward odd-number hands on the card. Protect useful 1s, 3s, 5s, 7s, and 9s before chasing loose tiles.";
+  if(key.includes("2468")||key.includes("even"))return "This means your rack is leaning toward even-number hands on the card. Look for clean 2s, 4s, 6s, and 8s that build together.";
+  if(key.includes("wind")||key.includes("dragon")||key.includes("honor"))return "This means the honors are doing enough work to keep Winds & Dragons in view, but only if you have real pairs or multiples.";
+  if(key.includes("quint"))return "This means your rack has enough repeated tile potential to keep a Quints path alive, usually with joker support.";
+  if(key.includes("consecutive")||key.includes("run"))return "This means your rack has connected numbers that could build into a Consecutive Run hand.";
+  if(key.includes("singles")||key.includes("pairs"))return "This means your rack is closer to a Singles & Pairs shape, where exact tiles matter and jokers cannot help.";
+  if(key.includes("2026"))return "This means your rack has enough 2026 structure to keep that section in view.";
+  return fallback||"This is the clearest part of the NMJL card your rack is pointing toward right now.";
+}
+
 function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onHome,onPractice,onCoachMode,setScreen,resultTime=0}){
   const [dailyStats,setDailyStats]=useState(null);
   const [globalEntries,setGlobalEntries]=useState([]);
@@ -7322,7 +7352,14 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       setAnimatedScore(next);
       if(progress>=1){clearInterval(timer);setAnimatedScore(target);}
     },interval);
-    return()=>clearInterval(timer);
+  
+  const [showStartingRack,setShowStartingRack]=useState(false);
+  const glanceBestName=rkFriendlyDirectionName(trustRead.best||shareDirection);
+  const glanceBestDetail=rkFriendlyDirectionDetail(trustRead.best||shareDirection,trustRead.bestFit);
+  const glanceBackupName=rkFriendlyDirectionName(trustRead.backup);
+  const glanceBackupDetail=rkFriendlyDirectionDetail(trustRead.backup,trustRead.backupFit);
+  const rackToShow=showStartingRack&&startingRack&&startingRack.length?startingRack:hand;
+  return()=>clearInterval(timer);
   },[score]);
   const time=Number(resultTime||iq.timeSecs||iq.time_secs||iq.totalTime||iq.time||0);
   const timeLabel=time?fT(Math.round(time)):"—";
@@ -7465,14 +7502,16 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <ShareButton text={shareText} label="Share your score" sublabel="Send it to your club" variant="green"/>
       </section>
 
-      <section className="rk-score-clean-final-v120" aria-label="Your final hand">
-        <div className="rk-score-clean-head-v120">
-          <span>Final hand</span>
-          <h2>Final rack</h2>
-          <p>See the shape you finished with after the Charleston.</p>
+      <section className="rk-final-rack-simple-v180" aria-label="Your rack">
+        <div className="rk-final-rack-simple-head-v180">
+          <strong>{showStartingRack?"Starting rack":"Your final rack"}</strong>
+          <div className="rk-final-rack-toggle-v180" role="group" aria-label="Choose rack view">
+            <button type="button" className={!showStartingRack?"active":""} onClick={()=>setShowStartingRack(false)}>Final</button>
+            <button type="button" className={showStartingRack?"active":""} onClick={()=>setShowStartingRack(true)}>Starting</button>
+          </div>
         </div>
-        <div className="rk-score-clean-rack-v120">
-          <SortableRack hand={hand}/>
+        <div className="rk-score-clean-rack-v120 rk-final-rack-simple-surface-v180">
+          <SortableRack hand={rackToShow}/>
         </div>
       </section>
 
@@ -7492,8 +7531,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <div className="rk-glance-v160-tiles">
           <div className="rk-glance-v160-tile">
             <span>Backup path</span>
-            <strong>{trustRead.backup}</strong>
-            <p>{trustRead.backupFit}</p>
+            <strong>{glanceBackupName}</strong>
+            <p>{glanceBackupDetail}</p>
           </div>
         </div>
 

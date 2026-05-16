@@ -12187,3 +12187,174 @@ body,
     font-size:10.5px!important;
   }
 }
+
+/* Final rack toggle + Rack at a Glance readability update */
+.rk-final-rack-simple-v180{
+  width:100%!important;
+  padding:0!important;
+  margin:0!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+.rk-final-rack-simple-head-v180{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  margin:0 0 8px!important;
+  padding:0 1px!important;
+}
+
+.rk-final-rack-simple-head-v180 strong{
+  display:block!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:20px!important;
+  line-height:1.05!important;
+  font-weight:900!important;
+  letter-spacing:-.25px!important;
+  color:#1A1410!important;
+}
+
+.rk-final-rack-toggle-v180{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:4px!important;
+  padding:3px!important;
+  border-radius:999px!important;
+  background:#EEE5D4!important;
+  border:1px solid rgba(26,20,16,.07)!important;
+  flex-shrink:0!important;
+}
+
+.rk-final-rack-toggle-v180 button{
+  min-height:28px!important;
+  padding:0 10px!important;
+  border:0!important;
+  border-radius:999px!important;
+  background:transparent!important;
+  color:#6B6157!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:11px!important;
+  font-weight:900!important;
+  cursor:pointer!important;
+}
+
+.rk-final-rack-toggle-v180 button.active{
+  background:#176B42!important;
+  color:#FFF8E8!important;
+}
+
+.rk-final-rack-simple-surface-v180{
+  margin-top:0!important;
+  padding:13px!important;
+  border-radius:20px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:
+    0 8px 20px rgba(26,20,16,.035),
+    inset 0 1px 0 rgba(255,255,255,.78)!important;
+}
+
+/* Make the Rack at a Glance card breathe without changing the whole scorecard */
+.rk-score-clean-glance-v120,
+.rk-score-glance-board-v140,
+.rk-score-glance-v150,
+.rk-score-glance-v160{
+  padding:19px!important;
+  border-radius:25px!important;
+}
+
+.rk-score-clean-head-v120.rk-glance-head-v140,
+.rk-score-clean-head-v120.rk-glance-head-v150,
+.rk-score-clean-head-v120.rk-glance-head-v160{
+  margin-bottom:15px!important;
+}
+
+.rk-glance-head-v160 h2,
+.rk-score-clean-head-v120.rk-glance-head-v160 h2{
+  font-size:22px!important;
+  line-height:1.08!important;
+  margin-bottom:7px!important;
+}
+
+.rk-glance-head-v160 p,
+.rk-score-clean-head-v120.rk-glance-head-v160 p{
+  max-width:560px!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:13px!important;
+  line-height:1.5!important;
+  font-weight:700!important;
+  color:#6B6157!important;
+}
+
+.rk-glance-v160-verdict{
+  padding:16px!important;
+  border-radius:21px!important;
+}
+
+.rk-glance-v160-verdict h3{
+  font-size:22px!important;
+  line-height:1.08!important;
+  margin-bottom:7px!important;
+}
+
+.rk-glance-v160-verdict p{
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:12.75px!important;
+  line-height:1.5!important;
+  font-weight:700!important;
+}
+
+.rk-glance-v160-tiles{
+  margin-top:10px!important;
+  gap:10px!important;
+}
+
+.rk-glance-v160-tile,
+.rk-glance-v160-coach-row{
+  padding:14px!important;
+  border-radius:18px!important;
+}
+
+.rk-glance-v160-tile strong{
+  font-size:18px!important;
+  line-height:1.1!important;
+}
+
+.rk-glance-v160-tile p,
+.rk-glance-v160-coach-row p{
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:12.25px!important;
+  line-height:1.48!important;
+  font-weight:700!important;
+  color:#5F564E!important;
+}
+
+.rk-glance-v160-coach{
+  margin-top:10px!important;
+  gap:10px!important;
+}
+
+@media (max-width:430px){
+  .rk-final-rack-simple-head-v180 strong{
+    font-size:18px!important;
+  }
+
+  .rk-final-rack-toggle-v180 button{
+    min-height:27px!important;
+    padding:0 9px!important;
+    font-size:10.5px!important;
+  }
+
+  .rk-score-clean-glance-v120,
+  .rk-score-glance-v160{
+    padding:17px!important;
+  }
+
+  .rk-glance-head-v160 h2,
+  .rk-score-clean-head-v120.rk-glance-head-v160 h2{
+    font-size:20px!important;
+  }
+}
