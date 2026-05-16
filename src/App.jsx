@@ -7667,7 +7667,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 }
 
 // ─── PRACTICE SCORECARD, collapsible sections, matching daily vibe ───────────
-function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHome,onDealAgain}){
+function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,allSections,onHome,onDealAgain}){
   if(!iq)return null;
   const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
   const scoredHandLabel=iq.scoredHandLabel||null;
@@ -8661,7 +8661,7 @@ function IQScorecard({iq,hand,startingRack,passLog,isDaily,dayNum,section,chosen
     <CoachModeScreen iq={iq} hand={hand} startingRack={startingRack} passLog={passLog} dayNum={dayNum} section={section} chosenSec={chosenSec} chosenHand={chosenHand} allSections={allSections} onBack={exitCoach} setScreen={setScreen}/>
   );
   if(isDaily)return <DailyIQScorecard iq={iq} hand={hand} startingRack={startingRack} passLog={passLog} dayNum={dayNum} section={section} chosenSec={chosenSec} chosenHand={chosenHand} allSections={allSections} onHome={onHome} onPractice={onPractice} onCoachMode={enterCoach} resultTime={iq?.timeSecs||iq?.time_secs||iq?.totalTime||0}/>;
-  return <PracticeIQScorecard iq={iq} hand={hand} passLog={passLog} section={section} chosenSec={chosenSec} allSections={allSections} onHome={onHome} onDealAgain={onDealAgain}/>;
+  return <PracticeIQScorecard iq={iq} hand={hand} startingRack={startingRack} passLog={passLog} section={section} chosenSec={chosenSec} allSections={allSections} onHome={onHome} onDealAgain={onDealAgain}/>;
 }
 
 // ─── STANDALONE SCORECARD SCREEN ─────────────────────────────────────────────
