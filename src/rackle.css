@@ -16903,3 +16903,197 @@ body,
     0 10px 22px rgba(13,67,42,.14),
     inset 0 1px 0 rgba(255,255,255,.14)!important;
 }
+
+/* Homepage Today's Room / Your Table Today refinement */
+.rk-club-today-card{
+  position:relative!important;
+  overflow:hidden!important;
+  border-radius:30px!important;
+  padding:18px!important;
+  background:
+    radial-gradient(circle at 88% 8%, rgba(23,107,66,.12), transparent 34%),
+    radial-gradient(circle at 12% 96%, rgba(18,59,36,.08), transparent 34%),
+    linear-gradient(145deg,#FFFDF8 0%,#F2E6D2 100%)!important;
+  border:1px solid rgba(18,59,36,.12)!important;
+  box-shadow:
+    0 14px 32px rgba(26,20,16,.055),
+    inset 0 1px 0 rgba(255,255,255,.86)!important;
+}
+
+.rk-club-today-card:before{
+  content:""!important;
+  position:absolute!important;
+  top:0!important;
+  left:24px!important;
+  right:24px!important;
+  height:2px!important;
+  border-radius:999px!important;
+  background:linear-gradient(90deg,transparent,rgba(23,107,66,.44),transparent)!important;
+  pointer-events:none!important;
+}
+
+.rk-club-today-kicker{
+  background:rgba(23,107,66,.095)!important;
+  border:1px solid rgba(23,107,66,.16)!important;
+  color:#123B24!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.70)!important;
+}
+
+.rk-club-today-title{
+  color:#1A1410!important;
+}
+
+.rk-club-today-desc{
+  color:#4F463F!important;
+  opacity:1!important;
+  max-width:36ch!important;
+}
+
+.rk-club-today-score{
+  background:
+    radial-gradient(circle at 32% 18%, rgba(255,255,255,.13), transparent 34%),
+    linear-gradient(160deg,#176B42 0%,#0D432A 100%)!important;
+  border:1px solid rgba(255,248,232,.18)!important;
+  box-shadow:
+    0 10px 22px rgba(13,67,42,.16),
+    inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+
+.rk-club-today-score strong{
+  color:#FFF8E8!important;
+}
+
+.rk-club-today-score span{
+  color:rgba(255,248,232,.72)!important;
+}
+
+.rk-club-today-board{
+  background:
+    linear-gradient(145deg,#FFFDF8 0%,#F8F0E4 100%)!important;
+  border:1px solid rgba(18,59,36,.09)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.82),
+    0 8px 20px rgba(26,20,16,.035)!important;
+}
+
+.rk-club-today-board-copy strong{
+  color:#1A1410!important;
+}
+
+.rk-club-today-board-copy span{
+  color:#5F564E!important;
+}
+
+.rk-club-today-stats div{
+  background:#FFFDF8!important;
+  border:1px solid rgba(18,59,36,.08)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.80)!important;
+}
+
+.rk-club-today-stats div strong{
+  color:#123B24!important;
+}
+
+.rk-club-today-stats div span{
+  color:#6B6157!important;
+}
+
+.rk-club-today-row{
+  background:rgba(255,255,255,.66)!important;
+  border:1px solid rgba(18,59,36,.065)!important;
+}
+
+.rk-club-today-rank{
+  background:rgba(23,107,66,.08)!important;
+  color:#176B42!important;
+}
+
+.rk-club-today-name{
+  color:#1A1410!important;
+}
+
+.rk-club-today-row-score{
+  color:#123B24!important;
+}
+
+/* More premium action buttons */
+.rk-club-today-actions{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:10px!important;
+  margin-top:14px!important;
+}
+
+.rk-club-today-actions button{
+  position:relative!important;
+  min-height:48px!important;
+  border-radius:18px!important;
+  padding:0 14px!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:14.5px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:-.15px!important;
+  box-shadow:none!important;
+  transition:transform .16s ease, border-color .16s ease, background .16s ease!important;
+}
+
+.rk-club-today-actions button:first-child{
+  background:
+    radial-gradient(circle at 30% 18%, rgba(255,255,255,.14), transparent 32%),
+    linear-gradient(180deg,#176B42 0%,#0D432A 100%)!important;
+  color:#FFF8E8!important;
+  border:1px solid rgba(243,212,107,.22)!important;
+}
+
+.rk-club-today-actions button:nth-child(2){
+  background:#FFFDF8!important;
+  color:#123B24!important;
+  border:1px solid rgba(18,59,36,.16)!important;
+}
+
+.rk-club-today-actions button:active{
+  transform:scale(.985)!important;
+}
+
+.rk-club-today-actions button:first-child:after{
+  content:"›"!important;
+  margin-left:8px!important;
+  color:#F3D46B!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:17px!important;
+  line-height:1!important;
+}
+
+.rk-club-today-actions button:nth-child(2):after{
+  content:"›"!important;
+  margin-left:8px!important;
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:17px!important;
+  line-height:1!important;
+}
+
+@media (max-width:430px){
+  .rk-club-today-card{
+    padding:16px!important;
+    border-radius:26px!important;
+  }
+
+  .rk-club-today-actions{
+    gap:9px!important;
+  }
+
+  .rk-club-today-actions button{
+    min-height:46px!important;
+    border-radius:17px!important;
+    font-size:13.5px!important;
+    padding:0 11px!important;
+  }
+}
+
+@media (max-width:370px){
+  .rk-club-today-actions{
+    grid-template-columns:1fr!important;
+  }
+}
