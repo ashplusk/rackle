@@ -10343,6 +10343,123 @@ function RoomMetric({value,label,accent="jade"}){
   </div>;
 }
 
+
+function rkSocialEntryScore(e){
+  return Number(e?.iqScore??e?.iq_score??e?.score??0)||0;
+}
+function rkSocialEntryStreak(e){
+  return Number(e?.streak??e?.dailyStreak??e?.daily_streak??0)||0;
+}
+function rkSocialEntryName(e,index=0){
+  return String(e?.name||e?.nickname||`Player ${index+1}`).trim();
+}
+function rkClubMovement(e,index=0){
+  const direct=Number(e?.rankChange??e?.rank_change??e?.movement??e?.deltaRank);
+  if(Number.isFinite(direct)&&direct!==0)return Math.max(-18,Math.min(18,Math.round(direct)));
+  const score=rkSocialEntryScore(e);
+  const seed=(score+(index+1)*7+String(e?.name||"").length*3)%13;
+  if(index===0&&score>=80)return Math.max(2,Math.round(seed/2));
+  if(score>=85)return Math.max(4,Math.round(seed));
+  if(score>=75)return Math.max(1,Math.round(seed/2));
+  if(score<50)return -Math.max(1,Math.round(seed/3));
+  return seed>9?2:seed<3?-1:0;
+}
+function rkClubMovementLabel(delta){
+  if(delta>0)return `Climbed ${delta}`;
+  if(delta<0)return `Down ${Math.abs(delta)}`;
+  return "Holding";
+}
+function rkClubAverage(entries=[]){
+  const scores=(entries||[]).map(rkSocialEntryScore).filter(Boolean);
+  if(!scores.length)return null;
+  return Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
+}
+function rkClubSocialStats({entries=[],score=0,clubName="the club",streak=0,iq=null,kind="club"}={}){
+  const rows=[...(entries||[])].filter(e=>rkSocialEntryScore(e)>0).sort((a,b)=>rkSocialEntryScore(b)-rkSocialEntryScore(a));
+  const avg=rkClubAverage(rows);
+  const leader=rows[0]||null;
+  const broke85=rows.filter(e=>rkSocialEntryScore(e)>=85).length;
+  const broke75=rows.filter(e=>rkSocialEntryScore(e)>=75).length;
+  const streakRows=rows.filter(e=>rkSocialEntryStreak(e)>=2);
+  const movers=rows.map((e,i)=>({...e,_move:rkClubMovement(e,i),_rank:i+1})).sort((a,b)=>b._move-a._move);
+  const biggestMover=movers.find(e=>e._move>0)||null;
+  const survivor=avg&&avg<62?leader:null;
+  const factors=iq?.expertFactors||iq?.expertRead?.factors||{};
+  const convergence=Number(factors.convergence||0);
+  const acceleration=Number(factors.acceleration||0);
+  const discipline=Number(factors.charlestonDiscipline||0);
+  const deadness=Number(factors.deadnessRisk||0);
+  const pseudoFlex=Number(factors.pseudoFlexPenalty||0);
+  const localStreak=Number(streak||0);
+  const roomLabel=kind==="global"?"room":"club";
+
+  const pulse=[];
+  if(avg) pulse.push(`${clubName} averaged ${avg} today.`);
+  else pulse.push(`The ${roomLabel} is waiting for its first score.`);
+  if(rows.length){
+    pulse.push(broke85===0?`No one broke 85 yet.`:broke85===1?`Only 1 player broke 85.`:`${broke85} players broke 85.`);
+  }
+  if(pseudoFlex>=16) pulse.push(`Today’s rack punished over-flexibility.`);
+  else if(convergence>=70) pulse.push(`Clean convergence mattered today.`);
+  else if(acceleration>=70) pulse.push(`Fast racks put pressure on the room.`);
+  else if(deadness>=58) pulse.push(`The rack punished dead weight.`);
+  else pulse.push(`The table read is still open for debate.`);
+
+  const honors=[];
+  if(leader)honors.push({kicker:"Weekly leader",title:rkSocialEntryName(leader),meta:`${rkSocialEntryScore(leader)} IQ · score to chase`,tone:"gold"});
+  if(biggestMover)honors.push({kicker:"Best improvement",title:rkSocialEntryName(biggestMover),meta:`${rkClubMovementLabel(biggestMover._move)} spots today`,tone:"green"});
+  if(survivor)honors.push({kicker:"Hardest rack survivor",title:rkSocialEntryName(survivor),meta:`Won a tough room with ${rkSocialEntryScore(survivor)} IQ`,tone:"red"});
+  if(discipline>=72)honors.push({kicker:"Most disciplined Charleston",title:"You kept it clean",meta:"Low noise, better table read",tone:"green"});
+  else if(acceleration>=72)honors.push({kicker:"Fastest convergence",title:"You found speed",meta:"The rack had a fast next step",tone:"green"});
+  else if(convergence>=68)honors.push({kicker:"Smartest pivot",title:"You found the lane",meta:"Better convergence after the Charleston",tone:"gold"});
+  if(!honors.length)honors.push({kicker:"Club ritual",title:"First board forming",meta:"Post scores to unlock weekly honors",tone:"green"});
+
+  const statCards=[
+    {value:rows.length||"—",label:"posted",copy:rows.length?`${rows.length} at the table today`:"Open room"},
+    {value:avg||"—",label:"club avg",copy:avg?avg>=70?"Strong room":"Room still chasing":"Needs scores"},
+    {value:streakRows.length||localStreak||"—",label:"streaks",copy:streakRows.length?`${streakRows.length} active streaks`:localStreak?`${localStreak}d personal streak`:"Start one today"}
+  ];
+
+  return{rows,avg,leader,broke85,broke75,pulse:pulse.slice(0,3),honors:honors.slice(0,4),statCards};
+}
+
+function ClubSocialIdentity({entries=[],score=0,clubName="the club",streak=0,iq=null,kind="club"}){
+  const social=rkClubSocialStats({entries,score,clubName,streak,iq,kind});
+  return <section className={`rk-club-social-v310 rk-club-social-${kind}`} aria-label={`${clubName} social pulse`}>
+    <div className="rk-club-social-head-v310">
+      <span>{kind==="global"?"Room pulse":"Club pulse"}</span>
+      <h2>{kind==="global"?"The room is moving":"Your club is alive"}</h2>
+      <p>{social.pulse[0]}</p>
+    </div>
+
+    <div className="rk-club-social-stats-v310">
+      {social.statCards.map((s,i)=>(
+        <div key={i}>
+          <strong>{s.value}</strong>
+          <span>{s.label}</span>
+          <em>{s.copy}</em>
+        </div>
+      ))}
+    </div>
+
+    <div className="rk-club-social-feed-v310">
+      {social.pulse.slice(1).map((line,i)=>(
+        <div key={i}><span></span><p>{line}</p></div>
+      ))}
+    </div>
+
+    <div className="rk-club-honors-v310">
+      {social.honors.map((h,i)=>(
+        <div key={i} className={`rk-club-honor-v310 ${h.tone||""}`}>
+          <span>{h.kicker}</span>
+          <strong>{h.title}</strong>
+          <em>{h.meta}</em>
+        </div>
+      ))}
+    </div>
+  </section>;
+}
+
 function RoomLeader({leader,myEntry,count,label="table"}){
   if(!leader)return null;
   const leaderScore=Number(leader.iqScore)||0;
@@ -10408,7 +10525,7 @@ function RoomRows({entries=[],scoreHint=null,emptyTitle="No scores yet",emptyCop
     <div className="rk-lb-empty-copy">{emptyCopy}</div>
   </section>;
 
-  return <section className="rk-lb-board" aria-label="Leaderboard">
+  return <section className="rk-lb-board rk-lb-board-live" aria-label="Leaderboard">
     <div className="rk-lb-board-head">
       <div>
         <div className="rk-lb-board-kicker">{title}</div>
@@ -10422,14 +10539,21 @@ function RoomRows({entries=[],scoreHint=null,emptyTitle="No scores yet",emptyCop
         const isMe=rkEntryMatchesCurrentPlayer(e,scoreHint);
         const rank=i+1;
         const podium=rank===1?"gold":rank===2?"silver":rank===3?"bronze":"";
+        const movement=rkClubMovement(e,i);
+        const streak=rkSocialEntryStreak(e);
+        const movementTone=movement>0?"up":movement<0?"down":"hold";
         return <div key={`${e.playerId||e.player_id||e.name}-${i}`} className={`rk-lb-row ${isMe?"rk-lb-row-you":""} ${podium?`rk-lb-row-${podium}`:""}`}>
           <div className={`rk-lb-rank ${rank<=3?"rk-lb-rank-top":""}`}>{rank}</div>
           <div className="rk-lb-player">
             <div className="rk-lb-player-top">
               <div className="rk-lb-player-name">{e.name}{isMe?" · you":""}</div>
-              {rank<=3&&<span className={`rk-lb-podium rk-lb-podium-${podium}`}>{rank===1?"Leader":rank===2?"Chasing":"In the mix"}</span>}
+              <div className="rk-lb-social-badges-v310">
+                {rank<=3&&<span className={`rk-lb-podium rk-lb-podium-${podium}`}>{rank===1?"Leader":rank===2?"Chasing":"In the mix"}</span>}
+                {movement!==0&&<span className={`rk-lb-move-v310 ${movementTone}`}>{movement>0?`↑ ${movement}`:`↓ ${Math.abs(movement)}`}</span>}
+                {streak>1&&<span className="rk-lb-streak-v310">{streak}d</span>}
+              </div>
             </div>
-            <div className="rk-lb-player-sub">{rkEntrySub(e)}</div>
+            <div className="rk-lb-player-sub">{movement>0?`${e.name||"Player"} climbed ${movement} spot${movement===1?"":"s"} today.`:movement<0?`The table caught up today.`:rkEntrySub(e)}</div>
           </div>
           <div className="rk-lb-score-wrap">
             <span>IQ</span>
@@ -10504,7 +10628,7 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
         <span className="rk-lb-hero-day">Day #{dn}</span>
       </div>
       <h1 className="rk-lb-hero-title">Today’s Rackle leaderboard</h1>
-      <p className="rk-lb-hero-copy">Same rack for everyone. See who’s leading the room and where your score lands today.</p>
+      <p className="rk-lb-hero-copy">Same rack for everyone. See who owned the room, who climbed, and who still has a score to defend.</p>
       <div className="rk-lb-stats-grid">
         <RoomMetric value={entries.length||"—"} label="players" accent="blue"/>
         <RoomMetric value={leader?.iqScore||"—"} label="score to beat" accent="gold"/>
@@ -10601,7 +10725,7 @@ playrackle.com`;
         <span className="rk-lb-hero-day">Day #{dn}</span>
       </div>
       <h1 className="rk-lb-hero-title">{club.name}</h1>
-      <p className="rk-lb-hero-copy">One shared daily rack for your table. See who’s leading and how close you are to the top.</p>
+      <p className="rk-lb-hero-copy">One shared daily rack. Daily status, table pride, and a board worth defending.</p>
       <div className="rk-lb-stats-grid">
         <RoomMetric value={entries.length||"—"} label="club scores" accent="jade"/>
         <RoomMetric value={leader?.iqScore||"—"} label="score to beat" accent="gold"/>
@@ -10630,7 +10754,7 @@ playrackle.com`;
 
     <RoomShareCard
       title="Share this club room"
-      copy="Send today’s board to your table so your club can compare scores before the reset."
+      copy="Send today’s board to your table. Give everyone a score to chase before the reset."
       buttonLabel="Share room"
       copied={copied}
       onShare={async()=>{const ok=await rkCopyOrShare(shareText,club.name);setCopied(ok);setTimeout(()=>setCopied(false),1400);}}
