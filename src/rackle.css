@@ -12357,3 +12357,20 @@ body,
     font-size:20px!important;
   }
 }
+
+/* Starting/final rack toggle reliability polish */
+.rk-final-rack-toggle-v180 button:disabled{
+  opacity:.42!important;
+  cursor:not-allowed!important;
+}
+
+.rk-final-rack-toggle-v180 button:disabled:hover{
+  background:transparent!important;
+  color:#6B6157!important;
+}
+
+.rk-final-rack-toggle-v180 button.active{
+  background:#176B42!important;
+  color:#FFF8E8!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14)!important;
+}

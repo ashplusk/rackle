@@ -7443,7 +7443,18 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const glanceBestDetail=rkFriendlyDirectionDetail(trustRead.best||shareDirection,trustRead.bestFit);
   const glanceBackupName=rkFriendlyDirectionName(trustRead.backup);
   const glanceBackupDetail=rkFriendlyDirectionDetail(trustRead.backup,trustRead.backupFit);
-  const rackToShow=showStartingRack&&startingRack&&startingRack.length?startingRack:hand;
+  const startingRackSource=(
+    Array.isArray(startingRack)&&startingRack.length?startingRack:
+    Array.isArray(iq?.startingRack)&&iq.startingRack.length?iq.startingRack:
+    Array.isArray(iq?.starting_rack)&&iq.starting_rack.length?iq.starting_rack:
+    Array.isArray(iq?.initialRack)&&iq.initialRack.length?iq.initialRack:
+    Array.isArray(iq?.initial_rack)&&iq.initial_rack.length?iq.initial_rack:
+    Array.isArray(passLog?.[0]?.startingRack)&&passLog[0].startingRack.length?passLog[0].startingRack:
+    Array.isArray(passLog?.[0]?.before)&&passLog[0].before.length?passLog[0].before:
+    []
+  );
+  const hasStartingRack=startingRackSource.length>0;
+  const rackToShow=showStartingRack&&hasStartingRack?startingRackSource:hand;
   return(
     <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26 rk-scorecard-clean-v120" style={{paddingBottom:32}}>
       <section className="rk-daily-scorecard-homeclone-v45 rk-home-scorecard-v41" aria-label="Daily Rackle scorecard">
@@ -7504,14 +7515,14 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
       <section className="rk-final-rack-simple-v180" aria-label="Your rack">
         <div className="rk-final-rack-simple-head-v180">
-          <strong>{showStartingRack?"Starting rack":"Your final rack"}</strong>
+          <strong>{showStartingRack&&hasStartingRack?"Starting rack":"Your final rack"}</strong>
           <div className="rk-final-rack-toggle-v180" role="group" aria-label="Choose rack view">
             <button type="button" className={!showStartingRack?"active":""} onClick={()=>setShowStartingRack(false)}>Final</button>
-            <button type="button" className={showStartingRack?"active":""} onClick={()=>setShowStartingRack(true)}>Starting</button>
+            <button type="button" className={showStartingRack&&hasStartingRack?"active":""} disabled={!hasStartingRack} onClick={()=>hasStartingRack&&setShowStartingRack(true)}>Starting</button>
           </div>
         </div>
         <div className="rk-score-clean-rack-v120 rk-final-rack-simple-surface-v180">
-          <SortableRack hand={rackToShow}/>
+          <SortableRack key={showStartingRack&&hasStartingRack?"starting-rack":"final-rack"} hand={rackToShow}/>
         </div>
       </section>
 
