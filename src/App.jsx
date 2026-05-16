@@ -260,6 +260,28 @@ const SUITS=["bam","crak","dot"],SN={bam:"Bam",crak:"Crk",dot:"Dot"},SC={bam:C.j
 function buildDeck(){const d=[];SUITS.forEach(s=>{for(let n=1;n<=9;n++)for(let i=0;i<4;i++)d.push({t:"s",s,n});});["N","E","W","S"].forEach(v=>{for(let i=0;i<4;i++)d.push({t:"w",v});});["Red","Grn","Soap"].forEach(v=>{for(let i=0;i<4;i++)d.push({t:"d",v});});for(let i=0;i<8;i++)d.push({t:"f"});for(let i=0;i<8;i++)d.push({t:"j"});return d;}
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
 function seededShuffle(a,seed){const b=[...a];let s=seed;for(let i=b.length-1;i>0;i--){s=(s*16807)%2147483647;[b[i],b[s%(i+1)]]=[b[s%(i+1)],b[i]];}return b;}
+function rkStableHash(input){
+  const str=String(input||"");
+  let h=2166136261;
+  for(let i=0;i<str.length;i++){
+    h^=str.charCodeAt(i);
+    h=Math.imul(h,16777619);
+  }
+  return h>>>0;
+}
+function rkSeedFloat(input){
+  return rkStableHash(input)/4294967295;
+}
+function rkTileStableKey(t){
+  if(!t)return"";
+  if(t.t==="s")return`s-${t.s}-${t.n}`;
+  if(t.t==="w")return`w-${t.v}`;
+  if(t.t==="d")return`d-${t.v}`;
+  if(t.t==="f")return`f`;
+  if(t.t==="j")return`j`;
+  return JSON.stringify(t);
+}
+
 function sortVal(t){if(t.t==="s")return{bam:0,crak:1,dot:2}[t.s]*100+t.n;if(t.t==="f")return 1000;if(t.t==="w")return 2000+"NEWS".indexOf(t.v);if(t.t==="d")return 3000+["Red","Grn","Soap"].indexOf(t.v);return 4000;}
 function sortHand(t){return[...t].sort((a,b)=>sortVal(a)-sortVal(b));}
 function tL(t){if(t.t==="j")return"🃏";if(t.t==="f")return"🌸";if(t.t==="w")return t.v;if(t.t==="d")return t.v==="Red"?"中":t.v==="Grn"?"發":"白";return`${t.n}`;}
@@ -12199,13 +12221,18 @@ function Game({mode,home,onDone,settings,setScreen,go}){
   // The opponent's "section" rotates per Charleston so the mix feels natural.
   const oppSectionRef=useRef(null);
   if(!oppSectionRef.current){
-    // Pick a random opposing section at game start, determines their discard bias
+    // Daily must be identical for everyone. Practice can still use normal randomness.
     const oppSecs=["2468","cr","13579","369","wd","sp","aln","2026"];
-    oppSectionRef.current=oppSecs[Math.floor(Math.random()*oppSecs.length)];
+    if(mode==="daily"){
+      oppSectionRef.current=oppSecs[rkStableHash(`daily-opponent-section:${getDailySeed()}`)%oppSecs.length];
+    }else{
+      oppSectionRef.current=oppSecs[Math.floor(Math.random()*oppSecs.length)];
+    }
   }
 
-  // Score a pool tile as "discard likelihood" for the opponent, higher = more likely to pass it
-  const oppDiscardScore=(t,oppSec)=>{
+  // Score a pool tile as "discard likelihood" for the opponent, higher = more likely to pass it.
+  // In Daily mode, every tie-break is seeded. No Math.random() can affect the Daily rack.
+  const oppDiscardScore=(t,oppSec,idx,contextKey)=>{
     // Jokers never enter the pool (filtered out on deal)
     if(t.t==="j")return 0;
     // Common discards: tiles that don't fit opponent's section
@@ -12220,21 +12247,30 @@ function Game({mode,home,onDone,settings,setScreen,go}){
       "sp":(t)=>false,
     };
     const isWeak=weakFor[oppSec]?weakFor[oppSec](t):false;
-    // Flowers and high-value tiles are less likely to be passed
-    if(t.t==="f")return 2;
-    if(isWeak)return 10+Math.random()*5;
-    return 3+Math.random()*4;
+    const jitter=mode==="daily"
+      ?rkSeedFloat(`${contextKey}:${idx}:${rkTileStableKey(t)}`)
+      :Math.random();
+
+    // Flowers and high-value tiles are less likely to be passed.
+    if(t.t==="f")return 2+jitter*.25;
+    if(isWeak)return 10+jitter*5;
+    return 3+jitter*4;
   };
 
   // Pick incoming Charleston tiles from the simulated opponent.
   // American Mahjong rule: Jokers are NEVER passed in the Charleston.
-  // Keep this centralized so Daily, Free Play, blind passes, and Courtesy Pass all obey it.
+  // Daily mode is deterministic across browsers/devices for the same daily and same player decisions.
   const getIncomingTiles=(count)=>{
     const requested=Math.max(0,Number(count)||0);
     const safePool=(pool||[]).filter(t=>t&&t.t!=="j");
+    const passKey=cn===1
+      ?(pi===0?"right":pi===1?"over":"left-blind")
+      :(pi===0?"second-left":pi===1?"second-over":"second-right-blind");
+    const contextKey=`${mode}:${mode==="daily"?getDailySeed():"practice"}:${cn}:${pi}:${passKey}:${requested}:${passLog.length}`;
+
     const scored=safePool
-      .map((t,idx)=>({t,idx,score:oppDiscardScore(t,oppSectionRef.current)}))
-      .sort((a,b)=>b.score-a.score);
+      .map((t,idx)=>({t,idx,score:oppDiscardScore(t,oppSectionRef.current,idx,contextKey)}))
+      .sort((a,b)=>(b.score-a.score)||(rkStableHash(`${contextKey}:tie:${a.idx}:${rkTileStableKey(a.t)}`)-rkStableHash(`${contextKey}:tie:${b.idx}:${rkTileStableKey(b.t)}`)));
 
     const picked=scored.slice(0,requested);
     const pickedIdx=new Set(picked.map(x=>x.idx));
@@ -12242,12 +12278,19 @@ function Game({mode,home,onDone,settings,setScreen,go}){
     let newPool=safePool.filter((_,i)=>!pickedIdx.has(i));
 
     // Defensive fallback: keep rack counts stable even if a stale pool was exhausted.
-    // Refill only with legal non-joker tiles. Jokers can be dealt initially, but never received.
+    // Daily fallback is also seeded so the daily puzzle remains reproducible.
     if(incoming.length<requested){
       const needed=requested-incoming.length;
-      const fallback=shuffle(buildDeck().filter(t=>t&&t.t!=="j")).slice(0,needed);
+      const fallbackDeck=buildDeck().filter(t=>t&&t.t!=="j");
+      const refill=mode==="daily"
+        ?seededShuffle(fallbackDeck,rkStableHash(`${contextKey}:fallback`))
+        :shuffle(fallbackDeck);
+      const fallback=refill.slice(0,needed);
       incoming.push(...fallback);
-      newPool=[...newPool,...shuffle(buildDeck().filter(t=>t&&t.t!=="j")).slice(0,Math.max(0,needed*2))];
+      const refill2=mode==="daily"
+        ?seededShuffle(fallbackDeck,rkStableHash(`${contextKey}:refill`))
+        :shuffle(fallbackDeck);
+      newPool=[...newPool,...refill2.slice(0,Math.max(0,needed*2))];
       console.warn("Rackle Charleston pool refilled with non-joker tiles to preserve pass count.");
     }
 
@@ -12329,7 +12372,7 @@ function Game({mode,home,onDone,settings,setScreen,go}){
 
   const restart=()=>{
     window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;
-    const d=shuffle(buildDeck());const dealt=d.slice(0,13);
+    const d=mode==="daily"?seededShuffle(buildDeck(),getDailySeed()):shuffle(buildDeck());const dealt=d.slice(0,13);
     setHand(dealt);setStartingRack(dealt);setPool(d.slice(13).filter(t=>t.t!=="j"));
     setSel([]);setPassed([]);setPassLog([]);setNewIdx([]);setCn(1);setPi(0);setChosenSecBoth(null);setChosenHand(null);
     setShowRef(false);setShowHint(false);setHintExp(null);setIqResultBoth(null);
