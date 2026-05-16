@@ -7291,6 +7291,69 @@ function ImproveGameHero({iq,chosenSecObj,bestFitSec,onPractice,onCoachMode,setS
 }
 
 
+
+function rkStyleReadForScorecard(styleName,score,trustRead){
+  const raw=(styleName||"").toString().trim();
+  const key=raw.toLowerCase();
+  const numeric=Number(score||0);
+  const best=trustRead?.best||"your best direction";
+
+  if(key.includes("focus")||key.includes("locked")){
+    return {
+      label:raw||"Focused Builder",
+      copy:`You had a clear lane and protected the tiles that mattered. Your rack was already pointing toward ${best}, so the strongest play was to keep that shape clean.`,
+      reasons:["Clear primary direction","Useful tiles worked together","Less noise after the Charleston"]
+    };
+  }
+
+  if(key.includes("flex")){
+    return {
+      label:raw||"Flexible Builder",
+      copy:"You kept more than one path alive without losing the whole shape. That helped your rack stay playable, but it still needed cleaner pair or repeated tile structure.",
+      reasons:["Multiple paths stayed open","Backup direction was realistic","Still needed cleaner structure"]
+    };
+  }
+
+  if(key.includes("scatter")||key.includes("messy")){
+    return {
+      label:raw||"Scattered Watcher",
+      copy:"Your rack touched a few sections, but not enough tiles were working together yet. The right move was to reduce noise and wait for the next clear signal.",
+      reasons:["Several loose tiles","No fully clean lane yet","Needed better tile compression"]
+    };
+  }
+
+  if(key.includes("thin")||numeric<50){
+    return {
+      label:raw||"Thin Rack",
+      copy:"This was a harder Charleston. You had a few clues, but not enough depth to chase confidently, so protecting useful shape mattered most.",
+      reasons:["Limited tile depth","Few true keepers","Needed help from future picks"]
+    };
+  }
+
+  if(numeric>=80){
+    return {
+      label:raw||"Strong Builder",
+      copy:`You finished the Charleston with a believable direction and useful backup. Your rack had enough structure to keep building toward ${best}.`,
+      reasons:["Strong primary lane","Useful backup path","Good post-Charleston shape"]
+    };
+  }
+
+  if(numeric>=65){
+    return {
+      label:raw||"Balanced Builder",
+      copy:"You played a steady Charleston. The rack had a real direction, but the next few picks still needed to confirm the best path.",
+      reasons:["Playable structure","Some flexibility remained","Needed one clearer signal"]
+    };
+  }
+
+  return {
+    label:raw||"Open Rack",
+    copy:"You kept the rack alive, but it was not ready to lock into one hand yet. The next move is to protect the strongest section and avoid chasing everything.",
+    reasons:["Some useful tiles","Direction still forming","Avoid overcommitting too early"]
+  };
+}
+
+
 function rkFriendlyDirectionName(direction){
   const raw=(direction||"").toString().trim();
   const key=raw.toLowerCase();
@@ -7455,6 +7518,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   );
   const hasStartingRack=startingRackSource.length>0;
   const rackToShow=showStartingRack&&hasStartingRack?startingRackSource:hand;
+  const styleRead=rkStyleReadForScorecard(iq.styleName||scoreLabel,score,trustRead);
   return(
     <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26 rk-scorecard-clean-v120" style={{paddingBottom:32}}>
       <section className="rk-daily-scorecard-homeclone-v45 rk-home-scorecard-v41" aria-label="Daily Rackle scorecard">
@@ -7557,6 +7621,22 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
             <p>{rkHumanTableCopy(trustRead.nextMove)}</p>
           </div>
 
+        </div>
+      </section>
+
+      <section className="rk-score-style-card-v190" aria-label="Your style">
+        <div className="rk-score-style-head-v190">
+          <span>Your style</span>
+          <strong>{styleRead.label}</strong>
+        </div>
+        <p>{styleRead.copy}</p>
+        <div className="rk-score-style-reasons-v190" aria-label="Why you got this style">
+          {styleRead.reasons.map((reason,i)=>(
+            <div key={i}>
+              <span></span>
+              <em>{reason}</em>
+            </div>
+          ))}
         </div>
       </section>
 
