@@ -7322,7 +7322,92 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       setAnimatedScore(next);
       if(progress>=1){clearInterval(timer);setAnimatedScore(target);}
     },interval);
-  
+    return()=>clearInterval(timer);
+  },[score]);
+  const time=Number(resultTime||iq.timeSecs||iq.time_secs||iq.totalTime||iq.time||0);
+  const timeLabel=time?fT(Math.round(time)):"—";
+  const clubCode=getClubCode();
+  const playerName=getPlayerDisplayName()||rkCurrentDisplayName?.()||"";
+  const affiliatedClubName=getAffiliatedClubName(clubCode);
+  const globalRows=rkMergeCurrentScore(globalEntries,score,time,iq.streak||0,clubCode);
+  const clubRows=clubCode?rkMergeCurrentScore(clubEntries,score,time,iq.streak||0,clubCode):[];
+  const globalRank=rkRankOfCurrent(globalRows,score);
+  const clubRank=clubCode?rkRankOfCurrent(clubRows,score):null;
+  const globalTotal=globalRows.length||dailyStats?.total||dailyStats?.count||null;
+  const clubTotal=clubCode?clubRows.length:null;
+  const rankLine=globalRank&&globalTotal?`#${globalRank} of ${globalTotal} today${clubRank&&clubTotal?` · #${clubRank} in ${affiliatedClubName||"your club"}`:""}`:clubRank&&clubTotal?`#${clubRank} of ${clubTotal} in ${affiliatedClubName||"your club"}`:"";
+  const roomCount=Number(globalTotal||globalRows.length||0);
+  const roomLabel=roomCount===1?"1 player played today":`${roomCount||1} players played today`;
+  const clubShortName=affiliatedClubName?affiliatedClubName.replace(/\s+Mahjong Club$/i,""):"";
+  const clubRoomLabel=affiliatedClubName?`${clubShortName||affiliatedClubName} room is live`:"Today’s room is live";
+  const clubRoomSub=clubCode?`Open the club room to see the board, posted scores, and where your ${score} sits.`:`Open today’s Rackle room and see the board.`;
+  const socialAvatarCount=Math.min(3,Math.max(1,roomCount||clubTotal||1));
+
+  const passEmoji=rkSharePattern(iq);
+  const passDots=(iq.passInsights||[]).slice(0,3);
+  const trustRead=rkScorecardTrustRead(iq,hand);
+  const quickRead=(trustRead?.band?.tone)||(()=>{
+    if(score>=85)return "Excellent Charleston. You have a clear direction, real tile depth, and enough acceleration.";
+    if(score>=75)return "Strong Charleston. You kept a believable lane alive.";
+    if(score>=65)return "Solid but still flexible. The next few turns still matter.";
+    if(score>=50)return "Playable but unclear. The rack needs cleaner shape before you lock in.";
+    if(score>=35)return "Thin rack. Protect structure and avoid forcing a thin lane.";
+    return "Difficult rack. Reduce noise and keep the best clues.";
+  })();
+  const scoreLabel=trustRead?.band?.short||rkLaunchScoreBand(score).short;
+  const scoreAccent=score>=85?C.gold:score>=70?C.jade:score>=55?"#2460A8":score>=40?C.gold:C.cinn;
+  const topSectionRead=allSections&&allSections.length?[...allSections].sort((a,b)=>(b.score||0)-(a.score||0))[0]:null;
+  const shareName=(playerName||"I").trim();
+  const shareDirection=trustRead?.best||topSectionRead?.name||iq.bestDirection||"Still watching";
+  const shareRankLine=clubRank
+    ? `Club rank: #${clubRank}${affiliatedClubName?` in ${affiliatedClubName}`:""}`
+    : globalRank?`Global rank: #${globalRank}${globalTotal?` of ${globalTotal}`:""}`:"";
+  const shareInsight=(trustRead?.heldBack?.[0]||trustRead?.band?.tone||quickRead||"").replace(/\s+/g," ").trim();
+  const shareText=[
+    `Rackle #${dayNum}`,
+    `Score: ${score}`,
+    shareDirection?`Best direction: ${shareDirection}`:"",
+    shareRankLine,
+    shareInsight,
+    `Play today’s rack:`,
+    `playrackle.com`
+  ].filter(Boolean).join("\n");
+  const viralPrompt=affiliatedClubName?`Can ${affiliatedClubName} beat ${score} before midnight?`:`Can your group beat ${score} before midnight?`;
+  const scoredHandLabel=iq.scoredHandLabel||chosenHand||null;
+  const scoredHandObj=scoredHandLabel?HAND_CATALOG.find(h=>h.sec===chosenSec&&h.label===scoredHandLabel):null;
+  const reviewBestPath=scoredHandObj?.labelForDisplay||scoredHandObj?.variantLabel||scoredHandObj?.label||iq.bestHandLabel||topSectionRead?.name||"Keep reading the rack";
+  const reviewTone=score>=75?"Strong read":score>=55?"Playable read":score>=40?"Developing read":"Reset rack";
+  const ruleSafeLine=rkRuleSafeScorecardLine(iq);
+  const reviewCopy=ruleSafeLine||rkHumanTableCopy(score>=75
+    ? "You kept a real lane alive and gave yourself room to compete."
+    : score>=55
+    ? "The rack had life. One cleaner pass or earlier pivot would have made the lane stronger."
+    : score>=40
+    ? "You found pieces of a direction, but the rack needed more shape before locking in."
+    : "This rack never fully settled. Protect structure and avoid forcing a thin lane.");
+  const pivotCopy=rkHumanTableCopy(ruleSafeLine||iq.strategicRead?.pivotAdvice||iq.coachNotes?.[0]||iq.takeaway||"Look for the first section that gives you natural groups, not just familiar tiles.");
+  const tableTag=score>=75?"Flexible":score>=55?"Alive":score>=40?"Messy":"Thin";
+  const shapeLine=rkHumanTableCopy(iq.expertRead?.topCoachLine||iq.strategicRead?.topCoachLine||iq.expertNotes?.[0]||reviewCopy);
+  const passLine=rkHumanTableCopy(iq.passReview?.regret?.[0]||iq.passReview?.correct?.[0]||iq.passReview?.summary||"No major pass regret showed up against the cleanest lane.");
+
+  const Metric=({label,value,sub,accent=C.ink,onClick})=>{
+    const Tag=onClick?"button":"div";
+    return(
+      <Tag onClick={onClick} style={{
+        border:`1px solid rgba(26,20,16,.075)`,borderRadius:18,
+        background:"linear-gradient(145deg,#FFFDF8,#F7F0E5)",
+        boxShadow:"0 5px 16px rgba(26,20,16,.035),inset 0 1px 0 rgba(255,255,255,.78)",
+        padding:"13px 10px",textAlign:"center",fontFamily:F.b,cursor:onClick?"pointer":"default",
+        width:"100%",appearance:"none"
+      }}>
+        <div style={{fontSize:8,letterSpacing:1.6,textTransform:"uppercase",fontWeight:900,color:"rgba(26,20,16,.45)",marginBottom:5}}>{label}</div>
+        <div style={{fontFamily:F.d,fontSize:22,lineHeight:1,fontWeight:900,color:accent,letterSpacing:-.7}}>{value}</div>
+        {sub&&<div style={{fontSize:10,lineHeight:1.4,color:C.mut,fontWeight:700,marginTop:6,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{sub}</div>}
+      </Tag>
+    );
+  };
+
+
   const resultStatusRaw=(iq.resultStatus||iq.result||iq.outcome||iq.gameResult||"").toString().toLowerCase();
   const resultLabel=resultStatusRaw.includes("mahj")?"Mahjongg":resultStatusRaw.includes("wall")?"Wall game":resultStatusRaw.includes("loss")?"Loss":score>=75?"Mahjongg":score>=55?"Wall game":"Loss";
   const resultTone=resultLabel==="Mahjongg"?"win":"loss";
@@ -7452,7 +7537,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           <h2>{affiliatedClubName?`Send it to ${affiliatedClubName}`:"Send it to your table"}</h2>
           <p>Post today&apos;s result so your club can chase the same rack.</p>
         </div>
-        <ShareButton text={shareText} label="Share today&apos;s Rackle" sublabel="Send score to the club chat" variant="green"/>
+        <ShareButton text={shareText} label="Share today's Rackle" sublabel="Send score to the club chat" variant="green"/>
       </section>
 
       <section className="rk-score-deep-dive-v300" aria-label="Score deep dive">
