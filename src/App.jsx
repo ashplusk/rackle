@@ -11997,9 +11997,9 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           {!hasTodayDaily&&<StartDaily/>}
           {hasTodayDaily&&<CompletedDaily/>}
           <Community/>
+          <TomorrowTease/>
           <PracticeCard/>
           <Learn/>
-          <TomorrowTease/>
         </div>
         <Footer/>
       </div>
