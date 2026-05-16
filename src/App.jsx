@@ -10366,6 +10366,23 @@ function RoomMetric({value,label,accent="jade"}){
 }
 
 
+
+function rkLeaderboardEntryStyle(e){
+  const raw=
+    e?.styleName||
+    e?.style||
+    e?.iq?.styleName||
+    e?.iq?.style||
+    e?.rackIQ?.styleName||
+    e?.rackleIQ?.styleName||
+    e?.scorecard?.iq?.styleName||
+    e?.result?.iq?.styleName||
+    "";
+  const val=String(raw||"").trim();
+  if(!val)return "";
+  return val.length>22?`${val.slice(0,21)}…`:val;
+}
+
 function rkSocialEntryScore(e){
   return Number(e?.iqScore??e?.iq_score??e?.score??0)||0;
 }
@@ -10577,9 +10594,12 @@ function RoomRows({entries=[],scoreHint=null,emptyTitle="No scores yet",emptyCop
             </div>
             <div className="rk-lb-player-sub">{movement>0?`${e.name||"Player"} climbed ${movement} spot${movement===1?"":"s"} today.`:movement<0?`The table caught up today.`:rkEntrySub(e)}</div>
           </div>
-          <div className="rk-lb-score-wrap">
+          <div className="rk-lb-score-wrap rk-lb-score-style-tight-v920">
             <span>IQ</span>
-            <div className={`rk-lb-score ${rkScoreTone(e.iqScore)}`}>{e.iqScore}</div>
+            <div className="rk-lb-score-line-v920">
+              <div className={`rk-lb-score ${rkScoreTone(e.iqScore)}`}>{e.iqScore}</div>
+              {rkLeaderboardEntryStyle(e)&&<em>{rkLeaderboardEntryStyle(e)}</em>}
+            </div>
           </div>
         </div>;
       })}
