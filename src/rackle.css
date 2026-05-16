@@ -20374,3 +20374,112 @@ footer p{
     min-height:68px!important;
   }
 }
+
+/* FINAL Rackle wordmark treatment: Fraunces italic, target image style */
+.rk-startup-logo-v4,
+.rk-header-brand-title-v75,
+.rk-gameplay-inline-logo-v200,
+.rk-gameplay-live-logo-v220,
+.rk-footer-logo,
+.rk-premium-footer-logo,
+.rk-brand-logo,
+.rk-logo,
+.rk-boot-logo,
+.rk-menu-logo,
+.rk-drawer-logo,
+.rk-app-logo,
+[class*="rk-"][class*="logo"]:not([class*="tag"]):not([class*="subtitle"]),
+[class*="brand-title"]{
+  font-family:'Fraunces', Georgia, serif!important;
+  font-style:italic!important;
+  font-weight:800!important;
+  letter-spacing:-0.058em!important;
+  line-height:.9!important;
+  color:#1A1410!important;
+  text-rendering:geometricPrecision!important;
+  -webkit-font-smoothing:antialiased!important;
+  font-synthesis:none!important;
+}
+
+/* Homepage hero wordmark scale */
+.rk-startup-logo-v4{
+  font-size:48px!important;
+  font-weight:800!important;
+  letter-spacing:-0.06em!important;
+}
+
+/* Compact app headers */
+.rk-header-brand-title-v75,
+.rk-gameplay-inline-logo-v200,
+.rk-gameplay-live-logo-v220{
+  font-size:30px!important;
+  font-weight:800!important;
+  letter-spacing:-0.058em!important;
+}
+
+/* Footer / loading / menu variants */
+.rk-footer-logo,
+.rk-premium-footer-logo,
+.rk-brand-logo,
+.rk-logo,
+.rk-boot-logo,
+.rk-menu-logo,
+.rk-drawer-logo,
+.rk-app-logo{
+  font-weight:800!important;
+  letter-spacing:-0.058em!important;
+}
+
+/* Keep all taglines and labels non-italic */
+.rk-startup-subtitle-v4,
+.rk-header-brand-tag-v75,
+.rk-inline-header-tag,
+.rk-gameplay-inline-tag-v200,
+.rk-gameplay-live-tag-v220,
+.rk-footer-tagline,
+.rk-premium-footer p,
+.rk-footer p,
+[class*="tagline"],
+[class*="subtitle"],
+[class*="tag-v"],
+[class*="kicker"],
+[class*="label"]{
+  font-style:normal!important;
+}
+
+/* Dark or green surfaces should still keep the same italic wordmark */
+.rk-scorecard-premium-page-v500 .rk-header-brand-title-v75,
+.rk-scorecard-premium-page-v500 .rk-gameplay-inline-logo-v200,
+.rk-scorecard-premium-page-v500 .rk-gameplay-live-logo-v220,
+.rk-game-scorecard-single-v990 .rk-header-brand-title-v75,
+.rk-game-scorecard-single-v990 .rk-gameplay-inline-logo-v200,
+.rk-game-scorecard-single-v990 .rk-gameplay-live-logo-v220{
+  font-family:'Fraunces', Georgia, serif!important;
+  font-style:italic!important;
+  font-weight:800!important;
+  letter-spacing:-0.058em!important;
+}
+
+@media (max-width:430px){
+  .rk-startup-logo-v4{
+    font-size:44px!important;
+  }
+
+  .rk-header-brand-title-v75,
+  .rk-gameplay-inline-logo-v200,
+  .rk-gameplay-live-logo-v220{
+    font-size:28px!important;
+  }
+}
+
+@media (max-width:370px){
+  .rk-startup-logo-v4{
+    font-size:40px!important;
+  }
+
+  .rk-header-brand-title-v75,
+  .rk-gameplay-inline-logo-v200,
+  .rk-gameplay-live-logo-v220{
+    font-size:26px!important;
+  }
+}
