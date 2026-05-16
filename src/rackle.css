@@ -14616,3 +14616,129 @@ body,
     height:60px!important;
   }
 }
+
+/* Homepage contrast fix: Your Table Today + Tomorrow's Rackle */
+.rk-club-today-card{
+  background:
+    radial-gradient(circle at 92% 8%, rgba(243,212,107,.10), transparent 30%),
+    linear-gradient(145deg,#FFFDF8 0%,#EFE3CF 100%)!important;
+  border:1px solid rgba(26,20,16,.10)!important;
+}
+
+.rk-club-today-kicker{
+  background:rgba(18,59,36,.10)!important;
+  border:1px solid rgba(18,59,36,.18)!important;
+  color:#123B24!important;
+}
+
+.rk-club-today-title{
+  color:#1A1410!important;
+}
+
+.rk-club-today-desc{
+  color:#4F463F!important;
+  opacity:1!important;
+}
+
+.rk-club-today-board{
+  background:#FFF8E8!important;
+  border:1px solid rgba(26,20,16,.09)!important;
+}
+
+.rk-club-today-board-copy strong,
+.rk-club-today-name,
+.rk-club-today-row-score{
+  color:#1A1410!important;
+}
+
+.rk-club-today-board-copy span,
+.rk-club-today-rank{
+  color:#5F564E!important;
+  opacity:1!important;
+}
+
+.rk-club-today-stats div{
+  background:#EFE3CF!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+}
+
+.rk-club-today-stats div strong{
+  color:#1A1410!important;
+}
+
+.rk-club-today-stats div span{
+  color:#5F564E!important;
+  opacity:1!important;
+}
+
+.rk-club-today-row{
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.065)!important;
+}
+
+.rk-club-today-score{
+  background:#123B24!important;
+  border:1px solid rgba(243,212,107,.26)!important;
+}
+
+.rk-club-today-score strong{
+  color:#FFF8E8!important;
+}
+
+.rk-club-today-score span{
+  color:rgba(255,248,232,.74)!important;
+}
+
+.rk-club-today-actions button{
+  color:#FFF8E8!important;
+}
+
+.rk-club-today-actions button:nth-child(2){
+  background:#FFF8E8!important;
+  color:#123B24!important;
+  border:1px solid rgba(18,59,36,.16)!important;
+}
+
+/* Tomorrow card: keep purple, but make it readable */
+.rk-tomorrow-card-v11.rk-tomorrow-mystery-final{
+  background:
+    radial-gradient(circle at 90% 10%, rgba(117,91,172,.14), transparent 30%),
+    linear-gradient(145deg,#E8DDF8 0%,#D9C8F0 100%)!important;
+  border:1px solid rgba(87,66,138,.18)!important;
+}
+
+.rk-tomorrow-v11-kicker{
+  color:#4E347A!important;
+  opacity:1!important;
+}
+
+.rk-tomorrow-v11-title{
+  color:#241638!important;
+}
+
+.rk-tomorrow-v11-copy{
+  color:#47315F!important;
+  opacity:1!important;
+}
+
+.rk-tomorrow-v11-badge{
+  background:#4E347A!important;
+  color:#FFF8E8!important;
+  border:1px solid rgba(255,248,232,.20)!important;
+}
+
+.rk-tomorrow-float-tiles{
+  opacity:.23!important;
+  color:#4E347A!important;
+}
+
+@media (max-width:430px){
+  .rk-club-today-desc,
+  .rk-tomorrow-v11-copy{
+    font-size:12.75px!important;
+  }
+
+  .rk-club-today-score span{
+    font-size:7.25px!important;
+  }
+}
