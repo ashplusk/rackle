@@ -11011,330 +11011,6 @@ body,
 }
 
 
-/* Scorecard targeted premium polish: homepage share button + Coach Mode typography */
-.rk-score-clean-share-v120 .rk-share-card,
-.rk-score-share-v160 .rk-share-card{
-  min-height:58px!important;
-  border-radius:18px!important;
-  padding:13px 15px!important;
-  background:linear-gradient(145deg,#FFFDF8 0%,#F1E7D5 100%)!important;
-  border:1px solid rgba(26,20,16,.08)!important;
-  color:#1A1410!important;
-  box-shadow:
-    0 10px 24px rgba(26,20,16,.055),
-    inset 0 1px 0 rgba(255,255,255,.82)!important;
-}
-
-.rk-score-clean-share-v120 .rk-share-card > div:first-child,
-.rk-score-share-v160 .rk-share-card > div:first-child{
-  background:rgba(23,107,66,.09)!important;
-  border:1px solid rgba(23,107,66,.15)!important;
-  color:#176B42!important;
-}
-
-.rk-score-clean-share-v120 .rk-share-card div,
-.rk-score-share-v160 .rk-share-card div{
-  color:inherit;
-}
-
-.rk-score-clean-share-v120 .rk-share-card [style*="font-family"],
-.rk-score-share-v160 .rk-share-card [style*="font-family"]{
-  font-family:'Fraunces', Georgia, serif!important;
-  font-weight:900!important;
-  color:#1A1410!important;
-  font-size:17px!important;
-  line-height:1.05!important;
-}
-
-.rk-score-clean-share-v120 .rk-share-card [style*="line-height:1.4"],
-.rk-score-share-v160 .rk-share-card [style*="line-height:1.4"]{
-  font-family:'Nunito','Segoe UI',sans-serif!important;
-  color:#6B6157!important;
-  font-size:12px!important;
-  font-weight:750!important;
-  line-height:1.35!important;
-}
-
-.rk-score-clean-share-v120 .rk-share-card:after,
-.rk-score-share-v160 .rk-share-card:after{
-  content:"→"!important;
-  width:30px!important;
-  height:30px!important;
-  border-radius:999px!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  margin-left:auto!important;
-  background:#176B42!important;
-  color:#FFF8E8!important;
-  font-family:'Fraunces', Georgia, serif!important;
-  font-size:17px!important;
-  font-weight:900!important;
-  flex-shrink:0!important;
-}
-
-.rk-score-clean-share-v120 .rk-share-card:hover,
-.rk-score-share-v160 .rk-share-card:hover{
-  transform:translateY(-1px)!important;
-  box-shadow:
-    0 14px 28px rgba(26,20,16,.075),
-    inset 0 1px 0 rgba(255,255,255,.86)!important;
-}
-
-/* Final hand: premium but stable */
-.rk-score-clean-final-v120{
-  position:relative!important;
-  overflow:hidden!important;
-  padding:20px!important;
-  border-radius:28px!important;
-  background:
-    radial-gradient(circle at 92% 10%, rgba(243,212,107,.10), transparent 28%),
-    linear-gradient(145deg,#FFFDF8 0%,#F7F0E4 100%)!important;
-  border:1px solid rgba(26,20,16,.08)!important;
-  box-shadow:
-    0 14px 34px rgba(26,20,16,.055),
-    inset 0 1px 0 rgba(255,255,255,.82)!important;
-}
-
-.rk-score-clean-final-v120:before{
-  content:""!important;
-  position:absolute!important;
-  top:0!important;
-  left:24px!important;
-  right:24px!important;
-  height:3px!important;
-  border-radius:999px!important;
-  background:linear-gradient(90deg,transparent,rgba(243,212,107,.74),transparent)!important;
-}
-
-.rk-score-clean-final-v120 .rk-score-clean-head-v120{
-  text-align:left!important;
-  margin-bottom:16px!important;
-}
-
-.rk-score-clean-final-v120 .rk-score-clean-head-v120 span,
-.rk-score-clean-glance-v120 .rk-score-clean-head-v120 span{
-  display:inline-flex!important;
-  width:max-content!important;
-  max-width:100%!important;
-  margin:0 0 12px!important;
-  padding:7px 12px!important;
-  border-radius:999px!important;
-  background:rgba(23,107,66,.08)!important;
-  border:1px solid rgba(23,107,66,.15)!important;
-  color:#176B42!important;
-  font-family:'Nunito','Segoe UI',sans-serif!important;
-  font-size:9.5px!important;
-  font-weight:900!important;
-  letter-spacing:1.8px!important;
-  line-height:1!important;
-  text-transform:uppercase!important;
-}
-
-.rk-score-clean-final-v120 .rk-score-clean-head-v120 h2,
-.rk-score-clean-glance-v120 .rk-score-clean-head-v120 h2{
-  margin:0 0 8px!important;
-  text-align:left!important;
-  font-family:'Fraunces', Georgia, serif!important;
-  font-size:25px!important;
-  line-height:1.05!important;
-  font-weight:900!important;
-  letter-spacing:-.35px!important;
-  color:#1A1410!important;
-}
-
-.rk-score-clean-final-v120 .rk-score-clean-head-v120 p,
-.rk-score-clean-glance-v120 .rk-score-clean-head-v120 p{
-  margin:0!important;
-  max-width:560px!important;
-  text-align:left!important;
-  color:#6B6157!important;
-  font-family:'Nunito','Segoe UI',sans-serif!important;
-  font-size:14px!important;
-  font-weight:750!important;
-  line-height:1.52!important;
-}
-
-.rk-score-clean-rack-v120{
-  margin-top:16px!important;
-  padding:14px!important;
-  border-radius:22px!important;
-  background:rgba(255,255,255,.52)!important;
-  border:1px solid rgba(26,20,16,.06)!important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.74),
-    0 8px 20px rgba(26,20,16,.035)!important;
-}
-
-/* Rack at a glance: Coach Mode-inspired typography and cards, not a full redesign */
-.rk-score-clean-glance-v120,
-.rk-score-glance-board-v140,
-.rk-score-glance-v150,
-.rk-score-glance-v160{
-  position:relative!important;
-  overflow:hidden!important;
-  padding:20px!important;
-  border-radius:28px!important;
-  background:
-    radial-gradient(circle at 92% 10%, rgba(23,107,66,.08), transparent 30%),
-    linear-gradient(145deg,#FFFDF8 0%,#F7F0E4 100%)!important;
-  border:1px solid rgba(26,20,16,.08)!important;
-  box-shadow:
-    0 14px 34px rgba(26,20,16,.055),
-    inset 0 1px 0 rgba(255,255,255,.82)!important;
-}
-
-.rk-score-clean-glance-v120:before,
-.rk-score-glance-v160:before{
-  content:""!important;
-  position:absolute!important;
-  top:0!important;
-  left:24px!important;
-  right:24px!important;
-  height:3px!important;
-  border-radius:999px!important;
-  background:linear-gradient(90deg,transparent,rgba(23,107,66,.45),rgba(243,212,107,.70),transparent)!important;
-}
-
-.rk-glance-v160-verdict{
-  margin-top:16px!important;
-  padding:18px!important;
-  border-radius:22px!important;
-  background:linear-gradient(145deg,#0D432A 0%,#176B42 100%)!important;
-  border:1px solid rgba(243,212,107,.28)!important;
-  box-shadow:
-    0 14px 30px rgba(13,67,42,.22),
-    inset 0 1px 0 rgba(255,255,255,.14)!important;
-}
-
-.rk-glance-v160-verdict span{
-  display:block!important;
-  margin-bottom:8px!important;
-  color:#F3D46B!important;
-  font-family:'Nunito','Segoe UI',sans-serif!important;
-  font-size:9px!important;
-  font-weight:900!important;
-  letter-spacing:1.8px!important;
-  text-transform:uppercase!important;
-}
-
-.rk-glance-v160-verdict h3{
-  margin:0 0 8px!important;
-  color:#FFF8E8!important;
-  font-family:'Fraunces', Georgia, serif!important;
-  font-size:26px!important;
-  line-height:1.04!important;
-  font-weight:900!important;
-  letter-spacing:-.4px!important;
-}
-
-.rk-glance-v160-verdict p{
-  margin:0!important;
-  max-width:560px!important;
-  color:rgba(255,248,232,.80)!important;
-  font-family:'Nunito','Segoe UI',sans-serif!important;
-  font-size:13px!important;
-  font-weight:750!important;
-  line-height:1.5!important;
-}
-
-.rk-glance-v160-tiles{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:12px!important;
-  margin-top:12px!important;
-}
-
-.rk-glance-v160-tile,
-.rk-glance-v160-coach-row{
-  padding:15px!important;
-  border-radius:20px!important;
-  background:#FFFDF8!important;
-  border:1px solid rgba(26,20,16,.07)!important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.78),
-    0 8px 20px rgba(26,20,16,.035)!important;
-}
-
-.rk-glance-v160-tile span,
-.rk-glance-v160-coach-row span{
-  display:block!important;
-  margin:0 0 7px!important;
-  color:#176B42!important;
-  font-family:'Nunito','Segoe UI',sans-serif!important;
-  font-size:9px!important;
-  font-weight:900!important;
-  letter-spacing:1.4px!important;
-  line-height:1!important;
-  text-transform:uppercase!important;
-}
-
-.rk-glance-v160-tile.avoid span{
-  color:#B02A2A!important;
-}
-
-.rk-glance-v160-tile strong{
-  display:block!important;
-  margin:0 0 7px!important;
-  color:#1A1410!important;
-  font-family:'Fraunces', Georgia, serif!important;
-  font-size:19px!important;
-  line-height:1.08!important;
-  font-weight:900!important;
-  letter-spacing:-.2px!important;
-}
-
-.rk-glance-v160-tile p,
-.rk-glance-v160-coach-row p{
-  margin:0!important;
-  color:#6B6157!important;
-  font-family:'Nunito','Segoe UI',sans-serif!important;
-  font-size:12.5px!important;
-  font-weight:750!important;
-  line-height:1.45!important;
-}
-
-.rk-glance-v160-coach{
-  display:flex!important;
-  flex-direction:column!important;
-  gap:10px!important;
-  margin-top:12px!important;
-}
-
-.rk-glance-v160-coach-row.expert span{
-  color:#8B6512!important;
-}
-
-.rk-glance-v160-coach-row.next span{
-  color:#176B42!important;
-}
-
-@media (max-width:430px){
-  .rk-score-clean-final-v120,
-  .rk-score-clean-glance-v120,
-  .rk-score-glance-v160{
-    padding:17px!important;
-    border-radius:24px!important;
-  }
-
-  .rk-score-clean-final-v120 .rk-score-clean-head-v120 h2,
-  .rk-score-clean-glance-v120 .rk-score-clean-head-v120 h2{
-    font-size:22px!important;
-  }
-
-  .rk-glance-v160-verdict h3{
-    font-size:23px!important;
-  }
-
-  .rk-glance-v160-tiles{
-    grid-template-columns:1fr!important;
-  }
-
-  .rk-score-clean-share-v120 .rk-share-card,
-  .rk-score-share-v160 .rk-share-card{
-    min-height:56px!important;
-  }
-}
 
 /* Daily scorecard uses homepage green scorecard styling */
 .rk-daily-scorecard-homeclone-v45.rk-home-scorecard-v41{
@@ -11426,5 +11102,404 @@ body,
 
   .rk-daily-scorecard-homeclone-v45 .rk-home-scorecard-v41-score{
     font-size:var(--rk-home-score-size-mobile, 50px)!important;
+  }
+}
+
+/* Daily scorecard supporting sections refinement */
+.rk-score-shell.rk-scorecard-clean-v120,
+.rk-score-ultra-simple.rk-scorecard-clean-v120{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:18px!important;
+  padding-bottom:34px!important;
+}
+
+/* Shared card shell: matches homepage section rhythm */
+.rk-score-clean-share-v120,
+.rk-score-share-premium-v130,
+.rk-score-share-simple-v140,
+.rk-score-share-v150,
+.rk-score-share-v160,
+.rk-score-clean-final-v120,
+.rk-score-clean-glance-v120,
+.rk-score-glance-board-v140,
+.rk-score-glance-v150,
+.rk-score-glance-v160{
+  position:relative!important;
+  overflow:hidden!important;
+  padding:20px!important;
+  border-radius:26px!important;
+  background:
+    radial-gradient(circle at 92% 10%, rgba(243,212,107,.10), transparent 28%),
+    linear-gradient(145deg,#FFFDF8 0%,#F7F0E4 100%)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:
+    0 14px 34px rgba(26,20,16,.055),
+    inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+
+/* Subtle top gilt line, same language as homepage premium cards */
+.rk-score-clean-share-v120:before,
+.rk-score-clean-final-v120:before,
+.rk-score-clean-glance-v120:before,
+.rk-score-glance-v160:before{
+  content:""!important;
+  position:absolute!important;
+  top:0!important;
+  left:24px!important;
+  right:24px!important;
+  height:2px!important;
+  border-radius:999px!important;
+  background:linear-gradient(90deg,transparent,rgba(243,212,107,.72),transparent)!important;
+  opacity:.78!important;
+}
+
+/* Homepage-like section headings */
+.rk-score-share-v150-head,
+.rk-score-share-v160-head,
+.rk-score-clean-head-v120,
+.rk-glance-head-v140,
+.rk-glance-head-v150,
+.rk-glance-head-v160{
+  text-align:left!important;
+  margin:0 0 16px!important;
+}
+
+.rk-score-share-v150-head span,
+.rk-score-share-v160-head span,
+.rk-score-clean-head-v120 span,
+.rk-glance-head-v160 span{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:max-content!important;
+  max-width:100%!important;
+  margin:0 0 12px!important;
+  padding:7px 11px!important;
+  border-radius:999px!important;
+  background:rgba(23,107,66,.08)!important;
+  border:1px solid rgba(23,107,66,.15)!important;
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:9px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  letter-spacing:1.75px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-score-share-v150-head h2,
+.rk-score-share-v160-head h2,
+.rk-score-clean-head-v120 h2,
+.rk-glance-head-v160 h2{
+  margin:0 0 7px!important;
+  text-align:left!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:24px!important;
+  line-height:1.05!important;
+  font-weight:900!important;
+  letter-spacing:-.35px!important;
+  color:#1A1410!important;
+}
+
+.rk-score-share-v150-head p,
+.rk-score-share-v160-head p,
+.rk-score-clean-head-v120 p,
+.rk-glance-head-v160 p{
+  margin:0!important;
+  max-width:560px!important;
+  text-align:left!important;
+  color:#6B6157!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:13.5px!important;
+  font-weight:750!important;
+  line-height:1.5!important;
+}
+
+/* Hide old summary boxes in share section so it follows the cleaner homepage CTA flow */
+.rk-score-share-v160-stats,
+.rk-score-share-v160-stat,
+.rk-scorecard-share-stats,
+.rk-scorecard-share-metrics{
+  display:none!important;
+}
+
+/* Share button: use homepage full-card CTA feel */
+.rk-score-clean-share-v120 .rk-share-card,
+.rk-score-share-v160 .rk-share-card{
+  position:relative!important;
+  min-height:58px!important;
+  border-radius:18px!important;
+  padding:13px 14px!important;
+  background:linear-gradient(145deg,#FFFDF8 0%,#F1E7D5 100%)!important;
+  border:1px solid rgba(26,20,16,.08)!important;
+  color:#1A1410!important;
+  box-shadow:
+    0 10px 24px rgba(26,20,16,.055),
+    inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+
+.rk-score-clean-share-v120 .rk-share-card > div:first-child,
+.rk-score-share-v160 .rk-share-card > div:first-child{
+  width:38px!important;
+  height:38px!important;
+  border-radius:14px!important;
+  background:rgba(23,107,66,.09)!important;
+  border:1px solid rgba(23,107,66,.15)!important;
+  color:#176B42!important;
+}
+
+.rk-score-clean-share-v120 .rk-share-card [style*="font-family"],
+.rk-score-share-v160 .rk-share-card [style*="font-family"]{
+  font-family:'Fraunces', Georgia, serif!important;
+  font-weight:900!important;
+  color:#1A1410!important;
+  font-size:17px!important;
+  line-height:1.06!important;
+  letter-spacing:-.1px!important;
+}
+
+.rk-score-clean-share-v120 .rk-share-card [style*="line-height:1.4"],
+.rk-score-share-v160 .rk-share-card [style*="line-height:1.4"]{
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  color:#6B6157!important;
+  font-size:12px!important;
+  font-weight:750!important;
+  line-height:1.35!important;
+}
+
+.rk-score-clean-share-v120 .rk-share-card:after,
+.rk-score-share-v160 .rk-share-card:after{
+  content:"→"!important;
+  width:30px!important;
+  height:30px!important;
+  border-radius:999px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin-left:auto!important;
+  background:#176B42!important;
+  color:#FFF8E8!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:17px!important;
+  font-weight:900!important;
+  flex-shrink:0!important;
+}
+
+.rk-score-clean-share-v120 .rk-share-card:hover,
+.rk-score-share-v160 .rk-share-card:hover{
+  transform:translateY(-1px)!important;
+  box-shadow:
+    0 14px 28px rgba(26,20,16,.075),
+    inset 0 1px 0 rgba(255,255,255,.86)!important;
+}
+
+/* Final hand: premium but calm */
+.rk-score-clean-rack-v120{
+  margin-top:16px!important;
+  padding:14px!important;
+  border-radius:22px!important;
+  background:rgba(255,255,255,.52)!important;
+  border:1px solid rgba(26,20,16,.06)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.74),
+    0 8px 20px rgba(26,20,16,.035)!important;
+}
+
+/* Rack at a glance: homepage section flow, Coach Mode-style typography */
+.rk-glance-v160-verdict{
+  margin-top:15px!important;
+  padding:17px!important;
+  border-radius:22px!important;
+  background:linear-gradient(145deg,#0D432A 0%,#176B42 100%)!important;
+  border:1px solid rgba(243,212,107,.28)!important;
+  box-shadow:
+    0 14px 30px rgba(13,67,42,.22),
+    inset 0 1px 0 rgba(255,255,255,.14)!important;
+}
+
+.rk-glance-v160-verdict span{
+  display:block!important;
+  margin-bottom:8px!important;
+  color:#F3D46B!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:8.75px!important;
+  font-weight:900!important;
+  letter-spacing:1.7px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-glance-v160-verdict h3{
+  margin:0 0 8px!important;
+  color:#FFF8E8!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:25px!important;
+  line-height:1.04!important;
+  font-weight:900!important;
+  letter-spacing:-.35px!important;
+}
+
+.rk-glance-v160-verdict p{
+  margin:0!important;
+  max-width:560px!important;
+  color:rgba(255,248,232,.80)!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:12.75px!important;
+  font-weight:750!important;
+  line-height:1.48!important;
+}
+
+.rk-glance-v160-tiles{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:11px!important;
+  margin-top:11px!important;
+}
+
+.rk-glance-v160-tile,
+.rk-glance-v160-coach-row{
+  padding:14px!important;
+  border-radius:19px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.07)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.78),
+    0 8px 20px rgba(26,20,16,.03)!important;
+}
+
+.rk-glance-v160-tile span,
+.rk-glance-v160-coach-row span{
+  display:block!important;
+  margin:0 0 7px!important;
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:8.75px!important;
+  font-weight:900!important;
+  letter-spacing:1.35px!important;
+  line-height:1!important;
+  text-transform:uppercase!important;
+}
+
+.rk-glance-v160-tile.avoid span{
+  color:#B02A2A!important;
+}
+
+.rk-glance-v160-tile strong{
+  display:block!important;
+  margin:0 0 7px!important;
+  color:#1A1410!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:18px!important;
+  line-height:1.08!important;
+  font-weight:900!important;
+  letter-spacing:-.15px!important;
+}
+
+.rk-glance-v160-tile p,
+.rk-glance-v160-coach-row p{
+  margin:0!important;
+  color:#6B6157!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:12px!important;
+  font-weight:750!important;
+  line-height:1.45!important;
+}
+
+.rk-glance-v160-coach{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:10px!important;
+  margin-top:11px!important;
+}
+
+.rk-glance-v160-coach-row.expert span{
+  color:#8B6512!important;
+}
+
+.rk-glance-v160-coach-row.next span{
+  color:#176B42!important;
+}
+
+/* Bottom actions: quieter and closer to homepage action rows */
+.rk-score-clean-actions-v120,
+.rk-score-home-style-actions-v140{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:10px!important;
+}
+
+.rk-score-clean-action-v120{
+  min-height:56px!important;
+  padding:12px 14px!important;
+  border-radius:19px!important;
+  background:linear-gradient(145deg,#FFFDF8 0%,#F1E7D5 100%)!important;
+  border:1px solid rgba(26,20,16,.08)!important;
+  box-shadow:
+    0 10px 24px rgba(26,20,16,.05),
+    inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+
+.rk-score-clean-action-v120.primary{
+  background:linear-gradient(180deg,#176B42 0%,#0D432A 100%)!important;
+  border:1px solid rgba(243,212,107,.28)!important;
+  box-shadow:
+    0 14px 30px rgba(13,67,42,.22),
+    inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+
+.rk-score-clean-action-v120 span{
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:9.5px!important;
+  font-weight:900!important;
+  letter-spacing:1.35px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-score-clean-action-v120 strong{
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:17px!important;
+  font-weight:900!important;
+  letter-spacing:-.1px!important;
+}
+
+@media (max-width:430px){
+  .rk-score-shell.rk-scorecard-clean-v120,
+  .rk-score-ultra-simple.rk-scorecard-clean-v120{
+    gap:15px!important;
+  }
+
+  .rk-score-clean-share-v120,
+  .rk-score-clean-final-v120,
+  .rk-score-clean-glance-v120,
+  .rk-score-glance-v160{
+    padding:17px!important;
+    border-radius:24px!important;
+  }
+
+  .rk-score-share-v150-head h2,
+  .rk-score-share-v160-head h2,
+  .rk-score-clean-head-v120 h2,
+  .rk-glance-head-v160 h2{
+    font-size:21px!important;
+  }
+
+  .rk-score-share-v150-head p,
+  .rk-score-share-v160-head p,
+  .rk-score-clean-head-v120 p,
+  .rk-glance-head-v160 p{
+    font-size:12.75px!important;
+  }
+
+  .rk-glance-v160-verdict h3{
+    font-size:22px!important;
+  }
+
+  .rk-glance-v160-tiles{
+    grid-template-columns:1fr!important;
+  }
+
+  .rk-score-clean-share-v120 .rk-share-card,
+  .rk-score-share-v160 .rk-share-card{
+    min-height:56px!important;
   }
 }

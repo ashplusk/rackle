@@ -7442,11 +7442,11 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </section>
 
-      <section className="rk-score-clean-share-v120 rk-score-share-premium-v130 rk-score-share-simple-v140 rk-score-share-v150 rk-score-share-v160" aria-label="Share today’s Rackle">
+      <section className="rk-score-clean-share-v120 rk-score-share-premium-v130 rk-score-share-simple-v140 rk-score-share-v150 rk-score-share-v160" aria-label="Share your score">
         <div className="rk-score-share-v150-head rk-score-share-v160-head">
-          <span>Share today’s Rackle</span>
+          <span>Share your score</span>
           <h2>{affiliatedClubName?`Share with ${affiliatedClubName}`:"Share with your club"}</h2>
-          <p>Send your score to the table so your club can chase the same rack.</p>
+          <p>Send today’s result to your table and let your club chase the same rack.</p>
         </div>
 
         <div className="rk-score-share-v160-stats" aria-label="Today’s score summary">
@@ -7469,7 +7469,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <div className="rk-score-clean-head-v120">
           <span>Final hand</span>
           <h2>Your rack after the Charleston</h2>
-          <p>This is your rack after the Charleston. Compare what you kept, what you passed, and where the hand started to point.</p>
+          <p>See the shape you finished with after the Charleston.</p>
         </div>
         <div className="rk-score-clean-rack-v120">
           <SortableRack hand={hand}/>
@@ -7480,7 +7480,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160">
           <span>Rack at a glance</span>
           <h2>Your Charleston read</h2>
-          <p>A simple read on your best direction, backup path, and what to avoid next.</p>
+          <p>A clear read on where your rack is leaning and what to avoid next.</p>
         </div>
 
         <div className="rk-glance-v160-verdict">
@@ -11098,7 +11098,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div className="rk-share-score-v6-copybox">
           <div className="rk-share-score-v6-kicker">Share your score</div>
           <h2 className="rk-share-score-v6-title">Can your table beat it?</h2>
-          <p className="rk-share-score-v6-copy">Share today’s Rackle and let your club chase the same rack.</p>
+          <p className="rk-share-score-v6-copy">Share your score and let your club chase the same rack.</p>
           <button onClick={copyShare} className="rk-share-score-v6-btn">{shareCopied?"Copied":"Share score"}</button>
         </div>
         <div className="rk-share-lux-card-v6" aria-hidden="true">
