@@ -7816,7 +7816,6 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
           <strong>Home</strong>
         </button>
       </section>
-      <Footer/>
     </div>
   );
 }
