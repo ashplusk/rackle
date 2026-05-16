@@ -19004,3 +19004,215 @@ footer p{
     max-width:31ch!important;
   }
 }
+
+/* Share score card: lighter, more social, more inviting */
+.rk-home-scorecard-v41-share,
+.rk-score-clean-share-v120 .rk-share-card,
+.rk-score-share-v160 .rk-share-card{
+  position:relative!important;
+  overflow:hidden!important;
+  min-height:76px!important;
+  padding:15px 16px!important;
+  border-radius:25px!important;
+  background:
+    radial-gradient(circle at 22% 18%, rgba(255,255,255,.18), transparent 34%),
+    linear-gradient(145deg,#1F7A4A 0%,#176B42 46%,#0F4E31 100%)!important;
+  border:1px solid rgba(243,212,107,.24)!important;
+  box-shadow:
+    0 12px 28px rgba(23,107,66,.18),
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 0 rgba(0,0,0,.10)!important;
+  color:#FFFDF8!important;
+}
+
+.rk-home-scorecard-v41-share:before,
+.rk-score-clean-share-v120 .rk-share-card:before,
+.rk-score-share-v160 .rk-share-card:before{
+  content:""!important;
+  position:absolute!important;
+  top:0!important;
+  left:24px!important;
+  right:24px!important;
+  height:1px!important;
+  border-radius:999px!important;
+  background:linear-gradient(90deg,transparent,rgba(255,248,232,.62),transparent)!important;
+  pointer-events:none!important;
+}
+
+.rk-home-scorecard-v41-share *,
+.rk-score-clean-share-v120 .rk-share-card *,
+.rk-score-share-v160 .rk-share-card *{
+  color:#FFFDF8!important;
+}
+
+.rk-home-scorecard-v41-share strong,
+.rk-score-clean-share-v120 .rk-share-card strong,
+.rk-score-share-v160 .rk-share-card strong{
+  color:#FFFDF8!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:22px!important;
+  line-height:1.05!important;
+  font-weight:900!important;
+  letter-spacing:-.35px!important;
+}
+
+.rk-home-scorecard-v41-share span,
+.rk-home-scorecard-v41-share small,
+.rk-home-scorecard-v41-share p,
+.rk-score-clean-share-v120 .rk-share-card span,
+.rk-score-clean-share-v120 .rk-share-card small,
+.rk-score-clean-share-v120 .rk-share-card p,
+.rk-score-share-v160 .rk-share-card span,
+.rk-score-share-v160 .rk-share-card small,
+.rk-score-share-v160 .rk-share-card p{
+  color:rgba(255,253,248,.78)!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:12.25px!important;
+  line-height:1.35!important;
+  font-weight:500!important;
+}
+
+.rk-home-scorecard-v41-share em,
+.rk-score-clean-share-v120 .rk-share-card em,
+.rk-score-share-v160 .rk-share-card em{
+  color:rgba(255,253,248,.68)!important;
+  font-style:normal!important;
+  font-weight:500!important;
+}
+
+/* Share icon tile */
+.rk-home-scorecard-v41-share .rk-home-scorecard-v41-share-icon,
+.rk-score-clean-share-v120 .rk-share-icon,
+.rk-score-share-v160 .rk-share-icon,
+.rk-score-clean-share-v120 .rk-share-card > div:first-child,
+.rk-score-share-v160 .rk-share-card > div:first-child{
+  background:rgba(255,253,248,.13)!important;
+  border:1px solid rgba(255,253,248,.18)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+
+/* SEND pill */
+.rk-home-scorecard-v41-share button,
+.rk-score-clean-share-v120 .rk-share-card button,
+.rk-score-share-v160 .rk-share-card button,
+.rk-home-scorecard-v41-share .rk-send-pill,
+.rk-score-clean-share-v120 .rk-send-pill,
+.rk-score-share-v160 .rk-send-pill{
+  min-height:40px!important;
+  padding:0 17px!important;
+  border-radius:999px!important;
+  background:#FFFDF8!important;
+  color:#0F4E31!important;
+  border:1px solid rgba(255,253,248,.28)!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:10.5px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:1.65px!important;
+  text-transform:uppercase!important;
+  box-shadow:
+    0 8px 18px rgba(0,0,0,.12),
+    inset 0 1px 0 rgba(255,255,255,.9)!important;
+}
+
+.rk-home-scorecard-v41-share button *,
+.rk-score-clean-share-v120 .rk-share-card button *,
+.rk-score-share-v160 .rk-share-card button *{
+  color:#0F4E31!important;
+}
+
+/* Better row spacing and alignment */
+.rk-home-scorecard-v41-share,
+.rk-score-clean-share-v120 .rk-share-card,
+.rk-score-share-v160 .rk-share-card{
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:14px!important;
+}
+
+.rk-home-scorecard-v41-share > div,
+.rk-score-clean-share-v120 .rk-share-card > div,
+.rk-score-share-v160 .rk-share-card > div{
+  min-width:0!important;
+}
+
+.rk-home-scorecard-v41-share:after,
+.rk-score-clean-share-v120 .rk-share-card:after,
+.rk-score-share-v160 .rk-share-card:after{
+  color:#FFFDF8!important;
+  opacity:.85!important;
+}
+
+/* Tap polish */
+.rk-home-scorecard-v41-share,
+.rk-score-clean-share-v120 .rk-share-card,
+.rk-score-share-v160 .rk-share-card{
+  transition:transform .16s ease, box-shadow .16s ease, filter .16s ease!important;
+}
+
+.rk-home-scorecard-v41-share:active,
+.rk-score-clean-share-v120 .rk-share-card:active,
+.rk-score-share-v160 .rk-share-card:active{
+  transform:scale(.985)!important;
+  filter:saturate(1.04)!important;
+}
+
+@media (max-width:430px){
+  .rk-home-scorecard-v41-share,
+  .rk-score-clean-share-v120 .rk-share-card,
+  .rk-score-share-v160 .rk-share-card{
+    min-height:72px!important;
+    padding:14px!important;
+    border-radius:23px!important;
+    gap:12px!important;
+  }
+
+  .rk-home-scorecard-v41-share strong,
+  .rk-score-clean-share-v120 .rk-share-card strong,
+  .rk-score-share-v160 .rk-share-card strong{
+    font-size:20px!important;
+  }
+
+  .rk-home-scorecard-v41-share span,
+  .rk-home-scorecard-v41-share small,
+  .rk-home-scorecard-v41-share p,
+  .rk-score-clean-share-v120 .rk-share-card span,
+  .rk-score-clean-share-v120 .rk-share-card small,
+  .rk-score-clean-share-v120 .rk-share-card p,
+  .rk-score-share-v160 .rk-share-card span,
+  .rk-score-share-v160 .rk-share-card small,
+  .rk-score-share-v160 .rk-share-card p{
+    font-size:11.75px!important;
+  }
+
+  .rk-home-scorecard-v41-share button,
+  .rk-score-clean-share-v120 .rk-share-card button,
+  .rk-score-share-v160 .rk-share-card button,
+  .rk-home-scorecard-v41-share .rk-send-pill,
+  .rk-score-clean-share-v120 .rk-send-pill,
+  .rk-score-share-v160 .rk-send-pill{
+    min-height:37px!important;
+    padding:0 14px!important;
+    font-size:9.75px!important;
+  }
+}
+
+@media (max-width:370px){
+  .rk-home-scorecard-v41-share,
+  .rk-score-clean-share-v120 .rk-share-card,
+  .rk-score-share-v160 .rk-share-card{
+    grid-template-columns:auto minmax(0,1fr)!important;
+  }
+
+  .rk-home-scorecard-v41-share button,
+  .rk-score-clean-share-v120 .rk-share-card button,
+  .rk-score-share-v160 .rk-share-card button,
+  .rk-home-scorecard-v41-share .rk-send-pill,
+  .rk-score-clean-share-v120 .rk-send-pill,
+  .rk-score-share-v160 .rk-send-pill{
+    grid-column:2!important;
+    width:max-content!important;
+    margin-top:8px!important;
+  }
+}
