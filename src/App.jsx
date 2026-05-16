@@ -11247,7 +11247,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             ))}
           </div>
           <h2 className="rk-daily-entry-v6-title"><span>Fresh rack.</span><span>New Charleston.</span></h2>
-          <p className="rk-daily-entry-v6-copy"><span>See how your analyzers it.</span><span>Same rack for everyone. One table read to defend.</span></p>
+          <p className="rk-daily-entry-v6-copy"><span>See how your table reads it.</span><span>Same rack for everyone. One table read to defend.</span></p>
           <div className="rk-daily-entry-v6-stats">
             <span>{posted===0?"First score owns the table":`${posted} ${posted===1?"player has":"players already"} posted`}</span>
             <span>{scoreToBeat?`${scoreToBeat} is the score to beat`:"Set the first score to beat"}</span>
@@ -11321,7 +11321,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     },[hasAnimatedScore,scoreNumber,scoreValue]);
 
     const shownScoreValue=hasAnimatedScore?animatedScore:scoreValue;
-    const homeRevealFrame=rkScoreRevealFrame(scoreNumber||0,rkScorecardTrustRead(iq||{},todayHand||hand||[]),iq||{},"daily");
+    const homeRevealFrame=rkScoreRevealFrame(scoreNumber||0,rkScorecardTrustRead(iq||{},[]),iq||{},"daily");
     const globalRowsForScore=rkMergeCurrentScore(homeGlobalEntries,currentScore,iq?.totalTime||todayDRes?.time||0,streak,activeClubCode);
     const globalRankForScore=currentScore?rkRankOfCurrent(globalRowsForScore,currentScore):null;
     const globalValue=globalRankForScore?`#${globalRankForScore}`:"—";
