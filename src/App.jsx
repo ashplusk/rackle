@@ -7875,11 +7875,10 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const betterPlayersRead=rkBetterPlayersInsights({entries:(clubRows&&clubRows.length>=3)?clubRows:globalRows,score,trustRead,iq,allSections,clubName:affiliatedClubName});
   return(
     <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26 rk-scorecard-clean-v120" style={{paddingBottom:32}}>
-      <section className="rk-daily-scorecard-homeclone-v45 rk-home-scorecard-v41 rk-score-reveal-v250" aria-label="Daily Rackle scorecard">
+      <section className="rk-daily-scorecard-homeclone-v45 rk-home-scorecard-v41 rk-score-reveal-v250 rk-scorecard-preview-optimized-v600" aria-label="Daily Rackle scorecard">
         <div className="rk-home-scorecard-v41-main rk-daily-scorecard-homeclone-v45-main">
           <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
           <div className="rk-home-scorecard-v41-kicker"><span/> Today’s Table Read · #{dayNum}</div>
-          <div className="rk-score-reveal-status-v250">{revealFrame.status}</div>
           <div className="rk-home-scorecard-v41-score-row rk-daily-scorecard-homeclone-v45-score-row">
             <div>
               <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43 rk-score-reveal-number-v250" aria-label={`Rackle IQ ${score}`}>{animatedScore}</div>
@@ -8104,11 +8103,10 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
 
   return(
     <div className="rk-score-shell rk-practice-v9-shell rk-scorecard-clean-v120 rk-practice-scorecard-match-v200 rk-scorecard-premium-page-v500">
-      <section className="rk-practice-homeclone-v45 rk-home-scorecard-v41 rk-score-reveal-v250" aria-label="Practice Rackle scorecard">
+      <section className="rk-practice-homeclone-v45 rk-home-scorecard-v41 rk-score-reveal-v250 rk-scorecard-preview-optimized-v600" aria-label="Practice Rackle scorecard">
         <div className="rk-home-scorecard-v41-main rk-practice-homeclone-v45-main">
           <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
           <div className="rk-home-scorecard-v41-kicker"><span/> Practice Table Read</div>
-          <div className="rk-score-reveal-status-v250">{revealFrame.status}</div>
           <div className="rk-home-scorecard-v41-score-row rk-practice-homeclone-v45-score-row">
             <div>
               <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43 rk-score-reveal-number-v250" aria-label={`Rackle IQ ${score}`}>{animatedScore}</div>
@@ -11678,7 +11676,6 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div role="button" tabIndex={0} onClick={showScorecard} onKeyDown={(e)=>{if(e.key==="Enter"||e.key===" ")showScorecard();}} className="rk-home-scorecard-v41-main" aria-label="Open your full scorecard">
         <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
         <div className="rk-home-scorecard-v41-kicker"><span/> Today’s Table Read · #{dn}</div>
-        <div className="rk-score-reveal-status-v250">{homeRevealFrame.status}</div>
         <div className="rk-home-scorecard-v41-score-row">
           <div>
             <div className="rk-home-scorecard-v41-score rk-home-scorecard-v41-score-countup rk-pop rk-score-reveal-number-v250" aria-label={`Rackle IQ ${scoreValue}`}>{shownScoreValue}</div>
