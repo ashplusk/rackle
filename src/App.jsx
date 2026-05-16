@@ -7672,14 +7672,12 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
   const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
   const scoredHandLabel=iq.scoredHandLabel||null;
   const scoredHandObj=scoredHandLabel?HAND_CATALOG.find(h=>h.sec===chosenSec&&h.label===scoredHandLabel):null;
-  const sortedSecsP=allSections?[...allSections].sort((a,b)=>b.score-a.score):[];
-  const [openSec,setOpenSec]=useState({hand:true,alts:false,passes:false});
-  const toggle=(k)=>setOpenSec(s=>({...s,[k]:!s[k]}));
-  const passDots=(iq.passInsights||[]).map(p=>({strong:"🟢",weak:"🔴",mixed:"🟡",neutral:"⚪"}[p.quality]||"⚪")).join("");
   const styled=withIQStyle(iq);
   const level=iq.level||styled.level||"Rack read";
   const score=Math.round(iq.totalScore||iq.rackleIQScore||iq.score||0);
   const [animatedScore,setAnimatedScore]=useState(0);
+  const [showStartingRack,setShowStartingRack]=useState(false);
+
   useEffect(()=>{
     const target=Number(score||0);
     setAnimatedScore(0);
@@ -7697,11 +7695,39 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
     },interval);
     return()=>clearInterval(timer);
   },[score]);
-  const bestLabel=scoredHandObj?.labelForDisplay||scoredHandObj?.variantLabel||scoredHandObj?.label||iq.bestHandLabel||iq.strategicRead?.bestDirection||"Keep reading the rack";
+
+  const trustRead=rkScorecardTrustRead(iq,hand);
+  const bestLabel=scoredHandObj?.labelForDisplay||scoredHandObj?.variantLabel||scoredHandObj?.label||iq.bestHandLabel||iq.strategicRead?.bestDirection||trustRead.best||"Keep reading the rack";
   const primPct=scoredHandObj?computeHonestCoverage(hand,scoredHandObj).pct:0;
+  const scoreLabel=styled?.styleName||rkLaunchScoreBand(score).short;
+  const quickRead=score>=75
+    ? "Strong practice rack. You had a believable lane after the Charleston."
+    : score>=55
+      ? "Playable practice rack. The shape was alive, but it needed cleaner structure before locking in."
+      : "Thin practice rack. Keep the best clues, reduce noise, and wait for the next clear signal.";
+  const startingRackSource=(
+    Array.isArray(iq?.startingRack)&&iq.startingRack.length?iq.startingRack:
+    Array.isArray(iq?.starting_rack)&&iq.starting_rack.length?iq.starting_rack:
+    Array.isArray(iq?.initialRack)&&iq.initialRack.length?iq.initialRack:
+    Array.isArray(iq?.initial_rack)&&iq.initial_rack.length?iq.initial_rack:
+    Array.isArray(passLog?.[0]?.startingRack)&&passLog[0].startingRack.length?passLog[0].startingRack:
+    Array.isArray(passLog?.[0]?.before)&&passLog[0].before.length?passLog[0].before:
+    []
+  );
+  const hasStartingRack=startingRackSource.length>0;
+  const rackToShow=showStartingRack&&hasStartingRack?startingRackSource:hand;
+  const glanceBestName=rkFriendlyDirectionName(bestLabel||trustRead.best);
+  const glanceBestDetail=scoredHandObj&&primPct>0
+    ? `${rkQualFitLabel(primPct)}. This is the clearest practice lane your rack showed after the Charleston.`
+    : rkFriendlyDirectionDetail(bestLabel||trustRead.best,trustRead.bestFit);
+  const glanceBackupName=rkFriendlyDirectionName(trustRead.backup||chosenSecObj?.name);
+  const glanceBackupDetail=rkFriendlyDirectionDetail(trustRead.backup||chosenSecObj?.name,trustRead.backupFit);
+  const expertReadText=rkHumanTableCopy(trustRead.expertRead||iq.expertRead?.topCoachLine||iq.strategicRead?.topCoachLine||"An experienced player would keep the cleanest section alive and avoid chasing every possible tile.");
+  const nextMoveText=rkHumanTableCopy(trustRead.nextMove||iq.strategicRead?.pivotAdvice||"Use the next draw to confirm the strongest section before locking into one hand.");
+  const styleRead=rkStyleReadForScorecard(styled?.styleName||scoreLabel,score,trustRead);
 
   return(
-    <div className="rk-score-shell rk-practice-v9-shell rk-scorecard-clean-v120">
+    <div className="rk-score-shell rk-practice-v9-shell rk-scorecard-clean-v120 rk-practice-scorecard-match-v200">
       <section className="rk-practice-homeclone-v45 rk-home-scorecard-v41" aria-label="Practice Rackle scorecard">
         <div className="rk-home-scorecard-v41-main rk-practice-homeclone-v45-main">
           <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
@@ -7714,44 +7740,70 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
             {styled?.styleName&&<div className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next">{styled.styleName}</div>}
           </div>
           <div className="rk-home-scorecard-v41-title">{level}</div>
-          <p className="rk-home-scorecard-v41-copy">One clearer pass can change the whole rack.</p>
+          <p className="rk-home-scorecard-v41-copy">{quickRead}</p>
         </div>
       </section>
 
-      <section className="rk-score-clean-final-v120" aria-label="Your practice hand">
-        <div className="rk-score-clean-head-v120">
-          <span>Final hand</span>
-          <h2>Final rack</h2>
-          <p>This practice rack is not on the daily board. Use it to sharpen the next pass.</p>
+      <section className="rk-final-rack-simple-v180" aria-label="Your practice rack">
+        <div className="rk-final-rack-simple-head-v180">
+          <strong>{showStartingRack&&hasStartingRack?"Starting rack":"Your final rack"}</strong>
+          <div className="rk-final-rack-toggle-v180" role="group" aria-label="Choose rack view">
+            <button type="button" className={!showStartingRack?"active":""} onClick={()=>setShowStartingRack(false)}>Final</button>
+            <button type="button" className={showStartingRack&&hasStartingRack?"active":""} disabled={!hasStartingRack} onClick={()=>hasStartingRack&&setShowStartingRack(true)}>Starting</button>
+          </div>
         </div>
-        <div className="rk-score-clean-rack-v120">
-          <SortableRack hand={hand}/>
+        <div className="rk-score-clean-rack-v120 rk-final-rack-simple-surface-v180">
+          <SortableRack key={showStartingRack&&hasStartingRack?"practice-starting-rack":"practice-final-rack"} hand={rackToShow}/>
         </div>
       </section>
 
-      <section className="rk-score-clean-glance-v120" aria-label="Practice rack at a glance">
-        <div className="rk-score-clean-head-v120">
+      <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160" aria-label="Practice rack at a glance">
+        <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160">
           <span>Rack at a glance</span>
-          <h2>Cleanest path</h2>
+          <h2>Your Charleston read</h2>
+          <p>A clear read on where this practice rack is leaning and what to do next.</p>
         </div>
-        <div className="rk-score-clean-lanes-v120 practice">
-          <div className="rk-score-clean-lane-v120 primary">
-            <span>Best path</span>
-            <strong>{bestLabel}</strong>
-            <p>{primPct>0?rkQualFitLabel(primPct):"Use this as the main direction if your next draw supports it."}</p>
-          </div>
-          <div className="rk-score-clean-lane-v120">
-            <span>Score read</span>
-            <strong>{level}</strong>
-            <p>{score>=75?"Strong practice rack. You have a believable lane.":score>=55?"Playable rack. It needs cleaner shape before locking in.":"Thin practice rack. Keep the best clues and reduce noise."}</p>
+
+        <div className="rk-glance-v160-verdict">
+          <span>Best fit read</span>
+          <h3>{glanceBestName}</h3>
+          <p>{glanceBestDetail}</p>
+        </div>
+
+        <div className="rk-glance-v160-tiles">
+          <div className="rk-glance-v160-tile">
+            <span>Backup path</span>
+            <strong>{glanceBackupName}</strong>
+            <p>{glanceBackupDetail}</p>
           </div>
         </div>
-        {iq.passInsights&&iq.passInsights.length>0&&(
-          <div className="rk-score-clean-expert-v120">
-            <span>Pass note</span>
-            <p>{rkHumanTableCopy(iq.passInsights[0]?.insight||"Review what you passed and whether it protected your best shape.")}</p>
+
+        <div className="rk-glance-v160-coach">
+          <div className="rk-glance-v160-coach-row expert">
+            <span>Expert read</span>
+            <p>{expertReadText}</p>
           </div>
-        )}
+          <div className="rk-glance-v160-coach-row next">
+            <span>Next move</span>
+            <p>{nextMoveText}</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="rk-score-style-card-v190" aria-label="Your style">
+        <div className="rk-score-style-head-v190">
+          <span>Your style</span>
+          <strong>{styleRead.label}</strong>
+        </div>
+        <p>{styleRead.copy}</p>
+        <div className="rk-score-style-reasons-v190" aria-label="Why you got this style">
+          {styleRead.reasons.map((reason,i)=>(
+            <div key={i}>
+              <span></span>
+              <em>{reason}</em>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="rk-score-clean-actions-v120 practice" aria-label="Practice actions">
@@ -7768,6 +7820,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
     </div>
   );
 }
+
 // ─── RACK VS HAND OVERLAY ─────────────────────────────────────────────────────
 // The centrepiece of Coach Mode. Shows the target hand tile-by-tile, with each
 // slot annotated: ✓ held, ✗ passed in round N, ○ never had it.
