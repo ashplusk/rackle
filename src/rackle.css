@@ -11009,3 +11009,369 @@ body,
     font-size:11.75px!important;
   }
 }
+
+/* Daily Rackle scorecard player results overhaul */
+.rk-daily-result-page-v300{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:16px!important;
+}
+
+.rk-daily-result-header-v300,
+.rk-final-hand-result-v300,
+.rk-how-it-went-v300,
+.rk-trending-hands-v300,
+.rk-quick-take-v300,
+.rk-share-club-v300,
+.rk-score-deep-dive-v300{
+  width:100%!important;
+  border-radius:26px!important;
+  background:linear-gradient(145deg,#FFFDF8 0%,#F7F0E4 100%)!important;
+  border:1px solid rgba(26,20,16,.08)!important;
+  box-shadow:0 12px 30px rgba(26,20,16,.055), inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+
+.rk-daily-result-header-v300{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:14px!important;
+  padding:18px!important;
+}
+
+.rk-daily-result-header-v300 span,
+.rk-result-card-head-v300 span,
+.rk-share-club-v300 span{
+  display:inline-flex!important;
+  width:max-content!important;
+  max-width:100%!important;
+  padding:7px 11px!important;
+  border-radius:999px!important;
+  background:rgba(23,107,66,.08)!important;
+  border:1px solid rgba(23,107,66,.14)!important;
+  color:#176B42!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:9.5px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  letter-spacing:1.8px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-daily-result-header-v300 h1{
+  margin:10px 0 4px!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:28px!important;
+  line-height:1.02!important;
+  font-weight:900!important;
+  color:#1A1410!important;
+  letter-spacing:-.5px!important;
+}
+
+.rk-daily-result-header-v300 p{
+  margin:0!important;
+  color:#6B6157!important;
+  font-size:13px!important;
+  font-weight:750!important;
+}
+
+.rk-daily-result-badge-v300,
+.rk-result-status-v300{
+  flex-shrink:0!important;
+  border-radius:999px!important;
+  padding:9px 12px!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:10px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  letter-spacing:1.2px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-daily-result-badge-v300.win,
+.rk-result-status-v300.win{
+  background:rgba(23,107,66,.12)!important;
+  color:#176B42!important;
+  border:1px solid rgba(23,107,66,.20)!important;
+}
+
+.rk-daily-result-badge-v300.loss,
+.rk-result-status-v300.loss{
+  background:rgba(176,42,42,.10)!important;
+  color:#B02A2A!important;
+  border:1px solid rgba(176,42,42,.18)!important;
+}
+
+.rk-final-hand-result-v300,
+.rk-how-it-went-v300,
+.rk-trending-hands-v300,
+.rk-quick-take-v300,
+.rk-share-club-v300{
+  padding:18px!important;
+}
+
+.rk-result-card-head-v300{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  margin-bottom:14px!important;
+}
+
+.rk-result-card-head-v300.left{
+  justify-content:flex-start!important;
+}
+
+.rk-final-hand-result-v300 h2,
+.rk-share-club-v300 h2{
+  margin:0 0 10px!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:25px!important;
+  line-height:1.05!important;
+  font-weight:900!important;
+  letter-spacing:-.35px!important;
+  color:#1A1410!important;
+}
+
+.rk-final-hand-meta-v300{
+  display:flex!important;
+  align-items:center!important;
+  gap:9px!important;
+  flex-wrap:wrap!important;
+  margin-bottom:15px!important;
+}
+
+.rk-final-hand-meta-v300 span,
+.rk-final-hand-meta-v300 strong{
+  display:inline-flex!important;
+  align-items:center!important;
+  min-height:28px!important;
+  padding:0 10px!important;
+  border-radius:999px!important;
+  font-family:'Nunito','Segoe UI',sans-serif!important;
+  font-size:11px!important;
+  font-weight:900!important;
+  letter-spacing:.4px!important;
+}
+
+.rk-final-hand-meta-v300 span{
+  background:rgba(23,107,66,.08)!important;
+  color:#176B42!important;
+}
+
+.rk-final-hand-meta-v300 strong{
+  background:rgba(243,212,107,.16)!important;
+  color:#8B6512!important;
+}
+
+.rk-final-hand-rack-v300{
+  border-radius:22px!important;
+  padding:14px!important;
+  background:rgba(255,255,255,.50)!important;
+  border:1px solid rgba(26,20,16,.06)!important;
+}
+
+.rk-how-stats-v300{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:10px!important;
+  margin-bottom:16px!important;
+}
+
+.rk-how-stats-v300 div{
+  border-radius:18px!important;
+  padding:13px 8px!important;
+  text-align:center!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.06)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+
+.rk-how-stats-v300 span{
+  display:block!important;
+  margin-bottom:7px!important;
+  color:#6B6157!important;
+  font-size:9px!important;
+  font-weight:900!important;
+  letter-spacing:1.1px!important;
+  text-transform:uppercase!important;
+  line-height:1.2!important;
+}
+
+.rk-how-stats-v300 strong{
+  display:block!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:28px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  color:#176B42!important;
+}
+
+.rk-arc-track-v300{
+  height:10px!important;
+  border-radius:999px!important;
+  overflow:hidden!important;
+  background:rgba(26,20,16,.10)!important;
+}
+
+.rk-arc-track-v300 div{
+  height:100%!important;
+  border-radius:999px!important;
+  background:linear-gradient(90deg,#D4A73A,#176B42)!important;
+}
+
+.rk-arc-labels-v300{
+  display:flex!important;
+  justify-content:space-between!important;
+  margin-top:8px!important;
+  color:#8A7B6D!important;
+  font-size:10px!important;
+  font-weight:850!important;
+  letter-spacing:.4px!important;
+}
+
+.rk-candidate-list-v300{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:10px!important;
+}
+
+.rk-candidate-row-v300{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 94px!important;
+  gap:12px!important;
+  align-items:center!important;
+  padding:13px!important;
+  border-radius:18px!important;
+  background:#FFFDF8!important;
+  border:1px solid rgba(26,20,16,.06)!important;
+}
+
+.rk-candidate-copy-v300 strong{
+  display:block!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:16px!important;
+  font-weight:900!important;
+  line-height:1.12!important;
+  color:#1A1410!important;
+}
+
+.rk-candidate-copy-v300 span{
+  display:block!important;
+  margin-top:4px!important;
+  color:#6B6157!important;
+  font-size:10px!important;
+  font-weight:900!important;
+  letter-spacing:1px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-candidate-score-v300{
+  text-align:right!important;
+}
+
+.rk-candidate-score-v300 strong{
+  display:block!important;
+  margin-bottom:7px!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:18px!important;
+  font-weight:900!important;
+  color:#176B42!important;
+}
+
+.rk-candidate-score-v300 div{
+  height:5px!important;
+  border-radius:999px!important;
+  overflow:hidden!important;
+  background:rgba(26,20,16,.10)!important;
+}
+
+.rk-candidate-score-v300 div span{
+  display:block!important;
+  height:100%!important;
+  border-radius:999px!important;
+  background:#176B42!important;
+}
+
+.rk-candidate-row-v300.rank-2 .rk-candidate-score-v300 strong{color:#2460A8!important;}
+.rk-candidate-row-v300.rank-2 .rk-candidate-score-v300 div span{background:#2460A8!important;}
+.rk-candidate-row-v300.rank-3 .rk-candidate-score-v300 strong{color:#8A7B6D!important;}
+.rk-candidate-row-v300.rank-3 .rk-candidate-score-v300 div span{background:#8A7B6D!important;}
+
+.rk-quick-take-v300 p,
+.rk-share-club-v300 p{
+  margin:0!important;
+  color:#6B6157!important;
+  font-size:14px!important;
+  font-weight:750!important;
+  line-height:1.55!important;
+}
+
+.rk-share-club-v300{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:16px!important;
+  background:
+    radial-gradient(circle at 90% 10%, rgba(243,212,107,.14), transparent 28%),
+    linear-gradient(145deg,#FFFDF8 0%,#F6EFE2 100%)!important;
+}
+
+.rk-share-club-v300 .rk-share-card{
+  min-height:62px!important;
+  border-radius:20px!important;
+  background:linear-gradient(180deg,#176B42 0%,#0D432A 100%)!important;
+  border:1px solid rgba(243,212,107,.34)!important;
+  box-shadow:0 16px 34px rgba(13,67,42,.24), inset 0 1px 0 rgba(255,255,255,.18)!important;
+}
+
+.rk-score-deep-dive-v300{
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+.rk-score-deep-dive-v300 button{
+  width:100%!important;
+  min-height:54px!important;
+  border-radius:20px!important;
+  border:1px solid rgba(23,107,66,.14)!important;
+  background:#FFFDF8!important;
+  color:#176B42!important;
+  font-family:'Fraunces', Georgia, serif!important;
+  font-size:17px!important;
+  font-weight:900!important;
+  cursor:pointer!important;
+  box-shadow:0 10px 24px rgba(26,20,16,.055), inset 0 1px 0 rgba(255,255,255,.82)!important;
+}
+
+@media (max-width:430px){
+  .rk-daily-result-page-v300{gap:14px!important;}
+  .rk-daily-result-header-v300,
+  .rk-final-hand-result-v300,
+  .rk-how-it-went-v300,
+  .rk-trending-hands-v300,
+  .rk-quick-take-v300,
+  .rk-share-club-v300{
+    padding:16px!important;
+    border-radius:24px!important;
+  }
+
+  .rk-daily-result-header-v300 h1{font-size:24px!important;}
+  .rk-final-hand-result-v300 h2,
+  .rk-share-club-v300 h2{font-size:22px!important;}
+
+  .rk-how-stats-v300{gap:8px!important;}
+  .rk-how-stats-v300 div{padding:12px 6px!important;}
+  .rk-how-stats-v300 span{font-size:8px!important;letter-spacing:.8px!important;}
+  .rk-how-stats-v300 strong{font-size:24px!important;}
+
+  .rk-candidate-row-v300{
+    grid-template-columns:minmax(0,1fr) 82px!important;
+    gap:10px!important;
+    padding:12px!important;
+  }
+
+  .rk-candidate-copy-v300 strong{font-size:15px!important;}
+  .rk-candidate-score-v300 strong{font-size:17px!important;}
+}
