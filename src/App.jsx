@@ -3457,7 +3457,7 @@ function rkExpertTileMatchesSection(t,secId){
 function rkExpertRoundLabel(p={}){
   return p.label||p.roundName||p.name||`pass ${p.round||""}`.trim()||"a pass";
 }
-function rkExpertPassRegretRack review({passedTilesByRound=[],sectionId,topSection,struct}){
+function rkExpertPassRegretAnalysis({passedTilesByRound=[],sectionId,topSection,struct}){
   const topId=topSection?.id||sectionId;
   const out=(passedTilesByRound||[]).flatMap((p,roundIndex)=>(p.out||[]).map(t=>({t,p,roundIndex})));
   const important=out.filter(x=>rkExpertTileMatchesSection(x.t,topId));
@@ -3641,7 +3641,7 @@ function rkExpertCharlestonCalibration({struct,sectionReads=[],liveDirections=[]
   const acceleration=rkClamp(16+struct.pairs.length*8+struct.pungs.length*13+struct.kongs.length*18+(struct.bestWindow?.depth||0)*4+struct.jokers*5-struct.isolated.length*5-(top?.id==="sp"&&struct.jokers?18:0));
   const viableNeeds=(top?.needs||[]).length;
   const viability=rkClamp(topScore*.70+(top?.coverage||0)*.22+gap*.35-viableNeeds*5-(top?.status==="thin"?18:0)-(top?.status==="technically possible"?8:0));
-  const passRead=rkExpertPassRegretRack review({passedTilesByRound,sectionId,topSection:top,struct});
+  const passRead=rkExpertPassRegretAnalysis({passedTilesByRound,sectionId,topSection:top,struct});
   const deadness=rkExpertDeadnessRisk({struct,topSection:top,liveDirections});
   const controlledFlex=rkClamp(35+Math.min((liveDirections||[]).length,3)*7+gap*.35+rkCoreOverlap(struct,sectionReads.filter(s=>s.score>=40))*0.45-(liveDirections.length>=4?18:0)-struct.isolated.length*4);
   const commitment=rkClamp(commitmentClarity*.72+gap*.35+(compression>=62?8:0)-(liveDirections.length>=4?10:0));
@@ -7175,7 +7175,7 @@ function sectionDescCase(text){
   if(!text)return text;
   return String(text)
     .replace(/best path/gi,"Best path")
-    .replace(/practice reads/gi,"Table reads")
+    .replace(/practice reads/gi,"Analyzers")
     .replace(/coach mode/g,"Deeper table read");
 }
 
@@ -11054,7 +11054,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             ))}
           </div>
           <h2 className="rk-daily-entry-v6-title"><span>Fresh rack.</span><span>New Charleston.</span></h2>
-          <p className="rk-daily-entry-v6-copy"><span>See how your table reads it.</span><span>Same rack for everyone. One table read to defend.</span></p>
+          <p className="rk-daily-entry-v6-copy"><span>See how your analyzers it.</span><span>Same rack for everyone. One table read to defend.</span></p>
           <div className="rk-daily-entry-v6-stats">
             <span>{posted===0?"First score owns the table":`${posted} ${posted===1?"player has":"players already"} posted`}</span>
             <span>{scoreToBeat?`${scoreToBeat} is the score to beat`:"Set the first score to beat"}</span>
@@ -11926,7 +11926,7 @@ function Game({mode,home,onDone,settings,setScreen}){
         </div>
       )}
 
-      {phase==="askSecond"&&<Ask icon="🔄" title="Keep the Charleston going?" desc="Another round of table reads: left, across, right?" hand={hand} timer={getDisplayTime()} onSort={()=>setHand(sortHand(hand))} onNo={()=>setPhase("askCourtesy")} onYes={()=>{setCn(2);setPi(0);setSel([]);setNewIdx([]);setPhase("pass");}} large={large}/>}
+      {phase==="askSecond"&&<Ask icon="🔄" title="Keep the Charleston going?" desc="Another round of analyzers: left, across, right?" hand={hand} timer={getDisplayTime()} onSort={()=>setHand(sortHand(hand))} onNo={()=>setPhase("askCourtesy")} onYes={()=>{setCn(2);setPi(0);setSel([]);setNewIdx([]);setPhase("pass");}} large={large}/>}
       {phase==="askCourtesy"&&<Ask icon="🤝" title="Courtesy Pass?" desc="Optional: pass 1–3 tiles." hand={hand} timer={getDisplayTime()} onSort={()=>setHand(sortHand(hand))} onNo={()=>{stopTimer();setSel([]);setNewIdx([]);setPhase("chooseHand");}} onYes={()=>{setSel([]);setNewIdx([]);setPhase("courtesy");}} large={large}/>}
 
       {phase==="courtesy"&&(
