@@ -19680,3 +19680,249 @@ footer p{
 .rk-game-scorecard-single-v990{
   display:block!important;
 }
+
+/* Scorecard pages: inherit homepage font system */
+.rk-score-shell,
+.rk-scorecard-premium-page-v500,
+.rk-scorecard-clean-v120,
+.rk-practice-scorecard-match-v200,
+.rk-game-scorecard-single-v990{
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  color:#1A1410!important;
+  letter-spacing:0!important;
+}
+
+/* Display typography matches homepage */
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-title,
+.rk-scorecard-premium-page-v500 .rk-score-reveal-title-v250,
+.rk-scorecard-premium-page-v500 .rk-final-rack-simple-head-v180 strong,
+.rk-scorecard-premium-page-v500 .rk-score-clean-head-v120 h2,
+.rk-scorecard-premium-page-v500 .rk-score-share-v150-head h2,
+.rk-scorecard-premium-page-v500 .rk-score-share-v160-head h2,
+.rk-scorecard-premium-page-v500 .rk-score-style-head-v190 strong,
+.rk-scorecard-premium-page-v500 .rk-score-glance-board-v140 h2,
+.rk-scorecard-premium-page-v500 .rk-score-glance-v150 h2,
+.rk-scorecard-premium-page-v500 .rk-better-players-head-v260 h2,
+.rk-scorecard-premium-page-v500 .rk-score-clean-action-v120 strong,
+.rk-scorecard-premium-page-v500 .rk-home-style-actions-v140 strong,
+.rk-scorecard-premium-page-v500 h1,
+.rk-scorecard-premium-page-v500 h2,
+.rk-scorecard-premium-page-v500 h3{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-weight:900!important;
+  letter-spacing:-.45px!important;
+}
+
+/* Body copy: lighter and closer to homepage */
+.rk-scorecard-premium-page-v500 p,
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-copy,
+.rk-scorecard-premium-page-v500 .rk-score-reveal-copy-v250,
+.rk-scorecard-premium-page-v500 .rk-score-clean-head-v120 p,
+.rk-scorecard-premium-page-v500 .rk-score-share-v150-head p,
+.rk-scorecard-premium-page-v500 .rk-score-share-v160-head p,
+.rk-scorecard-premium-page-v500 .rk-score-style-card-v190 > p,
+.rk-scorecard-premium-page-v500 .rk-score-glance-board-v140 p,
+.rk-scorecard-premium-page-v500 .rk-score-glance-v150 p,
+.rk-scorecard-premium-page-v500 .rk-better-players-head-v260 p,
+.rk-scorecard-premium-page-v500 .rk-better-players-row-v260 p,
+.rk-scorecard-premium-page-v500 .rk-score-clean-action-v120 span,
+.rk-scorecard-premium-page-v500 .rk-score-clean-action-v120 em{
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-weight:500!important;
+  letter-spacing:0!important;
+  line-height:1.55!important;
+}
+
+/* Pills and labels match homepage uppercase label style */
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-kicker,
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-score-label,
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-style,
+.rk-scorecard-premium-page-v500 .rk-score-reveal-status-v250,
+.rk-scorecard-premium-page-v500 .rk-score-reveal-micro-v250,
+.rk-scorecard-premium-page-v500 .rk-score-clean-share-copy-v120 > span,
+.rk-scorecard-premium-page-v500 .rk-score-clean-head-v120 > span,
+.rk-scorecard-premium-page-v500 .rk-score-clean-lane-v120 > span,
+.rk-scorecard-premium-page-v500 .rk-score-clean-expert-v120 > span,
+.rk-scorecard-premium-page-v500 .rk-score-clean-next-v120 > span,
+.rk-scorecard-premium-page-v500 .rk-score-share-v150-head > span,
+.rk-scorecard-premium-page-v500 .rk-score-share-v160-head > span,
+.rk-scorecard-premium-page-v500 .rk-score-style-head-v190 span,
+.rk-scorecard-premium-page-v500 .rk-better-players-head-v260 span,
+.rk-scorecard-premium-page-v500 .rk-score-clean-action-v120 > span,
+.rk-scorecard-premium-page-v500 .rk-score-share-v160-stat span,
+.rk-scorecard-premium-page-v500 .rk-score-reasons-v260 span,
+.rk-scorecard-premium-page-v500 label{
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-weight:800!important;
+  letter-spacing:1.45px!important;
+  text-transform:uppercase!important;
+  line-height:1.1!important;
+}
+
+/* Hero score inherits homepage score treatment */
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-score,
+.rk-scorecard-premium-page-v500 .rk-score-reveal-number-v250{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-weight:900!important;
+  letter-spacing:-3px!important;
+}
+
+/* Scorecard hero copy should not be chunky */
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-copy,
+.rk-scorecard-premium-page-v500 .rk-score-reveal-copy-v250{
+  font-size:13px!important;
+  font-weight:500!important;
+  line-height:1.56!important;
+}
+
+/* Panel headings: same rhythm as homepage sections */
+.rk-scorecard-premium-page-v500 .rk-final-rack-simple-head-v180 strong,
+.rk-scorecard-premium-page-v500 .rk-score-clean-head-v120 h2,
+.rk-scorecard-premium-page-v500 .rk-score-share-v150-head h2,
+.rk-scorecard-premium-page-v500 .rk-score-share-v160-head h2,
+.rk-scorecard-premium-page-v500 .rk-better-players-head-v260 h2{
+  font-size:23px!important;
+  line-height:1.06!important;
+}
+
+/* Panel body descriptions: softer than headings */
+.rk-scorecard-premium-page-v500 .rk-score-clean-head-v120 p,
+.rk-scorecard-premium-page-v500 .rk-score-share-v150-head p,
+.rk-scorecard-premium-page-v500 .rk-score-share-v160-head p,
+.rk-scorecard-premium-page-v500 .rk-better-players-head-v260 p{
+  color:#6B6157!important;
+  font-size:12.75px!important;
+  font-weight:500!important;
+}
+
+/* Rack at a glance cards */
+.rk-scorecard-premium-page-v500 .rk-score-glance-board-v140 strong,
+.rk-scorecard-premium-page-v500 .rk-score-glance-v150 strong,
+.rk-scorecard-premium-page-v500 .rk-score-clean-lane-v120 strong,
+.rk-scorecard-premium-page-v500 .rk-score-clean-expert-v120 strong,
+.rk-scorecard-premium-page-v500 .rk-score-clean-next-v120 strong{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-weight:900!important;
+  letter-spacing:-.25px!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-score-glance-board-v140 span,
+.rk-scorecard-premium-page-v500 .rk-score-glance-v150 span,
+.rk-scorecard-premium-page-v500 .rk-score-clean-lane-v120 span,
+.rk-scorecard-premium-page-v500 .rk-score-clean-expert-v120 span,
+.rk-scorecard-premium-page-v500 .rk-score-clean-next-v120 span,
+.rk-scorecard-premium-page-v500 .rk-score-glance-board-v140 em,
+.rk-scorecard-premium-page-v500 .rk-score-glance-v150 em{
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+}
+
+/* Your Style card: align with homepage copy feel */
+.rk-scorecard-premium-page-v500 .rk-score-style-head-v190 strong{
+  font-size:21px!important;
+  line-height:1.08!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-score-style-card-v190 > p{
+  color:#5F564E!important;
+  font-size:13px!important;
+  line-height:1.6!important;
+  text-align:left!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-score-style-reasons-v190 em{
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-weight:500!important;
+  line-height:1.35!important;
+}
+
+/* Better players rows: human, readable, less debug-like */
+.rk-scorecard-premium-page-v500 .rk-better-players-stat-v260 strong{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-weight:900!important;
+  letter-spacing:-.2px!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-better-players-stat-v260 span{
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-weight:800!important;
+  letter-spacing:1.1px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-better-players-row-v260 p{
+  color:#4F463F!important;
+  font-size:12.75px!important;
+}
+
+/* Action rows should feel like homepage nav rows */
+.rk-scorecard-premium-page-v500 .rk-score-clean-action-v120 strong{
+  font-size:17px!important;
+  line-height:1.08!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-score-clean-action-v120 span,
+.rk-scorecard-premium-page-v500 .rk-score-clean-action-v120 em{
+  font-size:10px!important;
+}
+
+/* Toggle + small controls */
+.rk-scorecard-premium-page-v500 button,
+.rk-scorecard-premium-page-v500 .rk-final-rack-toggle-v180 button{
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-final-rack-toggle-v180 button{
+  font-weight:800!important;
+  letter-spacing:.2px!important;
+  text-transform:none!important;
+}
+
+/* Share card title keeps display style, body is readable */
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-share strong,
+.rk-scorecard-premium-page-v500 .rk-score-clean-share-v120 .rk-share-card strong,
+.rk-scorecard-premium-page-v500 .rk-score-share-v160 .rk-share-card strong{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-weight:900!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-share span,
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-share small,
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-share p,
+.rk-scorecard-premium-page-v500 .rk-score-clean-share-v120 .rk-share-card span,
+.rk-scorecard-premium-page-v500 .rk-score-clean-share-v120 .rk-share-card small,
+.rk-scorecard-premium-page-v500 .rk-score-clean-share-v120 .rk-share-card p,
+.rk-scorecard-premium-page-v500 .rk-score-share-v160 .rk-share-card span,
+.rk-scorecard-premium-page-v500 .rk-score-share-v160 .rk-share-card small,
+.rk-scorecard-premium-page-v500 .rk-score-share-v160 .rk-share-card p{
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-weight:500!important;
+}
+
+/* Keep Rackle brand italic from the last pass */
+.rk-scorecard-premium-page-v500 .rk-header-brand-title-v75,
+.rk-scorecard-premium-page-v500 .rk-gameplay-inline-logo-v200,
+.rk-scorecard-premium-page-v500 .rk-gameplay-live-logo-v220{
+  font-style:italic!important;
+}
+
+@media (max-width:430px){
+  .rk-scorecard-premium-page-v500 .rk-final-rack-simple-head-v180 strong,
+  .rk-scorecard-premium-page-v500 .rk-score-clean-head-v120 h2,
+  .rk-scorecard-premium-page-v500 .rk-score-share-v150-head h2,
+  .rk-scorecard-premium-page-v500 .rk-score-share-v160-head h2,
+  .rk-scorecard-premium-page-v500 .rk-better-players-head-v260 h2{
+    font-size:21px!important;
+  }
+
+  .rk-scorecard-premium-page-v500 .rk-score-clean-head-v120 p,
+  .rk-scorecard-premium-page-v500 .rk-score-share-v150-head p,
+  .rk-scorecard-premium-page-v500 .rk-score-share-v160-head p,
+  .rk-scorecard-premium-page-v500 .rk-better-players-head-v260 p{
+    font-size:12.5px!important;
+  }
+
+  .rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-copy,
+  .rk-scorecard-premium-page-v500 .rk-score-reveal-copy-v250{
+    font-size:12.5px!important;
+  }
+}
