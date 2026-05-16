@@ -18389,3 +18389,280 @@ footer p{
     grid-template-columns:1fr!important;
   }
 }
+
+/* Tagline + scorecard style consistency */
+.rk-startup-subtitle-v4,
+.rk-startup-hero-v42 .rk-startup-subtitle-v4,
+.rk-header-brand-tag-v75,
+.rk-inline-header-tag,
+.rk-gameplay-inline-tag-v200,
+.rk-gameplay-live-tag-v220{
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-size:10px!important;
+  line-height:1.1!important;
+  font-weight:500!important;
+  font-style:normal!important;
+  letter-spacing:1.45px!important;
+  text-transform:none!important;
+  color:#176B42!important;
+  opacity:.86!important;
+  white-space:nowrap!important;
+}
+
+.rk-startup-subtitle-v4,
+.rk-startup-hero-v42 .rk-startup-subtitle-v4{
+  font-size:10px!important;
+  margin-top:4px!important;
+  margin-bottom:8px!important;
+}
+
+.rk-header-brand-tag-v75{
+  font-size:10px!important;
+  margin-top:4px!important;
+}
+
+.rk-gameplay-inline-tag-v200,
+.rk-gameplay-live-tag-v220{
+  font-size:10px!important;
+  margin-top:4px!important;
+  letter-spacing:1.35px!important;
+}
+
+/* Daily and Practice scorecard heroes should match the homepage scorecard treatment */
+.rk-scorecard-premium-page-v500 .rk-daily-scorecard-homeclone-v45.rk-home-scorecard-v41,
+.rk-scorecard-premium-page-v500 .rk-practice-homeclone-v45.rk-home-scorecard-v41{
+  position:relative!important;
+  overflow:hidden!important;
+  min-height:auto!important;
+  border-radius:30px!important;
+  background:
+    radial-gradient(circle at 86% 8%, rgba(243,212,107,.12), transparent 30%),
+    radial-gradient(circle at 10% 96%, rgba(111,207,96,.07), transparent 30%),
+    linear-gradient(145deg,#061A10 0%,#103820 58%,#06150D 100%)!important;
+  border:1px solid rgba(243,212,107,.22)!important;
+  box-shadow:
+    0 18px 42px rgba(6,26,16,.22),
+    inset 0 1px 0 rgba(255,255,255,.13),
+    inset 0 -1px 0 rgba(0,0,0,.24)!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-daily-scorecard-homeclone-v45.rk-home-scorecard-v41:after,
+.rk-scorecard-premium-page-v500 .rk-practice-homeclone-v45.rk-home-scorecard-v41:after{
+  display:none!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-main,
+.rk-scorecard-premium-page-v500 .rk-practice-homeclone-v45-main{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  text-align:center!important;
+  padding:24px 20px 25px!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-kicker{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:max-content!important;
+  max-width:100%!important;
+  margin:0 auto 18px!important;
+  padding:7px 11px!important;
+  border-radius:999px!important;
+  background:rgba(255,248,232,.085)!important;
+  border:1px solid rgba(255,248,232,.15)!important;
+  color:rgba(255,248,232,.74)!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:8px!important;
+  line-height:1!important;
+  font-weight:800!important;
+  letter-spacing:1.55px!important;
+  text-transform:uppercase!important;
+  box-shadow:none!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-score-reveal-status-v250{
+  display:none!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-score-row{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:0!important;
+  width:100%!important;
+  margin:0 auto!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-score-row > div{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-score,
+.rk-scorecard-premium-page-v500 .rk-score-reveal-number-v250{
+  display:block!important;
+  margin:0 auto!important;
+  color:#FFF8E8!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:82px!important;
+  line-height:.78!important;
+  font-weight:900!important;
+  letter-spacing:-3.2px!important;
+  text-align:center!important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.10),
+    0 14px 34px rgba(0,0,0,.22)!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-score-label{
+  margin:13px auto 0!important;
+  color:rgba(255,248,232,.66)!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:8.5px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:2px!important;
+  text-align:center!important;
+  text-transform:uppercase!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-style{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:36px!important;
+  margin:22px auto 0!important;
+  padding:0 14px!important;
+  border-radius:999px!important;
+  background:rgba(243,212,107,.12)!important;
+  border:1px solid rgba(243,212,107,.24)!important;
+  color:#F3D46B!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:10px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:.75px!important;
+  box-shadow:none!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-title,
+.rk-scorecard-premium-page-v500 .rk-score-reveal-title-v250{
+  width:100%!important;
+  max-width:13ch!important;
+  margin:24px auto 0!important;
+  color:#FFF8E8!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:31px!important;
+  line-height:1.02!important;
+  font-weight:900!important;
+  letter-spacing:-.8px!important;
+  text-align:center!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-copy,
+.rk-scorecard-premium-page-v500 .rk-score-reveal-copy-v250{
+  width:100%!important;
+  max-width:34ch!important;
+  margin:13px auto 0!important;
+  color:rgba(255,248,232,.76)!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:13px!important;
+  line-height:1.58!important;
+  font-weight:500!important;
+  text-align:center!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-score-reveal-micro-v250{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:max-content!important;
+  max-width:100%!important;
+  margin:18px auto 0!important;
+  padding:8px 11px!important;
+  border-radius:999px!important;
+  background:rgba(255,248,232,.08)!important;
+  border:1px solid rgba(255,248,232,.13)!important;
+  color:#F3D46B!important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif!important;
+  font-size:8px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:1.45px!important;
+  text-transform:uppercase!important;
+  box-shadow:none!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-actions{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:10px!important;
+  width:100%!important;
+  margin:26px auto 0!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-actions button{
+  min-height:70px!important;
+  border-radius:20px!important;
+  background:rgba(255,248,232,.075)!important;
+  border:1px solid rgba(255,248,232,.11)!important;
+  box-shadow:none!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-actions button span{
+  color:rgba(255,248,232,.56)!important;
+  font-size:8px!important;
+  letter-spacing:1.25px!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-actions button strong{
+  color:#F3D46B!important;
+  font-size:23px!important;
+  line-height:1!important;
+}
+
+.rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-actions button em{
+  color:rgba(255,248,232,.54)!important;
+}
+
+/* Keep standalone page panels from overpowering the matched hero */
+.rk-scorecard-premium-page-v500{
+  gap:18px!important;
+}
+
+@media (max-width:430px){
+  .rk-startup-subtitle-v4,
+  .rk-startup-hero-v42 .rk-startup-subtitle-v4,
+  .rk-header-brand-tag-v75,
+  .rk-inline-header-tag,
+  .rk-gameplay-inline-tag-v200,
+  .rk-gameplay-live-tag-v220{
+    font-size:9.5px!important;
+    letter-spacing:1.15px!important;
+  }
+
+  .rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-main,
+  .rk-scorecard-premium-page-v500 .rk-practice-homeclone-v45-main{
+    padding:22px 18px 23px!important;
+  }
+
+  .rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-score,
+  .rk-scorecard-premium-page-v500 .rk-score-reveal-number-v250{
+    font-size:72px!important;
+    letter-spacing:-2.8px!important;
+  }
+
+  .rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-title,
+  .rk-scorecard-premium-page-v500 .rk-score-reveal-title-v250{
+    font-size:27px!important;
+  }
+
+  .rk-scorecard-premium-page-v500 .rk-home-scorecard-v41-copy,
+  .rk-scorecard-premium-page-v500 .rk-score-reveal-copy-v250{
+    font-size:12.75px!important;
+    max-width:31ch!important;
+  }
+}
