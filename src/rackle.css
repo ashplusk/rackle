@@ -17771,3 +17771,317 @@ footer p{
     align-items:flex-start!important;
   }
 }
+
+/* Homepage alignment + room polish v900 */
+
+/* Fresh rack hero: true center alignment */
+.rk-daily-entry-v6{
+  text-align:center!important;
+}
+
+.rk-daily-entry-v6-kicker{
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+.rk-daily-entry-v6 .rk-real-tile-row-v6,
+.rk-daily-entry-v6 .rk-freeplay-v40-tiles,
+.rk-daily-entry-v6 .rk-tile-strip,
+.rk-daily-entry-v6 [class*="tile-row"]{
+  justify-content:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+.rk-daily-entry-v6-title{
+  width:100%!important;
+  max-width:520px!important;
+  margin:20px auto 0!important;
+  text-align:center!important;
+  text-wrap:balance!important;
+}
+
+.rk-daily-entry-v6-title span,
+.rk-daily-entry-v6-title br{
+  text-align:center!important;
+}
+
+.rk-daily-entry-v6-copy{
+  width:100%!important;
+  max-width:440px!important;
+  margin:13px auto 0!important;
+  text-align:center!important;
+  font-weight:500!important;
+}
+
+.rk-daily-entry-v6-stats{
+  justify-content:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+.rk-daily-entry-v6-cta{
+  width:100%!important;
+  max-width:620px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+.rk-daily-entry-v37-tutorial{
+  display:block!important;
+  width:max-content!important;
+  max-width:100%!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:center!important;
+}
+
+/* Today's Room / Your Club: force score badge to the top-right consistently */
+.rk-club-today-head{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:start!important;
+  column-gap:18px!important;
+  row-gap:10px!important;
+  width:100%!important;
+}
+
+.rk-club-today-head > div:first-child{
+  min-width:0!important;
+  grid-column:1!important;
+  grid-row:1!important;
+}
+
+.rk-club-today-score{
+  grid-column:2!important;
+  grid-row:1!important;
+  justify-self:end!important;
+  align-self:start!important;
+  margin:0!important;
+  transform:none!important;
+}
+
+.rk-club-today-title{
+  max-width:100%!important;
+}
+
+.rk-club-today-desc{
+  max-width:36ch!important;
+}
+
+/* More attractive leaderboard section */
+.rk-club-today-card{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+}
+
+.rk-club-today-card:after{
+  content:""!important;
+  position:absolute!important;
+  right:-48px!important;
+  bottom:-52px!important;
+  width:160px!important;
+  height:160px!important;
+  border-radius:999px!important;
+  background:radial-gradient(circle,rgba(23,107,66,.105),transparent 68%)!important;
+  z-index:-1!important;
+  pointer-events:none!important;
+}
+
+.rk-club-today-board{
+  position:relative!important;
+  overflow:hidden!important;
+  margin-top:18px!important;
+  border-radius:26px!important;
+  background:
+    radial-gradient(circle at 92% 10%, rgba(23,107,66,.055), transparent 30%),
+    linear-gradient(145deg,#FFFDF8 0%,#F8F0E4 100%)!important;
+}
+
+.rk-club-today-board:before{
+  content:""!important;
+  position:absolute!important;
+  top:0!important;
+  left:22px!important;
+  right:22px!important;
+  height:1px!important;
+  background:linear-gradient(90deg,transparent,rgba(23,107,66,.24),transparent)!important;
+  pointer-events:none!important;
+}
+
+.rk-club-today-board-copy{
+  align-items:center!important;
+}
+
+.rk-club-today-board-copy strong{
+  letter-spacing:-.35px!important;
+}
+
+.rk-club-today-stats div{
+  transition:transform .18s ease, border-color .18s ease, background .18s ease!important;
+}
+
+.rk-club-today-stats div:hover{
+  transform:translateY(-1px)!important;
+}
+
+.rk-club-today-row{
+  min-height:48px!important;
+  padding:0 13px!important;
+  border-radius:18px!important;
+  background:
+    linear-gradient(145deg,rgba(255,253,248,.94),rgba(249,241,228,.78))!important;
+  border:1px solid rgba(23,107,66,.08)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.76)!important;
+}
+
+.rk-club-today-rank{
+  width:34px!important;
+  height:34px!important;
+  min-width:34px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border-radius:999px!important;
+  background:rgba(23,107,66,.085)!important;
+  color:#176B42!important;
+  font-weight:800!important;
+}
+
+.rk-club-today-name{
+  font-weight:800!important;
+}
+
+.rk-club-today-row-score{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-weight:900!important;
+  letter-spacing:-.35px!important;
+}
+
+/* More premium, clickable buttons */
+.rk-club-today-actions{
+  margin-top:18px!important;
+  gap:12px!important;
+}
+
+.rk-club-today-actions button{
+  position:relative!important;
+  overflow:hidden!important;
+  min-height:54px!important;
+  border-radius:21px!important;
+  box-shadow:
+    0 9px 20px rgba(26,20,16,.045),
+    inset 0 1px 0 rgba(255,255,255,.16)!important;
+}
+
+.rk-club-today-actions button:first-child{
+  background:
+    radial-gradient(circle at 26% 18%, rgba(255,255,255,.14), transparent 30%),
+    linear-gradient(180deg,#176B42 0%,#0D432A 100%)!important;
+  border:1px solid rgba(243,212,107,.22)!important;
+}
+
+.rk-club-today-actions button:nth-child(2){
+  background:
+    linear-gradient(145deg,#FFFDF8 0%,#F5ECD9 100%)!important;
+  border:1px solid rgba(23,107,66,.16)!important;
+}
+
+.rk-club-today-actions button:before{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent)!important;
+  transform:translateX(-120%)!important;
+  transition:transform .42s ease!important;
+  pointer-events:none!important;
+}
+
+.rk-club-today-actions button:hover:before{
+  transform:translateX(120%)!important;
+}
+
+.rk-club-today-actions button:active{
+  transform:scale(.985)!important;
+}
+
+/* Subtle entry animation for room card */
+@keyframes rkRoomSoftInV900{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.rk-club-today-card{
+  animation:rkRoomSoftInV900 .48s cubic-bezier(.16,1,.3,1) both!important;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .rk-club-today-card,
+  .rk-club-today-stats div,
+  .rk-club-today-actions button,
+  .rk-club-today-actions button:before{
+    animation:none!important;
+    transition:none!important;
+    transform:none!important;
+  }
+}
+
+/* Mobile refinements */
+@media (max-width:430px){
+  .rk-daily-entry-v6-title{
+    max-width:330px!important;
+    margin-top:18px!important;
+  }
+
+  .rk-daily-entry-v6-copy{
+    max-width:310px!important;
+  }
+
+  .rk-club-today-head{
+    column-gap:14px!important;
+  }
+
+  .rk-club-today-score{
+    width:74px!important;
+    min-width:74px!important;
+    height:68px!important;
+  }
+
+  .rk-club-today-desc{
+    max-width:26ch!important;
+  }
+
+  .rk-club-today-actions{
+    gap:10px!important;
+  }
+
+  .rk-club-today-actions button{
+    min-height:52px!important;
+  }
+}
+
+@media (max-width:370px){
+  .rk-daily-entry-v6-title{
+    max-width:290px!important;
+  }
+
+  .rk-club-today-head{
+    grid-template-columns:minmax(0,1fr) 66px!important;
+    column-gap:10px!important;
+  }
+
+  .rk-club-today-score{
+    width:66px!important;
+    min-width:66px!important;
+    height:62px!important;
+  }
+
+  .rk-club-today-score strong{
+    font-size:22px!important;
+  }
+
+  .rk-club-today-score span{
+    font-size:6.75px!important;
+  }
+}
