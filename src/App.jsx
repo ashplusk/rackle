@@ -7871,6 +7871,17 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   );
   const hasStartingRack=startingRackSource.length>0;
   const rackToShow=showStartingRack&&hasStartingRack?startingRackSource:hand;
+  const actualAlignmentName=scoredHandObj?.labelForDisplay||scoredHandObj?.variantLabel||scoredHandObj?.label||iq.bestHandLabel||iq.scoredHandLabel||glanceBestName||trustRead.best||"Best lane";
+  const actualAlignmentSection=SECS.find(s=>s.id===(scoredHandObj?.sec||chosenSec||topSectionRead?.id))?.name||glanceBestName||trustRead.best||"Section read";
+  const actualAlignmentPct=scoredHandObj?Math.round(computeHonestCoverage(hand,scoredHandObj).pct):null;
+  const actualAlignmentDetail=actualAlignmentPct
+    ? `${actualAlignmentPct}% fit toward ${actualAlignmentSection}. This is the clearest hand shape your final rack was pointing at.`
+    : `${trustRead.bestFit||glanceBestDetail} This is the strongest lane your final rack showed after the Charleston.`;
+  const dailyTableReadText=rkHumanTableCopy(trustRead.expertRead||shapeLine||reviewCopy);
+  const dailyNextMoveBase=rkHumanTableCopy(trustRead.nextMove||pivotCopy);
+  const dailyNextMoveText=dailyNextMoveBase&&dailyNextMoveBase!==dailyTableReadText
+    ? dailyNextMoveBase
+    : rkHumanTableCopy(`Use the next pick to prove ${actualAlignmentSection}. If it does not add density, cut the weakest backup and keep the rack compressed.`);
   const styleRead=rkStyleReadForScorecard(iq.styleName||scoreLabel,score,trustRead);
   const betterPlayersRead=rkBetterPlayersInsights({entries:(clubRows&&clubRows.length>=3)?clubRows:globalRows,score,trustRead,iq,allSections,clubName:affiliatedClubName});
   return(
@@ -7945,37 +7956,42 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
         </div>
       </section>
 
-      <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160 rk-scorecard-panel-v500 rk-scorecard-strategy-v500" aria-label="Rack at a glance">
-        <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160">
+      <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160 rk-scorecard-panel-v500 rk-scorecard-strategy-v500 rk-glance-overhaul-v1000" aria-label="Rack at a glance">
+        <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160 rk-glance-overhaul-head-v1000">
           <span>Rack at a glance</span>
-          <h2>Your table read</h2>
-          <p>A clear read on where your rack was leaning after the Charleston.</p>
+          <h2>Your rack’s direction</h2>
+          <p>A sharper read on the hand shape your final rack was actually moving toward.</p>
         </div>
 
-        <div className="rk-glance-v160-verdict">
-          <span>Best lane</span>
-          <h3>{iq.bestHandLabel||iq.scoredHandLabel||trustRead.best}</h3>
-          <p>{trustRead.bestFit}</p>
+        <div className="rk-glance-hand-alignment-v1000">
+          <span>Final hand alignment</span>
+          <h3>{actualAlignmentName}</h3>
+          <p>{actualAlignmentDetail}</p>
+          <em>{actualAlignmentSection}</em>
         </div>
 
-        <div className="rk-glance-v160-tiles">
-          <div className="rk-glance-v160-tile">
+        <div className="rk-glance-path-grid-v1000">
+          <div className="rk-glance-path-card-v1000 best">
+            <span>Best lane</span>
+            <strong>{glanceBestName}</strong>
+            <p>{glanceBestDetail}</p>
+          </div>
+          <div className="rk-glance-path-card-v1000 backup">
             <span>Backup path</span>
             <strong>{glanceBackupName}</strong>
             <p>{glanceBackupDetail}</p>
           </div>
         </div>
 
-        <div className="rk-glance-v160-coach">
-          <div className="rk-glance-v160-coach-row expert">
+        <div className="rk-glance-v160-coach rk-glance-coach-v1000">
+          <div className="rk-glance-v160-coach-row expert rk-glance-coach-row-v1000">
             <span>Table read</span>
-            <p>{rkHumanTableCopy(trustRead.expertRead)}</p>
+            <p>{dailyTableReadText}</p>
           </div>
-          <div className="rk-glance-v160-coach-row next">
+          <div className="rk-glance-v160-coach-row next rk-glance-coach-row-v1000 next">
             <span>Next table move</span>
-            <p>{rkHumanTableCopy(trustRead.nextMove)}</p>
+            <p>{dailyNextMoveText}</p>
           </div>
-
         </div>
       </section>
 
@@ -8097,8 +8113,17 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
     : rkFriendlyDirectionDetail(bestLabel||trustRead.best,trustRead.bestFit);
   const glanceBackupName=rkFriendlyDirectionName(trustRead.backup||chosenSecObj?.name);
   const glanceBackupDetail=rkFriendlyDirectionDetail(trustRead.backup||chosenSecObj?.name,trustRead.backupFit);
+  const actualAlignmentName=scoredHandObj?.labelForDisplay||scoredHandObj?.variantLabel||scoredHandObj?.label||iq.bestHandLabel||bestLabel||glanceBestName||"Best lane";
+  const actualAlignmentSection=SECS.find(s=>s.id===(scoredHandObj?.sec||chosenSec))?.name||glanceBestName||trustRead.best||"Section read";
+  const actualAlignmentPct=scoredHandObj?Math.round(computeHonestCoverage(hand,scoredHandObj).pct):null;
+  const actualAlignmentDetail=actualAlignmentPct
+    ? `${actualAlignmentPct}% fit toward ${actualAlignmentSection}. This is the clearest hand shape your final rack was pointing at.`
+    : `${glanceBestDetail} This is the strongest lane your practice rack showed after the Charleston.`;
   const expertReadText=rkHumanTableCopy(trustRead.expertRead||iq.expertRead?.topCoachLine||iq.strategicRead?.topCoachLine||"An experienced player would keep the cleanest section alive and avoid chasing every possible tile.");
-  const nextMoveText=rkHumanTableCopy(trustRead.nextMove||iq.strategicRead?.pivotAdvice||"Use the next draw to confirm the strongest section before locking into one hand.");
+  const nextMoveBase=rkHumanTableCopy(trustRead.nextMove||iq.strategicRead?.pivotAdvice||"Use the next draw to confirm the strongest section before locking into one hand.");
+  const nextMoveText=nextMoveBase&&nextMoveBase!==expertReadText
+    ? nextMoveBase
+    : rkHumanTableCopy(`Use the next pick to prove ${actualAlignmentSection}. If it does not add density, cut the weakest backup and keep the rack compressed.`);
   const styleRead=rkStyleReadForScorecard(styled?.styleName||scoreLabel,score,trustRead);
 
   return(
@@ -8133,33 +8158,39 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
         </div>
       </section>
 
-      <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160 rk-scorecard-panel-v500 rk-scorecard-strategy-v500" aria-label="Practice rack at a glance">
-        <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160">
+      <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160 rk-scorecard-panel-v500 rk-scorecard-strategy-v500 rk-glance-overhaul-v1000" aria-label="Practice rack at a glance">
+        <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160 rk-glance-overhaul-head-v1000">
           <span>Rack at a glance</span>
-          <h2>Your table read</h2>
-          <p>A clear read on where this practice rack was leaning after the Charleston.</p>
+          <h2>Your rack’s direction</h2>
+          <p>A sharper read on the hand shape your final rack was actually moving toward.</p>
         </div>
 
-        <div className="rk-glance-v160-verdict">
-          <span>Best lane</span>
-          <h3>{glanceBestName}</h3>
-          <p>{glanceBestDetail}</p>
+        <div className="rk-glance-hand-alignment-v1000">
+          <span>Final hand alignment</span>
+          <h3>{actualAlignmentName}</h3>
+          <p>{actualAlignmentDetail}</p>
+          <em>{actualAlignmentSection}</em>
         </div>
 
-        <div className="rk-glance-v160-tiles">
-          <div className="rk-glance-v160-tile">
+        <div className="rk-glance-path-grid-v1000">
+          <div className="rk-glance-path-card-v1000 best">
+            <span>Best lane</span>
+            <strong>{glanceBestName}</strong>
+            <p>{glanceBestDetail}</p>
+          </div>
+          <div className="rk-glance-path-card-v1000 backup">
             <span>Backup path</span>
             <strong>{glanceBackupName}</strong>
             <p>{glanceBackupDetail}</p>
           </div>
         </div>
 
-        <div className="rk-glance-v160-coach">
-          <div className="rk-glance-v160-coach-row expert">
+        <div className="rk-glance-v160-coach rk-glance-coach-v1000">
+          <div className="rk-glance-v160-coach-row expert rk-glance-coach-row-v1000">
             <span>Table read</span>
             <p>{expertReadText}</p>
           </div>
-          <div className="rk-glance-v160-coach-row next">
+          <div className="rk-glance-v160-coach-row next rk-glance-coach-row-v1000 next">
             <span>Next table move</span>
             <p>{nextMoveText}</p>
           </div>
