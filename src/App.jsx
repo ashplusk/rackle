@@ -11817,12 +11817,15 @@ function Game({mode,home,onDone,settings,setScreen}){
       {phase==="pass"&&(
         <>
           {showLeave&&<LeaveModal onStay={()=>setShowLeave(false)} onLeave={()=>{setShowLeave(false);home();}}/>}
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
-            <button onClick={()=>setShowLeave(true)} style={S.back}>← Back</button>
-            <div style={{textAlign:"center"}}><div style={{fontFamily:F.d,fontSize:18,fontWeight:900,color:C.ink,letterSpacing:-0.5,lineHeight:1}}>Rackle</div><div className="rk-inline-header-tag">Daily Mahjong Workout</div></div>
-            <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:1}}>
-              <span style={{fontSize:10,color:C.mut,fontWeight:700}}>{mode==="daily"?`Daily #${dn}`:"Practice"}</span>
-              {getDisplayTime()&&<span style={{fontSize:11,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {getDisplayTime()}</span>}
+          <div className="rk-gameplay-live-header-v220">
+            <button onClick={()=>setShowLeave(true)} className="rk-gameplay-back-v220">← Back</button>
+            <div className="rk-gameplay-live-brand-v220">
+              <div className="rk-gameplay-live-logo-v220">Rackle</div>
+              <div className="rk-inline-header-tag rk-gameplay-live-tag-v220">Daily Mahjong Workout</div>
+            </div>
+            <div className="rk-gameplay-live-meta-v220">
+              <span>{mode==="daily"?`Daily #${dn}`:"Practice"}</span>
+              {getDisplayTime()&&<strong>⏱ {getDisplayTime()}</strong>}
             </div>
           </div>
           <div className="rk-game-flow-card">
