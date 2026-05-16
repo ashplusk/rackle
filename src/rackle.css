@@ -13360,3 +13360,94 @@ body,
     font-size:18px!important;
   }
 }
+
+/* Product-feel pass: daily Charleston ritual language + premium table tone */
+.rk-startup-subtitle-v4,
+.rk-header-brand-tag-v75,
+.rk-gameplay-inline-tag-v200,
+.rk-gameplay-live-tag-v220{
+  letter-spacing:1.45px!important;
+  text-transform:uppercase!important;
+  color:#176B42!important;
+  font-weight:700!important;
+}
+
+.rk-startup-pulse-pill-v41,
+.rk-startup-pulse-pill-v42,
+.rk-live-pill-dynamic,
+.rk-club-active-pill{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72), 0 8px 22px rgba(23,107,66,.075)!important;
+}
+
+.rk-daily-entry-v6-title span,
+.rk-home-scorecard-v41-title,
+.rk-club-today-title,
+.rk-freeplay-v40-copy h2,
+.rk-learn-home-v18-title{
+  letter-spacing:-.45px!important;
+}
+
+.rk-daily-entry-v6-copy,
+.rk-home-scorecard-v41-copy,
+.rk-club-today-subtitle,
+.rk-freeplay-v40-copy p,
+.rk-learn-home-v18-copy{
+  line-height:1.52!important;
+  font-weight:750!important;
+}
+
+.rk-game-flow-title,
+.rk-game-start-instruction h2{
+  letter-spacing:-.25px!important;
+}
+
+.rk-game-flow-copy,
+.rk-game-start-instruction p{
+  max-width:330px!important;
+  color:#6B6157!important;
+  font-weight:750!important;
+}
+
+/* Scorecard language hierarchy */
+.rk-glance-v160-verdict span,
+.rk-glance-v160-tile span,
+.rk-glance-v160-coach-row span,
+.rk-score-style-head-v190 span,
+.rk-score-clean-action-v120 span{
+  letter-spacing:1.45px!important;
+}
+
+.rk-glance-v160-verdict h3,
+.rk-glance-v160-tile strong,
+.rk-score-style-head-v190 strong{
+  letter-spacing:-.25px!important;
+}
+
+.rk-glance-v160-verdict p,
+.rk-glance-v160-tile p,
+.rk-glance-v160-coach-row p,
+.rk-score-style-card-v190 > p{
+  line-height:1.52!important;
+}
+
+/* Share buttons should feel like table invitations */
+.rk-score-clean-share-v120 .rk-share-card,
+.rk-score-share-v160 .rk-share-card,
+.rk-share-score-v6-btn{
+  cursor:pointer!important;
+}
+
+.rk-score-clean-share-v120 .rk-share-card:active,
+.rk-score-share-v160 .rk-share-card:active,
+.rk-share-score-v6-btn:active{
+  transform:translateY(0) scale(.985)!important;
+}
+
+/* Tomorrow card: stronger anticipation */
+.rk-tomorrow-v11-title{
+  letter-spacing:-.35px!important;
+}
+
+.rk-tomorrow-v11-copy{
+  font-weight:750!important;
+}

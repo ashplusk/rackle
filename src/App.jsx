@@ -271,7 +271,7 @@ function tLabel(t){if(t.t==="j")return"Joker";if(t.t==="f")return"Flower";if(t.t
 
 // ─── SECTION DEFINITIONS ─────────────────────────────────────────────────────
 // 2026 NMJL Card, validated against all 3 card images.
-// Scoring philosophy derived from hand-count analysis per section:
+// Scoring philosophy derived from hand-count rack review per section:
 //   2026: 4 hands | 2468: 8 hands | ALN: 3 hands | QUINTS: 3 hands
 //   CR: 8 hands   | 13579: 9 hands  | W/D: 8 hands | 369: 6 hands | S&P: 6 hands
 // Key 2026-card tile weights (frequency across all hands):
@@ -594,7 +594,7 @@ const SECS=[
   }},
 ];
 
-// Section metadata for IQ scoring, calibrated to 2026 NMJL card hand analysis
+// Section metadata for IQ scoring, calibrated to 2026 NMJL card hand rack review
 // strongNums: numbers appearing in majority of section's hands (hold priority)
 // weakNums: numbers that never or rarely appear in this section (pass immediately)
 // riskyPass: numbers so valuable they cost points if accidentally passed
@@ -1896,7 +1896,7 @@ function generateHandPaths(finalRack,sortedSections,chosenSecId){
   const twos=numCounts[2]||0,sixes=numCounts[6]||0;
   const soap=countOf(t=>t.t==="d"&&t.v==="Soap");
 
-  // CR window analysis, find the best 4-wide window
+  // CR window rack review, find the best 4-wide window
   const crWindow=(()=>{
     const suitsPresent=["bam","crak","dot"];
     let bestW=null,bestDepth=0;
@@ -2510,7 +2510,7 @@ function iqTiming(totalTime,roundCount,passLog){
     ?passTimes.reduce((a,b)=>a+b,0)/passTimes.length
     :totalTime/rc;
 
-  // Per-pass analysis when we have the data
+  // Per-pass rack review when we have the data
   const slowPasses=passTimes.filter(s=>s>35).length;
   const fastPasses=passTimes.filter(s=>s<6).length;
   const goodPasses=passTimes.filter(s=>s>=10&&s<=25).length;
@@ -3457,7 +3457,7 @@ function rkExpertTileMatchesSection(t,secId){
 function rkExpertRoundLabel(p={}){
   return p.label||p.roundName||p.name||`pass ${p.round||""}`.trim()||"a pass";
 }
-function rkExpertPassRegretAnalysis({passedTilesByRound=[],sectionId,topSection,struct}){
+function rkExpertPassRegretRack review({passedTilesByRound=[],sectionId,topSection,struct}){
   const topId=topSection?.id||sectionId;
   const out=(passedTilesByRound||[]).flatMap((p,roundIndex)=>(p.out||[]).map(t=>({t,p,roundIndex})));
   const important=out.filter(x=>rkExpertTileMatchesSection(x.t,topId));
@@ -3641,7 +3641,7 @@ function rkExpertCharlestonCalibration({struct,sectionReads=[],liveDirections=[]
   const acceleration=rkClamp(16+struct.pairs.length*8+struct.pungs.length*13+struct.kongs.length*18+(struct.bestWindow?.depth||0)*4+struct.jokers*5-struct.isolated.length*5-(top?.id==="sp"&&struct.jokers?18:0));
   const viableNeeds=(top?.needs||[]).length;
   const viability=rkClamp(topScore*.70+(top?.coverage||0)*.22+gap*.35-viableNeeds*5-(top?.status==="thin"?18:0)-(top?.status==="technically possible"?8:0));
-  const passRead=rkExpertPassRegretAnalysis({passedTilesByRound,sectionId,topSection:top,struct});
+  const passRead=rkExpertPassRegretRack review({passedTilesByRound,sectionId,topSection:top,struct});
   const deadness=rkExpertDeadnessRisk({struct,topSection:top,liveDirections});
   const controlledFlex=rkClamp(35+Math.min((liveDirections||[]).length,3)*7+gap*.35+rkCoreOverlap(struct,sectionReads.filter(s=>s.score>=40))*0.45-(liveDirections.length>=4?18:0)-struct.isolated.length*4);
   const commitment=rkClamp(commitmentClarity*.72+gap*.35+(compression>=62?8:0)-(liveDirections.length>=4?10:0));
@@ -3766,8 +3766,8 @@ function rkHumanTableCopy(text=""){
     .replace(/based on your tile distribution/gi,"from the tiles you kept")
     .replace(/your passes suggest/gi,"your passes suggest")
     .replace(/AI/gi,"Rackle")
-    .replace(/analyzer/gi,"table read")
-    .replace(/analysis/gi,"rack review")
+    .replace(/table read/gi,"table read")
+    .replace(/rack review/gi,"rack review")
     .replace(/clearest lane/gi,"clearest lane")
     .replace(/strongly leaning/gi,"strongly leaning")
     .replace(/you should have/gi,"next time, try to")
@@ -5781,7 +5781,7 @@ function Ti({t,sel,isNew,onClick,dim,large,locked=false}){
       :isNew
         ?"0 5px 12px rgba(160,120,40,.15), 0 0 0 3px rgba(176,138,53,.08), 0 1px 0 rgba(255,255,255,.85) inset"
         :"0 2px 5px rgba(26,20,16,.07), 0 1px 0 rgba(255,255,255,.85) inset";
-  const label=locked&&isJoker?`${tAria(t)} protected. Jokers cannot be passed.`:tAria(t);
+  const label=locked&&isJoker?`${tAria(t)} protected. Jokers stay with you.`:tAria(t);
   return(
   <div className={`rk-mahjong-tile${sel?" rk-tile-selected":""}${isNew?" rk-tile-received":""}${locked?" rk-tile-locked":""}`} onClick={onClick} role={isInteractive?"checkbox":undefined} aria-checked={isInteractive?sel:undefined}
     aria-disabled={locked||undefined}
@@ -5991,7 +5991,7 @@ function computeExpertRead(finalRack, chosenSec, allSections, passLog, iq){
   const totalNums=numTiles.length;
   const suitName={bam:"Bamboo",crak:"Character",dot:"Circle"};
 
-  // Group analysis
+  // Group rack review
   const groups={};
   finalRack.forEach(t=>{
     const k=t.t==="s"?`s-${t.s}-${t.n}`:t.t==="w"?`w-${t.v}`:t.t==="d"?`d-${t.v}`:`f`;
@@ -6595,7 +6595,7 @@ function RackViewer({hand,startingRack}){
         </div>
         <div style={{padding:"12px 14px"}}>
           {tab==="final"&&<>
-            <div style={{fontSize:9,color:C.mut,marginBottom:8}}>Final rack, what you scored on.</div>
+            <div style={{fontSize:9,color:C.mut,marginBottom:8}}>Your final rack, what you scored on.</div>
             <SortableRack hand={hand}/>
           </>}
           {tab==="starting"&&hasStarting&&<>
@@ -7028,7 +7028,7 @@ function SpecificHandCard({finalRack,sectionId,defaultOpen=false,label:overrideL
           const verdict=`${fitText}. ${hand.coachLine||tone.desc}`;
           const verdictColor=tone.color;
 
-          // Tile analysis
+          // Tile rack review
           const jk=jokers(finalRack);
           const fl=flowers(finalRack);
           const numCounts={};
@@ -7155,7 +7155,7 @@ function SortableRack({hand:initialHand}){
   return(
     <div className="rk-lux-card" style={{...S.card,marginBottom:8}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-        <div style={{fontSize:9,color:C.mut,letterSpacing:1.2,fontWeight:700}}>Final rack</div>
+        <div style={{fontSize:9,color:C.mut,letterSpacing:1.2,fontWeight:700}}>Your final rack</div>
         <button onClick={toggle} className="rk-leaderboard-card" style={{...S.sortBtn,color:sorted?C.jade:C.mut,borderColor:sorted?C.jade+"40":C.bdr,background:sorted?C.jade+"08":"none"}}>{sorted?"Sorted":"Sort"}</button>
       </div>
       <RackSurface>{rack.map((t,i)=><Ti key={i} t={t}/>)}</RackSurface>
@@ -7175,8 +7175,8 @@ function sectionDescCase(text){
   if(!text)return text;
   return String(text)
     .replace(/best path/gi,"Best path")
-    .replace(/practice recommendations/gi,"Recommendations")
-    .replace(/coach mode/g,"Coach Mode");
+    .replace(/practice reads/gi,"Table reads")
+    .replace(/coach mode/g,"Deeper table read");
 }
 
 function CollapsibleSection({label,desc,open,onToggle,children,badge,icon}){
@@ -7296,36 +7296,36 @@ function rkStyleReadForScorecard(styleName,score,trustRead){
   const raw=(styleName||"").toString().trim();
   const key=raw.toLowerCase();
   const numeric=Number(score||0);
-  const best=trustRead?.best||"your best direction";
+  const best=trustRead?.best||"your best lane";
 
   if(key.includes("focus")||key.includes("locked")){
     return {
       label:raw||"Focused Builder",
-      copy:`You had a clear lane and protected the tiles that mattered. Your rack was already pointing toward ${best}, so the strongest play was to keep that shape clean.`,
-      reasons:["Clear primary direction","Useful tiles worked together","Less noise after the Charleston"]
+      copy:`You saw the lane early and protected the tiles that mattered. Your rack was already pointing toward ${best}, so the strongest play was to keep the table read clean.`,
+      reasons:["Clear table read","Useful tiles worked together","Low noise after the Charleston"]
     };
   }
 
   if(key.includes("flex")){
     return {
       label:raw||"Flexible Builder",
-      copy:"You kept more than one path alive without losing the whole shape. That helped your rack stay playable, but it still needed cleaner pair or repeated tile structure.",
-      reasons:["Multiple paths stayed open","Backup direction was realistic","Still needed cleaner structure"]
+      copy:"You kept more than one path alive without losing the rack. That made your Charleston playable, but the final shape still needed cleaner pairs or repeated tiles before it became dangerous.",
+      reasons:["Multiple lanes stayed open","Backup path was believable","Still needed cleaner structure"]
     };
   }
 
   if(key.includes("scatter")||key.includes("messy")){
     return {
       label:raw||"Scattered Watcher",
-      copy:"Your rack touched a few sections, but not enough tiles were working together yet. The right move was to reduce noise and wait for the next clear signal.",
-      reasons:["Several loose tiles","No fully clean lane yet","Needed better tile compression"]
+      copy:"Your rack had clues, but they were pulling in a few directions. A strong player would use the next pick to cut noise and listen for the clearest lane.",
+      reasons:["Several loose tiles","No clean lane yet","Needed better tile compression"]
     };
   }
 
   if(key.includes("thin")||numeric<50){
     return {
       label:raw||"Thin Rack",
-      copy:"This was a harder Charleston. You had a few clues, but not enough depth to chase confidently, so protecting useful shape mattered most.",
+      copy:"This Charleston made you work. You had a few clues, but not enough depth to chase hard, so protecting useful shape mattered more than forcing a hand.",
       reasons:["Limited tile depth","Few true keepers","Needed help from future picks"]
     };
   }
@@ -7333,26 +7333,25 @@ function rkStyleReadForScorecard(styleName,score,trustRead){
   if(numeric>=80){
     return {
       label:raw||"Strong Builder",
-      copy:`You finished the Charleston with a believable direction and useful backup. Your rack had enough structure to keep building toward ${best}.`,
-      reasons:["Strong primary lane","Useful backup path","Good post-Charleston shape"]
+      copy:`You finished the Charleston with a real lane and a table read worth defending. Your rack had enough structure to keep building toward ${best}.`,
+      reasons:["Strong primary lane","Useful backup path","Clean post-Charleston shape"]
     };
   }
 
   if(numeric>=65){
     return {
       label:raw||"Balanced Builder",
-      copy:"You played a steady Charleston. The rack had a real direction, but the next few picks still needed to confirm the best path.",
+      copy:"You played a steady Charleston. The rack had a believable direction, but the next few picks still needed to confirm the strongest lane.",
       reasons:["Playable structure","Some flexibility remained","Needed one clearer signal"]
     };
   }
 
   return {
     label:raw||"Open Rack",
-    copy:"You kept the rack alive, but it was not ready to lock into one hand yet. The next move is to protect the strongest section and avoid chasing everything.",
+    copy:"You kept the rack alive, but it was not ready to lock into one hand yet. The next move is to protect the strongest lane and avoid chasing the whole card.",
     reasons:["Some useful tiles","Direction still forming","Avoid overcommitting too early"]
   };
 }
-
 
 function rkFriendlyDirectionName(direction){
   const raw=(direction||"").toString().trim();
@@ -7524,7 +7523,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       <section className="rk-daily-scorecard-homeclone-v45 rk-home-scorecard-v41" aria-label="Daily Rackle scorecard">
         <div className="rk-home-scorecard-v41-main rk-daily-scorecard-homeclone-v45-main">
           <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
-          <div className="rk-home-scorecard-v41-kicker"><span/> Daily Rackle Scorecard · #{dayNum}</div>
+          <div className="rk-home-scorecard-v41-kicker"><span/> Today’s Table Read · #{dayNum}</div>
           <div className="rk-home-scorecard-v41-score-row rk-daily-scorecard-homeclone-v45-score-row">
             <div>
               <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43">{animatedScore}</div>
@@ -7574,7 +7573,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           </div>
         </div>
 
-        <ShareButton text={shareText} label="Share your score" sublabel="Send it to your club" variant="green"/>
+        <ShareButton text={shareText} label="Share your score" sublabel="Drop it in your club chat" variant="green"/>
       </section>
 
       <section className="rk-final-rack-simple-v180" aria-label="Your rack">
@@ -7593,12 +7592,12 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160" aria-label="Rack at a glance">
         <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160">
           <span>Rack at a glance</span>
-          <h2>Your Charleston read</h2>
-          <p>A clear read on where your rack is leaning and what to avoid next.</p>
+          <h2>Your table read</h2>
+          <p>A clear read on where your rack was leaning after the Charleston.</p>
         </div>
 
         <div className="rk-glance-v160-verdict">
-          <span>Best fit read</span>
+          <span>Best lane</span>
           <h3>{iq.bestHandLabel||iq.scoredHandLabel||trustRead.best}</h3>
           <p>{trustRead.bestFit}</p>
         </div>
@@ -7613,11 +7612,11 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
         <div className="rk-glance-v160-coach">
           <div className="rk-glance-v160-coach-row expert">
-            <span>Expert read</span>
+            <span>Table read</span>
             <p>{rkHumanTableCopy(trustRead.expertRead)}</p>
           </div>
           <div className="rk-glance-v160-coach-row next">
-            <span>Next move</span>
+            <span>Next table move</span>
             <p>{rkHumanTableCopy(trustRead.nextMove)}</p>
           </div>
 
@@ -7642,18 +7641,18 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 
       <section className="rk-score-clean-actions-v120 rk-score-home-style-actions-v140" aria-label="Next actions">
         <button type="button" onClick={()=>setScreen&&setScreen(clubCode?"leaderboard":"globalLeaderboard")} className="rk-score-clean-action-v120 primary">
-          <span>{clubCode?"Open clubhouse":"Open today’s room"}</span>
-          <strong>{clubCode?"Club board":"Global board"}</strong>
+          <span>{clubCode?"Open the clubhouse":"Open today’s room"}</span>
+          <strong>{clubCode?"Club board":"Today’s room"}</strong>
           <em>→</em>
         </button>
         <button type="button" onClick={onPractice} className="rk-score-clean-action-v120">
           <span>Practice another rack</span>
-          <strong>Build the habit</strong>
+          <strong>Build the ritual</strong>
           <em>→</em>
         </button>
         {onCoachMode&&<button type="button" onClick={onCoachMode} className="rk-score-clean-action-v120">
           <span>Score deep dive</span>
-          <strong>Coach Mode</strong>
+          <strong>Deeper table read</strong>
           <em>→</em>
         </button>}
         <button type="button" onClick={onHome} className="rk-score-clean-action-v120 quiet">
@@ -7731,7 +7730,7 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
       <section className="rk-practice-homeclone-v45 rk-home-scorecard-v41" aria-label="Practice Rackle scorecard">
         <div className="rk-home-scorecard-v41-main rk-practice-homeclone-v45-main">
           <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
-          <div className="rk-home-scorecard-v41-kicker"><span/> Practice Rackle Scorecard</div>
+          <div className="rk-home-scorecard-v41-kicker"><span/> Practice Table Read</div>
           <div className="rk-home-scorecard-v41-score-row rk-practice-homeclone-v45-score-row">
             <div>
               <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43">{animatedScore}</div>
@@ -7760,12 +7759,12 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
       <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160" aria-label="Practice rack at a glance">
         <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160">
           <span>Rack at a glance</span>
-          <h2>Your Charleston read</h2>
-          <p>A clear read on where this practice rack is leaning and what to do next.</p>
+          <h2>Your table read</h2>
+          <p>A clear read on where this practice rack was leaning after the Charleston.</p>
         </div>
 
         <div className="rk-glance-v160-verdict">
-          <span>Best fit read</span>
+          <span>Best lane</span>
           <h3>{glanceBestName}</h3>
           <p>{glanceBestDetail}</p>
         </div>
@@ -7780,11 +7779,11 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
 
         <div className="rk-glance-v160-coach">
           <div className="rk-glance-v160-coach-row expert">
-            <span>Expert read</span>
+            <span>Table read</span>
             <p>{expertReadText}</p>
           </div>
           <div className="rk-glance-v160-coach-row next">
-            <span>Next move</span>
+            <span>Next table move</span>
             <p>{nextMoveText}</p>
           </div>
         </div>
@@ -7821,7 +7820,7 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
 }
 
 // ─── RACK VS HAND OVERLAY ─────────────────────────────────────────────────────
-// The centrepiece of Coach Mode. Shows the target hand tile-by-tile, with each
+// The centrepiece of Deeper table read. Shows the target hand tile-by-tile, with each
 // slot annotated: ✓ held, ✗ passed in round N, ○ never had it.
 // Also surfaces the "gap sentence", the precise tiles that stood between the
 // player and completing this hand.
@@ -7979,7 +7978,7 @@ function RackVsHandOverlay({hand, handObj, passLog, sectionId, handWasInferred, 
         </div>
       </div>
 
-      {/* Gap analysis */}
+      {/* Gap rack review */}
       <div style={{padding:"10px 14px"}}>
         <p style={{fontSize:12,color:C.ink,lineHeight:1.55,margin:"0 0 6px",fontWeight:700}}>{gapSentence}</p>
         {critPassSentence&&(
@@ -8047,7 +8046,7 @@ function computeCoachAdvice(hand, passLog, chosenSec, allSections, iq, chosenHan
   const maxOfOne=Math.max(0,...Object.values(nc));
   const maxNum=Object.entries(nc).find(([n,c])=>c===maxOfOne)?.[0];
 
-  // Pass analysis
+  // Pass rack review
   const passedJokers=allPassed.filter(t=>t.t==="j");
   const passedFlowers=allPassed.filter(t=>t.t==="f");
   const passedStrong=allPassed.filter(t=>{
@@ -8329,7 +8328,7 @@ function CoachAdvice({hand,passLog,chosenSec,allSections,iq,chosenHandObj}){
   );
 }
 
-// ─── COACH MODE SCREEN, narrative-first deep analysis ───────────────────────
+// ─── COACH MODE SCREEN, narrative-first deep rack review ───────────────────────
 
 
 function FinalHandReadCard({hand,chosenHandObj,chosenSecObj,handWasInferred}){
@@ -8401,7 +8400,7 @@ function FinalHandCrossReference({hand,startingRack,chosenHandObj,chosenSec,chos
   return(
     <div style={{...S.card,marginBottom:10,padding:0,overflow:"hidden",borderColor:C.jade+"22"}}>
       <div style={{padding:"12px 14px",background:"linear-gradient(145deg,#FFFDF8,#F5EFE4)",borderBottom:`1px solid ${C.bdr}`}}>
-        <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:900,textTransform:"uppercase",marginBottom:5}}>Final rack cross-check</div>
+        <div style={{fontSize:8,color:C.jade,letterSpacing:2,fontWeight:900,textTransform:"uppercase",marginBottom:5}}>Your final rack cross-check</div>
         <div style={{fontFamily:F.d,fontSize:16,fontWeight:900,color:C.ink,lineHeight:1.12,letterSpacing:-.2}}>Final hand, best fits, and hand shapes</div>
         <p style={{fontSize:11.5,color:C.mut,lineHeight:1.55,margin:"7px 0 0"}}>Use this to compare your final rack against the best-fit hands and shapes Rackle is seeing.</p>
       </div>
@@ -8432,8 +8431,8 @@ function FinalHandCrossReference({hand,startingRack,chosenHandObj,chosenSec,chos
       </div>}
       {tab==="rack"&&<div className="rk-in" style={{padding:"12px 14px"}}>
         <div style={{marginBottom:14}}>
-          <div style={{fontSize:8,color:C.jade,letterSpacing:1.8,textTransform:"uppercase",fontWeight:900,marginBottom:7}}>Final rack</div>
-          <div style={{fontSize:11,color:C.mut,lineHeight:1.5,marginBottom:8}}>Final rack. This is the rack used for the best-fit reads above.</div>
+          <div style={{fontSize:8,color:C.jade,letterSpacing:1.8,textTransform:"uppercase",fontWeight:900,marginBottom:7}}>Your final rack</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.5,marginBottom:8}}>Your final rack. This is the rack used for the best-fit reads above.</div>
           <SortableRack hand={hand}/>
         </div>
         <div>
@@ -8869,7 +8868,7 @@ function RackleHeader({onBack,setScreen}){
         className="rk-header-logo-home-v60 rk-header-brand-v75"
       >
         <span className="rk-header-brand-title-v75">Rackle</span>
-        <span className="rk-header-brand-tag-v75">The Daily Mahjong Workout.</span>
+        <span className="rk-header-brand-tag-v75">The daily Charleston ritual.</span>
       </button>
 
       <div className="rk-header-menu-wrap-v75">
@@ -9676,7 +9675,7 @@ function GlobalLeaderboardPill({setScreen}){
         )}
         <div className="rk-quiet-footer">
           {setScreen&&<button onClick={()=>setScreen("globalLeaderboard")} className="rk-quiet-link">Open full room →</button>}
-          <div style={{fontSize:10.5,color:C.mut,lineHeight:1.5}}>Play the Daily to appear · Board resets tonight</div>
+          <div style={{fontSize:10.5,color:C.mut,lineHeight:1.5}}>Play the Daily to appear · The board resets tonight</div>
         </div>
       </div>}
     </div>
@@ -9977,7 +9976,7 @@ function rkBuildActivity(entries=[],label="room",myRank=null){
   else if(myRank&&leader)feed.push(`You are ${Math.max(0,(Number(leader.iqScore)||0)-(Number(entries[myRank-1]?.iqScore)||0))} points behind the lead.`);
   if(entries.length>1)feed.push(`${entries.length} players have posted today.`);
   if(entries.find(e=>Number(e.streak||0)>=5))feed.push(`A streak is alive in the room.`);
-  if(feed.length<3)feed.push(`Board resets tonight.`);
+  if(feed.length<3)feed.push(`The board resets tonight.`);
   return feed.slice(0,3);
 }
 function RoomMetric({value,label,accent="jade"}){
@@ -10161,7 +10160,7 @@ function GlobalLeaderboardScreen({home,dRes,streak,setScreen}){
       : <>
           <RoomLeader leader={leader} myEntry={myEntry} count={entries.length} label="global"/>
           <RoomMyPosition myRank={myRank} score={score} leader={leader} count={entries.length} clubName="the global room"/>
-          <RoomRows entries={entries} scoreHint={score} emptyTitle="Be the first to post a score today" emptyCopy="Play today’s rack to get ranked." title="Global board" subtitle="Leaderboard"/>
+          <RoomRows entries={entries} scoreHint={score} emptyTitle="Be the first to post a score today" emptyCopy="Play today’s rack to get ranked." title="Today’s room" subtitle="Leaderboard"/>
         </>
     }
 
@@ -10500,9 +10499,9 @@ function StreakCard({streak,streakBadge,bestIQ,clubName,onStats,firstName}){
 // ─── TOP BANNER ───────────────────────────────────────────────────────────────
 function TopBanner(){
   const messages=[
-    {label:"WELCOME",text:"The Daily Mahjong Workout. Same hand. Every player. Every day."},
+    {label:"WELCOME",text:"The daily Charleston ritual. Same hand. Every player. Every day."},
     {label:"LIVE",text:"Same rack today. Every player gets one read."},
-    {label:"TIP",text:"Jokers can never be passed. Hold them and build around them."},
+    {label:"TIP",text:"Jokers stay with you. They can’t be passed in the Charleston. Hold them and build around them."},
     {label:"TIP",text:"Flowers appear in most winning hands. Don't throw them away early."},
     {label:"TIP",text:"6s are your most versatile tile, they appear in ~40% of hands."},
     {label:"TIP",text:"1s are the least useful tiles on the 2026 card. Pass them first."},
@@ -10943,13 +10942,15 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const bestDirection=homeTrustRead?.best||iq?.bestDirection||todayDRes?.section||"Still watching";
     const rankLine=shownClubRank?`Club rank: #${shownClubRank}${club?` in ${club.name}`:""}`:"";
     const insight=(homeTrustRead?.heldBack?.[0]||homeTrustRead?.band?.tone||"Same rack for everyone. Can you beat it?").replace(/\s+/g," ").trim();
+    const styleLine=iq?.styleName?`Style: ${iq.styleName}`:"";
     const text=[
       `Rackle #${dn}`,
-      iq?`Score: ${iq.totalScore}`:`Score: played`,
-      bestDirection?`Best direction: ${bestDirection}`:"",
+      iq?`${iq.totalScore} IQ`:`Score posted`,
+      bestDirection?`Best lane: ${bestDirection}`:"",
+      styleLine,
       rankLine,
       insight,
-      "Play today’s rack:",
+      "Same rack. Can you beat it?",
       "playrackle.com"
     ].filter(Boolean).join("\n");
     const markShared=async()=>{
@@ -11007,17 +11008,17 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       "Today’s room is open",
       "Fresh rack is live",
       "Your table is waiting",
-      "One rack. One room.",
-      "Beat the room today",
-      "Daily Charleston is live",
-      "The club board is open",
+      "One rack. One table.",
+      "Beat the table today",
+      "Today’s Charleston is live",
+      "The club board is moving",
     ];
     const headerPill=headerPills[Math.abs(Number(dn)||0)%headerPills.length];
     return(
       <div className="rk-startup-hero-v4 rk-startup-hero-v42">
         <div className="rk-startup-mark-v4 rk-float">🀄</div>
         <h1 className="rk-startup-logo-v4">Rackle</h1>
-        <p className="rk-startup-subtitle-v4">The Daily Mahjong Workout</p>
+        <p className="rk-startup-subtitle-v4">The daily Charleston ritual</p>
         <div className="rk-startup-pulse-pill-v41 rk-startup-pulse-pill-v42" aria-label="Today’s Rackle status">
           <span></span> {headerPill}
         </div>
@@ -11053,14 +11054,14 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             ))}
           </div>
           <h2 className="rk-daily-entry-v6-title"><span>Fresh rack.</span><span>New Charleston.</span></h2>
-          <p className="rk-daily-entry-v6-copy"><span>See how your table stacks up.</span><span>Same rack for everyone. One score to chase.</span></p>
+          <p className="rk-daily-entry-v6-copy"><span>See how your table reads it.</span><span>Same rack for everyone. One table read to defend.</span></p>
           <div className="rk-daily-entry-v6-stats">
-            <span>{posted===0?"First score gets the room":`${posted} ${posted===1?"player has":"players already"} posted`}</span>
-            <span>{scoreToBeat?`${scoreToBeat} is the score to beat`:"Be the first score to beat"}</span>
+            <span>{posted===0?"First score owns the table":`${posted} ${posted===1?"player has":"players already"} posted`}</span>
+            <span>{scoreToBeat?`${scoreToBeat} is the score to beat`:"Set the first score to beat"}</span>
           </div>
           <span className="rk-daily-entry-v6-cta"><span className="rk-live-spark"/> Play Today’s Rackle</span>
           <button type="button" onClick={(e)=>{e.stopPropagation();setScreen("howto");}} className="rk-daily-entry-v37-tutorial" aria-label="Learn how the Daily Rackle works">
-            New to Rackle? See how it works →
+            New to Rackle? Learn the table flow →
           </button>
         </div>
       </section>
@@ -11070,7 +11071,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   const LiveTicker=()=>{
     const posted=Number(todayPlayers||0)||0;
     const updates=[
-      "Board resets tonight",
+      "The board resets tonight",
       `${posted} ${posted===1?"player has":"players already"} posted`,
       topToday?`Top score today: ${topToday}`:null,
       club?.name?`${club.name} is active`:null,
@@ -11135,7 +11136,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     <section className="rk-home-scorecard-v41 rk-home-section-lg" aria-label="Your Daily Rackle scorecard">
       <div role="button" tabIndex={0} onClick={showScorecard} onKeyDown={(e)=>{if(e.key==="Enter"||e.key===" ")showScorecard();}} className="rk-home-scorecard-v41-main" aria-label="Open your full scorecard">
         <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
-        <div className="rk-home-scorecard-v41-kicker"><span/> Daily Rackle Scorecard · #{dn}</div>
+        <div className="rk-home-scorecard-v41-kicker"><span/> Today’s Table Read · #{dn}</div>
         <div className="rk-home-scorecard-v41-score-row">
           <div>
             <div className="rk-home-scorecard-v41-score rk-home-scorecard-v41-score-countup rk-pop" aria-label={`Rackle IQ ${scoreValue}`}>{shownScoreValue}</div>
@@ -11198,7 +11199,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           </div>
           <div className="rk-tomorrow-v11-badge">{resetLabel}</div>
         </div>
-        <p className="rk-tomorrow-v11-copy">Come back tomorrow and climb the club board.</p>
+        <p className="rk-tomorrow-v11-copy">Come back tomorrow and defend your table read.</p>
       </section>
     );
   };
@@ -11228,7 +11229,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div className="rk-freeplay-v24-copy rk-freeplay-v40-copy">
           <div className="rk-freeplay-v24-kicker">Free play room</div>
           <h2>Improve Your Game</h2>
-          <p>Practice another Charleston whenever you want. New rack, clean passes, instant readout.</p>
+          <p>Warm up with a fresh Charleston. Practice the pass, then see your table read.</p>
         </div>
         <div className="rk-freeplay-v40-preview" aria-hidden="true">
           <div className="rk-freeplay-v40-tiles">
@@ -11242,13 +11243,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       </div>
 
       <div className="rk-freeplay-v24-steps rk-freeplay-v40-steps" aria-label="How Free Play works">
-        <div><strong>1</strong><span><b>Fresh rack</b><small>Start a new Charleston warm-up.</small></span></div>
-        <div><strong>2</strong><span><b>Choose your passes</b><small>Practice what to keep, pass, and protect.</small></span></div>
-        <div><strong>3</strong><span><b>Read the table</b><small>Get your Rackle IQ and best lane.</small></span></div>
+        <div><strong>1</strong><span><b>Fresh rack</b><small>Start a fresh Charleston warm-up.</small></span></div>
+        <div><strong>2</strong><span><b>Make your passes</b><small>Practice what to keep, pass, and protect.</small></span></div>
+        <div><strong>3</strong><span><b>Read the table</b><small>See your table read and best lane.</small></span></div>
       </div>
 
       <button type="button" onClick={()=>go("free")} className="rk-freeplay-v24-cta">
-        Start Free Play
+        Start a practice rack
       </button>
     </section>
   );
@@ -11257,10 +11258,10 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const items=[
       currentScore?`${currentName} posted ${currentScore}`:null,
       topToday?`Beat ${topToday} before the board resets`:null,
-      todayPlayers?`${todayPlayers} players played today`:"First score gets the room",
+      todayPlayers?`${todayPlayers} players played today`:"First score owns the table",
       club?`${club.name} is live`:"Club rooms are live",
       ydIQ?`Yesterday: ${ydIQ}. Today’s room is open.`:null,
-      "Board resets tonight",
+      "The board resets tonight",
     ].filter(Boolean);
     return <div className="rk-activity-strip rk-activity-strip-live"><span className="rk-activity-dot"/>{items[dn%items.length]}</div>;
   };
@@ -11302,7 +11303,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div className="rk-ritual-head-v6">
         <span>The Rackle Ritual</span>
         <strong>Your daily Charleston loop.</strong>
-        <p>Four small reads. One sharper rack. Build the habit before your next table.</p>
+        <p>Four small reads. One sharper rack. Build the ritual before your next table.</p>
       </div>
       <div className="rk-ritual-track-v6">
         {[
@@ -11344,7 +11345,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
         <div className="rk-web-data-card">
           <div className="rk-web-data-kicker">Practice room</div>
           <h3 className="rk-web-data-title">Warm up</h3>
-          <p className="rk-web-data-copy">Practice without touching today’s score.</p>
+          <p className="rk-web-data-copy">Practice without touching today’s board.</p>
           <div className="rk-web-metric-row" style={{gridTemplateColumns:"repeat(2,minmax(0,1fr))"}}>
             <div className="rk-web-metric"><strong>{avgDaily}</strong><span>Daily avg</span></div>
             <div className="rk-web-metric"><strong>{avgPractice}</strong><span>Practice avg</span></div>
@@ -11373,7 +11374,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
     const activeRows=(activeClubCode&&clubRows.length?clubRows:globalRows)||[];
     const leadValue=Number(activeRows?.[0]?.iqScore||activeRows?.[0]?.score||0)||0;
     const leader=activeRows?.[0]||{};
-    const leaderName=(leader.name||(leadValue?"Top player":"First score gets the room")).trim();
+    const leaderName=(leader.name||(leadValue?"Top player":"First score owns the table")).trim();
     const pointsBehind=Number.isFinite(leadValue)&&Number.isFinite(Number(currentScore))?Math.max(0,leadValue-Number(currentScore)):null;
     const openBoard=()=>activeClubCode?setScreen("leaderboard"):setScreen("globalLeaderboard");
     const findClub=()=>setScreen("clubs");
@@ -11381,11 +11382,11 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       ?[
         {name:hasTodayDaily&&currentScore?currentName:"Play today to join the board",iqScore:hasTodayDaily&&currentScore?currentScore:"—"},
         {name:club?.name?`${club.name} board`:"Your club board",iqScore:clubCount||"—"},
-        {name:"First score gets the room",iqScore:leadValue||"—"},
+        {name:"First score owns the table",iqScore:leadValue||"—"},
       ]
       :[
         {name:leaderName,iqScore:leadValue||"—"},
-        {name:hasTodayDaily&&currentScore?currentName:"First score gets the room",iqScore:hasTodayDaily&&currentScore?currentScore:"—"},
+        {name:hasTodayDaily&&currentScore?currentName:"First score owns the table",iqScore:hasTodayDaily&&currentScore?currentScore:"—"},
         {name:"Global room",iqScore:globalCount||"—"},
       ];
     const rows=(activeRows.length?activeRows:fallbackRows).slice(0,3);
@@ -11398,19 +11399,19 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
           : shownClubRank
             ? `You’re #${shownClubRank} in ${club?.name||"your club"}.`
             : "Your score is ready for the club board."
-        : "Post your score and see where you stand in your club."
+        : "Post your score and see where you stand at the table."
       : currentScore
         ? pointsBehind===0
           ? "You’re on top. Open the room and defend it."
           : `You’re ${pointsBehind} point${pointsBehind===1?"":"s"} back. Open the room and chase.`
-        : "Post your score, then see exactly who you’re chasing.";
+        : "Post your score, then see who you’re chasing.";
     const socialCopy=activeClubCode
       ? clubCount>0?`${clubCount} club score${clubCount===1?"":"s"} live today`:"No club scores yet today"
       : globalCount>0?`${globalCount} player${globalCount===1?"":"s"} in today’s Rackle room`:"No scores live yet";
     const previewRows=rows.slice(0,3);
     const boardLabel=activeClubCode?(club?.name||"Your club"):"Rackle room";
     const title=activeClubCode?"Your Club":"Rackle Room";
-    const kicker=activeClubCode?"Your club today":"Live standings";
+    const kicker=activeClubCode?"Your table today":"Today’s room";
     const scoreLabel=leadValue?"score to beat":"open";
     const scoreDisplay=leadValue||"—";
     const secondaryLabel=activeClubCode?"Global room →":"Find a club →";
@@ -11478,13 +11479,13 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
       <div className="rk-learn-home-head rk-learn-home-v18-head">
         <div className="rk-learn-home-kicker rk-learn-home-v18-kicker">Learn + Explore</div>
         <h2 className="rk-learn-home-title rk-learn-home-v18-title">Sharpen your table read</h2>
-        <p className="rk-learn-home-copy rk-learn-home-v18-copy">Learn the card, browse the 2026 hands, or take another practice rack.</p>
+        <p className="rk-learn-home-copy rk-learn-home-v18-copy">Learn the card, browse the 2026 hands, or warm up with another rack.</p>
       </div>
       <div className="rk-learn-home-grid rk-learn-home-v18-grid">
         {[
-          ["01","How to Play","Learn the flow in two minutes.",()=>setScreen("howto")],
+          ["01","How to Play","Learn the table flow in two minutes.",()=>setScreen("howto")],
           ["02","2026 Hand Browser","Browse sections, patterns, and hands.",()=>setScreen("handbrowser")],
-          ["03","Free Play","Practice without touching today’s score.",()=>go("free")],
+          ["03","Free Play","Practice without touching today’s board.",()=>go("free")],
         ].map(([mark,title,sub,fn])=>(
           <button key={title} className="rk-learn-home-card rk-learn-home-v18-card" onClick={fn}>
             <span className="rk-learn-home-icon rk-learn-home-v18-icon">{mark}</span>
@@ -11886,7 +11887,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           </div>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}><span className="rk-game-flow-mini-label">Charleston · 1/3</span></div>
           <div style={{display:"flex",gap:3,marginBottom:10}}>{[0,1,2].map(i=><div key={i} style={{flex:1,height:4,borderRadius:2,background:i===0?C.gold:C.bdr}}/>)}</div>
-          <div className="rk-game-start-instruction"><h2>Choose 3 tiles to pass right</h2><p>Jokers stay protected.</p></div>
+          <div className="rk-game-start-instruction"><h2>First pass: choose 3 tiles to pass right</h2><p>Keep your best lane alive. Jokers stay with you.</p></div>
           <div style={S.card}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
               <span style={{fontSize:8,color:C.mut,letterSpacing:2,fontWeight:700}}>YOUR RACK (13 tiles)</span>
@@ -11925,7 +11926,7 @@ function Game({mode,home,onDone,settings,setScreen}){
         </div>
       )}
 
-      {phase==="askSecond"&&<Ask icon="🔄" title="Continue Charleston?" desc="Another round: Left → Over → Right?" hand={hand} timer={getDisplayTime()} onSort={()=>setHand(sortHand(hand))} onNo={()=>setPhase("askCourtesy")} onYes={()=>{setCn(2);setPi(0);setSel([]);setNewIdx([]);setPhase("pass");}} large={large}/>}
+      {phase==="askSecond"&&<Ask icon="🔄" title="Keep the Charleston going?" desc="Another round of table reads: left, across, right?" hand={hand} timer={getDisplayTime()} onSort={()=>setHand(sortHand(hand))} onNo={()=>setPhase("askCourtesy")} onYes={()=>{setCn(2);setPi(0);setSel([]);setNewIdx([]);setPhase("pass");}} large={large}/>}
       {phase==="askCourtesy"&&<Ask icon="🤝" title="Courtesy Pass?" desc="Optional: pass 1–3 tiles." hand={hand} timer={getDisplayTime()} onSort={()=>setHand(sortHand(hand))} onNo={()=>{stopTimer();setSel([]);setNewIdx([]);setPhase("chooseHand");}} onYes={()=>{setSel([]);setNewIdx([]);setPhase("courtesy");}} large={large}/>}
 
       {phase==="courtesy"&&(
@@ -11933,7 +11934,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           <RackleHeader onBack={()=>setShowLeave(true)}/>
           {getDisplayTime()&&<div style={{textAlign:"center",marginBottom:4}}><span style={{fontSize:12,color:C.mut,fontFamily:F.d,fontWeight:700}}>⏱ {getDisplayTime()}</span></div>}
           <h2 style={{fontFamily:F.d,fontSize:18,color:C.ink,margin:"0 0 2px",textAlign:"center"}}>Courtesy pass: choose 1–3 tiles across</h2>
-          <p style={{fontSize:12,color:C.mut,textAlign:"center",marginBottom:10}}>Optional. Skip if your rack is already clean. Jokers stay protected.</p>
+          <p style={{fontSize:12,color:C.mut,textAlign:"center",marginBottom:10}}>Optional. Skip if your rack is already clean. Keep your best lane alive. Jokers stay with you.</p>
           {jw&&<JW/>}
           <div style={S.card}><RH hand={hand} onSort={()=>setHand(sortHand(hand))}/>
             <RackSurface>{hand.map((t,i)=><Ti key={i} t={t} sel={sel.includes(i)} dim={t.t==="j"} locked={t.t==="j"} onClick={()=>cTog(i)} large={large}/>)}</RackSurface></div>
@@ -12009,7 +12010,7 @@ function Game({mode,home,onDone,settings,setScreen}){
           <div className="rk-game-flow-card">
             <span className="rk-game-flow-kicker">Charleston · {pi+1}/3</span>
             <h2 className="rk-game-flow-title">{passInstruction}</h2>
-            <p className="rk-game-flow-copy">{hasNew?"Review the tiles you received before the next pass.":"Tap your pass tiles. Jokers stay protected in your rack."}</p>
+            <p className="rk-game-flow-copy">{hasNew?"Review the tiles you received before the next pass.":"Choose what does not help your lane. Jokers stay protected in your rack."}</p>
           </div>
           <div role="progressbar" aria-valuenow={pi} aria-valuemin={0} aria-valuemax={3} style={{display:"flex",gap:3,marginBottom:10}}>{[0,1,2].map(i=><div key={i} style={{flex:1,height:4,borderRadius:2,background:i<pi?C.jade:i===pi?(hasNew?C.jade:C.gold):C.bdr}}/>)}</div>
           <div style={{textAlign:"center",marginBottom:10}}>
@@ -12667,7 +12668,7 @@ function computeHonestCoverage(rack, handObj){
 
 // ── NEAR-WIN / EXECUTION MODE CALIBRATION ───────────────────────────────────
 // If a rack is 10+ tiles into one valid hand, Rackle must stop speaking like a
-// mid-Charleston analyzer. It should move into closing/execution coaching.
+// mid-Charleston table read. It should move into closing/execution coaching.
 function rkHasJokerEligibleGap(plan,handObj){
   if(!plan||handObj?.concealed)return false;
   return (plan.groupStatus||[]).some(st=>{
@@ -13182,7 +13183,7 @@ function rkExactCharlestonAudit({finalRack=[],startingRack=[],passedTilesByRound
   const rackSizeOk=Array.isArray(finalRack)&&finalRack.length===13;
   const startingRackSizeOk=!startingRack?.length||startingRack.length===13;
   const ruleIssues=[...(validation.issues||[])];
-  if(!rackSizeOk)ruleIssues.push(`Final rack should have 13 tiles, saw ${finalRack?.length||0}`);
+  if(!rackSizeOk)ruleIssues.push(`Your final rack should have 13 tiles, saw ${finalRack?.length||0}`);
   if(!startingRackSizeOk)ruleIssues.push(`Starting rack should have 13 tiles, saw ${startingRack?.length||0}`);
   return{
     jokerRuleOk:validation.jokerRuleOk,
@@ -13558,7 +13559,7 @@ function StyleGlossaryScreen({home,setScreen}){
 
       <div className="rk-style-glossary-detail-v60">
         <div><strong>Table read</strong><p>{current.tableRead}</p></div>
-        <div><strong>Next move</strong><p>{current.next}</p></div>
+        <div><strong>Next table move</strong><p>{current.next}</p></div>
       </div>
 
       <section className="rk-style-finder-v91" aria-label="Style finder">
@@ -14267,7 +14268,7 @@ function DashRight({
   club, hasTodayDaily, go, setScreen, iq
 }){
   const rows=(club&&displayHomeClubEntries?.length?displayHomeClubEntries:homeGlobalEntries||[]).slice(0,5);
-  const boardLabel=club?club.name:"Global board";
+  const boardLabel=club?club.name:"Today’s room";
   const currentName=rkCurrentDisplayName();
   return(
     <div className="rk-dash-panel-stack">
@@ -14371,7 +14372,7 @@ function AppShell({children,dashProps=null}){
           {children}
           <Analytics />
         </div>
-        <aside className="rk-dash-right" aria-label="Live standings">{dashProps&&<DashRight {...dashProps}/>}</aside>
+        <aside className="rk-dash-right" aria-label="Today’s room">{dashProps&&<DashRight {...dashProps}/>}</aside>
       </div>
     </div>
   );
