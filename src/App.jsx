@@ -6595,7 +6595,7 @@ function RackViewer({hand,startingRack}){
         </div>
         <div style={{padding:"12px 14px"}}>
           {tab==="final"&&<>
-            <div style={{fontSize:9,color:C.mut,marginBottom:8}}>Your rack after the Charleston, what you scored on.</div>
+            <div style={{fontSize:9,color:C.mut,marginBottom:8}}>Final rack, what you scored on.</div>
             <SortableRack hand={hand}/>
           </>}
           {tab==="starting"&&hasStarting&&<>
@@ -7445,8 +7445,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
       <section className="rk-score-clean-share-v120 rk-score-share-premium-v130 rk-score-share-simple-v140 rk-score-share-v150 rk-score-share-v160" aria-label="Share your score">
         <div className="rk-score-share-v150-head rk-score-share-v160-head">
           <span>Share your score</span>
-          <h2>{affiliatedClubName?`Share with ${affiliatedClubName}`:"Share with your club"}</h2>
-          <p>Send today’s result to your table and let your club chase the same rack.</p>
+          <h2>Share your score</h2>
+          <p>Send today’s result to your club.</p>
         </div>
 
         <div className="rk-score-share-v160-stats" aria-label="Today’s score summary">
@@ -7462,13 +7462,13 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
           </div>
         </div>
 
-        <ShareButton text={shareText} label="Share your score" sublabel={affiliatedClubName?`Send it to ${affiliatedClubName}`:"Send it to your club"} variant="green"/>
+        <ShareButton text={shareText} label="Share your score with your club" sublabel="Tap to send" variant="green"/>
       </section>
 
       <section className="rk-score-clean-final-v120" aria-label="Your final hand">
         <div className="rk-score-clean-head-v120">
           <span>Final hand</span>
-          <h2>Your rack after the Charleston</h2>
+          <h2>Final rack</h2>
           <p>See the shape you finished with after the Charleston.</p>
         </div>
         <div className="rk-score-clean-rack-v120">
@@ -7506,10 +7506,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
             <span>Next move</span>
             <p>{rkHumanTableCopy(trustRead.nextMove)}</p>
           </div>
-          <div className="rk-glance-v160-coach-row pass-review">
-            <span>Pass review</span>
-            <p>{passDots?`${passDots} ${passLine}`:passLine}</p>
-          </div>
+
         </div>
       </section>
 
@@ -7594,7 +7591,7 @@ function PracticeIQScorecard({iq,hand,passLog,section,chosenSec,allSections,onHo
       <section className="rk-score-clean-final-v120" aria-label="Your practice hand">
         <div className="rk-score-clean-head-v120">
           <span>Final hand</span>
-          <h2>Your rack after the Charleston</h2>
+          <h2>Final rack</h2>
           <p>This practice rack is not on the daily board. Use it to sharpen the next pass.</p>
         </div>
         <div className="rk-score-clean-rack-v120">
@@ -8254,7 +8251,7 @@ function FinalHandCrossReference({hand,startingRack,chosenHandObj,chosenSec,chos
       {tab==="rack"&&<div className="rk-in" style={{padding:"12px 14px"}}>
         <div style={{marginBottom:14}}>
           <div style={{fontSize:8,color:C.jade,letterSpacing:1.8,textTransform:"uppercase",fontWeight:900,marginBottom:7}}>Final rack</div>
-          <div style={{fontSize:11,color:C.mut,lineHeight:1.5,marginBottom:8}}>Your rack after the Charleston. This is the rack used for the best-fit reads above.</div>
+          <div style={{fontSize:11,color:C.mut,lineHeight:1.5,marginBottom:8}}>Final rack. This is the rack used for the best-fit reads above.</div>
           <SortableRack hand={hand}/>
         </div>
         <div>
