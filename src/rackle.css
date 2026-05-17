@@ -18946,7 +18946,7 @@ footer p{
   background:rgba(255,248,232,.075)!important;
   border:1px solid rgba(255,248,232,.11)!important;
   box-shadow:none!important;
-  text-align:left!important;
+  text-align:center!important;
 }
 
 .rk-home-scorecard-v41.rk-scorecard-preview-optimized-v600 .rk-home-scorecard-v41-actions button span,
@@ -20279,7 +20279,7 @@ footer p{
   background:rgba(255,248,232,.075)!important;
   border:1px solid rgba(255,248,232,.11)!important;
   box-shadow:none!important;
-  text-align:left!important;
+  text-align:center!important;
   cursor:pointer!important;
 }
 
@@ -21894,9 +21894,9 @@ button.rk-share-card,
   color:#7A7168!important;
 }
 
-/* Daily lower sections can share this left-align polish too */
-.rk-score-shell.rk-score-ultra-simple > section:not(.rk-daily-scorecard-homeclone-v45),
-.rk-score-shell.rk-score-ultra-simple > section:not(.rk-daily-scorecard-homeclone-v45) *{
+/* Lower sections (below the hero) use left-align polish; hero sections are excluded */
+.rk-score-shell.rk-score-ultra-simple > section:not(.rk-daily-scorecard-homeclone-v45):not(.rk-practice-homeclone-v45),
+.rk-score-shell.rk-score-ultra-simple > section:not(.rk-daily-scorecard-homeclone-v45):not(.rk-practice-homeclone-v45) *{
   text-align:left!important;
 }
 

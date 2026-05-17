@@ -7734,6 +7734,50 @@ function rkBetterPlayersInsights({entries=[],score=0,trustRead={},iq={},allSecti
   return items.slice(0,3);
 }
 
+// ─── SHARED SCORE HERO CARD ───────────────────────────────────────────────────
+// Single source of truth for the hero section shown at the top of both the
+// daily scorecard and the practice scorecard.
+//
+// Props
+//   animatedScore  animated tick-up number
+//   score          raw numeric score (for aria-label)
+//   kicker         kicker line, e.g. "Today's Table Read · #5"
+//   variantClass   section/main CSS modifier,
+//                  e.g. "rk-daily-scorecard-homeclone-v45"
+//   styleValue     style pill text, e.g. "Sharp Pusher"
+//   onStyleClick   if provided, pill renders as a clickable <button>
+//   revealFrame    { headline, copy, tag }
+//   rankActions    optional JSX for the rank cells (daily only)
+//   ariaLabel      aria-label for the <section>
+function ScoreHeroCard({animatedScore,score,kicker,variantClass,styleValue,onStyleClick,revealFrame,rankActions,ariaLabel="Scorecard"}){
+  const cCol={display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",width:"100%",textAlign:"center"};
+  const cBlock={display:"block",width:"100%",textAlign:"center"};
+  const cAuto={textAlign:"center",marginLeft:"auto",marginRight:"auto"};
+  return(
+    <section className={`${variantClass} rk-home-scorecard-v41 rk-score-reveal-v250 rk-scorecard-preview-optimized-v600`} aria-label={ariaLabel}>
+      <div className={`rk-home-scorecard-v41-main ${variantClass}-main`}>
+        <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
+        <div className="rk-home-scorecard-v41-kicker"><span/> {kicker}</div>
+        <div className={`rk-home-scorecard-v41-score-row ${variantClass}-score-row`} style={cCol}>
+          <div style={cCol}>
+            <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43 rk-score-reveal-number-v250" aria-label={`Rackle IQ ${score}`} style={cBlock}>{animatedScore}</div>
+            <div className="rk-home-scorecard-v41-score-label" style={cBlock}>Rackle IQ</div>
+          </div>
+          {styleValue&&(
+            onStyleClick
+              ?<button type="button" onClick={onStyleClick} className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next rk-style-pill-clickable rk-score-reveal-style-v250" aria-label={`Learn what ${styleValue} means`} style={cAuto}>{styleValue}</button>
+              :<div className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next" style={cAuto}>{styleValue}</div>
+          )}
+        </div>
+        <div className="rk-home-scorecard-v41-title rk-score-reveal-title-v250" style={cAuto}>{revealFrame.headline}</div>
+        <p className="rk-home-scorecard-v41-copy rk-score-reveal-copy-v250" style={{...cAuto,maxWidth:"34ch"}}>{revealFrame.copy}</p>
+        <div className="rk-score-reveal-micro-v250">{revealFrame.tag}</div>
+        {rankActions}
+      </div>
+    </section>
+  );
+}
+
 function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onHome,onPractice,onCoachMode,setScreen,resultTime=0}){
   const [dailyStats,setDailyStats]=useState(null);
   const [globalEntries,setGlobalEntries]=useState([]);
@@ -7887,25 +7931,16 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const betterPlayersRead=rkBetterPlayersInsights({entries:(clubRows&&clubRows.length>=3)?clubRows:globalRows,score,trustRead,iq,allSections,clubName:affiliatedClubName});
   return(
     <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26 rk-scorecard-clean-v120" style={{paddingBottom:32}}>
-      <section className="rk-daily-scorecard-homeclone-v45 rk-home-scorecard-v41 rk-score-reveal-v250 rk-scorecard-preview-optimized-v600" aria-label="Daily Rackle scorecard">
-        <div className="rk-home-scorecard-v41-main rk-daily-scorecard-homeclone-v45-main">
-          <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
-          <div className="rk-home-scorecard-v41-kicker"><span/> Today’s Table Read · #{dayNum}</div>
-          <div className="rk-home-scorecard-v41-score-row rk-daily-scorecard-homeclone-v45-score-row">
-            <div>
-              <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43 rk-score-reveal-number-v250" aria-label={`Rackle IQ ${score}`}>{animatedScore}</div>
-              <div className="rk-home-scorecard-v41-score-label">Rackle IQ</div>
-            </div>
-            {(iq.styleName||scoreLabel)&&(
-              <button type="button" onClick={()=>setScreen&&setScreen("styleGlossary")} className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next rk-style-pill-clickable rk-score-reveal-style-v250" aria-label={`Learn what ${iq.styleName||scoreLabel} means`}>
-                {iq.styleName||scoreLabel}
-              </button>
-            )}
-          </div>
-          <div className="rk-home-scorecard-v41-title rk-score-reveal-title-v250">{revealFrame.headline}</div>
-          <p className="rk-home-scorecard-v41-copy rk-score-reveal-copy-v250">{revealFrame.copy}</p>
-          <div className="rk-score-reveal-micro-v250">{revealFrame.tag}</div>
-
+      <ScoreHeroCard
+        animatedScore={animatedScore}
+        score={score}
+        kicker={`Today’s Table Read · #${dayNum}`}
+        variantClass="rk-daily-scorecard-homeclone-v45"
+        styleValue={iq.styleName||scoreLabel}
+        onStyleClick={()=>setScreen&&setScreen("styleGlossary")}
+        revealFrame={revealFrame}
+        ariaLabel="Daily Rackle scorecard"
+        rankActions={
           <div className="rk-home-scorecard-v41-actions" aria-label="Scorecard rooms">
             <button type="button" onClick={()=>setScreen&&setScreen("globalLeaderboard")} aria-label="View global leaderboard">
               <span>Global room</span>
@@ -7918,8 +7953,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
               <em>{clubCode?"View club":"Find club"}</em>
             </button>
           </div>
-        </div>
-      </section>
+        }
+      />
 
       <section className="rk-score-clean-share-v120 rk-score-share-premium-v130 rk-score-share-simple-v140 rk-score-share-v150 rk-score-share-v160" aria-label="Share your score">
         <div className="rk-score-share-v150-head rk-score-share-v160-head">
@@ -8150,22 +8185,15 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
   return(
     <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26 rk-scorecard-clean-v120 rk-practice-scorecard-match-v200 rk-scorecard-premium-page-v500" style={{paddingBottom:32}}>
       {!hideChrome&&<RackleHeader onBack={onHome}/>}
-      <section className="rk-practice-homeclone-v45 rk-home-scorecard-v41 rk-score-reveal-v250 rk-scorecard-preview-optimized-v600" aria-label="Practice Rackle scorecard">
-        <div className="rk-home-scorecard-v41-main rk-practice-homeclone-v45-main">
-          <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
-          <div className="rk-home-scorecard-v41-kicker"><span/> Practice Table Read</div>
-          <div className="rk-home-scorecard-v41-score-row rk-practice-homeclone-v45-score-row" style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",width:"100%",textAlign:"center"}}>
-            <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",width:"100%",textAlign:"center"}}>
-              <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43 rk-score-reveal-number-v250" aria-label={`Rackle IQ ${score}`} style={{display:"block",width:"100%",textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>{animatedScore}</div>
-              <div className="rk-home-scorecard-v41-score-label" style={{display:"block",width:"100%",textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>Rackle IQ</div>
-            </div>
-            {styled?.styleName&&<div className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next" style={{marginLeft:"auto",marginRight:"auto",textAlign:"center"}}>{styled.styleName}</div>}
-          </div>
-          <div className="rk-home-scorecard-v41-title rk-score-reveal-title-v250" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>{revealFrame.headline}</div>
-          <p className="rk-home-scorecard-v41-copy rk-score-reveal-copy-v250" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto",maxWidth:"34ch"}}>{revealFrame.copy}</p>
-          <div className="rk-score-reveal-micro-v250">{revealFrame.tag}</div>
-        </div>
-      </section>
+      <ScoreHeroCard
+        animatedScore={animatedScore}
+        score={score}
+        kicker="Practice Table Read"
+        variantClass="rk-practice-homeclone-v45"
+        styleValue={styled?.styleName}
+        revealFrame={revealFrame}
+        ariaLabel="Practice Rackle scorecard"
+      />
 
       <section className="rk-score-clean-share-v120 rk-score-share-premium-v130 rk-score-share-simple-v140 rk-score-share-v150 rk-score-share-v160" aria-label="Share your practice score">
         <div className="rk-score-share-v150-head rk-score-share-v160-head">
