@@ -22759,3 +22759,213 @@ button.rk-share-card,
     font-size:22px!important;
   }
 }
+
+/* Practice scorecard final alignment fixes */
+.rk-practice-scorecard-outer-v1020 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-main,
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-main{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  text-align:center!important;
+}
+
+.rk-practice-scorecard-outer-v1020 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-row,
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-row{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:center!important;
+}
+
+.rk-practice-scorecard-outer-v1020 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-row > div,
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-row > div{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:center!important;
+}
+
+/* 1. Center the score and score label */
+.rk-practice-scorecard-outer-v1020 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score,
+.rk-practice-scorecard-outer-v1020 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-label,
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score,
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-label{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:center!important;
+}
+
+/* 2. Center the hero title/description after the style pill */
+.rk-practice-scorecard-outer-v1020 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-title,
+.rk-practice-scorecard-outer-v1020 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-copy,
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-title,
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-copy{
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:center!important;
+}
+
+.rk-practice-scorecard-outer-v1020 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-copy,
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-copy{
+  max-width:34ch!important;
+  width:100%!important;
+  font-weight:400!important;
+}
+
+/* 3. Center Your Rack's Direction title and description */
+.rk-practice-scorecard-outer-v1020 .rk-glance-overhaul-head-v1000,
+.rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  text-align:center!important;
+}
+
+.rk-practice-scorecard-outer-v1020 .rk-glance-overhaul-head-v1000 > span,
+.rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000 > span{
+  margin-left:auto!important;
+  margin-right:auto!important;
+  align-self:center!important;
+}
+
+.rk-practice-scorecard-outer-v1020 .rk-glance-overhaul-head-v1000 h2,
+.rk-practice-scorecard-outer-v1020 .rk-glance-overhaul-head-v1000 p,
+.rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000 h2,
+.rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000 p{
+  width:100%!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:center!important;
+}
+
+/* 4. Improve Practice action buttons and fix internal alignment */
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice,
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:8px!important;
+  width:calc(100% - 20px)!important;
+  margin-left:10px!important;
+  margin-right:10px!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120,
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  column-gap:12px!important;
+  width:100%!important;
+  min-height:54px!important;
+  margin:0!important;
+  padding:14px 16px!important;
+  border-radius:12px!important;
+  box-sizing:border-box!important;
+  text-align:left!important;
+}
+
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120.primary,
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120.primary{
+  background:#1a3320!important;
+  color:#ffffff!important;
+  border:none!important;
+}
+
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120:not(.primary),
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120:not(.primary){
+  background:#ffffff!important;
+  color:#1a2e1a!important;
+  border:.5px solid #d8d4c8!important;
+}
+
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120 span,
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120 span{
+  display:none!important;
+}
+
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120 strong,
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120 strong{
+  display:block!important;
+  grid-column:1!important;
+  align-self:center!important;
+  justify-self:start!important;
+  margin:0!important;
+  padding:0!important;
+  color:inherit!important;
+  font-family:Georgia,serif!important;
+  font-size:16px!important;
+  font-weight:700!important;
+  line-height:1.15!important;
+  letter-spacing:0!important;
+  text-align:left!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120:after,
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120:after{
+  grid-column:2!important;
+  align-self:center!important;
+  justify-self:end!important;
+  content:"→"!important;
+  display:block!important;
+  width:auto!important;
+  height:auto!important;
+  margin:0!important;
+  padding:0!important;
+  color:#4a8c3a!important;
+  background:transparent!important;
+  border:0!important;
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-size:18px!important;
+  line-height:1!important;
+  font-weight:700!important;
+}
+
+/* 5. Remove duplicate footer on practice result flow */
+.rk-practice-scorecard-outer-v1020 .rk-score-shell .rk-footer,
+.rk-practice-scorecard-outer-v1020 .rk-score-shell .rk-premium-footer{
+  display:none!important;
+}
+
+.rk-practice-scorecard-outer-v1020 > .rk-footer + .rk-footer,
+.rk-practice-scorecard-outer-v1020 > .rk-premium-footer + .rk-footer,
+.rk-practice-scorecard-outer-v1020 > .rk-footer + .rk-premium-footer{
+  display:none!important;
+}
+
+.rk-practice-scorecard-outer-v1020 > .rk-footer,
+.rk-practice-scorecard-outer-v1020 > .rk-premium-footer{
+  display:block!important;
+  text-align:center!important;
+}
+
+.rk-practice-scorecard-outer-v1020 > .rk-footer *,
+.rk-practice-scorecard-outer-v1020 > .rk-premium-footer *{
+  text-align:center!important;
+}
+
+@media (max-width:430px){
+  .rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120,
+  .rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120{
+    min-height:52px!important;
+    padding:14px 16px!important;
+  }
+}
