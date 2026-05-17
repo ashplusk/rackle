@@ -12523,7 +12523,7 @@ function Game({mode,home,onDone,settings,setScreen,go}){
           scoredHandLabel:null,
           strategicRead:{bestDirection:sec.name,sectionReads:e||[],topSection:e?.[0]||null,tileStructure:{}},
           expertFactors:{},
-          expertRead:{summary:"Your rack was scored, but the detailed read could not finish. Review the final rack and compare your lane."}
+          expertRead:{summary:"Your rack was scored, but the full table read did not finish. Review the final rack and compare your lane."}
         };
       }
 
@@ -12574,7 +12574,7 @@ function Game({mode,home,onDone,settings,setScreen,go}){
         bestDirection:SECS.find(x=>x.id===sectionId)?.name||"Selected lane",
         strategicRead:{bestDirection:SECS.find(x=>x.id===sectionId)?.name||"Selected lane",sectionReads:[],tileStructure:{}},
         expertFactors:{},
-        expertRead:{summary:"Your scorecard opened, but the detailed read needs another refresh."}
+        expertRead:{summary:"Your scorecard opened, but the full table read needs another refresh."}
       };
       chosenSecRef.current=sectionId;
       setChosenSecBoth(sectionId);
