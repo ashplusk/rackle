@@ -33,8 +33,8 @@ const T = {
 };
 
 const S={
-  outer:{background:"var(--color-bg-page)",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
-  app:{fontFamily:F.b,background:"var(--color-bg-page)",minHeight:"100vh",color:C.ink,width:"100%",maxWidth:560,borderLeft:`1px solid ${C.bdr}`,borderRight:`1px solid ${C.bdr}`,overflowX:"hidden"},
+  outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
+  app:{fontFamily:F.b,background:C.bg,minHeight:"100vh",color:C.ink,width:"100%",maxWidth:560,borderLeft:`1px solid ${C.bdr}`,borderRight:`1px solid ${C.bdr}`,overflowX:"hidden"},
   pg:{padding:"14px 18px",paddingBottom:52},
   pill:{background:"linear-gradient(180deg,#F2EBDD,#E9E0CF)",borderRadius:14,padding:"8px 8px",textAlign:"center",border:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"center",gap:6,boxShadow:"inset 0 1px 0 rgba(255,255,255,.65),0 2px 8px rgba(26,20,16,.025)"},
   card:{background:"linear-gradient(145deg,#FFFDF8,#F8F1E6)",border:`1px solid rgba(26,20,16,.085)`,borderRadius:18,padding:16,marginBottom:14,boxShadow:"0 6px 22px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.72)"},
@@ -7734,50 +7734,6 @@ function rkBetterPlayersInsights({entries=[],score=0,trustRead={},iq={},allSecti
   return items.slice(0,3);
 }
 
-// ─── SHARED SCORE HERO CARD ───────────────────────────────────────────────────
-// Single source of truth for the hero section shown at the top of both the
-// daily scorecard and the practice scorecard.
-//
-// Props
-//   animatedScore  animated tick-up number
-//   score          raw numeric score (for aria-label)
-//   kicker         kicker line, e.g. "Today's Table Read · #5"
-//   variantClass   section/main CSS modifier,
-//                  e.g. "rk-daily-scorecard-homeclone-v45"
-//   styleValue     style pill text, e.g. "Sharp Pusher"
-//   onStyleClick   if provided, pill renders as a clickable <button>
-//   revealFrame    { headline, copy, tag }
-//   rankActions    optional JSX for the rank cells (daily only)
-//   ariaLabel      aria-label for the <section>
-function ScoreHeroCard({animatedScore,score,kicker,variantClass,styleValue,onStyleClick,revealFrame,rankActions,ariaLabel="Scorecard"}){
-  const cCol={display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",width:"100%",textAlign:"center"};
-  const cBlock={display:"block",width:"100%",textAlign:"center"};
-  const cAuto={textAlign:"center",marginLeft:"auto",marginRight:"auto"};
-  return(
-    <section className={`${variantClass} rk-home-scorecard-v41 rk-score-reveal-v250 rk-scorecard-preview-optimized-v600`} aria-label={ariaLabel}>
-      <div className={`rk-home-scorecard-v41-main ${variantClass}-main`}>
-        <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
-        <div className="rk-home-scorecard-v41-kicker"><span/> {kicker}</div>
-        <div className={`rk-home-scorecard-v41-score-row ${variantClass}-score-row`} style={cCol}>
-          <div style={cCol}>
-            <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43 rk-score-reveal-number-v250" aria-label={`Rackle IQ ${score}`} style={cBlock}>{animatedScore}</div>
-            <div className="rk-home-scorecard-v41-score-label" style={cBlock}>Rackle IQ</div>
-          </div>
-          {styleValue&&(
-            onStyleClick
-              ?<button type="button" onClick={onStyleClick} className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next rk-style-pill-clickable rk-score-reveal-style-v250" aria-label={`Learn what ${styleValue} means`} style={cAuto}>{styleValue}</button>
-              :<div className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next" style={cAuto}>{styleValue}</div>
-          )}
-        </div>
-        <div className="rk-home-scorecard-v41-title rk-score-reveal-title-v250" style={cAuto}>{revealFrame.headline}</div>
-        <p className="rk-home-scorecard-v41-copy rk-score-reveal-copy-v250" style={{...cAuto,maxWidth:"34ch"}}>{revealFrame.copy}</p>
-        <div className="rk-score-reveal-micro-v250">{revealFrame.tag}</div>
-        {rankActions}
-      </div>
-    </section>
-  );
-}
-
 function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec,chosenHand,allSections,onHome,onPractice,onCoachMode,setScreen,resultTime=0}){
   const [dailyStats,setDailyStats]=useState(null);
   const [globalEntries,setGlobalEntries]=useState([]);
@@ -7931,16 +7887,25 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
   const betterPlayersRead=rkBetterPlayersInsights({entries:(clubRows&&clubRows.length>=3)?clubRows:globalRows,score,trustRead,iq,allSections,clubName:affiliatedClubName});
   return(
     <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26 rk-scorecard-clean-v120" style={{paddingBottom:32}}>
-      <ScoreHeroCard
-        animatedScore={animatedScore}
-        score={score}
-        kicker={`Today’s Table Read · #${dayNum}`}
-        variantClass="rk-daily-scorecard-homeclone-v45"
-        styleValue={iq.styleName||scoreLabel}
-        onStyleClick={()=>setScreen&&setScreen("styleGlossary")}
-        revealFrame={revealFrame}
-        ariaLabel="Daily Rackle scorecard"
-        rankActions={
+      <section className="rk-daily-scorecard-homeclone-v45 rk-home-scorecard-v41 rk-score-reveal-v250 rk-scorecard-preview-optimized-v600" aria-label="Daily Rackle scorecard">
+        <div className="rk-home-scorecard-v41-main rk-daily-scorecard-homeclone-v45-main">
+          <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
+          <div className="rk-home-scorecard-v41-kicker"><span/> Today’s Table Read · #{dayNum}</div>
+          <div className="rk-home-scorecard-v41-score-row rk-daily-scorecard-homeclone-v45-score-row">
+            <div>
+              <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43 rk-score-reveal-number-v250" aria-label={`Rackle IQ ${score}`}>{animatedScore}</div>
+              <div className="rk-home-scorecard-v41-score-label">Rackle IQ</div>
+            </div>
+            {(iq.styleName||scoreLabel)&&(
+              <button type="button" onClick={()=>setScreen&&setScreen("styleGlossary")} className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next rk-style-pill-clickable rk-score-reveal-style-v250" aria-label={`Learn what ${iq.styleName||scoreLabel} means`}>
+                {iq.styleName||scoreLabel}
+              </button>
+            )}
+          </div>
+          <div className="rk-home-scorecard-v41-title rk-score-reveal-title-v250">{revealFrame.headline}</div>
+          <p className="rk-home-scorecard-v41-copy rk-score-reveal-copy-v250">{revealFrame.copy}</p>
+          <div className="rk-score-reveal-micro-v250">{revealFrame.tag}</div>
+
           <div className="rk-home-scorecard-v41-actions" aria-label="Scorecard rooms">
             <button type="button" onClick={()=>setScreen&&setScreen("globalLeaderboard")} aria-label="View global leaderboard">
               <span>Global room</span>
@@ -7953,8 +7918,8 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
               <em>{clubCode?"View club":"Find club"}</em>
             </button>
           </div>
-        }
-      />
+        </div>
+      </section>
 
       <section className="rk-score-clean-share-v120 rk-score-share-premium-v130 rk-score-share-simple-v140 rk-score-share-v150 rk-score-share-v160" aria-label="Share your score">
         <div className="rk-score-share-v150-head rk-score-share-v160-head">
@@ -8185,15 +8150,22 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
   return(
     <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26 rk-scorecard-clean-v120 rk-practice-scorecard-match-v200 rk-scorecard-premium-page-v500" style={{paddingBottom:32}}>
       {!hideChrome&&<RackleHeader onBack={onHome}/>}
-      <ScoreHeroCard
-        animatedScore={animatedScore}
-        score={score}
-        kicker="Practice Table Read"
-        variantClass="rk-practice-homeclone-v45"
-        styleValue={styled?.styleName}
-        revealFrame={revealFrame}
-        ariaLabel="Practice Rackle scorecard"
-      />
+      <section className="rk-practice-homeclone-v45 rk-home-scorecard-v41 rk-score-reveal-v250 rk-scorecard-preview-optimized-v600" aria-label="Practice Rackle scorecard">
+        <div className="rk-home-scorecard-v41-main rk-practice-homeclone-v45-main">
+          <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
+          <div className="rk-home-scorecard-v41-kicker"><span/> Practice Table Read</div>
+          <div className="rk-home-scorecard-v41-score-row rk-practice-homeclone-v45-score-row" style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",width:"100%",textAlign:"center"}}>
+            <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",width:"100%",textAlign:"center"}}>
+              <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43 rk-score-reveal-number-v250" aria-label={`Rackle IQ ${score}`} style={{display:"block",width:"100%",textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>{animatedScore}</div>
+              <div className="rk-home-scorecard-v41-score-label" style={{display:"block",width:"100%",textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>Rackle IQ</div>
+            </div>
+            {styled?.styleName&&<div className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next" style={{marginLeft:"auto",marginRight:"auto",textAlign:"center"}}>{styled.styleName}</div>}
+          </div>
+          <div className="rk-home-scorecard-v41-title rk-score-reveal-title-v250" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>{revealFrame.headline}</div>
+          <p className="rk-home-scorecard-v41-copy rk-score-reveal-copy-v250" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto",maxWidth:"34ch"}}>{revealFrame.copy}</p>
+          <div className="rk-score-reveal-micro-v250">{revealFrame.tag}</div>
+        </div>
+      </section>
 
       <section className="rk-score-clean-share-v120 rk-score-share-premium-v130 rk-score-share-simple-v140 rk-score-share-v150 rk-score-share-v160" aria-label="Share your practice score">
         <div className="rk-score-share-v150-head rk-score-share-v160-head">
@@ -9356,53 +9328,52 @@ function PremiumClubMenu({open,onClose,setScreen,go,showSettings,streak=0,dRes=n
   );
 }
 
-function RackleHeader({onBack,setScreen}){
+function RackleHeader({onBack,setScreen,isHome=false,streak=0,go=null,showSettings=null,dRes=null}){
   const [menuOpen,setMenuOpen]=useState(false);
-  const profile=getProfile();
-  const hasProfile=!!(profile&&profile.nickname);
-  const goHome=()=>setScreen?setScreen("home"):onBack?.();
+  const numericStreak=Number(streak||ST.get("str",0)||0)||0;
+  const hasBack=!!onBack&&!isHome;
+  const closeMenu=()=>setMenuOpen(false);
+  const handleMenu=()=>setMenuOpen(o=>!o);
   return(
-    <header className="rk-page-header-v75" role="banner">
-      <button onClick={onBack} className="rk-header-back-v75" aria-label="Back">
-        <span aria-hidden="true">←</span>
-        <strong>Back</strong>
-      </button>
+    <header className="rk-site-header-v1100 site-header" role="banner">
+      <div className="rk-header-left-v1100 header-left">
+        {isHome&&numericStreak>0?(
+          <button type="button" onClick={()=>setScreen?.("stats")} className="rk-streak-badge-v1100 streak-badge" aria-label={`${numericStreak} day streak`}>
+            <span className="rk-streak-flame-v1100" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.2 22c-4.05 0-7.2-2.82-7.2-6.62 0-2.34 1.18-4.25 3.04-5.82 1.42-1.2 2.2-2.7 2.14-4.56-.01-.39.42-.62.74-.39 2.42 1.72 3.77 3.66 4.05 5.84.78-.62 1.24-1.48 1.35-2.5.04-.38.48-.57.78-.34 1.66 1.3 2.9 3.34 2.9 5.82C20 18.45 16.44 22 12.2 22Z" fill="currentColor"/>
+              </svg>
+            </span>
+            <span>{numericStreak}d</span>
+          </button>
+        ):hasBack?(
+          <button type="button" onClick={onBack} className="rk-header-icon-btn-v1100 header-icon-btn" aria-label="Back">
+            <i aria-hidden="true">←</i>
+          </button>
+        ):null}
+      </div>
 
       <button
         type="button"
-        onClick={goHome}
+        onClick={()=>setScreen?.("home")}
         aria-label="Go to Rackle home"
-        className="rk-header-logo-home-v60 rk-header-brand-v75"
+        className="rk-header-centre-v1100 header-centre"
       >
-        <span className="rk-header-brand-title-v75">Rackle</span>
-        <span className="rk-header-brand-tag-v75">The Daily Charleston ritual</span>
+        <span className="rk-header-logo-v1100 logo">Rackle</span>
+        <span className="rk-header-tagline-v1100 header-tagline">The Daily Charleston Ritual</span>
       </button>
 
-      <div className="rk-header-menu-wrap-v75">
-        <button onClick={()=>setMenuOpen(o=>!o)} aria-label={menuOpen?"Close menu":"Open menu"} className={`rk-header-menu-btn-v75${menuOpen?" is-open":""}`}>
-          <span/>
-          <span/>
-          <span/>
+      <div className="rk-header-right-v1100 header-right">
+        <button type="button" onClick={handleMenu} aria-label={menuOpen?"Close menu":"Open menu"} className={`rk-header-icon-btn-v1100 rk-header-menu-btn-v1100 header-icon-btn${menuOpen?" is-open":""}`}>
+          <i aria-hidden="true">
+            <span/>
+            <span/>
+            <span/>
+          </i>
         </button>
-        {menuOpen&&(
-          <div className="rk-in rk-menu-surface rk-header-menu-v75">
-            {hasProfile?(
-              <button onClick={()=>{setMenuOpen(false);setScreen&&setScreen("profile");}} className="rk-header-menu-profile-v75">
-                <div className="rk-header-menu-avatar-v75">
-                  {(profile.nickname||"?").charAt(0).toUpperCase()}
-                </div>
-                <div>
-                  <div className="rk-header-menu-name-v75">{profile.nickname.split(" ")[0]}</div>
-                  <div className="rk-header-menu-sub-v75">{getAffiliatedClubName(profile.clubCode||profile.club_code||getClubCode())||"No club joined yet"}</div>
-                </div>
-              </button>
-            ):(
-              <button onClick={()=>{setMenuOpen(false);setScreen&&setScreen("profile");}} className="rk-header-menu-join-v75">Join Rackle →</button>
-            )}
-            <button onClick={()=>{setMenuOpen(false);setScreen&&setScreen("settings");}} className="rk-header-menu-item-v75">Settings</button>
-          </div>
-        )}
       </div>
+
+      <PremiumClubMenu open={menuOpen} onClose={closeMenu} setScreen={setScreen} go={go} showSettings={showSettings} streak={numericStreak} dRes={dRes}/>
     </header>
   );
 }
@@ -9415,7 +9386,7 @@ function Footer(){
           <div aria-hidden="true" className="rk-footer-rule"/>
           <div className="rk-footer-brand-lockup">
             <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" className="rk-footer-logo">Rackle</a>
-            <div className="rk-footer-tagline">The Daily Charleston ritual</div>
+            <div className="rk-footer-tagline">The Daily Charleston Ritual</div>
           </div>
           <div className="rk-footer-community">Made for the American Mahjong community.</div>
           <div className="rk-footer-actions">
@@ -11150,7 +11121,7 @@ function StreakCard({streak,streakBadge,bestIQ,clubName,onStats,firstName}){
 // ─── TOP BANNER ───────────────────────────────────────────────────────────────
 function TopBanner(){
   const messages=[
-    {label:"WELCOME",text:"The Daily Charleston ritual Same hand. Every player. Every day."},
+    {label:"WELCOME",text:"The Daily Charleston Ritual Same hand. Every player. Every day."},
     {label:"LIVE",text:"Same rack today. Every player gets one read."},
     {label:"TIP",text:"Jokers stay with you. They can’t be passed in the Charleston. Hold them and build around them."},
     {label:"TIP",text:"Flowers appear in most winning hands. Don't throw them away early."},
@@ -11655,24 +11626,11 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
   };
 
   const Hero=()=>{
-    const headerPills=[
-      "Today’s room is open",
-      "Fresh rack is live",
-      "Your table is waiting",
-      "One rack. One table.",
-      "Beat the table today",
-      "Today’s Charleston is live",
-      "The club board is moving",
-    ];
-    const headerPill=headerPills[Math.abs(Number(dn)||0)%headerPills.length];
     return(
       <div className="rk-startup-hero-v4 rk-startup-hero-v42">
         <div className="rk-startup-mark-v4 rk-float">🀄</div>
         <h1 className="rk-startup-logo-v4">Rackle</h1>
-        <p className="rk-startup-subtitle-v4">The Daily Charleston ritual</p>
-        <div className="rk-startup-pulse-pill-v41 rk-startup-pulse-pill-v42" aria-label="Today’s Rackle status">
-          <span></span> {headerPill}
-        </div>
+        <p className="rk-startup-subtitle-v4">The Daily Charleston Ritual</p>
         <p className="rk-startup-description-v4 rk-startup-description-hidden" aria-hidden="true"></p>
       </div>
     );
@@ -12160,8 +12118,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
             <button onClick={dismissNudge} style={{background:"none",border:"none",color:C.mut,fontSize:16,cursor:"pointer",padding:"2px 4px",lineHeight:1}}>✕</button>
           </div>
         )}
-        <Menu/>
-        <Hero/>
+        <RackleHeader isHome streak={streak} setScreen={setScreen} go={go} showSettings={showSettings} dRes={dRes}/>
         <div className="rk-home-landing-flow">
           {!hasTodayDaily&&<StartDaily/>}
           {hasTodayDaily&&<CompletedDaily/>}
@@ -12710,7 +12667,7 @@ function Game({mode,home,onDone,settings,setScreen,go}){
             <div className="rk-gameplay-inline-left-v200" aria-hidden="true">← Back</div>
             <div className="rk-gameplay-inline-brand-v200">
               <div className="rk-gameplay-inline-logo-v200">Rackle</div>
-              <div className="rk-inline-header-tag rk-gameplay-inline-tag-v200">The Daily Charleston ritual</div>
+              <div className="rk-inline-header-tag rk-gameplay-inline-tag-v200">The Daily Charleston Ritual</div>
             </div>
             <span className="rk-gameplay-inline-mode-v200">{mode==="daily"?`Daily #${dn}`:"Practice"}</span>
           </div>
@@ -12810,7 +12767,7 @@ function Game({mode,home,onDone,settings,setScreen,go}){
             <button onClick={()=>setShowLeave(true)} className="rk-gameplay-back-v220">← Back</button>
             <div className="rk-gameplay-live-brand-v220">
               <div className="rk-gameplay-live-logo-v220">Rackle</div>
-              <div className="rk-inline-header-tag rk-gameplay-live-tag-v220">The Daily Charleston ritual</div>
+              <div className="rk-inline-header-tag rk-gameplay-live-tag-v220">The Daily Charleston Ritual</div>
             </div>
             <div className="rk-gameplay-live-meta-v220">
               <span>{mode==="daily"?`Daily #${dn}`:"Practice"}</span>
