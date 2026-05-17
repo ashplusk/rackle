@@ -22238,3 +22238,192 @@ button.rk-share-card,
   transform:scale(.988)!important;
   filter:saturate(1.05)!important;
 }
+
+/* Practice scorecard final polish */
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-row,
+.rk-practice-scorecard-outer-v1020 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-row{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  width:100%!important;
+  gap:0!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-row > div,
+.rk-practice-scorecard-outer-v1020 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-row > div{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  width:100%!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score,
+.rk-practice-scorecard-outer-v1020 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score{
+  display:block!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:center!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-label,
+.rk-practice-scorecard-outer-v1020 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-label{
+  display:block!important;
+  width:100%!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:center!important;
+}
+
+/* Reduce final rack title size on scorecard pages */
+.rk-scorecard-clean-v120 .rk-final-rack-simple-head-v180 strong,
+.rk-practice-scorecard-match-v200 .rk-final-rack-simple-head-v180 strong,
+.rk-practice-scorecard-outer-v1020 .rk-final-rack-simple-head-v180 strong{
+  font-size:24px!important;
+  line-height:1.02!important;
+  letter-spacing:-.55px!important;
+  max-width:8.5ch!important;
+}
+
+/* Center Your Rack’s Direction while keeping the rest readable */
+.rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000 h2,
+.rk-practice-scorecard-outer-v1020 .rk-glance-overhaul-head-v1000 h2,
+.rk-scorecard-clean-v120 .rk-glance-overhaul-head-v1000 h2{
+  text-align:center!important;
+  width:100%!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000 p,
+.rk-practice-scorecard-outer-v1020 .rk-glance-overhaul-head-v1000 p,
+.rk-scorecard-clean-v120 .rk-glance-overhaul-head-v1000 p{
+  text-align:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+/* Keep final hand alignment copy readable on dark card */
+.rk-practice-scorecard-match-v200 .rk-glance-hand-alignment-v1000 p,
+.rk-practice-scorecard-outer-v1020 .rk-glance-hand-alignment-v1000 p,
+.rk-scorecard-clean-v120 .rk-glance-hand-alignment-v1000 p,
+.rk-glance-hand-alignment-v1000 p{
+  color:rgba(255,248,232,.82)!important;
+  font-weight:400!important;
+  text-align:left!important;
+}
+
+/* Practice actions should match Daily scorecard actions */
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice,
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:10px!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice:before,
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice:before{
+  display:none!important;
+  content:none!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120,
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  width:100%!important;
+  min-height:66px!important;
+  padding:14px 16px!important;
+  border-radius:24px!important;
+  background:linear-gradient(145deg,#FFFDF8 0%,#F6ECDC 100%)!important;
+  border:1px solid rgba(26,20,16,.075)!important;
+  box-shadow:0 10px 26px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.78)!important;
+  color:#1A1410!important;
+  text-align:left!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120.primary,
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120.primary{
+  background:linear-gradient(145deg,#123B24 0%,#0B2A18 100%)!important;
+  border:1px solid rgba(243,212,107,.18)!important;
+  box-shadow:0 14px 30px rgba(18,59,36,.16),inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120 span,
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120 span{
+  display:block!important;
+  margin:0 0 5px!important;
+  color:#176B42!important;
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-size:8.5px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:1.45px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120 strong,
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120 strong{
+  display:block!important;
+  color:#1A1410!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:19px!important;
+  line-height:1.05!important;
+  font-weight:900!important;
+  letter-spacing:-.35px!important;
+  text-align:left!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120.primary span,
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120.primary span{
+  color:rgba(255,248,232,.62)!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120.primary strong,
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120.primary strong{
+  color:#FFF8E8!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120:after,
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120:after{
+  content:"›"!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:34px!important;
+  height:34px!important;
+  border-radius:999px!important;
+  margin-left:12px!important;
+  color:#176B42!important;
+  background:rgba(23,107,66,.07)!important;
+  border:1px solid rgba(23,107,66,.10)!important;
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-size:24px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  flex-shrink:0!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120.primary:after,
+.rk-practice-scorecard-outer-v1020 .rk-score-clean-actions-v120.practice .rk-score-clean-action-v120.primary:after{
+  color:#F3D46B!important;
+  background:rgba(243,212,107,.10)!important;
+  border-color:rgba(243,212,107,.18)!important;
+}
+
+@media (max-width:430px){
+  .rk-scorecard-clean-v120 .rk-final-rack-simple-head-v180 strong,
+  .rk-practice-scorecard-match-v200 .rk-final-rack-simple-head-v180 strong,
+  .rk-practice-scorecard-outer-v1020 .rk-final-rack-simple-head-v180 strong{
+    font-size:22px!important;
+  }
+}
