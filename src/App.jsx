@@ -12363,6 +12363,58 @@ function Game({mode,home,onDone,settings,setScreen,go}){
     return 3+jitter*4;
   };
 
+  const rkIsHonorTile=(t)=>t&&(t.t==="w"||t.t==="d");
+  const rkIsFlowerTile=(t)=>t&&t.t==="f";
+
+  const rkWeightedIncomingPick=(scored,requested,contextKey)=>{
+    const picked=[];
+    const usedIdx=new Set();
+    const honorCap=requested>=3?1:requested;
+    let honorCount=0;
+
+    const available=()=>scored.filter(x=>!usedIdx.has(x.idx));
+    const weightedPick=(candidates,slot)=>{
+      if(!candidates.length)return null;
+      const weights=candidates.map(x=>Math.max(.1,Number(x.score)||1));
+      const total=weights.reduce((a,b)=>a+b,0)||1;
+      const roll=mode==="daily"
+        ?rkSeedFloat(`${contextKey}:weighted:${slot}:${picked.length}`)*total
+        :Math.random()*total;
+      let acc=0;
+      for(let i=0;i<candidates.length;i++){
+        acc+=weights[i];
+        if(roll<=acc)return candidates[i];
+      }
+      return candidates[candidates.length-1];
+    };
+
+    for(let slot=0;slot<requested;slot++){
+      let candidates=available();
+
+      // Practice mode should feel like real Charleston traffic, not a constant stream
+      // of Winds and Dragons. Cap honors per pass unless the pool is genuinely exhausted.
+      if(mode!=="daily"){
+        const nonHonor=candidates.filter(x=>!rkIsHonorTile(x.t));
+        if(honorCount>=honorCap&&nonHonor.length)candidates=nonHonor;
+
+        // Make sure the first incoming tile in a 3-tile pass is usually a suited tile.
+        // This prevents repeated all-honor practice passes while still allowing honors naturally.
+        if(slot===0&&requested>=3){
+          const suited=candidates.filter(x=>x.t?.t==="s");
+          if(suited.length)candidates=suited;
+        }
+      }
+
+      const choice=weightedPick(candidates,slot);
+      if(!choice)break;
+      usedIdx.add(choice.idx);
+      picked.push(choice);
+      if(rkIsHonorTile(choice.t))honorCount+=1;
+    }
+
+    return picked;
+  };
+
   // Pick incoming Charleston tiles from the simulated opponent.
   // American Mahjong rule: Jokers are NEVER passed in the Charleston.
   // Daily mode is deterministic across browsers/devices for the same daily and same player decisions.
@@ -12375,10 +12427,21 @@ function Game({mode,home,onDone,settings,setScreen,go}){
     const contextKey=`${mode}:${mode==="daily"?getDailySeed():"practice"}:${cn}:${pi}:${passKey}:${requested}:${passLog.length}`;
 
     const scored=safePool
-      .map((t,idx)=>({t,idx,score:oppDiscardScore(t,oppSectionRef.current,idx,contextKey)}))
+      .map((t,idx)=>{
+        let score=oppDiscardScore(t,oppSectionRef.current,idx,contextKey);
+
+        // In practice, reduce the honor-tile bias that made received tiles feel like
+        // Winds/Dragons every hand. Honors can still appear, but they should not dominate.
+        if(mode!=="daily"&&rkIsHonorTile(t))score*=.42;
+        if(mode!=="daily"&&rkIsFlowerTile(t))score*=.75;
+        return {t,idx,score};
+      })
       .sort((a,b)=>(b.score-a.score)||(rkStableHash(`${contextKey}:tie:${a.idx}:${rkTileStableKey(a.t)}`)-rkStableHash(`${contextKey}:tie:${b.idx}:${rkTileStableKey(b.t)}`)));
 
-    const picked=scored.slice(0,requested);
+    const picked=mode==="daily"
+      ?scored.slice(0,requested)
+      :rkWeightedIncomingPick(scored,requested,contextKey);
+
     const pickedIdx=new Set(picked.map(x=>x.idx));
     const incoming=picked.map(x=>x.t).filter(t=>t&&t.t!=="j");
     let newPool=safePool.filter((_,i)=>!pickedIdx.has(i));
@@ -12388,9 +12451,12 @@ function Game({mode,home,onDone,settings,setScreen,go}){
     if(incoming.length<requested){
       const needed=requested-incoming.length;
       const fallbackDeck=buildDeck().filter(t=>t&&t.t!=="j");
+      const practiceFallbackPool=mode==="daily"
+        ?fallbackDeck
+        :fallbackDeck.filter(t=>!rkIsHonorTile(t));
       const refill=mode==="daily"
-        ?seededShuffle(fallbackDeck,rkStableHash(`${contextKey}:fallback`))
-        :shuffle(fallbackDeck);
+        ?seededShuffle(practiceFallbackPool,rkStableHash(`${contextKey}:fallback`))
+        :shuffle(practiceFallbackPool.length?practiceFallbackPool:fallbackDeck);
       const fallback=refill.slice(0,needed);
       incoming.push(...fallback);
       const refill2=mode==="daily"
