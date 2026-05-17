@@ -8142,6 +8142,7 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
 
   return(
     <div className="rk-score-shell rk-practice-v9-shell rk-scorecard-clean-v120 rk-practice-scorecard-match-v200 rk-scorecard-premium-page-v500">
+      <RackleHeader onBack={onHome}/>
       <section className="rk-practice-homeclone-v45 rk-home-scorecard-v41 rk-score-reveal-v250 rk-scorecard-preview-optimized-v600" aria-label="Practice Rackle scorecard">
         <div className="rk-home-scorecard-v41-main rk-practice-homeclone-v45-main">
           <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>

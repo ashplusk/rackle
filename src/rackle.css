@@ -21577,3 +21577,172 @@ button.rk-share-card,
     width:100%!important;
   }
 }
+
+/* Practice scorecard header + typography alignment with Daily scorecard */
+.rk-practice-scorecard-match-v200 .rk-page-header-v75,
+.rk-practice-scorecard-match-v200 .rk-gameplay-header-v200,
+.rk-practice-scorecard-match-v200 .rk-gameplay-live-header-v220{
+  margin:0 0 12px!important;
+  padding:12px 0 10px!important;
+  border-bottom:1px solid rgba(26,20,16,.075)!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-header-brand-title-v75,
+.rk-practice-scorecard-match-v200 .rk-gameplay-inline-logo-v200,
+.rk-practice-scorecard-match-v200 .rk-gameplay-live-logo-v220{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-style:italic!important;
+  font-size:30px!important;
+  line-height:.9!important;
+  font-weight:800!important;
+  letter-spacing:-0.058em!important;
+  color:#1A1410!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-header-brand-tag-v75,
+.rk-practice-scorecard-match-v200 .rk-gameplay-inline-tag-v200,
+.rk-practice-scorecard-match-v200 .rk-gameplay-live-tag-v220{
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-style:normal!important;
+  font-size:12.5px!important;
+  line-height:1.15!important;
+  font-weight:500!important;
+  letter-spacing:1.15px!important;
+  color:#176B42!important;
+  text-transform:none!important;
+}
+
+/* Practice hero should use Daily scorecard typography exactly */
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-kicker{
+  margin:0 auto 30px!important;
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-size:8px!important;
+  line-height:1!important;
+  font-weight:800!important;
+  letter-spacing:1.55px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-style:normal!important;
+  font-size:84px!important;
+  line-height:.78!important;
+  font-weight:900!important;
+  letter-spacing:-3.2px!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-label{
+  margin-top:13px!important;
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-size:8.5px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:2px!important;
+  text-transform:uppercase!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-style{
+  min-height:38px!important;
+  margin:23px auto 0!important;
+  padding:0 16px!important;
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-size:11px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  letter-spacing:.75px!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-title{
+  margin:24px auto 0!important;
+  max-width:12ch!important;
+  font-family:'Fraunces',Georgia,serif!important;
+  font-style:normal!important;
+  font-size:31px!important;
+  line-height:1.02!important;
+  font-weight:900!important;
+  letter-spacing:-.8px!important;
+  text-align:center!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-copy{
+  max-width:34ch!important;
+  margin:14px auto 0!important;
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-size:13px!important;
+  line-height:1.58!important;
+  font-weight:500!important;
+  letter-spacing:0!important;
+  text-align:center!important;
+}
+
+/* Practice lower sections: same Daily sizes and alignment */
+.rk-practice-scorecard-match-v200 .rk-final-rack-simple-head-v180 strong{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:31px!important;
+  line-height:1.02!important;
+  font-weight:900!important;
+  letter-spacing:-.8px!important;
+  text-align:left!important;
+  color:#1A1410!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000 h2,
+.rk-practice-scorecard-match-v200 .rk-better-players-head-v260 h2{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:23px!important;
+  line-height:1.06!important;
+  font-weight:900!important;
+  letter-spacing:-.45px!important;
+  text-align:left!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000 p,
+.rk-practice-scorecard-match-v200 .rk-better-players-head-v260 p,
+.rk-practice-scorecard-match-v200 .rk-score-style-card-v190 > p{
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-size:12.75px!important;
+  line-height:1.62!important;
+  font-weight:300!important;
+  letter-spacing:0!important;
+  text-align:left!important;
+  color:#7A7168!important;
+}
+
+/* Make all pills in Practice left-aligned unless they are inside the score hero */
+.rk-practice-scorecard-match-v200 section:not(.rk-practice-homeclone-v45) .rk-score-clean-head-v120 > span,
+.rk-practice-scorecard-match-v200 section:not(.rk-practice-homeclone-v45) .rk-glance-overhaul-head-v1000 > span,
+.rk-practice-scorecard-match-v200 section:not(.rk-practice-homeclone-v45) .rk-better-players-head-v260 > span,
+.rk-practice-scorecard-match-v200 section:not(.rk-practice-homeclone-v45) .rk-score-style-head-v190 > span{
+  margin-left:0!important;
+  margin-right:auto!important;
+  text-align:left!important;
+}
+
+@media (max-width:430px){
+  .rk-practice-scorecard-match-v200 .rk-header-brand-title-v75,
+  .rk-practice-scorecard-match-v200 .rk-gameplay-inline-logo-v200,
+  .rk-practice-scorecard-match-v200 .rk-gameplay-live-logo-v220{
+    font-size:28px!important;
+  }
+
+  .rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score{
+    font-size:74px!important;
+    letter-spacing:-2.8px!important;
+  }
+
+  .rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-title{
+    font-size:28px!important;
+  }
+
+  .rk-practice-scorecard-match-v200 .rk-final-rack-simple-head-v180 strong{
+    font-size:28px!important;
+  }
+
+  .rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000 h2,
+  .rk-practice-scorecard-match-v200 .rk-better-players-head-v260 h2{
+    font-size:21px!important;
+  }
+}
