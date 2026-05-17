@@ -22427,3 +22427,335 @@ button.rk-share-card,
     font-size:22px!important;
   }
 }
+
+/* Focused scorecard polish pass */
+
+/* Fix 1: hero score/card content centered */
+.rk-scorecard-clean-v120 .rk-home-scorecard-v41-main,
+.rk-scorecard-clean-v120 .rk-home-scorecard-v41-main *,
+.rk-practice-scorecard-outer-v1020 .rk-home-scorecard-v41-main,
+.rk-practice-scorecard-outer-v1020 .rk-home-scorecard-v41-main *{
+  text-align:center!important;
+}
+
+.rk-scorecard-clean-v120 .rk-home-scorecard-v41-score-row,
+.rk-practice-scorecard-outer-v1020 .rk-home-scorecard-v41-score-row,
+.rk-scorecard-clean-v120 .rk-home-scorecard-v41-score-row > div,
+.rk-practice-scorecard-outer-v1020 .rk-home-scorecard-v41-score-row > div{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:center!important;
+}
+
+.rk-scorecard-clean-v120 .rk-home-scorecard-v41-score,
+.rk-scorecard-clean-v120 .rk-home-scorecard-v41-score-label,
+.rk-scorecard-clean-v120 .rk-home-scorecard-v41-style,
+.rk-scorecard-clean-v120 .rk-home-scorecard-v41-title,
+.rk-scorecard-clean-v120 .rk-home-scorecard-v41-copy,
+.rk-scorecard-clean-v120 .rk-score-reveal-micro-v250,
+.rk-practice-scorecard-outer-v1020 .rk-home-scorecard-v41-score,
+.rk-practice-scorecard-outer-v1020 .rk-home-scorecard-v41-score-label,
+.rk-practice-scorecard-outer-v1020 .rk-home-scorecard-v41-style,
+.rk-practice-scorecard-outer-v1020 .rk-home-scorecard-v41-title,
+.rk-practice-scorecard-outer-v1020 .rk-home-scorecard-v41-copy,
+.rk-practice-scorecard-outer-v1020 .rk-score-reveal-micro-v250{
+  text-align:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+/* Keep the score hero centered even when lower-page alignment rules are present */
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score{
+  display:block!important;
+  width:100%!important;
+  text-align:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+/* Fix 2: rebuild final rack tile grid into uniform flex tiles without touching Rack at a Glance */
+.rk-final-rack-simple-v180 .rk-score-clean-rack-v120,
+.rk-final-rack-simple-v180 .rk-final-rack-simple-surface-v180,
+.rk-final-rack-simple-v180 .rack,
+.rk-final-rack-simple-v180 [class*="rack-grid"],
+.rk-final-rack-simple-v180 [class*="Rack"]{
+  box-sizing:border-box!important;
+}
+
+.rk-final-rack-simple-v180 .rk-score-clean-rack-v120 > div,
+.rk-final-rack-simple-v180 .rk-final-rack-simple-surface-v180 > div,
+.rk-final-rack-simple-v180 .rack-grid{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+  gap:5px!important;
+}
+
+/* Tile normalization: final rack only */
+.rk-final-rack-simple-v180 .tile,
+.rk-final-rack-simple-v180 [class*="tile"]:not([class*="subtitle"]):not([class*="label"]),
+.rk-final-rack-simple-v180 [data-tile]{
+  width:34px!important;
+  min-width:34px!important;
+  max-width:34px!important;
+  height:44px!important;
+  min-height:44px!important;
+  max-height:44px!important;
+  border-radius:6px!important;
+  border:.5px solid #d0ccc0!important;
+  background:#faf7f0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex-shrink:0!important;
+  box-sizing:border-box!important;
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+}
+
+.rk-final-rack-simple-v180 .tile-number,
+.rk-final-rack-simple-v180 [class*="tile"] strong,
+.rk-final-rack-simple-v180 [data-tile] strong{
+  font-size:17px!important;
+  font-weight:700!important;
+  line-height:1!important;
+  margin:0!important;
+}
+
+.rk-final-rack-simple-v180 .tile-suit,
+.rk-final-rack-simple-v180 [class*="tile"] small,
+.rk-final-rack-simple-v180 [data-tile] small{
+  font-size:9px!important;
+  font-weight:500!important;
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  letter-spacing:.04em!important;
+  margin-top:1px!important;
+  line-height:1!important;
+}
+
+/* Suit colors by common class/data hooks */
+.rk-final-rack-simple-v180 .bam,
+.rk-final-rack-simple-v180 [data-suit="bam"],
+.rk-final-rack-simple-v180 [data-suit="bamboo"]{
+  color:#2a6b2a!important;
+}
+
+.rk-final-rack-simple-v180 .crak,
+.rk-final-rack-simple-v180 [data-suit="crak"],
+.rk-final-rack-simple-v180 [data-suit="character"]{
+  color:#8b1a1a!important;
+}
+
+.rk-final-rack-simple-v180 .dot,
+.rk-final-rack-simple-v180 [data-suit="dot"],
+.rk-final-rack-simple-v180 [data-suit="dots"]{
+  color:#1a3a8b!important;
+}
+
+.rk-final-rack-simple-v180 .wind,
+.rk-final-rack-simple-v180 .dragon,
+.rk-final-rack-simple-v180 [data-suit="wind"],
+.rk-final-rack-simple-v180 [data-suit="dragon"]{
+  color:#4a3a1a!important;
+  background:#faf7f0!important;
+}
+
+.rk-final-rack-simple-v180 .joker,
+.rk-final-rack-simple-v180 [data-suit="joker"],
+.rk-final-rack-simple-v180 [data-tile="joker"]{
+  background:#1a3320!important;
+  color:#e8d870!important;
+  border-color:rgba(232,216,112,.45)!important;
+}
+
+/* Fix 3: Your Style trait rows, no bullets/list chrome */
+.rk-score-style-card-v190 ul,
+.rk-score-style-card-v190 ol{
+  list-style:none!important;
+  padding:0!important;
+  margin:12px 0 0!important;
+}
+
+.rk-score-style-card-v190 li,
+.rk-score-style-reasons-v190 div{
+  padding:9px 12px!important;
+  background:#f5f2e8!important;
+  border-radius:8px!important;
+  border:0!important;
+  box-shadow:none!important;
+  font-size:13px!important;
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  color:#3a4e3a!important;
+  margin:0 0 6px!important;
+  display:block!important;
+}
+
+.rk-score-style-reasons-v190 div span{
+  display:none!important;
+}
+
+.rk-score-style-reasons-v190 div em,
+.rk-score-style-card-v190 li{
+  color:#3a4e3a!important;
+  font-size:13px!important;
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-style:normal!important;
+  font-weight:400!important;
+  line-height:1.35!important;
+}
+
+/* Fix 4: bottom CTA colors, no amber/gold backgrounds */
+.rk-score-clean-actions-v120,
+.rk-score-clean-actions-v120.practice{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:8px!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+.rk-score-clean-actions-v120:before,
+.rk-score-clean-actions-v120.practice:before{
+  display:none!important;
+  content:none!important;
+}
+
+.rk-score-clean-actions-v120 .rk-score-clean-action-v120{
+  position:relative!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  width:calc(100% - 24px)!important;
+  margin:0 12px 8px!important;
+  padding:14px 16px!important;
+  min-height:52px!important;
+  border-radius:12px!important;
+  background:#ffffff!important;
+  color:#1a2e1a!important;
+  border:.5px solid #d8d4c8!important;
+  box-shadow:none!important;
+  font-family:Georgia,serif!important;
+  font-size:16px!important;
+  font-weight:700!important;
+  text-align:left!important;
+}
+
+.rk-score-clean-actions-v120 .rk-score-clean-action-v120.primary{
+  background:#1a3320!important;
+  color:#ffffff!important;
+  border:none!important;
+}
+
+.rk-score-clean-actions-v120 .rk-score-clean-action-v120 span{
+  display:none!important;
+}
+
+.rk-score-clean-actions-v120 .rk-score-clean-action-v120 strong{
+  color:inherit!important;
+  font-family:Georgia,serif!important;
+  font-size:16px!important;
+  font-weight:700!important;
+  line-height:1.15!important;
+  letter-spacing:0!important;
+  text-align:left!important;
+}
+
+.rk-score-clean-actions-v120 .rk-score-clean-action-v120:after{
+  content:"→"!important;
+  margin-left:auto!important;
+  color:#4a8c3a!important;
+  background:transparent!important;
+  border:0!important;
+  width:auto!important;
+  height:auto!important;
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-size:18px!important;
+  line-height:1!important;
+  font-weight:700!important;
+}
+
+/* Fix 5: section breathing room, except Rack at a Glance untouched */
+.rk-final-rack-simple-v180,
+.rk-score-style-card-v190,
+.rk-score-clean-actions-v120,
+.rk-score-clean-share-v120,
+.rk-better-players-v260{
+  margin-top:20px!important;
+}
+
+.rk-score-clean-glance-v120,
+.rk-glance-overhaul-v1000{
+  /* intentionally untouched */
+}
+
+/* Fix 6: share bar icon treatment */
+.rk-home-scorecard-v41-share-icon,
+.rk-share-icon,
+.rk-share-card .rk-share-icon,
+.rk-score-clean-share-v120 .rk-share-icon,
+.rk-score-share-v160 .rk-share-icon{
+  width:36px!important;
+  height:36px!important;
+  min-width:36px!important;
+  border-radius:8px!important;
+  background:#1a3320!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  color:#6fcf60!important;
+  font-size:18px!important;
+  line-height:1!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+.rk-home-scorecard-v41-share-icon *,
+.rk-share-icon *,
+.rk-share-card .rk-share-icon *,
+.rk-score-clean-share-v120 .rk-share-icon *,
+.rk-score-share-v160 .rk-share-icon *{
+  color:#6fcf60!important;
+  font-size:18px!important;
+}
+
+/* Fix 7: duplicate footer guard. Keep inline footer only. */
+.rk-footer + .rk-footer,
+.rk-premium-footer + .rk-footer,
+.rk-footer + .rk-premium-footer,
+.rk-sticky-footer,
+.rk-bottom-footer,
+.rk-footer-sticky,
+[class*="sticky-footer"],
+[class*="bottom-footer"]{
+  display:none!important;
+}
+
+/* Keep footer centered */
+.rk-footer,
+.rk-footer *{
+  text-align:center!important;
+}
+
+@media (max-width:430px){
+  .rk-score-clean-actions-v120 .rk-score-clean-action-v120{
+    width:calc(100% - 24px)!important;
+    margin-left:12px!important;
+    margin-right:12px!important;
+  }
+
+  .rk-scorecard-clean-v120 .rk-final-rack-simple-head-v180 strong,
+  .rk-practice-scorecard-match-v200 .rk-final-rack-simple-head-v180 strong,
+  .rk-practice-scorecard-outer-v1020 .rk-final-rack-simple-head-v180 strong{
+    font-size:22px!important;
+  }
+}

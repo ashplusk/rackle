@@ -228,7 +228,7 @@ function ShareCardImage({iq,dayNum,section,streak,mode,passInsights}){
         opacity:saving?0.7:1,transition:"opacity 0.15s",
       }}>
         <div style={{width:32,height:32,borderRadius:8,background:"rgba(255,255,255,0.12)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>
-          {done?"✓":saving?"⏳":"📤"}
+          {done?"✓":saving?"⏳":"↗"}
         </div>
         <div style={{flex:1}}>
           <div style={{fontFamily:F.d,fontSize:14,fontWeight:900,color:"#fff",lineHeight:1.4}}>
@@ -5812,7 +5812,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
           {profile.clubCode?<>Challenge your club, share code <strong>{profile.clubCode}</strong> and get everyone on the leaderboard.</>:"Share Rackle with your mahjong friends and build your club community."}
         </div>
         <button onClick={invite} style={{...S.greenBtn,width:"100%",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
-          <span>📲</span><span>{inviting?"Opening Messages…":"Invite via Text"}</span>
+          <span>↗</span><span>{inviting?"Opening Messages…":"Invite via Text"}</span>
         </button>
       </div>
 
@@ -7054,7 +7054,7 @@ function ShareButton({text,label,sublabel,variant="goldpill"}){
         background:v.bg,border:v.border||"none",
         cursor:"pointer",display:"flex",alignItems:"center",gap:variant==="viral"?12:10,padding:variant==="viral"?"15px 16px":"11px 14px",
         textAlign:"left",boxShadow:variant==="viral"?`0 12px 26px ${v.shadow}, inset 0 1px 0 rgba(255,255,255,.16)`:`0 3px 12px ${v.shadow}`,transition:"opacity 0.15s"}}>
-        <div style={{width:variant==="viral"?42:32,height:variant==="viral"?42:32,borderRadius:variant==="viral"?14:8,background:iconBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:variant==="viral"?19:15,flexShrink:0}}>{copied?"✓":"📱"}</div>
+        <div style={{width:variant==="viral"?42:32,height:variant==="viral"?42:32,borderRadius:variant==="viral"?14:8,background:iconBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:variant==="viral"?19:15,flexShrink:0}}>{copied?"✓":"↗"}</div>
         <div style={{flex:1,minWidth:0,display:"flex",flexDirection:"column",gap:2}}>
           <div style={{fontFamily:F.d,fontSize:variant==="viral"?14:12,fontWeight:900,color:titleColor,lineHeight:1.1,letterSpacing:variant==="viral"?-.2:0}}>{copied?"Copied to clipboard!":label||"Challenge Your Club"}</div>
           <div style={{fontSize:variant==="viral"?12:11,color:subColor,lineHeight:1.4,fontWeight:variant==="viral"?750:400}}>{copied?"Paste it into your group chat":sublabel||"Tap to copy · Drop it in your group chat"}</div>
@@ -11788,7 +11788,7 @@ function Home({streak,rounds,dDone,dRes,showHelp,setShowHelp,go,showStats,showSe
 
       <div className="rk-home-scorecard-v41-bottom">
         <button onClick={copyShare} className={`rk-home-scorecard-v41-share ${shareCopied?"rk-copied-state":""}`}>
-          <div className="rk-home-scorecard-v41-share-icon">{shareCopied?"✓":"📲"}</div>
+          <div className="rk-home-scorecard-v41-share-icon">{shareCopied?"✓":"↗"}</div>
           <div>
             <strong>{shareCopied?"Copied for your club":"Share your score"}</strong>
             <span>{shareCopied?"Paste it into your group chat":"Drop it in your group chat"}</span>
