@@ -5845,7 +5845,6 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
       {getWeeklyRecapData()&&<button onClick={()=>setScreen("recap")} style={{...S.oBtn,width:"100%",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
         <span>📊</span><span>View Weekly Recap →</span>
       </button>}
-      {!hideChrome&&<Footer/>}
     </div>
   );
 }
@@ -8155,15 +8154,15 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
         <div className="rk-home-scorecard-v41-main rk-practice-homeclone-v45-main">
           <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
           <div className="rk-home-scorecard-v41-kicker"><span/> Practice Table Read</div>
-          <div className="rk-home-scorecard-v41-score-row rk-practice-homeclone-v45-score-row">
-            <div>
-              <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43 rk-score-reveal-number-v250" aria-label={`Rackle IQ ${score}`}>{animatedScore}</div>
-              <div className="rk-home-scorecard-v41-score-label">Rackle IQ</div>
+          <div className="rk-home-scorecard-v41-score-row rk-practice-homeclone-v45-score-row" style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",width:"100%",textAlign:"center"}}>
+            <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",width:"100%",textAlign:"center"}}>
+              <div className="rk-home-scorecard-v41-score rk-score-tick-up-v43 rk-score-reveal-number-v250" aria-label={`Rackle IQ ${score}`} style={{display:"block",width:"100%",textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>{animatedScore}</div>
+              <div className="rk-home-scorecard-v41-score-label" style={{display:"block",width:"100%",textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>Rackle IQ</div>
             </div>
-            {styled?.styleName&&<div className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next">{styled.styleName}</div>}
+            {styled?.styleName&&<div className="rk-home-scorecard-v41-style rk-home-scorecard-v42-style-next" style={{marginLeft:"auto",marginRight:"auto",textAlign:"center"}}>{styled.styleName}</div>}
           </div>
-          <div className="rk-home-scorecard-v41-title rk-score-reveal-title-v250">{revealFrame.headline}</div>
-          <p className="rk-home-scorecard-v41-copy rk-score-reveal-copy-v250">{revealFrame.copy}</p>
+          <div className="rk-home-scorecard-v41-title rk-score-reveal-title-v250" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>{revealFrame.headline}</div>
+          <p className="rk-home-scorecard-v41-copy rk-score-reveal-copy-v250" style={{textAlign:"center",marginLeft:"auto",marginRight:"auto",maxWidth:"34ch"}}>{revealFrame.copy}</p>
           <div className="rk-score-reveal-micro-v250">{revealFrame.tag}</div>
         </div>
       </section>
@@ -8205,10 +8204,10 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
       </section>
 
       <section className="rk-score-clean-glance-v120 rk-score-glance-board-v140 rk-score-glance-v150 rk-score-glance-v160 rk-scorecard-panel-v500 rk-scorecard-strategy-v500 rk-glance-overhaul-v1000" aria-label="Practice rack at a glance">
-        <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160 rk-glance-overhaul-head-v1000">
-          <span>Rack at a glance</span>
-          <h2>Your Rack’s Direction</h2>
-          <p>A sharper read on the hand shape your final rack was actually moving toward.</p>
+        <div className="rk-score-clean-head-v120 rk-glance-head-v140 rk-glance-head-v150 rk-glance-head-v160 rk-glance-overhaul-head-v1000" style={{display:"flex",flexDirection:"column",alignItems:"center",textAlign:"center"}}>
+          <span style={{marginLeft:"auto",marginRight:"auto",alignSelf:"center"}}>Rack at a glance</span>
+          <h2 style={{width:"100%",textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>Your Rack’s Direction</h2>
+          <p style={{width:"100%",textAlign:"center",marginLeft:"auto",marginRight:"auto"}}>A sharper read on the hand shape your final rack was actually moving toward.</p>
         </div>
 
         <div className="rk-glance-hand-alignment-v1000">
@@ -8259,18 +8258,19 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
         </div>
       </section>
 
-      <section className="rk-score-clean-actions-v120 practice" aria-label="Practice actions">
-        <button type="button" onClick={onDealAgain} className="rk-score-clean-action-v120 primary">
-          <span>Practice another rack</span>
-          <strong>Deal again</strong>
+      <section className="rk-score-clean-actions-v120 practice" aria-label="Practice actions" style={{display:"grid",gridTemplateColumns:"1fr",gap:8,width:"calc(100% - 20px)",margin:"20px 10px 0",padding:0,background:"transparent",border:0,boxShadow:"none"}}>
+        <button type="button" onClick={onDealAgain} className="rk-score-clean-action-v120 primary" style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",alignItems:"center",columnGap:12,width:"100%",minHeight:54,margin:0,padding:"14px 16px",borderRadius:12,boxSizing:"border-box",textAlign:"left",background:"#1a3320",color:"#ffffff",border:"none",boxShadow:"none"}}>
+          <span style={{display:"none"}}>Practice another rack</span>
+          <strong style={{display:"block",gridColumn:1,alignSelf:"center",justifySelf:"start",margin:0,padding:0,color:"inherit",fontFamily:"Georgia, serif",fontSize:16,fontWeight:700,lineHeight:1.15,letterSpacing:0,textAlign:"left",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>Deal again</strong>
+          <b aria-hidden="true" style={{display:"block",gridColumn:2,alignSelf:"center",justifySelf:"end",margin:0,padding:0,color:"#4a8c3a",fontFamily:"system-ui, sans-serif",fontSize:18,lineHeight:1,fontWeight:700}}>→</b>
         </button>
-        <button type="button" onClick={onHome} className="rk-score-clean-action-v120">
-          <span>Back to clubhouse</span>
-          <strong>Home</strong>
+        <button type="button" onClick={onHome} className="rk-score-clean-action-v120" style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",alignItems:"center",columnGap:12,width:"100%",minHeight:54,margin:0,padding:"14px 16px",borderRadius:12,boxSizing:"border-box",textAlign:"left",background:"#ffffff",color:"#1a2e1a",border:"0.5px solid #d8d4c8",boxShadow:"none"}}>
+          <span style={{display:"none"}}>Back to clubhouse</span>
+          <strong style={{display:"block",gridColumn:1,alignSelf:"center",justifySelf:"start",margin:0,padding:0,color:"inherit",fontFamily:"Georgia, serif",fontSize:16,fontWeight:700,lineHeight:1.15,letterSpacing:0,textAlign:"left",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>Home</strong>
+          <b aria-hidden="true" style={{display:"block",gridColumn:2,alignSelf:"center",justifySelf:"end",margin:0,padding:0,color:"#4a8c3a",fontFamily:"system-ui, sans-serif",fontSize:18,lineHeight:1,fontWeight:700}}>→</b>
         </button>
       </section>
 
-      <Footer/>
     </div>
   );
 }

@@ -22969,3 +22969,53 @@ button.rk-share-card,
     padding:14px 16px!important;
   }
 }
+
+/* Practice scorecard direct JSX fix support */
+.rk-practice-scorecard-outer-v1020 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-main,
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-main{
+  align-items:center!important;
+  text-align:center!important;
+}
+
+.rk-practice-scorecard-outer-v1020 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score,
+.rk-practice-scorecard-outer-v1020 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-label,
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score,
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score-label{
+  text-align:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+.rk-practice-scorecard-outer-v1020 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-copy,
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-copy{
+  text-align:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+.rk-practice-scorecard-outer-v1020 .rk-glance-overhaul-head-v1000,
+.rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000{
+  align-items:center!important;
+  text-align:center!important;
+}
+
+.rk-practice-scorecard-outer-v1020 .rk-glance-overhaul-head-v1000 h2,
+.rk-practice-scorecard-outer-v1020 .rk-glance-overhaul-head-v1000 p,
+.rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000 h2,
+.rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000 p{
+  text-align:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+/* Prevent any nested practice footer from rendering. Keep only outer wrapper footer. */
+.rk-practice-scorecard-outer-v1020 .rk-score-shell .rk-footer,
+.rk-practice-scorecard-outer-v1020 .rk-score-shell .rk-premium-footer{
+  display:none!important;
+}
+
+.rk-practice-scorecard-outer-v1020 > .rk-footer + .rk-footer,
+.rk-practice-scorecard-outer-v1020 > .rk-premium-footer + .rk-footer,
+.rk-practice-scorecard-outer-v1020 > .rk-footer + .rk-premium-footer{
+  display:none!important;
+}
