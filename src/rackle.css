@@ -352,8 +352,8 @@
 
 /* ─── iPhone landscape polish: keep Rackle readable and compact ───────────── */
 @media (orientation: landscape) and (max-height: 520px) and (pointer: coarse){
-  html,body,#root{background:#F8F4EE!important;overflow-x:hidden!important;}
-  .rk-outer{padding:0!important;align-items:flex-start!important;justify-content:center!important;background:#F8F4EE!important;}
+  html,body,#root{background:var(--color-bg-page)!important;overflow-x:hidden!important;}
+  .rk-outer{padding:0!important;align-items:flex-start!important;justify-content:center!important;background:var(--color-bg-page)!important;}
   .rk-app{width:100vw!important;max-width:none!important;min-height:100vh!important;margin:0!important;border-radius:0!important;border-left:none!important;border-right:none!important;box-shadow:none!important;}
   .rk-pg{width:100%!important;max-width:620px!important;margin:0 auto!important;padding:8px 14px 32px!important;}
 
@@ -543,20 +543,20 @@
    clean two-column rhythm instead of staggered columns. */
 @media (min-width:768px){
   html,body,#root,.rk-outer,.rk-dash-shell{
-    background:#F8F4EE!important;
+    background:var(--color-bg-page)!important;
   }
   .rk-outer{
-    background:#F8F4EE!important;
+    background:var(--color-bg-page)!important;
     padding:0!important;
   }
   .rk-dash-shell{
-    background:#F8F4EE!important;
+    background:var(--color-bg-page)!important;
     padding:22px 16px 0!important;
   }
   .rk-app{
     width:min(100%,760px)!important;
     max-width:760px!important;
-    background:#F8F4EE!important;
+    background:var(--color-bg-page)!important;
     border:1px solid rgba(26,20,16,.07)!important;
     border-radius:24px!important;
     box-shadow:0 12px 46px rgba(26,20,16,.10), inset 0 1px 0 rgba(255,255,255,.72)!important;
@@ -564,7 +564,7 @@
     overflow:hidden!important;
   }
   .rk-pg{
-    background:#F8F4EE!important;
+    background:var(--color-bg-page)!important;
     padding:22px 28px 0!important;
   }
   .rk-startup-hero{
@@ -724,7 +724,7 @@
    polished vertical player column. */
 @media (min-width:768px){
   html,body,#root,.rk-outer,.rk-dash-shell{
-    background:#F8F4EE!important;
+    background:var(--color-bg-page)!important;
   }
   .rk-outer{
     width:100%!important;
@@ -751,7 +751,7 @@
     min-height:auto!important;
     position:relative!important;
     overflow-x:hidden!important;
-    background:#F8F4EE!important;
+    background:var(--color-bg-page)!important;
     border-radius:24px!important;
     border:1px solid rgba(26,20,16,.07)!important;
     box-shadow:0 10px 42px rgba(26,20,16,.10),0 0 0 1px rgba(255,255,255,.48) inset!important;
@@ -769,7 +769,7 @@
     flex-direction:column!important;
     gap:0!important;
     padding:22px 20px 0!important;
-    background:#F8F4EE!important;
+    background:var(--color-bg-page)!important;
     overflow-x:hidden!important;
     box-sizing:border-box!important;
   }
@@ -978,9 +978,9 @@
 
 /* ─── V1 desktop/tablet final polish: spacing, section rhythm, leaderboard readability ─── */
 @media (min-width:768px){
-  html,body,#root{background:#F8F4EE!important;}
-  .rk-outer{background:#F8F4EE!important;}
-  .rk-dash-shell{background:#F8F4EE!important;}
+  html,body,#root{background:var(--color-bg-page)!important;}
+  .rk-outer{background:var(--color-bg-page)!important;}
+  .rk-dash-shell{background:var(--color-bg-page)!important;}
 
   /* Wider center rail so desktop/tablet copy does not collapse. */
   .rk-dash-shell .rk-app,
@@ -989,7 +989,7 @@
     max-width:620px!important;
     flex-basis:620px!important;
     flex-shrink:0!important;
-    background:#F8F4EE!important;
+    background:var(--color-bg-page)!important;
   }
 
   /* Slightly tighter gap between the live status pill and the first scorecard. */
@@ -1234,7 +1234,7 @@
   }
 
   /* Small lift across desktop/tablet surfaces. */
-  .rk-pg{background:#F8F4EE!important;}
+  .rk-pg{background:var(--color-bg-page)!important;}
   .rk-lux-card,
   .rk-row-card,
   .rk-premium-card,
@@ -2838,7 +2838,7 @@
 
 /* v92: Rackle launch polish pass — homepage centering, leaderboard polish, scorecard consistency */
 html,body,#root{
-  background:#F8F4EE!important;
+  background:var(--color-bg-page)!important;
 }
 .rk-pg,
 .rk-room-page,
@@ -3301,7 +3301,7 @@ html,body,#root{
   --rk-line:rgba(26,20,16,.075);
 }
 html,body,#root{
-  background:var(--rk-bg)!important;
+  background:var(--color-bg-page)!important;
 }
 .rk-pg,
 .rk-score-shell,
@@ -4018,6 +4018,7 @@ html,body,#root{
 
 /* v94: full consumer UX polish pass */
 :root{
+  --color-bg-page:#F5F2EC;
   --rk-paper:#F8F4EE;
   --rk-card:#FFFDF8;
   --rk-card-soft:#F7F0E5;
@@ -4030,7 +4031,7 @@ html,body,#root{
   --rk-shadow:0 10px 28px rgba(26,20,16,.045), inset 0 1px 0 rgba(255,255,255,.82);
   --rk-radius:24px;
 }
-html,body,#root{background:var(--rk-paper)!important;color:var(--rk-ink)!important;}
+html,body,#root{background:var(--color-bg-page)!important;color:var(--rk-ink)!important;}
 .rk-app,.rk-pg,.rk-room-page,.rk-score-shell{
   background:linear-gradient(180deg,#F8F4EE 0%,#F4EDE2 100%)!important;
 }
@@ -4778,7 +4779,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 }
 
 html,body,#root,.rk-outer,.rk-app,.rk-pg{
-  background:var(--rk-fix-paper)!important;
+  background:var(--color-bg-page)!important;
   color:var(--rk-fix-ink)!important;
 }
 .rk-pg,.rk-score-shell,.rk-home-landing-flow,.rk-room-page{
@@ -7488,7 +7489,7 @@ html,body,#root,.rk-outer,.rk-app,.rk-pg{
    Keep the page canvas as one calm Rackle cream across every screen.
    Cards and leaderboard panels still keep their own premium treatments. */
 :root{
-  --rk-page-canvas:#F8F4EE;
+  --rk-page-canvas:var(--color-bg-page);
 }
 html,
 body,
@@ -7504,8 +7505,10 @@ body,
 .rk-recap-shell,
 .rk-style-glossary-v60,
 .rk-howto-v40,
-.rk-handbrowser-v40{
-  background-color:var(--rk-page-canvas)!important;
+.rk-handbrowser-v40,
+.rk-practice-scorecard-match-v200,
+.rk-practice-scorecard-outer-v1020{
+  background-color:var(--color-bg-page)!important;
   background-image:none!important;
 }
 .rk-page-header-v75,
@@ -22005,7 +22008,7 @@ button.rk-share-card,
   padding-left:0!important;
   padding-right:0!important;
   box-sizing:border-box!important;
-  background:radial-gradient(circle at top,rgba(255,255,255,.72),transparent 240px),linear-gradient(180deg,#F8F4EE 0%,#F5EEE2 100%)!important;
+  background:var(--color-bg-page)!important;
   min-height:100vh!important;
 }
 
@@ -22195,7 +22198,7 @@ button.rk-share-card,
   margin:0!important;
   padding:0!important;
   min-height:100vh!important;
-  background:radial-gradient(circle at top,rgba(255,255,255,.72),transparent 240px),linear-gradient(180deg,#F8F4EE 0%,#F5EEE2 100%)!important;
+  background:var(--color-bg-page)!important;
 }
 
 .rk-practice-scorecard-outer-v1020 > .rk-page-header-v75,

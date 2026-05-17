@@ -33,8 +33,8 @@ const T = {
 };
 
 const S={
-  outer:{background:"#F8F4EE",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
-  app:{fontFamily:F.b,background:C.bg,minHeight:"100vh",color:C.ink,width:"100%",maxWidth:560,borderLeft:`1px solid ${C.bdr}`,borderRight:`1px solid ${C.bdr}`,overflowX:"hidden"},
+  outer:{background:"var(--color-bg-page)",minHeight:"100vh",display:"flex",justifyContent:"center",alignItems:"flex-start"},
+  app:{fontFamily:F.b,background:"var(--color-bg-page)",minHeight:"100vh",color:C.ink,width:"100%",maxWidth:560,borderLeft:`1px solid ${C.bdr}`,borderRight:`1px solid ${C.bdr}`,overflowX:"hidden"},
   pg:{padding:"14px 18px",paddingBottom:52},
   pill:{background:"linear-gradient(180deg,#F2EBDD,#E9E0CF)",borderRadius:14,padding:"8px 8px",textAlign:"center",border:`1px solid ${C.bdr}`,display:"flex",alignItems:"center",justifyContent:"center",gap:6,boxShadow:"inset 0 1px 0 rgba(255,255,255,.65),0 2px 8px rgba(26,20,16,.025)"},
   card:{background:"linear-gradient(145deg,#FFFDF8,#F8F1E6)",border:`1px solid rgba(26,20,16,.085)`,borderRadius:18,padding:16,marginBottom:14,boxShadow:"0 6px 22px rgba(26,20,16,.045),inset 0 1px 0 rgba(255,255,255,.72)"},
