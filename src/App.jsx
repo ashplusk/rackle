@@ -5845,7 +5845,7 @@ function ProfileScreen({home,streak,rounds,dRes,setScreen}){
       {getWeeklyRecapData()&&<button onClick={()=>setScreen("recap")} style={{...S.oBtn,width:"100%",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
         <span>📊</span><span>View Weekly Recap →</span>
       </button>}
-      <Footer/>
+      {!hideChrome&&<Footer/>}
     </div>
   );
 }
@@ -8071,7 +8071,7 @@ function DailyIQScorecard({iq,hand,startingRack,passLog,dayNum,section,chosenSec
 }
 
 // ─── PRACTICE SCORECARD, collapsible sections, matching daily vibe ───────────
-function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,allSections,onHome,onDealAgain}){
+function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,allSections,onHome,onDealAgain,hideChrome=false}){
   if(!iq)return null;
   const chosenSecObj=chosenSec&&SECS.find(s=>s.id===chosenSec);
   const scoredHandLabel=iq.scoredHandLabel||null;
@@ -8140,9 +8140,17 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
     : rkHumanTableCopy(`Use the next pick to prove ${actualAlignmentSection}. If it does not add density, cut the weakest backup and keep the rack compressed.`);
   const styleRead=rkStyleReadForScorecard(styled?.styleName||scoreLabel,score,trustRead);
 
+  const practiceShareText=[
+    `Practice Rackle`,
+    `Score: ${score}`,
+    styled?.styleName?`Style: ${styled.styleName}`:`Style: ${scoreLabel}`,
+    actualAlignmentSection?`Best lane: ${actualAlignmentSection}`:"",
+    `playrackle.com`
+  ].filter(Boolean).join("\n");
+
   return(
-    <div className="rk-score-shell rk-practice-v9-shell rk-scorecard-clean-v120 rk-practice-scorecard-match-v200 rk-scorecard-premium-page-v500">
-      <RackleHeader onBack={onHome}/>
+    <div className="rk-score-shell rk-score-ultra-simple rk-scorecard-premium-v26 rk-scorecard-clean-v120 rk-practice-scorecard-match-v200 rk-scorecard-premium-page-v500" style={{paddingBottom:32}}>
+      {!hideChrome&&<RackleHeader onBack={onHome}/>}
       <section className="rk-practice-homeclone-v45 rk-home-scorecard-v41 rk-score-reveal-v250 rk-scorecard-preview-optimized-v600" aria-label="Practice Rackle scorecard">
         <div className="rk-home-scorecard-v41-main rk-practice-homeclone-v45-main">
           <div className="rk-home-scorecard-v41-watermark" aria-hidden="true">🀄</div>
@@ -8158,6 +8166,29 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
           <p className="rk-home-scorecard-v41-copy rk-score-reveal-copy-v250">{revealFrame.copy}</p>
           <div className="rk-score-reveal-micro-v250">{revealFrame.tag}</div>
         </div>
+      </section>
+
+      <section className="rk-score-clean-share-v120 rk-score-share-premium-v130 rk-score-share-simple-v140 rk-score-share-v150 rk-score-share-v160" aria-label="Share your practice score">
+        <div className="rk-score-share-v150-head rk-score-share-v160-head">
+          <span>Share your score</span>
+          <h2>Share your score</h2>
+          <p>Send this practice read to your group.</p>
+        </div>
+
+        <div className="rk-score-share-v160-stats" aria-label="Practice score summary">
+          <div className="rk-score-share-v160-stat primary">
+            <span>Practice read</span>
+            <strong>{actualAlignmentSection}</strong>
+            <em>{actualAlignmentName}</em>
+          </div>
+          <div className="rk-score-share-v160-stat score">
+            <span>Rackle IQ</span>
+            <strong>{score}</strong>
+            <em>{styled?.styleName||scoreLabel}</em>
+          </div>
+        </div>
+
+        <ShareButton text={practiceShareText} label="Share your score" sublabel="Drop it in your group chat" variant="green"/>
       </section>
 
       <section className="rk-final-rack-simple-v180 rk-scorecard-panel-v500 rk-scorecard-final-v500" aria-label="Your practice rack">
@@ -9084,7 +9115,13 @@ function IQScorecard({iq,hand,startingRack,passLog,isDaily,dayNum,section,chosen
     <CoachModeScreen iq={iq} hand={hand} startingRack={startingRack} passLog={passLog} dayNum={dayNum} section={section} chosenSec={chosenSec} chosenHand={chosenHand} allSections={allSections} onBack={exitCoach} setScreen={setScreen}/>
   );
   if(isDaily)return <DailyIQScorecard iq={iq} hand={hand} startingRack={startingRack} passLog={passLog} dayNum={dayNum} section={section} chosenSec={chosenSec} chosenHand={chosenHand} allSections={allSections} onHome={onHome} onPractice={onPractice} onCoachMode={enterCoach} resultTime={iq?.timeSecs||iq?.time_secs||iq?.totalTime||0}/>;
-  return <PracticeIQScorecard iq={iq} hand={hand} startingRack={startingRack} passLog={passLog} section={section} chosenSec={chosenSec} allSections={allSections} onHome={onHome} onDealAgain={onDealAgain}/>;
+  return(
+    <div className="rk-practice-scorecard-outer-v1020">
+      <RackleHeader onBack={onHome} setScreen={setScreen}/>
+      <PracticeIQScorecard iq={iq} hand={hand} startingRack={startingRack} passLog={passLog} section={section} chosenSec={chosenSec} allSections={allSections} onHome={onHome} onDealAgain={onDealAgain} hideChrome/>
+      <Footer/>
+    </div>
+  );
 }
 
 // ─── STANDALONE SCORECARD SCREEN ─────────────────────────────────────────────
@@ -12719,9 +12756,9 @@ function Game({mode,home,onDone,settings,setScreen,go}){
           </button>
           {showRef&&<CG onClose={()=>setShowRef(false)}/>}
           <div style={{fontSize:9,color:C.mut,letterSpacing:2,fontWeight:700,marginBottom:6}}>SCORE YOUR ROUND</div>
-          <div onClick={(e)=>{const btn=e.target.closest?.("[data-rk-score-section]");if(btn){e.preventDefault();e.stopPropagation();scoreRoundForSection(btn.dataset.rkScoreSection);}}} style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
+          <div className="rk-score-round-options-v1020" style={{display:"flex",flexDirection:"column",gap:5,marginBottom:10}}>
             {SECS.map((s)=>(
-              <button key={s.id} type="button" className="rk-score-round-option-v700" data-rk-score-section={s.id} onTouchEnd={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}} onClick={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}}
+              <button key={s.id} type="button" className="rk-score-round-option-v700" data-rk-score-section={s.id} onClick={(e)=>{e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}} onKeyDown={(e)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();e.stopPropagation();scoreRoundForSection(s.id);}}}
                 style={{cursor:"pointer",display:"flex",alignItems:"center",gap:0,borderRadius:12,overflow:"hidden",border:`1.5px solid ${C.bdr}`,background:"#fff",textAlign:"left",padding:0,transition:"all 0.15s"}}>
                 <div style={{width:4,alignSelf:"stretch",flexShrink:0,background:s.color+"40"}}/>
                 <div style={{width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,margin:"0 2px"}}>{s.icon}</div>

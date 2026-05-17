@@ -21995,3 +21995,246 @@ button.rk-share-card,
     margin-right:0!important;
   }
 }
+
+/* Practice scorecard: mirror Daily scorecard layout, excluding Social Read */
+.rk-practice-scorecard-match-v200{
+  width:100%!important;
+  max-width:none!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  padding-left:0!important;
+  padding-right:0!important;
+  box-sizing:border-box!important;
+  background:radial-gradient(circle at top,rgba(255,255,255,.72),transparent 240px),linear-gradient(180deg,#F8F4EE 0%,#F5EEE2 100%)!important;
+  min-height:100vh!important;
+}
+
+/* Same single-source card spacing as Daily */
+.rk-practice-scorecard-match-v200 > .rk-practice-homeclone-v45,
+.rk-practice-scorecard-match-v200 > .rk-score-clean-share-v120,
+.rk-practice-scorecard-match-v200 > .rk-final-rack-simple-v180,
+.rk-practice-scorecard-match-v200 > .rk-score-clean-glance-v120,
+.rk-practice-scorecard-match-v200 > .rk-score-style-card-v190,
+.rk-practice-scorecard-match-v200 > .rk-score-clean-actions-v120,
+.rk-practice-scorecard-match-v200 > .rk-scorecard-panel-v500,
+.rk-practice-scorecard-match-v200 > section{
+  width:calc(100% - 20px)!important;
+  max-width:none!important;
+  margin-left:10px!important;
+  margin-right:10px!important;
+  box-sizing:border-box!important;
+}
+
+/* Header and footer remain full width */
+.rk-practice-scorecard-match-v200 > .rk-page-header-v75,
+.rk-practice-scorecard-match-v200 > .rk-footer{
+  width:100%!important;
+  max-width:none!important;
+  margin-left:0!important;
+  margin-right:0!important;
+}
+
+/* Practice scorecard hero uses the same structure as Daily */
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45{
+  margin-top:8px!important;
+  margin-bottom:14px!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-main{
+  padding:25px 22px 25px!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-kicker{
+  margin:0 auto 30px!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score{
+  font-size:84px!important;
+  line-height:.78!important;
+  letter-spacing:-3.2px!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-title{
+  margin:24px auto 0!important;
+  max-width:12ch!important;
+  font-size:31px!important;
+  line-height:1.02!important;
+  text-align:center!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-copy{
+  max-width:34ch!important;
+  margin:14px auto 0!important;
+  font-size:13px!important;
+  line-height:1.58!important;
+  font-weight:500!important;
+  text-align:center!important;
+}
+
+/* Lower sections match Daily alignment: left aligned */
+.rk-practice-scorecard-match-v200 > section:not(.rk-practice-homeclone-v45):not(.rk-score-clean-share-v120),
+.rk-practice-scorecard-match-v200 > section:not(.rk-practice-homeclone-v45):not(.rk-score-clean-share-v120) *{
+  text-align:left!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-final-rack-simple-head-v180,
+.rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000,
+.rk-practice-scorecard-match-v200 .rk-score-style-head-v190{
+  align-items:flex-start!important;
+  text-align:left!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000,
+.rk-practice-scorecard-match-v200 .rk-score-style-head-sticker-v1010{
+  flex-direction:column!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000 > span,
+.rk-practice-scorecard-match-v200 .rk-score-style-head-v190 > span{
+  margin-left:0!important;
+  margin-right:auto!important;
+  align-self:flex-start!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-final-rack-simple-head-v180 strong{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:31px!important;
+  line-height:1.02!important;
+  font-weight:900!important;
+  letter-spacing:-.8px!important;
+  color:#1A1410!important;
+  max-width:8ch!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000 h2{
+  font-family:'Fraunces',Georgia,serif!important;
+  font-size:23px!important;
+  line-height:1.06!important;
+  font-weight:900!important;
+  letter-spacing:-.45px!important;
+  color:#1A1410!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000 p,
+.rk-practice-scorecard-match-v200 .rk-score-style-card-v190 > p{
+  color:#7A7168!important;
+  font-family:'Nunito','Inter','Segoe UI',system-ui,sans-serif!important;
+  font-size:12.75px!important;
+  line-height:1.62!important;
+  font-weight:300!important;
+  letter-spacing:0!important;
+}
+
+/* Practice share card uses same Daily section sizing but keeps its own practice content */
+.rk-practice-scorecard-match-v200 .rk-score-clean-share-v120{
+  margin-top:0!important;
+  margin-bottom:14px!important;
+}
+
+/* Practice must not show Social Read */
+.rk-practice-scorecard-match-v200 .rk-better-players-v260,
+.rk-practice-scorecard-match-v200 .rk-social-read-left-v1010,
+.rk-practice-scorecard-match-v200 .rk-social-guidance-v1010{
+  display:none!important;
+}
+
+/* Footer matching Daily rhythm */
+.rk-practice-scorecard-match-v200 .rk-footer{
+  padding-top:20px!important;
+  padding-bottom:28px!important;
+}
+
+.rk-practice-scorecard-match-v200 .rk-footer,
+.rk-practice-scorecard-match-v200 .rk-footer *{
+  text-align:center!important;
+}
+
+@media (max-width:430px){
+  .rk-practice-scorecard-match-v200 > .rk-practice-homeclone-v45,
+  .rk-practice-scorecard-match-v200 > .rk-score-clean-share-v120,
+  .rk-practice-scorecard-match-v200 > .rk-final-rack-simple-v180,
+  .rk-practice-scorecard-match-v200 > .rk-score-clean-glance-v120,
+  .rk-practice-scorecard-match-v200 > .rk-score-style-card-v190,
+  .rk-practice-scorecard-match-v200 > .rk-score-clean-actions-v120,
+  .rk-practice-scorecard-match-v200 > .rk-scorecard-panel-v500,
+  .rk-practice-scorecard-match-v200 > section{
+    width:calc(100% - 20px)!important;
+    margin-left:10px!important;
+    margin-right:10px!important;
+  }
+
+  .rk-practice-scorecard-match-v200 > .rk-page-header-v75,
+  .rk-practice-scorecard-match-v200 > .rk-footer{
+    width:100%!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+
+  .rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-score{
+    font-size:74px!important;
+    letter-spacing:-2.8px!important;
+  }
+
+  .rk-practice-scorecard-match-v200 .rk-practice-homeclone-v45 .rk-home-scorecard-v41-title{
+    font-size:28px!important;
+  }
+
+  .rk-practice-scorecard-match-v200 .rk-final-rack-simple-head-v180 strong{
+    font-size:28px!important;
+  }
+
+  .rk-practice-scorecard-match-v200 .rk-glance-overhaul-head-v1000 h2{
+    font-size:21px!important;
+  }
+}
+
+/* Practice scorecard chrome wrapper + score-tap bug fix */
+.rk-practice-scorecard-outer-v1020{
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+  min-height:100vh!important;
+  background:radial-gradient(circle at top,rgba(255,255,255,.72),transparent 240px),linear-gradient(180deg,#F8F4EE 0%,#F5EEE2 100%)!important;
+}
+
+.rk-practice-scorecard-outer-v1020 > .rk-page-header-v75,
+.rk-practice-scorecard-outer-v1020 > .rk-footer{
+  width:100%!important;
+  max-width:none!important;
+  margin-left:0!important;
+  margin-right:0!important;
+}
+
+.rk-practice-scorecard-outer-v1020 .rk-score-shell.rk-practice-scorecard-match-v200{
+  min-height:auto!important;
+}
+
+/* Score options: only the actual hand/section buttons should score */
+.rk-score-round-options-v1020{
+  position:relative!important;
+  z-index:2!important;
+  pointer-events:auto!important;
+}
+
+.rk-score-round-options-v1020 .rk-score-round-option-v700{
+  position:relative!important;
+  z-index:3!important;
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+  cursor:pointer!important;
+}
+
+.rk-score-round-options-v1020 .rk-score-round-option-v700 *{
+  pointer-events:auto!important;
+}
+
+.rk-score-round-options-v1020:active{
+  transform:none!important;
+}
+
+/* Remove older broad child pointer disabling for this scoring list */
+.rk-score-round-options-v1020 .rk-score-round-option-v700:active{
+  transform:scale(.988)!important;
+  filter:saturate(1.05)!important;
+}
