@@ -8238,6 +8238,8 @@ function PracticeIQScorecard({iq,hand,startingRack,passLog,section,chosenSec,all
           <strong>Home</strong>
         </button>
       </section>
+
+      <Footer/>
     </div>
   );
 }
@@ -9348,7 +9350,7 @@ function Footer(){
           <div aria-hidden="true" className="rk-footer-rule"/>
           <div className="rk-footer-brand-lockup">
             <a href="https://playrackle.com" target="_blank" rel="noopener noreferrer" className="rk-footer-logo">Rackle</a>
-            <div className="rk-footer-tagline">The daily Mahjong workout.</div>
+            <div className="rk-footer-tagline">The Daily Charleston ritual</div>
           </div>
           <div className="rk-footer-community">Made for the American Mahjong community.</div>
           <div className="rk-footer-actions">
