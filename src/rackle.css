@@ -21913,3 +21913,85 @@ button.rk-share-card,
     font-size:21px!important;
   }
 }
+
+/* Daily scorecard width fix: single source of horizontal spacing */
+.rk-score-shell.rk-score-ultra-simple{
+  width:100%!important;
+  max-width:none!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  padding-left:0!important;
+  padding-right:0!important;
+  box-sizing:border-box!important;
+}
+
+/* Apply homepage-style card edge spacing to daily scorecard cards */
+.rk-score-shell.rk-score-ultra-simple > .rk-daily-scorecard-homeclone-v45,
+.rk-score-shell.rk-score-ultra-simple > .rk-score-clean-share-v120,
+.rk-score-shell.rk-score-ultra-simple > .rk-final-rack-simple-v180,
+.rk-score-shell.rk-score-ultra-simple > .rk-score-clean-glance-v120,
+.rk-score-shell.rk-score-ultra-simple > .rk-score-style-card-v190,
+.rk-score-shell.rk-score-ultra-simple > .rk-better-players-v260,
+.rk-score-shell.rk-score-ultra-simple > .rk-score-clean-actions-v120,
+.rk-score-shell.rk-score-ultra-simple > .rk-scorecard-panel-v500,
+.rk-score-shell.rk-score-ultra-simple > section{
+  width:calc(100% - 20px)!important;
+  max-width:none!important;
+  margin-left:10px!important;
+  margin-right:10px!important;
+  box-sizing:border-box!important;
+}
+
+/* Nested scorecard card should not add another horizontal margin */
+.rk-score-shell.rk-score-ultra-simple .rk-daily-scorecard-homeclone-v45.rk-home-scorecard-v41,
+.rk-score-shell.rk-score-ultra-simple .rk-home-scorecard-v41{
+  max-width:none!important;
+}
+
+/* Headings/standalone rows get content padding only, not wrapper padding */
+.rk-score-shell.rk-score-ultra-simple .rk-final-rack-simple-head-v180,
+.rk-score-shell.rk-score-ultra-simple .rk-score-clean-head-v120,
+.rk-score-shell.rk-score-ultra-simple .rk-glance-overhaul-head-v1000,
+.rk-score-shell.rk-score-ultra-simple .rk-better-players-head-v260,
+.rk-score-shell.rk-score-ultra-simple .rk-score-deep-dive-link,
+.rk-score-shell.rk-score-ultra-simple .rk-score-clean-deep-link,
+.rk-score-shell.rk-score-ultra-simple .rk-score-link-row{
+  padding-left:0!important;
+  padding-right:0!important;
+}
+
+/* Footer should remain page-width and not inherit card margin */
+.rk-score-shell.rk-score-ultra-simple > .rk-footer{
+  width:100%!important;
+  max-width:none!important;
+  margin-left:0!important;
+  margin-right:0!important;
+}
+
+/* Keep mobile behavior consistent */
+@media (max-width:430px){
+  .rk-score-shell.rk-score-ultra-simple{
+    padding-left:0!important;
+    padding-right:0!important;
+  }
+
+  .rk-score-shell.rk-score-ultra-simple > .rk-daily-scorecard-homeclone-v45,
+  .rk-score-shell.rk-score-ultra-simple > .rk-score-clean-share-v120,
+  .rk-score-shell.rk-score-ultra-simple > .rk-final-rack-simple-v180,
+  .rk-score-shell.rk-score-ultra-simple > .rk-score-clean-glance-v120,
+  .rk-score-shell.rk-score-ultra-simple > .rk-score-style-card-v190,
+  .rk-score-shell.rk-score-ultra-simple > .rk-better-players-v260,
+  .rk-score-shell.rk-score-ultra-simple > .rk-score-clean-actions-v120,
+  .rk-score-shell.rk-score-ultra-simple > .rk-scorecard-panel-v500,
+  .rk-score-shell.rk-score-ultra-simple > section{
+    width:calc(100% - 20px)!important;
+    margin-left:10px!important;
+    margin-right:10px!important;
+  }
+
+  .rk-score-shell.rk-score-ultra-simple > .rk-footer{
+    width:100%!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+}
