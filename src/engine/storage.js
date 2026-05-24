@@ -120,9 +120,59 @@ export function getClubCode() {
 
 export function setClubCode(code) { ST.set("clubCode", code || null); }
 
+
+function makeAccountPlayerId() {
+  const suffix =
+    typeof crypto !== "undefined" && crypto.randomUUID
+      ? crypto.randomUUID().slice(0, 12)
+      : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+  return `player-${suffix}`;
+}
+
+export function isGuestPlayerId(id) {
+  return String(id || "").toLowerCase().startsWith("guest-");
+}
+
+export function ensureAuthenticatedPlayerId() {
+  const session = readSession();
+  const profile = ST.get("profile", null);
+  const isAuthenticated = Boolean(session?.email || profile?.email || ST.get("isAuthenticated", false));
+  if (!isAuthenticated) {
+    return { playerId: getPlayerId(), previousGuestId: null, profile };
+  }
+
+  const currentAuthId = String(ST.get("authPlayerId", "") || session?.playerId || profile?.playerId || "").trim();
+  const currentProfileId = String(profile?.playerId || profile?.player_id || "").trim();
+  const oldGuestId = [currentAuthId, currentProfileId, ST.get("playerId", "")]
+    .map(v => String(v || "").trim())
+    .find(isGuestPlayerId) || null;
+
+  const usableAccountId = [currentAuthId, currentProfileId]
+    .map(v => String(v || "").trim())
+    .find(v => v && !isGuestPlayerId(v));
+
+  const nextPlayerId = usableAccountId || makeAccountPlayerId();
+  const nextProfile = profile ? { ...profile, playerId: nextPlayerId } : profile;
+  const nextSession = session ? { ...session, playerId: nextPlayerId } : session;
+
+  ST.set("authPlayerId", nextPlayerId);
+  ST.set("isAuthenticated", true);
+  if (nextProfile) ST.set("profile", nextProfile);
+  if (nextSession) ST.set("session_v1", nextSession);
+
+  return {
+    playerId: nextPlayerId,
+    previousGuestId: oldGuestId && oldGuestId !== nextPlayerId ? oldGuestId : null,
+    profile: nextProfile,
+  };
+}
+
 export function getPlayerId() {
   const authId = ST.get("authPlayerId", null);
-  if (authId) return authId;
+  if (authId && !isGuestPlayerId(authId)) return authId;
+  if (authId && isGuestPlayerId(authId) && (readSession()?.email || getProfile()?.email || ST.get("isAuthenticated", false))) {
+    return ensureAuthenticatedPlayerId().playerId;
+  }
 
   let playerId = ST.get("playerId", null);
   if (playerId) return playerId;

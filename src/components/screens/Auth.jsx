@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import {
   ST, getProfile, setProfile, writeSession, getTodayDailyResult, getDailySeed, getClubCode,
-  getLeaderboardDisplayName,
+  getLeaderboardDisplayName, isGuestPlayerId,
 } from "../../engine/storage.js";
 import { migrateDailyLeaderboardIdentity } from "../../engine/leaderboard.js";
 import { trackRackleEvent, getClubState } from "../../engine/analytics.js";
@@ -158,7 +158,10 @@ function LoginForm({ setScreen }) {
     };
     const profile = {
       ...baseProfile,
-      playerId: baseProfile.playerId || baseProfile.player_id || existingProfile.playerId || previousGuestId || makePlayerId(),
+      playerId: (() => {
+        const existingId = baseProfile.playerId || baseProfile.player_id || existingProfile.playerId;
+        return existingId && !isGuestPlayerId(existingId) ? existingId : makePlayerId();
+      })(),
       email: cleanEmail,
     };
 
@@ -233,7 +236,8 @@ function SignupForm({ setScreen }) {
 
     const accounts = getStoredAccounts();
     const previousGuestId = currentGuestPlayerId();
-    const playerId = accounts[cleanEmail]?.profile?.playerId || previousGuestId || makePlayerId();
+    const existingAccountId = accounts[cleanEmail]?.profile?.playerId;
+    const playerId = existingAccountId && !isGuestPlayerId(existingAccountId) ? existingAccountId : makePlayerId();
     const profile = {
       playerId,
       firstName: firstName.trim(),

@@ -1,7 +1,7 @@
 // ─── Rackle v2 · App shell ────────────────────────────────────────────────────
 // Routing only. All page content lives in src/components/screens/.
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Component } from "react";
 import { fetchClubs }          from "./engine/leaderboard.js";
 import { clearStaleDailyResult, getStreak, getTodayDailyResult } from "./engine/storage.js";
 
@@ -65,6 +65,45 @@ const SCREEN_TO_PATH = {
   signup: "/signup",
   "forgot-password": "/forgot-password",
 };
+
+
+class RackleErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, info) {
+    if (import.meta.env.DEV) console.error("Rackle screen crashed", error, info);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.resetKey !== this.props.resetKey && this.state.hasError) {
+      this.setState({ hasError: false, error: null });
+    }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <RackleState
+          eyebrow="Rackle"
+          title="The room needs a reset."
+          body="Something interrupted that table read. Head back home and open Rackle again."
+          primaryLabel="Back home"
+          onPrimary={this.props.onReset}
+          secondaryLabel="Send feedback"
+          onSecondary={this.props.onFeedback}
+        />
+      );
+    }
+    return this.props.children;
+  }
+}
 
 function getInitialRoute() {
   if (typeof window === "undefined") return { screen: "home", params: {} };
@@ -134,8 +173,9 @@ export default function App() {
 
   return (
     <TileThemeProvider>
-      {showHeader && (
-        <RackleHeader
+      <div className={`rk-app-shell rk-app-shell--${screen}`}>
+        {showHeader && (
+          <RackleHeader
           isHome={isHome}
           streak={streak}
           onBack={() => go("home")}
@@ -145,6 +185,7 @@ export default function App() {
       )}
 
       <main className="rk-page" role="main">
+        <RackleErrorBoundary resetKey={`${screen}:${JSON.stringify(params || {})}`} onReset={() => go("home")} onFeedback={() => go("feedback")}>
         {screen === "home" && (
           <Home setScreen={setScreen} />
         )}
@@ -228,9 +269,11 @@ export default function App() {
             onPrimary={() => go("home")}
           />
         )}
+        </RackleErrorBoundary>
       </main>
 
-      {showFooter && <Footer setScreen={setScreen} />}
+        {showFooter && <Footer setScreen={setScreen} />}
+      </div>
     </TileThemeProvider>
   );
 }
