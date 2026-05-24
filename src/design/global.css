@@ -111,3 +111,9 @@ img, svg {
   white-space: nowrap;
 }
 
+@import './tokens.css';
+@import './components.css';
+@import './responsive.css';
+@import './scorecard-mobile-fix.css';
+@import './scorecard-mobile-fix.css';
+@import './scorecard-premium.css';

@@ -1,0 +1,282 @@
+/* ─── Rackle Premium Scorecard Layer ───────────────────────────────────────── */
+/* Drop this in as src/design/scorecard-premium.css
+   Import it AFTER scorecard-mobile-fix.css.
+
+   Goal:
+   Make the scorecard feel screenshot-worthy:
+   - richer emerald card
+   - cleaner collectible-card layout
+   - stronger score focus
+   - better typography hierarchy
+   - softer glow and border treatment
+   - tighter, more premium spacing
+*/
+
+.rk-sc-page {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(23, 107, 66, 0.08), transparent 34%),
+    var(--color-bg-page);
+}
+
+/* Main shareable scorecard shell */
+.rk-sc-feature-card {
+  isolation: isolate;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.11), transparent 28%),
+    radial-gradient(circle at 12% 18%, rgba(214, 178, 95, 0.13), transparent 24%),
+    linear-gradient(155deg, #032814 0%, #06401f 46%, #02180d 100%);
+  border: 1px solid rgba(238, 223, 178, 0.22);
+  box-shadow:
+    0 24px 54px rgba(8, 30, 18, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.rk-sc-feature-card::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  z-index: -1;
+  border: 1px solid rgba(238, 223, 178, 0.16);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.rk-sc-feature-card::after {
+  content: "";
+  position: absolute;
+  inset: auto -20% -28% -20%;
+  height: 42%;
+  z-index: -1;
+  background: radial-gradient(circle at 50% 0%, rgba(214, 178, 95, 0.16), transparent 62%);
+  pointer-events: none;
+}
+
+/* Inner score area */
+.rk-sc-hero {
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+  padding-bottom: 8px;
+}
+
+.rk-sc-hero__pill {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.84);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 8px 20px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(10px);
+}
+
+/* Premium score medallion */
+.rk-sc-score-ring {
+  position: relative;
+  border: 1px solid rgba(235, 221, 184, 0.22);
+  background:
+    radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.14), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(214, 178, 95, 0.08), transparent 62%);
+  box-shadow:
+    0 20px 42px rgba(0, 0, 0, 0.18),
+    inset 0 0 0 7px rgba(255, 255, 255, 0.045),
+    inset 0 0 34px rgba(255, 255, 255, 0.045);
+}
+
+.rk-sc-score-ring::before {
+  content: "";
+  position: absolute;
+  inset: -9px;
+  border-radius: 50%;
+  border: 1px solid rgba(238, 223, 178, 0.10);
+}
+
+.rk-sc-score-ring::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rk-sc-score-ring__num {
+  color: #fffdf4;
+  text-shadow:
+    0 2px 0 rgba(255, 255, 255, 0.06),
+    0 12px 26px rgba(0, 0, 0, 0.22);
+}
+
+.rk-sc-score-ring__label {
+  color: rgba(255, 255, 255, 0.62);
+  font-weight: 900;
+}
+
+/* Archetype badge */
+.rk-sc-archetype__name {
+  color: #fffdf4;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.055));
+  border: 1px solid rgba(238, 223, 178, 0.20);
+  border-radius: 999px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.rk-sc-hero__tier {
+  color: rgba(255, 255, 255, 0.52);
+  font-weight: 900;
+}
+
+/* Headline block */
+.rk-sc-headline__h {
+  color: #fff8df;
+  text-wrap: balance;
+  text-shadow: 0 10px 28px rgba(0, 0, 0, 0.24);
+}
+
+.rk-sc-headline__copy {
+  color: rgba(255, 255, 255, 0.76);
+  text-wrap: balance;
+}
+
+.rk-sc-headline__tag {
+  color: #fff9e8;
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(238, 223, 178, 0.20);
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+}
+
+/* Return nudge inside card */
+.rk-sc-return-nudge {
+  color: rgba(255, 248, 223, 0.74);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+/* Make following content feel intentionally separate */
+.rk-sc-hand-section {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 253, 247, 0.96));
+  border: 1px solid rgba(26, 20, 16, 0.08);
+  box-shadow: 0 18px 36px rgba(26, 20, 16, 0.07);
+}
+
+/* Screenshot helper: hide noisy helper panels from first viewport if present */
+.rk-sc-first-score-note {
+  margin-top: 4px;
+  opacity: 0.94;
+}
+
+/* Mobile screenshot composition */
+@media (max-width: 430px) {
+  .rk-sc-page {
+    padding-top: 0;
+  }
+
+  .rk-sc-feature-card {
+    margin-top: 4px;
+    margin-bottom: 34px;
+    padding: 18px 16px 22px;
+    border-radius: 30px;
+  }
+
+  .rk-sc-feature-card::before {
+    inset: 11px;
+    border-radius: 24px;
+  }
+
+  .rk-sc-hero {
+    padding-top: 22px;
+    padding-bottom: 2px;
+  }
+
+  .rk-sc-hero__pill {
+    padding: 8px 20px;
+    font-size: 11px;
+  }
+
+  .rk-sc-score-ring {
+    width: 148px;
+    height: 148px;
+  }
+
+  .rk-sc-score-ring__num {
+    font-size: 66px;
+  }
+
+  .rk-sc-score-ring__label {
+    font-size: 10px;
+  }
+
+  .rk-sc-archetype__name {
+    padding: 9px 22px;
+    font-size: 16px;
+  }
+
+  .rk-sc-hero__tier {
+    font-size: 13px;
+  }
+
+  .rk-sc-headline {
+    gap: 13px;
+    padding-inline: 8px;
+  }
+
+  .rk-sc-headline__h {
+    font-size: 36px;
+    line-height: 1.08;
+    max-width: 11ch;
+  }
+
+  .rk-sc-headline__copy {
+    max-width: 30ch;
+    font-size: 17px;
+    line-height: 1.52;
+  }
+
+  .rk-sc-headline__tag {
+    padding: 8px 20px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+  }
+
+  .rk-sc-return-nudge {
+    margin-top: 15px;
+    padding-bottom: 0;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 390px) {
+  .rk-sc-feature-card {
+    padding: 16px 14px 20px;
+    border-radius: 28px;
+  }
+
+  .rk-sc-score-ring {
+    width: 136px;
+    height: 136px;
+  }
+
+  .rk-sc-score-ring__num {
+    font-size: 60px;
+  }
+
+  .rk-sc-headline__h {
+    font-size: 32px;
+  }
+
+  .rk-sc-headline__copy {
+    font-size: 16px;
+  }
+}
+
+/* Optional: better screenshot crop target if you add this class later */
+.rk-sc-feature-card.is-screenshot-ready {
+  aspect-ratio: 9 / 14;
+  justify-content: center;
+}
