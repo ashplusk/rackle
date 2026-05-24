@@ -51,6 +51,63 @@ function sameLocalDay(ts1, ts2) {
   return localDateKey(ts1) === localDateKey(ts2);
 }
 
+// ── Display name helpers ──────────────────────────────────────────────────────
+
+function cleanLeaderboardNameCandidate(value) {
+  const name = String(value || "").replace(/\s+/g, " ").trim();
+  if (!name) return "";
+  if (/^rackler$/i.test(name)) return "";
+  if (/^guest\s*rackler$/i.test(name)) return "";
+  if (/^guest\s*\d+$/i.test(name)) return "";
+  if (/^guest-[a-z0-9-]+$/i.test(name)) return "";
+  if (/^player\d+$/i.test(name)) return "";
+  if (/^anonymous[_\s-]?user$/i.test(name)) return "";
+  if (/^(undefined|null|nan)$/i.test(name)) return "";
+  if (/^test\s*user$/i.test(name)) return "";
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(name)) return "";
+  return name;
+}
+
+function fullName(firstName, lastName) {
+  return [firstName, lastName]
+    .map(v => String(v || "").trim())
+    .filter(Boolean)
+    .join(" ");
+}
+
+function nameFromEmail(email) {
+  const local = String(email || "").split("@")[0] || "";
+  const cleaned = local
+    .replace(/[._+-]+/g, " ")
+    .replace(/\d+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!cleaned) return "";
+  return cleaned
+    .split(" ")
+    .filter(Boolean)
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function bestProfileName(profile = {}, session = null) {
+  const emailName = nameFromEmail(profile?.email || session?.email || "");
+  const candidates = [
+    profile?.displayName,
+    profile?.display_name,
+    profile?.name,
+    fullName(profile?.firstName || profile?.first_name, profile?.lastName || profile?.last_name),
+    session?.displayName,
+    session?.name,
+    ST.get("playerName", ""),
+    ST.get("displayName", ""),
+    emailName,
+  ];
+
+  return candidates.map(cleanLeaderboardNameCandidate).find(Boolean) || "";
+}
+
 // ── Session ───────────────────────────────────────────────────────────────────
 
 const SESSION_DAYS = 30;
@@ -66,21 +123,35 @@ export function readSession() {
 
 export function writeSession(profile = {}) {
   const playerId = String(profile.playerId || profile.player_id || ST.get("playerId", "") || "").trim();
-  const email    = String(profile.email || "").trim().toLowerCase();
+  const email = String(profile.email || "").trim().toLowerCase();
   if (!playerId || !email) return null;
+
+  const existingSession = readSession();
+  const resolvedName = bestProfileName(profile, existingSession);
+
   const session = {
     playerId,
     email,
-    name:        profile.name || "",
-    club:        profile.clubCode || profile.club_code || ST.get("clubCode", null) || null,
-    avatar:      profile.avatarUrl || profile.avatar_url || null,
-    streak:      Number(profile.streak || ST.get("str", 0) || 0),
-    expiresAt:   Date.now() + SESSION_DAYS * 86400000,
+    name: resolvedName,
+    displayName: resolvedName,
+    firstName: profile.firstName || profile.first_name || "",
+    lastName: profile.lastName || profile.last_name || "",
+    club: profile.clubCode || profile.club_code || ST.get("clubCode", null) || null,
+    avatar: profile.avatarUrl || profile.avatar_url || null,
+    streak: Number(profile.streak || ST.get("str", 0) || 0),
+    expiresAt: Date.now() + SESSION_DAYS * 86400000,
     authVersion: SESSION_VERSION,
   };
+
   ST.set("session_v1", session);
   ST.set("isAuthenticated", true);
   ST.set("authPlayerId", playerId);
+
+  if (resolvedName) {
+    ST.set("playerName", resolvedName);
+    ST.set("displayName", resolvedName);
+  }
+
   return session;
 }
 
@@ -100,20 +171,68 @@ export function logout() {
 
 // ── Profile ───────────────────────────────────────────────────────────────────
 
-export function getProfile() { return ST.get("profile", null); }
+export function getProfile() {
+  const profile = ST.get("profile", null);
+  const session = readSession();
+
+  if (profile) {
+    const resolvedName = bestProfileName(profile, session);
+    if (resolvedName && (!profile.name || /^guest\s*rackler$/i.test(String(profile.name)))) {
+      return {
+        ...profile,
+        name: resolvedName,
+        displayName: profile.displayName || resolvedName,
+        email: profile.email || session?.email || "",
+        playerId: profile.playerId || profile.player_id || session?.playerId || ST.get("authPlayerId", null),
+      };
+    }
+    return profile;
+  }
+
+  if (session) {
+    const resolvedName = bestProfileName({}, session);
+    return {
+      playerId: session.playerId,
+      email: session.email,
+      name: resolvedName,
+      displayName: resolvedName,
+      firstName: session.firstName || "",
+      lastName: session.lastName || "",
+      clubCode: session.club || null,
+      avatarUrl: session.avatar || null,
+    };
+  }
+
+  return null;
+}
 
 export function setProfile(p) {
   if (!p) { ST.set("profile", null); return; }
-  const cleaned = { ...p };
+
+  const session = readSession();
+  const resolvedName = bestProfileName(p, session);
+  const cleaned = {
+    ...p,
+    name: resolvedName || p.name || "",
+    displayName: resolvedName || p.displayName || p.name || "",
+  };
+
   delete cleaned["nick" + "name"];
+
   ST.set("profile", cleaned);
+
+  if (resolvedName) {
+    ST.set("playerName", resolvedName);
+    ST.set("displayName", resolvedName);
+  }
 }
 
 export function getClubCode() {
   const profile = ST.get("profile", null);
-  const code    = String(profile?.clubCode || profile?.club_code || "").trim();
+  const session = readSession();
+  const code = String(profile?.clubCode || profile?.club_code || session?.club || "").trim();
   if (code && code !== "__global__") { ST.set("clubCode", code); return code; }
-  const stored  = String(ST.get("clubCode", null) || "").trim();
+  const stored = String(ST.get("clubCode", null) || "").trim();
   if (stored && stored !== "__global__") return stored;
   return null;
 }
@@ -121,7 +240,7 @@ export function getClubCode() {
 export function setClubCode(code) { ST.set("clubCode", code || null); }
 
 export function getPlayerId() {
-  const authId = ST.get("authPlayerId", null);
+  const authId = ST.get("authPlayerId", null) || readSession()?.playerId;
   if (authId) return authId;
 
   let playerId = ST.get("playerId", null);
@@ -137,7 +256,6 @@ export function getPlayerId() {
   return playerId;
 }
 
-
 // ── Player display helpers ───────────────────────────────────────────────────
 
 export function isLeaderboardNameVisible() {
@@ -148,49 +266,24 @@ export function isLeaderboardNameVisible() {
   } catch { return true; }
 }
 
-function cleanLeaderboardNameCandidate(value) {
-  const name = String(value || "").replace(/\s+/g, " ").trim();
-  if (!name) return "";
-  if (/^rackler$/i.test(name)) return "";
-  if (/^guest\s*\d+$/i.test(name)) return "";
-  if (/^player\d+$/i.test(name)) return "";
-  if (/^anonymous[_\s-]?user$/i.test(name)) return "";
-  if (/^(undefined|null|nan)$/i.test(name)) return "";
-  if (/^test\s*user$/i.test(name)) return "";
-  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(name)) return "";
-  return name;
-}
-
 export function getLocalPlayerName() {
-  const profile = ST.get("profile", null) || {};
+  const profile = getProfile() || {};
   const session = readSession();
-  const candidates = [
-    profile.displayName,
-    profile.name,
-    session?.name,
-    ST.get("playerName", ""),
-    ST.get("displayName", ""),
-  ];
-  const found = candidates
-    .map(cleanLeaderboardNameCandidate)
-    .find(Boolean);
+  const found = bestProfileName(profile, session);
   return found || "Guest Rackler";
 }
 
 export function getLeaderboardDisplayName(profile = null) {
+  const session = readSession();
+  const activeProfile = profile || getProfile() || {};
+  const found = bestProfileName(activeProfile, session);
+
+  // Logged-in players should never be displayed or shared as Guest Rackler.
+  // If a logged-in account has no name saved, use a readable email-derived fallback.
+  if (session && found) return found;
+
   if (!isLeaderboardNameVisible()) return "Guest Rackler";
-  const candidates = [
-    profile?.displayName,
-    profile?.name,
-    getProfile()?.displayName,
-    getProfile()?.name,
-    readSession()?.name,
-    ST.get("playerName", ""),
-    ST.get("displayName", ""),
-  ];
-  const found = candidates
-    .map(cleanLeaderboardNameCandidate)
-    .find(Boolean);
+
   return found || "Guest Rackler";
 }
 
@@ -218,10 +311,10 @@ export function setStreak(n) { ST.set("str", n); }
 
 export function isDailyResultForToday(result) {
   if (!result) return false;
-  const today      = getDailySeed();
+  const today = getDailySeed();
   const resultSeed = Number(result?.daySeed || result?.day_seed || 0) || null;
   const completedDate = result.completedDate || result.rkCompletedDate || null;
-  const playedToday   = completedDate
+  const playedToday = completedDate
     ? completedDate === todayDateKey()
     : sameLocalDay(result?.ts || 0, Date.now());
   if (resultSeed) return resultSeed === today && playedToday;
@@ -229,7 +322,7 @@ export function isDailyResultForToday(result) {
 }
 
 export function getTodayDailyResult() {
-  const today  = getDailySeed();
+  const today = getDailySeed();
   const stored = ST.get("dres", null);
   if (ST.get("dd", null) === today && isDailyResultForToday(stored)) return stored;
   return null;
@@ -243,7 +336,7 @@ export function saveDailyResult(result) {
 }
 
 export function clearStaleDailyResult() {
-  const today  = getDailySeed();
+  const today = getDailySeed();
   const stored = ST.get("dres", null);
   if (ST.get("dd", null) !== today) ST.set("dd", null);
   if (stored && !isDailyResultForToday(stored)) ST.set("dres", null);
@@ -252,20 +345,20 @@ export function clearStaleDailyResult() {
 // ── Streak badges ─────────────────────────────────────────────────────────────
 
 const STREAK_BADGES = [
-  { days: 3,   badge: "⚡",  title: "Sparked",           desc: "3-day streak"   },
-  { days: 5,   badge: "🎲",  title: "Feeling Lucky",     desc: "5-day streak"   },
-  { days: 7,   badge: "🎯",  title: "Week Warrior",      desc: "7-day streak"   },
-  { days: 9,   badge: "🌱",  title: "Taking Root",       desc: "9-day streak"   },
-  { days: 11,  badge: "🎸",  title: "On A Roll",         desc: "11-day streak"  },
-  { days: 14,  badge: "🧠",  title: "Sharp Mind",        desc: "14-day streak"  },
-  { days: 21,  badge: "🌙",  title: "Three Weeks",       desc: "21-day streak"  },
-  { days: 30,  badge: "💎",  title: "Monthly Master",    desc: "30-day streak"  },
-  { days: 50,  badge: "🌟",  title: "Half Century",      desc: "50-day streak"  },
-  { days: 60,  badge: "🏯",  title: "The Regular",       desc: "60-day streak"  },
-  { days: 90,  badge: "🧬",  title: "In The DNA",        desc: "90-day streak"  },
-  { days: 100, badge: "🏆",  title: "Century",           desc: "100-day streak" },
-  { days: 150, badge: "👑",  title: "Royalty",           desc: "150-day streak" },
-  { days: 200, badge: "🐐",  title: "Greatest",          desc: "200-day streak" },
+  { days: 3, badge: "⚡", title: "Sparked", desc: "3-day streak" },
+  { days: 5, badge: "🎲", title: "Feeling Lucky", desc: "5-day streak" },
+  { days: 7, badge: "🎯", title: "Week Warrior", desc: "7-day streak" },
+  { days: 9, badge: "🌱", title: "Taking Root", desc: "9-day streak" },
+  { days: 11, badge: "🎸", title: "On A Roll", desc: "11-day streak" },
+  { days: 14, badge: "🧠", title: "Sharp Mind", desc: "14-day streak" },
+  { days: 21, badge: "🌙", title: "Three Weeks", desc: "21-day streak" },
+  { days: 30, badge: "💎", title: "Monthly Master", desc: "30-day streak" },
+  { days: 50, badge: "🌟", title: "Half Century", desc: "50-day streak" },
+  { days: 60, badge: "🏯", title: "The Regular", desc: "60-day streak" },
+  { days: 90, badge: "🧬", title: "In The DNA", desc: "90-day streak" },
+  { days: 100, badge: "🏆", title: "Century", desc: "100-day streak" },
+  { days: 150, badge: "👑", title: "Royalty", desc: "150-day streak" },
+  { days: 200, badge: "🐐", title: "Greatest", desc: "200-day streak" },
 ];
 
 export function getStreakBadge(streak) {
