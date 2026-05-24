@@ -1,0 +1,39 @@
+{
+  "name": "rackle-v2",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "validate:scoring": "RACKLE_QA_SUMMARY=1 node src/engine/charleston-scoring-validation.js",
+    "validate:incoming": "node src/engine/incoming-tiles-validation.js",
+    "validate:score-distribution": "node src/engine/score-distribution-validation.js",
+    "validate:passes": "node src/engine/pass-recommendation-validation.js",
+    "validate:card-lines": "node src/engine/card-line-validation.js",
+    "validate:score-distribution:deep": "RACKLE_SCORE_DISTRIBUTION_GAMES=1000 node src/engine/score-distribution-validation.js",
+    "validate:rack-state": "node src/engine/rack-state-validation.js",
+    "validate:daily-determinism": "node src/engine/daily-determinism-validation.js",
+    "validate:practice-variety": "node src/engine/practice-variety-validation.js",
+    "validate:game-engine": "node src/engine/game-engine-validation.js",
+    "validate:game-engine:deep": "node src/engine/game-engine-validation.js --deep",
+    "validate:scoring:verbose": "node src/engine/charleston-scoring-validation.js"
+  },
+  "dependencies": {
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^10.3.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.6.0",
+    "vite": "^8.0.12"
+  }
+}

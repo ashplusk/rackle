@@ -1,0 +1,93 @@
+/* ─── Rackle v2 Design Tokens ────────────────────────────────────────────── */
+/* Single source of truth. All colours, type, spacing, radius, shadow.       */
+/* Never hardcode a value in a component — always reference a token.          */
+
+:root {
+
+  /* ── Page backgrounds ──────────────────────────────────────────────────── */
+  --color-bg-page:      #F5F2EC;
+  --color-surface:      #FFFFFF;
+  --color-surface-2:    #EDE7DA;
+  --color-surface-dark: #062B18;
+
+  /* ── Text ──────────────────────────────────────────────────────────────── */
+  --color-ink:          #1A1410;
+  --color-ink-muted:    #6B6157;
+  --color-ink-subtle:   #9A8F85;
+  --color-ink-inverse:  #FFFFFF;
+
+  /* ── Brand accents ─────────────────────────────────────────────────────── */
+  --color-jade:         #176B42;
+  --color-jade-light:   rgba(23, 107, 66, 0.06);
+  --color-jade-mid:     rgba(23, 107, 66, 0.12);
+  --color-gold:         #A07828;
+  --color-gold-light:   rgba(160, 120, 40, 0.12);
+  --color-cinn:         #B02A2A;
+  --color-cinn-light:   rgba(176, 42, 42, 0.08);
+
+  /* ── Tagline ───────────────────────────────────────────────────────────── */
+  --color-tagline:      #7A8C6E;
+
+  /* ── Borders ───────────────────────────────────────────────────────────── */
+  --color-border:       #DDD6C8;
+  --color-border-soft:  rgba(26, 20, 16, 0.08);
+  --color-border-gold:  rgba(160, 120, 40, 0.28);
+
+  /* ── Score card gradient (dark surface) ────────────────────────────────── */
+  --gradient-score-card: linear-gradient(150deg, #062B18 0%, #0D4A2E 55%, #051F11 100%);
+  --gradient-hero:       linear-gradient(160deg, #0D3D22, #176B42, #0A2918);
+
+  /* ── Typography ────────────────────────────────────────────────────────── */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body:    'Nunito', 'Segoe UI', sans-serif;
+
+  /* ── Type scale ────────────────────────────────────────────────────────── */
+  --text-2xs:  9px;
+  --text-xs:   10px;
+  --text-sm:   12px;
+  --text-base: 14px;
+  --text-md:   16px;
+  --text-lg:   20px;
+  --text-xl:   24px;
+  --text-2xl:  32px;
+  --text-3xl:  48px;
+
+  /* ── Spacing (4px base) ────────────────────────────────────────────────── */
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-8:   32px;
+  --space-10:  40px;
+  --space-12:  48px;
+  --space-16:  64px;
+
+  /* ── Border radius ─────────────────────────────────────────────────────── */
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   18px;
+  --radius-xl:   24px;
+  --radius-2xl:  32px;
+  --radius-full: 999px;
+
+  /* ── Shadows ───────────────────────────────────────────────────────────── */
+  --shadow-sm:  0 1px 4px rgba(26, 20, 16, 0.06);
+  --shadow-md:  0 4px 14px rgba(26, 20, 16, 0.08);
+  --shadow-lg:  0 8px 24px rgba(26, 20, 16, 0.10);
+  --shadow-xl:  0 16px 40px rgba(26, 20, 16, 0.12);
+
+  /* ── Motion ────────────────────────────────────────────────────────────── */
+  --ease-out:       cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:        cubic-bezier(0.4, 0, 1, 1);
+  --duration-fast:  120ms;
+  --duration-base:  200ms;
+  --duration-slow:  350ms;
+
+  /* ── Layout ────────────────────────────────────────────────────────────── */
+  --max-width:       480px;
+  --header-height:   62px;
+  --page-padding-x:  18px;
+  --page-padding-b:  56px;
+}
