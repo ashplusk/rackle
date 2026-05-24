@@ -1,0 +1,371 @@
+/* ─── Rackle v2 Responsive Fit Layer ────────────────────────────────────────── */
+/* Global sizing polish for phones and tablets. Keep this file imported after
+   tokens.css and components.css so these rules can safely tighten the app. */
+
+:root {
+  --max-width: min(100vw, 460px);
+  --page-padding-x: clamp(12px, 4vw, 18px);
+  --page-padding-b: clamp(38px, 8vw, 56px);
+
+  --text-2xs: clamp(8px, 2.2vw, 9px);
+  --text-xs: clamp(9px, 2.45vw, 10px);
+  --text-sm: clamp(11px, 2.95vw, 12px);
+  --text-base: clamp(13px, 3.35vw, 14px);
+  --text-md: clamp(14px, 3.85vw, 16px);
+  --text-lg: clamp(17px, 4.8vw, 20px);
+  --text-xl: clamp(20px, 5.8vw, 24px);
+  --text-2xl: clamp(26px, 7.6vw, 32px);
+  --text-3xl: clamp(36px, 10.6vw, 48px);
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  min-width: 0;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+.rk-app-shell,
+.rk-page,
+.rk-header,
+.rk-footer {
+  max-width: var(--max-width);
+}
+
+.rk-page,
+.rk-header,
+.rk-footer {
+  min-width: 0;
+}
+
+.rk-page {
+  padding-left: max(var(--page-padding-x), env(safe-area-inset-left));
+  padding-right: max(var(--page-padding-x), env(safe-area-inset-right));
+}
+
+.rk-game,
+.rk-game-screen,
+.rk-app-shell--game .rk-page,
+.rk-app-shell--practice .rk-page {
+  width: 100%;
+  min-height: 100dvh;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.rk-app-shell--game .rk-page,
+.rk-app-shell--practice .rk-page {
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+}
+
+.rk-btn,
+.rk-btn--play,
+.rk-footer-action,
+.rk-header-menu-item,
+.rk-header-menu-profile,
+.rk-header-menu-join {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.rk-btn,
+.rk-btn--play {
+  min-height: 44px;
+  white-space: normal;
+  line-height: 1.15;
+}
+
+.rk-card,
+.rk-card-dark,
+.rk-hero-card,
+.rk-room__card,
+.rk-practice-card__inner,
+.rk-score-hero,
+.rk-sc-feature-card,
+.rk-sc-section,
+.rk-sc-share-card,
+.rk-game-notice,
+.rk-section-select {
+  max-width: 100%;
+}
+
+.rk-hero-card__rack,
+.rk-game-intro__rack,
+.rk-game-rack,
+.rk-game-courtesy-rack,
+.rk-game-notice__tiles-row,
+.rk-section-select__rack,
+.rk-continue__rack,
+.rk-sc-final-rack,
+.rk-sc-pass__tiles,
+.rk-continue__tiles {
+  max-width: 100%;
+  overflow-x: visible;
+}
+
+/* Tile sizing. The tile component keeps its current design while these rules
+   gently scale the footprints down on narrower phones. */
+.rk-premium-game-tile--md {
+  width: clamp(38px, 11vw, 48px);
+  min-width: clamp(38px, 11vw, 48px);
+}
+
+.rk-premium-game-tile--sm {
+  width: clamp(31px, 8.8vw, 38px);
+  min-width: clamp(31px, 8.8vw, 38px);
+}
+
+.rk-premium-game-tile--xs {
+  width: clamp(25px, 7vw, 30px);
+  min-width: clamp(25px, 7vw, 30px);
+}
+
+@media (max-width: 430px) {
+  :root {
+    --page-padding-x: 14px;
+    --page-padding-b: 44px;
+    --space-5: 18px;
+    --space-6: 20px;
+    --space-8: 26px;
+    --space-10: 32px;
+    --space-12: 38px;
+    --space-16: 52px;
+    --radius-xl: 20px;
+    --radius-2xl: 26px;
+  }
+
+  .rk-header {
+    min-height: 66px;
+    padding-top: 8px;
+    padding-bottom: 10px;
+  }
+
+  .rk-header-left,
+  .rk-header-right {
+    width: 38px;
+  }
+
+  .rk-header-wordmark {
+    font-size: 30px;
+  }
+
+  .rk-header-tagline {
+    font-size: 10px;
+    letter-spacing: 0.065em;
+  }
+
+  .rk-header-back,
+  .rk-header-streak,
+  .rk-header-menu-btn,
+  .rk-header-slot-spacer {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+  }
+
+  .rk-home {
+    gap: var(--space-6);
+  }
+
+  .rk-hero {
+    padding-top: var(--space-4);
+  }
+
+  .rk-hero-card,
+  .rk-room__card,
+  .rk-practice-card__inner,
+  .rk-card,
+  .rk-card-dark {
+    padding: var(--space-5);
+    border-radius: var(--radius-xl);
+  }
+
+  .rk-hero-card {
+    gap: var(--space-3);
+  }
+
+  .rk-hero-card__title {
+    line-height: 1.06;
+  }
+
+  .rk-btn,
+  .rk-btn--play {
+    padding: 11px 16px;
+    font-size: 13px;
+  }
+
+  .rk-score-hero {
+    max-width: 292px;
+    padding: 20px 22px;
+  }
+
+  .rk-footer {
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-6);
+  }
+
+  .rk-footer-actions {
+    gap: 8px;
+  }
+
+  .rk-footer-action {
+    min-height: 38px;
+    padding-inline: 13px;
+    font-size: 11px;
+  }
+
+  .rk-game-brand,
+  .rk-game-copy,
+  .rk-game-tools,
+  .rk-game-tray,
+  .rk-game-cta,
+  .rk-game-rack-wrap,
+  .rk-section-select,
+  .rk-game-notice,
+  .rk-continue {
+    max-width: 100%;
+  }
+
+  .rk-game-copy--card,
+  .rk-game-notice,
+  .rk-section-select,
+  .rk-continue,
+  .rk-game-tray {
+    padding: 16px;
+    border-radius: 22px;
+  }
+
+  .rk-game-brand__wordmark {
+    font-size: clamp(30px, 9vw, 36px);
+  }
+
+  .rk-game-brand__tagline {
+    font-size: 10px;
+  }
+
+  .rk-game-copy__title,
+  .rk-section-select__title,
+  .rk-game-notice__title {
+    font-size: var(--text-xl);
+  }
+
+  .rk-game-rack,
+  .rk-game-courtesy-rack,
+  .rk-section-select__rack,
+  .rk-continue__rack,
+  .rk-sc-final-rack {
+    gap: 6px;
+  }
+
+  .rk-sc-page {
+    max-width: 100%;
+  }
+
+  .rk-sc-feature-card,
+  .rk-sc-section,
+  .rk-sc-share-card {
+    padding: 16px;
+    border-radius: 22px;
+  }
+
+  .rk-sc-score-ring {
+    transform: scale(0.92);
+    transform-origin: center;
+  }
+
+  .rk-sc-headline__h,
+  .rk-sc-section__h {
+    font-size: var(--text-lg);
+  }
+
+  .rk-sc-ranks,
+  .rk-sc-control-split,
+  .rk-sc-share-card__actions {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 390px) {
+  :root {
+    --page-padding-x: 12px;
+    --text-base: 13px;
+    --text-md: 14px;
+    --text-lg: 17px;
+    --text-xl: 20px;
+    --text-2xl: 26px;
+    --space-6: 18px;
+    --space-8: 24px;
+  }
+
+  .rk-page {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+
+  .rk-header {
+    min-height: 62px;
+  }
+
+  .rk-header-wordmark {
+    font-size: 28px;
+  }
+
+  .rk-header-tagline {
+    font-size: 9px;
+  }
+
+  .rk-hero-card,
+  .rk-room__card,
+  .rk-practice-card__inner,
+  .rk-card,
+  .rk-card-dark,
+  .rk-game-notice,
+  .rk-section-select,
+  .rk-continue,
+  .rk-sc-feature-card,
+  .rk-sc-section,
+  .rk-sc-share-card {
+    padding: 14px;
+  }
+
+  .rk-hero-card__pill,
+  .rk-pill,
+  .rk-hero-card__tag {
+    padding-inline: 10px;
+  }
+
+  .rk-btn,
+  .rk-btn--play {
+    padding-inline: 14px;
+  }
+
+  .rk-premium-game-tile--md {
+    width: clamp(35px, 10.4vw, 42px);
+    min-width: clamp(35px, 10.4vw, 42px);
+  }
+
+  .rk-premium-game-tile--sm {
+    width: clamp(29px, 8.2vw, 34px);
+    min-width: clamp(29px, 8.2vw, 34px);
+  }
+
+  .rk-premium-game-tile--xs {
+    width: clamp(23px, 6.7vw, 28px);
+    min-width: clamp(23px, 6.7vw, 28px);
+  }
+}
+
+@media (min-width: 700px) {
+  :root {
+    --max-width: 500px;
+  }
+}
