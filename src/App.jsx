@@ -79,6 +79,49 @@ function getInitialRoute() {
   return { screen, params };
 }
 
+function toSafeArray(value) {
+  if (Array.isArray(value)) return value;
+  if (value === null || value === undefined || value === "") return [];
+  return [value];
+}
+
+function normalizeScorecardResult(rawResult) {
+  if (!rawResult || typeof rawResult !== "object") return rawResult || null;
+
+  const bestPaths = toSafeArray(rawResult.bestPaths).map(path => {
+    if (!path || typeof path !== "object") return path;
+    return {
+      ...path,
+      supportingTiles: toSafeArray(path.supportingTiles),
+      missingNeeds: toSafeArray(path.missingNeeds),
+      deadTiles: toSafeArray(path.deadTiles),
+    };
+  });
+
+  const passAnalysis = toSafeArray(rawResult.passAnalysis).map(entry => {
+    if (!entry || typeof entry !== "object") return entry;
+    return {
+      ...entry,
+      betterPassCandidate: toSafeArray(entry.betterPassCandidate),
+      tilesYouProtectedWell: toSafeArray(entry.tilesYouProtectedWell),
+      questionableKeep: toSafeArray(entry.questionableKeep),
+    };
+  });
+
+  return {
+    ...rawResult,
+    bestPaths,
+    passAnalysis,
+    passLog: toSafeArray(rawResult.passLog),
+    allSections: toSafeArray(rawResult.allSections),
+    finalRack: toSafeArray(rawResult.finalRack),
+    startingRack: toSafeArray(rawResult.startingRack),
+    whatHeldYouBack: toSafeArray(rawResult.whatHeldYouBack),
+    nearMisses: toSafeArray(rawResult.nearMisses),
+    defensibleAlternatives: toSafeArray(rawResult.defensibleAlternatives),
+  };
+}
+
 export default function App() {
   const initialRoute = getInitialRoute();
   const [screen, setScreenState] = useState(initialRoute.screen);
@@ -132,6 +175,8 @@ export default function App() {
   // Shared setScreen helper passed to all screens
   function setScreen(s, p) { go(s, p); }
 
+  const scorecardResult = normalizeScorecardResult(params.result || getTodayDailyResult());
+
   return (
     <TileThemeProvider>
       <div className={`rk-app-shell rk-app-shell--${screen}`}>
@@ -163,7 +208,7 @@ export default function App() {
         )}
         {(screen === "scorecard" || screen === "dailyScorecard") && (
           <DailyScorecard
-            result={params.result || getTodayDailyResult()}
+            result={scorecardResult}
             mode={params.mode || "daily"}
             setScreen={setScreen}
           />
