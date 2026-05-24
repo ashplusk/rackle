@@ -11,9 +11,9 @@ import {
 } from "../../engine/game.js";
 import {
   getDailySeed, getDayNum, getProfile, getClubCode, getPlayerId, getLeaderboardDisplayName,
-  saveDailyResult, addHistory, getStreak, setStreak, ST, ensureAuthenticatedPlayerId,
+  saveDailyResult, addHistory, getStreak, setStreak, ST,
 } from "../../engine/storage.js";
-import { postScore, migrateDailyLeaderboardIdentity } from "../../engine/leaderboard.js";
+import { postScore } from "../../engine/leaderboard.js";
 import { HANDS_2026 } from "./HandBrowser.jsx";
 import { trackRackleEvent, getScoreBand, getClubState } from "../../engine/analytics.js";
 
@@ -464,29 +464,16 @@ export default function Game({ mode = "daily", setScreen }) {
       saveDailyResult(result);
       try { localStorage.setItem("rackleHasCompletedFirstDaily", "true"); } catch {}
       setStreak(getStreak() + 1);
-      const identity = ensureAuthenticatedPlayerId();
-      const latestProfile = identity.profile || getProfile() || profile;
-      const pid = identity.playerId || getPlayerId();
-      const playerName = getLeaderboardDisplayName(latestProfile);
-      const postPayload = {
+      const pid = getPlayerId();
+      await postScore({
         playerId: pid,
-        name: playerName,
-        iqScore: iq.totalScore,
+        name:     getLeaderboardDisplayName(profile),
+        iqScore:  iq.totalScore,
         timeSecs: totalSecs,
-        clubCode: latestProfile?.clubCode || latestProfile?.club_code || clubCode,
+        clubCode,
         seed,
-        profile: latestProfile,
-      };
-
-      if (identity.previousGuestId) {
-        await migrateDailyLeaderboardIdentity({
-          fromPlayerId: identity.previousGuestId,
-          toPlayerId: pid,
-          ...postPayload,
-        }).catch(() => postScore(postPayload).catch(() => false));
-      } else {
-        await postScore(postPayload).catch(() => false);
-      }
+        profile,
+      }).catch(() => false);
     }
 
     addHistory(result);

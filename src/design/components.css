@@ -16672,136 +16672,96 @@ body,
   }
 }
 
-/* ── iPhone launch correction: reduce oversized text and keep scorecard stable ── */
-@media (max-width: 430px) {
-  :root {
-    --text-base: 13px;
-    --text-md: 15px;
-    --text-lg: 18px;
-    --text-xl: 21px;
-    --text-2xl: 27px;
-    --text-3xl: 38px;
+/* ── Launch mobile spacing + title scale polish ─────────────────────────
+   Keeps the homepage calm on iPhone 14 and aligns section titles with the
+   played-score read headline scale instead of oversized hero typography. */
+.rk-header--home {
+  margin-bottom: clamp(14px, 3.8vw, 28px) !important;
+}
+
+.rk-home--v2 .rk-hero,
+.rk-home--v2 .rk-hero--played {
+  margin-top: clamp(8px, 2.8vw, 18px) !important;
+}
+
+.rk-table-board__title,
+.rk-practice-card__title,
+.rk-player-identity__title,
+.rk-club-directory-preview__title {
+  font-size: clamp(30px, 5.2vw, 38px) !important;
+  line-height: 0.98 !important;
+  letter-spacing: -0.018em !important;
+  text-wrap: balance;
+}
+
+@media (max-width: 640px) {
+  .rk-header--home {
+    min-height: 124px !important;
+    padding-bottom: 18px !important;
+    margin-bottom: 18px !important;
   }
 
-  body {
-    font-size: 13px;
+  .rk-header--home .rk-header-centre {
+    top: 56px !important;
   }
 
-  .rk-header {
-    min-height: 68px;
-    padding-top: 8px;
-    padding-bottom: 10px;
+  .rk-home,
+  .rk-home--v2 {
+    gap: 26px !important;
   }
 
-  .rk-header-wordmark {
-    font-size: 30px !important;
+  .rk-home--v2 .rk-hero,
+  .rk-home--v2 .rk-hero--played {
+    margin-top: 8px !important;
   }
 
-  .rk-header-tagline {
-    font-size: 10px !important;
-    letter-spacing: 0.075em;
-  }
-
-  .rk-home--v2,
-  .rk-page {
-    font-size: 13px;
-  }
-
-  .rk-hero-copy h1,
-  .rk-daily-hero-card__title,
   .rk-table-board__title,
   .rk-practice-card__title,
-  .rk-club-directory-preview__title,
-  .rk-state-card__title,
-  .rk-sc-headline__h,
-  .rk-sc-section__h,
-  .rk-game-copy__title,
-  .rk-section-select__title,
-  .rk-feedback-card__title,
-  .rk-club-signup-card__title,
-  .rk-auth__intro h1,
-  .rk-static-hero__title {
-    font-size: clamp(30px, 9.6vw, 40px) !important;
-    line-height: 0.98 !important;
-    letter-spacing: -0.045em !important;
+  .rk-player-identity__title,
+  .rk-club-directory-preview__title {
+    max-width: 330px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    font-size: clamp(25px, 7vw, 30px) !important;
+    line-height: 1.02 !important;
+    letter-spacing: -0.012em !important;
   }
 
-  .rk-daily-hero-card__subtitle,
+  .rk-table-board__card-intro,
+  .rk-practice-card__copy,
+  .rk-club-directory-preview__intro,
+  .rk-player-identity__head {
+    text-align: center !important;
+  }
+
   .rk-table-board__subcopy,
-  .rk-practice-card__body,
-  .rk-state-card__body,
-  .rk-sc-headline__copy,
-  .rk-sc-section__subcopy,
-  .rk-game-copy__body,
-  .rk-feedback-card__copy,
-  .rk-club-signup-card__copy {
+  .rk-practice-card__sub,
+  .rk-club-directory-preview__sub {
     font-size: 13px !important;
-    line-height: 1.45 !important;
-  }
-
-  .rk-hero-table {
-    min-height: 220px !important;
-  }
-
-  .rk-sc-page {
-    padding-inline: 12px !important;
-  }
-
-  .rk-sc-score-ring {
-    width: 132px !important;
-    height: 132px !important;
-  }
-
-  .rk-sc-score-ring__num {
-    font-size: 50px !important;
-  }
-
-  .rk-sc-feature-card,
-  .rk-sc-section,
-  .rk-sc-share-card,
-  .rk-table-board,
-  .rk-practice-card--v2 {
-    border-radius: 24px !important;
-  }
-
-  .rk-sc-hero {
-    padding: 22px 14px 14px !important;
-  }
-
-  .rk-sc-headline {
-    padding: 0 14px 18px !important;
-  }
-
-  .rk-sc-section {
-    padding: 16px !important;
-  }
-
-  .rk-sc-final-rack,
-  .rk-sc-pass__tiles,
-  .rk-game-rack,
-  .rk-rack {
-    gap: 4px !important;
+    line-height: 1.42 !important;
   }
 }
 
-@media (max-width: 390px) {
-  .rk-hero-copy h1,
-  .rk-daily-hero-card__title,
+@media (max-width: 430px) {
+  .rk-header--home {
+    min-height: 118px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .rk-header--home .rk-header-wordmark {
+    font-size: 48px !important;
+  }
+
+  .rk-header--home .rk-header-tagline {
+    font-size: 10px !important;
+    letter-spacing: 0.13em !important;
+  }
+
   .rk-table-board__title,
   .rk-practice-card__title,
-  .rk-state-card__title,
-  .rk-sc-headline__h,
-  .rk-game-copy__title,
-  .rk-section-select__title {
-    font-size: clamp(28px, 9vw, 36px) !important;
-  }
-
-  .rk-sc-score-ring {
-    width: 120px !important;
-    height: 120px !important;
-  }
-
-  .rk-sc-score-ring__num {
-    font-size: 46px !important;
+  .rk-player-identity__title,
+  .rk-club-directory-preview__title {
+    font-size: clamp(24px, 7vw, 29px) !important;
+    max-width: 300px !important;
   }
 }
