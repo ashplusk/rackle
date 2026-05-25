@@ -9,6 +9,7 @@ import {
 } from "../../engine/storage.js";
 import { getIQTier } from "../../engine/scoring.js";
 import { getClubs, postScore, removeLeaderboardScore } from "../../engine/leaderboard.js";
+import { upsertProfile } from "../../engine/supabase.js";
 
 function splitName(name = "") {
   const parts = String(name || "").trim().split(/\s+/).filter(Boolean);
@@ -26,21 +27,37 @@ function updateStoredAccountProfile(profile) {
   const email = String(profile?.email || "").trim().toLowerCase();
   if (!email) return;
   const accounts = ST.get("accounts", {});
-  if (!accounts[email]) return;
   accounts[email] = {
-    ...accounts[email],
-    profile: { ...accounts[email].profile, ...profile },
+    ...(accounts[email] || {}),
+    profile: { ...(accounts[email]?.profile || {}), ...profile },
+    updatedAt: Date.now(),
   };
   ST.set("accounts", accounts);
+}
+
+function forceLocalDisplayName(profile) {
+  const name = String(profile?.displayName || profile?.display_name || profile?.name || "").trim();
+  if (!name) return;
+
+  ST.set("playerName", name);
+  ST.set("displayName", name);
+
+  try {
+    localStorage.setItem("rackleShowNameOnLeaderboard", JSON.stringify(true));
+  } catch {}
 }
 
 async function syncTodayLeaderboardName(profile) {
   const result = getTodayDailyResult();
   const score = result?.iqScore ?? result?.totalScore ?? null;
   if (score === null || score === undefined) return;
+
+  const playerId = profile?.playerId || profile?.player_id || profile?.id || getPlayerId();
+  const displayName = profile?.displayName || profile?.display_name || profile?.name || getLeaderboardDisplayName(profile);
+
   await postScore({
-    playerId: getPlayerId(),
-    name: getLeaderboardDisplayName(profile),
+    playerId,
+    name: displayName,
     iqScore: score,
     timeSecs: result?.time ?? result?.timeSecs ?? result?.time_secs ?? null,
     clubCode: profile?.clubCode || profile?.club_code || getClubCode(),
@@ -51,11 +68,11 @@ async function syncTodayLeaderboardName(profile) {
 
 export default function Profile({ setScreen }) {
   const storedProfile = getProfile() || {};
-  const split = splitName(storedProfile.name);
+  const split = splitName(storedProfile.displayName || storedProfile.display_name || storedProfile.name);
   const [profile, setProfileState] = useState(storedProfile);
   const [editing, setEditing] = useState(!storedProfile.name && !storedProfile.email);
-  const [firstName, setFirstName] = useState(storedProfile.firstName || split.firstName || "");
-  const [lastName, setLastName] = useState(storedProfile.lastName || split.lastName || "");
+  const [firstName, setFirstName] = useState(storedProfile.firstName || storedProfile.first_name || split.firstName || "");
+  const [lastName, setLastName] = useState(storedProfile.lastName || storedProfile.last_name || split.lastName || "");
   const [email, setEmail] = useState(storedProfile.email || "");
   const [saveMsg, setSaveMsg] = useState("");
 
@@ -71,7 +88,7 @@ export default function Profile({ setScreen }) {
     ? Math.round(history.reduce((s, h) => s + (h.iqScore || 0), 0) / history.length)
     : null;
   const totalGames = history.length;
-  const displayName = profile.name || profile.email || "Rackle Player";
+  const displayName = profile.displayName || profile.display_name || profile.name || profile.email || "Rackle Player";
   const initial = displayName.charAt(0).toUpperCase();
 
   async function saveAccount(e) {
@@ -80,37 +97,68 @@ export default function Profile({ setScreen }) {
     const cleanEmail = email.trim().toLowerCase();
     if (!name || name.length < 2) return;
     if (cleanEmail && !cleanEmail.includes("@")) return;
+
+    const playerId = profile.playerId || profile.player_id || profile.id || getPlayerId();
     const updated = {
       ...profile,
-      playerId: profile.playerId || profile.player_id || getPlayerId(),
+      id: profile.id || playerId,
+      playerId,
+      player_id: playerId,
       firstName: firstName.trim(),
+      first_name: firstName.trim(),
       lastName: lastName.trim(),
+      last_name: lastName.trim(),
       name,
+      fullName: name,
+      full_name: name,
+      displayName: name,
+      display_name: name,
       email: cleanEmail || profile.email || "",
+      clubCode: profile.clubCode || profile.club_code || getClubCode(),
     };
+
+    // Update local state immediately so the UI changes as soon as Save is tapped.
     setProfile(updated);
     writeSession(updated);
+    forceLocalDisplayName(updated);
     updateStoredAccountProfile(updated);
-    await syncTodayLeaderboardName(updated);
     setProfileState(updated);
+
+    try {
+      await upsertProfile(updated);
+      await syncTodayLeaderboardName(updated);
+      setSaveMsg("Saved");
+    } catch (error) {
+      if (import.meta.env?.DEV) console.warn("Profile save failed", error);
+      setSaveMsg("Saved locally. Sync will retry after redeploy.");
+    }
+
     setEditing(false);
-    setSaveMsg("Saved");
-    setTimeout(() => setSaveMsg(""), 2000);
+    setTimeout(() => setSaveMsg(""), 2500);
   }
 
   async function leaveClub() {
     const previousClub = getClubCode();
     setClubCode(null);
-    const updated = { ...profile, playerId: profile.playerId || profile.player_id || getPlayerId(), clubCode: null, clubName: null };
+    const updated = {
+      ...profile,
+      playerId: profile.playerId || profile.player_id || profile.id || getPlayerId(),
+      clubCode: null,
+      club_code: null,
+      clubName: null,
+      club_name: null,
+    };
     setProfile(updated);
     writeSession(updated);
+    forceLocalDisplayName(updated);
     updateStoredAccountProfile(updated);
+    await upsertProfile(updated).catch(() => null);
     setProfileState(updated);
 
     const result = getTodayDailyResult();
     if (previousClub && result) {
       await removeLeaderboardScore({
-        playerId: getPlayerId(),
+        playerId: updated.playerId,
         seed: result?.daySeed || result?.day_seed || getDailySeed(),
         clubCode: previousClub,
       }).catch(() => false);
