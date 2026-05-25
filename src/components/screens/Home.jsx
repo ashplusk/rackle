@@ -31,6 +31,7 @@ import { trackRackleEvent, getScoreBand, getClubState } from "../../engine/analy
 import "../../design/home-hero-v2.css";
 import "../../design/home-hero-tiles-polish.css";
 import "../../design/home-scorecard-polish.css";
+import "../../design/home-leaderboard-polish.css";
 
 const STREAK_EMOJIS = {
   1: "🌱",
