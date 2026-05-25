@@ -59,6 +59,10 @@ function getOrigin() {
   return window.location.origin || "https://playrackle.com";
 }
 
+function isUuid(value) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(value || ""));
+}
+
 export function getResetPasswordRedirectUrl() {
   return `${getOrigin()}/reset-password`;
 }
@@ -117,7 +121,7 @@ export async function upsertProfile(profile = {}) {
   const name = profile.name || profile.displayName || profile.display_name || profile.full_name || "Rackle Player";
   const body = {
     player_id: playerId,
-    id: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(playerId) ? playerId : null,
+    id: isUuid(playerId) ? playerId : null,
     nickname: name,
     name,
     full_name: profile.fullName || profile.full_name || name,
@@ -184,6 +188,51 @@ export function isRecoveryLink() {
   const search = new URLSearchParams(window.location.search || "");
 
   return hash.get("type") === "recovery" || search.get("type") === "recovery" || Boolean(getRecoveryAccessTokenFromUrl());
+}
+
+// ── Daily result helpers ─────────────────────────────────────────────────────
+export async function fetchTodayDailyResult(playerId, daySeed) {
+  const id = String(playerId || "").trim();
+  const seed = Number(daySeed || 0);
+  if (!id || !seed) return null;
+
+  const identityFilter = isUuid(id)
+    ? `or=(user_id.eq.${encodeURIComponent(id)},player_id.eq.${encodeURIComponent(id)})`
+    : `player_id=eq.${encodeURIComponent(id)}`;
+
+  const rows = await sbFetch(
+    `daily_results?${identityFilter}&day_seed=eq.${encodeURIComponent(seed)}&select=scorecard_json,iq_score,rating,time_secs,streak,club_code,day_seed,created_at&limit=1`
+  ).catch(() => []);
+
+  const row = rows?.[0];
+  if (!row) return null;
+
+  if (row.scorecard_json && typeof row.scorecard_json === "object") {
+    return {
+      ...row.scorecard_json,
+      daySeed: row.scorecard_json.daySeed || row.day_seed || seed,
+      day_seed: row.day_seed || seed,
+      iqScore: row.scorecard_json.iqScore ?? row.iq_score,
+      totalScore: row.scorecard_json.totalScore ?? row.iq_score,
+      time: row.scorecard_json.time ?? row.time_secs,
+      timeSecs: row.scorecard_json.timeSecs ?? row.time_secs,
+      source: row.scorecard_json.source || "supabase",
+    };
+  }
+
+  return {
+    mode: "daily",
+    daySeed: row.day_seed || seed,
+    day_seed: row.day_seed || seed,
+    iqScore: row.iq_score,
+    totalScore: row.iq_score,
+    rating: row.rating || "Table read complete",
+    time: row.time_secs,
+    timeSecs: row.time_secs,
+    streak: row.streak || 0,
+    clubCode: row.club_code || null,
+    source: "supabase",
+  };
 }
 
 // ── Tables reference ──────────────────────────────────────────────────────────
