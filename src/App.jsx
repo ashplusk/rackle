@@ -31,10 +31,10 @@ import TrustPages        from "./components/screens/TrustPages.jsx";
 import "./design/global.css";
 
 // ── No-header screens (full bleed) ───────────────────────────────────────────
-const NO_HEADER_SCREENS = new Set(["game", "login", "signup", "forgot-password"]);
+const NO_HEADER_SCREENS = new Set(["game", "login", "signup", "forgot-password", "reset-password"]);
 
 // ── No-footer screens ─────────────────────────────────────────────────────────
-const NO_FOOTER_SCREENS = new Set(["game", "tutorial", "login", "signup", "forgot-password"]);
+const NO_FOOTER_SCREENS = new Set(["game", "tutorial", "login", "signup", "forgot-password", "reset-password"]);
 
 const PATH_TO_SCREEN = {
   "/": "home",
@@ -49,6 +49,7 @@ const PATH_TO_SCREEN = {
   "/login": "login",
   "/signup": "signup",
   "/forgot-password": "forgot-password",
+  "/reset-password": "reset-password",
 };
 
 const SCREEN_TO_PATH = {
@@ -64,6 +65,7 @@ const SCREEN_TO_PATH = {
   login: "/login",
   signup: "/signup",
   "forgot-password": "/forgot-password",
+  "reset-password": "/reset-password",
 };
 
 function getInitialRoute() {
@@ -240,6 +242,9 @@ export default function App() {
         {screen === "forgot-password" && (
           <Auth mode="forgot" setScreen={setScreen} />
         )}
+        {screen === "reset-password" && (
+          <Auth mode="reset" setScreen={setScreen} />
+        )}
         {screen === "profile" && (
           <Profile setScreen={setScreen} />
         )}
@@ -264,7 +269,7 @@ export default function App() {
         {!([
           "home", "game", "practice", "scorecard", "dailyScorecard", "leaderboard", "clubRoom",
           "clubDirectory", "clubSignup", "foundingClubs", "feedback", "login", "signup", "forgot-password",
-          "profile", "settings", "handBrowser", "tutorial", "privacy", "terms", "trust",
+          "reset-password", "profile", "settings", "handBrowser", "tutorial", "privacy", "terms", "trust",
         ].includes(screen)) && (
           <RackleState
             eyebrow="Rackle"

@@ -1,13 +1,20 @@
 // ─── Rackle v2 · Auth screens ────────────────────────────────────────────────
-// Traditional local auth prototype: login, sign-up, forgot password.
+// Traditional local auth prototype plus Supabase password reset flow.
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ST, getProfile, setProfile, writeSession, getTodayDailyResult, getDailySeed, getClubCode,
   getLeaderboardDisplayName,
 } from "../../engine/storage.js";
 import { migrateDailyLeaderboardIdentity } from "../../engine/leaderboard.js";
 import { trackRackleEvent, getClubState } from "../../engine/analytics.js";
+import {
+  getRecoveryAccessTokenFromUrl,
+  getResetPasswordRedirectUrl,
+  isRecoveryLink,
+  requestPasswordReset,
+  updatePasswordWithAccessToken,
+} from "../../engine/supabase.js";
 
 function normalizeEmail(value) {
   return String(value || "").trim().toLowerCase();
@@ -35,6 +42,22 @@ function updateStoredAccountProfile(profile) {
     profile: { ...accounts[cleanEmail].profile, ...profile },
   };
   saveStoredAccounts(accounts);
+}
+
+function updateStoredAccountPassword(email, password) {
+  const cleanEmail = normalizeEmail(email);
+  if (!cleanEmail || !password) return false;
+
+  const accounts = getStoredAccounts();
+  if (!accounts[cleanEmail]) return false;
+
+  accounts[cleanEmail] = {
+    ...accounts[cleanEmail],
+    password,
+    updatedAt: Date.now(),
+  };
+  saveStoredAccounts(accounts);
+  return true;
 }
 
 function currentGuestPlayerId() {
@@ -65,12 +88,20 @@ function fullName(firstName, lastName) {
 }
 
 function AuthShell({ children, mode, setScreen }) {
-  const title = mode === "signup" ? "Create your Rackle account" : mode === "forgot" ? "Reset your password" : "Log in to Rackle";
-  const copy = mode === "signup"
-    ? "Save your streak, scorecards, club, and leaderboard progress."
-    : mode === "forgot"
-      ? "Enter your email and we’ll send reset instructions."
-      : "Pick up your daily Charleston ritual where you left off.";
+  const title =
+    mode === "signup" ? "Create your Rackle account" :
+    mode === "forgot" ? "Reset your password" :
+    mode === "reset" ? "Choose a new password" :
+    "Log in to Rackle";
+
+  const copy =
+    mode === "signup"
+      ? "Save your streak, scorecards, club, and leaderboard progress."
+      : mode === "forgot"
+        ? "Enter your email and we’ll send reset instructions."
+        : mode === "reset"
+          ? "Enter a new password to get back to your Rackle table."
+          : "Pick up your daily Charleston ritual where you left off.";
 
   return (
     <div className="rk-auth">
@@ -114,6 +145,11 @@ const SIGNUP_ERROR = {
 const FORGOT_ERROR = {
   title: "That email did not work.",
   body: "Enter the email connected to your Rackle account.",
+};
+
+const RESET_ERROR = {
+  title: "Password was not updated.",
+  body: "Open the latest reset link and try again.",
 };
 
 function LoginForm({ setScreen }) {
@@ -300,16 +336,31 @@ function ForgotPasswordForm({ setScreen }) {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [error, setError] = useState(null);
+  const [sending, setSending] = useState(false);
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
     const cleanEmail = normalizeEmail(email);
     if (!cleanEmail || !cleanEmail.includes("@")) {
       setError(FORGOT_ERROR);
       return;
     }
+
+    setSending(true);
     setError(null);
-    setSent(true);
+
+    try {
+      await requestPasswordReset(cleanEmail, getResetPasswordRedirectUrl());
+      setSent(true);
+      trackRackleEvent("password_reset_requested", { source: "forgot_password", isGuest: true });
+    } catch (err) {
+      setError({
+        title: "Reset email was not sent.",
+        body: err?.message || "Check your email and try again.",
+      });
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -318,6 +369,7 @@ function ForgotPasswordForm({ setScreen }) {
         <div className="rk-auth__success">
           <h2>Check your inbox.</h2>
           <p>We sent a reset link if that email has a Rackle account.</p>
+          <p className="rk-auth__fineprint">The link will take you back to Rackle to choose a new password.</p>
         </div>
       ) : (
         <>
@@ -326,7 +378,9 @@ function ForgotPasswordForm({ setScreen }) {
             <span>Email</span>
             <input type="email" autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" />
           </label>
-          <button type="submit" className="rk-auth__primary">Send reset link</button>
+          <button type="submit" className="rk-auth__primary" disabled={sending}>
+            {sending ? "Sending..." : "Send reset link"}
+          </button>
         </>
       )}
       <div className="rk-auth__links rk-auth__links--center">
@@ -336,13 +390,118 @@ function ForgotPasswordForm({ setScreen }) {
   );
 }
 
+function ResetPasswordForm({ setScreen }) {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState(() => normalizeEmail(ST.get("lastResetEmail", "")));
+  const [status, setStatus] = useState(null);
+  const [error, setError] = useState(null);
+  const [saving, setSaving] = useState(false);
+
+  const accessToken = useMemo(() => getRecoveryAccessTokenFromUrl(), []);
+
+  useEffect(() => {
+    if (!isRecoveryLink()) {
+      setError({
+        title: "Reset link is missing.",
+        body: "Open the latest password reset email and try again.",
+      });
+    }
+  }, []);
+
+  async function submit(e) {
+    e.preventDefault();
+
+    if (!password || password.length < 6) {
+      setError({ title: RESET_ERROR.title, body: "Password must be at least 6 characters." });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError({ title: RESET_ERROR.title, body: "Passwords do not match." });
+      return;
+    }
+
+    setSaving(true);
+    setError(null);
+
+    try {
+      await updatePasswordWithAccessToken(accessToken, password);
+
+      // Keep the local prototype password in sync when the account is stored locally.
+      if (email) updateStoredAccountPassword(email, password);
+
+      setStatus("updated");
+      trackRackleEvent("password_reset_completed", { source: "reset_password", isGuest: true });
+
+      try {
+        window.history.replaceState({}, "", "/login");
+      } catch {
+        // Ignore history cleanup failures.
+      }
+    } catch (err) {
+      setError({
+        title: RESET_ERROR.title,
+        body: err?.message || RESET_ERROR.body,
+      });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (status === "updated") {
+    return (
+      <div className="rk-auth__form">
+        <div className="rk-auth__success">
+          <h2>Password updated.</h2>
+          <p>You can now log in with your new password.</p>
+        </div>
+        <button type="button" className="rk-auth__primary" onClick={() => setScreen?.("login")}>
+          Back to login
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <form className="rk-auth__form" onSubmit={submit}>
+      {error && <AuthInlineState title={error.title} body={error.body} />}
+
+      <label className="rk-auth__field">
+        <span>Email <em>optional</em></span>
+        <input type="email" autoComplete="email" value={email} onChange={e => setEmail(normalizeEmail(e.target.value))} placeholder="you@example.com" />
+      </label>
+
+      <label className="rk-auth__field">
+        <span>New password</span>
+        <input type="password" autoComplete="new-password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Create a new password" />
+      </label>
+
+      <label className="rk-auth__field">
+        <span>Confirm new password</span>
+        <input type="password" autoComplete="new-password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Confirm your new password" />
+      </label>
+
+      <button type="submit" className="rk-auth__primary" disabled={saving || !accessToken}>
+        {saving ? "Saving..." : "Update password"}
+      </button>
+
+      <div className="rk-auth__links rk-auth__links--center">
+        <button type="button" onClick={() => setScreen?.("forgot-password")}>Send a new reset link</button>
+      </div>
+    </form>
+  );
+}
+
 export default function Auth({ mode = "login", setScreen }) {
-  const activeMode = mode === "signup" || mode === "forgot" ? mode : "login";
+  const activeMode = mode === "signup" || mode === "forgot" || mode === "reset" ? mode : "login";
+
   return (
     <AuthShell mode={activeMode} setScreen={setScreen}>
       {activeMode === "signup" && <SignupForm setScreen={setScreen} />}
       {activeMode === "login" && <LoginForm setScreen={setScreen} />}
       {activeMode === "forgot" && <ForgotPasswordForm setScreen={setScreen} />}
+      {activeMode === "reset" && <ResetPasswordForm setScreen={setScreen} />}
     </AuthShell>
   );
 }
