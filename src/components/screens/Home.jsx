@@ -51,7 +51,6 @@ const HERO_TILES = [
 ];
 
 const SCORE_TILES = [
-  { value: "2", suit: "DOT", color: "blue", detail: "••" },
   { value: "中", suit: "RED", color: "red", detail: "◆" },
   { value: "6", suit: "BAM", color: "green", detail: "|||" },
 ];
@@ -211,7 +210,7 @@ function SimpleActionHero({
   const score = todayResult?.iqScore ?? todayResult?.totalScore ?? null;
   const tier = score ? getIQTier(score) : null;
   const heroTitle = playedToday ? "Today’s read is in." : "Fresh rack,\nnew Charleston.";
-  const heroSubcopy = playedToday ? "Screenshot it, share it, then see where you landed at the table." : "Play the daily, then compare your read with the table.";
+  const heroSubcopy = playedToday ? "Screenshot it, share it, then see where you landed." : "Play the daily, then compare your read with the table.";
 
   return (
     <section className="rk-home-hero-v2" aria-label="Start playing Rackle">
@@ -225,19 +224,17 @@ function SimpleActionHero({
 
         {playedToday && score ? (
           <div className="rk-home-scorecard" aria-label={`Today’s score ${score} Rackle IQ`}>
-            <div className="rk-home-scorecard__tiles rk-home-scorecard__tiles--left">
+            <div className="rk-home-scorecard__label">Today’s table read</div>
+
+            <div className="rk-home-scorecard__main">
               <HomeHeroTile tile={SCORE_TILES[0]} index={0} variant="score" />
+
+              <div className="rk-home-hero-v2__score rk-home-hero-v2__score--revealing">
+                <span>{score}</span>
+                <small>Rackle IQ</small>
+              </div>
+
               <HomeHeroTile tile={SCORE_TILES[1]} index={1} variant="score" />
-            </div>
-
-            <div className="rk-home-hero-v2__score rk-home-hero-v2__score--revealing">
-              <span>{score}</span>
-              <small>Rackle IQ</small>
-            </div>
-
-            <div className="rk-home-scorecard__tiles rk-home-scorecard__tiles--right">
-              <HomeHeroTile tile={SCORE_TILES[2]} index={2} variant="score" />
-              <span className="rk-home-scorecard__share-chip">Shareable read</span>
             </div>
           </div>
         ) : (
@@ -281,7 +278,6 @@ function SimpleActionHero({
           {clubRank && <span>Club #{clubRank}</span>}
           {streak > 0 && <span>{getHomepageStreakEmoji(streak)} {streak}-day streak</span>}
           {!playedToday && <span>{isGuest ? "Guest table ready" : `Welcome back, ${playerName}`}</span>}
-          {playedToday && <span>Ready to share with your table</span>}
         </div>
 
         {playedToday && (
