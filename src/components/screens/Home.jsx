@@ -17,6 +17,7 @@ import {
   getClubCode,
   getTodayDailyResult,
   isDailyResultForToday,
+  saveDailyResult,
   getStreak,
   getHistory,
   getDayNum,
@@ -24,6 +25,7 @@ import {
   getPlayerId,
   getLeaderboardDisplayName,
 } from "../../engine/storage.js";
+import { fetchTodayDailyResult as fetchSupabaseTodayDailyResult } from "../../engine/supabase.js";
 import { buildShareText, getIQTier } from "../../engine/scoring.js";
 import { trackRackleEvent, getScoreBand, getClubState } from "../../engine/analytics.js";
 
@@ -97,7 +99,7 @@ function rowName(row) {
 }
 
 function rowPlayerId(row) {
-  return row?.playerId || row?.player_id || row?.id || null;
+  return row?.playerId || row?.player_id || row?.user_id || row?.id || null;
 }
 
 function averageScore(history) {
@@ -132,6 +134,35 @@ function getPlayerArchetype({ score, avg, streak, hasPlayed }) {
   if (base >= 76) return { name: "Charleston Climber", detail: "Your decisions are trending sharper." };
   if (base >= 64) return { name: "Pattern Finder", detail: "You are spotting useful shape earlier." };
   return { name: "Table Builder", detail: "You are learning what to keep and what to release." };
+}
+
+function buildResultFromLeaderboardRow(row, seed) {
+  if (!row) return null;
+  const score = rowScore(row);
+  if (!score) return null;
+  return {
+    mode: "daily",
+    daySeed: seed,
+    day_seed: seed,
+    iqScore: score,
+    totalScore: score,
+    time: row?.time_secs ?? row?.timeSecs ?? row?.time ?? null,
+    timeSecs: row?.time_secs ?? row?.timeSecs ?? row?.time ?? null,
+    rating: row?.rating || "Table read complete",
+    completedDate: new Date().toISOString().slice(0, 10),
+    ts: Date.now(),
+    source: "leaderboard",
+  };
+}
+
+function findCurrentPlayerRow(rows = [], playerId) {
+  const currentId = String(playerId || "").trim();
+  if (!currentId) return null;
+  return (rows || []).find(row => {
+    const rowPid = String(row?.player_id || row?.playerId || "").trim();
+    const rowUid = String(row?.user_id || row?.userId || "").trim();
+    return rowPid === currentId || rowUid === currentId;
+  }) || null;
 }
 
 function SimpleActionHero({
@@ -173,7 +204,7 @@ function SimpleActionHero({
           </p>
         </div>
 
-        {playedToday && (
+        {playedToday && score && (
           <div className="rk-played-score rk-simple-home-hero__score">
             <div className="rk-played-score__main">
               <div className="rk-played-score__num rk-played-score__num--bright">{score}</div>
@@ -550,17 +581,21 @@ export default function Home({ setScreen }) {
   const dayNum = getDayNum();
   const seed = getDailySeed();
   const history = getHistory();
-  const doneToday = isDailyResultForToday(getTodayDailyResult());
-  const todayResult = getTodayDailyResult();
+  const localTodayResult = getTodayDailyResult();
+  const localDoneToday = isDailyResultForToday(localTodayResult);
   const hasPlayed = history.length > 0;
+  const playerId = getPlayerId();
+  const playerName = getLeaderboardDisplayName(profile);
 
   const [globalRows, setGlobalRows] = useState([]);
   const [clubRows, setClubRows] = useState([]);
   const [dailyStats, setDailyStats] = useState(null);
   const [leaderboardError, setLeaderboardError] = useState(false);
+  const [dbTodayResult, setDbTodayResult] = useState(null);
 
   const timeLeft = useCountdown();
-  const playedToday = doneToday && todayResult;
+  const todayResult = localDoneToday && localTodayResult ? localTodayResult : dbTodayResult;
+  const playedToday = Boolean(todayResult);
 
   useEffect(() => {
     trackRackleEvent("homepage_viewed", {
@@ -574,11 +609,21 @@ export default function Home({ setScreen }) {
 
   const loadLeaderboardPreview = useCallback(async () => {
     try {
-      const [stats, global, club] = await Promise.all([
+      const [stats, global, club, savedDaily] = await Promise.all([
         fetchDailyStats(seed),
         fetchGlobalLeaderboard(seed),
         clubCode ? fetchClubLeaderboard(clubCode, seed) : Promise.resolve([]),
+        playerId ? fetchSupabaseTodayDailyResult(playerId, seed) : Promise.resolve(null),
       ]);
+
+      const currentRow = findCurrentPlayerRow(global || [], playerId) || findCurrentPlayerRow(club || [], playerId);
+      const hydratedResult = savedDaily || buildResultFromLeaderboardRow(currentRow, seed);
+
+      if (hydratedResult) {
+        setDbTodayResult(hydratedResult);
+        saveDailyResult(hydratedResult);
+        try { localStorage.setItem("rackleHasCompletedFirstDaily", "true"); } catch {}
+      }
 
       setDailyStats(stats);
       setGlobalRows(global || []);
@@ -591,21 +636,20 @@ export default function Home({ setScreen }) {
       setClubRows([]);
       setLeaderboardError(true);
     }
-  }, [seed, clubCode]);
+  }, [seed, clubCode, playerId]);
 
   useEffect(() => {
     let alive = true;
 
     async function load() {
+      if (!alive) return;
       await loadLeaderboardPreview();
     }
 
-    if (alive) load();
+    load();
     return () => { alive = false; };
   }, [loadLeaderboardPreview]);
 
-  const playerId = getPlayerId();
-  const playerName = getLeaderboardDisplayName(profile);
   const currentScore = todayResult?.iqScore ?? todayResult?.totalScore ?? null;
   const currentTime = todayResult?.time ?? todayResult?.timeSecs ?? todayResult?.time_secs ?? null;
 
