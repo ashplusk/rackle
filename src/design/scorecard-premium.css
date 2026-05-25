@@ -280,3 +280,224 @@
   aspect-ratio: 9 / 14;
   justify-content: center;
 }
+
+/* ─── Daily scorecard overhaul: fuller width, centered, more human ────────── */
+.rk-sc-page.rk-sc-page--simplified {
+  width: min(100%, 760px);
+  max-width: none;
+  margin: 0 auto;
+  padding-inline: clamp(10px, 3vw, 18px);
+}
+
+.rk-sc-page.rk-sc-page--simplified > * {
+  width: 100%;
+}
+
+.rk-sc-feature-card,
+.rk-sc-section,
+.rk-sc-share-card,
+.rk-sc__footer-ctas {
+  box-sizing: border-box;
+}
+
+.rk-sc-feature-card {
+  gap: clamp(16px, 3vw, 24px);
+  text-align: center;
+}
+
+.rk-sc-hero,
+.rk-sc-headline,
+.rk-sc-headline__copy,
+.rk-sc-return-nudge {
+  text-align: center;
+}
+
+.rk-sc-headline {
+  align-items: center;
+}
+
+.rk-sc-hero__pill,
+.rk-sc-archetype,
+.rk-sc-headline__tag {
+  margin-inline: auto;
+}
+
+.rk-sc-headline__h {
+  max-width: 12ch;
+  margin-inline: auto;
+  font-size: clamp(28px, 8vw, 44px);
+  line-height: 1.04;
+}
+
+.rk-sc-headline__copy {
+  max-width: 28ch;
+  margin-inline: auto;
+  font-size: clamp(16px, 4vw, 18px);
+  line-height: 1.5;
+}
+
+.rk-sc-return-nudge {
+  max-width: 24ch;
+  margin-inline: auto;
+}
+
+.rk-sc-section,
+.rk-sc-share-card {
+  padding: clamp(18px, 4vw, 24px);
+  border-radius: 24px;
+}
+
+.rk-sc-section__head-row {
+  gap: 14px;
+}
+
+.rk-sc-section__h {
+  margin-bottom: 8px;
+}
+
+.rk-sc-section__subcopy,
+.rk-sc-breakdown-intro {
+  color: rgba(23, 20, 15, 0.68);
+  line-height: 1.5;
+}
+
+.rk-sc-hand-card {
+  text-align: center;
+}
+
+.rk-sc-hand-card__topline {
+  justify-content: center;
+  gap: 10px;
+}
+
+.rk-sc-hand-card__lean {
+  max-width: 29ch;
+  margin: 10px auto 0;
+  text-align: center;
+  color: rgba(23, 20, 15, 0.74);
+  line-height: 1.45;
+}
+
+.rk-sc-direction,
+.rk-sc-direction--featured {
+  padding: 18px;
+  border-radius: 18px;
+}
+
+.rk-sc-direction--featured {
+  text-align: left;
+}
+
+.rk-sc-direction__badge {
+  margin-bottom: 14px;
+}
+
+.rk-sc-direction__label {
+  font-size: 12px;
+}
+
+.rk-sc-direction__score {
+  font-size: clamp(20px, 5.5vw, 26px);
+  line-height: 1.1;
+}
+
+.rk-sc-mini-list {
+  display: grid;
+  gap: 8px;
+}
+
+.rk-sc-direction__note {
+  color: rgba(23, 20, 15, 0.82);
+  line-height: 1.5;
+}
+
+.rk-sc-ranks.rk-sc-ranks--compact {
+  gap: 12px;
+}
+
+.rk-sc-rank-card {
+  padding: 16px 14px;
+  border-radius: 18px;
+}
+
+.rk-sc-rank-card__label {
+  color: rgba(23, 20, 15, 0.58);
+  letter-spacing: 0.08em;
+}
+
+.rk-sc-rank-card__val {
+  margin-top: 6px;
+}
+
+.rk-sc-rank-card__note {
+  display: block;
+  margin-top: 6px;
+  color: rgba(23, 20, 15, 0.66);
+  line-height: 1.35;
+}
+
+.rk-sc-share-card__copy h3,
+.rk-sc-share-card__copy p,
+.rk-sc-share-card__status,
+.rk-sc-share-card__fallback p {
+  text-align: center;
+}
+
+.rk-sc-share-card__copy p {
+  max-width: 28ch;
+  margin-inline: auto;
+}
+
+.rk-sc-share-card__actions {
+  gap: 10px;
+}
+
+.rk-sc__footer-ctas {
+  gap: 10px;
+}
+
+@media (max-width: 430px) {
+  .rk-sc-page.rk-sc-page--simplified {
+    width: 100%;
+    padding-inline: 10px;
+  }
+
+  .rk-sc-feature-card,
+  .rk-sc-section,
+  .rk-sc-share-card {
+    padding: 16px 14px;
+    border-radius: 22px;
+  }
+
+  .rk-sc-feature-card {
+    margin-bottom: 20px;
+  }
+
+  .rk-sc-headline__h {
+    max-width: 11ch;
+    font-size: clamp(30px, 8.5vw, 38px);
+  }
+
+  .rk-sc-headline__copy {
+    max-width: 26ch;
+    font-size: 16px;
+  }
+
+  .rk-sc-section__h {
+    font-size: 18px;
+  }
+
+  .rk-sc-hand-card__topline {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .rk-sc-direction,
+  .rk-sc-direction--featured {
+    padding: 16px 14px;
+  }
+
+  .rk-sc-ranks.rk-sc-ranks--compact {
+    gap: 10px;
+  }
+}
