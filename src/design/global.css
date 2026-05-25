@@ -119,9 +119,7 @@ img, svg {
 @import './scorecard-premium.css';
 
 /* ─── Homepage hero: compact premium daily start ───────────────────────────── */
-.rk-home--simple-actions .rk-simple-home-hero {
-  padding-top: 6px;
-}
+.rk-home--simple-actions .rk-simple-home-hero { padding-top: 6px; }
 
 .rk-home--simple-actions .rk-simple-home-hero__card {
   position: relative;
@@ -136,32 +134,12 @@ img, svg {
   box-shadow: 0 22px 48px rgba(4, 25, 14, 0.22), inset 0 1px 0 rgba(255,255,255,0.10);
 }
 
-.rk-home--simple-actions .rk-daily-hero-card__topline {
-  margin-bottom: 8px;
-}
-
-.rk-home--simple-actions .rk-daily-pill {
-  border-color: rgba(255,255,255,0.16);
-  background: rgba(255,255,255,0.10);
-  color: rgba(255,255,255,0.86);
-}
-
-.rk-home--simple-actions .rk-daily-pill > span {
-  background: #b7e3c6;
-  box-shadow: 0 0 12px rgba(183,227,198,0.55);
-}
-
-.rk-home--simple-actions .rk-daily-countdown {
-  color: rgba(255,255,255,0.66);
-}
-
-.rk-home--simple-actions .rk-simple-home-hero__identity {
-  display: none;
-}
-
-.rk-home--simple-actions .rk-played-score {
-  margin: 8px auto 4px;
-}
+.rk-home--simple-actions .rk-daily-hero-card__topline { margin-bottom: 8px; }
+.rk-home--simple-actions .rk-daily-pill { border-color: rgba(255,255,255,0.16); background: rgba(255,255,255,0.10); color: rgba(255,255,255,0.86); }
+.rk-home--simple-actions .rk-daily-pill > span { background: #b7e3c6; box-shadow: 0 0 12px rgba(183,227,198,0.55); }
+.rk-home--simple-actions .rk-daily-countdown { color: rgba(255,255,255,0.66); }
+.rk-home--simple-actions .rk-simple-home-hero__identity { display: none; }
+.rk-home--simple-actions .rk-played-score { margin: 8px auto 4px; }
 
 .rk-home--simple-actions .rk-simple-home-hero__copy {
   position: relative;
@@ -173,11 +151,7 @@ img, svg {
   padding-top: clamp(76px, 17vw, 108px);
 }
 
-.rk-home--simple-actions .rk-daily-hero-card__kicker {
-  font-size: 0 !important;
-  margin: 0;
-}
-
+.rk-home--simple-actions .rk-daily-hero-card__kicker { font-size: 0 !important; margin: 0; }
 .rk-home--simple-actions .rk-daily-hero-card__kicker::after {
   content: "Fresh rack";
   display: inline-block;
@@ -188,12 +162,7 @@ img, svg {
   color: rgba(255,255,255,0.62);
 }
 
-.rk-home--simple-actions .rk-daily-hero-card__title {
-  font-size: 0 !important;
-  margin: 0;
-  color: transparent;
-}
-
+.rk-home--simple-actions .rk-daily-hero-card__title { font-size: 0 !important; margin: 0; color: transparent; }
 .rk-home--simple-actions .rk-daily-hero-card__title::after {
   content: "Fresh rack,\A new Charleston.";
   display: block;
@@ -210,11 +179,7 @@ img, svg {
   text-shadow: 0 2px 0 rgba(255,255,255,0.05), 0 18px 34px rgba(0,0,0,0.20);
 }
 
-.rk-home--simple-actions .rk-daily-hero-card__sub {
-  font-size: 0 !important;
-  margin: 2px auto 0;
-}
-
+.rk-home--simple-actions .rk-daily-hero-card__sub { font-size: 0 !important; margin: 2px auto 0; }
 .rk-home--simple-actions .rk-daily-hero-card__sub::after {
   content: "Play the daily, then compare your read with the table.";
   display: block;
@@ -250,14 +215,8 @@ img, svg {
 }
 
 .rk-home--simple-actions .rk-daily-hero-card__cta::before,
-.rk-home--simple-actions .rk-daily-hero-card__cta::after {
-  display: none !important;
-}
-
-.rk-home--simple-actions .rk-daily-hero-card__cta .rk-btn__dot {
-  background: #d9ffe1;
-  box-shadow: 0 0 14px rgba(217,255,225,0.70);
-}
+.rk-home--simple-actions .rk-daily-hero-card__cta::after { display: none !important; }
+.rk-home--simple-actions .rk-daily-hero-card__cta .rk-btn__dot { background: #d9ffe1; box-shadow: 0 0 14px rgba(217,255,225,0.70); }
 
 .rk-home--simple-actions .rk-simple-home-hero__practice {
   width: min(70%, 330px) !important;
@@ -274,9 +233,7 @@ img, svg {
 }
 
 .rk-home--simple-actions .rk-simple-home-hero__note,
-.rk-home--simple-actions .rk-simple-home-hero__signals {
-  display: none !important;
-}
+.rk-home--simple-actions .rk-simple-home-hero__signals { display: none !important; }
 
 /* Four individual premium floating tiles. */
 .rk-home--simple-actions .rk-simple-home-hero__copy::before,
@@ -310,113 +267,254 @@ img, svg {
   pointer-events: none;
 }
 
-.rk-home--simple-actions .rk-simple-home-hero__copy::before {
-  content: "🀇";
-  --tile-x: -96px;
-  --tile-y: 8px;
-  --tile-r: -7deg;
-  --tile-delay: -0.2s;
-  color: #b12c29;
-}
-
-.rk-home--simple-actions .rk-simple-home-hero__copy::after {
-  content: "🀙";
-  --tile-x: -32px;
-  --tile-y: -2px;
-  --tile-r: 3deg;
-  --tile-delay: -1.1s;
-  color: #147143;
-}
-
-.rk-home--simple-actions .rk-daily-hero-card__kicker::before {
-  content: "🀐";
-  --tile-x: 32px;
-  --tile-y: 7px;
-  --tile-r: -2deg;
-  --tile-delay: -1.7s;
-  color: #202020;
-}
-
-.rk-home--simple-actions .rk-daily-hero-card__title::before {
-  content: "🀄";
-  --tile-x: 96px;
-  --tile-y: -1px;
-  --tile-r: 7deg;
-  --tile-delay: -0.7s;
-  color: #b12c29;
-}
-
-.rk-home--simple-actions .rk-daily-hero-card__sub::before {
-  display: none !important;
-}
+.rk-home--simple-actions .rk-simple-home-hero__copy::before { content: "🀇"; --tile-x: -96px; --tile-y: 8px; --tile-r: -7deg; --tile-delay: -0.2s; color: #b12c29; }
+.rk-home--simple-actions .rk-simple-home-hero__copy::after { content: "🀙"; --tile-x: -32px; --tile-y: -2px; --tile-r: 3deg; --tile-delay: -1.1s; color: #147143; }
+.rk-home--simple-actions .rk-daily-hero-card__kicker::before { content: "🀐"; --tile-x: 32px; --tile-y: 7px; --tile-r: -2deg; --tile-delay: -1.7s; color: #202020; }
+.rk-home--simple-actions .rk-daily-hero-card__title::before { content: "🀄"; --tile-x: 96px; --tile-y: -1px; --tile-r: 7deg; --tile-delay: -0.7s; color: #b12c29; }
+.rk-home--simple-actions .rk-daily-hero-card__sub::before { display: none !important; }
 
 @keyframes rk-premium-tile-bob {
-  0%, 100% {
-    transform: translateX(-50%) translateX(var(--tile-x, 0)) translateY(var(--tile-y, 0)) rotate(var(--tile-r, 0deg));
-  }
-  45% {
-    transform: translateX(-50%) translateX(var(--tile-x, 0)) translateY(calc(var(--tile-y, 0) - 5px)) rotate(calc(var(--tile-r, 0deg) + 1.1deg));
-  }
-  70% {
-    transform: translateX(-50%) translateX(var(--tile-x, 0)) translateY(calc(var(--tile-y, 0) - 2px)) rotate(calc(var(--tile-r, 0deg) - 0.6deg));
-  }
+  0%, 100% { transform: translateX(-50%) translateX(var(--tile-x, 0)) translateY(var(--tile-y, 0)) rotate(var(--tile-r, 0deg)); }
+  45% { transform: translateX(-50%) translateX(var(--tile-x, 0)) translateY(calc(var(--tile-y, 0) - 5px)) rotate(calc(var(--tile-r, 0deg) + 1.1deg)); }
+  70% { transform: translateX(-50%) translateX(var(--tile-x, 0)) translateY(calc(var(--tile-y, 0) - 2px)) rotate(calc(var(--tile-r, 0deg) - 0.6deg)); }
 }
 
 @media (max-width: 560px) {
-  .rk-home--simple-actions .rk-simple-home-hero {
-    padding-top: 4px;
-  }
-
-  .rk-home--simple-actions .rk-simple-home-hero__card {
-    border-radius: 30px;
-    padding: 21px 17px 22px;
-  }
-
-  .rk-home--simple-actions .rk-daily-hero-card__topline {
-    gap: 8px;
-    margin-bottom: 4px;
-  }
-
-  .rk-home--simple-actions .rk-simple-home-hero__copy {
-    padding-top: 78px;
-    gap: 7px;
-  }
-
+  .rk-home--simple-actions .rk-simple-home-hero { padding-top: 4px; }
+  .rk-home--simple-actions .rk-simple-home-hero__card { border-radius: 30px; padding: 21px 17px 22px; }
+  .rk-home--simple-actions .rk-daily-hero-card__topline { gap: 8px; margin-bottom: 4px; }
+  .rk-home--simple-actions .rk-simple-home-hero__copy { padding-top: 78px; gap: 7px; }
   .rk-home--simple-actions .rk-simple-home-hero__copy::before,
   .rk-home--simple-actions .rk-simple-home-hero__copy::after,
   .rk-home--simple-actions .rk-daily-hero-card__kicker::before,
-  .rk-home--simple-actions .rk-daily-hero-card__title::before {
-    width: 45px;
-    height: 62px;
-    font-size: 27px;
-    border-radius: 12px;
-  }
-
+  .rk-home--simple-actions .rk-daily-hero-card__title::before { width: 45px; height: 62px; font-size: 27px; border-radius: 12px; }
   .rk-home--simple-actions .rk-simple-home-hero__copy::before { --tile-x: -78px; }
   .rk-home--simple-actions .rk-simple-home-hero__copy::after { --tile-x: -26px; }
   .rk-home--simple-actions .rk-daily-hero-card__kicker::before { --tile-x: 26px; }
   .rk-home--simple-actions .rk-daily-hero-card__title::before { --tile-x: 78px; }
-
-  .rk-home--simple-actions .rk-daily-hero-card__title::after {
-    font-size: clamp(40px, 11.2vw, 52px);
-  }
-
-  .rk-home--simple-actions .rk-daily-hero-card__sub::after {
-    max-width: 300px;
-  }
-
-  .rk-home--simple-actions .rk-simple-home-hero__actions {
-    margin-top: 15px;
-    gap: 8px;
-  }
-
+  .rk-home--simple-actions .rk-daily-hero-card__title::after { font-size: clamp(40px, 11.2vw, 52px); }
+  .rk-home--simple-actions .rk-daily-hero-card__sub::after { max-width: 300px; }
+  .rk-home--simple-actions .rk-simple-home-hero__actions { margin-top: 15px; gap: 8px; }
   .rk-home--simple-actions .rk-daily-hero-card__cta,
-  .rk-home--simple-actions .rk-btn--play.rk-daily-hero-card__cta {
-    min-height: 56px;
+  .rk-home--simple-actions .rk-btn--play.rk-daily-hero-card__cta { min-height: 56px; }
+  .rk-home--simple-actions .rk-simple-home-hero__practice { width: min(78%, 292px) !important; min-height: 43px; }
+}
+
+/* ─── Gameplay UX tightening: one logo, less scrolling, more seamless ─────── */
+.rk-game-screen {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: clamp(10px, 3vw, 18px) clamp(12px, 4vw, 20px) clamp(18px, 5vw, 28px) !important;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 2.6vw, 16px);
+}
+
+/* The global header already carries the Rackle brand. Hide the in-game duplicate. */
+.rk-game-brand__mark {
+  display: none !important;
+}
+
+.rk-game-brand {
+  margin: 0 !important;
+}
+
+.rk-game-copy,
+.rk-game-copy--card {
+  margin: 0 auto !important;
+  padding: clamp(12px, 3vw, 16px) clamp(14px, 4vw, 20px) !important;
+  border-radius: 22px !important;
+  background: rgba(255, 253, 248, 0.78) !important;
+  border: 1px solid rgba(22, 78, 48, 0.10) !important;
+  box-shadow: 0 10px 24px rgba(9, 37, 23, 0.08) !important;
+  text-align: center;
+}
+
+.rk-game-copy__title {
+  margin: 0 0 4px !important;
+  font-size: clamp(24px, 6vw, 34px) !important;
+  line-height: 0.98 !important;
+}
+
+.rk-game-copy__sub {
+  margin: 0 !important;
+  font-size: clamp(13px, 3.5vw, 15px) !important;
+  line-height: 1.35 !important;
+  color: rgba(31, 43, 36, 0.68) !important;
+}
+
+.rk-game-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin: 0 calc(var(--page-padding-x, 16px) * -0.25) !important;
+  padding: 8px 10px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 253, 248, 0.88) !important;
+  border: 1px solid rgba(22, 78, 48, 0.10) !important;
+  box-shadow: 0 10px 22px rgba(9, 37, 23, 0.08) !important;
+  backdrop-filter: blur(10px);
+}
+
+.rk-game-rack-wrap {
+  padding: 0 !important;
+}
+
+.rk-game-tableau {
+  padding: clamp(10px, 3vw, 16px) clamp(8px, 3vw, 14px) !important;
+  border-radius: 26px !important;
+}
+
+.rk-game-rack {
+  gap: clamp(4px, 1.7vw, 8px) !important;
+}
+
+.rk-game-tile-wrap,
+.rk-game-tile-btn {
+  line-height: 0;
+}
+
+.rk-game-tools {
+  margin: -2px 0 0 !important;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.rk-game-tray {
+  margin: 0 !important;
+  padding: 12px 14px !important;
+  border-radius: 22px !important;
+}
+
+.rk-game-tray__header {
+  margin-bottom: 3px !important;
+}
+
+.rk-game-tray__sub {
+  margin-bottom: 8px !important;
+  font-size: 13px !important;
+}
+
+.rk-game-tray__slots {
+  gap: 8px !important;
+}
+
+.rk-game-cta {
+  position: sticky;
+  bottom: 10px;
+  z-index: 25;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.rk-game-cta .rk-btn {
+  min-height: 54px !important;
+  box-shadow: 0 14px 30px rgba(7, 40, 22, 0.24) !important;
+}
+
+.rk-game-notice,
+.rk-section-select,
+.rk-continue,
+.rk-game-pregame-card {
+  width: min(100%, 620px) !important;
+  margin: 0 auto !important;
+  padding: clamp(18px, 5vw, 28px) clamp(16px, 5vw, 26px) !important;
+  border-radius: 28px !important;
+}
+
+.rk-game-notice__body,
+.rk-section-select__sub,
+.rk-continue__round-copy {
+  font-size: clamp(14px, 3.6vw, 16px) !important;
+  line-height: 1.38 !important;
+}
+
+.rk-game-notice__tiles,
+.rk-section-select__rack,
+.rk-continue__rack-section {
+  margin-top: 12px !important;
+}
+
+.rk-section-select__grid {
+  gap: 8px !important;
+  margin-top: 14px !important;
+}
+
+.rk-section-btn {
+  padding: 11px 12px !important;
+  border-radius: 16px !important;
+}
+
+.rk-section-btn__label {
+  font-size: 14px !important;
+}
+
+.rk-section-btn__sub {
+  font-size: 12px !important;
+  line-height: 1.25 !important;
+}
+
+.rk-section-select__cta {
+  position: sticky;
+  bottom: 10px;
+  z-index: 20;
+  margin-top: 14px !important;
+}
+
+@media (max-width: 560px) {
+  .rk-game-screen {
+    padding: 8px 10px 16px !important;
+    gap: 9px;
   }
 
-  .rk-home--simple-actions .rk-simple-home-hero__practice {
-    width: min(78%, 292px) !important;
-    min-height: 43px;
+  .rk-game-copy,
+  .rk-game-copy--card {
+    padding: 11px 12px !important;
+  }
+
+  .rk-game-copy__title {
+    font-size: clamp(23px, 6.4vw, 28px) !important;
+  }
+
+  .rk-game-copy__sub {
+    font-size: 13px !important;
+  }
+
+  .rk-game-tableau {
+    padding: 9px 6px !important;
+    border-radius: 22px !important;
+  }
+
+  .rk-game-tray {
+    padding: 10px 12px !important;
+  }
+
+  .rk-game-tray__slots {
+    display: none !important;
+  }
+
+  .rk-game-notice,
+  .rk-section-select,
+  .rk-continue,
+  .rk-game-pregame-card {
+    padding: 16px 14px !important;
+    border-radius: 24px !important;
+  }
+
+  .rk-game-notice__icon {
+    display: none !important;
+  }
+
+  .rk-game-notice__title,
+  .rk-section-select__title {
+    font-size: clamp(26px, 7vw, 34px) !important;
+    margin-bottom: 6px !important;
+  }
+
+  .rk-game-notice__actions,
+  .rk-section-select__cta,
+  .rk-continue > .rk-btn {
+    margin-top: 12px !important;
   }
 }
