@@ -1,6 +1,7 @@
 // ─── Rackle v2 · Storage engine ──────────────────────────────────────────────
 // Local storage with in-memory fallback. Single key prefix "rk-".
-// All state that persists between sessions lives here.
+// Local storage is now only a compatibility/UI layer. Supabase Auth/profile IDs
+// should be treated as the source of truth for logged-in users.
 
 const mem = {};
 
@@ -49,6 +50,25 @@ export function todayDateKey() { return localDateKey(Date.now()); }
 
 function sameLocalDay(ts1, ts2) {
   return localDateKey(ts1) === localDateKey(ts2);
+}
+
+function isUuid(value) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(value || ""));
+}
+
+function isGuestId(value) {
+  return String(value || "").toLowerCase().startsWith("guest-");
+}
+
+function isLegacyLocalPlayerId(value) {
+  const id = String(value || "").trim();
+  if (!id) return true;
+  if (isUuid(id)) return false;
+  if (isGuestId(id)) return false;
+  if (/^player-/i.test(id)) return true;
+  if (/^player\d+$/i.test(id)) return true;
+  if (/^[A-Z0-9]{6,14}$/.test(id)) return true;
+  return false;
 }
 
 // ── Display name helpers ──────────────────────────────────────────────────────
@@ -122,7 +142,7 @@ export function readSession() {
 }
 
 export function writeSession(profile = {}) {
-  const playerId = String(profile.playerId || profile.player_id || ST.get("playerId", "") || "").trim();
+  const playerId = String(profile.playerId || profile.player_id || profile.id || ST.get("playerId", "") || "").trim();
   const email = String(profile.email || "").trim().toLowerCase();
   if (!playerId || !email) return null;
 
@@ -177,16 +197,18 @@ export function getProfile() {
 
   if (profile) {
     const resolvedName = bestProfileName(profile, session);
+    const resolvedPlayerId = profile.playerId || profile.player_id || profile.id || session?.playerId || ST.get("authPlayerId", null);
+
     if (resolvedName && (!profile.name || /^guest\s*rackler$/i.test(String(profile.name)))) {
       return {
         ...profile,
         name: resolvedName,
         displayName: profile.displayName || resolvedName,
         email: profile.email || session?.email || "",
-        playerId: profile.playerId || profile.player_id || session?.playerId || ST.get("authPlayerId", null),
+        playerId: resolvedPlayerId,
       };
     }
-    return profile;
+    return { ...profile, playerId: resolvedPlayerId };
   }
 
   if (session) {
@@ -213,6 +235,7 @@ export function setProfile(p) {
   const resolvedName = bestProfileName(p, session);
   const cleaned = {
     ...p,
+    playerId: p.playerId || p.player_id || p.id || session?.playerId || null,
     name: resolvedName || p.name || "",
     displayName: resolvedName || p.displayName || p.name || "",
   };
@@ -240,11 +263,29 @@ export function getClubCode() {
 export function setClubCode(code) { ST.set("clubCode", code || null); }
 
 export function getPlayerId() {
-  const authId = ST.get("authPlayerId", null) || readSession()?.playerId;
-  if (authId) return authId;
+  const profile = ST.get("profile", null);
+  const session = readSession();
 
+  // Supabase Auth UUID wins every time.
+  const authCandidates = [
+    profile?.playerId,
+    profile?.player_id,
+    profile?.id,
+    session?.playerId,
+    ST.get("authPlayerId", null),
+  ].map(v => String(v || "").trim()).filter(Boolean);
+
+  const uuidCandidate = authCandidates.find(isUuid);
+  if (uuidCandidate) return uuidCandidate;
+
+  // If the user has an email/session, keep the best non-guest account id.
+  const hasLoggedInShape = Boolean(profile?.email || session?.email);
+  const accountCandidate = authCandidates.find(id => id && !isGuestId(id) && !isLegacyLocalPlayerId(id));
+  if (hasLoggedInShape && accountCandidate) return accountCandidate;
+
+  // Do not reuse legacy local account IDs like PAIYBTQUQ for new guest scores.
   let playerId = ST.get("playerId", null);
-  if (playerId) return playerId;
+  if (playerId && !isLegacyLocalPlayerId(playerId)) return playerId;
 
   const suffix =
     typeof crypto !== "undefined" && crypto.randomUUID
@@ -278,10 +319,7 @@ export function getLeaderboardDisplayName(profile = null) {
   const activeProfile = profile || getProfile() || {};
   const found = bestProfileName(activeProfile, session);
 
-  // Logged-in players should never be displayed or shared as Guest Rackler.
-  // If a logged-in account has no name saved, use a readable email-derived fallback.
   if (session && found) return found;
-
   if (!isLeaderboardNameVisible()) return "Guest Rackler";
 
   return found || "Guest Rackler";
