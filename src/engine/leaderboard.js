@@ -36,6 +36,10 @@ function isDev() {
   return import.meta.env.DEV;
 }
 
+function isUuid(value) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(value || ""));
+}
+
 function rowScore(row) {
   return Number(row?.iq_score ?? row?.iqScore ?? row?.score ?? 0) || 0;
 }
@@ -49,8 +53,12 @@ function rowCompletedAt(row) {
   return raw ? (new Date(raw).getTime() || 0) : 0;
 }
 
+function userIdFrom(row) {
+  return String(row?.user_id || row?.userId || "").trim();
+}
+
 function playerIdFrom(row) {
-  return String(row?.player_id || row?.playerId || "").trim();
+  return String(row?.player_id || row?.playerId || row?.user_id || row?.userId || "").trim();
 }
 
 function boardCodeFrom(row) {
@@ -98,7 +106,8 @@ export function resolveLeaderboardName({
 }
 
 function isGuestId(id) {
-  return String(id || "").toLowerCase().startsWith("guest-");
+  const value = String(id || "").toLowerCase();
+  return value.startsWith("guest-") || value === "paiybtquq";
 }
 
 function isAnonymousName(name) {
@@ -107,14 +116,14 @@ function isAnonymousName(name) {
 }
 
 function dedupeKey(row) {
+  const uid = userIdFrom(row);
   const id = playerIdFrom(row);
   const seed = seedFrom(row);
   const board = boardCodeFrom(row);
 
+  if (uid) return `${board}:${seed}:user:${uid}`;
   if (id) return `${board}:${seed}:player:${id}`;
 
-  // Legacy anonymous rows with no stable identity cannot be trusted as unique.
-  // Collapse them so old Rackler / Player### rows do not inflate launch boards.
   if (isAnonymousName(row?.name)) return `${board}:${seed}:legacy-guest:${Math.round(rowScore(row))}`;
 
   return `${board}:${seed}:name:${resolveLeaderboardName({ localPlayerName: row?.name }).toLowerCase()}`;
@@ -122,6 +131,7 @@ function dedupeKey(row) {
 
 function normalizeRow(row) {
   const id = playerIdFrom(row);
+  const uid = userIdFrom(row);
   const safeName = resolveLeaderboardName({
     profileDisplayName: row?.profile_display_name || row?.display_name,
     profileName: row?.profile_name,
@@ -131,6 +141,7 @@ function normalizeRow(row) {
 
   return {
     ...row,
+    user_id: uid || row?.user_id || null,
     player_id: id || row?.player_id,
     club_code: boardCodeFrom(row),
     day_seed: row?.day_seed ?? row?.daySeed ?? getDailySeed(),
@@ -144,20 +155,12 @@ function dedupeWinner(next, current) {
   const nextCompleted = rowCompletedAt(next);
   const currentCompleted = rowCompletedAt(current);
 
-  // If duplicate rows exist for the same player/day, keep the latest saved row.
-  // This matches replay/recalculation behavior while still hiding duplicates.
   if (nextCompleted && currentCompleted && nextCompleted !== currentCompleted) {
     return nextCompleted > currentCompleted ? next : current;
   }
 
-  if (rowScore(next) !== rowScore(current)) {
-    return rowScore(next) > rowScore(current) ? next : current;
-  }
-
-  if (rowTime(next) !== rowTime(current)) {
-    return rowTime(next) < rowTime(current) ? next : current;
-  }
-
+  if (rowScore(next) !== rowScore(current)) return rowScore(next) > rowScore(current) ? next : current;
+  if (rowTime(next) !== rowTime(current)) return rowTime(next) < rowTime(current) ? next : current;
   return next;
 }
 
@@ -172,14 +175,11 @@ function compareLeaderboardRows(a, b) {
   const timeDiff = rowTime(a) - rowTime(b);
   if (timeDiff) return timeDiff;
 
-  return resolveLeaderboardName({ localPlayerName: a?.name }).localeCompare(
-    resolveLeaderboardName({ localPlayerName: b?.name })
-  );
+  return resolveLeaderboardName({ localPlayerName: a?.name }).localeCompare(resolveLeaderboardName({ localPlayerName: b?.name }));
 }
 
 export function normalizeLeaderboardRows(rows = []) {
   const byKey = new Map();
-
   rows.forEach(rawRow => {
     if (!rawRow) return;
     const row = normalizeRow(rawRow);
@@ -187,16 +187,12 @@ export function normalizeLeaderboardRows(rows = []) {
     const current = byKey.get(key);
     byKey.set(key, current ? dedupeWinner(row, current) : row);
   });
-
   return [...byKey.values()].sort(compareLeaderboardRows);
 }
 
 export function exposeLeaderboardDebug(payload = {}) {
   if (!isDev() || typeof window === "undefined") return;
-  window.__rackleLeaderboardDebug = {
-    updatedAt: new Date().toISOString(),
-    ...payload,
-  };
+  window.__rackleLeaderboardDebug = { updatedAt: new Date().toISOString(), ...payload };
 }
 
 function handleFetchError(err, throwOnError) {
@@ -209,9 +205,7 @@ function handleFetchError(err, throwOnError) {
 
 export async function fetchGlobalLeaderboard(seed = getDailySeed(), options = {}) {
   try {
-    const rows = await sbFetch(
-      `leaderboard?club_code=eq.__global__&day_seed=eq.${encodeURIComponent(seed)}&order=iq_score.desc&limit=1000`
-    );
+    const rows = await sbFetch(`leaderboard?club_code=eq.__global__&day_seed=eq.${encodeURIComponent(seed)}&order=iq_score.desc&limit=1000`);
     return normalizeLeaderboardRows(rows || []);
   } catch (err) { return handleFetchError(err, options.throwOnError); }
 }
@@ -219,10 +213,7 @@ export async function fetchGlobalLeaderboard(seed = getDailySeed(), options = {}
 export async function fetchDailyStats(seed = getDailySeed(), options = {}) {
   try {
     const rows = await fetchGlobalLeaderboard(seed, options);
-    return {
-      total: rows.length,
-      topScore: rows[0]?.iq_score || null,
-    };
+    return { total: rows.length, topScore: rows[0]?.iq_score || null };
   } catch (err) {
     if (options.throwOnError) throw err;
     return { total: 0, topScore: null };
@@ -234,9 +225,7 @@ export async function fetchDailyStats(seed = getDailySeed(), options = {}) {
 export async function fetchClubLeaderboard(clubCode, seed = getDailySeed(), options = {}) {
   if (!clubCode) return [];
   try {
-    const rows = await sbFetch(
-      `leaderboard?club_code=eq.${encodeURIComponent(clubCode)}&day_seed=eq.${encodeURIComponent(seed)}&order=iq_score.desc&limit=500`
-    );
+    const rows = await sbFetch(`leaderboard?club_code=eq.${encodeURIComponent(clubCode)}&day_seed=eq.${encodeURIComponent(seed)}&order=iq_score.desc&limit=500`);
     return normalizeLeaderboardRows(rows || []);
   } catch (err) { return handleFetchError(err, options.throwOnError); }
 }
@@ -244,9 +233,7 @@ export async function fetchClubLeaderboard(clubCode, seed = getDailySeed(), opti
 export async function fetchClubShareCount(clubCode, seed = getDailySeed()) {
   if (!clubCode) return 0;
   try {
-    const rows = await sbFetch(
-      `club_share_events?club_code=eq.${encodeURIComponent(clubCode)}&day_seed=eq.${encodeURIComponent(seed)}&select=player_id`
-    );
+    const rows = await sbFetch(`club_share_events?club_code=eq.${encodeURIComponent(clubCode)}&day_seed=eq.${encodeURIComponent(seed)}&select=player_id`);
     return new Set((rows || []).map(r => String(r?.player_id || "").trim()).filter(Boolean)).size || 0;
   } catch { return 0; }
 }
@@ -254,20 +241,24 @@ export async function fetchClubShareCount(clubCode, seed = getDailySeed()) {
 // ── Score posting ─────────────────────────────────────────────────────────────
 
 async function upsertLeaderboardRow(row) {
-  const query = `leaderboard?club_code=eq.${encodeURIComponent(row.club_code)}&day_seed=eq.${encodeURIComponent(row.day_seed)}&player_id=eq.${encodeURIComponent(row.player_id)}`;
+  const identityFilter = row.user_id
+    ? `user_id=eq.${encodeURIComponent(row.user_id)}`
+    : `player_id=eq.${encodeURIComponent(row.player_id)}`;
+  const query = `leaderboard?club_code=eq.${encodeURIComponent(row.club_code)}&day_seed=eq.${encodeURIComponent(row.day_seed)}&${identityFilter}`;
   const patchBody = {
+    user_id: row.user_id || null,
+    player_id: row.player_id,
     name: row.name,
     iq_score: row.iq_score,
     time_secs: row.time_secs,
   };
 
-  const existing = await sbFetch(`${query}&select=player_id&limit=1`).catch(() => []);
+  const existing = await sbFetch(`${query}&select=id&limit=1`).catch(() => []);
   if (existing?.length) {
     try {
       await sbPatch(query, patchBody, "return=minimal");
       return;
     } catch {
-      // Fallback keeps launch behavior safe even if PATCH is blocked by RLS.
       await sbDelete(query).catch(() => {});
     }
   }
@@ -281,16 +272,18 @@ export async function postScore({ playerId, name, iqScore, timeSecs, clubCode, s
   const stablePlayerId = String(playerId).trim();
   if (!stablePlayerId) return false;
 
+  const authUserId = isUuid(stablePlayerId) ? stablePlayerId : (isUuid(profile?.id) ? profile.id : null);
   const cleanClubCode = clubCode && clubCode !== "__global__" ? String(clubCode).trim() : null;
   const displayName = resolveLeaderboardName({
-    profileDisplayName: profile?.displayName,
-    profileName: profile?.name,
+    profileDisplayName: profile?.displayName || profile?.display_name,
+    profileName: profile?.name || profile?.fullName || profile?.full_name,
     localPlayerName: name || getLeaderboardDisplayName(profile) || getLocalPlayerName(),
     guestName: isGuestId(stablePlayerId) ? "Guest Rackler" : null,
   });
 
   const body = {
     player_id: stablePlayerId,
+    user_id: authUserId,
     name: isGuestId(stablePlayerId) ? "Guest Rackler" : displayName,
     iq_score: Number(iqScore),
     time_secs: timeSecs || null,
@@ -299,14 +292,8 @@ export async function postScore({ playerId, name, iqScore, timeSecs, clubCode, s
   };
 
   try {
-    // Every Daily Rackle score posts to Global.
     await upsertLeaderboardRow(body);
-
-    // Club board only receives scores from club-affiliated players.
-    if (cleanClubCode) {
-      await upsertLeaderboardRow({ ...body, club_code: cleanClubCode });
-    }
-
+    if (cleanClubCode) await upsertLeaderboardRow({ ...body, club_code: cleanClubCode });
     return true;
   } catch (err) {
     if (isDev()) console.warn("postScore failed", err);
@@ -314,13 +301,15 @@ export async function postScore({ playerId, name, iqScore, timeSecs, clubCode, s
   }
 }
 
-
 export async function removeLeaderboardScore({ playerId, seed = getDailySeed(), clubCode = "__global__" } = {}) {
   const stablePlayerId = String(playerId || "").trim();
   if (!stablePlayerId) return false;
 
   const boardCode = clubCode && clubCode !== "__global__" ? String(clubCode).trim() : "__global__";
-  const query = `leaderboard?club_code=eq.${encodeURIComponent(boardCode)}&day_seed=eq.${encodeURIComponent(seed)}&player_id=eq.${encodeURIComponent(stablePlayerId)}`;
+  const identityFilter = isUuid(stablePlayerId)
+    ? `user_id=eq.${encodeURIComponent(stablePlayerId)}`
+    : `player_id=eq.${encodeURIComponent(stablePlayerId)}`;
+  const query = `leaderboard?club_code=eq.${encodeURIComponent(boardCode)}&day_seed=eq.${encodeURIComponent(seed)}&${identityFilter}`;
 
   try {
     await sbDelete(query);
@@ -331,35 +320,16 @@ export async function removeLeaderboardScore({ playerId, seed = getDailySeed(), 
   }
 }
 
-export async function migrateDailyLeaderboardIdentity({
-  fromPlayerId,
-  toPlayerId,
-  name,
-  iqScore,
-  timeSecs,
-  clubCode,
-  seed = getDailySeed(),
-  profile = null,
-} = {}) {
+export async function migrateDailyLeaderboardIdentity({ fromPlayerId, toPlayerId, name, iqScore, timeSecs, clubCode, seed = getDailySeed(), profile = null } = {}) {
   const fromId = String(fromPlayerId || "").trim();
   const toId = String(toPlayerId || "").trim();
   if (!toId || iqScore === null || iqScore === undefined) return false;
 
-  const posted = await postScore({
-    playerId: toId,
-    name,
-    iqScore,
-    timeSecs,
-    clubCode,
-    seed,
-    profile,
-  });
+  const posted = await postScore({ playerId: toId, name, iqScore, timeSecs, clubCode, seed, profile });
 
   if (posted && fromId && fromId !== toId && isGuestId(fromId)) {
     await removeLeaderboardScore({ playerId: fromId, seed, clubCode: "__global__" });
-    if (clubCode && clubCode !== "__global__") {
-      await removeLeaderboardScore({ playerId: fromId, seed, clubCode });
-    }
+    if (clubCode && clubCode !== "__global__") await removeLeaderboardScore({ playerId: fromId, seed, clubCode });
   }
 
   return posted;
@@ -375,14 +345,11 @@ export async function recordShareEvent({ clubCode, playerId, playerName, seed = 
       player_name: resolveLeaderboardName({ localPlayerName: playerName || getLeaderboardDisplayName() }),
       shared_at: new Date().toISOString(),
     }, "resolution=merge-duplicates");
-  } catch {
-    // Share events should never block the scorecard flow.
-  }
+  } catch {}
 }
 
 // ── Rank utilities ────────────────────────────────────────────────────────────
 
-/** Merge the current player's score into a leaderboard row array. */
 export function mergeCurrentScore(rows, currentScore, currentTimeSecs, playerId, name = "You", options = {}) {
   if (currentScore === null || currentScore === undefined || !playerId) return normalizeLeaderboardRows(rows || []);
 
@@ -391,6 +358,7 @@ export function mergeCurrentScore(rows, currentScore, currentTimeSecs, playerId,
   const daySeed = options.seed || rows?.[0]?.day_seed || getDailySeed();
   const entry = {
     player_id: currentId,
+    user_id: isUuid(currentId) ? currentId : null,
     iq_score: Number(currentScore),
     time_secs: currentTimeSecs || null,
     name: resolveLeaderboardName({ localPlayerName: name, guestName: isGuestId(currentId) ? "Guest Rackler" : null }),
@@ -399,11 +367,10 @@ export function mergeCurrentScore(rows, currentScore, currentTimeSecs, playerId,
     club_code: boardCode,
   };
 
-  const filtered = (rows || []).filter(r => playerIdFrom(r) !== currentId);
+  const filtered = (rows || []).filter(r => playerIdFrom(r) !== currentId && userIdFrom(r) !== currentId);
   return normalizeLeaderboardRows([...filtered, entry]);
 }
 
-/** 1-based rank of the current player in a sorted board. */
 export function rankOfCurrent(rows, currentScore, playerId = null) {
   if (currentScore === null || currentScore === undefined || !rows?.length) return null;
   const sorted = normalizeLeaderboardRows(rows || []);
@@ -411,7 +378,7 @@ export function rankOfCurrent(rows, currentScore, playerId = null) {
 
   if (playerId) {
     const currentId = String(playerId).trim();
-    idx = sorted.findIndex(r => playerIdFrom(r) === currentId);
+    idx = sorted.findIndex(r => playerIdFrom(r) === currentId || userIdFrom(r) === currentId);
   }
 
   if (idx < 0) idx = sorted.findIndex(r => r.isYou);
