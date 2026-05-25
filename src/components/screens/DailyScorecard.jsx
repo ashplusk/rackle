@@ -64,6 +64,14 @@ function sectionLabel(idOrName) {
   return SECTION_LABELS[idOrName] || idOrName || "Open read";
 }
 
+function firstFiniteNumber(...values) {
+  for (const value of values) {
+    const number = Number(value);
+    if (Number.isFinite(number) && number > 0) return number;
+  }
+  return null;
+}
+
 async function copyText(text) {
   try {
     await navigator.clipboard.writeText(text);
@@ -88,10 +96,15 @@ async function shareText(text, title = "Rackle score") {
 }
 
 function ScoreStat({ label, value, desc, accent = false }) {
+  const numericValue = Number(value);
+  const hasValue = Number.isFinite(numericValue) && numericValue > 0;
+
   return (
     <div className={`rk-sc-rank-card ${accent ? "rk-sc-rank-card--accent" : ""}`}>
       <span className="rk-sc-rank-card__label">{label}</span>
-      <span className="rk-sc-rank-card__val">{Number.isFinite(Number(value)) ? Math.round(Number(value)) : "—"}</span>
+      <span className={`rk-sc-rank-card__val ${!hasValue ? "rk-sc-rank-card__val--empty" : ""}`}>
+        {hasValue ? Math.round(numericValue) : "—"}
+      </span>
       {desc && <small className="rk-sc-rank-card__note">{desc}</small>}
     </div>
   );
@@ -101,7 +114,7 @@ function TileRack({ tiles, size = "sm" }) {
   return (
     <div className="rk-sc-final-rack rk-sc-final-rack--premium">
       {safeArray(tiles).map((tile, index) => (
-        <PremiumMahjongTile key={`${index}-${tile?.t || "tile"}`} tile={tile} size={size} />
+        <PremiumMahjongTile key={`${index}-${tile?.t || tile?.id || "tile"}`} tile={tile} size={size} />
       ))}
     </div>
   );
@@ -125,7 +138,7 @@ export default function DailyScorecard({ result, mode = "daily", setScreen }) {
   const allSections = safeArray(iq?.allSections);
   const chosen = iq?.chosenSection;
   const chosenLabel = sectionLabel(chosen);
-  const finalRack = safeArray(iq?.finalRack);
+  const finalRack = safeArray(iq?.finalRack || result?.finalRack || result?.rack || result?.tiles);
   const startingRack = safeArray(iq?.startingRack || result?.startingRack);
   const bestPaths = safeArray(iq?.bestPaths);
   const topPath = bestPaths[0] || null;
@@ -292,7 +305,7 @@ export default function DailyScorecard({ result, mode = "daily", setScreen }) {
         )}
       </div>
 
-      {finalRack.length > 0 && (
+      {activeRack.length > 0 && (
         <section className="rk-sc-section rk-sc-section--in rk-sc-hand-section">
           <div className="rk-sc-section__head-row">
             <div>
@@ -359,7 +372,11 @@ export default function DailyScorecard({ result, mode = "daily", setScreen }) {
 
         <div className="rk-sc-ranks rk-sc-ranks--compact rk-sc-control-split">
           {BAR_META.map((meta, index) => {
-            const rawValue = iq?.[meta.key] ?? (meta.fallback ? iq?.[meta.fallback] : null) ?? (meta.key === "luckAdjustedScore" ? score : 0);
+            const rawValue = firstFiniteNumber(
+              iq?.[meta.key],
+              meta.fallback ? iq?.[meta.fallback] : null,
+              meta.key === "luckAdjustedScore" ? score : null
+            );
             return (
               <ScoreStat
                 key={meta.key}
