@@ -1,0 +1,143 @@
+/* Scoped mobile viewport fix for the Daily/Practice scorecard page. */
+
+.rk-sc-page--simplified {
+  padding-inline: clamp(12px, 4vw, 18px);
+  padding-bottom: max(84px, env(safe-area-inset-bottom));
+}
+
+.rk-sc-page--simplified .rk-sc-feature-card--shareable {
+  overflow: hidden;
+  margin: 0 auto clamp(18px, 5vw, 26px);
+  padding: clamp(16px, 4vw, 22px) clamp(14px, 4vw, 22px) clamp(18px, 4vw, 24px);
+  border-radius: clamp(28px, 7vw, 36px);
+}
+
+.rk-sc-page--simplified .rk-sc-hero {
+  gap: clamp(8px, 2.2vw, 11px);
+  padding: clamp(18px, 4.5vw, 24px) clamp(12px, 4vw, 20px) clamp(10px, 3vw, 14px);
+}
+
+.rk-sc-page--simplified .rk-sc-hero__pill {
+  padding: 8px 22px;
+  font-size: clamp(11px, 2.6vw, 13px);
+}
+
+.rk-sc-page--simplified .rk-sc-score-ring {
+  width: clamp(124px, 32vw, 154px);
+  height: clamp(124px, 32vw, 154px);
+}
+
+.rk-sc-page--simplified .rk-sc-score-ring__num {
+  font-size: clamp(58px, 14vw, 74px);
+}
+
+.rk-sc-page--simplified .rk-sc-archetype__name {
+  padding: 8px 22px;
+  font-size: clamp(14px, 3.4vw, 16px);
+}
+
+.rk-sc-page--simplified .rk-sc-hero__tier {
+  margin-top: 2px;
+  font-size: clamp(11px, 2.8vw, 13px);
+}
+
+.rk-sc-page--simplified .rk-sc-headline {
+  gap: clamp(8px, 2.2vw, 11px);
+  margin-top: clamp(8px, 2.4vw, 12px);
+  padding-inline: clamp(8px, 2.4vw, 14px);
+}
+
+.rk-sc-page--simplified .rk-sc-headline__h {
+  max-width: 13ch;
+  font-size: clamp(32px, 7.7vw, 44px);
+  line-height: 1.03;
+}
+
+.rk-sc-page--simplified .rk-sc-headline__copy {
+  max-width: 31ch;
+  font-size: clamp(14px, 3.5vw, 17px);
+  line-height: 1.42;
+}
+
+.rk-sc-page--simplified .rk-sc-headline__tag {
+  margin-top: 2px;
+  padding: 7px 18px;
+}
+
+.rk-sc-page--simplified .rk-sc-return-nudge {
+  margin: clamp(10px, 2.8vw, 14px) auto 0;
+  padding: 0 clamp(10px, 3vw, 16px);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: clamp(12px, 3vw, 14px);
+  line-height: 1.35;
+}
+
+.rk-sc-page--simplified .rk-sc-hand-section,
+.rk-sc-page--simplified .rk-sc-quick-read {
+  margin-top: clamp(18px, 5vw, 26px);
+}
+
+@media (max-width: 430px) {
+  .rk-sc-page--simplified {
+    padding-inline: 12px;
+  }
+
+  .rk-sc-page--simplified .rk-sc-feature-card--shareable {
+    padding: 14px 12px 18px;
+    border-radius: 28px;
+  }
+
+  .rk-sc-page--simplified .rk-sc-hero {
+    padding: 16px 10px 10px;
+    border-radius: 24px;
+  }
+
+  .rk-sc-page--simplified .rk-sc-score-ring {
+    width: 118px;
+    height: 118px;
+  }
+
+  .rk-sc-page--simplified .rk-sc-score-ring__num {
+    font-size: 54px;
+  }
+
+  .rk-sc-page--simplified .rk-sc-headline {
+    margin-top: 6px;
+  }
+
+  .rk-sc-page--simplified .rk-sc-headline__h {
+    font-size: clamp(27px, 7.2vw, 34px);
+    max-width: 13ch;
+  }
+
+  .rk-sc-page--simplified .rk-sc-headline__copy {
+    font-size: 13px;
+    line-height: 1.38;
+    max-width: 30ch;
+  }
+
+  .rk-sc-page--simplified .rk-sc-return-nudge {
+    margin-top: 10px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 390px) {
+  .rk-sc-page--simplified .rk-sc-score-ring {
+    width: 112px;
+    height: 112px;
+  }
+
+  .rk-sc-page--simplified .rk-sc-score-ring__num {
+    font-size: 50px;
+  }
+
+  .rk-sc-page--simplified .rk-sc-archetype__name {
+    padding: 7px 18px;
+    font-size: 13px;
+  }
+
+  .rk-sc-page--simplified .rk-sc-headline__h {
+    font-size: 26px;
+  }
+}
