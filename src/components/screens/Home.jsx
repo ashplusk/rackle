@@ -28,6 +28,7 @@ import {
 import { fetchTodayDailyResult as fetchSupabaseTodayDailyResult } from "../../engine/supabase.js";
 import { buildShareText, getIQTier } from "../../engine/scoring.js";
 import { trackRackleEvent, getScoreBand, getClubState } from "../../engine/analytics.js";
+import "../../design/home-hero-v2.css";
 
 const STREAK_EMOJIS = {
   1: "🌱",
@@ -38,6 +39,14 @@ const STREAK_EMOJIS = {
   6: "💎",
   7: "👑",
 };
+
+const HERO_TILES = [
+  { value: "8", suit: "DOT", color: "blue", detail: "••••" },
+  { value: "7", suit: "BAM", color: "green", detail: "|||" },
+  { value: "5", suit: "CRK", color: "red", detail: "◆◆◆" },
+  { value: "白", suit: "SOAP", color: "slate", detail: "— — —" },
+  { value: "6", suit: "BAM", color: "green", detail: "|||" },
+];
 
 function getHomepageStreakEmoji(streak = 0) {
   const count = Number(streak || 0);
@@ -165,6 +174,18 @@ function findCurrentPlayerRow(rows = [], playerId) {
   }) || null;
 }
 
+function HomeHeroTile({ tile, index }) {
+  return (
+    <span className={`rk-home-hero-v2__tile rk-home-hero-v2__tile--${tile.color} rk-home-hero-v2__tile--${index + 1}`} aria-hidden="true">
+      <span className="rk-home-hero-v2__tile-corner rk-home-hero-v2__tile-corner--tl">{tile.value}</span>
+      <span className="rk-home-hero-v2__tile-corner rk-home-hero-v2__tile-corner--tr">{tile.value}</span>
+      <span className="rk-home-hero-v2__tile-value">{tile.value}</span>
+      <span className="rk-home-hero-v2__tile-detail">{tile.detail}</span>
+      <span className="rk-home-hero-v2__tile-suit">{tile.suit}</span>
+    </span>
+  );
+}
+
 function SimpleActionHero({
   profile,
   playedToday,
@@ -181,83 +202,69 @@ function SimpleActionHero({
   const isGuest = !profile?.name && !profile?.email;
   const score = todayResult?.iqScore ?? todayResult?.totalScore ?? null;
   const tier = score ? getIQTier(score) : null;
+  const heroTitle = playedToday ? "Today’s read is in." : "Fresh rack,\nnew Charleston.";
+  const heroSubcopy = playedToday ? "Review the full scorecard or practice another rack." : "Play the daily, then compare your read with the table.";
 
   return (
-    <section className="rk-hero rk-hero--daily-open rk-simple-home-hero" aria-label="Start playing Rackle">
-      <div className="rk-daily-hero-card rk-simple-home-hero__card">
-        <div className="rk-daily-hero-card__glow" aria-hidden="true" />
+    <section className="rk-home-hero-v2" aria-label="Start playing Rackle">
+      <div className="rk-home-hero-v2__card">
+        <div className="rk-home-hero-v2__glow" aria-hidden="true" />
 
-        <div className="rk-daily-hero-card__topline">
-          <span className="rk-daily-pill"><span /> Daily Rackle · #{dayNum}</span>
-          <span className="rk-daily-countdown">{playedToday ? "score posted" : `closes in ${timeLeft}`}</span>
+        <div className="rk-home-hero-v2__top">
+          <span className="rk-home-hero-v2__pill"><span /> Daily Rackle · #{dayNum}</span>
+          <span className="rk-home-hero-v2__countdown">{playedToday ? "score posted" : `closes in ${timeLeft}`}</span>
         </div>
 
-        <div className="rk-home-status__identity rk-simple-home-hero__identity">
-          <p className="rk-home-status__eyebrow">Today at the table</p>
-          <h1 className="rk-home-status__name">{playerName}</h1>
-          <p className="rk-home-status__guest-copy">
-            {playedToday
-              ? "Today’s score is locked. Open your scorecard or keep practicing."
-              : isGuest
-                ? "Your first table is ready."
-                : "Your daily rack is ready."}
-          </p>
-        </div>
-
-        {playedToday && score && (
-          <div className="rk-played-score rk-simple-home-hero__score">
-            <div className="rk-played-score__main">
-              <div className="rk-played-score__num rk-played-score__num--bright">{score}</div>
-              <div className="rk-played-score__label">Rackle IQ</div>
-            </div>
+        {playedToday && score ? (
+          <div className="rk-home-hero-v2__score" aria-label={`Today’s score ${score} Rackle IQ`}>
+            <span>{score}</span>
+            <small>Rackle IQ</small>
+          </div>
+        ) : (
+          <div className="rk-home-hero-v2__tile-row" aria-hidden="true">
+            {HERO_TILES.map((tile, index) => (
+              <HomeHeroTile key={`${tile.value}-${tile.suit}-${index}`} tile={tile} index={index} />
+            ))}
           </div>
         )}
 
-        <div className="rk-daily-hero-card__copy rk-simple-home-hero__copy">
-          <p className="rk-daily-hero-card__kicker">
-            {playedToday ? tier?.level || "Table read complete" : "Your daily table is open."}
+        <div className="rk-home-hero-v2__copy">
+          <p className="rk-home-hero-v2__kicker">
+            {playedToday ? tier?.level || "Table read complete" : "Fresh rack"}
           </p>
-          <h2 className="rk-daily-hero-card__title">
-            {playedToday ? "Today’s read is in." : "Your table is ready."}
-          </h2>
-          <p className="rk-daily-hero-card__sub">
-            {playedToday ? "Review the full scorecard or practice another rack." : "Play the daily, or warm up with Open Play."}
-          </p>
+          <h1 className="rk-home-hero-v2__title">{heroTitle}</h1>
+          <p className="rk-home-hero-v2__subcopy">{heroSubcopy}</p>
         </div>
 
-        <div className="rk-simple-home-hero__actions">
+        <div className="rk-home-hero-v2__actions">
           <button
-            className="rk-btn rk-btn--primary rk-btn--full rk-btn--play rk-daily-hero-card__cta"
+            className="rk-home-hero-v2__cta rk-home-hero-v2__cta--primary"
             onClick={() => {
               try { localStorage.setItem("rackleHasSeenIntro", "true"); } catch {}
               setScreen?.(playedToday ? "scorecard" : "game");
             }}
           >
-            <span className="rk-btn__dot" />
-            {playedToday ? "View Today’s Scorecard" : "Play Today’s Rackle"}
+            <span className="rk-home-hero-v2__cta-dot" />
+            {playedToday ? "View Scorecard" : "Play Today’s Rackle"}
           </button>
 
           <button
-            className="rk-btn rk-btn--secondary rk-btn--full rk-simple-home-hero__practice"
+            className="rk-home-hero-v2__cta rk-home-hero-v2__cta--secondary"
             onClick={() => setScreen?.("practice")}
           >
-            Open Play
+            Free Play
           </button>
         </div>
 
-        <p className="rk-daily-hero-card__button-note rk-simple-home-hero__note">
-          Daily counts toward the leaderboard. Open Play is just for practice.
-        </p>
-
-        <div className="rk-daily-hero-card__signals rk-simple-home-hero__signals">
+        <div className="rk-home-hero-v2__signals">
           {globalRank && <span>Global #{globalRank}</span>}
           {clubRank && <span>Club #{clubRank}</span>}
           {streak > 0 && <span>{getHomepageStreakEmoji(streak)} {streak}-day streak</span>}
-          {!playedToday && <span>Same rack for everyone</span>}
+          {!playedToday && <span>{isGuest ? "Guest table ready" : `Welcome back, ${playerName}`}</span>}
         </div>
 
         {playedToday && (
-          <button type="button" className="rk-daily-hero-card__quiet-link" onClick={handleShare}>
+          <button type="button" className="rk-home-hero-v2__share" onClick={handleShare}>
             Share your score →
           </button>
         )}
@@ -707,7 +714,7 @@ export default function Home({ setScreen }) {
   }, [todayResult, dayNum, globalRank, clubRank, profile, streak]);
 
   return (
-    <div className="rk-home rk-home--v2 rk-home--simple-actions">
+    <div className="rk-home rk-home--v2">
       <SimpleActionHero
         profile={profile}
         playedToday={!!playedToday}
