@@ -71,9 +71,10 @@
 }
 
 .rk-home-hero-v2__countdown {
-  color: rgba(255,255,255,0.62);
+  color: rgba(255,255,255,0.58);
   text-transform: none;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.035em;
+  font-weight: 650;
 }
 
 .rk-home-hero-v2__tile-row {
@@ -206,16 +207,34 @@
 }
 
 .rk-home-hero-v2__score {
+  position: relative;
   display: grid;
   place-items: center;
   width: clamp(130px, 28vw, 168px);
   height: clamp(130px, 28vw, 168px);
-  margin: 0 auto clamp(16px, 3vw, 22px);
+  margin: 0 auto clamp(14px, 3vw, 20px);
   border-radius: 50%;
-  border: 1px solid rgba(235,221,184,0.22);
-  background: radial-gradient(circle at 50% 35%, rgba(255,255,255,0.14), transparent 42%);
-  box-shadow: inset 0 0 0 7px rgba(255,255,255,0.045), 0 20px 42px rgba(0,0,0,0.18);
+  border: 1px solid rgba(235,221,184,0.20);
+  background:
+    radial-gradient(circle at 50% 32%, rgba(255,255,255,0.16), transparent 36%),
+    radial-gradient(circle at 50% 50%, rgba(53,154,94,0.12), transparent 62%);
+  box-shadow:
+    inset 0 0 0 7px rgba(255,255,255,0.04),
+    inset 0 0 36px rgba(255,255,255,0.045),
+    0 20px 42px rgba(0,0,0,0.17);
   color: #fffdf4;
+}
+
+.rk-home-hero-v2__score::before {
+  content: "";
+  position: absolute;
+  inset: -9px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.065);
+}
+
+.rk-home-hero-v2__score--revealing {
+  animation: rk-home-score-pop 780ms ease-out both;
 }
 
 .rk-home-hero-v2__score span {
@@ -224,15 +243,22 @@
   font-style: italic;
   font-weight: 900;
   line-height: 0.9;
+  font-variant-numeric: tabular-nums;
 }
 
 .rk-home-hero-v2__score small {
   margin-top: -10px;
-  color: rgba(255,255,255,0.62);
+  color: rgba(255,255,255,0.52);
   font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.15em;
+  font-weight: 800;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
+}
+
+@keyframes rk-home-score-pop {
+  0% { transform: scale(0.94); opacity: 0.72; }
+  70% { transform: scale(1.02); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 .rk-home-hero-v2__copy {
@@ -241,7 +267,7 @@
 
 .rk-home-hero-v2__kicker {
   margin: 0 0 8px;
-  color: rgba(255,255,255,0.54);
+  color: rgba(255,255,255,0.50);
   font-size: clamp(11px, 2.4vw, 13px);
   font-weight: 900;
   letter-spacing: 0.17em;
@@ -266,10 +292,10 @@
 .rk-home-hero-v2__subcopy {
   max-width: 410px;
   margin: 12px auto 0;
-  color: rgba(255,255,255,0.70);
+  color: rgba(255,255,255,0.64);
   font-size: clamp(13px, 3.2vw, 16px);
-  font-weight: 550;
-  line-height: 1.45;
+  font-weight: 400;
+  line-height: 1.48;
 }
 
 .rk-home-hero-v2__actions {
@@ -342,19 +368,20 @@
   min-height: 30px;
   padding: 7px 13px;
   border-radius: 999px;
-  color: rgba(255,255,255,0.66);
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.58);
+  background: rgba(255,255,255,0.065);
+  border: 1px solid rgba(255,255,255,0.09);
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 650;
 }
 
 .rk-home-hero-v2__share {
   display: block;
   margin: 14px auto 0;
-  color: rgba(255,255,255,0.72);
+  color: rgba(255,255,255,0.64);
   font-size: 13px;
-  font-weight: 850;
+  font-weight: 650;
+  letter-spacing: 0.01em;
 }
 
 @media (max-width: 560px) {
