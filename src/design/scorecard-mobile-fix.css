@@ -1,29 +1,21 @@
 /* ─── Rackle Scorecard Mobile Fix ───────────────────────────────────────────── */
-/* Drop this in as src/design/scorecard-mobile-fix.css
-   Then import it after your other design CSS files.
-
-   Fixes:
-   - scorecard hero too tall on iPhone
-   - IQ ring too large
-   - headline copy pushing the card too far down
-   - return nudge being clipped by the next section
-   - better spacing before “Your hand”
-*/
+/* Mobile-focused scorecard fixes only. */
 
 .rk-sc-page {
   width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
   overflow-x: hidden;
+  padding-bottom: 28px;
 }
 
 .rk-sc-feature-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: clamp(14px, 4vw, 22px);
-  margin: 0 auto var(--space-8);
-  padding: clamp(18px, 5vw, 28px);
+  gap: clamp(10px, 3vw, 16px);
+  margin: 0 auto clamp(18px, 5vw, 28px);
+  padding: clamp(14px, 4vw, 22px);
   border-radius: clamp(24px, 7vw, 34px);
   overflow: visible;
 }
@@ -32,9 +24,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(10px, 3vw, 16px);
+  gap: clamp(8px, 2.4vw, 12px);
   min-height: auto;
-  padding: clamp(22px, 7vw, 36px) clamp(16px, 5vw, 28px);
+  padding: clamp(16px, 5vw, 26px) clamp(14px, 5vw, 24px);
   border-radius: clamp(22px, 6vw, 30px);
 }
 
@@ -44,20 +36,20 @@
 }
 
 .rk-sc-score-ring {
-  width: clamp(132px, 42vw, 174px);
-  height: clamp(132px, 42vw, 174px);
+  width: clamp(118px, 36vw, 154px);
+  height: clamp(118px, 36vw, 154px);
   min-width: 0;
   min-height: 0;
   margin: 0;
 }
 
 .rk-sc-score-ring__num {
-  font-size: clamp(56px, 17vw, 82px);
+  font-size: clamp(50px, 15vw, 72px);
   line-height: 0.9;
 }
 
 .rk-sc-score-ring__label {
-  font-size: clamp(10px, 2.8vw, 13px);
+  font-size: clamp(9px, 2.5vw, 12px);
   letter-spacing: 0.14em;
 }
 
@@ -69,15 +61,15 @@
 .rk-sc-archetype__name {
   display: inline-flex;
   max-width: 100%;
-  padding: 9px 18px;
-  font-size: clamp(14px, 4vw, 18px);
+  padding: 8px 16px;
+  font-size: clamp(13px, 3.6vw, 16px);
   line-height: 1.1;
   text-align: center;
 }
 
 .rk-sc-hero__tier {
   margin: 0;
-  font-size: clamp(12px, 3.4vw, 15px);
+  font-size: clamp(11px, 3vw, 13px);
   letter-spacing: 0.16em;
 }
 
@@ -85,24 +77,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(10px, 3vw, 16px);
+  gap: clamp(8px, 2.4vw, 12px);
   padding: 0 clamp(6px, 2vw, 12px);
   margin: 0;
   text-align: center;
 }
 
 .rk-sc-headline__h {
-  max-width: 10ch;
+  max-width: 13ch;
   margin: 0 auto;
-  font-size: clamp(31px, 8.8vw, 44px);
-  line-height: 1.08;
+  font-size: clamp(28px, 7.7vw, 40px);
+  line-height: 1.06;
 }
 
 .rk-sc-headline__copy {
   max-width: 31ch;
   margin: 0 auto;
-  font-size: clamp(16px, 4.2vw, 20px);
-  line-height: 1.48;
+  font-size: clamp(14px, 3.8vw, 17px);
+  line-height: 1.44;
 }
 
 .rk-sc-headline__tag {
@@ -115,72 +107,99 @@
   z-index: 1;
   display: block;
   width: 100%;
-  margin: clamp(14px, 4vw, 22px) auto 0;
-  padding: 0 clamp(10px, 3vw, 18px) clamp(6px, 2vw, 10px);
+  margin: clamp(10px, 3vw, 16px) auto 0;
+  padding: 0 clamp(10px, 3vw, 18px) clamp(12px, 3vw, 18px);
   color: rgba(255, 255, 255, 0.78);
-  font-size: clamp(13px, 3.6vw, 16px);
+  font-size: clamp(12px, 3.2vw, 14px);
   line-height: 1.3;
   text-align: center;
 }
 
 .rk-sc-hand-section {
-  margin-top: clamp(22px, 7vw, 34px);
+  margin-top: clamp(18px, 5vw, 28px);
+}
+
+.rk-sc-section__h,
+.rk-sc-direction__label,
+.rk-sc-rank-card__label {
+  overflow: visible;
+  text-overflow: initial;
+  white-space: normal;
+}
+
+.rk-sc-direction__badge,
+.rk-sc-rank-card {
+  min-width: 0;
+}
+
+.rk-sc-rank-card__val--empty {
+  color: rgba(26, 20, 16, 0.34);
+}
+
+.rk-sc-final-rack--premium {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  max-width: 100%;
+  overflow: visible;
 }
 
 @media (max-width: 430px) {
   .rk-sc-feature-card {
     margin-left: 0;
     margin-right: 0;
-    margin-bottom: 30px;
-    padding: 18px 16px 24px;
+    margin-bottom: 26px;
+    padding: 14px 14px 20px;
     border-radius: 28px;
   }
 
   .rk-sc-hero {
-    padding: 22px 14px 18px;
-    gap: 10px;
+    padding: 18px 12px 14px;
+    gap: 8px;
     border-radius: 24px;
   }
 
   .rk-sc-hero__pill {
-    padding: 8px 18px;
-    font-size: 11px;
-    letter-spacing: 0.18em;
+    padding: 7px 16px;
+    font-size: 10px;
+    letter-spacing: 0.16em;
   }
 
   .rk-sc-score-ring {
-    width: 142px;
-    height: 142px;
+    width: 122px;
+    height: 122px;
   }
 
   .rk-sc-score-ring__num {
-    font-size: 64px;
+    font-size: 56px;
   }
 
   .rk-sc-archetype__name {
-    padding: 8px 18px;
-    font-size: 16px;
+    padding: 8px 16px;
+    font-size: 14px;
   }
 
   .rk-sc-headline__h {
-    font-size: 34px;
-    line-height: 1.08;
+    font-size: 28px;
+    line-height: 1.06;
+    max-width: 13ch;
   }
 
   .rk-sc-headline__copy {
-    font-size: 17px;
-    line-height: 1.48;
+    font-size: 14px;
+    line-height: 1.42;
   }
 
   .rk-sc-headline__tag {
-    padding: 8px 18px;
-    font-size: 11px;
+    padding: 7px 16px;
+    font-size: 10px;
   }
 
   .rk-sc-return-nudge {
-    margin-top: 16px;
-    padding-bottom: 4px;
-    font-size: 14px;
+    margin-top: 12px;
+    padding-bottom: 14px;
+    font-size: 12px;
   }
 
   .rk-sc-section__head-row {
@@ -192,36 +211,42 @@
   }
 
   .rk-sc-hand-toggle__btn {
-    min-height: 44px;
-    font-size: 13px;
+    min-height: 42px;
+    font-size: 12px;
+  }
+
+  .rk-sc-direction__label,
+  .rk-sc-rank-card__label {
+    font-size: 10px;
+    line-height: 1.15;
   }
 }
 
 @media (max-width: 390px) {
   .rk-sc-feature-card {
-    padding: 16px 14px 22px;
+    padding: 14px 12px 20px;
     border-radius: 26px;
   }
 
   .rk-sc-hero {
-    padding: 20px 12px 16px;
+    padding: 16px 12px 14px;
   }
 
   .rk-sc-score-ring {
-    width: 132px;
-    height: 132px;
+    width: 116px;
+    height: 116px;
   }
 
   .rk-sc-score-ring__num {
-    font-size: 58px;
+    font-size: 52px;
   }
 
   .rk-sc-headline__h {
-    font-size: 31px;
+    font-size: 26px;
   }
 
   .rk-sc-headline__copy {
-    font-size: 16px;
-    line-height: 1.45;
+    font-size: 13px;
+    line-height: 1.42;
   }
 }
