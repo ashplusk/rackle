@@ -30,6 +30,7 @@ import { buildShareText, getIQTier } from "../../engine/scoring.js";
 import { trackRackleEvent, getScoreBand, getClubState } from "../../engine/analytics.js";
 import "../../design/home-hero-v2.css";
 import "../../design/home-hero-tiles-polish.css";
+import "../../design/home-scorecard-polish.css";
 
 const STREAK_EMOJIS = {
   1: "🌱",
@@ -46,6 +47,12 @@ const HERO_TILES = [
   { value: "7", suit: "BAM", color: "green", detail: "|||" },
   { value: "5", suit: "CRK", color: "red", detail: "◆◆◆" },
   { value: "白", suit: "SOAP", color: "slate", detail: "— — —" },
+  { value: "6", suit: "BAM", color: "green", detail: "|||" },
+];
+
+const SCORE_TILES = [
+  { value: "2", suit: "DOT", color: "blue", detail: "••" },
+  { value: "中", suit: "RED", color: "red", detail: "◆" },
   { value: "6", suit: "BAM", color: "green", detail: "|||" },
 ];
 
@@ -175,9 +182,9 @@ function findCurrentPlayerRow(rows = [], playerId) {
   }) || null;
 }
 
-function HomeHeroTile({ tile, index }) {
+function HomeHeroTile({ tile, index, variant = "hero" }) {
   return (
-    <span className={`rk-home-hero-v2__tile rk-home-hero-v2__tile--${tile.color} rk-home-hero-v2__tile--${index + 1}`} aria-hidden="true">
+    <span className={`rk-home-hero-v2__tile rk-home-hero-v2__tile--${tile.color} rk-home-hero-v2__tile--${index + 1} rk-home-hero-v2__tile--${variant}`} aria-hidden="true">
       <span className="rk-home-hero-v2__tile-corner rk-home-hero-v2__tile-corner--tl">{tile.value}</span>
       <span className="rk-home-hero-v2__tile-corner rk-home-hero-v2__tile-corner--tr">{tile.value}</span>
       <span className="rk-home-hero-v2__tile-value">{tile.value}</span>
@@ -204,11 +211,11 @@ function SimpleActionHero({
   const score = todayResult?.iqScore ?? todayResult?.totalScore ?? null;
   const tier = score ? getIQTier(score) : null;
   const heroTitle = playedToday ? "Today’s read is in." : "Fresh rack,\nnew Charleston.";
-  const heroSubcopy = playedToday ? "Review the full scorecard or practice another rack." : "Play the daily, then compare your read with the table.";
+  const heroSubcopy = playedToday ? "Screenshot it, share it, then see where you landed at the table." : "Play the daily, then compare your read with the table.";
 
   return (
     <section className="rk-home-hero-v2" aria-label="Start playing Rackle">
-      <div className="rk-home-hero-v2__card">
+      <div className={`rk-home-hero-v2__card ${playedToday ? "rk-home-hero-v2__card--played" : ""}`}>
         <div className="rk-home-hero-v2__glow" aria-hidden="true" />
 
         <div className="rk-home-hero-v2__top">
@@ -217,9 +224,21 @@ function SimpleActionHero({
         </div>
 
         {playedToday && score ? (
-          <div className="rk-home-hero-v2__score" aria-label={`Today’s score ${score} Rackle IQ`}>
-            <span>{score}</span>
-            <small>Rackle IQ</small>
+          <div className="rk-home-scorecard" aria-label={`Today’s score ${score} Rackle IQ`}>
+            <div className="rk-home-scorecard__tiles rk-home-scorecard__tiles--left">
+              <HomeHeroTile tile={SCORE_TILES[0]} index={0} variant="score" />
+              <HomeHeroTile tile={SCORE_TILES[1]} index={1} variant="score" />
+            </div>
+
+            <div className="rk-home-hero-v2__score rk-home-hero-v2__score--revealing">
+              <span>{score}</span>
+              <small>Rackle IQ</small>
+            </div>
+
+            <div className="rk-home-scorecard__tiles rk-home-scorecard__tiles--right">
+              <HomeHeroTile tile={SCORE_TILES[2]} index={2} variant="score" />
+              <span className="rk-home-scorecard__share-chip">Shareable read</span>
+            </div>
           </div>
         ) : (
           <div className="rk-home-hero-v2__tile-row" aria-hidden="true">
@@ -262,6 +281,7 @@ function SimpleActionHero({
           {clubRank && <span>Club #{clubRank}</span>}
           {streak > 0 && <span>{getHomepageStreakEmoji(streak)} {streak}-day streak</span>}
           {!playedToday && <span>{isGuest ? "Guest table ready" : `Welcome back, ${playerName}`}</span>}
+          {playedToday && <span>Ready to share with your table</span>}
         </div>
 
         {playedToday && (
