@@ -29,6 +29,7 @@ import Tutorial          from "./components/screens/Tutorial.jsx";
 import TrustPages        from "./components/screens/TrustPages.jsx";
 
 import "./design/global.css";
+import "./design/scorecard-viewport-fix.css";
 
 // ── No-header screens (full bleed) ───────────────────────────────────────────
 const NO_HEADER_SCREENS = new Set(["game", "login", "signup", "forgot-password", "reset-password"]);
