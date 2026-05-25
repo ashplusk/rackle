@@ -2,7 +2,7 @@
 // All DB calls live here. Screen components never import from Supabase directly.
 
 const SB_URL = import.meta.env.VITE_SUPABASE_URL || "https://kkyhrwryhebpnbbffmfq.supabase.co";
-const SB_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "";
+const SB_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "sb_publishable_sPkUMItekEfDN50NhFdd7Q_6ngdSMTT";
 
 export const SB_HEADERS = {
   "Content-Type": "application/json",
@@ -111,12 +111,19 @@ export async function signInWithPassword({ email, password }) {
 }
 
 export async function upsertProfile(profile = {}) {
-  const playerId = String(profile.playerId || profile.player_id || "").trim();
+  const playerId = String(profile.playerId || profile.player_id || profile.id || "").trim();
   if (!playerId) return null;
 
+  const name = profile.name || profile.displayName || profile.display_name || profile.full_name || "Rackle Player";
   const body = {
     player_id: playerId,
-    name: profile.name || profile.displayName || profile.display_name || "Rackle Player",
+    id: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(playerId) ? playerId : null,
+    nickname: name,
+    name,
+    full_name: profile.fullName || profile.full_name || name,
+    display_name: profile.displayName || profile.display_name || name,
+    first_name: profile.firstName || profile.first_name || null,
+    last_name: profile.lastName || profile.last_name || null,
     email: String(profile.email || "").trim().toLowerCase() || null,
     club_code: profile.clubCode || profile.club_code || null,
     streak: Number(profile.streak || 0),
@@ -181,8 +188,8 @@ export function isRecoveryLink() {
 
 // ── Tables reference ──────────────────────────────────────────────────────────
 // clubs             — code, name, location, emoji
-// game_history      — player_id, played_at, mode, section_id, iq_score, rating, time_secs, day_seed
-// daily_results     — player_id, day_seed, iq_score, rating, time_secs, streak, club_code, rack_json, scorecard_json
-// profiles          — player_id, name, club_code, email, streak, rounds_played, best_iq, password_hash
-// leaderboard       — club_code, day_seed, player_id, iq_score, name, time_secs
+// game_history      — player_id/user_id, played_at, mode, section_id, iq_score, rating, time_secs, day_seed, scorecard_json
+// daily_results     — player_id/user_id, day_seed, iq_score, rating, time_secs, streak, club_code, rack_json, scorecard_json
+// profiles          — player_id/id, name, display_name, club_code, email, streak, rounds_played, best_iq
+// leaderboard       — club_code, day_seed, player_id/user_id, iq_score, name, time_secs
 // club_share_events — club_code, day_seed, player_id, player_name, shared_at
