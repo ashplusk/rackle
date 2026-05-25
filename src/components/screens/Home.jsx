@@ -29,6 +29,7 @@ import { fetchTodayDailyResult as fetchSupabaseTodayDailyResult } from "../../en
 import { buildShareText, getIQTier } from "../../engine/scoring.js";
 import { trackRackleEvent, getScoreBand, getClubState } from "../../engine/analytics.js";
 import "../../design/home-hero-v2.css";
+import "../../design/home-hero-tiles-polish.css";
 
 const STREAK_EMOJIS = {
   1: "🌱",
@@ -78,39 +79,6 @@ function useCountdown() {
   }, []);
 
   return timeLeft;
-}
-
-function useCountUp(target = 0, duration = 1050) {
-  const [value, setValue] = useState(0);
-
-  useEffect(() => {
-    const finalValue = Math.max(0, Math.round(Number(target) || 0));
-    if (!finalValue) {
-      setValue(0);
-      return undefined;
-    }
-
-    let frameId;
-    const start = performance.now();
-
-    function tick(now) {
-      const progress = Math.min(1, (now - start) / duration);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setValue(Math.round(finalValue * eased));
-
-      if (progress < 1) {
-        frameId = requestAnimationFrame(tick);
-      } else {
-        setValue(finalValue);
-      }
-    }
-
-    setValue(0);
-    frameId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frameId);
-  }, [target, duration]);
-
-  return value;
 }
 
 async function share(text) {
@@ -234,7 +202,6 @@ function SimpleActionHero({
   const playerName = getLeaderboardDisplayName(profile);
   const isGuest = !profile?.name && !profile?.email;
   const score = todayResult?.iqScore ?? todayResult?.totalScore ?? null;
-  const animatedScore = useCountUp(score || 0);
   const tier = score ? getIQTier(score) : null;
   const heroTitle = playedToday ? "Today’s read is in." : "Fresh rack,\nnew Charleston.";
   const heroSubcopy = playedToday ? "Review the full scorecard or practice another rack." : "Play the daily, then compare your read with the table.";
@@ -250,8 +217,8 @@ function SimpleActionHero({
         </div>
 
         {playedToday && score ? (
-          <div className="rk-home-hero-v2__score rk-home-hero-v2__score--revealing" aria-label={`Today’s score ${score} Rackle IQ`}>
-            <span>{animatedScore}</span>
+          <div className="rk-home-hero-v2__score" aria-label={`Today’s score ${score} Rackle IQ`}>
+            <span>{score}</span>
             <small>Rackle IQ</small>
           </div>
         ) : (
