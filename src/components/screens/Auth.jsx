@@ -1,5 +1,6 @@
 // ─── Rackle v2 · Auth screens ────────────────────────────────────────────────
-// Traditional local auth prototype plus Supabase password reset flow.
+// Real Supabase Auth for signup, login, forgot password, and password reset.
+// Local storage remains only for Rackle profile/session continuity.
 
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -13,7 +14,10 @@ import {
   getResetPasswordRedirectUrl,
   isRecoveryLink,
   requestPasswordReset,
+  signInWithPassword,
+  signUpWithPassword,
   updatePasswordWithAccessToken,
+  upsertProfile,
 } from "../../engine/supabase.js";
 
 function normalizeEmail(value) {
@@ -35,11 +39,12 @@ function saveStoredAccounts(accounts) {
 function updateStoredAccountProfile(profile) {
   const cleanEmail = normalizeEmail(profile?.email);
   if (!cleanEmail) return;
+
   const accounts = getStoredAccounts();
-  if (!accounts[cleanEmail]) return;
   accounts[cleanEmail] = {
-    ...accounts[cleanEmail],
-    profile: { ...accounts[cleanEmail].profile, ...profile },
+    ...(accounts[cleanEmail] || {}),
+    profile: { ...(accounts[cleanEmail]?.profile || {}), ...profile },
+    updatedAt: Date.now(),
   };
   saveStoredAccounts(accounts);
 }
@@ -85,6 +90,33 @@ async function syncTodayScoreToProfile(profile, previousGuestId = null) {
 
 function fullName(firstName, lastName) {
   return [firstName, lastName].map(v => String(v || "").trim()).filter(Boolean).join(" ");
+}
+
+function profileFromAuthUser(user, fallback = {}) {
+  const metadata = user?.user_metadata || user?.data || {};
+  const firstName = metadata.firstName || metadata.first_name || fallback.firstName || fallback.first_name || "";
+  const lastName = metadata.lastName || metadata.last_name || fallback.lastName || fallback.last_name || "";
+  const name = metadata.name || fallback.name || fullName(firstName, lastName) || normalizeEmail(user?.email || fallback.email || "");
+
+  return {
+    ...fallback,
+    playerId: user?.id || fallback.playerId || fallback.player_id || makePlayerId(),
+    firstName,
+    lastName,
+    name,
+    displayName: name,
+    email: normalizeEmail(user?.email || fallback.email || ""),
+    clubCode: metadata.clubCode || metadata.club_code || fallback.clubCode || fallback.club_code || null,
+    createdAt: fallback.createdAt || Date.now(),
+  };
+}
+
+async function finalizeAuthenticatedProfile(profile, previousGuestId = null) {
+  setProfile(profile);
+  writeSession(profile);
+  updateStoredAccountProfile(profile);
+  await upsertProfile(profile).catch(() => null);
+  await syncTodayScoreToProfile(profile, previousGuestId);
 }
 
 function AuthShell({ children, mode, setScreen }) {
@@ -156,59 +188,54 @@ function LoginForm({ setScreen }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   async function submit(e) {
     e.preventDefault();
     const cleanEmail = normalizeEmail(email);
-    if (!cleanEmail || !cleanEmail.includes("@")) {
-      setError(LOGIN_ERROR);
-      return;
-    }
-    if (!password) {
-      setError(LOGIN_ERROR);
-      return;
-    }
 
-    const accounts = getStoredAccounts();
-    const saved = accounts[cleanEmail];
-    const existingProfile = getProfile() || {};
-    const existingMatchesEmail = normalizeEmail(existingProfile.email) === cleanEmail;
-    const previousGuestId = currentGuestPlayerId();
-
-    if (saved && saved.password !== password) {
-      setError(LOGIN_ERROR);
-      return;
-    }
-    if (!saved && !existingMatchesEmail) {
+    if (!cleanEmail || !cleanEmail.includes("@") || !password) {
       setError(LOGIN_ERROR);
       return;
     }
 
-    const baseProfile = saved?.profile || {
-      ...existingProfile,
-      email: cleanEmail,
-      name: existingProfile.name || cleanEmail,
-      firstName: existingProfile.firstName || "",
-      lastName: existingProfile.lastName || "",
-      createdAt: existingProfile.createdAt || Date.now(),
-    };
-    const profile = {
-      ...baseProfile,
-      playerId: baseProfile.playerId || baseProfile.player_id || existingProfile.playerId || previousGuestId || makePlayerId(),
-      email: cleanEmail,
-    };
+    setLoading(true);
+    setError(null);
 
-    setProfile(profile);
-    writeSession(profile);
-    updateStoredAccountProfile(profile);
-    await syncTodayScoreToProfile(profile, previousGuestId);
-    trackRackleEvent("login_completed", {
-      source: "login",
-      hasClub: Boolean(profile?.clubCode || profile?.club_code),
-      isGuest: false,
-      clubState: getClubState({ hasClub: Boolean(profile?.clubCode || profile?.club_code) }),
-    });
-    setScreen?.("home");
+    try {
+      const previousGuestId = currentGuestPlayerId();
+      const auth = await signInWithPassword({ email: cleanEmail, password });
+      const stored = getStoredAccounts()[cleanEmail]?.profile || {};
+      const profile = profileFromAuthUser(auth.user, {
+        ...stored,
+        email: cleanEmail,
+      });
+
+      await finalizeAuthenticatedProfile(profile, previousGuestId);
+
+      trackRackleEvent("login_completed", {
+        source: "login",
+        hasClub: Boolean(profile?.clubCode || profile?.club_code),
+        isGuest: false,
+        clubState: getClubState({ hasClub: Boolean(profile?.clubCode || profile?.club_code) }),
+      });
+
+      setScreen?.("home");
+    } catch (err) {
+      const message = err?.message || "";
+      const legacyLocalAccount = getStoredAccounts()[cleanEmail];
+
+      if (legacyLocalAccount?.password === password) {
+        setError({
+          title: "Create your Rackle account again.",
+          body: "This older account was saved locally. Create an account with the same email once, then password reset will work going forward.",
+        });
+      } else {
+        setError({ title: LOGIN_ERROR.title, body: message || LOGIN_ERROR.body });
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -222,7 +249,7 @@ function LoginForm({ setScreen }) {
         <span>Password</span>
         <input type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Your password" />
       </label>
-      <button type="submit" className="rk-auth__primary">Log in</button>
+      <button type="submit" className="rk-auth__primary" disabled={loading}>{loading ? "Logging in..." : "Log in"}</button>
       <div className="rk-auth__links">
         <button type="button" onClick={() => setScreen?.("forgot-password")}>Forgot password?</button>
         <button type="button" onClick={() => setScreen?.("signup")}>Create account</button>
@@ -239,6 +266,7 @@ function SignupForm({ setScreen }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [clubCode, setClubCodeInput] = useState("");
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     trackRackleEvent("signup_started", { source: "signup", isGuest: true, clubState: "none" });
@@ -250,48 +278,62 @@ function SignupForm({ setScreen }) {
     const cleanEmail = normalizeEmail(email);
     const cleanClub = clubCode.trim().toUpperCase();
 
-    if (!name) {
-      setError(SIGNUP_ERROR);
-      return;
-    }
-    if (!cleanEmail || !cleanEmail.includes("@")) {
+    if (!name || !cleanEmail || !cleanEmail.includes("@")) {
       setError(SIGNUP_ERROR);
       return;
     }
     if (password.length < 6) {
-      setError(SIGNUP_ERROR);
+      setError({ title: SIGNUP_ERROR.title, body: "Password must be at least 6 characters." });
       return;
     }
     if (password !== confirmPassword) {
-      setError(SIGNUP_ERROR);
+      setError({ title: SIGNUP_ERROR.title, body: "Passwords do not match." });
       return;
     }
 
-    const accounts = getStoredAccounts();
-    const previousGuestId = currentGuestPlayerId();
-    const playerId = accounts[cleanEmail]?.profile?.playerId || previousGuestId || makePlayerId();
-    const profile = {
-      playerId,
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      name,
-      email: cleanEmail,
-      clubCode: cleanClub || null,
-      createdAt: Date.now(),
-    };
+    setLoading(true);
+    setError(null);
 
-    accounts[cleanEmail] = { password, profile, createdAt: accounts[cleanEmail]?.createdAt || Date.now() };
-    saveStoredAccounts(accounts);
-    setProfile(profile);
-    writeSession(profile);
-    await syncTodayScoreToProfile(profile, previousGuestId);
-    trackRackleEvent("signup_completed", {
-      source: "signup",
-      hasClub: Boolean(cleanClub),
-      isGuest: false,
-      clubState: getClubState({ hasClub: Boolean(cleanClub) }),
-    });
-    setScreen?.("home");
+    try {
+      const previousGuestId = currentGuestPlayerId();
+      const metadata = {
+        name,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        clubCode: cleanClub || null,
+      };
+      const auth = await signUpWithPassword({ email: cleanEmail, password, metadata });
+      const playerId = auth?.user?.id || previousGuestId || makePlayerId();
+      const profile = {
+        playerId,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        name,
+        displayName: name,
+        email: cleanEmail,
+        clubCode: cleanClub || null,
+        createdAt: Date.now(),
+      };
+
+      const accounts = getStoredAccounts();
+      accounts[cleanEmail] = { profile, createdAt: accounts[cleanEmail]?.createdAt || Date.now(), supabaseAuth: true };
+      saveStoredAccounts(accounts);
+
+      await finalizeAuthenticatedProfile(profile, previousGuestId);
+
+      trackRackleEvent("signup_completed", {
+        source: "signup",
+        hasClub: Boolean(cleanClub),
+        isGuest: false,
+        clubState: getClubState({ hasClub: Boolean(cleanClub) }),
+      });
+
+      setScreen?.("home");
+    } catch (err) {
+      setError({ title: SIGNUP_ERROR.title, body: err?.message || SIGNUP_ERROR.body });
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -324,7 +366,7 @@ function SignupForm({ setScreen }) {
         <input type="text" value={clubCode} onChange={e => setClubCodeInput(e.target.value)} placeholder="ApexMahjong" />
       </label>
       <p className="rk-auth__fineprint">By creating an account, you can save your streak, scorecards, and club leaderboard progress.</p>
-      <button type="submit" className="rk-auth__primary">Create account</button>
+      <button type="submit" className="rk-auth__primary" disabled={loading}>{loading ? "Creating account..." : "Create account"}</button>
       <div className="rk-auth__links rk-auth__links--center">
         <button type="button" onClick={() => setScreen?.("login")}>Already have an account? Log in</button>
       </div>
@@ -350,6 +392,7 @@ function ForgotPasswordForm({ setScreen }) {
     setError(null);
 
     try {
+      ST.set("lastResetEmail", cleanEmail);
       await requestPasswordReset(cleanEmail, getResetPasswordRedirectUrl());
       setSent(true);
       trackRackleEvent("password_reset_requested", { source: "forgot_password", isGuest: true });
@@ -427,18 +470,12 @@ function ResetPasswordForm({ setScreen }) {
 
     try {
       await updatePasswordWithAccessToken(accessToken, password);
-
-      // Keep the local prototype password in sync when the account is stored locally.
       if (email) updateStoredAccountPassword(email, password);
 
       setStatus("updated");
       trackRackleEvent("password_reset_completed", { source: "reset_password", isGuest: true });
 
-      try {
-        window.history.replaceState({}, "", "/login");
-      } catch {
-        // Ignore history cleanup failures.
-      }
+      try { window.history.replaceState({}, "", "/login"); } catch {}
     } catch (err) {
       setError({
         title: RESET_ERROR.title,
@@ -456,9 +493,7 @@ function ResetPasswordForm({ setScreen }) {
           <h2>Password updated.</h2>
           <p>You can now log in with your new password.</p>
         </div>
-        <button type="button" className="rk-auth__primary" onClick={() => setScreen?.("login")}>
-          Back to login
-        </button>
+        <button type="button" className="rk-auth__primary" onClick={() => setScreen?.("login")}>Back to login</button>
       </div>
     );
   }
