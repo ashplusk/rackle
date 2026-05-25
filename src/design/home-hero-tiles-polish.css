@@ -1,0 +1,123 @@
+/* Scoped polish layer for Rackle homepage hero tiles only. */
+
+.rk-home-hero-v2__tile-row {
+  gap: clamp(10px, 2.7vw, 20px) !important;
+  width: min(100%, 560px) !important;
+  min-height: clamp(100px, 18vw, 138px) !important;
+  padding-inline: clamp(2px, 1.6vw, 10px) !important;
+  margin-bottom: clamp(15px, 3vw, 22px) !important;
+}
+
+.rk-home-hero-v2__tile {
+  width: clamp(62px, 10.8vw, 86px) !important;
+  height: clamp(88px, 15.6vw, 120px) !important;
+  padding: 13px 8px 16px !important;
+  border-radius: 19px !important;
+  background:
+    radial-gradient(circle at 33% 8%, rgba(255,255,255,0.98), rgba(255,255,255,0.20) 24%, transparent 32%),
+    linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.28) 14%, transparent 15%),
+    linear-gradient(90deg, rgba(126,108,72,0.06), transparent 20%, transparent 80%, rgba(126,108,72,0.08)),
+    linear-gradient(180deg, #fffefa 0%, #f5eddf 58%, #deceb6 100%) !important;
+  border: 1px solid rgba(113, 97, 67, 0.28) !important;
+  outline: 1px solid rgba(255,255,255,0.36) !important;
+  box-shadow:
+    0 20px 30px rgba(0,0,0,0.25),
+    0 4px 0 rgba(112,96,68,0.38),
+    inset 0 3px 0 rgba(255,255,255,0.98),
+    inset 0 -8px 13px rgba(102,82,49,0.15),
+    inset 5px 0 8px rgba(255,255,255,0.34),
+    inset -5px 0 8px rgba(105,88,56,0.08) !important;
+  animation-duration: 4.8s !important;
+}
+
+.rk-home-hero-v2__tile::before {
+  inset: 7px !important;
+  border-radius: 14px !important;
+  border-color: rgba(119,105,78,0.13) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0.18), transparent 34%) !important;
+}
+
+.rk-home-hero-v2__tile::after {
+  content: "";
+  position: absolute;
+  inset: 12px 11px 15px;
+  border-radius: 11px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.26);
+  pointer-events: none;
+}
+
+.rk-home-hero-v2__tile--1 { --tile-y: 8px !important; --tile-r: -6deg !important; }
+.rk-home-hero-v2__tile--2 { --tile-y: -5px !important; --tile-r: 2.5deg !important; }
+.rk-home-hero-v2__tile--3 { --tile-y: 2px !important; --tile-r: -0.8deg !important; }
+.rk-home-hero-v2__tile--4 { --tile-y: -7px !important; --tile-r: 3.5deg !important; }
+.rk-home-hero-v2__tile--5 { --tile-y: 7px !important; --tile-r: 6deg !important; }
+
+.rk-home-hero-v2__tile-corner {
+  font-size: clamp(11px, 2vw, 15px) !important;
+  opacity: 0.52 !important;
+  z-index: 2 !important;
+}
+
+.rk-home-hero-v2__tile-value {
+  position: relative;
+  z-index: 2;
+  font-size: clamp(35px, 6.6vw, 54px) !important;
+  letter-spacing: -0.065em !important;
+  transform: translateY(1px) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.34), 0 3px 4px rgba(0,0,0,0.08) !important;
+}
+
+.rk-home-hero-v2__tile-detail {
+  position: relative;
+  z-index: 2;
+  margin-top: 6px !important;
+  font-size: clamp(13px, 2.6vw, 19px) !important;
+  letter-spacing: 0.02em !important;
+  opacity: 0.92 !important;
+}
+
+.rk-home-hero-v2__tile-suit {
+  z-index: 2;
+  color: rgba(70,63,51,0.74) !important;
+}
+
+@keyframes rk-home-hero-v2-float {
+  0%, 100% { transform: translateY(var(--tile-y, 0)) rotate(var(--tile-r, 0deg)); }
+  48% { transform: translateY(calc(var(--tile-y, 0) - 4px)) rotate(calc(var(--tile-r, 0deg) + 0.55deg)); }
+}
+
+@media (max-width: 560px) {
+  .rk-home-hero-v2__tile-row {
+    min-height: 94px !important;
+    gap: clamp(7px, 2.15vw, 10px) !important;
+    width: min(100%, 340px) !important;
+    margin-bottom: 13px !important;
+  }
+
+  .rk-home-hero-v2__tile {
+    width: clamp(52px, 13.8vw, 58px) !important;
+    height: clamp(74px, 19.5vw, 82px) !important;
+    border-radius: 16px !important;
+    padding: 9px 5px 13px !important;
+  }
+
+  .rk-home-hero-v2__tile-value {
+    font-size: clamp(29px, 7.4vw, 33px) !important;
+  }
+
+  .rk-home-hero-v2__tile-detail {
+    margin-top: 4px !important;
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 374px) {
+  .rk-home-hero-v2__tile-row {
+    gap: 5px !important;
+  }
+
+  .rk-home-hero-v2__tile {
+    width: 47px !important;
+    height: 68px !important;
+  }
+}
