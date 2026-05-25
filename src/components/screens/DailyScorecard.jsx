@@ -27,6 +27,7 @@ import {
   mergeCurrentScore,
 } from "../../engine/leaderboard.js";
 import { trackRackleEvent, getScoreBand, getClubState } from "../../engine/analytics.js";
+import "../../design/scorecard-viewport-fix.css";
 
 const SECTION_LABELS = {
   "2026": "2026",
