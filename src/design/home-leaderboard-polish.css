@@ -1,5 +1,7 @@
-/* ─── Homepage QA Polish: played hero + Daily Table leaderboard ───────────── */
+/* ─── Homepage Leaderboard Refinement ──────────────────────────────────────── */
+/* Scoped to the homepage Daily Table section and played hero only. */
 
+/* Played hero: remove unneeded status copy and keep the table pill centered. */
 .rk-home-hero-v2__card--played .rk-home-hero-v2__countdown {
   display: none !important;
 }
@@ -15,6 +17,7 @@
   margin-inline: auto !important;
 }
 
+/* Section shell */
 .rk-table-board {
   width: 100% !important;
   padding: clamp(24px, 5vw, 40px) 0 0 !important;
@@ -29,15 +32,18 @@
   position: relative !important;
   isolation: isolate !important;
   overflow: hidden !important;
-  padding: clamp(24px, 5vw, 38px) clamp(16px, 5vw, 36px) !important;
+  padding: clamp(24px, 5vw, 36px) clamp(16px, 5vw, 34px) !important;
   border-radius: clamp(30px, 5vw, 40px) !important;
   background:
-    radial-gradient(circle at 50% -10%, rgba(255,255,255,0.18), transparent 34%),
-    radial-gradient(circle at 16% 26%, rgba(255,250,225,0.09), transparent 30%),
-    radial-gradient(circle at 84% 18%, rgba(178,126,255,0.25), transparent 38%),
-    linear-gradient(155deg, #513071 0%, #351d50 52%, #211032 100%) !important;
-  border: 1px solid rgba(255,255,255,0.13) !important;
-  box-shadow: 0 26px 58px rgba(35,18,50,0.26), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.24) !important;
+    radial-gradient(circle at 50% -12%, rgba(255,255,255,0.18), transparent 36%),
+    radial-gradient(circle at 12% 20%, rgba(255,250,226,0.08), transparent 32%),
+    radial-gradient(circle at 88% 14%, rgba(170,124,219,0.20), transparent 38%),
+    linear-gradient(160deg, #53336d 0%, #392350 48%, #261632 100%) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow:
+    0 22px 48px rgba(35,18,50,0.22),
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    inset 0 -1px 0 rgba(0,0,0,0.18) !important;
 }
 
 .rk-table-board__card::before {
@@ -53,16 +59,17 @@
 .rk-table-board__card::after {
   content: "" !important;
   position: absolute !important;
-  inset: auto -18% -28% -18% !important;
+  inset: auto -20% -30% -20% !important;
   height: 46% !important;
   z-index: -1 !important;
-  background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.11), transparent 62%) !important;
+  background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.10), transparent 64%) !important;
   pointer-events: none !important;
 }
 
+/* Intro */
 .rk-table-board__card-intro {
   text-align: center !important;
-  margin: 0 auto clamp(22px, 5vw, 32px) !important;
+  margin: 0 auto clamp(22px, 5vw, 30px) !important;
 }
 
 .rk-table-board__eyebrow {
@@ -71,13 +78,13 @@
   justify-content: center !important;
   gap: 8px !important;
   min-height: 31px !important;
-  margin: 0 auto clamp(18px, 4vw, 24px) !important;
+  margin: 0 auto clamp(16px, 4vw, 22px) !important;
   padding: 7px 16px !important;
   border-radius: 999px !important;
-  color: rgba(255,255,255,0.74) !important;
+  color: rgba(255,255,255,0.76) !important;
   background: rgba(255,255,255,0.10) !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 10px 22px rgba(0,0,0,0.12) !important;
+  border: 1px solid rgba(255,255,255,0.13) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 10px 22px rgba(0,0,0,0.10) !important;
   font-size: 11px !important;
   font-weight: 900 !important;
   letter-spacing: 0.15em !important;
@@ -91,7 +98,7 @@
   height: 8px !important;
   border-radius: 999px !important;
   background: #d7f4dc !important;
-  box-shadow: 0 0 0 5px rgba(215,244,220,0.11), 0 0 18px rgba(215,244,220,0.32) !important;
+  box-shadow: 0 0 0 5px rgba(215,244,220,0.10), 0 0 16px rgba(215,244,220,0.26) !important;
   flex: 0 0 auto !important;
 }
 
@@ -100,48 +107,49 @@
   margin: 0 auto !important;
   color: #fffaf0 !important;
   font-family: var(--font-display) !important;
-  font-size: clamp(32px, 7vw, 48px) !important;
+  font-size: clamp(31px, 6.6vw, 46px) !important;
   font-style: italic !important;
   font-weight: 900 !important;
-  line-height: 0.98 !important;
+  line-height: 1 !important;
   letter-spacing: -0.055em !important;
-  text-shadow: 0 16px 32px rgba(0,0,0,0.24) !important;
+  text-shadow: 0 14px 28px rgba(0,0,0,0.22) !important;
 }
 
 .rk-table-board__subcopy {
   max-width: 390px !important;
   margin: 12px auto 0 !important;
-  color: rgba(255,255,255,0.67) !important;
+  color: rgba(255,255,255,0.68) !important;
   font-size: clamp(13px, 3.1vw, 15px) !important;
-  font-weight: 450 !important;
+  font-weight: 500 !important;
   line-height: 1.45 !important;
 }
 
+/* Status panel */
 .rk-table-board__card-head {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) auto !important;
   align-items: center !important;
   gap: 12px !important;
-  width: min(100%, 640px) !important;
+  width: min(100%, 620px) !important;
   margin: 0 auto 16px !important;
   padding: 14px 15px !important;
   border-radius: 22px !important;
-  background: rgba(255,255,255,0.095) !important;
-  border: 1px solid rgba(255,255,255,0.12) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 12px 24px rgba(0,0,0,0.13) !important;
+  background: rgba(255,255,255,0.09) !important;
+  border: 1px solid rgba(255,255,255,0.11) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 10px 22px rgba(0,0,0,0.10) !important;
 }
 
 .rk-table-board__card-head strong {
   display: block !important;
-  color: rgba(255,250,240,0.95) !important;
-  font-size: clamp(14px, 3.3vw, 17px) !important;
+  color: rgba(255,250,240,0.94) !important;
+  font-size: clamp(14px, 3.2vw, 16px) !important;
   font-weight: 900 !important;
   line-height: 1.25 !important;
 }
 
 .rk-table-board__card-head p {
   margin: 4px 0 0 !important;
-  color: rgba(255,255,255,0.65) !important;
+  color: rgba(255,255,255,0.64) !important;
   font-size: 13px !important;
   font-weight: 500 !important;
 }
@@ -153,9 +161,9 @@
   min-height: 34px !important;
   padding: 8px 13px !important;
   border-radius: 999px !important;
-  color: #321a4d !important;
+  color: #332043 !important;
   background: linear-gradient(180deg, #fffdf8 0%, #efe7d8 100%) !important;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.92) !important;
+  box-shadow: 0 10px 18px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.92) !important;
   font-size: 11px !important;
   font-weight: 950 !important;
   letter-spacing: 0.08em !important;
@@ -163,99 +171,99 @@
   white-space: nowrap !important;
 }
 
+/* Global / Club toggle */
 .rk-table-board__tabs {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
   gap: 6px !important;
-  width: min(100%, 430px) !important;
+  width: min(100%, 410px) !important;
   margin: 0 auto 18px !important;
   padding: 6px !important;
   border-radius: 999px !important;
-  background: rgba(255,255,255,0.12) !important;
-  border: 1px solid rgba(255,255,255,0.15) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 12px 24px rgba(0,0,0,0.12) !important;
+  background: rgba(255,255,255,0.10) !important;
+  border: 1px solid rgba(255,255,255,0.13) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 10px 20px rgba(0,0,0,0.10) !important;
 }
 
 .rk-table-board__tabs button {
-  min-height: 42px !important;
+  min-height: 40px !important;
   border-radius: 999px !important;
   color: rgba(255,255,255,0.72) !important;
   font-size: 13px !important;
-  font-weight: 950 !important;
-  letter-spacing: 0.06em !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.05em !important;
   transition: transform 160ms ease, background 160ms ease, color 160ms ease !important;
 }
 
 .rk-table-board__tabs button.is-active {
-  color: #321a4d !important;
+  color: #332043 !important;
   background: linear-gradient(180deg, #fffdf8 0%, #efe7d8 100%) !important;
-  box-shadow: 0 10px 22px rgba(0,0,0,0.17), inset 0 1px 0 rgba(255,255,255,0.92) !important;
+  box-shadow: 0 9px 18px rgba(0,0,0,0.13), inset 0 1px 0 rgba(255,255,255,0.92) !important;
 }
 
+/* Leaderboard rows */
 .rk-table-board__rows {
   display: grid !important;
-  gap: 11px !important;
-  width: min(100%, 640px) !important;
+  gap: 10px !important;
+  width: min(100%, 620px) !important;
   margin: 0 auto !important;
 }
 
 .rk-table-board-row {
   position: relative !important;
   display: grid !important;
-  grid-template-columns: 44px minmax(0, 1fr) auto !important;
+  grid-template-columns: 42px minmax(0, 1fr) auto !important;
   align-items: center !important;
   gap: 12px !important;
   padding: 13px 14px !important;
-  border-radius: 21px !important;
-  background: rgba(255,255,255,0.09) !important;
+  border-radius: 20px !important;
+  background: rgba(255,255,255,0.10) !important;
   border: 1px solid rgba(255,255,255,0.11) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 10px 22px rgba(0,0,0,0.11) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 10px 20px rgba(0,0,0,0.09) !important;
 }
 
 .rk-table-board-row::before {
   content: "" !important;
   position: absolute !important;
-  inset: 0 auto 0 0 !important;
-  width: 4px !important;
-  border-radius: 999px 0 0 999px !important;
+  left: 0 !important;
+  top: 14px !important;
+  bottom: 14px !important;
+  width: 3px !important;
+  border-radius: 999px !important;
   background: rgba(255,255,255,0.16) !important;
 }
 
 .rk-table-board-row.is-top-score {
-  background: radial-gradient(circle at 92% 50%, rgba(255,250,226,0.12), transparent 34%), rgba(255,255,255,0.14) !important;
-  border-color: rgba(255,250,226,0.24) !important;
+  background: rgba(255,255,255,0.13) !important;
+  border-color: rgba(255,250,226,0.20) !important;
 }
 
 .rk-table-board-row.is-top-score::before {
-  background: linear-gradient(180deg, #fff8d8, #d8f4dc) !important;
-  box-shadow: 0 0 18px rgba(255,248,216,0.28) !important;
+  background: linear-gradient(180deg, rgba(255,250,226,0.90), rgba(215,244,220,0.72)) !important;
 }
 
 .rk-table-board-row.is-current {
-  border-color: rgba(215,244,220,0.36) !important;
-  box-shadow: 0 0 0 1px rgba(215,244,220,0.10), 0 12px 24px rgba(0,0,0,0.15) !important;
+  border-color: rgba(215,244,220,0.30) !important;
+  box-shadow: 0 0 0 1px rgba(215,244,220,0.08), 0 12px 22px rgba(0,0,0,0.12) !important;
 }
 
 .rk-table-board-row__rank {
   position: relative !important;
   display: grid !important;
   place-items: center !important;
-  width: 38px !important;
-  height: 38px !important;
+  width: 36px !important;
+  height: 36px !important;
   border-radius: 50% !important;
-  color: #321a4d !important;
+  color: #332043 !important;
   background: linear-gradient(180deg, #fffdf8 0%, #efe7d8 100%) !important;
   font-size: 14px !important;
   font-weight: 950 !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.92), 0 8px 16px rgba(0,0,0,0.14) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.92), 0 7px 14px rgba(0,0,0,0.12) !important;
 }
 
 .rk-table-board-row.is-top-score .rk-table-board-row__rank::before {
-  content: "👑" !important;
-  position: absolute !important;
-  transform: translateY(-26px) !important;
-  font-size: 13px !important;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.18)) !important;
+  display: none !important;
+  content: none !important;
 }
 
 .rk-table-board-row__player {
@@ -266,7 +274,7 @@
   display: block !important;
   overflow: hidden !important;
   color: rgba(255,250,240,0.95) !important;
-  font-size: clamp(14px, 3.5vw, 16px) !important;
+  font-size: clamp(14px, 3.4vw, 16px) !important;
   font-weight: 900 !important;
   line-height: 1.2 !important;
   text-overflow: ellipsis !important;
@@ -275,11 +283,11 @@
 
 .rk-table-board-row__player small {
   display: block !important;
-  margin-top: 3px !important;
+  margin-top: 4px !important;
   overflow: hidden !important;
-  color: rgba(255,255,255,0.60) !important;
+  color: rgba(255,255,255,0.58) !important;
   font-size: 12px !important;
-  font-weight: 550 !important;
+  font-weight: 500 !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
 }
@@ -289,17 +297,18 @@
   color: #fffaf0 !important;
   -webkit-text-fill-color: #fffaf0 !important;
   font-family: var(--font-display) !important;
-  font-size: clamp(32px, 7vw, 44px) !important;
+  font-size: clamp(30px, 6.6vw, 40px) !important;
   font-style: italic !important;
   font-weight: 900 !important;
   line-height: 0.9 !important;
   letter-spacing: -0.055em !important;
-  text-shadow: 0 12px 26px rgba(0,0,0,0.26) !important;
+  text-shadow: 0 10px 22px rgba(0,0,0,0.22) !important;
 }
 
+/* Current player callout and empty state */
 .rk-table-board__current,
 .rk-table-board__state {
-  width: min(100%, 640px) !important;
+  width: min(100%, 620px) !important;
   margin-inline: auto !important;
   border-radius: 20px !important;
   background: rgba(255,255,255,0.08) !important;
@@ -341,21 +350,23 @@
   color: rgba(255,255,255,0.65) !important;
 }
 
+/* Actions */
 .rk-table-board__actions {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) minmax(120px, 0.75fr) !important;
   gap: 10px !important;
-  width: min(100%, 640px) !important;
+  width: min(100%, 620px) !important;
   margin: 16px auto 0 !important;
 }
 
 .rk-table-board__actions .rk-btn {
   width: 100% !important;
-  min-height: 50px !important;
+  min-height: 48px !important;
   border-radius: 999px !important;
   font-weight: 950 !important;
 }
 
+/* Mobile polish */
 @media (max-width: 560px) {
   .rk-table-board__card {
     padding: 22px 14px 24px !important;
@@ -400,12 +411,9 @@
   }
 
   .rk-table-board-row__rank {
-    width: 34px !important;
-    height: 34px !important;
-  }
-
-  .rk-table-board-row.is-top-score .rk-table-board-row__rank::before {
-    transform: translateY(-24px) !important;
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 13px !important;
   }
 
   .rk-table-board-row__player strong {
@@ -418,7 +426,7 @@
 
   .rk-table-board-row em,
   .rk-table-board__current strong {
-    font-size: 31px !important;
+    font-size: 30px !important;
   }
 
   .rk-table-board__actions {
