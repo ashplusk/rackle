@@ -1,0 +1,148 @@
+/* ─── Rackle desktop responsive polish ─────────────────────────────────────── */
+/* Keeps mobile behavior intact while giving large screens a true desktop layout. */
+
+@media (min-width: 900px) {
+  .rk-page {
+    width: 100%;
+  }
+
+  .rk-home.rk-home--v2 {
+    width: min(100%, 1180px);
+    margin-inline: auto;
+    padding-inline: 32px;
+  }
+
+  .rk-home-hero-v2 {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-top: 14px;
+  }
+
+  .rk-home-hero-v2__card {
+    width: min(100%, 1040px);
+    max-width: 1040px;
+    padding: 38px 64px 42px;
+    border-radius: 42px;
+  }
+
+  .rk-home-hero-v2__top {
+    width: min(100%, 760px);
+    margin-bottom: 30px;
+  }
+
+  .rk-home-hero-v2__pill,
+  .rk-home-hero-v2__countdown {
+    min-height: 40px;
+    font-size: 13px;
+  }
+
+  .rk-home-hero-v2__tile-row {
+    width: min(100%, 720px);
+    min-height: 144px;
+    gap: 24px;
+    margin-bottom: 26px;
+    padding-inline: 0;
+  }
+
+  .rk-home-hero-v2__tile {
+    width: 88px;
+    height: 122px;
+    border-radius: 20px;
+  }
+
+  .rk-home-hero-v2__tile-value {
+    font-size: 54px;
+  }
+
+  .rk-home-hero-v2__tile-detail {
+    font-size: 18px;
+  }
+
+  .rk-home-hero-v2__tile-suit {
+    font-size: 12px;
+  }
+
+  .rk-home-hero-v2__title {
+    max-width: 620px;
+    font-size: clamp(50px, 5vw, 68px);
+    line-height: 0.95;
+  }
+
+  .rk-home-hero-v2__subcopy {
+    max-width: 470px;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .rk-home-hero-v2__actions {
+    width: min(100%, 620px);
+    grid-template-columns: minmax(0, 1.35fr) 210px;
+    gap: 18px;
+    margin-top: 32px;
+  }
+
+  .rk-home-hero-v2__cta {
+    min-height: 60px;
+    padding-inline: 26px;
+    font-size: 17px;
+    white-space: nowrap;
+  }
+
+  .rk-home-hero-v2__cta--secondary {
+    min-height: 54px;
+  }
+
+  .rk-table-board__inner,
+  .rk-practice-card,
+  .rk-player-identity,
+  .rk-club-directory-preview {
+    width: min(100%, 1040px);
+    margin-inline: auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  .rk-home.rk-home--v2 {
+    max-width: 1220px;
+  }
+
+  .rk-home-hero-v2__card {
+    width: 1080px;
+    max-width: 1080px;
+  }
+
+  .rk-home-hero-v2__tile-row {
+    width: 760px;
+    gap: 28px;
+  }
+
+  .rk-home-hero-v2__title {
+    font-size: 68px;
+  }
+}
+
+@media (min-width: 900px) and (max-width: 1100px) {
+  .rk-home-hero-v2__card {
+    width: min(100%, 920px);
+    padding-inline: 46px;
+  }
+
+  .rk-home-hero-v2__tile-row {
+    width: min(100%, 650px);
+    gap: 18px;
+  }
+
+  .rk-home-hero-v2__tile {
+    width: 78px;
+    height: 110px;
+  }
+
+  .rk-home-hero-v2__tile-value {
+    font-size: 48px;
+  }
+
+  .rk-home-hero-v2__title {
+    font-size: clamp(46px, 5.4vw, 58px);
+  }
+}
