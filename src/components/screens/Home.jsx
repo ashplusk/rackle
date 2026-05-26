@@ -32,6 +32,7 @@ import "../../design/home-hero-v2.css";
 import "../../design/home-hero-tiles-polish.css";
 import "../../design/home-scorecard-polish.css";
 import "../../design/home-leaderboard-polish.css";
+import "../../design/desktop-responsive-polish.css";
 
 const STREAK_EMOJIS = {
   1: "🌱",
