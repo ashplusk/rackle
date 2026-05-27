@@ -1,0 +1,342 @@
+/* ─── Simplified Daily Scorecard v2 ────────────────────────────────────────── */
+/* This layer intentionally reduces the scorecard to: score, hand, coaching, share, practice. */
+
+.rk-sc-page--simple-v2 {
+  width: min(100%, 720px);
+  max-width: none;
+  margin: 0 auto;
+  padding: clamp(10px, 3vw, 18px) clamp(10px, 3vw, 18px) max(88px, env(safe-area-inset-bottom));
+}
+
+.rk-simple-scorecard {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: clamp(18px, 4vw, 26px);
+  margin: 0 auto clamp(18px, 5vw, 28px);
+  padding: clamp(20px, 5vw, 34px) clamp(16px, 5vw, 34px);
+  border-radius: clamp(28px, 6vw, 40px);
+  text-align: center;
+  color: #fffaf0;
+  background:
+    radial-gradient(circle at 50% -12%, rgba(255,255,255,0.16), transparent 34%),
+    radial-gradient(circle at 16% 28%, rgba(255,250,225,0.09), transparent 30%),
+    radial-gradient(circle at 86% 22%, rgba(38,150,91,0.18), transparent 36%),
+    linear-gradient(158deg, #0b3b22 0%, #042715 58%, #02180d 100%);
+  border: 1px solid rgba(238,223,178,0.20);
+  box-shadow:
+    0 24px 52px rgba(8,30,18,0.24),
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    inset 0 -1px 0 rgba(0,0,0,0.22);
+}
+
+.rk-simple-scorecard::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: clamp(22px, 5vw, 32px);
+  border: 1px solid rgba(238,223,178,0.14);
+  pointer-events: none;
+}
+
+.rk-simple-scorecard__pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: fit-content;
+  min-height: 32px;
+  margin: 0 auto;
+  padding: 7px 16px;
+  border-radius: 999px;
+  color: rgba(255,255,255,0.76);
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.14);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.rk-simple-scorecard__pill::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #d7f4dc;
+  box-shadow: 0 0 0 5px rgba(215,244,220,0.10), 0 0 16px rgba(215,244,220,0.28);
+}
+
+.rk-simple-scorecard__score-wrap {
+  display: grid;
+  place-items: center;
+  gap: 6px;
+}
+
+.rk-simple-scorecard__score {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(82px, 20vw, 132px);
+  font-style: italic;
+  font-weight: 900;
+  line-height: 0.82;
+  letter-spacing: -0.08em;
+  color: #fffaf0;
+  text-shadow: 0 2px 0 rgba(255,255,255,0.06), 0 18px 36px rgba(0,0,0,0.25);
+}
+
+.rk-simple-scorecard__score-label {
+  color: rgba(255,255,255,0.58);
+  font-size: 11px;
+  font-weight: 950;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+}
+
+.rk-simple-scorecard__style {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin: 4px auto 0;
+  padding: 8px 18px;
+  border-radius: 999px;
+  color: rgba(255,255,255,0.88);
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.14);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.rk-simple-scorecard__copy {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+
+.rk-simple-scorecard__copy h1 {
+  max-width: 12ch;
+  margin: 0;
+  color: #fff8df;
+  font-family: var(--font-display);
+  font-size: clamp(34px, 8vw, 56px);
+  font-style: italic;
+  font-weight: 900;
+  line-height: 1.02;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.rk-simple-scorecard__copy p {
+  max-width: 31ch;
+  margin: 0;
+  color: rgba(255,255,255,0.72);
+  font-size: clamp(15px, 3.8vw, 18px);
+  line-height: 1.48;
+  text-wrap: balance;
+}
+
+.rk-simple-scorecard__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.rk-simple-scorecard__meta span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: rgba(255,255,255,0.66);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.10);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.rk-simple-panel {
+  margin: 0 auto clamp(14px, 4vw, 20px);
+  padding: clamp(18px, 4.5vw, 26px);
+  border-radius: clamp(22px, 5vw, 30px);
+  background: rgba(255,253,247,0.95);
+  border: 1px solid rgba(26,20,16,0.08);
+  box-shadow: 0 18px 38px rgba(26,20,16,0.075);
+}
+
+.rk-simple-panel__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.rk-simple-panel__head h2 {
+  margin: 0;
+  color: #17140f;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 6.2vw, 42px);
+  font-style: italic;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.rk-simple-panel__head p,
+.rk-simple-panel__copy {
+  margin: 8px 0 0;
+  color: rgba(23,20,15,0.68);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.rk-simple-hand-toggle {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  min-width: 190px;
+  padding: 5px;
+  border-radius: 999px;
+  background: rgba(16,84,50,0.08);
+  border: 1px solid rgba(16,84,50,0.12);
+}
+
+.rk-simple-hand-toggle button {
+  min-height: 34px;
+  border-radius: 999px;
+  color: rgba(16,84,50,0.76);
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.rk-simple-hand-toggle button.is-active {
+  color: #fffaf0;
+  background: linear-gradient(180deg, #187744, #0f5432);
+  box-shadow: 0 8px 18px rgba(15,84,50,0.20), inset 0 1px 0 rgba(255,255,255,0.18);
+}
+
+.rk-simple-hand-card {
+  display: grid;
+  gap: 14px;
+  text-align: center;
+}
+
+.rk-simple-hand-card__label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 7px 14px;
+  border-radius: 999px;
+  color: rgba(16,84,50,0.82);
+  background: rgba(16,84,50,0.08);
+  border: 1px solid rgba(16,84,50,0.12);
+  font-size: 11px;
+  font-weight: 950;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+
+.rk-simple-hand-card .rk-sc-final-rack {
+  justify-content: center;
+  padding: 8px 0 2px;
+}
+
+.rk-simple-coach-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.rk-simple-coach-item {
+  padding: 14px 15px;
+  border-radius: 18px;
+  background: #fffaf0;
+  border: 1px solid rgba(26,20,16,0.08);
+}
+
+.rk-simple-coach-item span {
+  display: block;
+  margin-bottom: 5px;
+  color: rgba(23,20,15,0.48);
+  font-size: 11px;
+  font-weight: 950;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.rk-simple-coach-item p {
+  margin: 0;
+  color: rgba(23,20,15,0.78);
+  font-size: 14px;
+  line-height: 1.48;
+}
+
+.rk-simple-share {
+  display: grid;
+  gap: 12px;
+  text-align: center;
+}
+
+.rk-simple-share h2 {
+  margin-bottom: 4px;
+}
+
+.rk-simple-share__actions,
+.rk-simple-footer-actions {
+  display: grid;
+  gap: 10px;
+}
+
+.rk-simple-footer-actions {
+  margin-top: clamp(16px, 4vw, 24px);
+}
+
+.rk-simple-share__status {
+  margin: 2px 0 0;
+  color: #0f5432;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.rk-simple-share__fallback textarea {
+  width: 100%;
+  min-height: 110px;
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(26,20,16,0.10);
+  background: #fffaf0;
+  color: #17140f;
+}
+
+@media (min-width: 760px) {
+  .rk-sc-page--simple-v2 {
+    width: min(100%, 820px);
+  }
+
+  .rk-simple-share__actions,
+  .rk-simple-footer-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .rk-simple-panel__head {
+    display: grid;
+    justify-items: start;
+  }
+
+  .rk-simple-hand-toggle {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .rk-simple-scorecard {
+    padding: 20px 15px 24px;
+  }
+}
